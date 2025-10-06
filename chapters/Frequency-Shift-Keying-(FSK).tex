@@ -316,281 +316,259 @@ $E_b/N_0$ (dB) & \multicolumn{1}{c}{BER (Non-coh)} & \multicolumn{1}{c}{BER (Coh
 
 \textbf{Key insight:} Coherent detection provides approximately \textbf{1~dB} advantage over non-coherent detection at practical BER levels.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Comparison with Other Modulation Schemes}
 
-\subsection{\texorpdfstring{ Advantages \&
-Disadvantages}{ Advantages \& Disadvantages}}\label{advantages-disadvantages}
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Scheme} & \textbf{Spectral Efficiency} & \textbf{$E_b/N_0$ @ BER $10^{-6}$} & \textbf{Complexity} & \textbf{Detection} \\
+\midrule
+OOK & $\sim$0.5~bps/Hz & 13.5~dB & Low & Non-coherent \\
+\textbf{FSK (non-coh)} & $\sim$0.5~bps/Hz & 12.5~dB & Low & Non-coherent \\
+\textbf{FSK (coherent)} & $\sim$0.5~bps/Hz & 10.5~dB & Medium & Coherent \\
+MSK & $\sim$0.67~bps/Hz & 10.5~dB & Medium & Coherent \\
+BPSK & $\sim$1.0~bps/Hz & 10.5~dB & Medium & Coherent \\
+QPSK & $\sim$2.0~bps/Hz & 10.5~dB & Medium & Coherent \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\subsubsection{Advantages}\label{advantages}
+\section{Worked Example: LoRa IoT Link Budget}
 
-\textbf{Constant envelope} - efficient power amplifiers (Class C)
-\textbf{Non-coherent detection} - simple receivers \textbf{Robust to
-fading} - amplitude variations don\textquotesingle t affect frequency
-\textbf{Good for noisy channels} - frequency easier to detect than phase
-\textbf{Legacy compatibility} - used in many older systems
+\begin{calloutbox}{Example: LoRa FSK Link at 915~MHz}
 
-\subsubsection{Disadvantages}\label{disadvantages}
+\textbf{Scenario:} Agricultural sensor transmitting to gateway 5~km away
 
-\textbf{Poor spectral efficiency} - wider bandwidth than PSK
-\textbf{Moderate power efficiency} - 1-2 dB worse than {[}{[}BPSK{]}{]}
-\textbf{Frequency stability} - requires accurate oscillators
-\textbf{Doppler sensitivity} - frequency shifts problematic
+\subsection*{Given Parameters}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{tabular}{@{}ll@{}}
+TX power & $P_t = 14$~dBm (25~mW) \\
+TX antenna gain & $G_t = 2$~dBi (omnidirectional) \\
+Distance & $d = 5$~km \\
+Frequency & $f = 915$~MHz (ISM band) \\
+RX antenna gain & $G_r = 6$~dBi (directional) \\
+Receiver noise figure & $NF = 6$~dB \\
+Bandwidth & $B = 125$~kHz (LoRa BW) \\
+Data rate & $R_b = 1$~kbps \\
+Required BER & $10^{-3}$ \\
+\end{tabular}
 
-\subsection{\texorpdfstring{
-Applications}{ Applications}}\label{applications}
+\subsection*{Solution}
 
-\subsubsection{Historical \& Current}\label{historical-current}
+\textbf{Step 1: Free-Space Path Loss}
+\begin{equation}
+\mathrm{FSPL} = 20\log_{10}(5) + 20\log_{10}(915) + 32.45 = 113.6~\text{dB}
+\end{equation}
 
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Telephone modems} (Bell 103: 1962, 300 baud,
-  f\textbackslash textsubscript\{0\}=1070 Hz,
-  f\textbackslash textsubscript\{1\}=1270 Hz)
-\item
-  \textbf{Radio teletype} (RTTY, 1930s-)
-\item
-  \textbf{Caller ID} (Bell 202: 1200 bps,
-  f\textbackslash textsubscript\{0\}=2200 Hz,
-  f\textbackslash textsubscript\{1\}=1200 Hz)
-\item
-  \textbf{Pagers} (POCSAG, FLEX protocols)
-\end{itemize}
+\textbf{Step 2: Received Power}
+\begin{equation}
+P_r = 14 + 2 + 6 - 113.6 = -91.6~\text{dBm}
+\end{equation}
 
-\subsubsection{Modern}\label{modern}
+\textbf{Step 3: Noise Power}
 
-\begin{itemize}
-\tightlist
-\item
-  \textbf{LoRa} (sub-GHz IoT, chirp spread spectrum FSK)
-\item
-  \textbf{Bluetooth Low Energy} (GFSK - Gaussian FSK)
-\item
-  \textbf{Wireless sensor networks} - low power, simple receivers
-\item
-  \textbf{Optical fiber} (frequency-shifted laser)
-\item
-  \textbf{{[}{[}AID-Protocol-Case-Study{]}{]}} - 12 kHz FSK sub-carrier
-  (11,999/12,001 Hz)
-\end{itemize}
+Thermal noise: $N_0 = -174$~dBm/Hz
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Noise power: $N = -174 + 10\log_{10}(125{,}000) + 6 = -117~\text{dBm}$
 
-\subsection{\texorpdfstring{ FSK
-Variants}{ FSK Variants}}\label{fsk-variants}
+\textbf{Step 4: SNR and $E_b/N_0$}
+\begin{equation}
+\mathrm{SNR} = -91.6 - (-117) = 25.4~\text{dB}
+\end{equation}
+\begin{equation}
+\frac{E_b}{N_0} = 25.4 + 10\log_{10}\left(\frac{125{,}000}{1{,}000}\right) = 25.4 + 21 = 46.4~\text{dB}
+\end{equation}
 
-\subsubsection{1. Minimum Shift Keying
-(MSK)}\label{minimum-shift-keying-msk}
+\textbf{Step 5: Link Margin}
 
-\textbf{Special case}: h = 0.5 (minimum for orthogonality)
+Required $E_b/N_0$ for FSK @ BER $10^{-3}$: $\sim$8~dB
 
-\begin{verbatim}
-Properties:
-- Continuous phase (no discontinuities)
-- Constant envelope
-- Bandwidth = 1.5 R_b (narrowest FSK)
-- Equivalent to offset QPSK with sinusoidal pulse shaping
-\end{verbatim}
+Link margin: $46.4 - 8 = 38.4$~dB (excellent!)
 
-\textbf{Used in}: GSM cellular (GMSK - Gaussian MSK)
+\textbf{Conclusion:} Massive link margin allows for multipath fading, foliage attenuation, and other impairments typical in IoT deployments.
+\end{calloutbox}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Advantages and Disadvantages}
 
-\subsubsection{2. Gaussian FSK (GFSK)}\label{gaussian-fsk-gfsk}
-
-\textbf{MSK + Gaussian pre-modulation filter}
-
-\begin{verbatim}
-Purpose: Further reduce spectral sidelobes
-Bandwidth: ~1.2-1.5 R_b (depending on BT product)
-BT product: Bandwidth × T_b (typical: 0.3-0.5)
-\end{verbatim}
-
-\textbf{Used in}: Bluetooth, Zigbee
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Continuous Phase FSK
-(CPFSK)}\label{continuous-phase-fsk-cpfsk}
-
-\textbf{Phase is continuous} across bit boundaries:
-
-\begin{verbatim}
-(t) = 2[f_c·t + (hf/2)·^{t} b()d]
-
-Benefits:
-- No spectral splatter
-- Better spectral efficiency
-- Smoother power envelope
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4. Multi-Frequency FSK
-(MFSK)}\label{multi-frequency-fsk-mfsk}
-
-\textbf{M \textgreater{} 2 frequencies} for higher data rates:
-
-\begin{verbatim}
-M symbols  log(M) bits per symbol
-
-Example (4-FSK):
-- f: bits 00
-- f: bits 01
-- f: bits 10
-- f: bits 11
-
-Bandwidth: B = M·R_b (wider!)
-Power efficiency: Better than BFSK for high M
-\end{verbatim}
-
-\textbf{Used in}: HF radio (MT63, Olivia modes)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Constellation
-Diagram}{ Constellation Diagram}}\label{constellation-diagram}
-
-\textbf{BFSK in frequency space}:
-
-\begin{verbatim}
-Frequency
-   
-f |      Symbol "1"
-   |
-f_c|       (carrier)
-   |
-f |      Symbol "0"
-   +------------ Time
-\end{verbatim}
-
-\textbf{Not a traditional I/Q constellation} (frequency, not
-amplitude/phase).
-
-\textbf{Equivalent I/Q representation} (for coherent detection):
-
-\begin{verbatim}
-      Q
-      
-      |
-  0  |  1   On real axis, separated
-      |
-------+------ I
-\end{verbatim}
-
-\textbf{Distance between points}: d = \$\textbackslash sqrt\{\}\$(2E\_b)
-(for orthogonal FSK)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Comparison
-Table}{ Comparison Table}}\label{comparison-table}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1579}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1711}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1447}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1316}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1447}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Modulation
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Bits/Symbol
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Bandwidth
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Eb/N0 @ BER 10\^{}-6
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Envelope
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Detection
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-{[}{[}On-Off-Keying-(OOK) & OOK{]}{]} & 1 & 2R\_b & 13.5 dB &
-Variable \\
-\textbf{FSK} & 1 & 2R\_b & 12.5 dB & Constant & Non-coherent \\
-\textbf{MSK} & 1 & 1.5R\_b & 10.5 dB & Constant & Coherent \\
-{[}{[}BPSK{]}{]} & 1 & R\_b & 10.5 dB & Constant & Coherent \\
-{[}{[}QPSK-Modulation & QPSK{]}{]} & 2 & R\_b & 10.5 dB & Constant \\
-\end{longtable}
-}
-
-\textbf{Key insight}: FSK trades bandwidth for simplicity.
-{[}{[}BPSK{]}{]}/{[}{[}QPSK-Modulation\textbar QPSK{]}{]} are more
-efficient but require phase synchronization.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Key
-Takeaways}{ Key Takeaways}}\label{key-takeaways}
+\subsection*{Advantages}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Frequency switching}: Binary data
-  \$\textbackslash rightarrow\$ two different frequencies
-\item
-  \textbf{Constant envelope}: Good for non-linear amplifiers
-\item
-  \textbf{Non-coherent detection}: Simple receivers, still good
-  performance
-\item
-  \textbf{Bandwidth penalty}: \textasciitilde2\$\textbackslash times\$
-  wider than PSK
-\item
-  \textbf{Robust}: Good for noisy, fading channels
-\item
-  \textbf{Still widely used}: Bluetooth, LoRa, pagers, caller ID
-\item
-  \textbf{Gateway to chirp spread spectrum}: LoRa uses frequency chirps
+\item \textbf{Constant envelope:} Power amplifiers can operate in saturation (Class C) with maximum efficiency
+\item \textbf{Non-coherent detection:} Simple receivers without carrier recovery loops
+\item \textbf{Amplitude immunity:} Robust against fading and amplitude variations
+\item \textbf{Frequency discrimination:} Easier than phase detection in noisy channels
+\item \textbf{Low-cost implementation:} VCO-based modulators are inexpensive
+\item \textbf{Legacy compatibility:} Widely deployed in existing systems
 \end{enumerate}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ See Also}{ See Also}}\label{see-also}
-
-\begin{itemize}
-\tightlist
-\item
-  {[}{[}On-Off-Keying-(OOK){]}{]} - Simpler (amplitude modulation)
-\item
-  {[}{[}Binary-Phase-Shift-Keying-(BPSK){]}{]} - Alternative (phase
-  modulation)
-\item
-  {[}{[}QPSK-Modulation{]}{]} - More bits per symbol (phase)
-\item
-  {[}{[}Constellation-Diagrams{]}{]} - Visualizing modulation schemes
-\item
-  {[}{[}AID-Protocol-Case-Study{]}{]} - Uses 1 bps FSK sub-carrier
-  (11,999/12,001 Hz)
-\end{itemize}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ References}{ References}}\label{references}
+\subsection*{Disadvantages}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Sunde, E.D.} (1946) ``Ideal binary pulse transmission by AM
-  and FM'' \emph{Bell Syst. Tech. J.} 25, 1067-1093
-\item
-  \textbf{de Jager, F. \& Dekker, C.B.} (1978) ``Tamed Frequency
-  Modulation'' \emph{IEEE Trans. Comm.} COM-26, 534-542
-\item
-  \textbf{Proakis, J.G. \& Salehi, M.} (2008) \emph{Digital
-  Communications} 5th ed.~(McGraw-Hill)
-\item
-  \textbf{Sklar, B.} (2001) \emph{Digital Communications} 2nd
-  ed.~(Prentice Hall)
+\item \textbf{Poor spectral efficiency:} Requires $\sim$2$\times$ bandwidth of PSK schemes
+\item \textbf{Moderate power efficiency:} 1--2~dB worse than coherent BPSK
+\item \textbf{Frequency stability:} Requires accurate oscillators (especially for narrowband)
+\item \textbf{Doppler sensitivity:} Frequency offsets degrade performance
+\item \textbf{Lower data rates:} Not suitable for high-throughput applications
 \end{enumerate}
+
+\section{Practical Applications}
+
+\subsection{Historical Systems}
+
+\subsubsection{Telephone Modems}
+
+\begin{itemize}
+\item \textbf{Bell 103 (1962):} 300~bps, $f_0 = 1070$~Hz, $f_1 = 1270$~Hz
+\item \textbf{Bell 202 (1976):} 1200~bps, $f_0 = 2200$~Hz, $f_1 = 1200$~Hz (still used for caller ID)
+\item \textbf{V.21 (CCITT):} 300~bps full-duplex over phone lines
+\end{itemize}
+
+\subsubsection{Radio Communication}
+
+\begin{itemize}
+\item \textbf{Radio Teletype (RTTY):} HF radio, 45.45~baud, $\Delta f = 170$~Hz (still used by amateur radio)
+\item \textbf{Pagers:} POCSAG (1981), FLEX (1993)---millions deployed worldwide
+\item \textbf{Emergency broadcasts:} Weather radio, emergency alert system (EAS) tones
+\end{itemize}
+
+\subsection{Modern IoT and Wireless Systems}
+
+\subsubsection{LoRa (Long Range)}
+
+\begin{itemize}
+\item \textbf{Technology:} Chirp Spread Spectrum (CSS) FSK variant
+\item \textbf{Frequency bands:} 433~MHz, 868~MHz (EU), 915~MHz (US)
+\item \textbf{Range:} Up to 15~km rural, 2--5~km urban
+\item \textbf{Data rates:} 0.3--50~kbps (adaptive)
+\item \textbf{Applications:} Smart agriculture, asset tracking, smart cities
+\end{itemize}
+
+\subsubsection{Bluetooth Low Energy (BLE)}
+
+\begin{itemize}
+\item \textbf{Modulation:} GFSK (Gaussian FSK)
+\item \textbf{Modulation index:} $h = 0.5$ (MSK)
+\item \textbf{Data rate:} 1~Mbps (BLE 4.x), 2~Mbps (BLE 5.0)
+\item \textbf{Applications:} Wearables, beacons, smart home devices
+\end{itemize}
+
+\subsubsection{IEEE 802.15.4 (Zigbee)}
+
+\begin{itemize}
+\item \textbf{Bands:} 868~MHz (Europe), 915~MHz (Americas), 2.4~GHz (worldwide)
+\item \textbf{Modulation:} BPSK (sub-GHz), O-QPSK (2.4~GHz)
+\item \textbf{Related:} Thread, 6LoWPAN protocols
+\end{itemize}
+
+\subsection{Specialized Applications}
+
+\begin{itemize}
+\item \textbf{RFID systems:} Passive tags use FSK backscatter
+\item \textbf{Weather balloons:} Radiosondes transmit meteorological data via FSK (400~MHz)
+\item \textbf{Wireless sensor networks:} Low-power nodes with simple FSK transceivers
+\item \textbf{Submarine communication:} VLF/ELF FSK for underwater links
+\end{itemize}
+
+\section{FSK Variants}
+
+\subsection{Minimum Shift Keying (MSK)}
+
+Special case where $h = 0.5$ (minimum for orthogonality):
+
+\begin{itemize}
+\item \textbf{Continuous phase:} No phase discontinuities at bit boundaries
+\item \textbf{Constant envelope:} Ideal for nonlinear amplifiers
+\item \textbf{Bandwidth:} $B \approx 1.5 R_b$ (narrowest orthogonal FSK)
+\item \textbf{Equivalent form:} Offset QPSK with half-sine pulse shaping
+\item \textbf{Used in:} GSM cellular (GMSK variant), satellite communications
+\end{itemize}
+
+\subsection{Gaussian FSK (GFSK)}
+
+MSK with Gaussian pre-modulation filtering:
+
+\begin{itemize}
+\item \textbf{Purpose:} Reduce spectral sidelobes for tighter spectrum occupancy
+\item \textbf{BT product:} $B \times T_b$ typically 0.3--0.5
+\item \textbf{Bandwidth:} $B \approx 1.2$--$1.5 R_b$ depending on BT
+\item \textbf{Applications:} Bluetooth (BT = 0.5), Zigbee, DECT
+\end{itemize}
+
+\subsection{Continuous Phase FSK (CPFSK)}
+
+Phase is continuous across all bit boundaries:
+\begin{equation}
+\phi(t) = 2\pi\left[f_c t + \frac{h\Delta f}{2}\int_0^t b(\tau)\,d\tau\right]
+\end{equation}
+
+\textbf{Benefits:}
+\begin{itemize}
+\item No spectral splatter from phase jumps
+\item Improved spectral efficiency
+\item Smoother power envelope
+\end{itemize}
+
+\subsection{Multi-Frequency FSK (MFSK)}
+
+Uses $M > 2$ frequencies for higher order modulation:
+
+\begin{itemize}
+\item \textbf{Symbol encoding:} $\log_2(M)$ bits per symbol
+\item \textbf{Example (4-FSK):} $f_0, f_1, f_2, f_3$ encode 00, 01, 10, 11
+\item \textbf{Bandwidth:} $B \approx M \cdot R_s$ (wider than binary FSK)
+\item \textbf{Power efficiency:} Better than BFSK at high $M$ and low SNR
+\item \textbf{Applications:} HF radio (MT63, Olivia), meteor scatter
+\end{itemize}
+
+\section{Summary}
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Bits per symbol & 1 (binary FSK) \\
+Modulation method & Frequency switching \\
+Typical bandwidth (Carson) & $\sim$2$R_b$ (non-coherent) \\
+Spectral efficiency & $\sim$0.5~bps/Hz \\
+BER @ 12~dB $E_b/N_0$ (non-coh) & $1.2 \times 10^{-4}$ \\
+BER @ 12~dB $E_b/N_0$ (coherent) & $2.6 \times 10^{-5}$ \\
+Detection type & Non-coherent or coherent \\
+Carrier recovery & Not required (non-coherent) \\
+Envelope & Constant \\
+Implementation & Simple (VCO-based) \\
+Best application & Low-power, harsh channels, IoT \\
+Typical uses & LoRa, Bluetooth (GFSK), caller ID, pagers \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Key advantages:}
+\begin{itemize}
+\item Robust amplitude immunity
+\item Simple non-coherent detection
+\item Constant envelope for efficient amplifiers
+\item Proven technology with wide deployment
+\end{itemize}
+
+\textbf{Key trade-offs:}
+\begin{itemize}
+\item Lower spectral efficiency than PSK/QAM
+\item Wider bandwidth requirement
+\item Moderate power efficiency (1--2~dB penalty vs BPSK)
+\end{itemize}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter~\ref{ch:bpsk}:} Binary Phase-Shift Keying (BPSK)---coherent alternative with better spectral efficiency
+\item \textbf{Chapter~5:} On-Off Keying (OOK)---simpler amplitude modulation
+\item \textbf{Chapter~7:} Quadrature Phase-Shift Keying (QPSK)---2 bits/symbol extension
+\item \textbf{Chapter~10:} Minimum Shift Keying (MSK)---optimal continuous-phase FSK
+\item \textbf{Chapter~12:} Constellation Diagrams---visualization of modulation schemes
+\item \textbf{Chapter~13:} IQ Representation---complex baseband mathematics
+\item \textbf{Chapter~18:} Bit Error Rate Analysis---performance measurement
+\item \textbf{Chapter~22:} Forward Error Correction---coding for BER improvement
+\item \textbf{Chapter~28:} Spread Spectrum Techniques---frequency hopping and chirp modulation
+\item \textbf{Chapter~35:} IoT Communication Systems---LoRa, Sigfox, NB-IoT applications
+\end{itemize}
