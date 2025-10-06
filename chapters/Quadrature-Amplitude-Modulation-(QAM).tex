@@ -647,42 +647,42 @@ The receiver uses coherent I/Q demodulation to recover the transmitted symbols:
 \item Map constellation point to bits using Gray code mapping
 \end{enumerate}
 
-\subsubsection{Soft-Decision Decoding}\label{soft-decision-decoding}
+\subsection{Soft-Decision Decoding}
 
-\textbf{Hard decision}: Nearest neighbor \$\textbackslash rightarrow\$
-Bits
+\textbf{Hard decision:} Select nearest constellation point, output bits directly.
 
-\textbf{Soft decision}: Pass I/Q values (or LLRs) to decoder
+\textbf{Soft decision:} Pass I/Q values or Log-Likelihood Ratios (LLRs) to the FEC decoder.
 
-\textbf{Log-Likelihood Ratio (LLR)} for bit \(b_k\):
-
-\[
+The LLR for bit $b_k$ is:
+\begin{equation}
 \text{LLR}(b_k) = \log\frac{P(b_k=0 | r)}{P(b_k=1 | r)}
-\]
+\label{eq:qam-llr-simple}
+\end{equation}
 
-\textbf{Benefit}: \textasciitilde2 dB coding gain (LDPC, Turbo codes use
-soft decisions)
+\begin{keyconcept}
+Soft-decision decoding provides approximately \textbf{2~dB coding gain} over hard decisions when used with modern FEC codes (LDPC, Turbo). The decoder utilizes the reliability information from the demodulator, not just the bit decision.
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Power Efficiency}
 
-\subsection{Power Efficiency}\label{power-efficiency}
+\subsection{Peak-to-Average Power Ratio (PAPR)}
 
-\subsubsection{Peak-to-Average Power Ratio
-(PAPR)}\label{peak-to-average-power-ratio-papr}
-
-\textbf{QAM has varying envelope}:
-
-\[
+Unlike constant-envelope modulations (BPSK, QPSK, FSK), QAM has a varying envelope:
+\begin{equation}
 |s_m| = \sqrt{I_m^2 + Q_m^2}
-\]
+\label{eq:qam-envelope}
+\end{equation}
 
-\textbf{PAPR}:
-
-\[
+The Peak-to-Average Power Ratio is defined as:
+\begin{equation}
 \text{PAPR} = \frac{P_{\max}}{P_{\text{avg}}} = \frac{|s_{\max}|^2}{\bar{E}_s}
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\label{eq:qam-papr}
+\end{equation}
+where:
+\begin{itemize}
+\item $|s_{\max}|$ = maximum constellation point magnitude
+\item $\bar{E}_s$ = average symbol energy
+\end{itemize}
 
 \subsubsection{PAPR Values}\label{papr-values}
 
@@ -711,89 +711,111 @@ saturation - Efficiency drops from 50\% to \textasciitilde13\%
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Practical Impairments}\label{practical-impairments}
+\section{Practical Impairments}
 
-\subsubsection{1. I/Q Imbalance}\label{iq-imbalance}
+\subsection{I/Q Imbalance}
 
-\textbf{Gain mismatch}: \(G_I \neq G_Q\)
+Hardware imperfections in the I/Q modulator/demodulator cause:
 
-\textbf{Phase error}: 90\$\^{}\textbackslash circ\$ hybrid imperfect
-(e.g., 88\$\^{}\textbackslash circ\$ or 92\$\^{}\textbackslash circ\$)
+\textbf{Gain mismatch:} $G_I \neq G_Q$
 
-\textbf{Effect}: Constellation distortion, image leakage
+\textbf{Phase error:} Quadrature hybrid not exactly $90°$ (e.g., $88°$ or $92°$)
 
-\textbf{Model}:
-
-\[
+The received signal model with I/Q imbalance is:
+\begin{equation}
 r = (1 + \alpha_G) I + j(1 - \alpha_G) e^{j\epsilon} Q + n
-\]
+\label{eq:iq-imbalance}
+\end{equation}
+where:
+\begin{itemize}
+\item $\alpha_G$ = gain imbalance coefficient
+\item $\epsilon$ = phase error (rad)
+\item $n$ = AWGN
+\end{itemize}
 
-Where: - \(\alpha_G\) = Gain imbalance - \(\epsilon\) = Phase error
+\textbf{Typical values:} $\pm 0.5$~dB gain, $\pm 2°$ phase
 
-\textbf{Typical}: \$\textbackslash pm\$0.5 dB gain,
-\$\textbackslash pm\$2\$\^{}\textbackslash circ\$ phase (degrades
-256-QAM significantly)
+\textbf{Effect:} Constellation distortion, image frequency leakage, significant degradation for 256-QAM and higher.
 
-\textbf{Mitigation}: Digital calibration (pilot-aided estimation)
+\textbf{Mitigation:} Digital I/Q calibration using pilot symbols or training sequences.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Nonlinear Power Amplifier Distortion}
 
-\subsubsection{2. Nonlinear PA
-Distortion}\label{nonlinear-pa-distortion}
+Non-constant envelope QAM signals suffer from PA nonlinearity:
 
-\textbf{AM-AM conversion}: Gain compression at high amplitudes
+\textbf{AM-AM conversion:} Gain compression at high signal amplitudes
 
-\textbf{AM-PM conversion}: Phase shift varies with amplitude
+\textbf{AM-PM conversion:} Phase shift varies with instantaneous amplitude
 
-\textbf{Effect}: Constellation warping, especially outer points
+\textbf{Effects:}
+\begin{itemize}
+\item Constellation warping (outer points compressed)
+\item Reduced minimum distance $\rightarrow$ increased BER
+\item Spectral regrowth (adjacent channel interference)
+\end{itemize}
 
-\textbf{Example}: 64-QAM, corner points compress 1 dB - Minimum distance
-reduced \$\textbackslash rightarrow\$ BER increases - Spectral regrowth
-(adjacent channel interference)
+\textbf{Example:} For 64-QAM, if corner points compress by 1~dB:
+\begin{itemize}
+\item Effective $E_b/N_0$ penalty: $\sim$2~dB
+\item Spectral mask violations possible
+\end{itemize}
 
-\textbf{Mitigation}: - \textbf{Backoff}: 6-10 dB (kills efficiency) -
-\textbf{Predistortion}: Digital (DPD) or analog - \textbf{Crest factor
-reduction (CFR)}: Clip peaks, re-generate signal
+\textbf{Mitigation techniques:}
+\begin{enumerate}
+\item \textbf{Power backoff:} Operate PA 6--10~dB below saturation (reduces efficiency)
+\item \textbf{Digital predistortion (DPD):} Pre-warp signal to compensate for PA nonlinearity
+\item \textbf{Crest factor reduction (CFR):} Clip and filter peaks to reduce PAPR
+\item \textbf{Linearization:} Feedforward or feedback techniques
+\end{enumerate}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Phase Noise}
 
-\subsubsection{3. Phase Noise}\label{phase-noise}
-
-\textbf{Oscillator jitter} causes constellation rotation/spread:
-
-\[
+Oscillator jitter causes constellation rotation and spreading:
+\begin{equation}
 r(t) = s(t) e^{j\phi_n(t)} + n(t)
-\]
+\label{eq:phase-noise-model}
+\end{equation}
+where $\phi_n(t)$ is the random phase noise process.
 
-\textbf{Effect}: Common phase error (CPE) + inter-carrier interference
-(OFDM)
+\textbf{Effects:}
+\begin{itemize}
+\item Common Phase Error (CPE): All symbols rotated by same random angle
+\item Inter-Carrier Interference (ICI) in OFDM systems
+\item Effective SNR degradation
+\end{itemize}
 
-\textbf{Sensitivity}: Higher-order QAM more sensitive
+\textbf{Sensitivity:} Higher-order QAM is extremely sensitive to phase noise.
 
-\textbf{Example}: 256-QAM - Tolerable phase noise:
-\textasciitilde1\$\^{}\textbackslash circ\$ RMS - Requires high-quality
-oscillator (PLL, TCXO, or OCXO)
+\textbf{Example (256-QAM):}
+\begin{itemize}
+\item Tolerable phase noise: $\sim 1°$ RMS
+\item Requires high-quality oscillator (PLL with TCXO or OCXO reference)
+\item Phase noise spectral density: $< -100$~dBc/Hz at 1~kHz offset
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Timing Jitter}
 
-\subsubsection{4. Timing Jitter}\label{timing-jitter}
+Symbol clock errors cause sampling offset, leading to:
+\begin{itemize}
+\item Intersymbol interference (ISI)
+\item Constellation blurring and rotation
+\item Reduced effective SNR
+\end{itemize}
 
-\textbf{Symbol clock error} causes sampling offset:
+\textbf{Requirement:} Timing error $< 0.1$ symbol period
 
-\textbf{Effect}: ISI, constellation blurring
+\textbf{Example:} For 64-QAM at 10~Msymbols/sec:
+\begin{itemize}
+\item Symbol period: $T_s = 100$~ns
+\item Tolerable jitter: $< 10$~ns RMS
+\item Clock accuracy: $< 10^{-4}$ (100~ppm)
+\end{itemize}
 
-\textbf{Requirement}: Timing error \textless{} 0.1 symbol period
+\section{Applications}
 
-\textbf{Example}: 64-QAM @ 10 Msps - Symbol period: 100 ns - Tolerable
-jitter: \textless{} 10 ns RMS
+\subsection{WiFi (802.11 Standards)}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Practical Applications}\label{practical-applications}
-
-\subsubsection{1. WiFi (802.11a/n/ac/ax)}\label{wifi-802.11anacax}
-
-\textbf{OFDM subcarriers} use QAM:
+OFDM subcarriers in WiFi use QAM modulation:
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
@@ -812,12 +834,9 @@ MIMO, 160 MHz \\
 \end{longtable}
 }
 
-\textbf{Adaptive modulation}: Switch QPSK \$\textbackslash rightarrow\$
-16/64/256/1024-QAM based on SNR
+\textbf{Adaptive modulation:} Systems dynamically switch between QPSK $\rightarrow$ 16/64/256/1024-QAM based on measured SNR.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. LTE/5G NR}\label{lte5g-nr}
+\subsection{LTE/5G NR}
 
 \textbf{LTE downlink}: Up to 256-QAM (Cat 9+)
 
@@ -829,13 +848,13 @@ scenarios)
 Per-carrier: 4 layers \$\textbackslash times\$ 8 bits/symbol
 \$\textbackslash times\$ 75k symbols/sec = 2.4 Gbps (theoretical)
 
-\textbf{Adaptive MCS} (Modulation \& Coding Scheme): - Poor channel:
-QPSK 1/4 (0.5 bits/symbol effective) - Good channel: 256-QAM 3/4 (6
-bits/symbol effective)
+\textbf{Adaptive MCS} (Modulation \& Coding Scheme):
+\begin{itemize}
+\item Poor channel: QPSK 1/4 (0.5 bits/symbol effective)
+\item Good channel: 256-QAM 3/4 (6 bits/symbol effective)
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Cable Modems (DOCSIS)}\label{cable-modems-docsis}
+\subsection{Cable Modems (DOCSIS)}
 
 \textbf{DOCSIS 3.0}: 256-QAM (8 bits/symbol)
 
@@ -843,11 +862,9 @@ bits/symbol effective)
 \textgreater{} 40 dB (excellent cable plant) - OFDM with 4096-QAM
 subcarriers \$\textbackslash rightarrow\$ 10 Gbps downstream
 
-\textbf{Key}: Wired channel (no fading), high SNR possible
+\textbf{Key advantage:} Wired channel has no fading, enabling high SNR and thus very high-order QAM.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4. Digital TV}\label{digital-tv}
+\subsection{Digital TV}
 
 \textbf{DVB-C (Cable)}: 256-QAM standard
 
@@ -855,9 +872,7 @@ subcarriers \$\textbackslash rightarrow\$ 10 Gbps downstream
 
 \textbf{ATSC 3.0 (US)}: 256-QAM, 1024-QAM, 4096-QAM (OFDM)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{5. Microwave Backhaul}\label{microwave-backhaul}
+\subsection{Microwave Backhaul}
 
 \textbf{Point-to-point links}: - \textbf{Clear weather}: 2048-QAM,
 4096-QAM (\$\textbackslash geq\$30 dB SNR) - \textbf{Light rain}:
