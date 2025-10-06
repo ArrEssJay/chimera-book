@@ -167,40 +167,154 @@ The FSK modulator can be implemented using frequency synthesis:
   node distance=2.2cm,
   font=\small
 ]
-\node (input) {\sffamily Binary\\$\{0, 1
+\node (input) {\sffamily Binary\\$\{0, 1\}$};
+\node[block, right of=input, node distance=2.8cm] (switch) {Frequency\\Selector};
+\node[block, right of=switch, node distance=3.5cm] (vco) {VCO or\\Synthesizer};
+\node[block, right of=vco, node distance=3.2cm] (filter) {Bandpass\\Filter};
+\node[right of=filter, node distance=2.8cm] (output) {\sffamily FSK\\Output};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\node[below of=switch, node distance=1.5cm, font=\scriptsize, align=center] (freq) {$f_0$ or $f_1$};
 
-\subsection{\texorpdfstring{ Performance
-Analysis}{ Performance Analysis}}\label{performance-analysis}
+\draw[->,thick] (input) -- (switch);
+\draw[->,thick] (switch) -- node[above,font=\scriptsize] {control} (vco);
+\draw[->,thick] (vco) -- (filter);
+\draw[->,thick] (filter) -- (output);
+\draw[->,thick] (freq) -- (switch);
+\end{tikzpicture}
+\end{center}
 
-\subsubsection{Bit Error Rate (BER)}\label{bit-error-rate-ber}
+\textbf{Process:}
+\begin{enumerate}
+\item \textbf{Data bit determines frequency:} Bit 0 $\rightarrow$ $f_0$, Bit 1 $\rightarrow$ $f_1$
+\item \textbf{Voltage-Controlled Oscillator (VCO):} Generates carrier at selected frequency
+\item \textbf{Bandpass filter:} Shapes spectrum and removes harmonics
+\end{enumerate}
 
-\textbf{With non-coherent detection} (AWGN channel):
+\subsection{Receiver: Non-Coherent Detection}
 
-\begin{verbatim}
-BER = (1/2)exp(-E_b/2N)      for orthogonal FSK
+The most common FSK demodulation uses \textbf{non-coherent detection}, which does not require carrier phase synchronization:
 
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2cm,
+  font=\small
+]
+\node (input) {\sffamily RX\\Signal};
+\node[block, above right of=input, node distance=2.8cm] (bpf0) {BPF\\$@f_0$};
+\node[block, right of=bpf0, node distance=2.8cm] (env0) {Envelope\\Detector};
+\node[block, below right of=input, node distance=2.8cm] (bpf1) {BPF\\$@f_1$};
+\node[block, right of=bpf1, node distance=2.8cm] (env1) {Envelope\\Detector};
+\node[block, right of=env0, node distance=2.8cm, yshift=-1.4cm] (comp) {Compare\\$>$};
+\node[block, right of=comp, node distance=2.5cm] (sample) {Sample\\$@T_b$};
+\node[right of=sample, node distance=2.5cm] (output) {\sffamily Data\\$\{0,1\}$};
+
+\draw[->,thick] (input) -- ++(0.8,0) coordinate (split);
+\draw[->,thick] (split) |- (bpf0);
+\draw[->,thick] (split) |- (bpf1);
+\draw[->,thick] (bpf0) -- (env0);
+\draw[->,thick] (bpf1) -- (env1);
+\draw[->,thick] (env0) -| node[near start,above,font=\scriptsize] {$z_0$} (comp);
+\draw[->,thick] (env1) -| node[near start,below,font=\scriptsize] {$z_1$} (comp);
+\draw[->,thick] (comp) -- (sample);
+\draw[->,thick] (sample) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Detection process:}
+\begin{enumerate}
+\item \textbf{Bandpass filters:} Separate $f_0$ and $f_1$ components
+\item \textbf{Envelope detectors:} Measure signal amplitude in each channel
+\item \textbf{Compare:} Select channel with larger envelope
+\item \textbf{Decision:} If $z_0 > z_1$: bit = 0; else: bit = 1
+\end{enumerate}
+
+\begin{keyconcept}
+\textbf{Non-coherent detection} eliminates the need for carrier phase recovery, significantly simplifying receiver design. The performance penalty is approximately \textbf{1~dB} compared to coherent detection---a worthwhile trade-off for many applications.
+\end{keyconcept}
+
+\subsection{Coherent Detection (Optimal)}
+
+For maximum performance, coherent detection uses correlation receivers:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2cm,
+  font=\small
+]
+\node (input) {\sffamily RX\\Signal};
+\node[block, above right of=input, node distance=2.8cm] (mult0) {Mixer\\$\times$};
+\node[block, right of=mult0, node distance=2.8cm] (int0) {Integrate\\$0$ to $T_b$};
+\node[block, below right of=input, node distance=2.8cm] (mult1) {Mixer\\$\times$};
+\node[block, right of=mult1, node distance=2.8cm] (int1) {Integrate\\$0$ to $T_b$};
+\node[block, right of=int0, node distance=2.8cm, yshift=-1.4cm] (comp) {Compare\\$>$};
+\node[right of=comp, node distance=2.5cm] (output) {\sffamily Data\\$\{0,1\}$};
+
+\node[below of=mult0, node distance=1.3cm, font=\scriptsize, align=center] (lo0) {$\cos(2\pi f_0 t)$};
+\node[below of=mult1, node distance=1.3cm, font=\scriptsize, align=center] (lo1) {$\cos(2\pi f_1 t)$};
+
+\draw[->,thick] (input) -- ++(0.8,0) coordinate (split);
+\draw[->,thick] (split) |- (mult0);
+\draw[->,thick] (split) |- (mult1);
+\draw[->,thick] (lo0) -- (mult0);
+\draw[->,thick] (lo1) -- (mult1);
+\draw[->,thick] (mult0) -- (int0);
+\draw[->,thick] (mult1) -- (int1);
+\draw[->,thick] (int0) -| node[near start,above,font=\scriptsize] {$z_0$} (comp);
+\draw[->,thick] (int1) -| node[near start,below,font=\scriptsize] {$z_1$} (comp);
+\draw[->,thick] (comp) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Coherent detection provides optimal performance but requires:}
+\begin{itemize}
+\item Precise local oscillators at both $f_0$ and $f_1$
+\item Phase synchronization (approximately 1~dB improvement over non-coherent)
+\item More complex receiver circuitry
+\end{itemize}
+
+\begin{warningbox}
+\textbf{Frequency accuracy is critical.} The local oscillators must match the transmitter frequencies exactly. Even small frequency offsets degrade performance. For non-coherent FSK, frequency stability requirements are relaxed compared to phase-coherent modulation schemes like BPSK.
+\end{warningbox}
+
+\section{Bit Error Rate (BER) Performance}
+
+\subsection{Non-Coherent FSK in AWGN Channel}
+
+For orthogonal non-coherent FSK with envelope detection:
+\begin{equation}
+\mathrm{BER} = \frac{1}{2}e^{-E_b/(2N_0)}
+\end{equation}
 where:
-- E_b = bit energy = (A²T_b)/2
-- N = noise power spectral density
-\end{verbatim}
+\begin{itemize}
+\item $E_b = \frac{A^2 T_b}{2}$ = energy per bit (joules)
+\item $N_0$ = noise power spectral density (W/Hz)
+\end{itemize}
 
-\textbf{With coherent detection}:
+\subsection{Coherent FSK in AWGN Channel}
 
-\begin{verbatim}
-BER = Q((E_b/N))            (1 dB better!)
-\end{verbatim}
+For orthogonal coherent FSK with correlation detection:
+\begin{equation}
+\mathrm{BER} = Q\left(\sqrt{\frac{E_b}{N_0}}\right) = \frac{1}{2}\mathrm{erfc}\left(\sqrt{\frac{E_b}{2N_0}}\right)
+\end{equation}
 
-\textbf{For orthogonal FSK}: Frequencies
-f\textbackslash textsubscript\{0\} and
-f\textbackslash textsubscript\{1\} must satisfy:
+\textbf{Performance benchmarks:}
 
-\begin{verbatim}
-(f - f)·T_b = n/2    (n = integer)
+\begin{center}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+$E_b/N_0$ (dB) & \multicolumn{1}{c}{BER (Non-coh)} & \multicolumn{1}{c}{BER (Coherent)} & Practical Meaning \\
+\midrule
+5~dB & $6.7 \times 10^{-2}$ & $3.9 \times 10^{-2}$ & 1 error in 15--25 bits \\
+10~dB & $6.7 \times 10^{-4}$ & $1.9 \times 10^{-4}$ & 1 error in 1,500--5,000 bits \\
+12~dB & $1.2 \times 10^{-4}$ & $2.6 \times 10^{-5}$ & 1 error in 8,000--38,000 bits \\
+15~dB & $3.7 \times 10^{-6}$ & $4.3 \times 10^{-7}$ & 1 error in $270$k--$2.3$M bits \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-Minimum: f = 1/(2T_b)   h = 1 (Sunde's FSK)
-\end{verbatim}
+\textbf{Key insight:} Coherent detection provides approximately \textbf{1~dB} advantage over non-coherent detection at practical BER levels.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
