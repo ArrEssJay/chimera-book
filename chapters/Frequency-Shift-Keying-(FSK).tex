@@ -1,205 +1,173 @@
-\section{Frequency-Shift Keying (FSK)}\label{frequency-shift-keying-fsk}
+\chapter{Frequency-Shift Keying (FSK)}
+\label{ch:fsk}
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\begin{nontechnical}
+\textbf{FSK is like Morse code with two different musical notes}---high note = 1, low note = 0. Simple, robust, and still used everywhere!
 
-\textbf{FSK is like morse code with two different musical
-notes-\/-\/-high note = 1, low note = 0. Simple, robust, and still used
-everywhere!}
+\textbf{Musical analogy:}
+\begin{itemize}
+\item Playing piano: \textbf{C note} = bit 0, \textbf{E note} = bit 1
+\item Song: ``C C E C E E C'' = data: ``0 0 1 0 1 1 0''
+\item Your ear (receiver) easily distinguishes C from E!
+\item FSK receiver does the same with radio frequencies
+\end{itemize}
 
-\textbf{The idea}: - Want to send a \textbf{1}? Transmit at \textbf{high
-frequency} (e.g., 1200 Hz) - Want to send a \textbf{0}? Transmit at
-\textbf{low frequency} (e.g., 1000 Hz) - Receiver listens for which tone
-is present
+\textbf{Why it's great:} Noise changes amplitude, but frequency stays clear! Immune to fading---signal can get weaker, but frequency doesn't change.
 
-\textbf{Musical analogy}: - Playing piano: \textbf{C note} = 0,
-\textbf{E note} = 1 - Song: ``C C E C E E C'' = data: ``0 0 1 0 1 1 0''
-- Your ear (receiver) easily distinguishes C from E! - FSK receiver does
-the same with radio frequencies
+\textbf{Where you hear it:}
+\begin{itemize}
+\item \textbf{Caller ID}: Your phone uses FSK between rings
+\item \textbf{Fax machines}: Those alternating tones you can hear
+\item \textbf{Dial-up modems}: BEEEE-doo-BEEEE-doo (remember the 90s?)
+\end{itemize}
 
-\textbf{Why it\textquotesingle s great}: - \textbf{Super robust}: Noise
-changes amplitude, but frequency stays clear! - \textbf{Simple}: Just
-detect which frequency is present - \textbf{Immune to fading}: Signal
-can get weaker, but frequency doesn\textquotesingle t change -
-\textbf{Works in harsh environments}: Industrial, underwater, long-range
+\textbf{Modern uses:} Bluetooth Low Energy (GFSK), LoRa IoT networks, weather balloons, RFID tags.
+\end{nontechnical}
 
-\textbf{Where you encounter FSK}: - \textbf{Caller ID}: Your phone uses
-FSK to send caller info between rings! - \textbf{Old dial-up modems}:
-1980s modems used FSK (remember the screeching sound?) -
-\textbf{Bluetooth Low Energy}: Uses GFSK (Gaussian FSK) for low power -
-\textbf{RFID tags}: Many use FSK for simplicity - \textbf{Weather
-balloons}: FSK survives atmospheric interference - \textbf{Pagers}:
-Remember pagers? FSK!
+\section{Overview}
 
-\textbf{Real-world sounds}: - \textbf{Fax machine}: That squawking noise
-is FSK! Listen carefully-\/-\/-you can hear the two tones alternating -
-\textbf{Dial-up internet}: BEEEE-doo-BEEEE-doo = FSK handshake -
-\textbf{Emergency broadcast tones}: Two-tone alert = FSK
+\textbf{Frequency-Shift Keying (FSK)} is a digital modulation scheme where binary data is represented by switching between two discrete carrier frequencies.
 
-\textbf{Variants}: - \textbf{BFSK}: Binary (2 frequencies) = 1
-bit/symbol - \textbf{MFSK}: Multiple frequencies (4, 8, 16, etc.) = more
-bits/symbol - \textbf{GFSK}: Gaussian FSK (smooth transitions) = used in
-Bluetooth
+\begin{keyconcept}
+FSK provides \textbf{excellent immunity to amplitude variations} and \textbf{non-coherent detection capability}, making it ideal for harsh channel conditions, low-power applications, and simple receiver implementations.
+\end{keyconcept}
 
-\textbf{Trade-off}: - \textbf{Advantage}: Extremely robust, immune to
-amplitude variations - \textbf{Disadvantage}: Slow compared to QAM
-(lower spectral efficiency) - Best for: Low-power, long-range, harsh
-environments
+Unlike phase-based modulation schemes (BPSK, QPSK), FSK encodes information in the \textbf{frequency domain}, allowing receivers to detect transmitted data without requiring precise carrier phase synchronization.
 
-\textbf{Fun fact}: Old telegraph operators could ``read'' morse code by
-EAR at 40+ words/minute. FSK is the same idea-\/-\/-humans can literally
-hear binary data if you slow it down!
+\section{Mathematical Description}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Time-Domain Signal}
 
-\textbf{Frequency-Shift Keying (FSK)} is a digital modulation scheme
-where binary data is represented by discrete changes in carrier
-frequency.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Basic
-Principle}{ Basic Principle}}\label{basic-principle}
-
-\textbf{Binary FSK (BFSK)}:
-
-\begin{verbatim}
-Bit "1": s(t) = A·cos(2f·t)
-Bit "0": s(t) = A·cos(2f·t)
-
+For binary FSK (BFSK), the transmitted signal for bit $n$ is:
+\begin{equation}
+s_n(t) = A \cos(2\pi f_n t), \quad 0 \leq t < T_b
+\end{equation}
 where:
-- A = constant amplitude
-- f = "mark" frequency (higher)
-- f = "space" frequency (lower)
-- f = f - f = frequency separation
-\end{verbatim}
+\begin{itemize}
+\item $A$ = constant carrier amplitude
+\item $f_n \in \{f_0, f_1\}$ = transmitted frequency for bit $n$
+\item $T_b$ = bit duration (seconds)
+\end{itemize}
 
-\textbf{Time-domain representation}:
+\textbf{Frequency encoding:}
+\begin{equation}
+f_n = \begin{cases}
+f_0 & \text{if bit = 0 (``space'' frequency)} \\
+f_1 & \text{if bit = 1 (``mark'' frequency)}
+\end{cases}
+\end{equation}
 
-\begin{verbatim}
-Frequency
-   
-f |---|   |---|       |---|     Bit "1"
-   |   |   |   |       |   |
-f |   |---|   |-------|   |---  Bit "0"
-   +-------------------------- Time
-       1   0   1   0       1
-\end{verbatim}
+\subsection{General Form}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+The FSK signal can be expressed as:
+\begin{equation}
+s(t) = A \cos\left[2\pi\left(f_c + b_k \cdot \frac{\Delta f}{2}\right)t\right]
+\end{equation}
+for $kT_b \leq t < (k+1)T_b$, where:
+\begin{itemize}
+\item $f_c$ = center carrier frequency (Hz)
+\item $b_k \in \{-1, +1\}$ = bipolar data symbol
+\item $\Delta f = f_1 - f_0$ = frequency separation (Hz)
+\end{itemize}
 
-\subsection{\texorpdfstring{ Mathematical
-Description}{ Mathematical Description}}\label{mathematical-description}
+\subsection{Modulation Index}
 
-\textbf{Transmitted signal}:
+The \textbf{modulation index} characterizes the frequency deviation relative to the bit rate:
+\begin{equation}
+h = \frac{\Delta f \cdot T_b}{1} = \Delta f \cdot T_b = \frac{\Delta f}{R_b}
+\end{equation}
+where $R_b = 1/T_b$ is the bit rate (bps).
 
-\begin{verbatim}
-s(t) = A·cos[2(f_c + b_k·f/2)·t]     for kT_b  t < (k+1)T_b
+\textbf{Common values:}
+\begin{itemize}
+\item $h = 0.5$: Minimum Shift Keying (MSK)---narrowest orthogonal FSK
+\item $h = 1.0$: Sunde's FSK---optimal orthogonality
+\item $h > 1$: Wideband FSK---improved noise immunity, wider bandwidth
+\end{itemize}
 
+\begin{calloutbox}{Orthogonality Condition}
+For \textbf{orthogonal FSK}, the two frequencies must satisfy:
+\begin{equation}
+\Delta f = \frac{n}{2T_b}, \quad n \in \mathbb{Z}^+
+\end{equation}
+Minimum orthogonal spacing: $\Delta f = \frac{1}{2T_b}$ (MSK, $h = 0.5$).
+
+Orthogonal signals allow optimal non-coherent detection with minimal mutual interference.
+\end{calloutbox}
+
+\section{Spectral Characteristics}
+
+\subsection{Bandwidth (Carson's Rule)}
+
+The approximate bandwidth of FSK is given by \textbf{Carson's rule}:
+\begin{equation}
+B \approx 2(\Delta f + R_b) = 2R_b(h + 1)
+\end{equation}
 where:
-- f_c = carrier frequency (center)
-- b_k  {-1, +1} (or {0, 1})
-- f = frequency deviation
-- T_b = bit duration
-\end{verbatim}
+\begin{itemize}
+\item $\Delta f$ = frequency separation (Hz)
+\item $R_b$ = bit rate (bps)
+\item $h$ = modulation index
+\end{itemize}
 
-\textbf{Modulation index}:
+\textbf{Examples:}
+\begin{itemize}
+\item \textbf{MSK} ($h = 0.5$): $B \approx 1.5 R_b$ (most spectrally efficient FSK)
+\item \textbf{Sunde's FSK} ($h = 1.0$): $B \approx 2 R_b$
+\item \textbf{Wideband FSK} ($h = 2.0$): $B \approx 6 R_b$
+\end{itemize}
 
-\begin{verbatim}
-h = 2f·T_b
+The power spectral density consists of two main lobes centered at $f_0$ and $f_1$, with sidelobe amplitude depending on pulse shaping.
 
-Common values:
-- h = 0.5 (Minimum Shift Keying - MSK)
-- h = 1.0 (Sunde's FSK)
-- h > 1 (Wideband FSK)
-\end{verbatim}
+\section{Constellation Diagram}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Unlike phase-based modulation, FSK does not have a traditional I/Q constellation in the same sense. However, for orthogonal coherent FSK, we can represent the two signals as orthogonal vectors:
 
-\subsection{\texorpdfstring{ Spectral
-Characteristics}{ Spectral Characteristics}}\label{spectral-characteristics}
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+% Axes
+\draw[->] (-2.5,0) -- (2.5,0) node[right] {\sffamily\small $I$ (Real)};
+\draw[->] (0,-2.5) -- (0,2.5) node[above] {\sffamily\small $Q$ (Imaginary)};
 
-\textbf{Bandwidth} (Carson\textquotesingle s rule):
+% Grid
+\draw[very thin,gray!30] (-2,-2) grid[step=0.5] (2,2);
 
-\begin{verbatim}
-B = 2(f + R_b)
+% Constellation points for orthogonal FSK
+\fill[black] (1.8,0) circle (3pt);
+\fill[black] (0,1.8) circle (3pt);
 
-where R_b = 1/T_b = bit rate
-\end{verbatim}
+% Labels
+\node[below=8pt,align=center] at (1.8,0) {\sffamily\small Bit 0\\$f_0$};
+\node[right=8pt,align=center] at (0,1.8) {\sffamily\small Bit 1\\$f_1$};
 
-\textbf{Examples}: - Narrowband FSK (h = 0.5): B
-\$\textbackslash approx\$ 1.5 R\_b - Wideband FSK (h = 2): B
-\$\textbackslash approx\$ 5 R\_b
+% Distance annotation
+\draw[<->,thick,dashed] (1.8,0) -- (0,1.8) node[midway,above left] {\sffamily\small $d = \sqrt{2E_b}$};
 
-\textbf{Power spectral density}: Two main lobes centered at
-f\textbackslash textsubscript\{0\} and
-f\textbackslash textsubscript\{1\}
+% Energy circle
+\draw[thin,gray,dashed] (0,0) circle (1.8);
+\node[below right,gray,font=\scriptsize] at (1.27,-1.27) {Equal energy};
+\end{tikzpicture}
+\end{center}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+For \textbf{orthogonal FSK}, the two signal vectors are perpendicular (90° apart), providing:
+\begin{equation}
+d = \sqrt{2E_b}
+\end{equation}
+where $E_b = A^2T_b/2$ is the energy per bit.
 
-\subsection{\texorpdfstring{ Demodulation
-Methods}{ Demodulation Methods}}\label{demodulation-methods}
+\section{Modulation and Demodulation}
 
-\subsubsection{1. Non-Coherent Detection (Envelope
-Detector)}\label{non-coherent-detection-envelope-detector}
+\subsection{Transmitter (Modulator)}
 
-\textbf{Simple and practical} - no carrier phase recovery!
+The FSK modulator can be implemented using frequency synthesis:
 
-\begin{verbatim}
-Architecture:
-
-         +---------+
-    r(t)-+ BPF @ f+--+
-         +---------+  |
-                      +- Envelope  Compare  Decision
-         +---------+  |   Detectors
-    r(t)-+ BPF @ f+--+
-         +---------+
-
-Decision:
-If |output of f filter| > |output of f filter|: bit = 1
-Else: bit = 0
-\end{verbatim}
-
-\textbf{Advantages}: Simple, no synchronization \textbf{Disadvantages}:
-\textasciitilde1 dB worse than coherent
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. Coherent Detection
-(Correlation)}\label{coherent-detection-correlation}
-
-\textbf{Optimal performance} but requires carrier synchronization:
-
-\begin{verbatim}
-Correlators:
-
-         +----------+
-    r(t)-+ × cos(2ft) +--   z
-         +----------+      0 to Tb
-
-         +----------+
-    r(t)-+ × cos(2ft) +--   z
-         +----------+      0 to Tb
-
-Decision:
-If z > z: bit = 1
-Else: bit = 0
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Frequency
-Discriminator}\label{frequency-discriminator}
-
-\textbf{Classic FM receiver approach}:
-
-\begin{verbatim}
-r(t)  [Limiter]  [Frequency Discriminator]  [LPF]  Decision
-\end{verbatim}
-
-\textbf{Converts frequency deviation to voltage}, then samples at bit
-boundaries.
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
+  font=\small
+]
+\node (input) {\sffamily Binary\\$\{0, 1
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
