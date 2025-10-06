@@ -1,426 +1,451 @@
-\section{8PSK \& Higher-Order PSK}\label{psk-higher-order-psk}
+\chapter{8PSK \& Higher-Order PSK}
+\label{ch:8psk}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{Digital Modulation} \textbar{}
-{[}{[}QPSK-Modulation{]}{]} \textbar{}
-{[}{[}Binary-Phase-Shift-Keying-(BPSK){]}{]}
+\begin{nontechnical}
+\textbf{8PSK is like using 8 different hand gestures instead of 4}---you can send 50\% more data per symbol, but the gestures are closer together, making them easier to confuse in noisy conditions.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{8PSK is like using 8 different hand gestures instead of 4}---you can send 50\% more data per symbol, but the gestures are closer together, making them easier to confuse in noisy conditions.
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\textbf{The progression:}
+\begin{itemize}
+\item \textbf{BPSK:} 2 positions (up/down) = 1 bit/symbol
+\item \textbf{QPSK:} 4 positions (corners) = 2 bits/symbol
+\item \textbf{8PSK:} 8 positions (compass directions) = 3 bits/symbol $\leftarrow$ \emph{We are here}
+\item \textbf{16-PSK:} 16 positions = 4 bits/symbol
+\item \textbf{32-PSK:} 32 positions = 5 bits/symbol
+\end{itemize}
 
-\textbf{8PSK is like using 8 different hand gestures instead of
-4-\/-\/-you can send 50\% more data, but the gestures are closer
-together, so easier to confuse!}
+\textbf{The trade-off:} More positions means faster data rate (8PSK is 1.5$\times$ faster than QPSK), but positions are closer together. This makes them easier to confuse when noise is present, requiring stronger signals (higher SNR) to work reliably.
 
-\textbf{The progression}: - \textbf{BPSK}: 2 positions (up/down) = 1
-bit/symbol - \textbf{QPSK}: 4 positions (4 corners) = 2 bits/symbol -
-\textbf{8PSK}: 8 positions (8 directions) = 3 bits/symbol We are here -
-\textbf{16PSK}: 16 positions = 4 bits/symbol - \textbf{32PSK}: 32
-positions = 5 bits/symbol
+\textbf{Real-world use:} \textbf{DVB-S2} satellite broadcasting uses 8PSK for HD channels because satellite bandwidth is expensive. The 50\% data rate increase translates to 50\% more channels in the same bandwidth. The trade-off is needing larger receiving dishes for adequate SNR.
 
-\textbf{Visual - 8PSK positions (like a compass)}:
+\textbf{Why not go higher?} Beyond 8PSK, phase states become too closely spaced. Even tiny noise causes errors. For higher spectral efficiency, \textbf{QAM} (which varies both amplitude and phase) is more effective. This is why WiFi uses 64-QAM and 256-QAM, not 16-PSK or 32-PSK.
 
-\begin{verbatim}
-        N (000)
-   NW   |   NE
-  (001) | (011)
-W ----+---- E
-  (010) | (110)
-   SW   |   SE
-      S (100)
-\end{verbatim}
+\textbf{Where you'll encounter 8PSK:}
+\begin{itemize}
+\item Satellite TV (DVB-S2 HD channels)
+\item Military SATCOM (MILSTAR)
+\item NASA deep-space missions (high-rate data return)
+\item Microwave backhaul (cell tower point-to-point links)
+\end{itemize}
 
-\textbf{The trade-off}: - \textbf{More positions} = faster data rate! -
-QPSK: 2 bits/symbol - 8PSK: 3 bits/symbol =
-\textbf{1.5\$\textbackslash times\$ faster}! - \textbf{BUT} positions
-are closer together - Easier to mistake ``North'' for ``Northeast'' when
-noisy - Needs stronger signal (higher SNR) to work reliably
+\textbf{Angular spacing matters:}
+\begin{itemize}
+\item QPSK: 90° between positions (robust)
+\item 8PSK: 45° between positions (moderate)
+\item 16-PSK: 22.5° between positions (sensitive)
+\end{itemize}
+Smaller angular separation = easier to confuse = requires cleaner signal and better phase tracking.
+\end{nontechnical}
 
-\textbf{Real-world use - Satellite TV}: - \textbf{DVB-S2} (digital
-satellite): Uses 8PSK for HD channels - Why? Satellite bandwidth is
-expensive! - 50\% more data in same bandwidth = 50\% more channels -
-Trade-off: Need bigger dish (better SNR) for 8PSK vs QPSK
+\section{Overview}
 
-\textbf{Higher-order PSK (16PSK, 32PSK)}: - \textbf{16PSK}: 16 positions
-= 4 bits/symbol - \textbf{32PSK}: 32 positions = 5 bits/symbol -
-Problem: Positions so close together, barely used in practice! -
-\textbf{Solution}: Switch to QAM (varies amplitude too) for better
-performance
+\textbf{8-ary Phase-Shift Keying (8PSK)} encodes data using \textbf{8 equally-spaced phase states} positioned around the unit circle, transmitting \textbf{3 bits per symbol}. This provides 50\% higher spectral efficiency than QPSK at the cost of approximately 3.5~dB additional SNR requirement.
 
-\textbf{Why not go higher?}: - Beyond 8PSK, positions are TOO close -
-Even tiny noise causes errors - QAM (varying amplitude + phase) is more
-efficient - This is why WiFi uses QAM, not 16PSK/32PSK!
+\begin{keyconcept}
+8PSK achieves \textbf{3 bits/symbol} ($\sim$2.2~bps/Hz with pulse shaping), providing a middle ground between QPSK's robustness (2 bits/symbol) and 16-QAM's efficiency (4 bits/symbol). Its constant envelope property makes it ideal for satellite systems using nonlinear power amplifiers.
+\end{keyconcept}
 
-\textbf{When you encounter it}: - \textbf{Satellite TV}: 8PSK for HD
-channels - \textbf{Military communications}: 8PSK for satellite links -
-\textbf{Deep space}: NASA sometimes uses 8PSK for high-rate data -
-\textbf{Microwave backhaul}: Point-to-point links between cell towers
+Higher-order PSK schemes ($M$-PSK) use $M$ phase states to transmit $\log_2(M)$ bits per symbol. However, beyond 8PSK, the reduced angular spacing between constellation points makes phase noise and additive noise increasingly problematic, leading to rapid BER degradation.
 
-\textbf{The math}: - QPSK: 45\$\^{}\textbackslash circ\$ between
-positions (lots of margin) - 8PSK: 22.5\$\^{}\textbackslash circ\$
-between positions (tight!) - 16PSK: 11.25\$\^{}\textbackslash circ\$
-between positions (very tight!) - Smaller angles = easier to confuse =
-needs cleaner signal
+\section{Mathematical Description}
 
-\textbf{Fun fact}: The Hubble Space Telescope originally used QPSK, but
-was upgraded to 8PSK to send more science data per day-\/-\/-saving
-millions in ground station time!
+\subsection{8PSK Constellation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+The 8PSK constellation consists of 8 equally-spaced phase states positioned on a unit circle with angular separation of $45°$ ($\pi/4$ radians):
 
-\subsection{Overview}\label{overview}
-
-\textbf{8PSK (8-ary Phase-Shift Keying)} encodes data using \textbf{8
-phase states}, transmitting \textbf{3 bits per symbol}.
-
-\textbf{Higher-order PSK} (M-PSK): M phase states, \(\log_2(M)\) bits
-per symbol
-
-\textbf{Trade-off}: Higher spectral efficiency but increased SNR
-requirement
-
-\textbf{Applications}: Satellite (DVB-S2), military (MILSTAR), microwave
-backhaul
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{8PSK Modulation}\label{psk-modulation}
-
-\subsubsection{Constellation}\label{constellation}
-
-\textbf{8 equally-spaced phases} around unit circle:
-
-\[
+\begin{equation}
 \phi_m = \frac{2\pi m}{8} = \frac{\pi m}{4}, \quad m = 0, 1, \ldots, 7
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $\phi_m$ = phase angle for symbol $m$ (radians)
+\item $m$ = symbol index from 0 to 7
+\end{itemize}
 
-\textbf{Symbol} \(m\):
+\subsection{Time-Domain Signal}
 
-\[
+The transmitted signal for symbol $m$ is:
+\begin{equation}
 s_m(t) = A\cos(2\pi f_c t + \phi_m)
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $A$ = carrier amplitude
+\item $f_c$ = carrier frequency (Hz)
+\item $\phi_m$ = phase for symbol $m$
+\item $0 \leq t < T_s$ (symbol period)
+\end{itemize}
 
-\textbf{Complex baseband}:
+\subsection{Complex Baseband Representation}
 
-\[
+In complex baseband notation:
+\begin{equation}
 s_m = A e^{j\phi_m} = A e^{j\pi m/4}
-\]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Constellation Diagram}\label{constellation-diagram}
-
-\begin{verbatim}
-          Q
-          
-     010  |  011
-         |  
-         \|/
-  001 ---+--- 100
-         /|\
-         |  
-     000  |  111
-          
-          I
-\end{verbatim}
-
-\textbf{Phases}: 0\$\^{}\textbackslash circ\$,
-45\$\^{}\textbackslash circ\$, 90\$\^{}\textbackslash circ\$,
-135\$\^{}\textbackslash circ\$, 180\$\^{}\textbackslash circ\$,
-225\$\^{}\textbackslash circ\$, 270\$\^{}\textbackslash circ\$,
-315\$\^{}\textbackslash circ\$
-
-\textbf{Gray coding} (adjacent symbols differ by 1 bit):
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-Symbol & Bits & Phase (\$\^{}\textbackslash circ\$) & I & Q \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-0 & 000 & 0 & 1 & 0 \\
-1 & 001 & 45 & 0.707 & 0.707 \\
-2 & 010 & 90 & 0 & 1 \\
-3 & 011 & 135 & -0.707 & 0.707 \\
-4 & 100 & 180 & -1 & 0 \\
-5 & 101 & 225 & -0.707 & -0.707 \\
-6 & 110 & 270 & 0 & -1 \\
-7 & 111 & 315 & 0.707 & -0.707 \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Signal Characteristics}\label{signal-characteristics}
-
-\subsubsection{Constant Envelope}\label{constant-envelope}
-
-\textbf{All symbols same amplitude} A:
-
-\[
-|s_m| = A, \quad \forall m
-\]
-
-\textbf{Advantage}: Power amplifier can operate at saturation (maximum
-efficiency)
-
-\textbf{PAPR} (Peak-to-Average Power Ratio): 0 dB (constant)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Symbol Energy}\label{symbol-energy}
-
-\[
-E_s = \int_0^{T_s} |s_m(t)|^2 dt = A^2 T_s = A^2
-\]
-
-\textbf{Energy per bit}:
-
-\[
-E_b = \frac{E_s}{\log_2(8)} = \frac{E_s}{3}
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Minimum Distance}\label{minimum-distance}
-
-\textbf{Euclidean distance} between adjacent symbols:
-
-\[
-d_{\min} = 2A\sin\left(\frac{\pi}{8}\right) = 2A \times 0.383 = 0.765A
-\]
-
-\textbf{Normalized} (A=1): \(d_{\min} = 0.765\)
-
-\textbf{Comparison}: - \textbf{QPSK}: \(d_{\min} = \sqrt{2}A = 1.414A\)
-(same energy) - \textbf{8PSK}: \(d_{\min} = 0.765A\) - \textbf{Ratio}:
-8PSK is 1.85\$\textbackslash times\$ worse (5.3 dB)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Modulation \& Demodulation}\label{modulation-demodulation}
-
-\subsubsection{IQ Modulator}\label{iq-modulator}
-
-\textbf{Baseband I/Q} for symbol \(m\):
-
-\[
+\textbf{IQ components:}
+\begin{equation}
 I_m = A\cos(\phi_m), \quad Q_m = A\sin(\phi_m)
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $I_m$ = in-phase component
+\item $Q_m$ = quadrature component
+\end{itemize}
 
-\textbf{Modulated signal}:
+\subsection{Constellation Diagram}
 
-\[
-s_{\text{RF}}(t) = I_m \cos(2\pi f_c t) - Q_m \sin(2\pi f_c t)
-\]
+The 8PSK constellation places 8 symbols at equal angular spacing of $45°$ around the unit circle:
 
-\textbf{Implementation}: Standard IQ modulator (same as QPSK)
+\begin{center}
+\begin{tikzpicture}[scale=2.2]
+% Axes
+\draw[->] (-1.8,0) -- (1.8,0) node[right] {\sffamily\small $I$ (Real)};
+\draw[->] (0,-1.8) -- (0,1.8) node[above] {\sffamily\small $Q$ (Imaginary)};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Grid
+\draw[very thin,gray!30] (-1.5,-1.5) grid[step=0.5] (1.5,1.5);
 
-\subsubsection{Coherent Demodulation}\label{coherent-demodulation}
+% Unit circle
+\draw[dashed,gray] (0,0) circle (1.4142);
 
-\textbf{Receiver}: 1. \textbf{IQ demodulation}: Recover I and Q
-components 2. \textbf{Phase calculation}: \(\hat{\phi} = \arctan(Q/I)\)
-3. \textbf{Decision}: Find closest constellation point
+% Constellation points with Gray coding
+\fill[black] (1.4142,0) circle (2.5pt) node[right=4pt,font=\small] {000 (0°)};
+\fill[black] (1,1) circle (2.5pt) node[above right=2pt,font=\small] {001 (45°)};
+\fill[black] (0,1.4142) circle (2.5pt) node[above=4pt,font=\small] {011 (90°)};
+\fill[black] (-1,1) circle (2.5pt) node[above left=2pt,font=\small] {010 (135°)};
+\fill[black] (-1.4142,0) circle (2.5pt) node[left=4pt,font=\small] {110 (180°)};
+\fill[black] (-1,-1) circle (2.5pt) node[below left=2pt,font=\small] {111 (225°)};
+\fill[black] (0,-1.4142) circle (2.5pt) node[below=4pt,font=\small] {101 (270°)};
+\fill[black] (1,-1) circle (2.5pt) node[below right=2pt,font=\small] {100 (315°)};
 
-\textbf{Decision regions}: 8 pie-slice wedges, each
-45\$\^{}\textbackslash circ\$ wide
+% Angular spacing annotation
+\draw[<->,thick,gray] (1.4142,0) arc (0:45:1.4142) node[midway,right=2pt,font=\scriptsize] {45°};
+\end{tikzpicture}
+\end{center}
 
-\textbf{Hard decision}:
+This maximum Euclidean distance constellation on the unit circle maintains constant envelope ($|s_m| = A$ for all $m$), enabling operation with nonlinear power amplifiers at saturation.
 
-\[
-\hat{m} = \left\lfloor \frac{\hat{\phi} + \pi/8}{2\pi/8} \right\rfloor \mod 8
-\]
+\subsection{Gray Coding}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Adjacent constellation points differ by only one bit (Gray coding) to minimize bit errors when symbol errors occur:
 
-\subsubsection{Differential 8PSK (D8PSK)}\label{differential-8psk-d8psk}
+\begin{center}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+Symbol & Gray Code & Phase & $I_m/A$ & $Q_m/A$ \\
+\midrule
+0 & 000 & $0°$ & 1.000 & 0.000 \\
+1 & 001 & $45°$ & 0.707 & 0.707 \\
+2 & 011 & $90°$ & 0.000 & 1.000 \\
+3 & 010 & $135°$ & $-0.707$ & 0.707 \\
+4 & 110 & $180°$ & $-1.000$ & 0.000 \\
+5 & 111 & $225°$ & $-0.707$ & $-0.707$ \\
+6 & 101 & $270°$ & 0.000 & $-1.000$ \\
+7 & 100 & $315°$ & 0.707 & $-0.707$ \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Differential encoding} avoids phase ambiguity:
+Note that adjacent symbols (e.g., 000 $\rightarrow$ 001 $\rightarrow$ 011) differ by exactly one bit, minimizing the number of bit errors when noise causes a decision error to an adjacent symbol.
 
-\textbf{Transmitted phase}:
+\section{Signal Characteristics}
 
-\[
-\phi_k = \phi_{k-1} + \Delta\phi_k \mod 2\pi
-\]
+\subsection{Constant Envelope Property}
 
-Where \(\Delta\phi_k\) encodes 3 bits
+All 8PSK symbols have identical amplitude:
+\begin{equation}
+|s_m| = A \quad \text{for all } m = 0, 1, \ldots, 7
+\end{equation}
 
-\textbf{Demodulation}: Compute phase difference between consecutive
-symbols
+This constant envelope property provides a critical advantage:
+\begin{itemize}
+\item[\checkmark] Power amplifier can operate at saturation (maximum DC-to-RF efficiency)
+\item[\checkmark] No amplitude modulation $\rightarrow$ no AM-PM distortion
+\item[\checkmark] Peak-to-Average Power Ratio (PAPR) = 0~dB
+\item[\checkmark] Compatible with nonlinear satellite TWTAs
+\end{itemize}
 
-\[
+\subsection{Symbol and Bit Energy}
+
+The energy per symbol (normalized to unit symbol period $T_s = 1$):
+\begin{equation}
+E_s = \int_0^{T_s} |s_m(t)|^2 \, dt = A^2 T_s = A^2
+\end{equation}
+
+Since 8PSK transmits 3 bits per symbol:
+\begin{equation}
+E_b = \frac{E_s}{\log_2(8)} = \frac{E_s}{3} = \frac{A^2}{3}
+\end{equation}
+where:
+\begin{itemize}
+\item $E_s$ = energy per symbol (joules)
+\item $E_b$ = energy per bit (joules)
+\end{itemize}
+
+\subsection{Minimum Euclidean Distance}
+
+The minimum distance between adjacent constellation points is critical for noise immunity:
+\begin{equation}
+d_{\min} = 2A\sin\left(\frac{\pi}{8}\right) = 2A \times 0.3827 = 0.765A
+\end{equation}
+
+For normalized amplitude ($A = 1$): $d_{\min} = 0.765$
+
+\textbf{Comparison with QPSK:}
+\begin{itemize}
+\item QPSK: $d_{\min} = \sqrt{2}A = 1.414A$ (at same average energy)
+\item 8PSK: $d_{\min} = 0.765A$
+\item \textbf{Ratio:} 8PSK minimum distance is $1.414/0.765 = 1.85\times$ smaller (5.3~dB)
+\end{itemize}
+
+This reduced separation explains why 8PSK requires approximately 3.5~dB higher SNR than QPSK to achieve the same BER.
+
+\section{Modulation and Demodulation}
+
+\subsection{Transmitter (IQ Modulator)}
+
+The 8PSK modulator generates I and Q baseband components, then mixes with carrier quadrature signals:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
+  font=\small
+]
+\node (input) {\sffamily Data\\3~bits};
+\node[block, right of=input, node distance=2.8cm] (mapper) {Symbol\\Mapper};
+\node[block, above right of=mapper, node distance=2.8cm, yshift=0.5cm] (i_filter) {RRC\\Filter};
+\node[block, below right of=mapper, node distance=2.8cm, yshift=-0.5cm] (q_filter) {RRC\\Filter};
+\node[block, right of=i_filter, node distance=3cm] (i_mult) {Mixer\\$\times$};
+\node[block, right of=q_filter, node distance=3cm] (q_mult) {Mixer\\$\times$};
+\node[circle, draw, right of=i_mult, node distance=2.5cm, minimum size=0.8cm] (sum) {$+$};
+\node[right of=sum, node distance=2.2cm] (output) {\sffamily 8PSK\\Output};
+
+\node[below of=i_mult, node distance=1.5cm, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
+\node[below of=q_mult, node distance=1.5cm, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
+
+\draw[->,thick] (input) -- (mapper);
+\draw[->,thick] (mapper) -- node[above left,font=\scriptsize] {$I_m$} (i_filter);
+\draw[->,thick] (mapper) -- node[below left,font=\scriptsize] {$Q_m$} (q_filter);
+\draw[->,thick] (i_filter) -- (i_mult);
+\draw[->,thick] (q_filter) -- (q_mult);
+\draw[->,thick] (cos) -- (i_mult);
+\draw[->,thick] (sin) -- (q_mult);
+\draw[->,thick] (i_mult) -- (sum);
+\draw[->,thick] (q_mult) -- (sum);
+\draw[->,thick] (sum) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Process:}
+\begin{enumerate}
+\item \textbf{Symbol mapping:} Map 3-bit groups to I/Q coordinates using Gray coding
+\item \textbf{Pulse shaping:} Apply root raised-cosine (RRC) filter to limit bandwidth
+\item \textbf{Upconversion:} Mix I with $\cos(2\pi f_c t)$ and Q with $-\sin(2\pi f_c t)$
+\item \textbf{Combine:} Sum I and Q paths to generate RF signal
+\end{enumerate}
+
+The transmitted signal is:
+\begin{equation}
+s_{\text{RF}}(t) = I_m(t) \cos(2\pi f_c t) - Q_m(t) \sin(2\pi f_c t)
+\end{equation}
+where $I_m(t)$ and $Q_m(t)$ are the pulse-shaped baseband waveforms.
+
+\subsection{Receiver (Coherent Detector)}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2cm,
+  font=\small
+]
+\node (input) {\sffamily RX\\Signal};
+\node[block, above right of=input, node distance=2.8cm, yshift=0.6cm] (i_mult) {Mixer\\$\times$};
+\node[block, below right of=input, node distance=2.8cm, yshift=-0.6cm] (q_mult) {Mixer\\$\times$};
+\node[block, right of=i_mult, node distance=2.8cm] (i_lpf) {Lowpass\\Filter};
+\node[block, right of=q_mult, node distance=2.8cm] (q_lpf) {Lowpass\\Filter};
+\node[block, right of=i_lpf, node distance=2.8cm] (i_sample) {Sample\\$@T_s$};
+\node[block, right of=q_lpf, node distance=2.8cm] (q_sample) {Sample\\$@T_s$};
+\node[block, below right of=i_sample, node distance=2.8cm, yshift=-0.5cm] (decision) {Symbol\\Decision};
+\node[right of=decision, node distance=2.8cm] (output) {\sffamily Data\\3~bits};
+
+\node[below of=i_mult, node distance=1.3cm, font=\scriptsize, align=center] (lo_i) {$2\cos(2\pi f_c t)$\\LO};
+\node[below of=q_mult, node distance=1.3cm, font=\scriptsize, align=center] (lo_q) {$-2\sin(2\pi f_c t)$\\LO};
+
+\draw[->,thick] (input) -- ++(1,0) |- (i_mult);
+\draw[->,thick] (input) -- ++(1,0) |- (q_mult);
+\draw[->,thick] (lo_i) -- (i_mult);
+\draw[->,thick] (lo_q) -- (q_mult);
+\draw[->,thick] (i_mult) -- (i_lpf);
+\draw[->,thick] (q_mult) -- (q_lpf);
+\draw[->,thick] (i_lpf) -- (i_sample);
+\draw[->,thick] (q_lpf) -- (q_sample);
+\draw[->,thick] (i_sample) -- node[above right,font=\scriptsize] {$\hat{I}$} (decision);
+\draw[->,thick] (q_sample) -- node[below right,font=\scriptsize] {$\hat{Q}$} (decision);
+\draw[->,thick] (decision) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\begin{warningbox}
+\textbf{Phase synchronization is critical.} The local oscillator must be exactly in phase with the transmitter carrier. A phase offset $\phi_e$ rotates the entire constellation, degrading performance. At $\phi_e = 22.5°$ (midpoint between symbols), complete decision ambiguity occurs.
+\end{warningbox}
+
+\textbf{Detection process:}
+\begin{enumerate}
+\item \textbf{Downconvert:} Mix received signal with local I/Q carriers
+\item \textbf{Lowpass filter:} Remove $2f_c$ component, retain baseband
+\item \textbf{Sample:} Capture I and Q values at optimal sampling instant
+\item \textbf{Decision:} Find closest of 8 constellation points
+\end{enumerate}
+
+\textbf{Decision rule:} Calculate phase angle and quantize:
+\begin{equation}
+\hat{\phi} = \arctan\left(\frac{\hat{Q}}{\hat{I}}\right)
+\end{equation}
+\begin{equation}
+\hat{m} = \left\lfloor \frac{\hat{\phi} + \pi/8}{2\pi/8} \right\rfloor \bmod 8
+\end{equation}
+
+The decision regions are 8 pie-slice wedges, each spanning $45°$ ($\pi/4$ radians), centered on each constellation point.
+
+\subsection{Differential 8PSK (D8PSK)}
+
+Differential encoding avoids the carrier phase ambiguity inherent in coherent PSK systems.
+
+\textbf{Encoding:} Data is encoded in the \emph{phase change} between consecutive symbols:
+\begin{equation}
+\phi_k = \phi_{k-1} + \Delta\phi_k \bmod 2\pi
+\end{equation}
+where $\Delta\phi_k \in \{0, \pi/4, \pi/2, 3\pi/4, \pi, 5\pi/4, 3\pi/2, 7\pi/4\}$ encodes 3 data bits.
+
+\textbf{Demodulation:} Compute phase difference between consecutive received symbols:
+\begin{equation}
 \Delta\hat{\phi}_k = \hat{\phi}_k - \hat{\phi}_{k-1}
-\]
+\end{equation}
 
-\textbf{Advantage}: No carrier phase recovery needed (only frequency
-sync)
+The 3-bit data word is decoded from $\Delta\hat{\phi}_k$ rather than from the absolute phase $\hat{\phi}_k$.
 
-\textbf{Disadvantage}: \textasciitilde3 dB penalty vs coherent
+\textbf{Trade-off:}
+\begin{itemize}
+\item[\checkmark] No carrier phase recovery needed (only frequency synchronization)
+\item[\checkmark] Simpler receiver implementation
+\item[\checkmark] Immune to 8-fold phase ambiguity
+\item[\texttimes] Approximately 3~dB performance penalty versus coherent detection
+\item[\texttimes] Error propagation (one symbol error affects two decoded symbols)
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Bit Error Rate (BER) Performance}
 
-\subsection{Performance Analysis}\label{performance-analysis}
+\subsection{Symbol Error Rate in AWGN}
 
-\subsubsection{Symbol Error Rate (SER)}\label{symbol-error-rate-ser}
+For 8PSK in additive white Gaussian noise (AWGN) with coherent detection (high SNR approximation):
+\begin{equation}
+P_s \approx 2Q\left(\sqrt{\frac{2E_s}{N_0}} \sin\left(\frac{\pi}{8}\right)\right) = 2Q\left(0.765\sqrt{\frac{E_s}{N_0}}\right)
+\end{equation}
+where:
+\begin{itemize}
+\item $P_s$ = symbol error probability
+\item $E_s$ = energy per symbol (joules)
+\item $N_0$ = noise power spectral density (W/Hz)
+\item $Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} \, dt$ (Gaussian Q-function)
+\end{itemize}
 
-\textbf{8PSK in AWGN} (approximate, high SNR):
+\subsection{Bit Error Rate with Gray Coding}
 
-\[
-P_s \approx 2Q\left(2\sin\left(\frac{\pi}{8}\right)\sqrt{\frac{E_s}{N_0}}\right) = 2Q\left(0.765\sqrt{\frac{E_s}{N_0}}\right)
-\]
+With Gray coding, most symbol errors cause only a single bit error:
+\begin{equation}
+\mathrm{BER} \approx \frac{P_s}{\log_2(8)} = \frac{P_s}{3}
+\end{equation}
 
-\textbf{Where}:
-\(Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} dt\)
+Expressing BER in terms of $E_b/N_0$ using $E_s = 3E_b$:
+\begin{equation}
+\mathrm{BER} \approx \frac{2}{3}Q\left(0.765\sqrt{\frac{3E_b}{N_0}}\right) = \frac{2}{3}Q\left(1.325\sqrt{\frac{E_b}{N_0}}\right)
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Required $E_b/N_0$ for Target BER}
 
-\subsubsection{Bit Error Rate (BER)}\label{bit-error-rate-ber}
+To achieve BER $= 10^{-6}$:
 
-\textbf{With Gray coding}:
+\begin{center}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Modulation & Required $E_b/N_0$ (dB) & Penalty vs BPSK \\
+\midrule
+BPSK & 10.5 & --- \\
+QPSK & 10.5 & 0~dB \\
+\textbf{8PSK} & \textbf{14.0} & \textbf{+3.5~dB} \\
+16-PSK & 18.0 & +7.5~dB \\
+32-PSK & 22.0 & +11.5~dB \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\[
-\text{BER} \approx \frac{P_s}{\log_2(8)} = \frac{P_s}{3}
-\]
+\textbf{Key observation:} Each doubling of $M$ (from $M$-PSK to $2M$-PSK) adds approximately 3.5--4~dB SNR requirement, making higher-order PSK increasingly impractical.
 
-\textbf{In terms of Eb/N0}:
+\subsection{BER Performance Comparison}
 
-\[
-\text{BER} \approx \frac{2}{3}Q\left(0.765\sqrt{\frac{3E_b}{N_0}}\right) = \frac{2}{3}Q\left(1.325\sqrt{\frac{E_b}{N_0}}\right)
-\]
+\begin{center}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+$E_b/N_0$ (dB) & BPSK & QPSK & 8PSK & 16-PSK \\
+\midrule
+6 & $1.9 \times 10^{-3}$ & $1.9 \times 10^{-3}$ & $4.0 \times 10^{-2}$ & $1.5 \times 10^{-1}$ \\
+8 & $5.6 \times 10^{-5}$ & $5.6 \times 10^{-5}$ & $8.0 \times 10^{-3}$ & $8.0 \times 10^{-2}$ \\
+10 & $3.9 \times 10^{-6}$ & $3.9 \times 10^{-6}$ & $7.0 \times 10^{-4}$ & $3.0 \times 10^{-2}$ \\
+12 & $7.8 \times 10^{-8}$ & $7.8 \times 10^{-8}$ & $4.0 \times 10^{-5}$ & $8.0 \times 10^{-3}$ \\
+14 & $7.7 \times 10^{-10}$ & $7.7 \times 10^{-10}$ & $1.0 \times 10^{-6}$ & $7.0 \times 10^{-4}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Key observation:} At a given SNR, higher-order PSK schemes suffer significantly higher BER due to reduced minimum distance between constellation points. To maintain the same BER as lower-order schemes, higher SNR is required.
 
-\subsubsection{Required Eb/N0 for BER =
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}}\label{required-ebn0-for-ber-10ux2076}
+\section{Bandwidth Efficiency}
 
-\textbf{8PSK}: 14 dB (coherent detection)
+The symbol rate for $M$-ary modulation is:
+\begin{equation}
+R_s = \frac{R_b}{\log_2(M)} \quad \text{(symbols/second)}
+\end{equation}
+where $R_b$ is the bit rate (bps).
 
-\textbf{Comparison}: - \textbf{BPSK}: 10.5 dB - \textbf{QPSK}: 10.5 dB
-(same as BPSK) - \textbf{8PSK}: 14 dB (+3.5 dB penalty vs QPSK) -
-\textbf{16-PSK}: 18 dB (+7.5 dB penalty vs QPSK)
+With raised-cosine pulse shaping (roll-off factor $\alpha$), the occupied bandwidth is:
+\begin{equation}
+B = (1 + \alpha) R_s = (1 + \alpha) \frac{R_b}{\log_2(M)} \quad \text{(Hz)}
+\end{equation}
 
-\textbf{Pattern}: Each doubling of M adds \textasciitilde3.5-4 dB
-penalty
+The spectral efficiency (data rate per unit bandwidth) is:
+\begin{equation}
+\eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad \text{(bps/Hz)}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Comparison of PSK Schemes}
 
-\subsubsection{BER vs SNR Curves}\label{ber-vs-snr-curves}
+For $\alpha = 0.35$ (typical raised-cosine roll-off):
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-Eb/N0 (dB) & BPSK & QPSK & 8PSK & 16-PSK \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-6 &
-1.9\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
-&
-1.9\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
-& 0.04 & 0.15 \\
-8 &
-5.6\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
-&
-5.6\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
-&
-8\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
-& 0.08 \\
-10 &
-3.9\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-&
-3.9\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-&
-7\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
-& 0.03 \\
-12 &
-7.8\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
-&
-7.8\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
-&
-4\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
-&
-8\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\} \\
-14 &
-7.7\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\}
-&
-7.7\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\}
-&
-1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-&
-7\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\} \\
-\end{longtable}
-}
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Modulation & Bits/Symbol & $\eta$ (bps/Hz) & Required $E_b/N_0$ & Relative SNR \\
+\midrule
+BPSK & 1 & 0.74 & 10.5~dB & Baseline \\
+QPSK & 2 & 1.48 & 10.5~dB & 0~dB \\
+\textbf{8PSK} & \textbf{3} & \textbf{2.22} & \textbf{14.0~dB} & \textbf{+3.5~dB} \\
+16-PSK & 4 & 2.96 & 18.0~dB & +7.5~dB \\
+32-PSK & 5 & 3.70 & 22.0~dB & +11.5~dB \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Observation}: Higher-order PSK needs significantly more SNR for
-same BER
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Bandwidth Efficiency}\label{bandwidth-efficiency}
-
-\textbf{Symbol rate} \(R_s\) (symbols/sec):
-
-\[
-R_s = \frac{R_b}{\log_2(M)}
-\]
-
-\textbf{Occupied bandwidth} (with pulse shaping):
-
-\[
-B = (1 + \alpha) R_s = (1 + \alpha) \frac{R_b}{\log_2(M)} \quad (\text{Hz})
-\]
-
-\textbf{Spectral efficiency}:
-
-\[
-\eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad (\text{bits/sec/Hz})
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Comparison (\$\textbackslash alpha\$ =
-0.35)}\label{comparison-ux3b1-0.35}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1791}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1940}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3134}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3134}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Modulation
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Bits/symbol
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Spectral Efficiency
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Required Eb/N0, BER 10\^{}-6
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{BPSK} & 1 & 0.74 & 10.5 dB \\
-\end{longtable}
-}
-
-\textbf{QPSK} \textbar{} 2 \textbar{} 1.48 \textbar{} 10.5 dB
-\textbar{}\\
-\textbf{8PSK} \textbar{} 3 \textbar{} 2.22 \textbar{} 14 dB \textbar{}\\
-\textbf{16-PSK} \textbar{} 4 \textbar{} 2.96 \textbar{} 18 dB
-\textbar{}\\
-\textbf{32-PSK} \textbar{} 5 \textbar{} 3.70 \textbar{} 22 dB \textbar{}
-
-\textbf{Trade-off}: Higher spectral efficiency requires higher SNR
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{Spectral Efficiency vs Power Efficiency Trade-off}
+8PSK provides 50\% higher spectral efficiency than QPSK (2.22 vs 1.48~bps/Hz) but requires 3.5~dB more SNR to achieve the same BER. This makes 8PSK ideal for bandwidth-limited systems with adequate link margin, such as:
+\begin{itemize}
+\item Satellite broadcasting (DVB-S2)
+\item Microwave backhaul links
+\item High-throughput military SATCOM
+\end{itemize}
+\end{calloutbox}
 
 \subsection{Higher-Order PSK}\label{higher-order-psk}
 
