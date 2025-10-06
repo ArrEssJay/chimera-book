@@ -3,14 +3,31 @@
 % ==============================================================================
 
 % --- Font and Encoding ---
-\usepackage{libertinus} % Libertinus - elegant serif with excellent math support for body
+\usepackage{ebgaramond} % EB Garamond - elegant open-source old-style serif for body and headings
+\usepackage[cmintegrals,cmbraces]{newtxmath} % Math support matching EB Garamond
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+% --- Font and Encoding ---
+\usepackage{fontspec} % For OTF font support (requires XeLaTeX or LuaLaTeX)
+
+% Minion Pro with explicit font file names from fc-list
+\setmainfont{MinionPro}[
+  Extension = .otf,
+  Path = /Users/rowan/Library/Fonts/,
+  UprightFont = *-Regular,
+  ItalicFont = *-It,
+  BoldFont = *-Bold,
+  BoldItalicFont = *-BoldIt
+]
+
+% Myriad Pro for headings
+\setsansfont{Myriad Pro}
+
+% Monospace for code
+\setmonofont{Latin Modern Mono}
+
 \usepackage{textcomp} % For additional symbols
 \usepackage{newunicodechar} % For handling Unicode characters
-
-% Humanist sans-serif for headings - Optima-like elegance
-\usepackage{cabin} % Cabin - humanist sans inspired by Gill Sans and Optima (headings only)
 
 % Define remaining Unicode characters that may legitimately appear in content
 \newunicodechar{✓}{\checkmark}
@@ -19,7 +36,8 @@
 
 
 % --- Page Layout ---
-\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14.5pt]{geometry}
+% 7x10 inch - standard for technical textbooks with diagrams and equations
+\usepackage[paperwidth=7in, paperheight=10in, top=0.75in, bottom=0.75in, left=0.875in, right=0.875in, headheight=14.5pt]{geometry}
 \usepackage{fancyhdr} % For custom headers and footers
 \pagestyle{fancy}
 \fancyhf{} % Clear all header and footer fields
@@ -38,12 +56,17 @@
 
 % --- Graphics and Colors ---
 \usepackage{graphicx}
+\usepackage{pdfpages} % For full-page PDF/image inclusion with no margins
 \usepackage[dvipsnames, svgnames]{xcolor}
 \setkeys{Gin}{width=\linewidth,height=0.8\textheight,keepaspectratio}
 
 % TikZ for diagrams
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, patterns}
+
+% --- Index ---
+\usepackage{makeidx}
+\makeindex
 
 % --- Hyperlinks and Referencing ---
 \usepackage[unicode=true, colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue, citecolor=Green]{hyperref}
@@ -182,8 +205,8 @@
 % --- Chapter and Section Styling ---
 \usepackage{titlesec}
 
-% Humanist sans-serif for headings (Cabin = Optima-like elegance)
-% Organic, warm, professional with calligraphic qualities
+% Myriad Pro for headings - clean, modern humanist sans-serif
+% Minion Pro for body - refined old-style serif elegance
 \titleformat{\chapter}[display]
   {\sffamily\bfseries\huge}
   {\chaptertitlename\ \thechapter}{20pt}{\fontsize{36}{42}\selectfont}

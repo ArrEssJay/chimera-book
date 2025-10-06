@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper,oneside]{book}
+\documentclass[11pt,oneside]{book}
 
 % Load preamble (fonts, packages, styling)
 \input{preamble}
@@ -13,60 +13,17 @@
 % Front Matter
 \frontmatter
 
-% Cover page with cover art
+% Cover Art (full page - absolute no margins)
 \begin{titlepage}
-\centering
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{graphics/cover_art.png}
+\thispagestyle{empty}
+\tikz[remember picture,overlay] \node[inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{graphics/cover_art.png}};
 \end{titlepage}
 
 % Title page
 \input{titlepage}
 
-% Copyright/License page
-\newpage
-\thispagestyle{empty}
-\vspace*{\fill}
-\begin{center}
-
-{\Large\bfseries Chimera: Signals Processing, Past, Present \& Future}
-
-\vspace{1cm}
-
-{\large First Edition}
-
-\vspace{0.5cm}
-
-{\large Edited by Rowan Jones}
-
-\vspace{1cm}
-
-Published by The Chimera Project\\
-\href{mailto:chimera@impermanent.io}{chimera@impermanent.io}\\
-\url{www.impermanent.io}
-
-\vspace{1cm}
-
-\includegraphics[width=3cm]{graphics/cc-zero.png}
-
-\vspace{0.5cm}
-
-{\large CC0 1.0 Universal (Public Domain)}
-
-\vspace{0.5cm}
-
-To the extent possible under law, The Chimera Project has waived all copyright and related or neighboring rights to this work. This work is published from: Australia.
-
-\vspace{1cm}
-
-{\small Typeset in \LaTeX{} with Libertinus fonts and Cabin headings.}
-
-\vspace{0.5cm}
-
-{\small Cover art: \textit{[Cover Art Credit]}}
-
-\end{center}
-\vspace*{\fill}
-\newpage
+% Cataloging in Publication (CIP) Data
+\input{cataloging}
 
 % Dedication
 \input{dedication}
@@ -111,9 +68,9 @@ This book was typeset using \LaTeX{}, the document preparation system created by
 
 \textbf{Typography:}
 \begin{itemize}
-\item Body text: Libertinus Serif (12pt)
-\item Headings: Cabin (humanist sans-serif)
-\item Mathematics: Libertinus Math
+\item Body text: Minion Pro (12pt)
+\item Headings: Myriad Pro
+\item Mathematics: Latin Modern Math
 \item Code: Latin Modern Mono
 \end{itemize}
 
@@ -121,7 +78,7 @@ This book was typeset using \LaTeX{}, the document preparation system created by
 
 \textbf{Technical tools:}
 \begin{itemize}
-\item \LaTeX{} engine: pdf\LaTeX{}
+\item \LaTeX{} engine: Xe\LaTeX{} with fontspec
 \item Bibliography: Biber with biblatex
 \item Build automation: Bash shell scripts
 \item Version control: Git

@@ -9,14 +9,14 @@ echo "========================================"
 echo
 
 # Check for required tools
-command -v pdflatex >/dev/null 2>&1 || { echo "Error: pdflatex not found"; exit 1; }
+command -v xelatex >/dev/null 2>&1 || { echo "Error: xelatex not found"; exit 1; }
 command -v biber >/dev/null 2>&1 || { echo "Error: biber not found"; exit 1; }
 
 # Main document
 DOC="chimera-book"
 
-echo "Step 1: First LaTeX pass (generate aux files)..."
-pdflatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
+echo "Step 1: First XeLaTeX pass (generate aux files)..."
+xelatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
 
 echo
 echo "Step 2: Generate bibliography..."
@@ -27,16 +27,16 @@ else
 fi
 
 echo
-echo "Step 3: Second LaTeX pass (resolve references)..."
-pdflatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
+echo "Step 3: Second XeLaTeX pass (resolve references)..."
+xelatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
 
 echo
-echo "Step 4: Third LaTeX pass (finalize TOC and index)..."
-pdflatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
+echo "Step 4: Third XeLaTeX pass (finalize TOC and index)..."
+xelatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
 
 echo
-echo "Step 5: Final pass for hyperlinks..."
-pdflatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
+echo "Step 5: Final XeLaTeX pass for hyperlinks..."
+xelatex -shell-escape -interaction=nonstopmode "$DOC.tex" | tail -20
 
 # Check for errors
 if [ $? -eq 0 ]; then
