@@ -1,0 +1,215 @@
+% ==============================================================================
+% Book Preamble
+% ==============================================================================
+
+% --- Font and Encoding ---
+\usepackage{libertinus} % Libertinus - elegant serif with excellent math support for body
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp} % For additional symbols
+\usepackage{newunicodechar} % For handling Unicode characters
+
+% Humanist sans-serif for headings - Optima-like elegance
+\usepackage{cabin} % Cabin - humanist sans inspired by Gill Sans and Optima (headings only)
+
+% Define remaining Unicode characters that may legitimately appear in content
+\newunicodechar{✓}{\checkmark}
+\newunicodechar{✗}{\texttimes}
+\newunicodechar{°}{\ifmmode^\circ\else\textdegree\fi}  % Degree symbol (math/text mode)
+
+
+% --- Page Layout ---
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=14.5pt]{geometry}
+\usepackage{fancyhdr} % For custom headers and footers
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\nouppercase{\leftmark}}
+\fancyhead[LO]{\nouppercase{\rightmark}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% --- Language and Typography ---
+\usepackage[english]{babel}
+\usepackage{microtype} % Improves typography and justification
+
+% --- Math and Symbols ---
+\usepackage{amsmath, amssymb, amsfonts}
+
+% --- Graphics and Colors ---
+\usepackage{graphicx}
+\usepackage[dvipsnames, svgnames]{xcolor}
+\setkeys{Gin}{width=\linewidth,height=0.8\textheight,keepaspectratio}
+
+% TikZ for diagrams
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, patterns}
+
+% --- Hyperlinks and Referencing ---
+\usepackage[unicode=true, colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue, citecolor=Green]{hyperref}
+\urlstyle{same}
+\usepackage[nameinlink]{cleveref} % For smart cross-referencing
+
+% --- Bibliography ---
+\usepackage{csquotes} % Recommended by biblatex for proper quotation handling
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{bibliography.bib} % Assumes bibliography.bib in the same directory
+
+% --- Code Blocks ---
+\usepackage{minted} % For syntax highlighting, requires -shell-escape
+\setminted{
+  fontsize=\small,
+  linenos,
+  frame=lines,
+  breaklines,
+  breakanywhere,
+  style=friendly
+}
+
+% Pandoc Shaded environment for code blocks
+\usepackage{framed}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\definecolor{shadecolor}{RGB}{248,248,248}
+
+% Pandoc Highlighting environment for syntax highlighting
+\newenvironment{Highlighting}{\begin{Shaded}\small}{\end{Shaded}}
+
+% --- Callouts/Framed Boxes ---
+\usepackage[most]{tcolorbox}
+
+% Professional callout box with optional custom styling
+% Sharp corners for professional print appearance
+\newtcolorbox{calloutbox}[2][]{
+  colback=black!5!white,
+  colframe=black!75!white,
+  fonttitle=\bfseries\sffamily,
+  title=#2,
+  boxrule=0.75pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% Non-technical reader callout
+\newtcolorbox{nontechnical}{
+  colback=black!3!white,
+  colframe=black!50!white,
+  fonttitle=\bfseries\sffamily,
+  title=FOR NON-TECHNICAL READERS,
+  boxrule=1pt,
+  sharp corners,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  toptitle=4pt,
+  bottomtitle=4pt
+}
+
+% Key concept callout
+\newtcolorbox{keyconcept}[1][]{
+  colback=black!8!white,
+  colframe=black!75!white,
+  fonttitle=\bfseries\sffamily,
+  title=KEY CONCEPT,
+  boxrule=1.5pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% Warning callout (double box for emphasis, B/W compatible)
+\newtcolorbox{warningbox}[1][]{
+  colback=white,
+  colframe=black,
+  fonttitle=\bfseries\sffamily,
+  title=\textbf{⚠}\ CRITICAL REQUIREMENT,
+  boxrule=2pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% Important note callout
+\newtcolorbox{importantbox}[1][]{
+  colback=black!5!white,
+  colframe=black,
+  fonttitle=\bfseries\sffamily,
+  title=IMPORTANT,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% --- Tables ---
+\usepackage{array} % Provides \arraybackslash
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{calc} % For calculations in table column widths
+
+% Define \real for pandoc-generated table column widths
+\providecommand{\real}[1]{#1}
+
+% --- Lists ---
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=5pt}
+
+% Pandoc compatibility - define \tightlist for compact lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% --- Chapter and Section Styling ---
+\usepackage{titlesec}
+
+% Humanist sans-serif for headings (Cabin = Optima-like elegance)
+% Organic, warm, professional with calligraphic qualities
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\huge}
+  {\chaptertitlename\ \thechapter}{20pt}{\fontsize{36}{42}\selectfont}
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
+
+\titleformat{\section}
+  {\sffamily\bfseries\Large}
+  {\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\sffamily\bfseries\large}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsubsection}{1em}{}
+
+% --- Mermaid Diagrams ---
+% This requires a build script to convert .mmd files to .pdf
+% Usage: \includemermaid{diagram_filename_without_extension}
+\newcommand{\includemermaid}[1]{%
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{#1.pdf}
+  \end{figure}
+}
+
+% --- CC License Icon ---
+\usepackage{ccicons}

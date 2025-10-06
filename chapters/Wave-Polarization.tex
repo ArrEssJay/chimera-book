@@ -1,0 +1,838 @@
+\section{Wave Polarization}\label{wave-polarization}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{EM Fundamentals} \textbar{}
+{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}
+\textbar{} {[}{[}Electromagnetic-Spectrum{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Wave polarization is like the orientation of a jump
+rope-\/-\/-you can shake it up/down (vertical), side-to-side
+(horizontal), or in circles (circular). Antennas must match this
+orientation to catch the signal!}
+
+\textbf{The idea}: - Radio waves are oscillating electric/magnetic
+fields - The \textbf{electric field} can point in different directions -
+\textbf{Polarization} = which direction the field oscillates
+
+\textbf{Three main types}:
+
+\textbf{1. Linear Polarization} (most common): - Field oscillates in one
+fixed direction - \textbf{Vertical}: Field points up/down
+(\$\textbackslash updownarrow\$) - \textbf{Horizontal}: Field points
+left/right (\$\textbackslash leftrightarrow\$) -
+\textbf{45\$\^{}\textbackslash circ\$}: Somewhere in between
+(\$\textbackslash nearrow\$)
+
+\textbf{2. Circular Polarization}: - Field rotates in a circle as wave
+travels - \textbf{Right-hand circular} (RHCP): Rotates clockwise -
+\textbf{Left-hand circular} (LHCP): Rotates counter-clockwise
+
+\textbf{3. Elliptical Polarization}: - Field traces an ellipse
+(in-between linear and circular) - Most real-world signals (not
+perfectly linear/circular)
+
+\textbf{Real-world examples}:
+
+\textbf{FM Radio}: - \textbf{Vertical polarization} - Your car antenna:
+Vertical rod - Must be vertical to match transmitter!
+
+\textbf{TV Broadcasting}: - \textbf{Horizontal polarization} (old analog
+TV) - Roof antennas: Horizontal elements - Must be horizontal to receive
+signal
+
+\textbf{WiFi}: - \textbf{Usually vertical} (your
+router\textquotesingle s antennas) - Laptop: Internal antenna usually
+vertical - This is why tilting laptop changes signal strength!
+
+\textbf{Satellite}: - \textbf{Circular polarization} (GPS, satellite TV)
+- Why circular? Survives Faraday rotation in ionosphere - Your satellite
+dish: Works at any angle!
+
+\textbf{Why polarization matters}:
+
+\textbf{Antenna alignment}: - \textbf{Matched polarization}: Maximum
+signal (0 dB loss) - \textbf{Cross-polarization}
+(90\$\^{}\textbackslash circ\$ off): -20 to -30 dB loss! - This is why
+rotating your phone can improve reception
+
+\textbf{Example}: - Cell tower: Vertical polarization - Your phone held
+horizontally: Antenna now horizontal - Signal loss: 10-20 dB! - Result:
+Dropped call
+
+\textbf{Frequency reuse}: - Send two signals at same frequency,
+different polarization - Vertical signal + Horizontal signal = no
+interference! - \textbf{Satellite TV}: Uses both RHCP and LHCP to double
+capacity
+
+\textbf{Faraday rotation}: - Ionosphere rotates polarization (like
+twisting jump rope) - Linear polarization \$\textbackslash rightarrow\$
+gets rotated \$\textbackslash rightarrow\$ antenna mismatch! -
+\textbf{Solution}: Use circular (rotation doesn\textquotesingle t
+matter) - This is why GPS uses circular!
+
+\textbf{Your experience}:
+
+\textbf{Old TV ``rabbit ears''}: - Had to rotate/tilt for best picture -
+You were matching antenna polarization! - Horizontal = horizontal
+polarization - V-shape = trying to catch both!
+
+\textbf{Cell phone}: - Hold normally: Antenna vertical (good) - Hold
+horizontally (watching video): Antenna horizontal (bad!) - This is
+``death grip'' effect (partly)
+
+\textbf{WiFi router antennas}: - Multiple antennas at different angles -
+Catches signals from devices in any orientation - Some routers: Mix
+vertical/horizontal for diversity
+
+\textbf{Satellite dish}: - Circular polarization
+\$\textbackslash rightarrow\$ dish angle doesn\textquotesingle t matter
+for polarization - Only matters for pointing at satellite!
+
+\textbf{Fun fact}: GPS satellites transmit right-hand circular
+polarization (RHCP). If you flip your GPS receiver upside-down, it
+receives left-hand circular polarization (LHCP)-\/-\/-and the signal is
+20-30 dB weaker, basically unusable. This is why your
+phone\textquotesingle s GPS doesn\textquotesingle t work well face-down
+on a table!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Polarization} describes the \textbf{orientation of the electric
+field vector} as an electromagnetic wave propagates through space.
+
+\textbf{Key insight}: While the wave travels in one direction (e.g.,
++z), the electric field \textbf{oscillates in a plane perpendicular} to
+propagation. The pattern traced by the E-field tip defines polarization.
+
+\textbf{Why it matters}: - \textbf{Antenna alignment}: RX antenna must
+match TX polarization for maximum signal capture - \textbf{Propagation
+effects}: Ionosphere rotates polarization (Faraday rotation) -
+\textbf{Interference mitigation}: Orthogonal polarizations enable
+frequency reuse - \textbf{Satellite communications}: Circular
+polarization combats ionospheric effects
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Mathematical Foundation}\label{mathematical-foundation}
+
+\subsubsection{Plane Wave
+Representation}\label{plane-wave-representation}
+
+\textbf{General electric field} (propagating in +z direction):
+
+\[
+\vec{E}(z,t) = E_x \cos(\omega t - kz + \phi_x)\hat{x} + E_y \cos(\omega t - kz + \phi_y)\hat{y}
+\]
+
+Where: - \(E_x\), \(E_y\) = Amplitudes in x and y directions -
+\(\phi_x\), \(\phi_y\) = Phase offsets -
+\(\Delta\phi = \phi_y - \phi_x\) = \textbf{Relative phase} (determines
+polarization type)
+
+\textbf{At fixed observation point} (z=0):
+
+\[
+\vec{E}(t) = E_x \cos(\omega t + \phi_x)\hat{x} + E_y \cos(\omega t + \phi_y)\hat{y}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Polarization Types}\label{polarization-types}
+
+\subsubsection{1. Linear Polarization}\label{linear-polarization}
+
+\textbf{Condition}: \(\Delta\phi = 0°\) or \(180°\) (in-phase or
+anti-phase)
+
+\textbf{Result}: E-field oscillates along a \textbf{fixed line}
+
+\paragraph{Vertical Polarization}\label{vertical-polarization}
+
+\[
+\vec{E}(t) = E_0 \cos(\omega t)\hat{y}
+\]
+
+\textbf{E-field aligned with y-axis} (vertical if antenna vertical)
+
+\textbf{Applications}: - AM/FM broadcast (vertical monopoles) - HF
+vertical antennas (ground wave propagation) - Mobile handsets (typically
+held vertically)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Horizontal Polarization}\label{horizontal-polarization}
+
+\[
+\vec{E}(t) = E_0 \cos(\omega t)\hat{x}
+\]
+
+\textbf{E-field aligned with x-axis} (horizontal)
+
+\textbf{Applications}: - TV broadcast (horizontal dipoles) - WiFi (many
+routers use horizontal dipoles) - Yagi antennas (horizontal for TV
+reception)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Slant Polarization}\label{slant-polarization}
+
+\[
+\vec{E}(t) = E_0 \cos(\omega t)(\cos\theta\hat{x} + \sin\theta\hat{y})
+\]
+
+\textbf{E-field at angle} \(\theta\) from horizontal
+
+\textbf{Example}: 45\$\^{}\textbackslash circ\$ slant
+(\$\textbackslash pm\$45\$\^{}\textbackslash circ\$):
+
+\[
+\vec{E}(t) = \frac{E_0}{\sqrt{2}} \cos(\omega t)(\hat{x} + \hat{y})
+\]
+
+\textbf{Applications}: - Satellite polarization diversity
+(\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ orthogonal channels)
+- Reduce building penetration loss (less reflection)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Circular Polarization}\label{circular-polarization}
+
+\textbf{Condition}: \(E_x = E_y\) and \(\Delta\phi = \pm 90°\)
+
+\textbf{Result}: E-field tip traces a \textbf{circle}, rotating as wave
+propagates
+
+\paragraph{Right-Hand Circular Polarization
+(RHCP)}\label{right-hand-circular-polarization-rhcp}
+
+\[
+\vec{E}(t) = E_0[\cos(\omega t)\hat{x} - \sin(\omega t)\hat{y}]
+\]
+
+\textbf{Viewed from receiver} (wave approaching): E-field rotates
+\textbf{clockwise}
+
+\textbf{Phase}: \(\Delta\phi = -90°\) (y lags x by
+90\$\^{}\textbackslash circ\$)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Left-Hand Circular Polarization
+(LHCP)}\label{left-hand-circular-polarization-lhcp}
+
+\[
+\vec{E}(t) = E_0[\cos(\omega t)\hat{x} + \sin(\omega t)\hat{y}]
+\]
+
+\textbf{Viewed from receiver}: E-field rotates \textbf{counterclockwise}
+
+\textbf{Phase}: \(\Delta\phi = +90°\) (y leads x by
+90\$\^{}\textbackslash circ\$)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Properties}\label{properties}
+
+\textbf{Axial ratio}: AR = 1 (perfect circle)
+
+\textbf{Isolation between RHCP/LHCP}: Theoretically infinite
+(orthogonal)
+
+\textbf{Practical isolation}: 20-30 dB (antenna imperfections)
+
+\textbf{Applications}: - \textbf{GPS satellites} (RHCP) - Mitigates
+Faraday rotation, multipath - \textbf{Satellite communications} (RHCP or
+LHCP) - Reduces rain depolarization - \textbf{RFID tags} -
+Orientation-insensitive - \textbf{Radar} (circular) - Target
+discrimination via polarization
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Elliptical
+Polarization}\label{elliptical-polarization}
+
+\textbf{Condition}: General case where \(E_x \neq E_y\) and/or
+\(\Delta\phi \neq 0°, 90°, 180°\)
+
+\textbf{Result}: E-field tip traces an \textbf{ellipse}
+
+\[
+\frac{E_x^2(t)}{A^2} + \frac{E_y^2(t)}{B^2} = 1
+\]
+
+Where A, B are semi-major/minor axes
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Axial Ratio (AR)}\label{axial-ratio-ar}
+
+\textbf{Measure of ellipse eccentricity}:
+
+\[
+\text{AR} = \frac{\text{Major axis}}{\text{Minor axis}} = \frac{A}{B}
+\]
+
+\textbf{In dB}:
+
+\[
+\text{AR}_{\text{dB}} = 20\log_{10}\left(\frac{A}{B}\right)
+\]
+
+\textbf{Special cases}: - \textbf{AR = 1 (0 dB)}: Circular polarization
+- \textbf{AR \$\textbackslash rightarrow\$ \$\textbackslash infty\$}:
+Linear polarization
+
+\textbf{Typical spec}: AR \textless{} 3 dB for ``circular'' antennas
+(ellipticity acceptable)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Sense of Rotation}\label{sense-of-rotation}
+
+\textbf{Right-hand elliptical}: Rotates clockwise (RHEP)
+
+\textbf{Left-hand elliptical}: Rotates counterclockwise (LHEP)
+
+\textbf{Example}: \(E_x = 2E_y\), \(\Delta\phi = 90°\) - Elliptical (not
+circular due to unequal amplitudes) - Right-hand sense
+(90\$\^{}\textbackslash circ\$ phase like RHCP) - AR = 2 (6 dB)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Polarization Loss Factor
+(PLF)}\label{polarization-loss-factor-plf}
+
+\textbf{Mismatch between TX and RX polarizations causes loss}:
+
+\[
+\text{PLF} = |\hat{e}_{\text{TX}} \cdot \hat{e}_{\text{RX}}^*|^2
+\]
+
+Where \(\hat{e}\) = Normalized polarization vectors (complex)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Linear Polarizations}\label{linear-polarizations}
+
+\textbf{Angle mismatch} \(\theta\) between TX and RX:
+
+\[
+\text{PLF} = \cos^2\theta
+\]
+
+\textbf{In dB}:
+
+\[
+L_{\text{pol}} = -10\log_{10}(\cos^2\theta) = -20\log_{10}(\cos\theta)
+\]
+
+\textbf{Examples}: - \textbf{0\$\^{}\textbackslash circ\$}: 0 dB loss
+(perfect match) - \textbf{30\$\^{}\textbackslash circ\$}: 1.2 dB loss -
+\textbf{45\$\^{}\textbackslash circ\$}: 3 dB loss (half power) -
+\textbf{90\$\^{}\textbackslash circ\$}: \$\textbackslash infty\$ dB loss
+(complete null - orthogonal)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Circular Polarizations}\label{circular-polarizations}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+TX & RX & PLF & Loss \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+RHCP & RHCP & 1 & 0 dB (match) \\
+LHCP & LHCP & 1 & 0 dB (match) \\
+RHCP & LHCP & 0 & \$\textbackslash infty\$ dB (null) \\
+LHCP & RHCP & 0 & \$\textbackslash infty\$ dB (null) \\
+\end{longtable}
+}
+
+\textbf{Co-pol vs cross-pol}: - \textbf{Co-pol}: Same sense (RHCP-RHCP
+or LHCP-LHCP) - \textbf{Cross-pol}: Opposite sense (RHCP-LHCP or
+LHCP-RHCP)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Linear to Circular}\label{linear-to-circular}
+
+\textbf{Linear antenna receiving circular wave} (or vice versa):
+
+\[
+\text{PLF} = 0.5 \quad (-3\ \text{dB loss})
+\]
+
+\textbf{Explanation}: Linear antenna captures only one component of
+circular wave (e.g., vertical dipole receives only vertical component of
+RHCP)
+
+\textbf{Example}: GPS receiver with linear patch antenna - GPS
+satellites transmit RHCP - Linear patch: 3 dB polarization loss - Need
+higher gain to compensate
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Polarization Generation}\label{polarization-generation}
+
+\subsubsection{Linear Polarization}\label{linear-polarization-1}
+
+\textbf{Simple dipole or monopole}: - Current flows in one direction
+\$\textbackslash rightarrow\$ E-field perpendicular to current -
+Vertical monopole \$\textbackslash rightarrow\$ Vertical polarization -
+Horizontal dipole \$\textbackslash rightarrow\$ Horizontal polarization
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Circular Polarization}\label{circular-polarization-1}
+
+\paragraph{Crossed Dipoles with 90\$\^{}\textbackslash circ\$ Phase
+Shift}\label{crossed-dipoles-with-90-phase-shift}
+
+\textbf{Two perpendicular dipoles}, fed with: - Equal amplitude -
+90\$\^{}\textbackslash circ\$ phase difference (quadrature)
+
+\textbf{Geometry}:
+
+\begin{verbatim}
+      y (vertical dipole)
+      |
+      |
+      +------ x (horizontal dipole)
+\end{verbatim}
+
+\textbf{Feed}: - Horizontal: \(I_x = I_0 \cos(\omega t)\) - Vertical:
+\(I_y = I_0 \cos(\omega t - 90°) = I_0 \sin(\omega t)\)
+
+\textbf{Result}: RHCP (assuming correct phase)
+
+\textbf{Implementation}: 90\$\^{}\textbackslash circ\$ hybrid coupler
+(branch-line, Lange coupler)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Helical Antenna}\label{helical-antenna}
+
+\textbf{Helix wound around cylinder} (axial mode):
+
+\textbf{Geometry}: - Diameter: \(D \approx \lambda/\pi\) (circumference
+\$\textbackslash approx\$ \$\textbackslash lambda\$) - Pitch angle:
+12-15\$\^{}\textbackslash circ\$ - Turns: 5-10 for good AR
+
+\textbf{Result}: Circular polarization (sense depends on helix
+direction) - Right-hand helix \$\textbackslash rightarrow\$ RHCP -
+Left-hand helix \$\textbackslash rightarrow\$ LHCP
+
+\textbf{Applications}: GPS antennas, satellite ground stations
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Patch Antenna with Corners
+Truncated}\label{patch-antenna-with-corners-truncated}
+
+\textbf{Circular or square patch} with: - Two opposite corners cut
+(truncated) - Single feed point
+
+\textbf{Mechanism}: Truncation creates two orthogonal modes with
+\textasciitilde90\$\^{}\textbackslash circ\$ phase difference
+
+\textbf{Result}: Circular polarization (RHCP or LHCP depending on which
+corners cut)
+
+\textbf{Applications}: GPS receivers, compact GNSS antennas
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Propagation Effects on
+Polarization}\label{propagation-effects-on-polarization}
+
+\subsubsection{Faraday Rotation}\label{faraday-rotation}
+
+\textbf{Ionosphere causes polarization rotation} (linear
+\$\textbackslash rightarrow\$ rotated linear):
+
+\[
+\Omega = 2.36 \times 10^4 \frac{B_\parallel \cdot \text{TEC}}{f^2} \quad (\text{radians})
+\]
+
+Where: - \(B_\parallel\) = Earth\textquotesingle s magnetic field
+component along path (Tesla) - TEC = Total Electron Content
+(electrons/m\textbackslash textsuperscript\{2\}) - \(f\) = Frequency
+(Hz)
+
+\textbf{Effect scales as} \(1/f^2\) (severe at HF, negligible at SHF)
+
+\textbf{Example}: HF @ 10 MHz, TEC =
+10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{8\}
+el/m\textbackslash textsuperscript\{2\} - Rotation:
+\textasciitilde500\$\^{}\textbackslash circ\$ (multiple full rotations!)
+- Linear polarization unusable (unpredictable rotation)
+
+\textbf{Mitigation}: Use \textbf{circular polarization} (immune to
+Faraday rotation)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Differential Propagation (Rain
+Depolarization)}\label{differential-propagation-rain-depolarization}
+
+\textbf{Rain causes differential attenuation} between H and V
+components:
+
+\textbf{Horizontal attenuated more} than vertical (raindrops are oblate)
+
+\textbf{Effect}: Linear \$\textbackslash rightarrow\$ Elliptical,
+Circular \$\textbackslash rightarrow\$ Elliptical
+
+\textbf{Cross-Polarization Discrimination (XPD)}:
+
+\[
+\text{XPD} = \frac{\text{Co-pol power}}{\text{Cross-pol power}} \quad (\text{dB})
+\]
+
+\textbf{Typical}: 30 dB in clear air, degrades to 15-20 dB in heavy rain
+
+\textbf{Example}: Satellite Ku-band,
+\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ linear polarization -
+Clear air: 30 dB isolation between channels - Heavy rain: 20 dB
+isolation (increased interference)
+
+\textbf{Mitigation}: Adaptive coding/modulation, switch to single
+polarization in heavy rain
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Reflection}\label{reflection}
+
+\textbf{Polarization changes upon reflection}:
+
+\paragraph{Perpendicular Incidence
+(Normal)}\label{perpendicular-incidence-normal}
+
+\textbf{Horizontal and vertical polarizations reflect with} \(180°\)
+\textbf{phase shift} (for good conductors)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Oblique Incidence}\label{oblique-incidence}
+
+\textbf{Brewster angle} (\(\theta_B\)):
+
+\[
+\theta_B = \arctan\left(\frac{n_2}{n_1}\right)
+\]
+
+\textbf{At Brewster angle}: Parallel (horizontal) polarization
+\textbf{not reflected} (complete transmission)
+
+\textbf{Example}: Air-to-glass (\(n_1=1\), \(n_2=1.5\)):
+
+\[
+\theta_B = \arctan(1.5) \approx 56°
+\]
+
+\textbf{Application}: Polarizing filters, anti-reflection coatings
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Applications}\label{applications}
+
+\subsubsection{1. Satellite
+Communications}\label{satellite-communications}
+
+\textbf{Frequency reuse via polarization diversity}:
+
+\textbf{Traditional}: H and V (or
+\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ linear) - Two
+independent channels on same frequency - Isolation: 25-30 dB (limited by
+cross-pol)
+
+\textbf{Modern}: RHCP and LHCP - Better rain performance (less
+depolarization) - Isolation: 20-30 dB
+
+\textbf{Example}: Ku-band DBS (Direct Broadcast Satellite) - 12 GHz
+downlink - Odd transponders: RHCP - Even transponders: LHCP - Doubles
+capacity
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. GPS and GNSS}\label{gps-and-gnss}
+
+\textbf{All GPS satellites transmit RHCP}:
+
+\textbf{Reasons}: 1. \textbf{Faraday rotation immunity}: Circular
+unaffected by ionosphere rotation 2. \textbf{Multipath rejection}:
+Ground reflection flips RHCP \$\textbackslash rightarrow\$ LHCP
+(cross-pol rejected) 3. \textbf{Orientation insensitive}: Works at any
+receiver angle (within hemisphere)
+
+\textbf{Receiver antenna}: RHCP patch or helix
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Radar}\label{radar}
+
+\textbf{Polarimetric radar} uses multiple polarizations:
+
+\textbf{Modes}: - HH: Transmit H, receive H - VV: Transmit V, receive V
+- HV: Transmit H, receive V (cross-pol) - VH: Transmit V, receive H
+(cross-pol)
+
+\textbf{Applications}: - \textbf{Weather radar}: Distinguish rain, hail,
+snow (different depolarization) - \textbf{SAR imaging}: Surface type
+classification (vegetation vs metal vs water) - \textbf{Target
+identification}: Military (tanks vs trees)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. WiFi and Cellular}\label{wifi-and-cellular}
+
+\textbf{Diversity antennas} use orthogonal polarizations:
+
+\textbf{MIMO systems}: 2\$\textbackslash times\$2,
+4\$\textbackslash times\$4 with
+\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ slant polarization -
+Reduce correlation between antenna elements - Improve capacity in rich
+scattering environments
+
+\textbf{Example}: WiFi 802.11n/ac router - Antenna 1:
++45\$\^{}\textbackslash circ\$ slant - Antenna 2:
+-45\$\^{}\textbackslash circ\$ slant - Independent fading
+\$\textbackslash rightarrow\$ Diversity gain
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5. EMI/EMC Testing}\label{emiemc-testing}
+
+\textbf{Measure emissions in both H and V polarizations}:
+
+\textbf{Standards} (FCC, CISPR): Require testing at both polarizations
+to find worst-case emissions
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Stokes Parameters}\label{stokes-parameters}
+
+\textbf{Complete polarization description} (intensity + polarization
+state):
+
+\[
+\begin{aligned}
+S_0 &= E_x^2 + E_y^2 \quad (\text{Total intensity}) \\
+S_1 &= E_x^2 - E_y^2 \quad (\text{H vs V preference}) \\
+S_2 &= 2E_xE_y\cos\Delta\phi \quad (\text{±45° preference}) \\
+S_3 &= 2E_xE_y\sin\Delta\phi \quad (\text{Circular preference})
+\end{aligned}
+\]
+
+\textbf{Interpretation}: - \(S_3 > 0\): RHCP dominant - \(S_3 < 0\):
+LHCP dominant - \(S_3 = 0\): Linear polarization
+
+\textbf{Degree of polarization}:
+
+\[
+\text{DOP} = \frac{\sqrt{S_1^2 + S_2^2 + S_3^2}}{S_0}
+\]
+
+\textbf{Range}: 0 (unpolarized) to 1 (fully polarized)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Poincaré Sphere}\label{poincaruxe9-sphere}
+
+\textbf{Graphical representation} of polarization states:
+
+\textbf{3D sphere} where: - \textbf{North pole}: LHCP - \textbf{South
+pole}: RHCP - \textbf{Equator}: All linear polarizations (H, V,
+\$\textbackslash pm\$45\$\^{}\textbackslash circ\$)
+
+\textbf{Coordinates}: \((S_1/S_0, S_2/S_0, S_3/S_0)\)
+
+\textbf{Application}: Visualize polarization transformations (e.g.,
+Faraday rotation = rotation around S\textbackslash textsubscript\{3\}
+axis)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Polarization Measurement}\label{polarization-measurement}
+
+\subsubsection{Antenna Pattern Testing}\label{antenna-pattern-testing}
+
+\textbf{Measure co-pol and cross-pol patterns}:
+
+\textbf{Setup}: 1. Rotate RX antenna 90\$\^{}\textbackslash circ\$ (H
+\$\textbackslash leftrightarrow\$ V) 2. Measure received power vs angle
+3. Plot co-pol and cross-pol gains
+
+\textbf{Cross-pol level}: Typically 20-30 dB below co-pol for good
+antenna
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Polarization Ratio}\label{polarization-ratio}
+
+\textbf{For linear polarization}:
+
+\[
+\text{PR} = \frac{P_{\text{co}}}{P_{\text{cross}}} \quad (\text{dB})
+\]
+
+\textbf{Typical}: \textgreater{} 20 dB for well-designed antenna
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Axial Ratio Measurement}\label{axial-ratio-measurement}
+
+\textbf{For circular polarization}:
+
+\textbf{Method 1}: Spinning linear dipole - Rotate RX linear antenna
+360\$\^{}\textbackslash circ\$ - Measure \(P_{\text{max}}\) and
+\(P_{\text{min}}\)
+
+\[
+\text{AR} = \frac{P_{\text{max}}}{P_{\text{min}}} \quad (\text{linear}), \quad \text{AR}_{\text{dB}} = 10\log_{10}\left(\frac{P_{\text{max}}}{P_{\text{min}}}\right)
+\]
+
+\textbf{Method 2}: Dual-pol receiver - Measure \(E_x\) and \(E_y\)
+amplitudes and phases - Calculate AR from ellipse parameters
+
+\textbf{Good circular antenna}: AR \textless{} 3 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Considerations}\label{practical-considerations}
+
+\subsubsection{Antenna Orientation}\label{antenna-orientation}
+
+\textbf{Must match TX/RX polarizations}:
+
+\textbf{Example}: Vertical monopole on car - Works well with vertical
+base station antenna - 90\$\^{}\textbackslash circ\$ mismatch if base
+station is horizontal (\$\textbackslash infty\$ dB loss)
+
+\textbf{WiFi routers}: Often mixed polarizations (multiple antennas at
+different angles) for robustness
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Polarization vs
+Bandwidth}\label{polarization-vs-bandwidth}
+
+\textbf{Circular polarization antennas are narrowband}:
+
+\textbf{Reason}: 90\$\^{}\textbackslash circ\$ phase shift only accurate
+over limited bandwidth
+
+\textbf{Typical}: 2-5\% bandwidth for AR \textless{} 3 dB
+
+\textbf{Wideband circular polarization}: Difficult (requires complex
+feed networks)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Cost/Complexity}\label{costcomplexity}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Polarization & Complexity & Cost & Applications \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Linear} & Simple & Low & Most terrestrial (AM/FM, WiFi,
+cellular) \\
+\textbf{Circular} & Moderate & Medium & GPS, satellite, RFID \\
+\textbf{Dual-pol} & High & High & Radar, satellite (frequency reuse) \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary Table}\label{summary-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2059}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2059}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1912}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1912}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2059}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Polarization
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\Delta\phi\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(E_x : E_y\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Axial Ratio
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Applications
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Horizontal} & 0\$\^{}\textbackslash circ\$ &
+\$\textbackslash infty\$ : 1 & \$\textbackslash infty\$ & TV broadcast,
+WiFi \\
+\textbf{Vertical} & 0\$\^{}\textbackslash circ\$ & 1 :
+\$\textbackslash infty\$ & \$\textbackslash infty\$ & AM/FM, mobile \\
+\textbf{\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ Slant} &
+0\$\^{}\textbackslash circ\$ & 1 : 1 & \$\textbackslash infty\$ &
+Satellite downlink \\
+\textbf{RHCP} & -90\$\^{}\textbackslash circ\$ & 1 : 1 & 1 & GPS,
+satellite \\
+\textbf{LHCP} & +90\$\^{}\textbackslash circ\$ & 1 : 1 & 1 & Satellite,
+RFID \\
+\textbf{Elliptical} & Arbitrary & Arbitrary & 1-\$\textbackslash infty\$
+& Imperfect circular \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}}:
+  E and H fields in EM waves
+\item
+  \textbf{{[}{[}Antenna-Theory-Basics{]}{]}}: Polarization matching for
+  maximum gain
+\item
+  \textbf{{[}{[}Atmospheric-Effects-(Ionospheric,-Tropospheric){]}{]}}:
+  Faraday rotation
+\item
+  \textbf{{[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}}:
+  Depolarization in multipath
+\item
+  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Friis equation
+  assumes matched polarization
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Polarization is the ``orientation'' of
+the electric field}. Linear (H, V, slant) is simplest and most common.
+Circular (RHCP, LHCP) is robust to ionospheric effects and multipath,
+used in GPS and satellites. Mismatch causes 3 dB to
+\$\textbackslash infty\$ dB loss depending on angle. Propagation effects
+(Faraday rotation, rain depolarization) degrade polarization purity.
+Match TX and RX polarizations for optimal link performance.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

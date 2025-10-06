@@ -1,0 +1,495 @@
+\section{THz Propagation in Biological
+Tissue}\label{thz-propagation-in-biological-tissue}
+
+{[}{[}Home{]}{]} \textbar{} {[}{[}Terahertz-(THz)-Technology{]}{]}
+\textbar{} {[}{[}THz-Bioeffects-Thermal-and-Non-Thermal{]}{]} \textbar{}
+{[}{[}mmWave-\&-THz-Communications{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Terahertz (THz) radiation} (0.1-10 THz, 30
+\$\textbackslash mu\$m-3 mm wavelength) occupies the spectral gap
+between microwaves and infrared. THz waves interact strongly with
+biological tissue due to resonances with molecular vibrations and
+rotations, particularly water. Understanding THz propagation is critical
+for: - \textbf{Medical imaging}: Cancer detection, burn assessment -
+\textbf{Security}: Concealed weapons/explosives detection through
+clothing - \textbf{Neuromodulation}: Speculative applications in neural
+stimulation (see {[}{[}AID-Protocol-Case-Study{]}{]})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Quick Start for Non-Technical
+Readers}\label{quick-start-for-non-technical-readers}
+
+\textbf{What is THz radiation?} Think of it as invisible light that sits
+between microwaves (used in your microwave oven) and infrared (heat you
+feel from a fireplace). It can pass through some materials but not
+others.
+
+\textbf{Why study it in tissue?} Scientists and doctors want to use THz
+waves to see inside skin without cutting it open-\/-\/-like an X-ray,
+but safer and better for soft tissue.
+
+\textbf{The main challenge: Water blocks THz waves.} Your body is mostly
+water, and water absorbs THz radiation very strongly. This means: -
+\textbf{Good news}: THz waves can create detailed images of skin and
+surface tissues - \textbf{Bad news}: They can\textquotesingle t
+penetrate deep (only a fraction of a millimeter)
+
+\textbf{Real-world analogy}: Imagine shining a flashlight through fog.
+The light gets absorbed quickly, so you can only see a short distance.
+THz waves in wet tissue behave the same way.
+
+\textbf{Key takeaways}: 1. \textbf{THz imaging works for skin}: Doctors
+can detect skin cancer, assess burn depth, or check dental cavities 2.
+\textbf{THz cannot image deep organs}: Unlike X-rays, THz stops at the
+surface (it can\textquotesingle t see your heart or brain through skin)
+3. \textbf{Safety}: THz is non-ionizing (unlike X-rays), so it
+doesn\textquotesingle t damage DNA. At low power, it\textquotesingle s
+considered safe 4. \textbf{The physics}: Water molecules spin in
+response to THz waves, absorbing energy and turning it into heat
+
+\textbf{Who uses this?} - Dermatologists (skin doctors) for cancer
+detection - Security personnel for airport body scanners - Researchers
+exploring futuristic applications (like non-invasive brain
+stimulation-\/-\/-still very experimental)
+
+\textbf{Want more detail?} The sections below explain the physics, but
+you now have the gist!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{1. Electromagnetic Properties of Biological Tissue at THz
+Frequencies}\label{electromagnetic-properties-of-biological-tissue-at-thz-frequencies}
+
+\subsubsection{1.1 Complex Permittivity}\label{complex-permittivity}
+
+Biological tissue\textquotesingle s response to EM waves is
+characterized by \textbf{complex relative permittivity}:
+\[\epsilon_r(\omega) = \epsilon'(\omega) - i\epsilon''(\omega)\] where:
+- \(\epsilon'\): Real part (polarization, refractive index) -
+\(\epsilon''\): Imaginary part (absorption, dissipation)
+
+\textbf{Refractive index}:
+\(n = \sqrt{\epsilon' \mu_r} \approx \sqrt{\epsilon'}\) (assuming
+\(\mu_r \approx 1\) for non-magnetic tissue)
+
+\textbf{Absorption coefficient}:
+\[\alpha(\omega) = \frac{\omega}{c} \sqrt{\frac{\epsilon'}{2} \left( \sqrt{1 + \left(\frac{\epsilon''}{\epsilon'}\right)^2} - 1 \right)} \approx \frac{\omega \epsilon''}{2cn}\]
+for \(\epsilon'' \ll \epsilon'\).
+
+\subsubsection{1.2 Frequency Dependence}\label{frequency-dependence}
+
+\textbf{Water dominates} (tissue is \textasciitilde70-90\% water by
+mass):
+
+\textbf{Debye relaxation model} (single relaxation time):
+\[\epsilon_r(\omega) = \epsilon_\infty + \frac{\epsilon_s - \epsilon_\infty}{1 + i\omega \tau}\]
+where: - \(\epsilon_s\): Static permittivity (\textasciitilde80 for
+water at DC) - \(\epsilon_\infty\): High-frequency limit
+(\textasciitilde5 for water) - \(\tau\): Relaxation time
+(\textasciitilde8 ps for bulk water at 20\$\^{}\textbackslash circ\$C)
+
+\textbf{Relaxation frequency}: \(f_0 = 1/(2\pi \tau) \approx 20\) GHz
+
+\textbf{At THz frequencies} (0.1-10 THz \textgreater\textgreater{} 20
+GHz): - \(\epsilon'\) approaches \(\epsilon_\infty \approx 5\) -
+\(\epsilon''\) increases linearly with frequency (Lorentzian tail) -
+\textbf{Absorption increases with frequency}:
+\(\alpha \propto \omega \epsilon''(\omega)\)
+
+\subsubsection{1.3 Hydration State}\label{hydration-state}
+
+\textbf{Free vs.~bound water}: - \textbf{Free water}: Bulk-like
+rotational dynamics, strong THz absorption - \textbf{Bound water}: Near
+protein surfaces, restricted rotation, reduced absorption
+
+\textbf{Tissue hydration} varies: - \textbf{Skin (stratum corneum)}:
+\textasciitilde20\% water \$\textbackslash rightarrow\$ lower absorption
+- \textbf{Muscle}: \textasciitilde75\% water
+\$\textbackslash rightarrow\$ high absorption - \textbf{Fat (adipose)}:
+\textasciitilde10\% water \$\textbackslash rightarrow\$ low absorption
+(relatively transparent at THz)
+
+\textbf{Temperature dependence}: Absorption increases with temperature
+(faster molecular relaxation)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Absorption Mechanisms}\label{absorption-mechanisms}
+
+\subsubsection{2.1 Water Rotational Modes}\label{water-rotational-modes}
+
+\textbf{Dominant mechanism}: Dipolar water molecules rotate in response
+to THz electric field.
+
+\textbf{Debye absorption peak}: \textasciitilde20 GHz (microwave range)
+\textbf{THz tail}: Absorption continues into THz due to: - Hindered
+rotations (librational modes) - Collective hydrogen bond network
+dynamics
+
+\textbf{Absorption coefficient} (water at 1 THz,
+20\$\^{}\textbackslash circ\$C): \(\alpha \approx 250\)
+cm\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}
+\textbf{Penetration depth}: \(\delta = 1/\alpha \approx 40\)
+\$\textbackslash mu\$m (very shallow!)
+
+\subsubsection{2.2 Protein Vibrational
+Modes}\label{protein-vibrational-modes}
+
+\textbf{Proteins contribute} secondary absorption: -
+\textbf{Low-frequency modes} (0.1-3 THz): Collective vibrations, domain
+motions - \textbf{Amide bands}: \textasciitilde6 THz (C=O stretch
+overtones)
+
+\textbf{Effect}: Protein-rich tissues (e.g., collagen in dermis) have
+enhanced absorption at specific frequencies.
+
+\subsubsection{2.3 Lipid and Membrane
+Absorption}\label{lipid-and-membrane-absorption}
+
+\textbf{Lipids}: Lower absorption than water/protein - \textbf{Fatty
+acids}: CH\textbackslash textsubscript\{2\} rocking modes at
+\textasciitilde2-4 THz - \textbf{Phospholipid headgroups}: Hydrated,
+contribute dielectric relaxation
+
+\textbf{Cell membranes}: - Thin (\textasciitilde7 nm lipid bilayer)
+\$\textbackslash rightarrow\$ minimal direct absorption - But
+membrane-associated water has altered dynamics
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Scattering Mechanisms}\label{scattering-mechanisms}
+
+\subsubsection{3.1 Rayleigh Scattering (Small
+Particles)}\label{rayleigh-scattering-small-particles}
+
+\textbf{Condition}: Particle size \(d \ll \lambda\) (THz wavelength
+\textasciitilde100 \$\textbackslash mu\$m)
+
+\textbf{Scattering cross-section}:
+\[\sigma_s \propto \left(\frac{d}{\lambda}\right)^4 \propto \omega^4\]
+
+\textbf{In tissue}: - \textbf{Organelles} (mitochondria \textasciitilde1
+\$\textbackslash mu\$m, lysosomes \textasciitilde0.5
+\$\textbackslash mu\$m): Weak Rayleigh scattering - \textbf{Cellular
+nuclei} (\textasciitilde10 \$\textbackslash mu\$m): Transition to Mie
+regime
+
+\textbf{Result}: Scattering is weak compared to absorption at THz
+frequencies (unlike visible light, where scattering dominates in tissue)
+
+\subsubsection{3.2 Mie Scattering (Comparable
+Size)}\label{mie-scattering-comparable-size}
+
+\textbf{Condition}: Particle size \(d \approx \lambda\)
+
+\textbf{Applicable to}: - Cells (\textasciitilde10-20
+\$\textbackslash mu\$m diameter) at low THz (\textasciitilde0.3 THz,
+\(\lambda \approx 1000\) \$\textbackslash mu\$m
+\$\textbackslash rightarrow\$ Rayleigh regime) - Cells at high THz
+(\textasciitilde3 THz, \(\lambda \approx 100\) \$\textbackslash mu\$m
+\$\textbackslash rightarrow\$ Mie regime)
+
+\textbf{Mie theory}: Complex calculation; depends on refractive index
+contrast and particle geometry.
+
+\subsubsection{3.3 Interface Reflections}\label{interface-reflections}
+
+\textbf{Fresnel reflection} at interfaces with refractive index
+mismatch: \[R = \left| \frac{n_1 - n_2}{n_1 + n_2} \right|^2\]
+
+\textbf{Tissue interfaces}: - \textbf{Air-skin}: \(n_1 = 1\),
+\(n_2 \approx 2.2\) \$\textbackslash rightarrow\$ \(R \approx 0.15\)
+(15\% reflected) - \textbf{Dermis-fat}: Small contrast
+\$\textbackslash rightarrow\$ \(R < 0.01\) - \textbf{Tissue-bone}: Large
+contrast \$\textbackslash rightarrow\$ \(R \approx 0.2\)
+
+\textbf{Implication}: Surface reflections significant; impedance
+matching needed for efficient coupling
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. Penetration Depth}\label{penetration-depth}
+
+\subsubsection{4.1 Beer-Lambert Law}\label{beer-lambert-law}
+
+Intensity decays exponentially: \[I(z) = I_0 e^{-\alpha z}\]
+
+\textbf{Penetration depth} (1/e attenuation):
+\[\delta = \frac{1}{\alpha}\]
+
+\subsubsection{4.2 Frequency Dependence}\label{frequency-dependence-1}
+
+\textbf{Typical values} (in vivo human tissue):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Frequency & Absorption (\(\text{cm}^{-1}\)) & Penetration depth \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.1 THz & \textasciitilde10 & 1 mm \\
+0.5 THz & \textasciitilde50 & 200 \$\textbackslash mu\$m \\
+1.0 THz & \textasciitilde200 & 50 \$\textbackslash mu\$m \\
+3.0 THz & \textasciitilde700 & 15 \$\textbackslash mu\$m \\
+\end{longtable}
+}
+
+\textbf{Key trend}: Penetration decreases rapidly with frequency. At 1
+THz, THz waves barely penetrate beyond epidermis (\textasciitilde100
+\$\textbackslash mu\$m thick).
+
+\subsubsection{4.3 Tissue-Specific
+Penetration}\label{tissue-specific-penetration}
+
+\textbf{Stratum corneum (dry outer skin)}: Lower water content
+\$\textbackslash rightarrow\$ deeper penetration (\textasciitilde500
+\$\textbackslash mu\$m at 0.5 THz) \textbf{Muscle}: High water
+\$\textbackslash rightarrow\$ shallow (\textasciitilde50
+\$\textbackslash mu\$m at 1 THz) \textbf{Fat}: Low water
+\$\textbackslash rightarrow\$ relatively transparent (\textasciitilde2
+mm at 1 THz) \textbf{Bone}: High mineral content, low water
+\$\textbackslash rightarrow\$ moderate absorption
+
+\textbf{Clinical implication}: THz imaging ideal for skin pathology
+(basal cell carcinoma, burns); poor for deep tissue imaging.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5. Wave Propagation Models}\label{wave-propagation-models}
+
+\subsubsection{5.1 Plane Wave
+Approximation}\label{plane-wave-approximation}
+
+\textbf{Assumption}: Infinite homogeneous medium
+
+\textbf{Electric field}:
+\[E(z,t) = E_0 e^{-\alpha z/2} e^{i(kz - \omega t)}\] where
+\(k = \omega n/c\) is the wavenumber.
+
+\textbf{Limitations}: Ignores interfaces, scattering, finite beam
+effects
+
+\subsubsection{5.2 Stratified Media Model}\label{stratified-media-model}
+
+\textbf{Skin structure}: Multi-layer (stratum corneum, epidermis,
+dermis, fat)
+
+\textbf{Transfer matrix method}: 1. Divide tissue into \(N\) layers 2.
+Apply boundary conditions at each interface (Fresnel
+reflection/transmission) 3. Multiply transfer matrices:
+\(\mathbf{M}_{\text{total}} = \mathbf{M}_N \cdots \mathbf{M}_2 \mathbf{M}_1\)
+4. Calculate total reflection/transmission
+
+\textbf{Result}: Oscillatory reflection spectrum due to interference
+(etalon effect in thin layers)
+
+\subsubsection{5.3 Diffusion
+Approximation}\label{diffusion-approximation}
+
+\textbf{When scattering dominates} (rare in THz):
+\[\nabla^2 U - \frac{U}{L^2} = -S\] where \(U\) is fluence rate,
+\(L = 1/\sqrt{3\mu_a \mu_s'}\) is diffusion length (\(\mu_a\) =
+absorption, \(\mu_s'\) = reduced scattering)
+
+\textbf{Not applicable} to most THz tissue scenarios (absorption
+\textgreater\textgreater{} scattering)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{6. Applications}\label{applications}
+
+\subsubsection{\texorpdfstring{6.1 Medical Imaging
+(Established)}{6.1 Medical Imaging  (Established)}}\label{medical-imaging-established}
+
+\textbf{THz time-domain spectroscopy (THz-TDS)}: - Ultrafast THz pulse
+(\(\sim\)ps duration) transmitted/reflected from tissue - Time-of-flight
+\$\textbackslash rightarrow\$ layer thickness - Spectral features
+\$\textbackslash rightarrow\$ molecular composition
+
+\textbf{Clinical applications}: - \textbf{Skin cancer detection}: Basal
+cell carcinoma has altered water content \$\textbackslash rightarrow\$
+contrast - \textbf{Burn depth assessment}: Damaged tissue has different
+THz signature - \textbf{Dental imaging}: Caries detection (demineralized
+enamel has higher water)
+
+\textbf{Limitations}: Shallow penetration, slow acquisition (raster
+scanning), requires contact or near-contact
+
+\subsubsection{\texorpdfstring{6.2 Security Screening
+(Established)}{6.2 Security Screening  (Established)}}\label{security-screening-established}
+
+\textbf{Through-clothing imaging}: - THz transparent to fabrics (low
+water) - Opaque to skin (high water) - Detect concealed weapons,
+explosives
+
+\textbf{Systems}: Passive THz cameras (detect natural thermal emission)
+or active illumination
+
+\textbf{Privacy concerns}: Can image body contours
+\$\textbackslash rightarrow\$ ``virtual strip search''
+
+\subsubsection{\texorpdfstring{6.3 Neuromodulation
+(Speculative)}{6.3 Neuromodulation  (Speculative)}}\label{neuromodulation-speculative}
+
+\textbf{Hypothesis}: THz pulses could stimulate neurons non-invasively.
+
+\textbf{Mechanisms} (proposed): - \textbf{Thermal}: Localized heating
+triggers temperature-sensitive ion channels (TRPV1) -
+\textbf{Non-thermal}: THz resonates with protein vibrational modes
+\$\textbackslash rightarrow\$ conformational changes - \textbf{Quantum}:
+Vibronic coupling in microtubules (see
+{[}{[}THz-Resonances-in-Microtubules{]}{]})
+
+\textbf{Challenges}: - Penetration: THz cannot reach deep brain
+structures transcranially (skull absorption + scalp) - Power: High
+intensity needed \$\textbackslash rightarrow\$ thermal damage risk -
+Specificity: How to target specific neuron populations?
+
+\textbf{Current status}: In vitro studies show weak effects; in vivo
+neuromodulation not demonstrated
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7. Measurement Techniques}\label{measurement-techniques}
+
+\subsubsection{7.1 THz Time-Domain Spectroscopy
+(THz-TDS)}\label{thz-time-domain-spectroscopy-thz-tds}
+
+\textbf{Setup}: 1. Femtosecond laser generates THz pulse via
+photoconductive antenna or nonlinear crystal 2. THz pulse transmitted
+through sample 3. Detected via electro-optic sampling (time-resolved
+electric field)
+
+\textbf{Advantages}: Phase-sensitive (extract \(\epsilon'\) and
+\(\epsilon''\)), broadband (\textasciitilde0.1-5 THz)
+\textbf{Disadvantages}: Slow (mechanical delay line), expensive
+
+\subsubsection{7.2 Continuous-Wave (CW) THz
+Systems}\label{continuous-wave-cw-thz-systems}
+
+\textbf{Quantum cascade lasers (QCLs)}: High-power, narrow-band THz
+sources
+
+\textbf{Advantage}: Fast imaging, compact \textbf{Disadvantage}: Single
+frequency (must scan laser to get spectrum)
+
+\subsubsection{7.3 In Vivo Reflection
+Geometry}\label{in-vivo-reflection-geometry}
+
+\textbf{Challenge}: Most tissue measurements done in transmission; in
+vivo requires reflection mode.
+
+\textbf{Reflection coefficient}:
+\[r(\omega) = \frac{E_{\text{ref}}(\omega)}{E_{\text{inc}}(\omega)}\]
+Extract optical properties via model fitting (stratified media)
+
+\textbf{Confounding factors}: Surface roughness, sweat, air gaps
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{8. Safety Considerations}\label{safety-considerations}
+
+\textbf{Thermal effects}: Dominant safety concern
+
+\textbf{ICNIRP guidelines} (International Commission on Non-Ionizing
+Radiation Protection): - \textbf{Power density limit}: 10
+mW/cm\textbackslash textsuperscript\{2\} (averaged over 6 minutes) for
+0.3-3 THz - \textbf{Temperature rise}: Must stay below
+1\$\^{}\textbackslash circ\$C for prolonged exposure
+
+\textbf{Non-thermal effects}: Controversial (see
+{[}{[}THz-Bioeffects-Thermal-and-Non-Thermal{]}{]})
+
+\textbf{Current assessment}: THz radiation is non-ionizing (photon
+energy \textasciitilde4 meV \textless\textless{} 13.6 eV ionization
+potential). At low intensities (\textless1
+W/cm\textbackslash textsuperscript\{2\}), considered safe for brief
+exposure.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{9. Connections to Other Wiki
+Pages}\label{connections-to-other-wiki-pages}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Terahertz-(THz)-Technology{]}{]} -\/-\/- THz sources and
+  detectors
+\item
+  {[}{[}THz-Bioeffects-Thermal-and-Non-Thermal{]}{]} -\/-\/- Biological
+  effects
+\item
+  {[}{[}THz-Resonances-in-Microtubules{]}{]} -\/-\/- Speculative quantum
+  effects
+\item
+  {[}{[}mmWave-\&-THz-Communications{]}{]} -\/-\/- Wireless applications
+\item
+  {[}{[}Free-Space-Path-Loss-(FSPL){]}{]} -\/-\/- Propagation
+  fundamentals
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{10. References}\label{references}
+
+\subsubsection{Tissue Optical
+Properties}\label{tissue-optical-properties}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Pickwell \& Wallace, \emph{J. Phys. D} 39, R301 (2006)}
+  -\/-\/- THz tissue review
+\item
+  \textbf{Smye et al., \emph{Phys. Med. Biol.} 46, R101 (2001)} -\/-\/-
+  Tissue dielectric properties
+\end{enumerate}
+
+\subsubsection{Medical Imaging}\label{medical-imaging}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Woodward et al., \emph{Phys. Med. Biol.} 47, 3853 (2002)}
+  -\/-\/- THz skin imaging
+\item
+  \textbf{Wallace et al., \emph{Br. J. Dermatol.} 151, 424 (2004)}
+  -\/-\/- Basal cell carcinoma detection
+\end{enumerate}
+
+\subsubsection{Propagation Models}\label{propagation-models}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  \textbf{Pickwell et al., \emph{Appl. Phys. Lett.} 84, 2190 (2004)}
+  -\/-\/- Stratified media modeling
+\end{enumerate}
+
+\subsubsection{Safety}\label{safety}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  \textbf{ICNIRP, \emph{Health Phys.} 99, 818 (2010)} -\/-\/- THz
+  exposure guidelines
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Last updated}: October 2025

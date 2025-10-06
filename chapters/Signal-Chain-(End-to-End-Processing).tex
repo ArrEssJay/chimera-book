@@ -1,0 +1,626 @@
+\section{Signal Chain (End-to-End
+Processing)}\label{signal-chain-end-to-end-processing}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{The signal chain is like a postal system for data-\/-\/-messages
+get packaged (encoded), addressed (modulated), mailed (transmitted),
+delivered (received), sorted (demodulated), and unpacked (decoded)!}
+
+\textbf{The complete journey}:
+
+\textbf{Transmitter Side} ( Sending):
+
+\textbf{1. Raw Data}: - Your message: ``Hello!'' (text, voice, video) -
+Binary: 01001000 01100101 01101100\textbackslash ldots\{\}
+
+\textbf{2. FEC Encoder} ( Add error protection): - Like: Adding packing
+material to fragile package - Adds redundancy so receiver can fix errors
+- Input: 100 data bits \$\textbackslash rightarrow\$ Output: 150 coded
+bits
+
+\textbf{3. Modulator} ( Convert to symbols): - Like: Converting letter
+to semaphore flags - Maps bits to radio signal patterns - QPSK: Every 2
+bits \$\textbackslash rightarrow\$ 1 symbol (4 positions)
+
+\textbf{4. Upconverter} ( Shift to radio frequency): - Like: Loading
+package onto airplane - Shifts signal from baseband (near 0 Hz) to RF
+(GHz) - Baseband 10 MHz \$\textbackslash rightarrow\$ RF 2.4 GHz
+
+\textbf{5. Transmit Antenna} ( Launch!): - Converts electrical signal to
+electromagnetic waves - Radiates into space - Power: mW to kW depending
+on application
+
+\textbf{Channel} ( The dangerous journey):
+
+\textbf{Link Loss} ( Signal weakens): - Distance: Signal spreads out,
+gets weaker - 2\$\textbackslash times\$ distance = 1/4 power (inverse
+square law)
+
+\textbf{Noise} ( Random interference): - Thermal noise (electronics are
+warm) - Interference (other transmitters) - Cosmic background radiation
+- Like: Static on old radio
+
+\textbf{Fading} ( Signal fluctuates): - Multipath: Echoes interfere -
+Obstacles: Buildings, trees block signal - Movement: Doppler shift -
+Like: Sound echoing in canyon
+
+\textbf{Receiver Side} ( Receiving):
+
+\textbf{6. Receive Antenna} ( Catch!): - Collects weak electromagnetic
+waves - Converts to electrical signal - Received power: Often 10\^{}-12
+watts (pW)!
+
+\textbf{7. Downconverter} ( Unload from airplane): - Shifts RF signal
+back to baseband - RF 2.4 GHz \$\textbackslash rightarrow\$ Baseband 10
+MHz - Now can process with DSP
+
+\textbf{8. Synchronizer} ({[}clock{]} Align timing/frequency): - Like:
+Aligning decoder ring - Matches receiver clock to transmitter - Corrects
+frequency/phase/timing offsets
+
+\textbf{9. Equalizer} ( Undo channel distortion): - Like: Uncrumpling
+package - Reverses distortion from multipath/fading - Makes
+constellation clean again
+
+\textbf{10. Demodulator} ( Read symbols): - Like: Reading semaphore
+flags - Converts received symbols back to bits - Makes ``soft
+decisions'' (probabilities)
+
+\textbf{11. FEC Decoder} ( Fix errors): - Like: Piecing together damaged
+package - Uses redundancy to detect and correct errors - Output: Clean
+data bits (hopefully!)
+
+\textbf{12. Recovered Data} ( Success!): - Your message: ``Hello!'' -
+Delivered successfully (if BER low enough)
+
+\textbf{Real-world example - Sending emoji via WiFi}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  You type (1 byte = 8 bits)
+\item
+  \textbf{FEC}: Encoded to 12 bits (50\% overhead)
+\item
+  \textbf{Modulator}: 12 bits \$\textbackslash rightarrow\$ 6 QPSK
+  symbols
+\item
+  \textbf{Upconverter}: Shifted to 2.4 GHz
+\item
+  \textbf{TX antenna}: Radiated at 100 mW
+\item
+  \textbf{Channel}: Signal travels 10 meters, weakened to 10 µW
+\item
+  \textbf{RX antenna}: Laptop antenna collects 1 µW
+\item
+  \textbf{Downconverter}: Back to baseband
+\item
+  \textbf{Synchronize}: Align timing (4 µs correction)
+\item
+  \textbf{Equalize}: Undo multipath from walls
+\item
+  \textbf{Demodulate}: Recover 12 bits (2 errors!)
+\item
+  \textbf{FEC decode}: Fix 2 errors \$\textbackslash rightarrow\$
+  perfect 8 bits
+\item
+  You see:
+\end{enumerate}
+
+All in 0.00024 seconds!
+
+\textbf{Why understanding the chain matters}: - \textbf{Weak signal?}
+Check: Antenna, link budget, path loss - \textbf{Lots of errors?} Check:
+Noise, FEC, modulation - \textbf{Intermittent?} Check: Fading,
+synchronization - \textbf{Each block} can be optimized independently!
+
+\textbf{Fun fact}: A typical WiFi packet goes through this entire signal
+chain (11+ processing blocks) in under 1 millisecond. Your
+laptop\textquotesingle s WiFi chip performs billions of calculations per
+second to execute these steps in real-time!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+The \textbf{signal chain} is the complete path data takes from
+transmitter to receiver in Chimera\textquotesingle s DSP simulation.
+
+\subsection{Overview}\label{overview}
+
+\begin{verbatim}
+Transmitter Side                    Channel                Receiver Side
+++++++++++++++++                    +++++++                ++++++++++++
+
+[Data Bits]                                                  [Data Bits]
+                                                                
+[FEC Encoder] -- add redundancy                         [FEC Decoder]
+                                                                
+[Modulator] ---- bits to symbols                       [Demodulator]
+                                                                
+[Upconverter] -- baseband to RF              [Downconverter] +
+                                                        
+[TX Antenna] --- [Link Loss] + [AWGN Noise] --- [RX Antenna]
+\end{verbatim}
+
+\subsection{Detailed Signal Chain}\label{detailed-signal-chain}
+
+\subsubsection{1. Data Source}\label{data-source}
+
+\textbf{Input}: Raw information bits (0s and 1s)
+
+\begin{verbatim}
+Example: "Hello" in binary
+01001000 01100101 01101100 01101100 01101111
+\end{verbatim}
+
+\textbf{In Chimera}: Generated from presets or user input
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. FEC Encoder}\label{fec-encoder}
+
+\textbf{Input}: Information bits\\
+\textbf{Output}: Encoded bits with parity
+
+\textbf{Purpose}: Add
+{[}{[}Forward-Error-Correction-(FEC)\textbar redundancy{]}{]} for error
+correction
+
+\begin{verbatim}
+Information: [1 0 1 0] (4 bits)
+      
+[[LDPC-Codes|LDPC]] Encoder (rate 1/2)
+      
+Codeword: [1 0 1 0 1 1 0 0] (8 bits)
+          +-----+ +-------+
+           data     parity
+\end{verbatim}
+
+\textbf{Parameters}: - Code rate (1/2, 2/3, 3/4, etc.) - Block length -
+LDPC matrix structure
+
+\textbf{Chimera Implementation}: \texttt{chimera-core::encoder}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Modulator}\label{modulator}
+
+\textbf{Input}: Encoded bits\\
+\textbf{Output}: Complex symbols (I+jQ)
+
+\textbf{Purpose}: Map bits to
+{[}{[}QPSK-Modulation\textbar constellation points{]}{]}
+
+\begin{verbatim}
+Bits: [0 0]  Symbol: (-1, -1)  225°
+Bits: [0 1]  Symbol: (-1, +1)  135°
+Bits: [1 0]  Symbol: (+1, -1)  315°
+Bits: [1 1]  Symbol: (+1, +1)   45°
+\end{verbatim}
+
+\textbf{For QPSK}: 2 bits per symbol
+
+\textbf{{[}{[}Constellation-Diagrams\textbar Constellation{]}{]} (TX
+side)}:
+
+\begin{verbatim}
+      Q
+      
+     |       Clean symbols
+------+------ I
+     |   
+\end{verbatim}
+
+\textbf{Chimera Implementation}: \texttt{chimera-core::modulation}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Pulse Shaping
+(Optional)}\label{pulse-shaping-optional}
+
+\textbf{Input}: Discrete symbols\\
+\textbf{Output}: Continuous waveform
+
+\textbf{Purpose}: Limit bandwidth, reduce inter-symbol interference
+
+\textbf{Filter Types}: - Raised cosine - Root raised cosine (most
+common) - Gaussian
+
+\textbf{Not simulated in current Chimera version} (focused on baseband)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5. Upconverter}\label{upconverter}
+
+\textbf{Input}: Baseband I/Q signal\\
+\textbf{Output}: RF signal at carrier frequency
+
+\textbf{Purpose}: Shift signal to transmission frequency
+
+\begin{verbatim}
+Baseband: s(t) = I(t) + jQ(t)
+
+RF Signal: s_RF(t) = I(t)·cos(2f_c·t) - Q(t)·sin(2f_c·t)
+
+where f_c is carrier frequency (e.g., 2.4 GHz)
+\end{verbatim}
+
+\textbf{Chimera}: Simulates baseband only (no carrier)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{6. Channel Effects}\label{channel-effects}
+
+\paragraph{A. Link Loss}\label{a.-link-loss}
+
+\textbf{Input}: Transmitted signal power\\
+\textbf{Output}: Attenuated signal power
+
+\textbf{Purpose}: Models distance, antenna gains, free-space path loss
+
+\begin{verbatim}
+Link Budget:
+P_RX = P_TX + G_TX + G_RX - L_path - L_other
+
+Example:
+  10 dBm TX power
++ 3 dBi TX antenna gain
++ 3 dBi RX antenna gain
+- 100 dB path loss
+- 5 dB other losses
+---------------------
+= -89 dBm RX power
+\end{verbatim}
+
+See: {[}{[}Link-Loss-vs-Noise{]}{]}
+
+\textbf{Chimera}: Simulated as amplitude scaling
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{B. Additive White Gaussian Noise
+(AWGN)}\label{b.-additive-white-gaussian-noise-awgn}
+
+\textbf{Input}: Attenuated signal\\
+\textbf{Output}: Noisy signal
+
+\textbf{Purpose}: Models thermal noise, interference
+
+\begin{verbatim}
+Received signal:
+r(t) = s(t) + n(t)
+
+where n(t) ~ N(0, ²) is Gaussian noise
+\end{verbatim}
+
+\textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}} determines noise power:
+
+\begin{verbatim}
+SNR = P_signal / P_noise
+
+² = P_signal / SNR
+\end{verbatim}
+
+\textbf{Constellation (RX side with noise)}:
+
+\begin{verbatim}
+      Q
+      
+     |      Noisy cloud
+    |  
+------+------ I
+    |  
+     |  
+\end{verbatim}
+
+See: {[}{[}Additive-White-Gaussian-Noise-(AWGN){]}{]}
+
+\textbf{Chimera Implementation}: \texttt{chimera-core::channel}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{7. Downconverter}\label{downconverter}
+
+\textbf{Input}: RF signal at carrier frequency\\
+\textbf{Output}: Baseband I/Q signal
+
+\textbf{Purpose}: Shift signal back to baseband for processing
+
+\begin{verbatim}
+I(t) = s_RF(t) · cos(2f_c·t) · LPF
+Q(t) = s_RF(t) · sin(2f_c·t) · LPF
+
+where LPF is low-pass filter
+\end{verbatim}
+
+\textbf{Chimera}: Not needed (baseband simulation)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{8. Matched Filter
+(Optional)}\label{matched-filter-optional}
+
+\textbf{Input}: Noisy continuous waveform\\
+\textbf{Output}: Discrete symbol samples
+
+\textbf{Purpose}: Maximize
+{[}{[}Signal-to-Noise-Ratio-(SNR)\textbar SNR{]}{]} before sampling
+
+\textbf{Not simulated in current Chimera}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{9. Demodulator}\label{demodulator}
+
+\textbf{Input}: Noisy symbols (I+jQ)\\
+\textbf{Output}: Soft bit estimates (LLRs)
+
+\textbf{Purpose}: Convert symbols back to bits with reliability info
+
+\textbf{Hard Decision}:
+
+\begin{verbatim}
+Symbol: (0.8, 0.7)  Bits: [1 1]  Confidence: High 
+Symbol: (0.1, -0.05)  Bits: [0 0]  Confidence: Low 
+\end{verbatim}
+
+\textbf{Soft Decision (Log-Likelihood Ratios)}:
+
+\begin{verbatim}
+LLR > 0  Likely a '1' bit
+LLR < 0  Likely a '0' bit
+|LLR| = Confidence level
+
+Example:
+LLR = +5.2  Very confident '1'
+LLR = -0.3  Weak '0' (could be wrong)
+\end{verbatim}
+
+\textbf{Soft values help FEC decoder make better decisions!}
+
+\textbf{Chimera Implementation}: \texttt{chimera-core::demodulator}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{10. FEC Decoder}\label{fec-decoder}
+
+\textbf{Input}: Soft bit estimates\\
+\textbf{Output}: Corrected information bits
+
+\textbf{Purpose}: Fix errors using
+{[}{[}Forward-Error-Correction-(FEC)\textbar redundancy{]}{]}
+
+\textbf{{[}{[}LDPC-Codes\textbar LDPC{]}{]} Decoding}: 1. Initialize
+with soft values (LLRs) 2. Iterate belief propagation (typically 50
+iterations) 3. Check parity constraints 4. Converge to corrected bits
+
+\begin{verbatim}
+Pre-FEC:  [1 0 1 0 1 1 0 0]  2 bit errors
+                       
+LDPC Decoder (50 iterations)
+                
+Post-FEC: [1 0 1 0 1 1 0 0]  Errors corrected! 
+\end{verbatim}
+
+\textbf{Chimera Implementation}: \texttt{chimera-core::decoder}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{11. Data Sink}\label{data-sink}
+
+\textbf{Output}: Recovered information bits
+
+\textbf{Quality Metrics}: - {[}{[}Bit-Error-Rate-(BER)\textbar Pre-FEC
+BER{]}{]}: Errors before decoding -
+{[}{[}Bit-Error-Rate-(BER)\textbar Post-FEC BER{]}{]}: Residual errors
+after decoding - Frame Error Rate: Percentage of completely corrupted
+frames
+
+\begin{verbatim}
+Best case:  Post-FEC BER = 0 (perfect!) 
+Acceptable: Post-FEC BER < 10
+Poor:       Post-FEC BER > 10³
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Signal Chain Metrics
+(Chimera)}\label{signal-chain-metrics-chimera}
+
+\subsubsection{Transmitter Metrics}\label{transmitter-metrics}
+
+\begin{itemize}
+\tightlist
+\item
+  Data rate (bits/second)
+\item
+  Symbol rate (symbols/second)
+\item
+  Code rate
+\item
+  Modulation order (bits/symbol)
+\end{itemize}
+
+\subsubsection{Channel Metrics}\label{channel-metrics}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Link-Loss-vs-Noise\textbar Link loss{]}{]} (dB)
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR)\textbar SNR{]}{]} (dB)
+\item
+  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0)\textbar Es/N0{]}{]} (dB per
+  symbol)
+\item
+  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0)\textbar Eb/N0{]}{]} (dB per bit)
+\end{itemize}
+
+\subsubsection{Receiver Metrics}\label{receiver-metrics}
+
+\begin{itemize}
+\tightlist
+\item
+  Pre-FEC errors
+\item
+  Post-FEC errors
+\item
+  {[}{[}Bit-Error-Rate-(BER)\textbar BER{]}{]} (pre and post)
+\item
+  Frame Error Rate
+\item
+  LDPC iterations
+\item
+  Coding gain
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Signal Processing Domains}\label{signal-processing-domains}
+
+Throughout the signal chain, we work in different domains:
+
+\subsubsection{Time Domain}\label{time-domain}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{What}: Signal amplitude vs time
+\item
+  \textbf{Where}: Pulse shaping, waveform generation
+\item
+  \textbf{Tool}: Oscilloscope
+\end{itemize}
+
+\subsubsection{Frequency Domain}\label{frequency-domain}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{What}: Signal power vs frequency
+\item
+  \textbf{Where}: Spectrum analysis, filtering
+\item
+  \textbf{Tool}: Spectrum analyzer
+\end{itemize}
+
+\subsubsection{Symbol Domain}\label{symbol-domain}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{What}: Discrete constellation points
+\item
+  \textbf{Where}: Modulation, demodulation
+\item
+  \textbf{Tool}: {[}{[}Constellation-Diagrams\textbar Constellation
+  diagram{]}{]}
+\end{itemize}
+
+\subsubsection{Bit Domain}\label{bit-domain}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{What}: Binary data (0s and 1s)
+\item
+  \textbf{Where}: FEC encoding/decoding
+\item
+  \textbf{Tool}: Error counting
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Processing Gain}\label{processing-gain}
+
+Chimera applies \textbf{processing gain} to improve SNR:
+
+\begin{verbatim}
+Processing Gain = 10 · log(Spread Factor)
+
+Example:
+- Symbol rate: 3200 symbols/sec
+- Chip rate: 32000 chips/sec
+- Spread factor: 10
+- Processing gain: 10 dB
+
+Effective SNR at demodulator:
+SNR_eff = SNR_channel + Processing_gain
+        = -25 dB + 10 dB
+        = -15 dB
+\end{verbatim}
+
+This allows operation at much lower channel SNR!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{End-to-End Example}\label{end-to-end-example}
+
+\begin{verbatim}
+Input: "Hi" = 01001000 01101001 (16 bits)
+
+1. FEC Encoder (rate 1/2):
+    32 bits (16 data + 16 parity)
+
+2. Modulator (QPSK, 2 bits/symbol):
+    16 symbols
+
+3. Channel (SNR = -18 dB):
+    Noisy symbols with errors
+
+4. Demodulator:
+    32 soft bits (LLRs)
+    Pre-FEC errors: 4 bits
+
+5. LDPC Decoder (50 iterations):
+    16 corrected bits
+    Post-FEC errors: 0 bits 
+
+Output: "Hi" = 01001000 01101001 (recovered!)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Visualization in Chimera}\label{visualization-in-chimera}
+
+The web interface shows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{TX Constellation}: Clean transmitted symbols
+\item
+  \textbf{RX Constellation}: Noisy received symbols (scatter plot)
+\item
+  \textbf{Error Metrics}: Pre/Post-FEC BER, frame errors
+\item
+  \textbf{SNR Controls}: Adjust noise level in real-time
+\item
+  \textbf{Processing Gain}: Shows effective SNR improvement
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Forward-Error-Correction-(FEC){]}{]} - Encoding/decoding details
+\item
+  {[}{[}QPSK-Modulation{]}{]} - Modulation scheme
+\item
+  {[}{[}Constellation-Diagrams{]}{]} - Symbol visualization
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - Channel quality metric
+\item
+  {[}{[}Link-Loss-vs-Noise{]}{]} - Channel impairments
+\item
+  {[}{[}Bit-Error-Rate-(BER){]}{]} - Performance metric
+\item
+  {[}{[}Reading the Constellation{]}{]} - Practical guide to
+  interpreting plots
+\end{itemize}

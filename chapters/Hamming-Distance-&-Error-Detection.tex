@@ -1,0 +1,666 @@
+\section{Hamming Distance \& Error
+Detection}\label{hamming-distance-error-detection}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Coding Theory} \textbar{}
+{[}{[}Forward-Error-Correction-(FEC){]}{]} \textbar{}
+{[}{[}Block-Codes-(Hamming,-BCH,-Reed-Solomon){]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Hamming distance is like counting spelling differences between
+words-\/-\/-the more letters that differ, the easier it is to detect
+typos!}
+
+\textbf{The idea - How different are two words?}
+
+Compare these: - \texttt{CAT} vs \texttt{CAR}
+\$\textbackslash rightarrow\$ \textbf{1 letter different}
+\$\textbackslash rightarrow\$ Hamming distance = 1 - \texttt{CAT} vs
+\texttt{DOG} \$\textbackslash rightarrow\$ \textbf{3 letters different}
+\$\textbackslash rightarrow\$ Hamming distance = 3 - \texttt{HELLO} vs
+\texttt{HELLO} \$\textbackslash rightarrow\$ \textbf{0 letters
+different} \$\textbackslash rightarrow\$ Hamming distance = 0
+
+\textbf{Why this matters for error detection}:
+
+\textbf{Problem}: Radio noise flips bits
+(0\$\textbackslash rightarrow\$1 or 1\$\textbackslash rightarrow\$0)
+
+\textbf{Solution}: Use codewords that are far apart! - Valid codewords:
+\texttt{00000}, \texttt{11111} (distance = 5) - Received: \texttt{00100}
+(1 bit flipped) - Decoder: ``Closer to \texttt{00000} than
+\texttt{11111}? Must have been \texttt{00000}!''
+
+\textbf{Rule of thumb}: - \textbf{Distance 2}: Can \textbf{detect} 1
+error (knows something\textquotesingle s wrong) - \textbf{Distance 3}:
+Can \textbf{correct} 1 error (fixes it automatically) - \textbf{Distance
+5}: Can \textbf{correct} 2 errors OR \textbf{detect} 4 errors
+
+\textbf{Real-world example - ISBN numbers}: - Book ISBNs have built-in
+Hamming distance - Typo in one digit? System detects it! - Typo in two
+digits? Usually detected! - This is why Amazon catches typos when you
+enter an ISBN
+
+\textbf{Everyday examples}: - \textbf{Credit card numbers}: Luhn
+algorithm (distance-based error detection) - \textbf{QR codes}: Large
+Hamming distance = works even with damage - \textbf{Your WiFi}: Uses
+codes with distance 3-5 to auto-correct bit errors
+
+\textbf{Fun fact}: Hamming codes (invented in 1950) are why computer RAM
+can automatically detect/correct errors-\/-\/-cosmic rays flip bits,
+Hamming distance catches them!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Hamming distance} measures how many \textbf{bit positions
+differ} between two codewords.
+
+\textbf{Definition}: For binary strings \(x\) and \(y\):
+
+\[
+d_H(x, y) = \text{number of positions where } x_i \neq y_i
+\]
+
+\textbf{Example}: - \(x = 10110\) - \(y = 10011\) - \(d_H(x, y) = 2\)
+(differ in positions 3 and 4)
+
+\textbf{Significance}: Determines \textbf{error detection} and
+\textbf{correction capability} of a code.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Minimum Distance}\label{minimum-distance}
+
+\textbf{Code} \(C\) = Set of valid codewords
+
+\textbf{Minimum distance} \(d_{\min}\):
+
+\[
+d_{\min} = \min_{x,y \in C, x \neq y} d_H(x, y)
+\]
+
+\textbf{Key property}: \(d_{\min}\) determines code\textquotesingle s
+error-handling capability
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Error Detection
+Capability}\label{error-detection-capability}
+
+\textbf{Theorem}: A code with minimum distance \(d_{\min}\) can
+\textbf{detect} up to:
+
+\[
+t_{\text{detect}} = d_{\min} - 1 \text{ errors}
+\]
+
+\textbf{Why}: To detect \(t\) errors, codewords must differ in
+\$\textbackslash geq\$ \(t+1\) positions
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Error Correction
+Capability}\label{error-correction-capability}
+
+\textbf{Theorem}: A code with minimum distance \(d_{\min}\) can
+\textbf{correct} up to:
+
+\[
+t_{\text{correct}} = \left\lfloor \frac{d_{\min} - 1}{2} \right\rfloor \text{ errors}
+\]
+
+\textbf{Why}: Need ``space'' around each codeword to uniquely decode
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Combined Detection \&
+Correction}\label{combined-detection-correction}
+
+\textbf{Can simultaneously}: - Correct \(t\) errors - Detect \(t + s\)
+errors
+
+\textbf{Requirement}:
+
+\[
+d_{\min} \geq 2t + s + 1
+\]
+
+\textbf{Example}: \(d_{\min} = 7\) - Correct 2 errors, detect 2 more
+(2\$\textbackslash times\$2 + 2 + 1 = 7) - Or correct 3 errors (no
+detection beyond that)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Examples}\label{examples}
+
+\subsubsection{Simple Parity Code}\label{simple-parity-code}
+
+\textbf{Codewords}: Add 1 parity bit to make total 1\textquotesingle s
+even
+
+\textbf{Example (3-bit data)}: - 000 \$\textbackslash rightarrow\$
+000\textbf{0} (0 ones, even) - 001 \$\textbackslash rightarrow\$
+001\textbf{1} (2 ones, even) - 010 \$\textbackslash rightarrow\$
+010\textbf{1} (2 ones, even) - 011 \$\textbackslash rightarrow\$
+011\textbf{0} (2 ones, even) - \textbackslash ldots\{\}
+
+\textbf{Minimum distance}: \(d_{\min} = 2\) - Any two codewords differ
+in \$\textbackslash geq\$2 positions
+
+\textbf{Capability}: - Detect: \(2 - 1 = 1\) error - Correct:
+\(\lfloor(2-1)/2\rfloor = 0\) errors (none)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Repetition Code (3-bit)}\label{repetition-code-3-bit}
+
+\textbf{Encoding}: Repeat each bit 3 times - 0
+\$\textbackslash rightarrow\$ 000 - 1 \$\textbackslash rightarrow\$ 111
+
+\textbf{Minimum distance}: \(d_{\min} = 3\) - 000 and 111 differ in all
+3 positions
+
+\textbf{Capability}: - Detect: \(3 - 1 = 2\) errors - Correct:
+\(\lfloor(3-1)/2\rfloor = 1\) error
+
+\textbf{Example error correction}: - Received: 0\textbf{1}0 (1 error) -
+Nearest codeword: 000 \$\textbackslash rightarrow\$ Decode as 0
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Hamming(7,4) Code}\label{hamming74-code}
+
+\textbf{Parameters}: - 7 bits total (4 data + 3 parity) -
+\(d_{\min} = 3\)
+
+\textbf{Capability}: - Correct 1 error - Detect 2 errors
+
+\textbf{Efficiency}: Rate = 4/7 = 0.57 (57\% data, 43\% overhead)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Hamming Weight}\label{hamming-weight}
+
+\textbf{Hamming weight} \(w_H(x)\) = Number of 1\textquotesingle s in
+\(x\)
+
+\textbf{Relationship to distance}:
+
+\[
+d_H(x, y) = w_H(x \oplus y)
+\]
+
+Where \(\oplus\) = XOR (exclusive OR)
+
+\textbf{Example}: - \(x = 10110\) - \(y = 10011\) -
+\(x \oplus y = 00101\) (weight = 2) - \(d_H(x, y) = 2\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Linear Codes}\label{linear-codes}
+
+\textbf{For linear codes}: \(d_{\min}\) = minimum non-zero codeword
+weight
+
+\textbf{Why}: \(d_H(x, y) = w_H(x \oplus y)\), and \(x \oplus y\) is
+also a codeword (closure property)
+
+\textbf{Simplification}: Only need to check weights, not all pairs!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Error Detection Methods}\label{error-detection-methods}
+
+\subsubsection{1. Single Parity Check}\label{single-parity-check}
+
+\textbf{Add 1 bit} to make total 1\textquotesingle s even (or odd)
+
+\textbf{Even parity}:
+
+\[
+p = d_1 \oplus d_2 \oplus \cdots \oplus d_k
+\]
+
+\textbf{Properties}: - \(d_{\min} = 2\) - Detects all single-bit errors
+- Detects all odd-number errors - \textbf{Cannot detect even-number
+errors} (2, 4, 6, \textbackslash ldots\{\})
+
+\textbf{Use case}: Memory (SIMM, DIMM) basic protection
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Two-Dimensional Parity}\label{two-dimensional-parity}
+
+\textbf{Arrange data in matrix}, add parity for rows and columns:
+
+\begin{verbatim}
+d11  d12  d13  | p1  (row parity)
+d21  d22  d23  | p2
+d31  d32  d33  | p3
+-----------------
+ c1   c2   c3  | pc  (col parity, overall)
+\end{verbatim}
+
+\textbf{Properties}: - Detect all 1, 2, 3-bit errors - Correct
+single-bit error (row \$\textbackslash cap\$ column identifies position)
+- Some 4+ bit error patterns undetected
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Cyclic Redundancy Check
+(CRC)}\label{cyclic-redundancy-check-crc}
+
+\textbf{Polynomial-based} error detection
+
+\textbf{Idea}: Treat message as polynomial, divide by generator
+\(g(x)\), append remainder
+
+\textbf{Example (CRC-8)}: - Generator: \(g(x) = x^8 + x^2 + x + 1\) -
+8-bit checksum
+
+\textbf{Properties}: - Detect all single-bit errors - Detect all
+double-bit errors - Detect all odd-number errors (if \(g(x)\) has
+\((x+1)\) factor) - Detect all burst errors \$\textbackslash leq\$
+degree of \(g(x)\)
+
+\textbf{Common CRCs}: - \textbf{CRC-16}: Modbus, USB - \textbf{CRC-32}:
+Ethernet, ZIP, PNG - \textbf{CRC-CCITT}: Bluetooth, X.25
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Checksum}\label{checksum}
+
+\textbf{Simple sum} of data bytes (with wraparound)
+
+\textbf{Example (16-bit)}:
+
+\[
+\text{Checksum} = \left(-\sum_{i} \text{data}_i\right) \bmod 2^{16}
+\]
+
+\textbf{Properties}: - Fast to compute - Weaker than CRC
+(doesn\textquotesingle t catch all bit reorderings)
+
+\textbf{Use case}: TCP, UDP, IP headers
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Error Correction
+Principles}\label{error-correction-principles}
+
+\subsubsection{Maximum Likelihood
+Decoding}\label{maximum-likelihood-decoding}
+
+\textbf{Receive} \(r\) (possibly corrupted)
+
+\textbf{Decode to codeword} \(\hat{c}\) that maximizes \(P(c | r)\)
+
+\textbf{For AWGN channel}: Minimum Euclidean distance
+
+\textbf{For BSC} (binary symmetric channel): Minimum Hamming distance
+
+\[
+\hat{c} = \arg\min_{c \in C} d_H(r, c)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Syndrome Decoding}\label{syndrome-decoding}
+
+\textbf{For linear codes}:
+
+\textbf{Syndrome}: \(s = r \cdot H^T\)
+
+Where: - \(r\) = Received word - \(H\) = Parity-check matrix
+
+\textbf{Property}: \(s = 0\) iff \(r\) is valid codeword
+
+\textbf{Error pattern} identified by syndrome lookup table
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Bounded Distance
+Decoding}\label{bounded-distance-decoding}
+
+\textbf{Decode successfully if} \(d_H(r, c) \leq t\)
+
+Where \(t = \lfloor (d_{\min} - 1)/2 \rfloor\)
+
+\textbf{If} \(d_H(r, c) > t\) \textbf{for all} \(c\): -
+\textbf{Erasure}: Declare decoding failure (more honest) -
+\textbf{Guess}: Pick nearest (may introduce errors)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Coding Bounds}\label{coding-bounds}
+
+\subsubsection{Hamming Bound (Sphere-Packing
+Bound)}\label{hamming-bound-sphere-packing-bound}
+
+\textbf{Volume} of Hamming sphere (radius \(t\)):
+
+\[
+V(t) = \sum_{i=0}^{t} \binom{n}{i}
+\]
+
+\textbf{Hamming bound}: For \((n, k)\) code correcting \(t\) errors:
+
+\[
+2^k \cdot V(t) \leq 2^n
+\]
+
+\textbf{Or}:
+
+\[
+2^{n-k} \geq \sum_{i=0}^{t} \binom{n}{i}
+\]
+
+\textbf{Interpretation}: Need \$\textbackslash geq\$ this many parity
+bits
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Perfect Codes}\label{perfect-codes}
+
+\textbf{Code is perfect} if Hamming bound is met with equality
+
+\textbf{Examples}: - Hamming codes (single-error correcting) - Golay
+code (23, 12, 7) - Repetition codes (trivial)
+
+\textbf{Property}: Every received word is within distance \(t\) of
+exactly one codeword (no ``wasted'' space)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Singleton Bound}\label{singleton-bound}
+
+\[
+d_{\min} \leq n - k + 1
+\]
+
+\textbf{Codes meeting this}: \textbf{Maximum Distance Separable (MDS)}
+
+\textbf{Examples}: Reed-Solomon codes (meet Singleton bound)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Gilbert-Varshamov Bound}\label{gilbert-varshamov-bound}
+
+\textbf{Existence bound}: Guarantees codes exist with certain
+\(d_{\min}\)
+
+\[
+\sum_{i=0}^{d-2} \binom{n-1}{i} < 2^{n-k}
+\]
+
+\textbf{Interpretation}: ``Good'' codes exist, even if we
+don\textquotesingle t know how to construct them
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Error Detection}\label{practical-error-detection}
+
+\subsubsection{Memory (ECC RAM)}\label{memory-ecc-ram}
+
+\textbf{Single Error Correction, Double Error Detection (SECDED)}: -
+Hamming code with extra parity bit - \(d_{\min} = 4\) - Correct 1 bit,
+detect 2 bits
+
+\textbf{Example}: 64-bit data - Hamming: 7 parity bits (for 1-bit
+correction) - +1 bit for double detection \$\textbackslash rightarrow\$
+8 bits total - (64, 72) SECDED code
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Storage (Hard Drives,
+SSDs)}\label{storage-hard-drives-ssds}
+
+\textbf{Reed-Solomon codes}: - Detect/correct burst errors - Used in
+RAID, CDs, DVDs, QR codes
+
+\textbf{Example}: CD - RS(32, 28, 5) over \(\mathrm{GF}(2^8)\) - Can
+correct 2 symbol errors (16 bits)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Networking}\label{networking}
+
+\textbf{CRC-32} (Ethernet): - Detects all burst errors
+\$\textbackslash leq\$32 bits - Detects 99.9999\% of longer bursts
+
+\textbf{TCP checksum}: - 16-bit sum (weak) - Mainly detects random
+errors, not malicious
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Spacecraft}\label{spacecraft}
+
+\textbf{Concatenated codes}: - Inner: Convolutional or LDPC (correct
+frequent errors) - Outer: Reed-Solomon (correct burst errors)
+
+\textbf{Example}: Voyager - (7, 1/2) convolutional + RS(255, 223) -
+\(d_{\min} = 33\) (outer code) - Can correct 16 symbol errors
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Burst Error Detection}\label{burst-error-detection}
+
+\textbf{Burst error}: Consecutive bits corrupted
+
+\textbf{Length \(b\) burst}: Errors span \(b\) consecutive bits
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Fire Codes}\label{fire-codes}
+
+\textbf{Designed for burst errors}
+
+\textbf{Parameters}: \((n, k)\) code detecting bursts
+\$\textbackslash leq\$ \(b\)
+
+\textbf{Requirement}: \(n - k \geq b\)
+
+\textbf{Generator polynomial}: Special structure
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Interleaving}\label{interleaving}
+
+\textbf{Spread codeword symbols} across time/space
+
+\textbf{Example (depth 5)}:
+
+\begin{verbatim}
+Original:
+C1: a1 a2 a3 a4
+C2: b1 b2 b3 b4
+C3: c1 c2 c3 c4
+C4: d1 d2 d3 d4
+C5: e1 e2 e3 e4
+
+Transmitted:
+a1 b1 c1 d1 e1 | a2 b2 c2 d2 e2 | a3 b3 c3 d3 e3 | ...
+
+If burst corrupts 5 bits:
+a1 b1 c1 d1 e1  (all corrupted)
+         
+Each codeword sees only 1 error  All correctable!
+\end{verbatim}
+
+\textbf{Use case}: CDs (scratch protection), wireless (fading)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Distance Spectrum}\label{distance-spectrum}
+
+\textbf{Weight distribution} \(A_i\) = Number of codewords with weight
+\(i\)
+
+\textbf{Notation}: \(\{A_0, A_1, A_2, \ldots, A_n\}\)
+
+\textbf{Example}: Hamming(7,4) - \(A_0 = 1\) (all-zeros) - \(A_3 = 7\)
+(weight 3) - \(A_4 = 7\) (weight 4) - \(A_7 = 1\) (all-ones)
+
+\textbf{Use}: Calculate average error probability
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Union Bound on Error
+Probability}\label{union-bound-on-error-probability}
+
+\[
+P_e \leq \sum_{i=d_{\min}}^{n} A_i \cdot P(\text{decode } c_i \text{ as another codeword})
+\]
+
+\textbf{Tight at high SNR}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Soft-Decision Metrics}\label{soft-decision-metrics}
+
+\textbf{Hard decision}: Received bit \$\textbackslash rightarrow\$ 0 or
+1 (threshold)
+
+\textbf{Soft decision}: Keep analog value (confidence)
+
+\textbf{Soft Hamming distance} (Euclidean):
+
+\[
+d_{\text{soft}}(r, c) = \sum_{i=1}^{n} (r_i - c_i)^2
+\]
+
+Where \(r_i \in \mathbb{R}\) (e.g., LLRs)
+
+\textbf{Benefit}: \textasciitilde2-3 dB coding gain
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary Table}\label{summary-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Error Type & Detection Method & Overhead & Capability \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Single bit} & Parity & 1 bit & Detect only \\
+\textbf{1-2 bits} & Hamming(7,4) & 43\% & Correct 1, detect 2 \\
+\textbf{Burst \$\textbackslash leq\$32 bits} & CRC-32 & 32 bits & Detect
+only \\
+\textbf{Random errors} & Reed-Solomon & 10-20\% & Correct + detect \\
+\textbf{Deep space} & Concatenated & 50\%+ & Very robust \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Code Comparison}\label{code-comparison}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llllll@{}}
+\toprule\noalign{}
+Code & (n, k) & \(d_{\min}\) & Correct & Detect & Rate \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Parity} & (n, n-1) & 2 & 0 & 1 & 0.875 (n=8) \\
+\textbf{Rep(3)} & (3, 1) & 3 & 1 & 2 & 0.33 \\
+\textbf{Hamming(7,4)} & (7, 4) & 3 & 1 & 2 & 0.57 \\
+\textbf{Extended Hamming} & (8, 4) & 4 & 1 & 3 & 0.50 \\
+\textbf{Golay(23,12)} & (23, 12) & 7 & 3 & 6 & 0.52 \\
+\textbf{RS(255,223)} & (255, 223) & 33 & 16 & 32 & 0.875 \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Python Example: Hamming
+Distance}\label{python-example-hamming-distance}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ hamming\_distance(x, y):}
+    \CommentTok{"""Calculate Hamming distance between two binary strings."""}
+    \ControlFlowTok{if} \BuiltInTok{len}\NormalTok{(x) }\OperatorTok{!=} \BuiltInTok{len}\NormalTok{(y):}
+        \ControlFlowTok{raise} \PreprocessorTok{ValueError}\NormalTok{(}\StringTok{"Strings must have equal length"}\NormalTok{)}
+    \ControlFlowTok{return} \BuiltInTok{sum}\NormalTok{(c1 }\OperatorTok{!=}\NormalTok{ c2 }\ControlFlowTok{for}\NormalTok{ c1, c2 }\KeywordTok{in} \BuiltInTok{zip}\NormalTok{(x, y))}
+
+\KeywordTok{def}\NormalTok{ hamming\_weight(x):}
+    \CommentTok{"""Calculate Hamming weight (number of 1\textquotesingle{}s)."""}
+    \ControlFlowTok{return} \BuiltInTok{sum}\NormalTok{(}\BuiltInTok{int}\NormalTok{(c) }\ControlFlowTok{for}\NormalTok{ c }\KeywordTok{in}\NormalTok{ x)}
+
+\KeywordTok{def}\NormalTok{ minimum\_distance(codewords):}
+    \CommentTok{"""Find minimum distance of a code."""}
+\NormalTok{    min\_dist }\OperatorTok{=} \BuiltInTok{float}\NormalTok{(}\StringTok{\textquotesingle{}inf\textquotesingle{}}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ i, c1 }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(codewords):}
+        \ControlFlowTok{for}\NormalTok{ c2 }\KeywordTok{in}\NormalTok{ codewords[i}\OperatorTok{+}\DecValTok{1}\NormalTok{:]:}
+\NormalTok{            dist }\OperatorTok{=}\NormalTok{ hamming\_distance(c1, c2)}
+            \ControlFlowTok{if}\NormalTok{ dist }\OperatorTok{\textless{}}\NormalTok{ min\_dist:}
+\NormalTok{                min\_dist }\OperatorTok{=}\NormalTok{ dist}
+    \ControlFlowTok{return}\NormalTok{ min\_dist}
+
+\CommentTok{\# Example: Hamming(7,4) codewords}
+\NormalTok{hamming\_7\_4 }\OperatorTok{=}\NormalTok{ [}
+    \StringTok{\textquotesingle{}0000000\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}0001111\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}0010110\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}0011001\textquotesingle{}}\NormalTok{,}
+    \StringTok{\textquotesingle{}0100101\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}0101010\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}0110011\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}0111100\textquotesingle{}}\NormalTok{,}
+    \StringTok{\textquotesingle{}1000011\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}1001100\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}1010101\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}1011010\textquotesingle{}}\NormalTok{,}
+    \StringTok{\textquotesingle{}1100110\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}1101001\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}1110000\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}1111111\textquotesingle{}}
+\NormalTok{]}
+
+\NormalTok{d\_min }\OperatorTok{=}\NormalTok{ minimum\_distance(hamming\_7\_4)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Minimum distance: }\SpecialCharTok{\{}\NormalTok{d\_min}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)  }\CommentTok{\# Output: 3}
+
+\CommentTok{\# Error capability}
+\NormalTok{t\_correct }\OperatorTok{=}\NormalTok{ (d\_min }\OperatorTok{{-}} \DecValTok{1}\NormalTok{) }\OperatorTok{//} \DecValTok{2}
+\NormalTok{t\_detect }\OperatorTok{=}\NormalTok{ d\_min }\OperatorTok{{-}} \DecValTok{1}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Can correct }\SpecialCharTok{\{}\NormalTok{t\_correct}\SpecialCharTok{\}}\SpecialStringTok{ errors, detect }\SpecialCharTok{\{}\NormalTok{t\_detect}\SpecialCharTok{\}}\SpecialStringTok{ errors"}\NormalTok{)}
+\CommentTok{\# Output: Can correct 1 errors, detect 2 errors}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Forward-Error-Correction-(FEC){]}{]}}: Using redundancy
+  for correction
+\item
+  \textbf{{[}{[}Block-Codes-(Hamming,-BCH,-Reed-Solomon){]}{]}}:
+  Specific code constructions
+\item
+  \textbf{{[}{[}Convolutional-Codes-\&-Viterbi-Decoding{]}{]}}:
+  Sequential error correction
+\item
+  \textbf{{[}{[}LDPC-Codes{]}{]}}: Modern capacity-approaching codes
+\item
+  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Hamming distance \(d_H(x,y)\) counts
+differing bit positions.} Minimum distance \(d_{\min}\) determines
+error-handling capability: detect \(d_{\min}-1\) errors, correct
+\(\lfloor(d_{\min}-1)/2\rfloor\) errors. Single parity (\(d_{\min}=2\))
+detects 1 error. Hamming codes (\(d_{\min}=3\)) correct 1 error.
+Reed-Solomon (\(d_{\min}=33\)) corrects 16 symbol errors. CRC detects
+burst errors efficiently. Interleaving converts burst errors to
+scattered errors. Soft-decision decoding gains \textasciitilde2 dB over
+hard decision. Trade-off: Larger \(d_{\min}\) requires more redundancy
+(lower code rate).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

@@ -1,0 +1,391 @@
+\section{LDPC Codes}\label{ldpc-codes}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{LDPC codes are like a super-smart spell-checker that can fix
+corruption even when 40\% of letters are garbled-\/-\/-and
+they\textquotesingle re so good, they\textquotesingle re in your WiFi,
+5G phone, and satellite TV!}
+
+\textbf{The magic - Near-perfect error correction}: - \textbf{Regular
+error correction}: Can fix maybe 10-20\% errors - \textbf{LDPC}: Can fix
+40\%+ errors and get to near-theoretical limit! - \textbf{How}: Uses
+``belief propagation'' -\/-\/- bits check each other iteratively
+
+\textbf{Real-world analogy - Sudoku}: - Each bit is connected to
+multiple parity checks - Like sudoku: each number constrains others -
+Even if some numbers missing, you can solve for them! - LDPC does this
+with thousands of interconnected checks
+
+\textbf{Why they\textquotesingle re everywhere}: - \textbf{WiFi 5/6}:
+Uses LDPC for reliability - \textbf{5G phones}: LDPC for data channels
+(not control) - \textbf{Satellite TV (DVB-S2)}: LDPC enables HD from
+space - \textbf{Deep space}: NASA uses LDPC for Mars rovers -
+\textbf{SSDs}: Flash storage uses LDPC to survive wear
+
+\textbf{The history - Forgotten and rediscovered}: - \textbf{1962}:
+Robert Gallager invents LDPC at MIT - \textbf{1960s-1990s}: Forgotten
+(computers too slow to decode) - \textbf{1996}: Rediscovered! Now
+computers are fast enough - \textbf{2000s}: Adopted in WiFi, satellites,
+5G - \textbf{Today}: One of the best error correction codes!
+
+\textbf{How good are they?} - \textbf{Shannon limit}: Theoretical best
+possible (1948) - \textbf{LDPC performance}: Within 0.5 dB of Shannon
+limit! - Translation: 99.9\% of theoretical maximum efficiency - No
+other practical code comes this close!
+
+\textbf{Why ``Low-Density Parity-Check''?} - \textbf{Parity-check}:
+Error detection using math - \textbf{Low-density}: Each bit only checks
+a few others (sparse) - \textbf{Benefit}: Efficient decoding (not
+checking everything against everything)
+
+\textbf{When you see it}: - \textbf{WiFi router}: ``802.11ac'' uses LDPC
+codes - \textbf{5G phone specs}: ``LDPC encoding for eMBB'' -
+\textbf{Satellite receiver}: ``DVB-S2 with LDPC'' - \textbf{SSD specs}:
+``LDPC ECC engine''
+
+\textbf{Fun fact}: LDPC codes were forgotten for 30 years because
+computers in the 1960s couldn\textquotesingle t run the decoder in
+real-time. Today, your WiFi chip decodes LDPC billions of times per
+second without breaking a sweat!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Low-Density Parity-Check (LDPC)} codes are a class of
+{[}{[}Forward-Error-Correction-(FEC)\textbar FEC{]}{]} codes used in
+Chimera and many modern communication systems.
+
+\subsection{What Makes LDPC Special?}\label{what-makes-ldpc-special}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Near Shannon-limit performance}: Approaches theoretical
+  maximum efficiency
+\item
+  \textbf{Iterative decoding}: Uses belief propagation algorithm
+\item
+  \textbf{Flexible}: Configurable code rate and structure
+\item
+  \textbf{Widely adopted}: Found in WiFi, satellite, 5G, storage systems
+\end{enumerate}
+
+\subsection{History}\label{history}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{1962}: Invented by Robert Gallager (MIT)
+\item
+  \textbf{1960s-1990s}: Forgotten (too complex for the technology)
+\item
+  \textbf{1996}: Rediscovered by MacKay and Neal
+\item
+  \textbf{2000s+}: Adopted in modern standards (computational power now
+  sufficient)
+\end{itemize}
+
+\subsection{How LDPC Works}\label{how-ldpc-works}
+
+\subsubsection{The Parity-Check Matrix}\label{the-parity-check-matrix}
+
+LDPC uses a \textbf{sparse parity-check matrix} H: - Most entries are 0
+(hence ``low-density'') - Few entries are 1 - Defines parity
+relationships between bits
+
+\begin{verbatim}
+Example 3x6 LDPC matrix H:
+
+     b b b b b b
+p [ 1  1  0  1  0  0 ]   b  b  b = 0
+p [ 0  1  1  0  1  0 ]   b  b  b = 0
+p [ 1  0  0  1  0  1 ]   b  b  b = 0
+
+Where  is XOR (modulo-2 addition)
+\end{verbatim}
+
+\subsubsection{Encoding}\label{encoding}
+
+\begin{verbatim}
+Information bits:  [1 0 1 0]
+         
+LDPC Encoder: Apply H matrix
+         
+Codeword:     [1 0 1 0 1 1]
+              +-----+ +---+
+               data   parity
+\end{verbatim}
+
+\subsubsection{Decoding (Belief
+Propagation)}\label{decoding-belief-propagation}
+
+The decoder iteratively refines bit estimates:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Initialize}: Start with received soft values (not just 0/1)
+\item
+  \textbf{Check nodes}: Verify parity constraints
+\item
+  \textbf{Variable nodes}: Update bit estimates
+\item
+  \textbf{Iterate}: Repeat until convergence or max iterations
+\item
+  \textbf{Decide}: Hard decision on final bit values
+\end{enumerate}
+
+\begin{verbatim}
+Iteration:  1    2    3    ... 50
+Errors:    15  8  3   ... 0  
+\end{verbatim}
+
+\subsection{LDPC Parameters}\label{ldpc-parameters}
+
+\subsubsection{Code Rate}\label{code-rate}
+
+\begin{verbatim}
+Rate = k/n
+
+where:
+- k = number of information bits
+- n = total codeword length
+\end{verbatim}
+
+Common rates in Chimera: - \textbf{1/2}: Strong error correction (50\%
+overhead) - \textbf{2/3}: Balanced (33\% overhead) - \textbf{3/4}:
+Efficient (25\% overhead)
+
+\subsubsection{Block Length}\label{block-length}
+
+\begin{itemize}
+\tightlist
+\item
+  Longer blocks: Better performance but more latency
+\item
+  Typical: 576 to 8192 bits
+\item
+  Chimera: Configurable per preset
+\end{itemize}
+
+\subsubsection{Degree Distribution}\label{degree-distribution}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Variable node degree}: Connections per information bit
+\item
+  \textbf{Check node degree}: Connections per parity bit
+\item
+  \textbf{Optimized}: For specific code rates and SNR ranges
+\end{itemize}
+
+\subsection{Performance
+Characteristics}\label{performance-characteristics}
+
+\subsubsection{Waterfall Region}\label{waterfall-region}
+
+\begin{verbatim}
+BER
+ 
+10 |
+    |     Steep
+10³ |      drop!
+    |        
+10 |         +
+    |          +___
+10 |              +___
+    +------------------ SNR (dB)
+       Threshold
+\end{verbatim}
+
+\subsubsection{Threshold Effect}\label{threshold-effect}
+
+\begin{itemize}
+\tightlist
+\item
+  Below threshold: BER stays high
+\item
+  At threshold: BER drops rapidly (waterfall)
+\item
+  Above threshold: Approaches error floor
+\end{itemize}
+
+\subsubsection{Error Floor}\label{error-floor}
+
+\begin{itemize}
+\tightlist
+\item
+  Minimum achievable BER
+\item
+  Caused by:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Trapping sets (problematic bit patterns)
+  \item
+    Finite block length
+  \item
+    Decoder implementation limits
+  \end{itemize}
+\end{itemize}
+
+\subsection{LDPC vs Other Codes}\label{ldpc-vs-other-codes}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Code Type & Complexity & Performance & Flexibility \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hamming & Low & Poor & Low \\
+Reed-Solomon & Medium & Good & Medium \\
+Convolutional & Low & Good & Low \\
+Turbo & High & Excellent & Medium \\
+\textbf{LDPC} & \textbf{Medium} & \textbf{Excellent} & \textbf{High} \\
+Polar & Medium & Excellent & High \\
+\end{longtable}
+}
+
+\subsection{LDPC in Chimera}\label{ldpc-in-chimera}
+
+\subsubsection{Implementation Details}\label{implementation-details}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Library}: Uses \texttt{chimera-core} Rust implementation
+\item
+  \textbf{Decoder}: Iterative belief propagation
+\item
+  \textbf{Max iterations}: Configurable (typically 50)
+\item
+  \textbf{Soft decision}: Uses log-likelihood ratios (LLRs)
+\end{itemize}
+
+\subsubsection{Preset Configuration}\label{preset-configuration}
+
+Each Chimera preset specifies: - Code rate (e.g., 1/2, 2/3) - Block
+length - Parity matrix structure - Recommended SNR range
+
+\subsubsection{Performance Metrics}\label{performance-metrics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pre-FEC BER}: Before LDPC decoding
+\item
+  \textbf{Post-FEC BER}: After LDPC correction
+\item
+  \textbf{Iterations}: Average iterations to converge
+\item
+  \textbf{Frame failures}: Frames that couldn\textquotesingle t be
+  corrected
+\end{itemize}
+
+\subsection{Example: LDPC in Action}\label{example-ldpc-in-action}
+
+\begin{verbatim}
+Scenario:
+- SNR: -18 dB (very noisy!)
+- Code rate: 1/2
+- Block length: 1024 bits
+
+Without LDPC:
+- Pre-FEC BER: 4.5 × 10² (4.5% errors)
+- Message: Completely corrupted 
+
+With LDPC:
+- Decoder iterations: 35
+- Post-FEC BER: 0 (zero errors!)
+- Message: Perfect recovery! 
+
+Coding gain: ~40 dB
+\end{verbatim}
+
+\subsection{Real-World Applications}\label{real-world-applications}
+
+\subsubsection{Digital Video Broadcasting
+(DVB-S2)}\label{digital-video-broadcasting-dvb-s2}
+
+\begin{itemize}
+\tightlist
+\item
+  Satellite TV
+\item
+  LDPC code rates: 1/4 to 9/10
+\item
+  Block length: 64,800 bits
+\end{itemize}
+
+\subsubsection{WiFi (802.11n/ac/ax)}\label{wifi-802.11nacax}
+
+\begin{itemize}
+\tightlist
+\item
+  Wireless LAN
+\item
+  LDPC optional but recommended
+\item
+  Various code rates
+\end{itemize}
+
+\subsubsection{5G NR}\label{g-nr}
+
+\begin{itemize}
+\tightlist
+\item
+  Mobile communications
+\item
+  LDPC for data channels
+\item
+  Flexible code rates and block lengths
+\end{itemize}
+
+\subsubsection{Storage Systems}\label{storage-systems}
+
+\begin{itemize}
+\tightlist
+\item
+  SSDs, hard drives
+\item
+  LDPC protects against bit flips
+\item
+  Enables higher storage densities
+\end{itemize}
+
+\subsection{Advantages of LDPC}\label{advantages-of-ldpc}
+
+\textbf{Near-optimal performance}: Within 0.5 dB of Shannon limit
+\textbf{Flexible}: Easily adapted to different code rates
+\textbf{Parallel decoding}: Can be implemented efficiently in hardware
+\textbf{Soft-decision}: Uses reliability information effectively
+\textbf{Scalable}: Works for various block lengths
+
+\subsection{Limitations}\label{limitations}
+
+\textbf{Complexity}: More complex than simple codes \textbf{Latency}:
+Iterative decoding takes time \textbf{Error floor}:
+Doesn\textquotesingle t completely eliminate errors \textbf{Design}:
+Matrix design requires expertise
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Forward-Error-Correction-(FEC){]}{]} - General FEC concepts
+\item
+  {[}{[}Bit-Error-Rate-(BER){]}{]} - What LDPC improves
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - LDPC enables lower SNR
+\item
+  \href{../docs/chimera_technical_overview.md}{Chimera Technical
+  Overview} - Implementation details
+\end{itemize}

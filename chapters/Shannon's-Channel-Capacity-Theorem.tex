@@ -1,0 +1,591 @@
+\section{Shannon\textquotesingle s Channel Capacity
+Theorem}\label{shannons-channel-capacity-theorem}
+
+\textbf{Shannon\textquotesingle s Channel Capacity Theorem} (1948) is
+one of the most important results in information theory, establishing
+the \textbf{fundamental limit} of reliable communication over a noisy
+channel.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+Imagine you\textquotesingle re trying to have a conversation in a noisy
+room. The noisier it gets, the harder it is to understand what the other
+person is saying. You might speak louder, or talk more slowly and
+clearly, but there\textquotesingle s a limit to how much information you
+can reliably communicate.
+
+\textbf{Shannon\textquotesingle s theorem tells us exactly what that
+limit is.}
+
+\subsubsection{The Big Ideas (In Plain
+English)}\label{the-big-ideas-in-plain-english}
+
+\textbf{1. Every communication channel has a speed limit}
+
+Just like highways have speed limits, communication channels (WiFi,
+radio, fiber optics, etc.) have a maximum rate at which you can send
+information reliably. This limit depends on two things: - \textbf{How
+much ``space'' you have} (bandwidth - like having more lanes on a
+highway) - \textbf{How noisy it is} (signal-to-noise ratio - like trying
+to talk in a quiet library vs.~a rock concert)
+
+\textbf{2. You can always send slower to be more reliable}
+
+If you\textquotesingle re below the speed limit, you can add ``error
+correction'' (like repeating yourself or spelling things out) to make
+sure the message gets through perfectly. Shannon proved that with good
+enough error correction, you can get the error rate as close to zero as
+you want.
+
+\textbf{3. You can never go faster than the limit}
+
+No matter how clever your technology, you cannot exceed this fundamental
+limit without making mistakes. It\textquotesingle s a law of nature,
+like the speed of light.
+
+\subsubsection{Real-World Example: Your
+WiFi}\label{real-world-example-your-wifi}
+
+Your WiFi router constantly adjusts its speed based on
+Shannon\textquotesingle s theorem: - \textbf{Far from router (weak
+signal, noisy)}: Sends data slowly but reliably (maybe 10 Mbps) -
+\textbf{Close to router (strong signal, clean)}: Sends data fast (maybe
+500 Mbps) - \textbf{Through thick walls (very noisy)}: Slows way down to
+maintain connection
+
+The router is always trying to send as fast as possible \textbf{without
+exceeding Shannon\textquotesingle s limit}, because going faster would
+just cause errors and make things worse.
+
+\subsubsection{Why This Matters for
+Chimera}\label{why-this-matters-for-chimera}
+
+In Chimera\textquotesingle s space communication scenarios,
+we\textquotesingle re often working in \textbf{extremely noisy}
+conditions (think: trying to hear a whisper from across a football field
+during a thunderstorm). Shannon\textquotesingle s theorem tells us: - We
+\textbf{must} use very strong error correction (LDPC codes) - We
+\textbf{cannot} send data very fast (maybe 32 bits per second instead of
+millions) - But we \textbf{can} still communicate reliably if we respect
+the limits
+
+\textbf{The theorem is like a GPS for engineers}: it tells us where the
+cliff edge is, so we know how close we can safely get.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ The Main
+Result}{ The Main Result}}\label{the-main-result}
+
+\textbf{Channel Capacity (C)}: Maximum rate at which information can be
+transmitted over a channel with \textbf{arbitrarily small error
+probability}.
+
+\textbf{For AWGN channel} (Additive White Gaussian Noise):
+
+\begin{verbatim}
+C = B · log(1 + SNR)  bits/second
+
+where:
+- B = bandwidth (Hz)
+- SNR = signal-to-noise ratio (linear, not dB!)
+\end{verbatim}
+
+\textbf{In terms of
+{[}{[}Energy-Ratios-(Es-N0-and-Eb-N0)\textbar Eb/N0{]}{]}}:
+
+\begin{verbatim}
+C/B = log(1 + (Eb/N) · (R/B))
+
+where R = data rate (bps)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Physical
+Interpretation}{ Physical Interpretation}}\label{physical-interpretation}
+
+\subsubsection{What Shannon Proved}\label{what-shannon-proved}
+
+\textbf{Two-part theorem}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Achievability}: If data rate R \textless{} C, there exists a
+  coding scheme that allows transmission with \textbf{arbitrarily low
+  error probability} (BER \$\textbackslash rightarrow\$ 0)
+\item
+  \textbf{Converse}: If R \textgreater{} C, \textbf{no} coding scheme
+  can achieve reliable communication (BER bounded away from zero)
+\end{enumerate}
+
+\textbf{Shannon limit}: The boundary R = C is the \textbf{hard limit} of
+communication.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Information-Theoretic
+Perspective}\label{information-theoretic-perspective}
+
+\begin{verbatim}
+Reliable Communication Regions:
+
+BER
+ 
+10|   R > C (impossible)
+   |
+10³|
+   |
+10|  Possible with
+   |  good codes
+10|         
+   |         | R < C (Shannon says codes exist!)
+   +---------+-------- R/C
+             1.0 (Shannon limit)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Derivations \&
+Examples}{ Derivations \& Examples}}\label{derivations-examples}
+
+\subsubsection{Example 1: WiFi Channel}\label{example-1-wifi-channel}
+
+\begin{verbatim}
+Given:
+- Bandwidth: B = 20 MHz
+- SNR: 20 dB = 100 (linear)
+
+Capacity:
+C = 20×10 · log(1 + 100)
+  = 20×10 · log(101)
+  = 20×10 · 6.66
+  = 133 Mbps
+
+Conclusion: No matter how clever your coding, you can't reliably transmit more than 133 Mbps on this channel.
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example 2: Deep Space
+Link}\label{example-2-deep-space-link}
+
+\begin{verbatim}
+Given:
+- Bandwidth: B = 1 MHz
+- SNR: -3 dB = 0.5 (linear!) (very noisy!)
+
+Capacity:
+C = 1×10 · log(1 + 0.5)
+  = 1×10 · log(1.5)
+  = 1×10 · 0.585
+  = 585 kbps
+
+Conclusion: Even at negative SNR, communication is possible (but rate must be low).
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example 3: Chimera
+Simulation}\label{example-3-chimera-simulation}
+
+\begin{verbatim}
+Given:
+- Bandwidth: B  20 Hz (QPSK @ 16 sym/s)
+- SNR: Variable (-25 to +10 dB in typical presets)
+
+At SNR = -15 dB (0.0316 linear):
+C = 20 · log(1 + 0.0316)
+  = 20 · log(1.0316)
+  = 20 · 0.045
+  = 0.9 bps
+
+Chimera uses: R = 32 bps (16 sym/s × 2 bits/sym)
+
+R/C = 32/0.9 = 35.6 >> 1   Operating FAR above capacity!
+
+This is why [[LDPC-Codes]] are essential. Without FEC, BER would be ~50% (random guessing).
+With LDPC (rate 1/2), effective R = 16 bps, still R/C = 17.8 (high, but FEC provides ~35 dB coding gain).
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Spectral
+Efficiency}{ Spectral Efficiency}}\label{spectral-efficiency}
+
+\textbf{Spectral efficiency}: \$\textbackslash eta\$ = R/B (bits/s/Hz)
+
+\textbf{Shannon limit} on spectral efficiency:
+
+\begin{verbatim}
+_max = log(1 + SNR)
+
+Examples:
+- SNR = 1 (0 dB): _max = 1 bit/s/Hz
+- SNR = 3 (4.8 dB): _max = 2 bits/s/Hz
+- SNR = 15 (11.8 dB): _max = 4 bits/s/Hz
+- SNR = 255 (24 dB): _max = 8 bits/s/Hz
+\end{verbatim}
+
+\textbf{Practical systems} (including overhead):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+System & SNR (dB) & \(\eta\) (bits/s/Hz) & \(\eta/\eta_{\text{max}}\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GSM & \textasciitilde10 & 0.5 & \textasciitilde30\% \\
+WiFi 802.11n & \textasciitilde20 & 3-4 & \textasciitilde60\% \\
+LTE Advanced & \textasciitilde25 & 5-6 & \textasciitilde75\% \\
+{[}{[}LDPC-Codes & LDPC{]}{]} (DVB-S2) & Variable & Adaptive \\
+\end{longtable}
+}
+
+\textbf{Modern codes} ({[}{[}LDPC-Codes\textbar LDPC{]}{]}, Turbo,
+Polar) achieve \textbf{\textgreater{} 95\% of Shannon limit}!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Power-Limited vs
+Bandwidth-Limited}{ Power-Limited vs Bandwidth-Limited}}\label{power-limited-vs-bandwidth-limited}
+
+\subsubsection{Power-Limited Regime}\label{power-limited-regime}
+
+\textbf{Low SNR} (deep space, satellite):
+
+\begin{verbatim}
+C  B · (SNR / ln 2)    (for SNR << 1)
+
+Power efficiency dominates:
+- Use low spectral efficiency
+- Heavy error correction (rate 1/4, 1/2)
+- Example: Voyager (rate 1/6 conv code)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Bandwidth-Limited Regime}\label{bandwidth-limited-regime}
+
+\textbf{High SNR} (fiber optics, mmWave backhaul):
+
+\begin{verbatim}
+C  B · log(SNR)       (for SNR >> 1)
+
+Spectral efficiency dominates:
+- Use high-order modulation (256-QAM)
+- Light error correction (rate 9/10)
+- Example: Fiber (SNR > 30 dB, use LDPC rate 0.9)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Shannon-Hartley Theorem
+(Historical)}{ Shannon-Hartley Theorem (Historical)}}\label{shannon-hartley-theorem-historical}
+
+\textbf{Original 1948 form}:
+
+\begin{verbatim}
+C = B · log(1 + S/N)
+
+where S and N are signal and noise POWER (not ratios)
+\end{verbatim}
+
+\textbf{Assumptions}: 1. AWGN channel (additive white Gaussian noise) 2.
+Average power constraint on transmitter 3. Unlimited complexity allowed
+for encoder/decoder 4. Infinite delay acceptable (block codes of
+arbitrary length)
+
+\textbf{What Shannon did NOT provide}: - How to construct codes that
+achieve capacity (left as exercise for humanity!) - Complexity or delay
+bounds - Performance at finite blocklength
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Building Towards
+Capacity}{ Building Towards Capacity}}\label{building-towards-capacity}
+
+\subsubsection{Historical Progress}\label{historical-progress}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Year & Code Type & Performance (dB from Shannon limit) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1948 & \textbf{Shannon proves limit exists} & - \\
+1950 & Hamming codes & \textasciitilde7 dB \\
+1960 & Convolutional codes & \textasciitilde3 dB \\
+1993 & \textbf{Turbo codes} & \textasciitilde0.7 dB (breakthrough!) \\
+1996 & \textbf{{[}{[}LDPC-Codes{]}{]} rediscovered} & \textasciitilde0.5
+dB \\
+2008 & \textbf{Polar codes} & \textasciitilde0.5 dB \\
+2020 & Modern LDPC (DVB-S2X) & \textasciitilde0.2 dB \\
+\end{longtable}
+}
+
+\textbf{We\textquotesingle re essentially there!} Modern codes are
+within 0.2 dB of the theoretical limit.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ The BER
+``Waterfall''}{ The BER ``Waterfall''}}\label{the-ber-waterfall}
+
+For codes approaching Shannon limit:
+
+\begin{verbatim}
+BER
+ 
+10|
+   |
+10³|          Steep
+   |           cliff!
+10|             +
+   |              +
+10|               +____
+   +------------------------ Eb/N0 (dB)
+                    Shannon limit
+\end{verbatim}
+
+\textbf{Threshold effect}: Below Shannon-limit Eb/N0, BER drops rapidly
+(waterfall region).
+
+\textbf{Practical threshold}: Where BER =
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+(typical target).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Implications for System
+Design}{ Implications for System Design}}\label{implications-for-system-design}
+
+\subsubsection{1. Trade-offs}\label{trade-offs}
+
+\textbf{Shannon says}: You can trade bandwidth for power (and vice
+versa):
+
+\begin{verbatim}
+C = B · log(1 + P/(NB))
+
+Increase B  Need less P for same C
+Decrease B  Need more P for same C
+\end{verbatim}
+
+\textbf{Spread spectrum} exploits this: Use wide B, tolerate low SNR.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2.
+{[}{[}Forward-Error-Correction-(FEC){]}{]}}\label{forward-error-correction-fec}
+
+\textbf{FEC adds redundancy} (lowers rate):
+
+\begin{verbatim}
+R_code = R_data · (k/n)    (rate k/n code)
+
+Without FEC: Need high Eb/N0 for low BER
+With FEC: Lower Eb/N0 sufficient (coding gain!)
+\end{verbatim}
+
+\textbf{Goal}: Design codes with R \$\textbackslash rightarrow\$ C as
+blocklength \$\textbackslash rightarrow\$ \$\textbackslash infty\$
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Adaptive Modulation \&
+Coding}\label{adaptive-modulation-coding}
+
+\textbf{Modern systems} (LTE, WiFi, DVB-S2): - Measure SNR dynamically -
+Select modulation and code rate to maximize throughput while R
+\textless{} C - \textbf{Always operate near Shannon limit!}
+
+\begin{verbatim}
+High SNR: 256-QAM, rate 9/10    7 bits/s/Hz
+Low SNR: QPSK, rate 1/4    0.5 bits/s/Hz
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Capacity for Other
+Channels}{ Capacity for Other Channels}}\label{capacity-for-other-channels}
+
+\subsubsection{Fading Channels}\label{fading-channels}
+
+\textbf{Rayleigh fading}:
+
+\begin{verbatim}
+C_fading < C_AWGN  (capacity reduced by fading)
+
+Mitigation:
+- Diversity (space, time, frequency)
+- Channel coding with interleaving
+- Adaptive modulation
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{MIMO Channels}\label{mimo-channels}
+
+\textbf{Multiple antennas} (N\_T transmit, N\_R receive):
+
+\begin{verbatim}
+C_MIMO  min(N_T, N_R) · B · log(1 + SNR)
+
+Capacity grows LINEARLY with min(N_T, N_R)!
+\end{verbatim}
+
+\textbf{This is why 5G uses massive MIMO} (64-256 antennas).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Non-Gaussian Noise}\label{non-gaussian-noise}
+
+\textbf{Shannon\textquotesingle s theorem assumes Gaussian noise} (worst
+case for given variance).
+
+\textbf{Other noise types} (impulsive, colored): - Capacity can be
+higher or lower - Requires different coding strategies
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Mathematical
+Details}{ Mathematical Details}}\label{mathematical-details}
+
+\subsubsection{Information Theory
+Foundation}\label{information-theory-foundation}
+
+\textbf{Mutual information} I(X;Y):
+
+\begin{verbatim}
+I(X;Y) = H(Y) - H(Y|X)
+
+where:
+- H(Y) = entropy of received signal
+- H(Y|X) = entropy of noise
+\end{verbatim}
+
+\textbf{Capacity}:
+
+\begin{verbatim}
+C = max_p(x) I(X;Y)
+
+Maximization over input distribution p(x).
+\end{verbatim}
+
+\textbf{For AWGN}: Optimal input is Gaussian
+\$\textbackslash rightarrow\$ Shannon capacity formula.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Key
+Takeaways}{ Key Takeaways}}\label{key-takeaways}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Fundamental limit}: C = B \$\textbackslash cdot\$
+  log\textbackslash textsubscript\{2\}(1 + SNR) is hard barrier
+\item
+  \textbf{Always achievable}: Codes exist that reach arbitrarily close
+  to C
+\item
+  \textbf{Trade-offs}: Can exchange bandwidth for power (spread
+  spectrum)
+\item
+  \textbf{Modern codes}: {[}{[}LDPC-Codes\textbar LDPC{]}{]}, Turbo,
+  Polar are within 0.2-0.5 dB of limit
+\item
+  \textbf{System design}: Target R \textless{} C, use adaptive
+  coding/modulation
+\item
+  \textbf{Chimera context}: Extreme low SNR (-25 dB) requires very low
+  rate or powerful FEC
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ See Also}{ See Also}}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Forward-Error-Correction-(FEC){]}{]} - How to approach Shannon
+  limit
+\item
+  {[}{[}LDPC-Codes{]}{]} - Modern capacity-approaching codes
+\item
+  {[}{[}Bit-Error-Rate-(BER){]}{]} - Performance metric
+\item
+  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]} - Related to SNR and
+  capacity
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - Key parameter in capacity
+  formula
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ References}{ References}}\label{references}
+
+\subsubsection{Primary Sources}\label{primary-sources}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Shannon, C.E.} (1948) ``A Mathematical Theory of
+  Communication'' \emph{Bell Syst. Tech. J.} 27, 379-423, 623-656
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{The foundational paper} - still highly readable!
+  \end{itemize}
+\item
+  \textbf{Shannon, C.E.} (1949) ``Communication in the Presence of
+  Noise'' \emph{Proc. IRE} 37, 10-21
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Shannon-Hartley theorem for AWGN
+  \end{itemize}
+\end{enumerate}
+
+\subsubsection{Textbooks}\label{textbooks}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Cover, T.M. \& Thomas, J.A.} (2006) \emph{Elements of
+  Information Theory} 2nd ed.~(Wiley)
+\item
+  \textbf{MacKay, D.J.C.} (2003) \emph{Information Theory, Inference,
+  and Learning Algorithms} (Cambridge UP) - Free online!
+\item
+  \textbf{Gallager, R.G.} (1968) \emph{Information Theory and Reliable
+  Communication} (Wiley)
+\end{enumerate}
+
+\subsubsection{Historical Context}\label{historical-context}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  \textbf{Verdú, S.} (1998) ``Fifty Years of Shannon Theory'' \emph{IEEE
+  Trans. Info. Theory} 44, 2057-2078
+\end{enumerate}

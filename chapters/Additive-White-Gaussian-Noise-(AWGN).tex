@@ -1,0 +1,168 @@
+\section{Additive White Gaussian Noise
+(AWGN)}\label{additive-white-gaussian-noise-awgn}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{AWGN is the ``static'' or ``hiss'' you hear on old
+radios-\/-\/-random interference that corrupts signals.}
+
+\textbf{Real-world analogies}: - \textbf{Old TV static}: Random noise
+when you lose the signal - \textbf{Grainy photos in low light}: Camera
+sensors produce AWGN when there\textquotesingle s not enough light -
+\textbf{Bluetooth stuttering}: Weak signals get corrupted by AWGN
+
+\textbf{Where it comes from}: Thermal noise (electrons jiggling from
+heat), electronic components, even faint cosmic microwave background
+radiation.
+
+\textbf{Why it matters}: AWGN is the \textbf{fundamental limit} on
+communication. You can\textquotesingle t eliminate it, but you can
+overcome it with more power, error correction, or better antennas.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{AWGN} is a basic noise model used in communication systems.
+
+\subsection{What is AWGN?}\label{what-is-awgn}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Additive}: Noise is added to the signal
+\item
+  \textbf{White}: Uniform power across all frequencies
+\item
+  \textbf{Gaussian}: Follows a normal (Gaussian) probability
+  distribution
+\end{itemize}
+
+\subsection{Visualizing AWGN}\label{visualizing-awgn}
+
+\begin{verbatim}
+Clean Signal:     ----------
+                         
+AWGN:            
+                         
+Noisy Signal:    -----
+                (Clean + AWGN)
+\end{verbatim}
+
+\subsection{AWGN Channel Model}\label{awgn-channel-model}
+
+In the I/Q plane, AWGN adds independent Gaussian noise to both
+components:
+
+\begin{verbatim}
+Received Symbol = Transmitted Symbol + Noise
+
+I_received = I_transmitted + N_I
+Q_received = Q_transmitted + N_Q
+
+where N_I and N_Q are independent Gaussian random variables
+\end{verbatim}
+
+\subsection{Mathematical Properties}\label{mathematical-properties}
+
+The noise samples have: - \textbf{Mean}: 0 (centered around zero) -
+\textbf{Variance}:
+\$\textbackslash sigma\$\textbackslash textsuperscript\{2\} (determined
+by noise power) - \textbf{Probability Distribution}: Gaussian (bell
+curve)
+
+\begin{verbatim}
+Probability Density:
+  
+  |    
+  |   +  +
+  |  +    +
+  | +      +___
+  |+            +___
+  +----------------- Amplitude
+       0
+\end{verbatim}
+
+\subsection{Why AWGN is Used}\label{why-awgn-is-used}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Simplicity}: Mathematical tractability for analysis
+\item
+  \textbf{Fundamental Model}: Many real noise sources approximate
+  Gaussian statistics
+\item
+  \textbf{Worst Case}: Often represents a pessimistic but realistic
+  scenario
+\item
+  \textbf{Standard Benchmark}: Industry-standard for comparing systems
+\end{enumerate}
+
+\subsection{Sources of Noise in Real
+Systems}\label{sources-of-noise-in-real-systems}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Thermal Noise}: Random motion of electrons (kTB)
+\item
+  \textbf{Amplifier Noise}: Electronic component noise
+\item
+  \textbf{Cosmic Noise}: Background radiation
+\item
+  \textbf{Interference}: Other signals (approximates Gaussian when many
+  sources)
+\end{itemize}
+
+\subsection{AWGN in Chimera}\label{awgn-in-chimera}
+
+Chimera\textquotesingle s simulation applies AWGN to model the
+communication channel: - Noise is added separately to I and Q components
+- Noise power is controlled by the
+{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} setting - Higher SNR = less
+noise variance = tighter constellation clusters
+
+\subsubsection{Noise Power Calculation}\label{noise-power-calculation}
+
+\begin{verbatim}
+Noise Variance (²) = Signal Power / SNR_linear
+                    = Signal Power / 10^(SNR_dB/10)
+\end{verbatim}
+
+For unit signal power and SNR = 10 dB:
+
+\begin{verbatim}
+² = 1 / 10^(10/10) = 1/10 = 0.1
+ = 0.1  0.316
+\end{verbatim}
+
+\subsection{Impact on Constellation}\label{impact-on-constellation}
+
+\begin{verbatim}
+High Noise ( = 0.5):          Low Noise ( = 0.1):
+  
+  Q                               Q
+                                 
+  |                            |  
+  |                          | 
+  |                            |  
+--+---- I                    ----+-- I
+
+Large scatter = high errors    Tight cluster = low errors
+\end{verbatim}
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - Controls noise power
+\item
+  {[}{[}Link-Loss-vs-Noise{]}{]} - Distinction between attenuation and
+  noise
+\item
+  {[}{[}Constellation-Diagrams{]}{]} - Visualizing noise effects
+\item
+  {[}{[}IQ-Representation{]}{]} - How noise affects I/Q components
+\end{itemize}

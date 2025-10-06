@@ -1,0 +1,273 @@
+\section{Link Loss vs Noise}\label{link-loss-vs-noise}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Link loss vs noise is like the difference between someone
+whispering (weak signal) vs shouting in a loud room (noise
+interference)-\/-\/-two different problems!}
+
+\textbf{Link Loss} - Signal gets weaker: - \textbf{What it is}: Your
+WiFi router is far away, so signal is weak by the time it reaches you -
+\textbf{Analogy}: Shouting across a football field-\/-\/-your voice
+spreads out and gets quieter - \textbf{Predictable}: Same distance =
+same loss every time - \textbf{Solution}: Move closer, use bigger
+antenna, increase transmit power
+
+\textbf{Examples of link loss}: - \textbf{WiFi}: 50 meters away =
+10,000\$\textbackslash times\$ weaker signal - \textbf{Cell phone}: Far
+from tower = fewer bars - \textbf{Satellite}: Space is far! Signal
+arrives incredibly weak
+
+\textbf{Noise} - Random interference added: - \textbf{What it is}:
+Random electrical static from electronics, thermal energy, cosmic rays -
+\textbf{Analogy}: Trying to hear someone whisper in a noisy
+restaurant-\/-\/-extra sound covers the signal - \textbf{Random}:
+Unpredictable, changes moment-to-moment - \textbf{Solution}:
+Can\textquotesingle t remove it! Must send stronger signal or use error
+correction
+
+\textbf{Examples of noise}: - \textbf{Bluetooth stuttering near
+microwave}: Microwave adds noise - \textbf{AM radio crackle}:
+Thunderstorms add noise - \textbf{TV static}: No signal?
+You\textquotesingle re seeing pure noise!
+
+\textbf{Key difference}: - \textbf{Link loss}: Makes signal weaker
+(deterministic, predictable) - \textbf{Noise}: Adds random garbage on
+top (random, unpredictable) - \textbf{Both hurt you}: Weak signal (loss)
+covered by noise = errors!
+
+\textbf{The engineering ratio: SNR (Signal-to-Noise Ratio)} - Strong
+signal + low noise = high SNR = perfect communication - Weak signal
+(loss) + high noise = low SNR = errors everywhere
+
+\textbf{When you see it}: Your phone shows ``5 bars'' (link loss is low)
+but internet is slow (noise is high from interference).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+In a real communication system, the received signal is degraded by
+\textbf{two distinct mechanisms}: link loss and additive noise.
+
+\subsection{Link Loss (Path Loss)}\label{link-loss-path-loss}
+
+\textbf{Link Loss} represents the reduction in signal power as it
+travels from transmitter to receiver.
+
+\subsubsection{Characteristics}\label{characteristics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Deterministic}: Same loss every time (for a given scenario)
+\item
+  \textbf{Multiplicative}: Scales the entire signal uniformly
+\item
+  \textbf{Predictable}: Can be calculated from path distance, frequency,
+  antenna gains
+\end{itemize}
+
+\subsubsection{Sources}\label{sources}
+
+\begin{itemize}
+\tightlist
+\item
+  Free-space path loss
+\item
+  Antenna gains (TX and RX)
+\item
+  Cable losses
+\item
+  Atmospheric absorption
+\item
+  Rain attenuation
+\end{itemize}
+
+\subsubsection{Mathematical Model}\label{mathematical-model}
+
+\begin{verbatim}
+P_received = P_transmitted / Loss_Factor
+
+In dB: P_received (dBm) = P_transmitted (dBm) - Link_Loss (dB)
+\end{verbatim}
+
+\subsubsection{Example Link Budget}\label{example-link-budget}
+
+\begin{verbatim}
+Transmit Power:        +30 dBm
+Antenna Gain (TX):     +10 dB
+Free-Space Loss:       -120 dB
+Antenna Gain (RX):     +5 dB
+Cable/Implementation:  -5 dB
+-----------------------------
+Received Signal Power: -80 dBm
+Total Link Loss:       100 dB
+\end{verbatim}
+
+\subsection{Additive Noise}\label{additive-noise}
+
+\textbf{Noise} adds random fluctuations on top of the received signal.
+
+\subsubsection{Characteristics}\label{characteristics-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Random}: Different every time, unpredictable
+\item
+  \textbf{Additive}: Added to the signal (not multiplicative)
+\item
+  \textbf{Stochastic}: Described by statistical properties (power,
+  distribution)
+\end{itemize}
+
+\subsubsection{Sources}\label{sources-1}
+
+\begin{itemize}
+\tightlist
+\item
+  Thermal noise (kTB)
+\item
+  Amplifier noise
+\item
+  Cosmic background
+\item
+  Interference from other signals
+\end{itemize}
+
+\subsubsection{Mathematical Model}\label{mathematical-model-1}
+
+\begin{verbatim}
+Received Signal = (Transmitted Signal / Link_Loss) + Noise
+
+where Noise has power determined by SNR or N
+\end{verbatim}
+
+\subsection{Combined Channel Model}\label{combined-channel-model}
+
+In Chimera\textquotesingle s simulation, both effects are applied:
+
+\begin{verbatim}
+1. Transmit Signal (Power = P_tx)
+        
+2. Apply Link Loss (Power reduced to P_tx / 10^(Loss_dB/10))
+        
+3. Add AWGN (Noise power = Attenuated_Signal_Power / SNR)
+        
+4. Received Signal (Attenuated + Noisy)
+\end{verbatim}
+
+\subsection{Why Both Matter}\label{why-both-matter}
+
+\subsubsection{Link Loss Affects Signal
+Power}\label{link-loss-affects-signal-power}
+
+\begin{itemize}
+\tightlist
+\item
+  High link loss (100+ dB) is typical in many systems
+\item
+  Reduces signal level but doesn\textquotesingle t add randomness
+\item
+  Can be compensated with amplification (but amplifies noise too!)
+\end{itemize}
+
+\subsubsection{Noise Affects Signal Quality
+(SNR)}\label{noise-affects-signal-quality-snr}
+
+\begin{itemize}
+\tightlist
+\item
+  Adds random errors that can\textquotesingle t be predicted
+\item
+  Sets the fundamental limit on achievable BER
+\item
+  Can be improved with processing gain, error correction
+\end{itemize}
+
+\subsection{Link Budget and SNR}\label{link-budget-and-snr}
+
+The combination determines receiver performance:
+
+\begin{verbatim}
+Received Signal Power = P_tx - Link_Loss_dB
+Noise Power = N × Bandwidth
+
+SNR (dB) = Received_Signal_Power (dBm) - Noise_Power (dBm)
+\end{verbatim}
+
+\subsubsection{Example 1: Good Link}\label{example-1-good-link}
+
+\begin{itemize}
+\tightlist
+\item
+  Transmit power: +30 dBm
+\item
+  Link loss: 100 dB
+\item
+  Received signal: \textbf{-70 dBm}
+\item
+  Noise floor: -90 dBm
+\item
+  \textbf{Resulting SNR: 20 dB} Good!
+\end{itemize}
+
+\subsubsection{Example 2: Challenging
+Link}\label{example-2-challenging-link}
+
+\begin{itemize}
+\tightlist
+\item
+  Transmit power: +30 dBm
+\item
+  Link loss: 120 dB
+\item
+  Received signal: \textbf{-90 dBm}
+\item
+  Noise floor: -90 dBm
+\item
+  \textbf{Resulting SNR: 0 dB} Very challenging!
+\end{itemize}
+
+\subsection{Link Loss in Chimera}\label{link-loss-in-chimera}
+
+Chimera allows you to model link loss separately from SNR: -
+\textbf{Link Loss}: Simulates the signal power reduction (path loss,
+antenna gains, etc.) - \textbf{SNR}: Controls the additive noise level -
+Both combine to determine the received signal quality - This separation
+helps understand link budget analysis
+
+With \textbf{0 dB link loss}, the SNR setting directly determines signal
+quality.
+
+With \textbf{100 dB link loss}, the signal is attenuated by
+10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\},
+but the SNR still controls the noise-to-signal ratio at the receiver
+input.
+
+\subsection{Key Insight}\label{key-insight}
+
+\begin{verbatim}
+More TX Power  Overcomes Link Loss  Higher RX Power  Better SNR
+                                                              
+                                                      Lower BER 
+\end{verbatim}
+
+But there are practical limits: - Transmitter power constraints
+(battery, regulations) - Receiver sensitivity (noise floor) - Cost and
+complexity
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - The quality metric
+\item
+  {[}{[}Additive-White-Gaussian-Noise-(AWGN){]}{]} - The noise model
+\item
+  {[}{[}Complete-Link-Budget-Analysis{]}{]} - Calculating system
+  performance
+\item
+  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]} - Energy-based metrics
+\end{itemize}

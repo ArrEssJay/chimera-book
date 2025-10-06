@@ -1,0 +1,916 @@
+\section{Polar Codes}\label{polar-codes}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Coding Theory} \textbar{}
+{[}{[}Turbo-Codes{]}{]} \textbar{} {[}{[}LDPC-Codes{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Polar codes are the newest champion of error
+correction-\/-\/-the first codes with mathematical PROOF they reach the
+theoretical limit. That\textquotesingle s why 5G uses them!}
+
+\textbf{What makes them special}: - \textbf{First provably optimal
+codes}: Math proof they\textquotesingle re perfect! - \textbf{Channel
+polarization}: Clever trick that splits channel into good/bad parts -
+\textbf{Simpler than LDPC}: Easier to implement in hardware - \textbf{5G
+standard}: Chosen for 5G control channels!
+
+\textbf{The discovery - Recent breakthrough}: - \textbf{2008}: Erdal
+Ar\textbackslash i\{\}kan (Turkish professor) invents polar codes -
+\textbf{2016}: Adopted by 5G standard (Huawei championed them) -
+\textbf{Today}: In every 5G phone for control signaling
+
+\textbf{The magic trick - Channel polarization}:
+
+Imagine you have a noisy channel: - Some bits get through clean (lucky!)
+- Some bits get corrupted (unlucky!) - But you don\textquotesingle t
+know which is which!
+
+\textbf{Polar code solution}: 1. Use clever math to ``sort'' the channel
+2. Some sub-channels become PERFECT (polarized to good) 3. Others become
+USELESS (polarized to bad) 4. Send data on perfect channels, known
+patterns on bad ones 5. Receiver uses known patterns to decode data!
+
+\textbf{Simple analogy - Sorting students}: - 100 students with mixed
+abilities - Polar coding: Group them by strength - Put hard problems to
+strong students (they\textquotesingle ll succeed) - Put easy problems to
+weak students (they\textquotesingle ll succeed too!) - Result: Maximum
+overall success!
+
+\textbf{Comparison with other codes}: - \textbf{Turbo codes}: Amazing,
+but complex, no optimality proof - \textbf{LDPC codes}: Near-optimal,
+but no explicit proof - \textbf{Polar codes}: PROVEN optimal, simpler
+structure!
+
+\textbf{Where they\textquotesingle re used}: - \textbf{5G control
+channels}: Polar codes for critical signaling - LDPC for data (better at
+high rates) - Polar for control (better at low rates) -
+\textbf{Research}: Future standards, deep space, quantum
+
+\textbf{Why 5G chose them}: - \textbf{Low latency}: Fast decoding for
+control messages - \textbf{Flexible}: Work at any code rate -
+\textbf{Simple}: Easier to implement in 5G chips - \textbf{Proven
+optimal}: Mathematical guarantee!
+
+\textbf{Performance}: - \textbf{Shannon limit}: Theoretical best -
+\textbf{Polar codes}: Proven to reach limit as block size
+\$\textbackslash rightarrow\$ \$\textbackslash infty\$ -
+\textbf{Practical}: Within 0.8-1.5 dB of limit at reasonable block sizes
+- Comparable to LDPC, but with optimality proof!
+
+\textbf{The debate}: - \textbf{Huawei pushed Polar}: They hold many
+patents - \textbf{Qualcomm pushed LDPC}: They have LDPC expertise -
+\textbf{5G compromise}: Polar for control, LDPC for data - Both sides
+win!
+
+\textbf{Fun fact}: Polar codes are the only error-correcting codes with
+a mathematical proof that they achieve Shannon\textquotesingle s
+theoretical limit. Every other code (even LDPC) is ``just'' really good
+in practice without the theoretical guarantee!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Polar codes} are the \textbf{first provably capacity-achieving
+codes} with explicit construction.
+
+\textbf{Discovery}: Erdal Ar\textbackslash i\{\}kan (2008) - Major
+theoretical breakthrough
+
+\textbf{Key property}: \textbf{Channel polarization} - Split channel
+into perfect + useless subchannels
+
+\textbf{Performance}: 0.8-1.5 dB from Shannon limit (rate 1/2, block
+length 1024+)
+
+\textbf{Applications}: \textbf{5G NR control channels} (eMBB, URLLC),
+future satellite, IoT
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Channel Polarization}\label{channel-polarization}
+
+\textbf{Fundamental idea}: Recursive channel combining + splitting
+
+\textbf{Input}: N uses of channel W with capacity I(W)
+
+\textbf{Output}: N synthesized channels \(W_i\), each with capacity
+I(\(W_i\))
+
+\textbf{Polarization}: As N \$\textbackslash rightarrow\$
+\$\textbackslash infty\$: - Some channels \$\textbackslash rightarrow\$
+I(\(W_i\)) \$\textbackslash rightarrow\$ 1 (perfect, \textbf{noiseless})
+- Others \$\textbackslash rightarrow\$ I(\(W_i\))
+\$\textbackslash rightarrow\$ 0 (useless, \textbf{pure noise})
+
+\textbf{Strategy}: Transmit data on good channels, freeze bad channels
+(set to 0)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Simple Example (N=2)}\label{simple-example-n2}
+
+\textbf{Base transformation}:
+
+\begin{verbatim}
+u ----> y
+      |
+u ---+--> y
+\end{verbatim}
+
+\textbf{Channel combining}: \(y_1 = u_1 \oplus u_2\), \(y_2 = u_2\)
+
+\textbf{After decoding}: - \textbf{Channel for \(u_1\)}: Worse than W
+(joint decoding, less reliable) - \textbf{Channel for \(u_2\)}: Better
+than W (uses \(u_1\) as side info)
+
+\textbf{Result}: Two channels split-\/-\/-one better, one worse
+(polarization starts!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Polar Transform}\label{polar-transform}
+
+\textbf{N = 2\textbackslash textsuperscript\{n\}} (power of 2)
+
+\textbf{Encoding}: \(\mathbf{x} = \mathbf{u} G_N\)
+
+Where: - \(\mathbf{u}\) = \((u_1, u_2, \ldots, u_N)\) (information +
+frozen bits) - \(G_N\) = Polar generator matrix - \(\mathbf{x}\) =
+Transmitted codeword
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Generator Matrix}\label{generator-matrix}
+
+\textbf{Base matrix} (N=2):
+
+\[
+G_2 = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}
+\]
+
+\textbf{Recursive construction}:
+
+\[
+G_N = \begin{bmatrix} G_{N/2} & G_{N/2} \\ 0 & G_{N/2} \end{bmatrix}
+\]
+
+\textbf{Example} (N=4):
+
+\[
+G_4 = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 1 & 1
+\end{bmatrix}
+\]
+
+\textbf{Example} (N=8):
+
+\[
+G_8 = G_2 \otimes G_2 \otimes G_2 = \begin{bmatrix}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+\vdots & & & \ddots & & & & \\
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 1
+\end{bmatrix}
+\]
+
+\textbf{Kronecker product}: \(G_N = G_2^{\otimes n}\) for \(N = 2^n\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Code Construction}\label{code-construction}
+
+\textbf{Steps}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Choose N} (block length, power of 2)
+\item
+  \textbf{Compute channel reliabilities}: \(Z(W_i)\) or \(I(W_i)\) for
+  \(i = 1, \ldots, N\)
+\item
+  \textbf{Select K best channels} (highest reliability)
+\item
+  \textbf{Information set} \(\mathcal{A}\): Indices of K best channels
+\item
+  \textbf{Frozen set} \(\mathcal{A}^c\): Remaining N-K indices (set to
+  0)
+\end{enumerate}
+
+\textbf{Code rate}: \(R = K/N\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Channel Reliability
+Metrics}\label{channel-reliability-metrics}
+
+\textbf{Bhattacharyya parameter} \(Z(W)\):
+
+\[
+Z(W) = \sum_{y} \sqrt{W(y|0) \cdot W(y|1)}
+\]
+
+\textbf{Mutual information} \(I(W)\):
+
+\[
+I(W) = \sum_{y} \sum_{x \in \{0,1\}} W(y|x) \log_2\frac{W(y|x)}{\sum_{x'} W(y|x')}
+\]
+
+\textbf{Properties}: - \(Z(W) \in [0, 1]\): Lower is better -
+\(I(W) \in [0, 1]\): Higher is better - Perfect channel: \(Z = 0\),
+\(I = 1\) - Useless channel: \(Z = 1\), \(I = 0\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Density Evolution}\label{density-evolution}
+
+\textbf{Compute reliabilities recursively}:
+
+\textbf{Channel combining} (worse):
+
+\[
+Z(W^-) \approx 2Z(W) - Z(W)^2
+\]
+
+\textbf{Channel splitting} (better):
+
+\[
+Z(W^+) \approx Z(W)^2
+\]
+
+\textbf{Starting point}: Binary symmetric channel (BSC) with crossover
+probability \(\epsilon\)
+
+\[
+Z_0 = 2\sqrt{\epsilon(1-\epsilon)}
+\]
+
+\textbf{Recursion}: Apply transformations \(n\) times for \(N = 2^n\)
+channels
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Encoding}\label{encoding}
+
+\textbf{Input}: - Data bits: \(\mathbf{d} = [d_1, d_2, \ldots, d_K]\) -
+Information set: \(\mathcal{A} = \{i_1, i_2, \ldots, i_K\}\)
+
+\textbf{Set vector} \(\mathbf{u}\):
+
+\[
+u_i = \begin{cases}
+d_j & \text{if } i = i_j \in \mathcal{A} \\
+0 & \text{if } i \in \mathcal{A}^c
+\end{cases}
+\]
+
+\textbf{Encode}:
+
+\[
+\mathbf{x} = \mathbf{u} G_N
+\]
+
+\textbf{Complexity}: \(O(N \log N)\) using FFT-like butterfly structure
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example (N=8, K=4)}\label{example-n8-k4}
+
+\textbf{Information set}: \(\mathcal{A} = \{4, 6, 7, 8\}\) (best 4
+channels)
+
+\textbf{Frozen set}: \(\mathcal{A}^c = \{1, 2, 3, 5\}\) (worst 4
+channels)
+
+\textbf{Data}: \(\mathbf{d} = [1, 0, 1, 1]\)
+
+\textbf{Vector} \(\mathbf{u}\):
+
+\[
+\mathbf{u} = [0, 0, 0, 1, 0, 0, 1, 1]
+\]
+
+(Frozen bits at positions 1,2,3,5 set to 0)
+
+\textbf{Codeword}:
+\(\mathbf{x} = \mathbf{u} G_8 = [0, 0, 0, 1, 0, 0, 1, 0]\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Successive Cancellation (SC)
+Decoding}\label{successive-cancellation-sc-decoding}
+
+\textbf{Optimal} for polarized channels (as N
+\$\textbackslash rightarrow\$ \$\textbackslash infty\$)
+
+\textbf{Idea}: Decode bits sequentially, use previous decisions as side
+info
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Algorithm}\label{algorithm}
+
+\textbf{Receive}: \(\mathbf{y} = [y_1, y_2, \ldots, y_N]\) (soft values
+or LLRs)
+
+\textbf{For} \(i = 1\) to \(N\):
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{If} \(i \in \mathcal{A}^c\) (frozen): Set \(\hat{u}_i = 0\)
+\item
+  \textbf{If} \(i \in \mathcal{A}\) (information):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compute LLR:
+    \(L_i = \log\frac{P(u_i=0|\mathbf{y}, \hat{u}_1^{i-1})}{P(u_i=1|\mathbf{y}, \hat{u}_1^{i-1})}\)
+  \item
+    Decide: \(\hat{u}_i = 0\) if \(L_i > 0\), else \(\hat{u}_i = 1\)
+  \end{itemize}
+\end{enumerate}
+
+\textbf{Recursive computation} (tree structure):
+
+\begin{verbatim}
+            [y, y, y, y]
+                   |
+         +---------+---------+
+         |                   |
+    [yy, yy]        [y, y]
+         |                   |
+      (decode u)        (decode u)
+\end{verbatim}
+
+\textbf{Complexity}: \(O(N \log N)\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{LLR Recursion}\label{llr-recursion}
+
+\textbf{Left child} (channel combining, worse):
+
+\[
+L_i^{(s)} = 2 \tanh^{-1}\left(\tanh\left(\frac{L_{2i-1}^{(s+1)}}{2}\right) \cdot \tanh\left(\frac{L_{2i}^{(s+1)}}{2}\right)\right)
+\]
+
+\textbf{Right child} (channel splitting, better):
+
+\[
+L_i^{(s)} = L_{2i}^{(s+1)} + (1 - 2\hat{u}_{2i-1}^{(s)}) L_{2i-1}^{(s+1)}
+\]
+
+\textbf{Where}: \(s\) = Stage index (0 to \(\log_2 N\))
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{SC List (SCL) Decoding}\label{sc-list-scl-decoding}
+
+\textbf{Problem}: SC is suboptimal for finite N
+
+\textbf{Solution}: Keep \textbf{L candidate paths} (like Viterbi)
+
+\textbf{SCL Algorithm}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Start with single path (all frozen bits = 0)
+\item
+  At each information bit:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Branch each path (try 0 and 1)
+  \item
+    Compute path metrics
+  \item
+    \textbf{Keep L best paths} (prune others)
+  \end{itemize}
+\item
+  Select best final path
+\end{enumerate}
+
+\textbf{List size} L = 2, 4, 8, 16, 32
+
+\textbf{Performance}: SCL-32 \$\textbackslash approx\$ ML performance
+(near-optimal)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Path Metric}\label{path-metric}
+
+\textbf{Log-likelihood} for path:
+
+\[
+\text{PM} = \sum_{i=1}^{N} \log P(y_i | x_i)
+\]
+
+\textbf{Update}: Add branch metric for each decision
+
+\textbf{Complexity}: \(O(L \cdot N \log N)\)
+
+\textbf{Example}: L=8, N=1024 \$\textbackslash rightarrow\$
+\textasciitilde8\$\textbackslash times\$ SC complexity
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{CRC-Aided Polar (CA-Polar)}\label{crc-aided-polar-ca-polar}
+
+\textbf{Problem}: SCL doesn\textquotesingle t know which path is correct
+
+\textbf{Solution}: Append \textbf{CRC} to data before encoding
+
+\textbf{Decoding}: 1. SCL decoding produces L candidate paths 2. Check
+CRC for each path 3. \textbf{Select path with valid CRC}
+
+\textbf{CRC length}: 8-24 bits (11-bit CRC typical for 5G)
+
+\textbf{Performance}: CA-SCL-8 \$\textbackslash approx\$ Turbo/LDPC
+(practical systems)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5G NR Implementation}\label{g-nr-implementation}
+
+\textbf{Control channels}: Use CA-Polar
+
+\textbf{Parameters}: - Block length: N = 512, 1024 (adaptable) - Code
+rate: 1/12 to 1/2 (puncturing/shortening) - CRC: 11-bit or 16-bit - List
+size: L = 8
+
+\textbf{Advantage}: Low latency (no iterations), good short-block
+performance
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Rate Matching}\label{rate-matching}
+
+\textbf{5G supports flexible rates}: Puncturing, shortening, repetition
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Puncturing}\label{puncturing}
+
+\textbf{Transmit fewer bits} than N \$\textbackslash rightarrow\$ Higher
+rate
+
+\textbf{Method}: Don\textquotesingle t transmit first \(P\) bits (known
+frozen bits)
+
+\textbf{Example}: N=512, K=256, puncture 128 - Transmit 384 bits -
+Effective rate: 256/384 = 2/3
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Shortening}\label{shortening}
+
+\textbf{Transmit fewer bits}, freeze last bits
+
+\textbf{Method}: Set last \(S\) input bits to 0 (frozen),
+don\textquotesingle t transmit corresponding outputs
+
+\textbf{Example}: N=512, K=200, shorten 112 - Effective N = 400 -
+Transmit 400 bits - Rate: 200/400 = 1/2
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Repetition}\label{repetition}
+
+\textbf{Transmit more bits} \$\textbackslash rightarrow\$ Lower rate,
+more reliability
+
+\textbf{Method}: Repeat some output bits
+
+\textbf{Example}: N=256, K=64, repeat 256 - Transmit 512 bits -
+Effective rate: 64/512 = 1/8
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Performance Analysis}\label{performance-analysis}
+
+\subsubsection{BER vs Eb/N0}\label{ber-vs-ebn0}
+
+\textbf{Typical performance} (rate 1/2, N=1024, CA-SCL-8):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llllll@{}}
+\toprule\noalign{}
+Eb/N0 (dB) & Uncoded & SC & SCL-8 & CA-SCL-8 & Shannon Limit \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 0.08 & 0.02 & 0.005 & 0.003 & 0 (capacity) \\
+1.0 & 0.02 & 0.005 &
+8\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+&
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+& - \\
+1.5 & 0.01 &
+2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+& Gap \$\textbackslash approx\$ 0.9 dB \\
+2.0 &
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+&
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{7\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
+& - \\
+\end{longtable}
+}
+
+\textbf{Gap to Shannon}: 0.8-1.5 dB (CA-SCL-32, N \$\textbackslash geq\$
+1024)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Finite-Length
+Performance}\label{finite-length-performance}
+
+\textbf{Short blocks} (N \textless{} 512): Polar competitive with
+Turbo/LDPC
+
+\textbf{Long blocks} (N \textgreater{} 2048): Polar slightly behind LDPC
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Block Length & Code & Eb/N0 @ 10\^{}-5 & Gap to Shannon \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{128} & Polar (SCL-8) & 2.5 dB & +2.0 dB \\
+\textbf{512} & Polar (CA-SCL-8) & 1.5 dB & +1.2 dB \\
+\textbf{1024} & Polar (CA-SCL-8) & 1.2 dB & +0.9 dB \\
+\textbf{2048} & LDPC & 0.8 dB & +0.5 dB \\
+\end{longtable}
+}
+
+\textbf{Polar advantage}: Better short-block performance, lower latency
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Complexity Comparison}\label{complexity-comparison}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3125}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1458}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1250}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Aspect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Polar (SC)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Polar (SCL-8)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Turbo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LDPC
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Encoding} & \(O(N \log N)\) & \(O(N \log N)\) & \(O(N)\) &
+\(O(N)\) \\
+\textbf{Decoding} & \(O(N \log N)\) & \(O(8N \log N)\) &
+\(O(N \cdot I)\) & \(O(N \cdot I)\) \\
+\textbf{Latency} & Low & Low & High (iterations) & Moderate \\
+\textbf{Memory} & \(O(N \log N)\) & \(O(8N \log N)\) & \(O(N)\) &
+\(O(N)\) \\
+\textbf{Parallelism} & Sequential & Sequential & Parallel decoders &
+Highly parallel \\
+\end{longtable}
+}
+
+\textbf{Polar trade-off}: Low latency but harder to parallelize
+(sequential decoding)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Advantages of Polar Codes}\label{advantages-of-polar-codes}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Provably capacity-achieving}: Theoretical guarantee
+\item
+  \textbf{Low latency}: No iterations (SC/SCL)
+\item
+  \textbf{Short-block performance}: Good for N = 128-1024
+\item
+  \textbf{Systematic construction}: Explicit, no search (unlike LDPC)
+\item
+  \textbf{Flexible rate matching}: Puncture/shorten easily
+\item
+  \textbf{5G standardized}: Future-proof
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Disadvantages of Polar
+Codes}\label{disadvantages-of-polar-codes}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Sequential decoding}: Hard to parallelize (vs LDPC)
+\item
+  \textbf{List decoder complexity}: SCL-8/32 needed for good performance
+\item
+  \textbf{Power-of-2 block lengths}: N =
+  2\textbackslash textsuperscript\{n\} (though can shorten)
+\item
+  \textbf{Slightly behind LDPC}: Long blocks (N \textgreater{} 2048)
+\item
+  \textbf{CRC overhead}: CA-Polar needs 11-24 bit CRC
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Applications}\label{practical-applications}
+
+\subsubsection{1. 5G NR Control Channels}\label{g-nr-control-channels}
+
+\textbf{eMBB} (Enhanced Mobile Broadband): - DCI (Downlink Control
+Information) - UCI (Uplink Control Information) - Block lengths: 12-1706
+bits (shortened from N=512, 1024)
+
+\textbf{URLLC} (Ultra-Reliable Low-Latency): - Short blocks (40-200
+bits) - Low latency (\textless1 ms) - CA-Polar with CRC-11
+
+\textbf{mMTC} (Massive Machine-Type): Future use
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Future Satellite}\label{future-satellite}
+
+\textbf{Low Earth Orbit (LEO)}: Short latency, bursty traffic - Polar
+codes fit well (low-latency decoding) - Adaptive rate matching (varying
+link quality)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. IoT (Internet of
+Things)}\label{iot-internet-of-things}
+
+\textbf{NB-IoT}: Narrowband, low power - Short blocks (100-500 bits) -
+Polar candidate for uplink control
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Code Construction
+Algorithms}\label{code-construction-algorithms}
+
+\subsubsection{1. Density Evolution (DE)}\label{density-evolution-de}
+
+\textbf{Compute} \(Z(W_i)\) or \(I(W_i)\) for each subchannel
+
+\textbf{Complexity}: \(O(N \log N)\) preprocessing
+
+\textbf{Accuracy}: Exact as N \$\textbackslash rightarrow\$
+\$\textbackslash infty\$
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Gaussian Approximation
+(GA)}\label{gaussian-approximation-ga}
+
+\textbf{Approximate} subchannel distributions as Gaussian
+
+\textbf{Mean}: \(\mu_i\), \textbf{Variance}: \(\sigma_i^2\)
+
+\textbf{Update rules} (simplified):
+
+\[
+\mu^- = \mu^2 / 2, \quad \mu^+ = 2\mu - \mu^2 / 2
+\]
+
+\textbf{Complexity}: \(O(N)\) (faster than DE)
+
+\textbf{Accuracy}: Good for practical SNR
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Monte Carlo}\label{monte-carlo}
+
+\textbf{Simulate} SC decoding, count errors for each bit position
+
+\textbf{Select K positions} with lowest error rate
+
+\textbf{Complexity}: High (simulation-based)
+
+\textbf{Accuracy}: Best for specific channel/SNR
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Python Example: Polar
+Encoder}\label{python-example-polar-encoder}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
+\KeywordTok{def}\NormalTok{ polar\_transform(u):}
+    \CommentTok{"""Apply polar transform (Kronecker product construction)."""}
+\NormalTok{    N }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(u)}
+\NormalTok{    n }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(np.log2(N))}
+\NormalTok{    x }\OperatorTok{=}\NormalTok{ u.copy()}
+    
+    \ControlFlowTok{for}\NormalTok{ stage }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
+\NormalTok{        stride }\OperatorTok{=} \DecValTok{2} \OperatorTok{**}\NormalTok{ (n }\OperatorTok{{-}}\NormalTok{ stage }\OperatorTok{{-}} \DecValTok{1}\NormalTok{)}
+        \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{0}\NormalTok{, N, }\DecValTok{2} \OperatorTok{*}\NormalTok{ stride):}
+            \ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(stride):}
+\NormalTok{                x[i }\OperatorTok{+}\NormalTok{ j] }\OperatorTok{=}\NormalTok{ x[i }\OperatorTok{+}\NormalTok{ j] }\OperatorTok{\^{}}\NormalTok{ x[i }\OperatorTok{+}\NormalTok{ j }\OperatorTok{+}\NormalTok{ stride]  }\CommentTok{\# XOR}
+    
+    \ControlFlowTok{return}\NormalTok{ x}
+
+\KeywordTok{def}\NormalTok{ polar\_encode(data, frozen\_set, N):}
+    \CommentTok{"""Encode using polar code.}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        data: Information bits (K bits)}
+\CommentTok{        frozen\_set: Indices of frozen bit positions (N{-}K positions)}
+\CommentTok{        N: Code length (power of 2)}
+\CommentTok{    }
+\CommentTok{    Returns:}
+\CommentTok{        Codeword (N bits)}
+\CommentTok{    """}
+\NormalTok{    K }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(data)}
+\NormalTok{    u }\OperatorTok{=}\NormalTok{ np.zeros(N, dtype}\OperatorTok{=}\BuiltInTok{int}\NormalTok{)}
+    
+    \CommentTok{\# Information set = complement of frozen set}
+\NormalTok{    info\_set }\OperatorTok{=}\NormalTok{ [i }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(N) }\ControlFlowTok{if}\NormalTok{ i }\KeywordTok{not} \KeywordTok{in}\NormalTok{ frozen\_set]}
+    
+    \CommentTok{\# Place data bits in information positions}
+    \ControlFlowTok{for}\NormalTok{ idx, i }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(info\_set):}
+\NormalTok{        u[i] }\OperatorTok{=}\NormalTok{ data[idx]}
+    
+    \CommentTok{\# Frozen bits already 0}
+    
+    \CommentTok{\# Apply polar transform}
+\NormalTok{    x }\OperatorTok{=}\NormalTok{ polar\_transform(u)}
+    
+    \ControlFlowTok{return}\NormalTok{ x}
+
+\CommentTok{\# Example: N=8, K=4}
+\NormalTok{N }\OperatorTok{=} \DecValTok{8}
+\NormalTok{K }\OperatorTok{=} \DecValTok{4}
+
+\CommentTok{\# Frozen set (worst 4 channels): positions 0,1,2,4 (0{-}indexed)}
+\NormalTok{frozen\_set }\OperatorTok{=}\NormalTok{ [}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{]}
+
+\CommentTok{\# Information set: positions 3,5,6,7}
+\CommentTok{\# Data}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{])}
+
+\CommentTok{\# Encode}
+\NormalTok{codeword }\OperatorTok{=}\NormalTok{ polar\_encode(data, frozen\_set, N)}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Data (K=}\SpecialCharTok{\{}\NormalTok{K}\SpecialCharTok{\}}\SpecialStringTok{):      }\SpecialCharTok{\{}\NormalTok{data}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Frozen set:        }\SpecialCharTok{\{}\NormalTok{frozen\_set}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Codeword (N=}\SpecialCharTok{\{}\NormalTok{N}\SpecialCharTok{\}}\SpecialStringTok{):  }\SpecialCharTok{\{}\NormalTok{codeword}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Code rate:         }\SpecialCharTok{\{}\NormalTok{K}\SpecialCharTok{\}}\SpecialStringTok{/}\SpecialCharTok{\{}\NormalTok{N}\SpecialCharTok{\}}\SpecialStringTok{ = }\SpecialCharTok{\{}\NormalTok{K}\OperatorTok{/}\NormalTok{N}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\CommentTok{\# Example output:}
+\CommentTok{\# Data (K=4):      [1 0 1 1]}
+\CommentTok{\# Frozen set:        [0, 1, 2, 4]}
+\CommentTok{\# Codeword (N=8):  [0 0 0 1 0 0 1 0]}
+\CommentTok{\# Code rate:         4/8 = 0.5}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Note}: SC/SCL decoding is complex (\textasciitilde200+ lines).
+Use libraries like \texttt{sionna} (TensorFlow) or custom MATLAB for
+research.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Design Guidelines}\label{design-guidelines}
+
+\subsubsection{Choose Polar Codes When:}\label{choose-polar-codes-when}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{5G NR} control channels (standardized)
+\item
+  \textbf{Short blocks} (100-1000 bits) with low latency
+\item
+  \textbf{Flexible rate matching} needed (puncture/shorten)
+\item
+  \textbf{Low-latency} critical (\textless{} 1 ms)
+\item
+  \textbf{Systematic construction} preferred (no random search)
+\end{enumerate}
+
+\subsubsection{Avoid Polar Codes If:}\label{avoid-polar-codes-if}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Long blocks} (\textgreater{} 2048 bits)
+  \$\textbackslash rightarrow\$ LDPC better
+\item
+  \textbf{Highest throughput} needed \$\textbackslash rightarrow\$ LDPC
+  more parallelizable
+\item
+  \textbf{No CRC available} \$\textbackslash rightarrow\$ CA-Polar needs
+  CRC for good performance
+\item
+  \textbf{Legacy systems} \$\textbackslash rightarrow\$ Turbo/LDPC
+  already deployed
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Comparison Summary}\label{comparison-summary}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llllll@{}}
+\toprule\noalign{}
+Code & Year & Gap to Shannon & Latency & Parallelism & Standard \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Convolutional} & 1955 & 6 dB & Low & Sequential & GPS, WiFi \\
+\textbf{Turbo} & 1993 & 0.5 dB & High & Moderate & 3G, 4G \\
+\textbf{LDPC} & 1960/1996 & 0.3 dB & Moderate & High & 5G data, WiFi
+6 \\
+\textbf{Polar} & 2008 & 0.8 dB & Low & Sequential & \textbf{5G
+control} \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Turbo-Codes{]}{]}}: Iterative near-capacity codes
+\item
+  \textbf{{[}{[}LDPC-Codes{]}{]}}: Modern capacity-approaching codes
+\item
+  \textbf{{[}{[}Convolutional-Codes-\&-Viterbi-Decoding{]}{]}}:
+  Classical FEC
+\item
+  \textbf{{[}{[}Forward-Error-Correction-(FEC){]}{]}}: General FEC
+  overview
+\item
+  \textbf{{[}{[}Shannon\textquotesingle s-Channel-Capacity-Theorem{]}{]}}:
+  Theoretical limit
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Polar codes are the first provably
+capacity-achieving codes with explicit construction.} Channel
+polarization splits N channel uses into perfect + useless subchannels.
+Transmit data on good channels (information set \(\mathcal{A}\)), freeze
+bad channels. SC decoding: sequential, \(O(N \log N)\) complexity. SCL
+decoding with CRC (CA-Polar) achieves near-optimal performance. 5G NR
+uses CA-Polar for control channels (low latency, good short-block
+performance). Gap to Shannon: 0.8-1.5 dB (CA-SCL-8, N=1024). Advantages:
+Low latency, short-block performance, systematic construction.
+Disadvantages: Sequential (hard to parallelize), slightly behind LDPC
+for long blocks. Generator matrix \(G_N = G_2^{\otimes n}\) (Kronecker
+product). 2008 discovery by Ar\textbackslash i\{\}kan-\/-\/-major
+theoretical milestone!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

@@ -1,0 +1,858 @@
+\section{Quadrature Amplitude Modulation
+(QAM)}\label{quadrature-amplitude-modulation-qam}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Digital Modulation} \textbar{}
+{[}{[}QPSK-Modulation{]}{]} \textbar{}
+{[}{[}8PSK-\&-Higher-Order-PSK{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{QAM is like having a grid of mailboxes-\/-\/-the more boxes, the
+more messages you can send at once. Your WiFi/phone picks bigger grids
+when signal is strong!}
+
+\textbf{The idea - Vary BOTH brightness and angle}: - \textbf{PSK} (like
+QPSK): Only varies angle (4 or 8 positions) - \textbf{QAM}: Varies
+\textbf{both} angle AND distance from center! - Result: Many more
+possible positions = much faster data!
+
+\textbf{Real QAM sizes}: - \textbf{16-QAM}: 4\$\textbackslash times\$4
+grid = 16 positions = 4 bits/symbol - \textbf{64-QAM}:
+8\$\textbackslash times\$8 grid = 64 positions = 6 bits/symbol -
+\textbf{256-QAM}: 16\$\textbackslash times\$16 grid = 256 positions = 8
+bits/symbol - \textbf{1024-QAM} (WiFi 6): 32\$\textbackslash times\$32
+grid = 1024 positions = 10 bits/symbol!
+
+\textbf{Why you care - Speed differences}: - \textbf{QPSK}: 2
+bits/symbol (baseline) - \textbf{16-QAM}: 4 bits/symbol =
+\textbf{2\$\textbackslash times\$ faster} - \textbf{64-QAM}: 6
+bits/symbol = \textbf{3\$\textbackslash times\$ faster}\\
+- \textbf{256-QAM}: 8 bits/symbol = \textbf{4\$\textbackslash times\$
+faster} - \textbf{1024-QAM}: 10 bits/symbol =
+\textbf{5\$\textbackslash times\$ faster}!
+
+\textbf{The trade-off}: - \textbf{More positions} = faster BUT positions
+are closer together - \textbf{Closer positions} = easier to confuse when
+signal is noisy - Strong signal (close to router): Use 1024-QAM =
+blazing fast! - Weak signal (far from router): Use QPSK = slower but
+reliable
+
+\textbf{Where you see it}: - \textbf{Your WiFi stats}: ``MCS 9,
+256-QAM'' = using 256-position grid - \textbf{4G/5G}: ``Modulation:
+64-QAM'' = using 64-position grid - \textbf{Cable modem}: DOCSIS 3.1
+uses 4096-QAM (12 bits/symbol!) - \textbf{Phone signal bars}: Full bars
+= can use high QAM, low bars = must use simple modulation
+
+\textbf{Real experience}: - Walk toward router: Speed increases as phone
+switches QPSK \$\textbackslash rightarrow\$ 16-QAM
+\$\textbackslash rightarrow\$ 64-QAM \$\textbackslash rightarrow\$
+256-QAM - Walk away: Speed decreases as phone steps back down - This
+happens automatically hundreds of times per second!
+
+\textbf{Fun fact}: Modern WiFi 6E can use 1024-QAM, but ONLY at close
+range with zero interference-\/-\/-it\textquotesingle s like threading a
+needle with radio waves!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Quadrature Amplitude Modulation (QAM)} encodes data by
+modulating \textbf{both amplitude and phase} of a carrier wave.
+
+\textbf{Key insight}: Combine \textbf{ASK} (amplitude-shift keying) and
+\textbf{PSK} (phase-shift keying) in \textbf{2D constellation} (I/Q
+plane)
+
+\textbf{Advantage}: \textbf{Best spectral efficiency} for given SNR
+(optimal use of 2D signal space)
+
+\textbf{Applications}: WiFi, LTE/5G, cable modems (DOCSIS), DSL, digital
+TV (DVB-C), microwave backhaul
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{QAM Fundamentals}\label{qam-fundamentals}
+
+\subsubsection{Complex Baseband
+Representation}\label{complex-baseband-representation}
+
+\textbf{QAM symbol}:
+
+\[
+s_m = I_m + jQ_m
+\]
+
+Where: - \(I_m\) = In-phase amplitude (real axis) - \(Q_m\) = Quadrature
+amplitude (imaginary axis) - \(m\) = Symbol index (0 to M-1)
+
+\textbf{Passband signal}:
+
+\[
+s_{\text{RF}}(t) = I_m \cos(2\pi f_c t) - Q_m \sin(2\pi f_c t)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{M-ary QAM}\label{m-ary-qam}
+
+\textbf{M constellation points}: \(\sqrt{M} \times \sqrt{M}\) grid (for
+square QAM)
+
+\textbf{Bits per symbol}: \(\log_2(M)\)
+
+\textbf{Common sizes}: 16-QAM, 64-QAM, 256-QAM, 1024-QAM, 4096-QAM
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{16-QAM}\label{qam}
+
+\subsubsection{Constellation}\label{constellation}
+
+\textbf{4\$\textbackslash times\$4 grid} in I/Q plane:
+
+\begin{verbatim}
+          Q
+          
+             (I=±3d, Q=±3d)
+             (I=±d, Q=±3d)
+             (I=±3d, Q=±d)
+             (I=±d, Q=±d)
+          
+          I
+\end{verbatim}
+
+\textbf{Amplitude levels}: \(I, Q \in \{-3d, -d, +d, +3d\}\)
+
+Where \(d\) = Unit spacing (normalized distance)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Bit Mapping (Gray Coding)}\label{bit-mapping-gray-coding}
+
+\textbf{4 bits per symbol}: \(b_3 b_2 b_1 b_0\)
+
+\textbf{Typical mapping}: - \(b_3 b_2\) \$\textbackslash rightarrow\$ I
+component (00=-3d, 01=-d, 11=+d, 10=+3d) - \(b_1 b_0\)
+\$\textbackslash rightarrow\$ Q component (00=-3d, 01=-d, 11=+d, 10=+3d)
+
+\textbf{Example symbols}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Bits & I & Q & Position \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0000 & -3d & -3d & Bottom-left corner \\
+0001 & -3d & -d & \\
+0011 & -3d & +d & \\
+0010 & -3d & +3d & Top-left corner \\
+1010 & +3d & +3d & Top-right corner \\
+\end{longtable}
+}
+
+\textbf{Gray coding}: Adjacent symbols differ by 1 bit (minimizes BER)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Signal Characteristics}\label{signal-characteristics}
+
+\textbf{Average symbol energy}:
+
+\[
+\bar{E}_s = \frac{1}{16}\sum_{m=0}^{15} (I_m^2 + Q_m^2) = \frac{1}{16} \times 16 \times 10d^2 = 10d^2
+\]
+
+\textbf{Normalization}: Set \(d^2 = 1/10\) \$\textbackslash rightarrow\$
+\(\bar{E}_s = 1\)
+
+\textbf{Minimum distance}: \(d_{\min} = 2d\)
+
+\textbf{With normalization}: \(d_{\min} = 2/\sqrt{10} = 0.632\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{64-QAM}\label{qam-1}
+
+\subsubsection{Constellation}\label{constellation-1}
+
+\textbf{8\$\textbackslash times\$8 grid}: 64 points
+
+\textbf{Amplitude levels}:
+\(I, Q \in \{-7d, -5d, -3d, -d, +d, +3d, +5d, +7d\}\)
+
+\textbf{Bits per symbol}: 6
+
+\textbf{Average energy}:
+
+\[
+\bar{E}_s = \frac{1}{64}\sum (I_m^2 + Q_m^2) = 42d^2
+\]
+
+\textbf{Normalized}: \(d = 1/\sqrt{42}\) \$\textbackslash rightarrow\$
+\(\bar{E}_s = 1\)
+
+\textbf{Minimum distance}: \(d_{\min} = 2d = 0.309\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{256-QAM}\label{qam-2}
+
+\subsubsection{Constellation}\label{constellation-2}
+
+\textbf{16\$\textbackslash times\$16 grid}: 256 points
+
+\textbf{Bits per symbol}: 8
+
+\textbf{Average energy}: \(\bar{E}_s = 170d^2\)
+
+\textbf{Normalized}: \(d = 1/\sqrt{170}\)
+
+\textbf{Minimum distance}: \(d_{\min} = 2d = 0.153\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{High-Order QAM}\label{high-order-qam}
+
+\textbf{1024-QAM}: 32\$\textbackslash times\$32 grid, 10 bits/symbol
+
+\textbf{4096-QAM}: 64\$\textbackslash times\$64 grid, 12 bits/symbol
+
+\textbf{Practical limit}: \textasciitilde4096-QAM (802.11ax WiFi 6,
+cable modems)
+
+\textbf{Challenge}: Requires very high SNR (\textgreater40 dB) and
+excellent linearity
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Performance Analysis}\label{performance-analysis}
+
+\subsubsection{Symbol Error Rate (SER)}\label{symbol-error-rate-ser}
+
+\textbf{Square M-QAM in AWGN} (approximate, high SNR):
+
+\[
+P_s \approx 4\left(1 - \frac{1}{\sqrt{M}}\right) Q\left(\sqrt{\frac{3}{M-1} \cdot \frac{E_s}{N_0}}\right)
+\]
+
+\textbf{Where}:
+\(Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} dt\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Bit Error Rate (BER)}\label{bit-error-rate-ber}
+
+\textbf{With Gray coding}:
+
+\[
+\text{BER} \approx \frac{P_s}{\log_2(M)}
+\]
+
+\textbf{In terms of Eb/N0}:
+
+\[
+\text{BER} \approx \frac{4}{\log_2(M)}\left(1 - \frac{1}{\sqrt{M}}\right) Q\left(\sqrt{\frac{3\log_2(M)}{M-1} \cdot \frac{E_b}{N_0}}\right)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Required Eb/N0 for BER =
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}}\label{required-ebn0-for-ber-10ux2076}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Modulation & Bits/symbol & Required Eb/N0 (dB) & SNR Penalty vs QPSK \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{QPSK} & 2 & 10.5 & 0 dB (baseline) \\
+\textbf{16-QAM} & 4 & 14.5 & +4 dB \\
+\textbf{64-QAM} & 6 & 18.5 & +8 dB \\
+\textbf{256-QAM} & 8 & 23 & +12.5 dB \\
+\textbf{1024-QAM} & 10 & 27.5 & +17 dB \\
+\textbf{4096-QAM} & 12 & 32 & +21.5 dB \\
+\end{longtable}
+}
+
+\textbf{Pattern}: Each 4\$\textbackslash times\$ increase in M adds
+\textasciitilde4 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{BER Comparison Table}\label{ber-comparison-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Eb/N0 (dB) & QPSK & 16-QAM & 64-QAM & 256-QAM \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+10 &
+3.9\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+&
+2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+& 0.1 & 0.3 \\
+15 &
+7\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\}
+&
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+&
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+& 0.08 \\
+20 &
+\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+&
+1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\}
+&
+1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
+&
+3\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\} \\
+25 &
+\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+&
+\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+&
+1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
+&
+2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\} \\
+30 &
+\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+&
+\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+&
+\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+&
+2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\} \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Bandwidth Efficiency}\label{bandwidth-efficiency}
+
+\textbf{Occupied bandwidth} (raised cosine pulse shaping):
+
+\[
+B = (1 + \alpha) R_s = (1 + \alpha) \frac{R_b}{\log_2(M)} \quad (\text{Hz})
+\]
+
+\textbf{Spectral efficiency}:
+
+\[
+\eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad (\text{bits/sec/Hz})
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Comparison (\$\textbackslash alpha\$ =
+0.35)}\label{comparison-ux3b1-0.35}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Modulation & Bits/symbol & Spectral Efficiency & Practical Limit \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{QPSK} & 2 & 1.48 & Good SNR (10 dB) \\
+\textbf{16-QAM} & 4 & 2.96 & Moderate SNR (15 dB) \\
+\textbf{64-QAM} & 6 & 4.44 & High SNR (20 dB) \\
+\textbf{256-QAM} & 8 & 5.93 & Very high SNR (25 dB) \\
+\textbf{1024-QAM} & 10 & 7.41 & Excellent SNR (30 dB), wired only \\
+\textbf{4096-QAM} & 12 & 8.89 & Exceptional SNR (35 dB), cable/DSL \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Modulation \& Demodulation}\label{modulation-demodulation}
+
+\subsubsection{IQ Modulator}\label{iq-modulator}
+
+\textbf{Standard quadrature modulator}:
+
+\begin{verbatim}
+           cos(2f_c t)
+                |
+    I(t) ----> [×] ----\
+                        [+] --> s_RF(t)
+    Q(t) ----> [×] ----/
+                |
+          -sin(2f_c t)
+\end{verbatim}
+
+\textbf{Same hardware as QPSK}, different symbol mapping
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Coherent Demodulation}\label{coherent-demodulation}
+
+\textbf{IQ demodulator}:
+
+\begin{verbatim}
+               cos(2f_c t)
+                    |
+s_RF(t) --> [×] --> [LPF] --> [Sample] --> I(t)
+         |
+         |  -sin(2f_c t)
+         |      |
+         +--> [×] --> [LPF] --> [Sample] --> Q(t)
+\end{verbatim}
+
+\textbf{Decision}: 1. Sample I and Q at symbol rate 2. Find nearest
+constellation point (minimum Euclidean distance) 3. Map constellation
+point to bits
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Soft-Decision Decoding}\label{soft-decision-decoding}
+
+\textbf{Hard decision}: Nearest neighbor \$\textbackslash rightarrow\$
+Bits
+
+\textbf{Soft decision}: Pass I/Q values (or LLRs) to decoder
+
+\textbf{Log-Likelihood Ratio (LLR)} for bit \(b_k\):
+
+\[
+\text{LLR}(b_k) = \log\frac{P(b_k=0 | r)}{P(b_k=1 | r)}
+\]
+
+\textbf{Benefit}: \textasciitilde2 dB coding gain (LDPC, Turbo codes use
+soft decisions)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Power Efficiency}\label{power-efficiency}
+
+\subsubsection{Peak-to-Average Power Ratio
+(PAPR)}\label{peak-to-average-power-ratio-papr}
+
+\textbf{QAM has varying envelope}:
+
+\[
+|s_m| = \sqrt{I_m^2 + Q_m^2}
+\]
+
+\textbf{PAPR}:
+
+\[
+\text{PAPR} = \frac{P_{\max}}{P_{\text{avg}}} = \frac{|s_{\max}|^2}{\bar{E}_s}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{PAPR Values}\label{papr-values}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Modulation & PAPR (linear) & PAPR (dB) & Notes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{QPSK} & 1 & 0 dB & Constant envelope \\
+\textbf{16-QAM} & 2.55 & 4.1 dB & Corner points
+2.55\$\textbackslash times\$ average \\
+\textbf{64-QAM} & 3.68 & 5.7 dB & \\
+\textbf{256-QAM} & 4.80 & 6.8 dB & \\
+\textbf{1024-QAM} & 5.93 & 7.7 dB & \\
+\end{longtable}
+}
+
+\textbf{Impact}: High PAPR requires PA backoff (reduces efficiency)
+
+\textbf{Example}: 64-QAM with 5.7 dB PAPR - PA must back off 5.7 dB from
+saturation - Efficiency drops from 50\% to \textasciitilde13\%
+(4\$\textbackslash times\$ penalty)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Impairments}\label{practical-impairments}
+
+\subsubsection{1. I/Q Imbalance}\label{iq-imbalance}
+
+\textbf{Gain mismatch}: \(G_I \neq G_Q\)
+
+\textbf{Phase error}: 90\$\^{}\textbackslash circ\$ hybrid imperfect
+(e.g., 88\$\^{}\textbackslash circ\$ or 92\$\^{}\textbackslash circ\$)
+
+\textbf{Effect}: Constellation distortion, image leakage
+
+\textbf{Model}:
+
+\[
+r = (1 + \alpha_G) I + j(1 - \alpha_G) e^{j\epsilon} Q + n
+\]
+
+Where: - \(\alpha_G\) = Gain imbalance - \(\epsilon\) = Phase error
+
+\textbf{Typical}: \$\textbackslash pm\$0.5 dB gain,
+\$\textbackslash pm\$2\$\^{}\textbackslash circ\$ phase (degrades
+256-QAM significantly)
+
+\textbf{Mitigation}: Digital calibration (pilot-aided estimation)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Nonlinear PA
+Distortion}\label{nonlinear-pa-distortion}
+
+\textbf{AM-AM conversion}: Gain compression at high amplitudes
+
+\textbf{AM-PM conversion}: Phase shift varies with amplitude
+
+\textbf{Effect}: Constellation warping, especially outer points
+
+\textbf{Example}: 64-QAM, corner points compress 1 dB - Minimum distance
+reduced \$\textbackslash rightarrow\$ BER increases - Spectral regrowth
+(adjacent channel interference)
+
+\textbf{Mitigation}: - \textbf{Backoff}: 6-10 dB (kills efficiency) -
+\textbf{Predistortion}: Digital (DPD) or analog - \textbf{Crest factor
+reduction (CFR)}: Clip peaks, re-generate signal
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Phase Noise}\label{phase-noise}
+
+\textbf{Oscillator jitter} causes constellation rotation/spread:
+
+\[
+r(t) = s(t) e^{j\phi_n(t)} + n(t)
+\]
+
+\textbf{Effect}: Common phase error (CPE) + inter-carrier interference
+(OFDM)
+
+\textbf{Sensitivity}: Higher-order QAM more sensitive
+
+\textbf{Example}: 256-QAM - Tolerable phase noise:
+\textasciitilde1\$\^{}\textbackslash circ\$ RMS - Requires high-quality
+oscillator (PLL, TCXO, or OCXO)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Timing Jitter}\label{timing-jitter}
+
+\textbf{Symbol clock error} causes sampling offset:
+
+\textbf{Effect}: ISI, constellation blurring
+
+\textbf{Requirement}: Timing error \textless{} 0.1 symbol period
+
+\textbf{Example}: 64-QAM @ 10 Msps - Symbol period: 100 ns - Tolerable
+jitter: \textless{} 10 ns RMS
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Applications}\label{practical-applications}
+
+\subsubsection{1. WiFi (802.11a/n/ac/ax)}\label{wifi-802.11anacax}
+
+\textbf{OFDM subcarriers} use QAM:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Standard & Max QAM & Max Rate & Notes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{802.11a} & 64-QAM & 54 Mbps & 20 MHz channel \\
+\textbf{802.11n} & 64-QAM & 600 Mbps & 4\$\textbackslash times\$4 MIMO,
+40 MHz \\
+\textbf{802.11ac} & 256-QAM & 6.9 Gbps & 8\$\textbackslash times\$8
+MIMO, 160 MHz \\
+\textbf{802.11ax} (WiFi 6) & 1024-QAM & 9.6 Gbps & OFDMA, MU-MIMO \\
+\end{longtable}
+}
+
+\textbf{Adaptive modulation}: Switch QPSK \$\textbackslash rightarrow\$
+16/64/256/1024-QAM based on SNR
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. LTE/5G NR}\label{lte5g-nr}
+
+\textbf{LTE downlink}: Up to 256-QAM (Cat 9+)
+
+\textbf{5G NR}: Up to 256-QAM (mmWave can use 1024-QAM in some
+scenarios)
+
+\textbf{Example}: LTE Cat 16 (1 Gbps downlink) -
+4\$\textbackslash times\$4 MIMO, 256-QAM, 20 MHz carrier aggregation -
+Per-carrier: 4 layers \$\textbackslash times\$ 8 bits/symbol
+\$\textbackslash times\$ 75k symbols/sec = 2.4 Gbps (theoretical)
+
+\textbf{Adaptive MCS} (Modulation \& Coding Scheme): - Poor channel:
+QPSK 1/4 (0.5 bits/symbol effective) - Good channel: 256-QAM 3/4 (6
+bits/symbol effective)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Cable Modems (DOCSIS)}\label{cable-modems-docsis}
+
+\textbf{DOCSIS 3.0}: 256-QAM (8 bits/symbol)
+
+\textbf{DOCSIS 3.1}: 4096-QAM (12 bits/symbol) - Requires SNR
+\textgreater{} 40 dB (excellent cable plant) - OFDM with 4096-QAM
+subcarriers \$\textbackslash rightarrow\$ 10 Gbps downstream
+
+\textbf{Key}: Wired channel (no fading), high SNR possible
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Digital TV}\label{digital-tv}
+
+\textbf{DVB-C (Cable)}: 256-QAM standard
+
+\textbf{DVB-T2 (Terrestrial)}: Up to 256-QAM (typically 64-QAM)
+
+\textbf{ATSC 3.0 (US)}: 256-QAM, 1024-QAM, 4096-QAM (OFDM)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5. Microwave Backhaul}\label{microwave-backhaul}
+
+\textbf{Point-to-point links}: - \textbf{Clear weather}: 2048-QAM,
+4096-QAM (\$\textbackslash geq\$30 dB SNR) - \textbf{Light rain}:
+256-QAM - \textbf{Heavy rain}: Adaptive down to 16-QAM or QPSK
+
+\textbf{Frequency}: 6-42 GHz (E-band: 70-80 GHz)
+
+\textbf{Example}: 28 GHz link, 56 MHz channel - 4096-QAM: 12 bits/symbol
+\$\textbackslash rightarrow\$ 672 Mbps (no coding) - With FEC 3/4: 504
+Mbps net
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{QAM vs PSK}\label{qam-vs-psk}
+
+\textbf{Same spectral efficiency}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+M-PSK & M-QAM & Comparison \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+4-PSK (QPSK) & 4-QAM (identical) & Same constellation \\
+8-PSK & 8-QAM (rare) & 8-PSK used (const envelope) \\
+16-PSK & 16-QAM & \textbf{16-QAM 4 dB better} \\
+32-PSK & 32-QAM & \textbf{32-QAM much better} \\
+64-PSK & 64-QAM & \textbf{64-QAM far superior} \\
+\end{longtable}
+}
+
+\textbf{General rule}: For M \textgreater{} 8, QAM always better than
+M-PSK
+
+\textbf{Reason}: 2D rectangular grid (QAM) uses signal space more
+efficiently than circle (PSK)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Non-Square QAM}\label{non-square-qam}
+
+\textbf{Cross QAM}: Non-square constellations (e.g., 32-QAM, 128-QAM)
+
+\textbf{32-QAM}: 5 bits/symbol - Constellation: 4 inner points + 12
+middle + 16 outer (hexagonal-like) - Used in some proprietary systems
+
+\textbf{128-QAM}: 7 bits/symbol - Between 64-QAM and 256-QAM
+
+\textbf{Trade-off}: Slightly worse performance than square QAM, but
+allows finer granularity
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Constellation Shaping}\label{constellation-shaping}
+
+\textbf{Probabilistic shaping}: Non-uniform symbol probability
+
+\textbf{Idea}: Transmit inner points more often (lower energy)
+\$\textbackslash rightarrow\$ Reduce average power
+
+\textbf{Benefit}: \textasciitilde0.5-1 dB SNR gain (approaching Shannon
+limit)
+
+\textbf{Used in}: Optical communications (400G/800G), submarine cables
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Adaptive QAM}\label{adaptive-qam}
+
+\textbf{Link adaptation}: Select QAM order based on channel
+
+\textbf{SNR thresholds} (example):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+SNR (dB) & Modulation & Code Rate & Spectral Eff. \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0-5 & QPSK & 1/2 & 1.0 \\
+5-10 & QPSK & 3/4 & 1.5 \\
+10-15 & 16-QAM & 1/2 & 2.0 \\
+15-20 & 16-QAM & 3/4 & 3.0 \\
+20-25 & 64-QAM & 2/3 & 4.0 \\
+25-30 & 64-QAM & 3/4 & 4.5 \\
+30-35 & 256-QAM & 3/4 & 6.0 \\
+\textgreater35 & 1024-QAM & 5/6 & 8.3 \\
+\end{longtable}
+}
+
+\textbf{Used in}: All modern wireless (WiFi, LTE, 5G)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Implementation Tips}\label{implementation-tips}
+
+\subsubsection{Constellation
+Normalization}\label{constellation-normalization}
+
+\textbf{Normalize average power to 1}:
+
+\[
+\bar{E}_s = \frac{1}{M}\sum_{m=0}^{M-1} |s_m|^2 = 1
+\]
+
+\textbf{Example (16-QAM)}: - Un-normalized:
+\(I, Q \in \{-3, -1, +1, +3\}\) - Average power: 10 - Normalized:
+\(I, Q \in \{-3, -1, +1, +3\}/\sqrt{10}\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Gray Coding}\label{gray-coding}
+
+\textbf{Map bits \$\textbackslash rightarrow\$ I/Q using Gray code}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ qam\_gray\_mapping(bits):}
+    \CommentTok{\# 16{-}QAM Gray mapping}
+\NormalTok{    gray\_map }\OperatorTok{=}\NormalTok{ [}\BaseNTok{0b00}\NormalTok{, }\BaseNTok{0b01}\NormalTok{, }\BaseNTok{0b11}\NormalTok{, }\BaseNTok{0b10}\NormalTok{]  }\CommentTok{\# Gray sequence}
+\NormalTok{    i\_bits }\OperatorTok{=}\NormalTok{ bits[}\DecValTok{0}\NormalTok{:}\DecValTok{2}\NormalTok{]}
+\NormalTok{    q\_bits }\OperatorTok{=}\NormalTok{ bits[}\DecValTok{2}\NormalTok{:}\DecValTok{4}\NormalTok{]}
+    
+\NormalTok{    i\_index }\OperatorTok{=}\NormalTok{ gray\_map.index(i\_bits)}
+\NormalTok{    q\_index }\OperatorTok{=}\NormalTok{ gray\_map.index(q\_bits)}
+    
+\NormalTok{    I }\OperatorTok{=} \DecValTok{2}\OperatorTok{*}\NormalTok{i\_index }\OperatorTok{{-}} \DecValTok{3}  \CommentTok{\# Map to \{{-}3, {-}1, +1, +3\}}
+\NormalTok{    Q }\OperatorTok{=} \DecValTok{2}\OperatorTok{*}\NormalTok{q\_index }\OperatorTok{{-}} \DecValTok{3}
+    
+    \ControlFlowTok{return}\NormalTok{ I }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{Q}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Soft-Decision LLR
+Calculation}\label{soft-decision-llr-calculation}
+
+\textbf{For bit \(b_k\) in constellation}:
+
+\[
+\text{LLR}(b_k) = \log\frac{\sum_{s \in S_0} e^{-|r-s|^2/(2\sigma^2)}}{\sum_{s \in S_1} e^{-|r-s|^2/(2\sigma^2)}}
+\]
+
+Where: - \(S_0\) = Constellation points with \(b_k = 0\) - \(S_1\) =
+Constellation points with \(b_k = 1\) - \(r\) = Received symbol -
+\(\sigma^2\) = Noise variance
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary Table}\label{summary-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1600}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1467}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1867}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Modulation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bits/sym
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Min Distance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Eb/N0, BER 10\^{}-6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+PAPR (dB)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Applications
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{QPSK} & 2 & 1.41 & 10.5 dB & 0 & Satellite, cellular \\
+\textbf{16-QAM} & 4 & 0.63 & 14.5 dB & 4.1 & WiFi, LTE, cable \\
+\textbf{64-QAM} & 6 & 0.31 & 18.5 dB & 5.7 & WiFi, LTE, backhaul \\
+\textbf{256-QAM} & 8 & 0.15 & 23 dB & 6.8 & WiFi 5/6, cable, LTE+ \\
+\textbf{1024-QAM} & 10 & 0.098 & 27.5 dB & 7.7 & WiFi 6, DOCSIS 3.1 \\
+\textbf{4096-QAM} & 12 & 0.049 & 32 dB & 8.6 & Cable (DOCSIS 3.1) \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}QPSK-Modulation{]}{]}}: Simplest QAM (4-QAM)
+\item
+  \textbf{{[}{[}8PSK-\&-Higher-Order-PSK{]}{]}}: Phase-only modulation
+\item
+  \textbf{{[}{[}Amplitude-Shift-Keying-(ASK){]}{]}}: Amplitude-only
+  modulation
+\item
+  \textbf{{[}{[}Constellation-Diagrams{]}{]}}: Visualizing QAM
+\item
+  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance analysis
+\item
+  \textbf{{[}{[}OFDM-\&-Multicarrier-Modulation{]}{]}}: Uses QAM per
+  subcarrier
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{QAM combines amplitude and phase
+modulation for optimal spectral efficiency.} 2D rectangular
+constellation uses signal space efficiently. 16/64/256-QAM dominate
+modern wireless/wired systems. Higher-order QAM (1024, 4096) requires
+excellent SNR (\textgreater30 dB) and linearity. Trade-off: Spectral
+efficiency vs power efficiency (PAPR). Adaptive modulation switches QAM
+order based on channel quality. Gray coding + soft-decision decoding
+essential for good BER performance.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

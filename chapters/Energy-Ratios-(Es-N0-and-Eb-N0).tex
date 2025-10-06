@@ -1,0 +1,209 @@
+\section{Energy Ratios: Es/N0 and
+Eb/N0}\label{energy-ratios-esn0-and-ebn0}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Es/N0 and Eb/N0 are like measuring ``signal per bit of
+information'' vs ``background noise''-\/-\/-higher ratio = cleaner
+signal = fewer errors!}
+
+\textbf{The idea - Signal vs Noise ratios}: - \textbf{Signal energy}:
+How much ``juice'' each bit/symbol has - \textbf{Noise}: Random
+interference (always present) - \textbf{Ratio}: Signal energy divided by
+noise = quality measure!
+
+\textbf{Two related measurements}:
+
+\textbf{1. Eb/N0 (Energy per BIT)}: - How much energy in each individual
+bit? - \textbf{Higher Eb/N0} = more energy per bit = easier to detect
+correctly - Used to compare different systems fairly
+
+\textbf{2. Es/N0 (Energy per SYMBOL)}: - How much energy in each symbol
+(which may carry multiple bits)? - QPSK symbol carries 2 bits, so Es/N0
+= 2 \$\textbackslash times\$ Eb/N0 - Used for actual system performance
+calculations
+
+\textbf{Why it matters - Quality threshold}: - \textbf{Low Eb/N0} (weak
+signal): Many bit errors, unusable - \textbf{Medium Eb/N0}: Some errors,
+FEC can fix them - \textbf{High Eb/N0} (strong signal): Nearly
+error-free
+
+\textbf{Real-world example}: - \textbf{WiFi close to router}: Eb/N0 = 25
+dB \$\textbackslash rightarrow\$ use 256-QAM (fast!) - \textbf{WiFi far
+from router}: Eb/N0 = 10 dB \$\textbackslash rightarrow\$ use QPSK
+(reliable!) - \textbf{WiFi too far}: Eb/N0 = 5 dB
+\$\textbackslash rightarrow\$ connection drops
+
+\textbf{The relationship}:
+
+\begin{verbatim}
+Es/N0 = Eb/N0 × (bits per symbol)
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  BPSK: 1 bit/symbol \$\textbackslash rightarrow\$ Es/N0 = Eb/N0
+\item
+  QPSK: 2 bits/symbol \$\textbackslash rightarrow\$ Es/N0 = 2
+  \$\textbackslash times\$ Eb/N0
+\item
+  16-QAM: 4 bits/symbol \$\textbackslash rightarrow\$ Es/N0 = 4
+  \$\textbackslash times\$ Eb/N0
+\end{itemize}
+
+\textbf{Why engineers love Eb/N0}: - \textbf{Fair comparison}: Compares
+systems with different modulations - \textbf{Theory matches practice}:
+Theoretical limits use Eb/N0 - \textbf{Standards use it}: 3GPP, WiFi
+specs quote Eb/N0 requirements
+
+\textbf{When you see it}: - \textbf{Satellite link budget}: ``Requires
+10 dB Eb/N0 for BER \textless{}
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}''
+- \textbf{Modem spec sheet}: ``Sensitivity: -95 dBm at 8 dB Eb/N0'' -
+\textbf{Paper comparing modulations}: Always uses Eb/N0 for fair
+comparison!
+
+\textbf{Fun fact}: The theoretical minimum Eb/N0 for error-free
+communication is -1.59 dB (Shannon limit)-\/-\/-but real systems need
+5-15 dB due to practical limitations!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+These ratios are fundamental measures of signal quality in digital
+communications.
+
+\subsection{Es/N0: Symbol Energy Ratio}\label{esn0-symbol-energy-ratio}
+
+\textbf{Es/N0} measures the energy per symbol relative to the noise
+power spectral density.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Es}: Energy per symbol
+\item
+  \textbf{N0}: Noise power per Hz (noise spectral density)
+\item
+  Used when analyzing symbol-level performance
+\end{itemize}
+
+\subsection{Eb/N0: Bit Energy Ratio}\label{ebn0-bit-energy-ratio}
+
+\textbf{Eb/N0} measures the energy per bit relative to the noise power
+spectral density.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Eb}: Energy per bit\\
+\item
+  \textbf{N0}: Noise power per Hz
+\item
+  More fundamental measure for comparing different modulation schemes
+\end{itemize}
+
+\subsection{Relationship Between Es/N0 and
+Eb/N0}\label{relationship-between-esn0-and-ebn0}
+
+The relationship depends on how many bits per symbol:
+
+\begin{verbatim}
+For QPSK (2 bits/symbol):
+Eb/N0 = Es/N0 - 3.01 dB
+
+General formula:
+Eb/N0 (dB) = Es/N0 (dB) - 10·log(bits per symbol)
+\end{verbatim}
+
+\subsection{Example in Chimera}\label{example-in-chimera}
+
+\begin{itemize}
+\tightlist
+\item
+  If Channel Es/N0 = -15 dB
+\item
+  For QPSK (2 bits/symbol):
+\item
+  Then Eb/N0 = -15 dB - 3.01 dB = \textbf{-18.01 dB}
+\end{itemize}
+
+\subsection{Why These Ratios Matter}\label{why-these-ratios-matter}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Performance Comparison}: Allows fair comparison between
+  different modulation schemes
+\item
+  \textbf{Link Budget Analysis}: Essential for designing communication
+  systems
+\item
+  \textbf{BER Prediction}: Theoretical BER curves are plotted against
+  Eb/N0
+\item
+  \textbf{Standard Metric}: Industry-standard way to specify
+  communication system performance
+\end{enumerate}
+
+\subsection{Comparison Table}\label{comparison-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Modulation & Bits/Symbol & Es/N0 to Eb/N0 Conversion \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+BPSK & 1 & Eb/N0 = Es/N0 (0 dB) \\
+\textbf{QPSK} & \textbf{2} & \textbf{Eb/N0 = Es/N0 - 3.01 dB} \\
+8PSK & 3 & Eb/N0 = Es/N0 - 4.77 dB \\
+16QAM & 4 & Eb/N0 = Es/N0 - 6.02 dB \\
+\end{longtable}
+}
+
+\subsection{SNR vs Es/N0 vs Eb/N0}\label{snr-vs-esn0-vs-ebn0}
+
+These terms are related but distinct:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{SNR}: Ratio of signal power to noise power (may include
+  bandwidth effects)
+\item
+  \textbf{Es/N0}: Symbol energy to noise spectral density (symbol-level
+  metric)
+\item
+  \textbf{Eb/N0}: Bit energy to noise spectral density (bit-level
+  metric, most fundamental)
+\end{itemize}
+
+In many contexts (including Chimera\textquotesingle s simple channel
+model), \textbf{SNR \$\textbackslash approx\$ Es/N0}.
+
+\subsection{Theoretical BER for QPSK}\label{theoretical-ber-for-qpsk}
+
+\begin{verbatim}
+BER_QPSK  (1/2) · erfc((Eb/N0))
+
+where erfc is the complementary error function
+\end{verbatim}
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - Related power ratio
+\item
+  {[}{[}Bit-Error-Rate-(BER){]}{]} - Performance metric
+\item
+  {[}{[}QPSK-Modulation{]}{]} - 2 bits per symbol
+\item
+  {[}{[}Complete-Link-Budget-Analysis{]}{]} - Using energy ratios in
+  system design
+\end{itemize}

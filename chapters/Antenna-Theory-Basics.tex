@@ -1,0 +1,810 @@
+\section{Antenna Theory Basics}\label{antenna-theory-basics}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Foundation} \textbar{}
+{[}{[}Electromagnetic-Spectrum{]}{]} \textbar{}
+{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{An antenna is like a funnel for radio waves-\/-\/-it
+concentrates energy in one direction (transmit) or collects it from many
+directions (receive).}
+
+\textbf{Simple analogies}: - \textbf{Flashlight vs.~bare bulb}: A
+flashlight (directional antenna) focuses light. A bare bulb
+(omnidirectional) lights up everything. - \textbf{Satellite dish}:
+Curved shape collects weak space signals and focuses them onto a tiny
+receiver - \textbf{Your cell phone}: Has multiple tiny antennas
+inside-\/-\/-cellular, WiFi, GPS, Bluetooth (each tuned to different
+frequencies)
+
+\textbf{Key insights}: - \textbf{Bigger = stronger}: 10-meter dish
+collects 100\$\textbackslash times\$ more energy than 1-meter dish -
+\textbf{Shape matters}: Long wire for AM radio, small stub for WiFi,
+dish for satellites - \textbf{Trade-off}: Omnidirectional (WiFi router)
+covers whole area but weak. Directional (satellite dish) is strong but
+must point exactly right.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+An \textbf{antenna} is a transducer that converts \textbf{electrical
+signals into electromagnetic waves} (transmit) and vice versa (receive).
+Antennas are governed by \textbf{reciprocity}: their transmit and
+receive properties are identical.
+
+\textbf{Fundamental principle}: Accelerating charges radiate EM energy
+({[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation\textbar Maxwell\textquotesingle s
+equations{]}{]}).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Key Antenna Parameters}\label{key-antenna-parameters}
+
+\subsubsection{1. Radiation Pattern}\label{radiation-pattern}
+
+\textbf{The spatial distribution of radiated power}.
+
+\textbf{Coordinate system}: - \textbf{Azimuth (\$\textbackslash phi\$)}:
+Horizontal angle (0\$\^{}\textbackslash circ\$ -
+360\$\^{}\textbackslash circ\$) - \textbf{Elevation
+(\$\textbackslash theta\$)}: Vertical angle from zenith
+(0\$\^{}\textbackslash circ\$ = straight up)
+
+\textbf{Typical patterns}:
+
+\paragraph{Isotropic Radiator
+(Theoretical)}\label{isotropic-radiator-theoretical}
+
+\begin{itemize}
+\tightlist
+\item
+  Radiates \textbf{equally in all directions} (sphere)
+\item
+  \textbf{Power density} at distance \(r\):
+\end{itemize}
+
+\[
+S = \frac{P_t}{4\pi r^2}
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Does not exist in reality} (used as reference for gain)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Dipole (\$\textbackslash lambda\$/2)}\label{dipole-ux3bb2}
+
+\textbf{Classic antenna}: Half-wavelength wire
+
+\textbf{Pattern}: - \textbf{Omnidirectional in azimuth}
+(\$\textbackslash phi\$) - \textbf{Figure-8 in elevation}
+(\$\textbackslash theta\$): Nulls along wire axis
+
+\textbf{3D pattern}: Donut-shaped (toroid)
+
+\textbf{Radiation resistance}: \(R_r = 73\ \Omega\) (lossless)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Directional Antennas}\label{directional-antennas}
+
+\textbf{Yagi-Uda} (TV antenna): - Single driven element (dipole) -
+Parasitic elements (directors + reflector) - \textbf{Gain}: 10-15 dBi -
+\textbf{Beamwidth}: \textasciitilde30-60\$\^{}\textbackslash circ\$
+
+\textbf{Parabolic Dish}: - Large aperture (diameter \(D \gg \lambda\)) -
+\textbf{Gain}: 30-60 dBi (satellite comms) - \textbf{Beamwidth}:
+\(\theta \approx 70 \lambda / D\) degrees
+
+\textbf{Phased Array}: - Multiple elements with controllable phase -
+\textbf{Electronically steerable} beam (no mechanical movement) - Used
+in: Radar, 5G base stations, {[}{[}AID-Protocol-Case-Study\textbar AID
+Protocol{]}{]} (THz)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Antenna Gain (G)}\label{antenna-gain-g}
+
+\textbf{Ratio of power density in preferred direction vs isotropic
+radiator}.
+
+\[
+G = \frac{S(\theta, \phi)}{S_{\text{iso}}}
+\]
+
+\textbf{Units}: dBi (dB relative to isotropic)
+
+\textbf{Typical gains}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Antenna Type & Gain (dBi) & Beamwidth \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Isotropic (reference) & 0 dBi & 360\$\^{}\textbackslash circ\$ (all
+directions) \\
+Dipole (\$\textbackslash lambda\$/2) & 2.15 dBi &
+\textasciitilde78\$\^{}\textbackslash circ\$ (elevation) \\
+Monopole (\$\textbackslash lambda\$/4) & 5.15 dBi &
+\textasciitilde30\$\^{}\textbackslash circ\$ (over ground plane) \\
+Patch (microstrip) & 6-9 dBi &
+\textasciitilde70-90\$\^{}\textbackslash circ\$ \\
+Yagi (10 elements) & 12-15 dBi &
+\textasciitilde30\$\^{}\textbackslash circ\$ \\
+Parabolic dish (1 m @ 10 GHz) & \textasciitilde40 dBi &
+\textasciitilde2\$\^{}\textbackslash circ\$ \\
+Phased array (64 elements) & 18-24 dBi & Steerable \\
+\end{longtable}
+}
+
+\textbf{Relationship to directivity}:
+
+\[
+G = \eta_{\text{ant}} \cdot D
+\]
+
+Where: - \(D\) = Directivity (concentrates power) -
+\(\eta_{\text{ant}}\) = Antenna efficiency (0.5-0.95 typical, accounts
+for ohmic losses)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Directivity (D)}\label{directivity-d}
+
+\textbf{Power concentration factor} (independent of losses):
+
+\[
+D = \frac{4\pi}{\Omega_A}
+\]
+
+Where \(\Omega_A\) is the \textbf{solid angle} of the main lobe
+(steradians).
+
+\textbf{Approximation} for narrow beams:
+
+\[
+D \approx \frac{41,253}{\theta_E \cdot \theta_H}
+\]
+
+Where: - \(\theta_E\) = Elevation beamwidth (degrees) - \(\theta_H\) =
+Azimuth beamwidth (degrees)
+
+\textbf{Example}: Beamwidth 10\$\^{}\textbackslash circ\$
+\$\textbackslash times\$ 10\$\^{}\textbackslash circ\$
+\$\textbackslash rightarrow\$
+\(D = 41,253 / (10 \times 10) = 412.53 \approx 26.2\) dBi
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Beamwidth}\label{beamwidth}
+
+\textbf{Angular width where power drops to half (-3 dB) of peak}.
+
+\textbf{Half-power beamwidth (HPBW)}:
+
+\[
+\theta_{\text{HPBW}} \approx \frac{k \lambda}{D}
+\]
+
+Where: - \(D\) = Antenna diameter (aperture antennas) - \(k\) = Constant
+(\textasciitilde70\$\^{}\textbackslash circ\$ for parabolic dishes)
+
+\textbf{Example}: 1 m dish at 10 GHz (\(\lambda = 3\) cm):
+
+\[
+\theta_{\text{HPBW}} = \frac{70 \times 0.03}{1} = 2.1°
+\]
+
+\textbf{Implication}: Narrow beams require \textbf{precise pointing}
+(satellites, radar)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5. Polarization}\label{polarization}
+
+\textbf{Orientation of electric field vector}.
+
+\paragraph{Linear Polarization}\label{linear-polarization}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Vertical}: E-field parallel to ground (monopole, vertical
+  dipole)
+\item
+  \textbf{Horizontal}: E-field perpendicular to ground (horizontal
+  dipole)
+\end{itemize}
+
+\textbf{Cross-polarization loss}: 20-30 dB if TX and RX polarizations
+are perpendicular
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Circular Polarization}\label{circular-polarization}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{E-field rotates} as wave propagates
+\item
+  \textbf{Right-hand circular (RHCP)}: Clockwise (looking at source)
+\item
+  \textbf{Left-hand circular (LHCP)}: Counter-clockwise
+\end{itemize}
+
+\textbf{Applications}: GPS, satellite comms (immune to Faraday rotation
+in ionosphere)
+
+\textbf{Axial ratio}: Measure of circularity (0 dB = perfect circular,
+\textgreater3 dB = elliptical)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Elliptical Polarization}\label{elliptical-polarization}
+
+\begin{itemize}
+\tightlist
+\item
+  General case (between linear and circular)
+\item
+  Common when reflection/scattering depolarizes signal
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{6. Impedance \& Matching}\label{impedance-matching}
+
+\textbf{Antenna input impedance}:
+
+\[
+Z_{\text{ant}} = R_{\text{rad}} + R_{\text{loss}} + jX
+\]
+
+Where: - \(R_{\text{rad}}\) = Radiation resistance (power radiated) -
+\(R_{\text{loss}}\) = Loss resistance (heat in conductors/dielectrics) -
+\(X\) = Reactance (energy storage in near-field)
+
+\textbf{Goal}: Match to transmission line (typically
+50\$\textbackslash Omega\$ or 75\$\textbackslash Omega\$)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Standing Wave Ratio (SWR)}\label{standing-wave-ratio-swr}
+
+\textbf{Mismatch metric}:
+
+\[
+\text{SWR} = \frac{1 + |\Gamma|}{1 - |\Gamma|}
+\]
+
+Where \(\Gamma = \frac{Z_{\text{ant}} - Z_0}{Z_{\text{ant}} + Z_0}\)
+(reflection coefficient)
+
+\textbf{Acceptable values}: - SWR \textless{} 1.5:1
+\$\textbackslash rightarrow\$ Good match (\textless{} 4\% power
+reflected) - SWR = 2:1 \$\textbackslash rightarrow\$ Marginal (11\%
+reflected) - SWR \textgreater{} 3:1 \$\textbackslash rightarrow\$ Poor
+(25\% reflected, may damage TX)
+
+\textbf{Measurement}: Antenna analyzer, network analyzer, SWR meter
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{7. Bandwidth}\label{bandwidth}
+
+\textbf{Frequency range where antenna performs adequately}.
+
+\textbf{Criteria}: - SWR \textless{} 2:1 - Gain variation \textless{} 3
+dB - Pattern distortion minimal
+
+\textbf{Narrowband antennas}: Dipole (2-5\%), loop (1-2\%)
+\textbf{Wideband antennas}: Log-periodic (10:1 ratio), biconical
+(octave), spiral (decade+)
+
+\textbf{Example}: WiFi 2.4 GHz (2.4-2.5 GHz = 4\% bandwidth)
+\$\textbackslash rightarrow\$ Simple patch works \textbf{Example}: UWB
+radar (3-10 GHz = 107\% fractional BW) \$\textbackslash rightarrow\$
+Needs spiral or horn
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{8. Effective Aperture
+(\(A_e\))}{8. Effective Aperture (A\_e)}}\label{effective-aperture-a_e}
+
+\textbf{Equivalent capture area} for receiving antennas:
+
+\[
+A_e = \frac{G \lambda^2}{4\pi}
+\]
+
+\textbf{Physical interpretation}: Power received = Incident power
+density \$\textbackslash times\$ \(A_e\)
+
+\[
+P_r = S \cdot A_e
+\]
+
+\textbf{Example}: Dipole (\(G = 2.15\) dBi = 1.64 linear) at 1 GHz
+(\(\lambda = 0.3\) m):
+
+\[
+A_e = \frac{1.64 \times (0.3)^2}{4\pi} = 0.0125\ \text{m}^2
+\]
+
+\textbf{Aperture efficiency}:
+\(\eta_{\text{ap}} = A_e / A_{\text{phys}}\) (0.5-0.7 for dishes)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Antenna Types by
+Application}\label{antenna-types-by-application}
+
+\subsubsection{1. Communication Antennas}\label{communication-antennas}
+
+\paragraph{Dipole (VHF/UHF)}\label{dipole-vhfuhf}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Simple, cheap, omnidirectional}
+\item
+  \textbf{Use}: FM broadcast, amateur radio, WiFi (2.4 GHz diversity
+  antennas)
+\end{itemize}
+
+\paragraph{Patch (Microstrip)}\label{patch-microstrip}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Flat, low-profile, easy to integrate}
+\item
+  \textbf{Use}: GPS, cellular, WiFi (5 GHz), IoT devices
+\end{itemize}
+
+\paragraph{Yagi-Uda}\label{yagi-uda}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Directional, moderate gain}
+\item
+  \textbf{Use}: TV reception, point-to-point links, amateur radio
+\end{itemize}
+
+\paragraph{Parabolic Dish}\label{parabolic-dish}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{High gain, narrow beam}
+\item
+  \textbf{Use}: Satellite TV (12 GHz), deep-space comms (Ka-band), radio
+  astronomy
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Mobile/Wearable
+Antennas}\label{mobilewearable-antennas}
+
+\paragraph{Monopole
+(\$\textbackslash lambda\$/4)}\label{monopole-ux3bb4}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Requires ground plane} (vehicle roof, PCB)
+\item
+  \textbf{Use}: Car antennas, handheld radios
+\end{itemize}
+
+\paragraph{PIFA (Planar Inverted-F
+Antenna)}\label{pifa-planar-inverted-f-antenna}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Compact, dual-band}
+\item
+  \textbf{Use}: Smartphones (cellular + WiFi)
+\end{itemize}
+
+\paragraph{Loop Antenna}\label{loop-antenna}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Small, magnetic field dominant}
+\item
+  \textbf{Use}: RFID tags, NFC, AM radio (ferrite bar)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Phased Arrays}\label{phased-arrays}
+
+\textbf{Multiple elements with controllable phase/amplitude}:
+
+\textbf{Advantages}: - \textbf{Electronic beam steering} (no moving
+parts) - \textbf{Adaptive nulling} (cancel interference) - \textbf{MIMO}
+(spatial multiplexing)
+
+\textbf{Beam steering}:
+
+\[
+\theta = \sin^{-1}\left(\frac{\phi \lambda}{2\pi d}\right)
+\]
+
+Where: - \(\phi\) = Phase shift between elements - \(d\) = Element
+spacing
+
+\textbf{Applications}: - Radar (military, automotive 77 GHz) - 5G base
+stations (massive MIMO, 64-256 elements) -
+{[}{[}AID-Protocol-Case-Study\textbar AID Protocol{]}{]} (THz phased
+array for coherent combining)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Friis Transmission
+Equation}\label{friis-transmission-equation}
+
+\textbf{Link budget fundamental} (connects antennas to
+{[}{[}Free-Space-Path-Loss-(FSPL)\textbar path loss{]}{]}):
+
+\[
+P_r = P_t + G_t + G_r - L_{\text{FSPL}}
+\]
+
+(in dB)
+
+Or in linear form:
+
+\[
+P_r = P_t \cdot G_t \cdot G_r \cdot \left(\frac{\lambda}{4\pi d}\right)^2
+\]
+
+\textbf{Derivation}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  TX power \(P_t\) radiated isotropically \$\textbackslash rightarrow\$
+  Power density at distance \(d\):
+\end{enumerate}
+
+\[
+S_{\text{iso}} = \frac{P_t}{4\pi d^2}
+\]
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  TX antenna gain \(G_t\) concentrates power:
+\end{enumerate}
+
+\[
+S = \frac{P_t G_t}{4\pi d^2}
+\]
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  RX antenna effective aperture \(A_e = G_r \lambda^2 / 4\pi\) captures
+  power:
+\end{enumerate}
+
+\[
+P_r = S \cdot A_e = \frac{P_t G_t}{4\pi d^2} \cdot \frac{G_r \lambda^2}{4\pi}
+\]
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Simplify:
+\end{enumerate}
+
+\[
+P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi d}\right)^2
+\]
+
+\textbf{Key insight}: Antenna gain \textbf{adds} to link budget (in dB),
+compensating for path loss.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Antenna Design by
+Frequency}\label{antenna-design-by-frequency}
+
+\subsubsection{VLF/LF (\textless{} 300 kHz)}\label{vlflf-300-khz}
+
+\textbf{Challenge}: Wavelength \textgreater\textgreater{} practical
+antenna size
+
+\textbf{Solution}: - \textbf{Electrically small antennas} (length
+\(\ll \lambda\)) - \textbf{Low efficiency} (most power lost in ohmic
+resistance) - \textbf{Loading coils} to resonate (match reactance)
+
+\textbf{Example}: 100 kHz (\$\textbackslash lambda\$ = 3000 m), 10 m
+vertical monopole: - Radiation resistance: \textasciitilde0.1
+\$\textbackslash Omega\$ - Loss resistance: \textasciitilde10
+\$\textbackslash Omega\$ - Efficiency: \textasciitilde1\%
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{HF/VHF (3-300 MHz)}\label{hfvhf-3-300-mhz}
+
+\textbf{Sweet spot}: Antennas are practical size
+
+\textbf{Common types}: - Dipole (\$\textbackslash lambda\$/2): 50 m @ 3
+MHz, 1 m @ 150 MHz - Monopole (\$\textbackslash lambda\$/4): 25 m @ 3
+MHz (vertical tower) - Yagi-Uda: TV reception (VHF channels)
+
+\textbf{Efficiency}: 50-90\% (good conductors, minimal loss)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{UHF/SHF (300 MHz - 30
+GHz)}\label{uhfshf-300-mhz---30-ghz}
+
+\textbf{Miniaturization}: Antennas fit on PCBs
+
+\textbf{Common types}: - Patch (microstrip): 3 cm
+\$\textbackslash times\$ 3 cm @ 2.4 GHz - Slot: Waveguide-based (radar,
+satellite) - Horn: Wideband, calibration standard
+
+\textbf{Phased arrays become feasible}: Element spacing
+\(d \sim \lambda/2\)
+
+\textbf{Example}: 10 GHz, \(\lambda = 3\) cm
+\$\textbackslash rightarrow\$ 1.5 cm spacing
+\$\textbackslash rightarrow\$ 100 elements in 15 cm
+\$\textbackslash times\$ 15 cm
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{EHF/THz (30 GHz - 10 THz)}\label{ehfthz-30-ghz---10-thz}
+
+\textbf{Challenges}: - \textbf{Fabrication tolerance}
+(\$\textbackslash mu\$m precision required) - \textbf{Surface roughness
+losses} (skin depth at THz \textasciitilde{} nm) - \textbf{Impedance
+matching} difficult (high frequencies)
+
+\textbf{Solutions}: - \textbf{On-chip antennas} (silicon, III-V
+semiconductors) - \textbf{Photolithography} (THz: \textless100
+\$\textbackslash mu\$m features) - \textbf{Lens-coupled antennas} (match
+impedance to free space)
+
+\textbf{Example}: 1.875 THz (AID protocol), \(\lambda = 160\)
+\$\textbackslash mu\$m: - Dipole: 80 \$\textbackslash mu\$m (fabricated
+via e-beam lithography) - Phased array: 40 \$\textbackslash mu\$m
+spacing, 1024 elements in 40 mm \$\textbackslash times\$ 40 mm
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Antenna Measurements}\label{antenna-measurements}
+
+\subsubsection{Anechoic Chamber}\label{anechoic-chamber}
+
+\textbf{Facility for measuring radiation patterns}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Absorber walls}: Eliminate reflections (simulate free space)
+\item
+  \textbf{Turntable}: Rotate antenna under test (AUT)
+\item
+  \textbf{Reference antenna}: Known gain/pattern
+\item
+  \textbf{Network analyzer}: Measure
+  S\textbackslash textsubscript\{2\}\textbackslash textsubscript\{1\}
+  (transmission) vs angle
+\end{itemize}
+
+\textbf{Far-field distance}: \(d > 2D^2/\lambda\) (Fraunhofer region)
+
+\textbf{Example}: 1 m dish @ 10 GHz \$\textbackslash rightarrow\$
+\(d > 2 \times 1^2 / 0.03 = 67\) m (large chamber!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Near-Field Scanning}\label{near-field-scanning}
+
+\textbf{For electrically large antennas} (where far-field distance is
+impractical):
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Scan E/H fields} on planar/cylindrical/spherical surface near
+  antenna
+\item
+  \textbf{FFT transform} to compute far-field pattern
+\item
+  \textbf{Smaller chamber} required (1-2 m)
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Gain Measurement (Comparison
+Method)}\label{gain-measurement-comparison-method}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Measure received power with \textbf{standard gain horn} (calibrated)
+\item
+  Replace with \textbf{antenna under test} (AUT)
+\item
+  Compare powers:
+\end{enumerate}
+
+\[
+G_{\text{AUT}} = G_{\text{std}} + (P_{\text{AUT}} - P_{\text{std}})
+\]
+
+(in dB)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Design
+Considerations}\label{practical-design-considerations}
+
+\subsubsection{1. Matching Network}\label{matching-network}
+
+\textbf{Goal}: Transform antenna impedance to 50\$\textbackslash Omega\$
+
+\textbf{Techniques}: - \textbf{LC network}: Series/shunt
+inductors/capacitors - \textbf{Quarter-wave transformer}:
+\(Z_{\lambda/4} = \sqrt{Z_0 Z_{\text{ant}}}\) - \textbf{Stub matching}:
+Open/short-circuited transmission line stubs
+
+\textbf{Example}: Dipole (\(Z = 73 + j42.5\ \Omega\)) to
+50\$\textbackslash Omega\$: - Add series capacitor to cancel reactance
+(j42.5\$\textbackslash Omega\$) - Use transformer to match
+73\$\textbackslash Omega\$ to 50\$\textbackslash Omega\$
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Balun (Balanced-Unbalanced
+Transformer)}\label{balun-balanced-unbalanced-transformer}
+
+\textbf{Problem}: Coaxial cable (unbalanced) feeding dipole (balanced)
+\$\textbackslash rightarrow\$ Common-mode currents on outer shield
+(pattern distortion)
+
+\textbf{Solution}: Balun isolates antenna from feedline
+
+\textbf{Types}: - \textbf{Choke balun}: Coil of coax (high impedance to
+common-mode) - \textbf{Sleeve balun}: \$\textbackslash lambda\$/4 sleeve
+over coax - \textbf{Transformer balun}: 1:1 or 4:1 turns ratio (ferrite
+core)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Environmental Effects}\label{environmental-effects}
+
+\paragraph{Ground Plane}\label{ground-plane}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Monopole requires ground plane} (acts as mirror image)
+\item
+  \textbf{Poor ground} (dry soil, concrete)
+  \$\textbackslash rightarrow\$ Reduced efficiency
+\item
+  \textbf{Elevated radials} (4-8 wires, \$\textbackslash lambda\$/4
+  length) improve performance
+\end{itemize}
+
+\paragraph{Nearby Objects}\label{nearby-objects}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Metal structures}: Detune antenna (shift resonance), reflect
+  energy
+\item
+  \textbf{Human body}: Lossy dielectric (especially at cellular
+  frequencies) \$\textbackslash rightarrow\$ Detuning, absorption
+\item
+  \textbf{Solution}: Antenna placement away from body (smartphones:
+  top/bottom), adaptive matching
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary: Key Antenna
+Formulas}\label{summary-key-antenna-formulas}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4074}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2593}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Parameter
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Formula
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Units
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Gain} & \(G = \eta_{\text{ant}} \cdot D\) & Linear or dBi \\
+\textbf{Effective aperture} & \(A_e = \frac{G\lambda^2}{4\pi}\) &
+m\textbackslash textsuperscript\{2\} \\
+\textbf{Beamwidth (aperture)} & \(\theta \approx 70\lambda/D\) &
+Degrees \\
+\textbf{Directivity (narrow beam)} &
+\(D \approx 41253/(\theta_E \theta_H)\) & Linear \\
+\textbf{Friis equation} & \(P_r = P_t G_t G_r (\lambda/4\pi d)^2\) &
+Watts \\
+\textbf{FSPL} & \(L = 20\log(d) + 20\log(f) + 92.45\) & dB \\
+\textbf{Radiation resistance (dipole)} & \(R_r = 73\ \Omega\) & Ohms \\
+\textbf{SWR} & \(\text{SWR} = (1+|\Gamma|)/(1-|\Gamma|)\) & Ratio \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Quantifies
+  distance-dependent loss (uses antenna gains)
+\item
+  \textbf{{[}{[}Electromagnetic-Spectrum{]}{]}}: Frequency-dependent
+  antenna design
+\item
+  \textbf{{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}}:
+  Radiation mechanism
+\item
+  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Antenna gain
+  improves SNR
+\item
+  \textbf{{[}{[}AID-Protocol-Case-Study{]}{]}}: THz phased array example
+  (1.875 THz, 40 dB gain)
+\item
+  \textbf{Propagation Modes}: How antennas couple to environment (TBD)
+\item
+  \textbf{Multipath \& Fading}: Antenna diversity, MIMO (TBD)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Next}: \textbf{Binary Phase-Shift Keying (BPSK)} (TBD) -
+Simplest phase modulation, bridge to {[}{[}QPSK-Modulation{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

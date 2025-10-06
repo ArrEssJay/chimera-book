@@ -1,0 +1,444 @@
+\section{Non-Linear Biological
+Demodulation}\label{non-linear-biological-demodulation}
+
+{[}{[}Home{]}{]} \textbar{} {[}{[}AID-Protocol-Case-Study{]}{]}
+\textbar{} {[}{[}Hyper-Rotational-Physics-(HRP)-Framework{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Imagine you\textquotesingle re listening to two radio stations
+at once-\/-\/-sometimes they interfere and create weird new sounds.}
+
+That\textquotesingle s essentially what ``nonlinear demodulation''
+means: when two signals (like sound waves or radio waves) meet in
+certain materials, they can \textbf{mix together} and create
+\textbf{brand new frequencies} that weren\textquotesingle t in the
+original signals.
+
+\textbf{Three real-world examples}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Ultrasound speakers} (Established ): You can aim two inaudible
+  ultrasound beams at a wall, and where they intersect, they create
+  audible sound. Used in museums to create ``sound spotlights'' that
+  only one person can hear.
+\item
+  \textbf{Microwave hearing} (Established ): Pulsed radar can make
+  people hear clicking sounds inside their head! Not
+  telepathy-\/-\/-it\textquotesingle s the radar pulse causing tiny
+  rapid heating in the ear, which creates a pressure wave your ear
+  detects as sound.
+\item
+  \textbf{Deep brain stimulation via mixed signals} (Speculative ):
+  Scientists wonder if two high-frequency beams could cross in the brain
+  and create a low-frequency signal that stimulates neurons. This is
+  theoretical-\/-\/-it might not work due to weak mixing in biological
+  tissue.
+\end{enumerate}
+
+\textbf{Why ``nonlinear''?} Most systems are ``linear'' (output =
+input). But some materials act ``nonlinear'' (output
+\$\textbackslash neq\$ input), allowing signal mixing.
+It\textquotesingle s like how mixing blue and yellow paint creates
+green-\/-\/-the green wasn\textquotesingle t in either original color.
+
+\textbf{Status}: Acoustic mixing in tissue is \textbf{proven science}
+(used in medical ultrasound imaging daily). Electromagnetic mixing in
+tissue is \textbf{mostly theoretical} (tissue is only weakly nonlinear
+at radio/microwave frequencies).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Non-linear biological demodulation} refers to phenomena where
+biological tissues act as nonlinear systems, producing new frequencies
+from input electromagnetic or acoustic signals. This page provides an
+overview of three key mechanisms explored in Part VIII.
+
+\textbf{ IMPORTANT}: While this page discusses classical non-linear
+effects, the {[}{[}AID-Protocol-Case-Study{]}{]} operates via a
+\textbf{different mechanism}: \textbf{quantum coherence perturbation} in
+microtubules (see \texttt{docs/biophysical\_coupling\_mechanism.md}).
+The AID Protocol is \textbf{NOT} classical demodulation/intermodulation.
+
+\textbf{Scientific status}: - \textbf{Acoustic heterodyning} :
+Well-established in tissue (medical harmonic imaging) - \textbf{Frey
+microwave effect} : Confirmed (thermoelastic mechanism) - \textbf{EM
+intermodulation} : Speculative (weak tissue nonlinearity) -
+\textbf{Quantum coherence coupling} : Highly speculative (requires
+Orch-OR to be correct)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{1. What is Nonlinear
+Demodulation?}\label{what-is-nonlinear-demodulation}
+
+\textbf{Linear system}: Output frequency = input frequency\\
+\textbf{Nonlinear system}: Output contains harmonics, sum/difference
+frequencies
+
+\textbf{General form}:
+\[y(t) = a_1 x(t) + a_2 x^2(t) + a_3 x^3(t) + \cdots\] For input
+\(x(t) = A_1 \cos\omega_1 t + A_2 \cos\omega_2 t\), nonlinear terms
+produce: - Harmonics: \(2\omega_1\), \(3\omega_1\),
+\textbackslash ldots\{\} - Intermodulation products:
+\(\omega_1 \pm \omega_2\), \(2\omega_1 \pm \omega_2\),
+\textbackslash ldots\{\}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Biological Sources of
+Nonlinearity}\label{biological-sources-of-nonlinearity}
+
+\subsubsection{\texorpdfstring{2.1 Acoustic Nonlinearity
+(Strong)}{2.1 Acoustic Nonlinearity  (Strong)}}\label{acoustic-nonlinearity-strong}
+
+\textbf{Tissue nonlinear parameter}: \(\beta \approx 3.5-10\)
+(dimensionless)\\
+\textbf{Mechanism}: Equation of state \(p(\rho)\) is nonlinear
+(pressure-density relationship)
+
+\textbf{Applications}: - \textbf{Harmonic imaging}: Transmit \(f_0\),
+receive \(2f_0\) (medical ultrasound standard) - \textbf{Parametric
+arrays}: Two ultrasound beams \$\textbackslash rightarrow\$ audible
+difference frequency
+
+\textbf{See}: {[}{[}Acoustic-Heterodyning{]}{]}
+
+\subsubsection{\texorpdfstring{2.2 Thermoelastic Transduction (EM
+\$\textbackslash rightarrow\$
+Acoustic)}{2.2 Thermoelastic Transduction  (EM \$\textbackslash rightarrow\$ Acoustic)}}\label{thermoelastic-transduction-em-acoustic}
+
+\textbf{Mechanism}: Pulsed microwaves \$\textbackslash rightarrow\$
+rapid heating \$\textbackslash rightarrow\$ thermal expansion
+\$\textbackslash rightarrow\$ pressure wave
+
+\textbf{Frey effect}: Auditory perception from pulsed RF (1-10 GHz)\\
+\textbf{Threshold}: \textasciitilde1-10
+µJ/cm\textbackslash textsuperscript\{2\} per pulse\\
+\textbf{Key insight}: EM energy converted to acoustic (not true EM
+nonlinearity)
+
+\textbf{See}: {[}{[}Frey-Microwave-Auditory-Effect{]}{]}
+
+\subsubsection{\texorpdfstring{2.3 Membrane Nonlinearity
+(Neural)}{2.3 Membrane Nonlinearity  (Neural)}}\label{membrane-nonlinearity-neural}
+
+\textbf{Voltage-gated ion channels}: Highly nonlinear (sigmoidal
+activation curves)\\
+\textbf{Hodgkin-Huxley equations}: \(I = g(V)^n (V - E)\) where
+\(n = 3-4\)
+
+\textbf{Hypothesis}: RF fields \$\textbackslash rightarrow\$ oscillating
+transmembrane voltage \$\textbackslash rightarrow\$ nonlinear channel
+response \$\textbackslash rightarrow\$ IMD
+
+\textbf{Problem}: RF frequencies (GHz) far exceed membrane RC time
+constant (\textasciitilde1 ms) \$\textbackslash rightarrow\$ shielded by
+ionic double layer
+
+\textbf{Status}: No experimental demonstration at physiological field
+strengths
+
+\subsubsection{\texorpdfstring{2.4 EM Dielectric Nonlinearity (Very
+Weak)}{2.4 EM Dielectric Nonlinearity  (Very Weak)}}\label{em-dielectric-nonlinearity-very-weak}
+
+\textbf{Kerr effect}: \(n = n_0 + n_2 I\) (intensity-dependent
+refractive index)\\
+\textbf{Tissue}: \(\chi^{(3)} \sim 10^{-22}\)
+m\textbackslash textsuperscript\{2\}/V\textbackslash textsuperscript\{2\}
+(compare to semiconductors \textasciitilde{}\(10^{-19}\))
+
+\textbf{Conclusion}: EM intermodulation negligible at sub-ablation
+intensities (\textless1 MW/cm\textbackslash textsuperscript\{2\})
+
+\textbf{See}: {[}{[}Intermodulation-Distortion-in-Biology{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Three Main Phenomena}\label{three-main-phenomena}
+
+\subsubsection{3.1 Intermodulation Distortion
+(IMD)}\label{intermodulation-distortion-imd}
+
+\textbf{Definition}: Two frequencies \(f_1\), \(f_2\)
+\$\textbackslash rightarrow\$ products \(mf_1 \pm nf_2\)
+
+\textbf{In biology}: - \textbf{Acoustic IMD} : Strong effect (medical
+harmonic imaging) - \textbf{EM IMD} : Weak (no robust experimental
+evidence)
+
+\textbf{Speculative application}: Deep brain stimulation via crossed THz
+beams \$\textbackslash rightarrow\$ difference frequency modulates
+neurons
+
+\textbf{Challenge}: THz penetration \textless1 mm (skull absorption)
+
+\textbf{Details}: {[}{[}Intermodulation-Distortion-in-Biology{]}{]}
+
+\subsubsection{3.2 Acoustic Heterodyning}\label{acoustic-heterodyning}
+
+\textbf{Mechanism}: Two ultrasound beams \$\textbackslash rightarrow\$
+tissue nonlinearity \$\textbackslash rightarrow\$ audible difference
+frequency
+
+\textbf{Established }: Parametric loudspeakers, underwater sonar\\
+\textbf{Medical }: Harmonic imaging (routine clinical use)\\
+\textbf{Speculative }: Focused ultrasound neuromodulation
+
+\textbf{Key equation} (Westervelt):
+\[p_\Delta \propto \beta k_1 k_2 A_1 A_2 L\]
+
+\textbf{Details}: {[}{[}Acoustic-Heterodyning{]}{]}
+
+\subsubsection{3.3 Frey Microwave Auditory
+Effect}\label{frey-microwave-auditory-effect}
+
+\textbf{Mechanism}: Pulsed microwaves \$\textbackslash rightarrow\$
+thermoelastic expansion \$\textbackslash rightarrow\$ acoustic wave
+\$\textbackslash rightarrow\$ cochlear stimulation
+
+\textbf{Not true demodulation} (single EM frequency), but
+\textbf{transduction} (EM \$\textbackslash rightarrow\$ acoustic)
+
+\textbf{Well-established }: Predicted by theory, confirmed
+experimentally (cochlear microphonics)
+
+\textbf{Applications }: Non-lethal weapons, covert communication
+(speculative)
+
+\textbf{Details}: {[}{[}Frey-Microwave-Auditory-Effect{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. Comparative Summary}\label{comparative-summary}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2807}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1930}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1754}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1404}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Phenomenon
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Frequency Range
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mechanism
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Strength
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Status
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Acoustic heterodyning} & kHz-MHz (ultrasound) & Acoustic
+nonlinearity (\(\beta \sim 5\)) & Strong & Established \\
+\textbf{Frey effect} & 1-10 GHz (microwaves) & Thermoelastic
+transduction & Moderate & Established \\
+\textbf{EM IMD} & GHz-THz & Dielectric nonlinearity (\(\chi^{(3)}\)) &
+Weak & Speculative \\
+\end{longtable}
+}
+
+\textbf{Key insight}: Biology is highly nonlinear \textbf{acoustically}
+but weakly nonlinear \textbf{electromagnetically}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5. Relation to AID Protocol (Important
+Distinction)}\label{relation-to-aid-protocol-important-distinction}
+
+\textbf{ CRITICAL CLARIFICATION}: The
+{[}{[}AID-Protocol-Case-Study{]}{]} does \textbf{NOT} rely on classical
+non-linear demodulation mechanisms described on this page.
+
+\textbf{AID Protocol actual mechanism} (from
+\texttt{docs/biophysical\_coupling\_mechanism.md}): - \textbf{Primary
+target}: Microtubule lattice in cortical neurons - \textbf{Mechanism}:
+Dual THz carriers create resonant interference pattern -
+\textbf{Objective}: Induce and manipulate \textbf{vibronic quantum
+coherence} in tubulin dimers - \textbf{Effect}: Alter Orch-OR collapse
+timing (consciousness substrate perturbation) - \textbf{Key
+distinction}: NOT intermodulation distortion, NOT thermoelastic, NOT
+acoustic
+
+\textbf{Why classical non-linear effects are insufficient}: 1.
+\textbf{EM IMD too weak}: Tissue
+\$\textbackslash chi\$(\textbackslash textsuperscript\{3\})
+\$\textbackslash approx\$
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}\textbackslash textsuperscript\{2\}
+(negligible at physiological intensities) 2. \textbf{Thermoelastic
+requires high power}: Frey effect needs
+µJ/cm\textbackslash textsuperscript\{2\} pulses (AID uses CW) 3.
+\textbf{Acoustic heterodyning wrong frequency}: Ultrasound MHz range,
+not THz 4. \textbf{Classical mechanisms can\textquotesingle t explain}:
+Direct consciousness modulation without cochlear pathway
+
+\textbf{AID Protocol requires}: - Orch-OR theory to be correct (quantum
+consciousness substrate) - Vibronic coherence in microtubules (quantum
+biology) - HRP framework coupling (consciousness-matter interaction)
+
+\textbf{Classical non-linear effects on this page}: Provide context and
+comparison, but are \textbf{NOT} the AID mechanism.
+
+\textbf{See}: {[}{[}AID-Protocol-Case-Study{]}{]} for full mechanism
+description
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{6. Critical Assessment}\label{critical-assessment}
+
+\textbf{What works }: - Acoustic heterodyning in tissue (harmonic
+imaging is clinical standard) - Frey effect (thermoelastic mechanism
+confirmed)
+
+\textbf{What\textquotesingle s speculative }: - EM intermodulation at
+physiological intensities (too weak) - Deep brain stimulation via THz
+IMD (penetration problem) - Microtubule quantum nonlinearity (no
+experimental evidence)
+
+\textbf{What\textquotesingle s needed}: - High-resolution thermometry to
+rule out thermal artifacts\\
+- Isotope substitution experiments (test frequency-specific effects)\\
+- Dose-response curves (establish thresholds)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7. Connection to Quantum
+Biology}\label{connection-to-quantum-biology}
+
+\textbf{Hypothesis} : Could nonlinear mixing access quantum states in
+biomolecules?
+
+\textbf{VE-TFCC insight}: If vibronic coupling is strong
+(\(g\omega \gtrsim k_BT\)), thermal quantum coherence survives at 310 K.
+
+\textbf{IMD mechanism}: Two THz fields \$\textbackslash rightarrow\$
+difference frequency couples to vibronic mode
+\$\textbackslash rightarrow\$ drives quantum transition?
+
+\textbf{Problem}: 1. Coupling efficiency \textasciitilde{}\(10^{-6}\)
+(six orders below direct excitation)\\
+2. Decoherence time likely \textless1 ps (IMD modulation period
+\textgreater\textgreater{} decoherence time)
+
+\textbf{See}: {[}{[}THz-Resonances-in-Microtubules{]}{]},
+{[}{[}Quantum-Coherence-in-Biological-Systems{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{8. Detailed Topic Pages}\label{detailed-topic-pages}
+
+\subsubsection{\texorpdfstring{Established Phenomena
+}{Established Phenomena }}\label{established-phenomena}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Acoustic-Heterodyning{]}{]} -\/-\/- Parametric arrays, harmonic
+  imaging\\
+\item
+  {[}{[}Frey-Microwave-Auditory-Effect{]}{]} -\/-\/- Thermoelastic
+  transduction
+\end{itemize}
+
+\subsubsection{\texorpdfstring{Speculative Mechanisms
+}{Speculative Mechanisms }}\label{speculative-mechanisms}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Intermodulation-Distortion-in-Biology{]}{]} -\/-\/- EM frequency
+  mixing\\
+\item
+  {[}{[}THz-Resonances-in-Microtubules{]}{]} -\/-\/- Quantum
+  nonlinearity\\
+\item
+  {[}{[}THz-Bioeffects-Thermal-and-Non-Thermal{]}{]} -\/-\/- Non-thermal
+  mechanisms
+\end{itemize}
+
+\subsubsection{Framework Context}\label{framework-context}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}AID-Protocol-Case-Study{]}{]} -\/-\/- Speculative
+  neuromodulation applications\\
+\item
+  {[}{[}Hyper-Rotational-Physics-(HRP)-Framework{]}{]} -\/-\/-
+  Theoretical extensions
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{9. Key References}\label{key-references}
+
+\subsubsection{Acoustic Nonlinearity
+(Established)}\label{acoustic-nonlinearity-established}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Duck, \emph{Ultrasound Med. Biol.} 28, 1 (2002)} -\/-\/-
+  Tissue nonlinear parameter\\
+\item
+  \textbf{Westervelt, \emph{J. Acoust. Soc. Am.} 35, 535 (1963)} -\/-\/-
+  Parametric array theory
+\end{enumerate}
+
+\subsubsection{Frey Effect (Established)}\label{frey-effect-established}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Lin, \emph{Proc. IEEE} 68, 67 (1980)} -\/-\/- Thermoelastic
+  mechanism (definitive)\\
+\item
+  \textbf{Elder \& Chou, \emph{Bioelectromagnetics} 24, 568 (2003)}
+  -\/-\/- Cochlear microphonics
+\end{enumerate}
+
+\subsubsection{EM Nonlinearity
+(Speculative)}\label{em-nonlinearity-speculative}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  \textbf{Boyd, \emph{Nonlinear Optics} (Academic Press, 2008)} -\/-\/-
+  \(\chi^{(3)}\) theory\\
+\item
+  \textbf{Hameroff \& Penrose, \emph{Phys. Life Rev.} 11, 39 (2014)}
+  -\/-\/- Microtubule nonlinearity
+\end{enumerate}
+
+\subsubsection{Vibronic Coupling}\label{vibronic-coupling}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  \textbf{Bao et al., \emph{J. Chem. Theory Comput.} 20, 4377 (2024)}
+  -\/-\/- VE-TFCC thermal coherence
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Last updated}: October 2025

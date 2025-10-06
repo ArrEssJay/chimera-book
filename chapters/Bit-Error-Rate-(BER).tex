@@ -1,0 +1,290 @@
+\section{Bit Error Rate (BER)}\label{bit-error-rate-ber}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{BER measures how many mistakes happen when transmitting digital
+data-\/-\/-like counting typos in a text message.}
+
+When you send data wirelessly, noise can flip bits
+(0\$\textbackslash leftrightarrow\$1 or
+1\$\textbackslash leftrightarrow\$0). BER counts how often this happens.
+
+\textbf{Real examples}: - \textbf{Pixelated video}: High BER
+\$\textbackslash rightarrow\$ corrupted data
+\$\textbackslash rightarrow\$ artifacts - \textbf{Dropped calls}: BER
+\textgreater{}
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+(1 error per 1000 bits) \$\textbackslash rightarrow\$ bad quality -
+\textbf{Corrupted downloads}: Even 1 flipped bit can break a file!
+
+\textbf{Acceptable levels}: Voice =
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+OK, Data = need \textless{}
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\},
+Banking = \textless{}
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+
+\textbf{Improve BER}: Move closer to WiFi, use error correction, slow
+down transmission rate.
+
+\textbf{Fun fact}: WiFi automatically adjusts speed based on
+BER-\/-\/-closer = faster (low errors), farther = slower (keep errors
+acceptable).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Bit Error Rate (BER)} is the ratio of incorrectly decoded bits
+to total transmitted bits.
+
+\subsection{Definition}\label{definition}
+
+\begin{verbatim}
+BER = Number of Bit Errors / Total Number of Bits
+\end{verbatim}
+
+\subsection{BER Scale}\label{ber-scale}
+
+BER is typically expressed as a decimal or in scientific notation:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+BER Value & Meaning & Quality \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}
+& 1 error per 10 bits & Terrible \\
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}
+& 1 error per 100 bits & Very Poor \\
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+& 1 error per 1,000 bits & Poor \\
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+& 1 error per 10,000 bits & Marginal \\
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+& 1 error per 1,000,000 bits & Good \\
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\}
+& 1 error per 1 billion bits & Excellent \\
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+& 1 error per 1 trillion bits & Exceptional \\
+\end{longtable}
+}
+
+\subsection{Pre-FEC vs Post-FEC BER}\label{pre-fec-vs-post-fec-ber}
+
+\subsubsection{Pre-FEC BER}\label{pre-fec-ber}
+
+Error rate \textbf{before} error correction - Directly reflects channel
+quality - Higher at low SNR - Called ``raw BER'' or ``channel BER''
+
+\subsubsection{Post-FEC BER}\label{post-fec-ber}
+
+Error rate \textbf{after} error correction (LDPC decoding) - Shows
+effectiveness of error correction - Should be much lower than Pre-FEC -
+The ``residual errors'' that couldn\textquotesingle t be corrected
+
+\begin{verbatim}
+Example:
+Pre-FEC BER:  10² (1 error per 100 bits)
+              
+        [LDPC Decoder]
+              
+Post-FEC BER: 10 (1 error per million bits)
+
+Coding Gain: 40 dB improvement! 
+\end{verbatim}
+
+\subsection{BER vs SNR Curves}\label{ber-vs-snr-curves}
+
+A BER vs SNR curve shows system performance:
+
+\begin{verbatim}
+BER
+ 
+ |         
+10|        Unusable
+   |        
+10³|        Poor
+   |      
+10|        ___ Good (threshold)
+   |            +___
+10|                +___ Excellent
+   |
+   +--------------------- SNR (dB)
+    -5  0   5  10  15  20
+\end{verbatim}
+
+\subsubsection{Key Features}\label{key-features}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Waterfall region}: Steep decrease in BER as SNR increases
+\item
+  \textbf{Threshold}: SNR where BER becomes acceptable (often
+  10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\})
+\item
+  \textbf{Error floor}: Minimum achievable BER (implementation limits)
+\end{itemize}
+
+\subsection{Theoretical vs Measured
+BER}\label{theoretical-vs-measured-ber}
+
+\subsubsection{Theoretical BER for QPSK}\label{theoretical-ber-for-qpsk}
+
+\begin{verbatim}
+BER_QPSK  (1/2) · erfc((Eb/N0))
+\end{verbatim}
+
+\subsubsection{In Chimera}\label{in-chimera}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Theoretical}: Based on the formula above
+\item
+  \textbf{Measured}: Actual errors observed in simulation
+\item
+  \textbf{Difference}: Processing gain, implementation effects, finite
+  sample size
+\end{itemize}
+
+\subsection{Factors Affecting BER}\label{factors-affecting-ber}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Primary factor
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Higher SNR \$\textbackslash rightarrow\$ Lower BER
+  \end{itemize}
+\item
+  \textbf{Modulation Scheme}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    QPSK more robust than 16QAM
+  \item
+    Lower order = better BER at same SNR
+  \end{itemize}
+\item
+  \textbf{{[}{[}Forward-Error-Correction-(FEC){]}{]}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can reduce BER by orders of magnitude
+  \item
+    LDPC codes provide near-optimal performance
+  \end{itemize}
+\item
+  \textbf{Channel Impairments}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Phase noise, frequency offset
+  \item
+    Timing errors, multipath
+  \end{itemize}
+\item
+  \textbf{Implementation}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Quantization effects
+  \item
+    Synchronization accuracy
+  \end{itemize}
+\end{enumerate}
+
+\subsection{BER in Chimera}\label{ber-in-chimera}
+
+Chimera displays multiple BER metrics:
+
+\subsubsection{Pre-FEC Metrics}\label{pre-fec-metrics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Symbol Errors}: Count of incorrect symbol decisions
+\item
+  \textbf{Bit Errors (Pre-FEC)}: Bit errors before LDPC decoding
+\item
+  \textbf{Pre-FEC BER}: Bit error rate at demodulator output
+\end{itemize}
+
+\subsubsection{Post-FEC Metrics}\label{post-fec-metrics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Bit Errors (Post-FEC)}: Residual errors after LDPC
+\item
+  \textbf{Post-FEC BER}: Final bit error rate
+\item
+  \textbf{Frame Error Rate (FER)}: Percentage of frames with
+  uncorrectable errors
+\end{itemize}
+
+\subsubsection{Example Output}\label{example-output}
+
+\begin{verbatim}
+Pre-FEC BER:  2.3 × 10² (2.3% bit errors)
+Post-FEC BER: 0 (all errors corrected!) 
+FER:          0% (no frame errors)
+\end{verbatim}
+
+\subsection{Acceptable BER Thresholds}\label{acceptable-ber-thresholds}
+
+Different applications have different requirements:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Application & Required BER & Rationale \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Voice (analog) &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+& Some crackling acceptable \\
+Data (with retransmission) &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+-
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+& Retries handle errors \\
+Streaming video &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+& Occasional glitch OK \\
+File transfer &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\}
+& Data integrity critical \\
+Financial transactions &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+& Zero tolerance \\
+\end{longtable}
+}
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - Primary BER determinant
+\item
+  {[}{[}Forward-Error-Correction-(FEC){]}{]} - BER improvement technique
+\item
+  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]} - Used in BER formulas
+\item
+  {[}{[}Understanding BER Curves{]}{]} - Interpreting performance plots
+\end{itemize}

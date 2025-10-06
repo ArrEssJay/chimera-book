@@ -1,0 +1,135 @@
+\section{QPSK Modulation}\label{qpsk-modulation}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{QPSK is like using 4 different hand signals instead of
+2-\/-\/-you can send messages twice as fast!}
+
+\textbf{The idea}: Instead of just ``wave up'' or ``wave down'' (BPSK),
+QPSK uses \textbf{4 directions}: - Up-right \$\textbackslash nearrow\$ =
+00 - Up-left \$\textbackslash nwarrow\$ = 01\\
+- Down-left \$\textbackslash swarrow\$ = 10 - Down-right
+\$\textbackslash searrow\$ = 11
+
+\textbf{Real-world use}: - \textbf{Satellite TV} (DVB-S): Uses QPSK for
+reliable transmission from space - \textbf{4G LTE}: Uses QPSK when
+signal is weak (more reliable than faster modes) - \textbf{GPS}: Newer
+signals use QPSK for twice the data rate
+
+\textbf{Why 4 directions?} - Sends \textbf{2 bits per symbol} (vs 1 bit
+for BPSK) = twice as fast! - Still pretty reliable (the 4 directions are
+well-separated) - Sweet spot between speed and robustness
+
+\textbf{When you see it}: Your phone uses QPSK when cell signal is
+weak-\/-\/-slower than 16-QAM or 64-QAM, but way more reliable.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{QPSK} stands for \textbf{Quadrature Phase-Shift Keying}.
+It\textquotesingle s a modulation technique that encodes 2 bits per
+symbol by varying the phase of the carrier wave.
+
+\subsection{The Four QPSK States}\label{the-four-qpsk-states}
+
+QPSK uses four distinct phase states, each representing a unique 2-bit
+pattern:
+
+\begin{verbatim}
+        Q (Quadrature)
+              
+              |
+    00       |       01
+              |
+   -----------+-----------> I (In-phase)
+              |
+    11       |       10
+              |
+\end{verbatim}
+
+\subsection{Bit-to-Phase Mapping in
+Chimera}\label{bit-to-phase-mapping-in-chimera}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{00} \$\textbackslash rightarrow\$ Phase:
+  135\$\^{}\textbackslash circ\$ (upper-left quadrant)
+\item
+  \texttt{01} \$\textbackslash rightarrow\$ Phase:
+  45\$\^{}\textbackslash circ\$ (upper-right quadrant)
+\item
+  \texttt{11} \$\textbackslash rightarrow\$ Phase:
+  225\$\^{}\textbackslash circ\$ (lower-left quadrant)
+\item
+  \texttt{10} \$\textbackslash rightarrow\$ Phase:
+  315\$\^{}\textbackslash circ\$ (lower-right quadrant)
+\end{itemize}
+
+\subsection{Mathematical
+Representation}\label{mathematical-representation}
+
+For normalized QPSK (unit energy), the four symbols are:
+
+\begin{verbatim}
+Symbol 00: I = -1/2,  Q = +1/2
+Symbol 01: I = +1/2,  Q = +1/2
+Symbol 11: I = -1/2,  Q = -1/2
+Symbol 10: I = +1/2,  Q = -1/2
+\end{verbatim}
+
+\subsection{Why QPSK?}\label{why-qpsk}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Spectral Efficiency}: Transmits 2 bits per symbol
+\item
+  \textbf{Robustness}: The large phase separation
+  (90\$\^{}\textbackslash circ\$) makes it resilient to noise
+\item
+  \textbf{Simplicity}: Relatively simple to implement and demodulate
+\item
+  \textbf{Widespread Use}: Used in many real-world systems (satellite,
+  WiFi, LTE)
+\end{itemize}
+
+\subsection{QPSK in Chimera}\label{qpsk-in-chimera}
+
+Chimera\textquotesingle s implementation: - \textbf{Symbol Rate}:
+Configurable (typically 16-1000 symbols/second depending on preset) -
+\textbf{Carrier Frequency}: 12.0 kHz (audio frequency for demonstration)
+- \textbf{Frame Structure}: Organized into sync, command, data, and ECC
+sections
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}What-Are-Symbols{]}{]} - Understanding the fundamental unit
+\item
+  {[}{[}IQ-Representation{]}{]} - In-phase and Quadrature components
+\item
+  {[}{[}Constellation-Diagrams{]}{]} - Visualizing QPSK
+\item
+  {[}{[}Real-World-System-Examples{]}{]} - QPSK in GPS, DVB-S2, and LTE
+\end{itemize}
+
+\subsection{External Resources}\label{external-resources}
+
+\textbf{Interactive Demonstrations}: -
+\href{https://wiki.gnuradio.org/index.php/Guided_Tutorial_PSK_Demodulation}{GNURadio
+QPSK Tutorial} - Hands-on QPSK implementation -
+\href{https://www.dsprelated.com/showarticle/153.php}{DSP Related: QPSK
+Articles} - Technical deep dive
+
+\textbf{Signal Examples}: -
+\href{https://www.sigidwiki.com/wiki/Category:QPSK}{sigidwiki QPSK
+Signals} - Real-world QPSK signal recordings -
+\href{https://www.etsi.org/deliver/etsi_en/302300_302399/30230701/}{DVB-S2
+QPSK Usage} - Satellite TV standard (ETSI EN 302 307-1)
+
+\textbf{Textbook References}: - Proakis \& Salehi, \emph{Digital
+Communications} (5th ed.), Chapter 4.2 - QPSK theory - See
+{[}{[}Bibliography{]}{]} for complete reference list

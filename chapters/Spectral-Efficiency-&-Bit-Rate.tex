@@ -1,0 +1,894 @@
+\section{Spectral Efficiency \& Bit
+Rate}\label{spectral-efficiency-bit-rate}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Digital Modulation} \textbar{}
+{[}{[}Quadrature-Amplitude-Modulation-(QAM){]}{]} \textbar{}
+{[}{[}Shannon\textquotesingle s-Channel-Capacity-Theorem{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Spectral efficiency is like measuring how many cars you can fit
+on a highway-\/-\/-higher efficiency = more data squeezed into the same
+bandwidth!}
+
+\textbf{The metric - bits/sec/Hz}: - \textbf{Bandwidth}: Your ``highway
+width'' (measured in Hz) - \textbf{Bit rate}: How much data flows
+(measured in bits/sec) - \textbf{Spectral efficiency}: Data rate per Hz
+of bandwidth
+
+\textbf{Formula}:
+
+\begin{verbatim}
+Spectral Efficiency = Bit Rate ÷ Bandwidth
+\end{verbatim}
+
+\textbf{Real-world examples}:
+
+\textbf{BPSK} (simple): - 1 bit per symbol - Spectral efficiency:
+\textasciitilde1 bit/sec/Hz - Like: One narrow car per lane
+
+\textbf{QPSK} (common): - 2 bits per symbol - Spectral efficiency:
+\textasciitilde2 bits/sec/Hz - Like: Two motorcycles side-by-side per
+lane
+
+\textbf{16-QAM} (moderate): - 4 bits per symbol - Spectral efficiency:
+\textasciitilde4 bits/sec/Hz - Like: Carpooling -\/-\/- 4 people per
+lane
+
+\textbf{256-QAM} (high): - 8 bits per symbol\\
+- Spectral efficiency: \textasciitilde8 bits/sec/Hz - Like:
+Double-decker bus per lane!
+
+\textbf{1024-QAM} (WiFi 6): - 10 bits per symbol - Spectral efficiency:
+\textasciitilde10 bits/sec/Hz - Like: Triple-decker bus!
+
+\textbf{Why it matters}:
+
+\textbf{Limited spectrum}: - FCC/governments auction bandwidth - WiFi:
+Only 20/40/80/160 MHz channels available - Cell carriers: Paid billions
+for spectrum - MUST use it efficiently!
+
+\textbf{More efficiency = more money}: - Double spectral efficiency =
+double capacity - Serve twice as many users - Sell twice as much data -
+This is why 5G is so important!
+
+\textbf{Real systems}:
+
+\textbf{WiFi evolution}: - \textbf{WiFi 4 (802.11n)}: 64-QAM,
+\textasciitilde5.5 bits/sec/Hz - \textbf{WiFi 5 (802.11ac)}: 256-QAM,
+\textasciitilde7 bits/sec/Hz (+27\%) - \textbf{WiFi 6 (802.11ax)}:
+1024-QAM, \textasciitilde9.6 bits/sec/Hz (+37\%)
+
+\textbf{Cellular evolution}: - \textbf{3G (HSPA+)}: 16-QAM,
+\textasciitilde2-3 bits/sec/Hz - \textbf{4G (LTE)}: 64-QAM,
+\textasciitilde5-6 bits/sec/Hz (2\$\textbackslash times\$ faster!) -
+\textbf{5G (NR)}: 256-QAM, \textasciitilde8-10 bits/sec/Hz
+(2\$\textbackslash times\$ faster again!)
+
+\textbf{Shannon\textquotesingle s limit}: - Theoretical maximum based on
+SNR - Formula: C = B \$\textbackslash times\$
+log\textbackslash textsubscript\{2\}(1 + SNR) - Modern systems get
+within 70-90\% of Shannon limit!
+
+\textbf{Example calculation - WiFi}:
+
+\textbf{Scenario}: 20 MHz WiFi channel, 256-QAM - Bandwidth: 20 MHz -
+Modulation: 256-QAM = 8 bits/symbol - Coding rate: 5/6 (error correction
+overhead) - OFDM subcarriers: 52 data subcarriers - Symbol rate: 250,000
+symbols/sec - \textbf{Spectral efficiency}: 8 \$\textbackslash times\$
+(5/6) \$\textbackslash times\$ (52/64) = 5.4 bits/sec/Hz - \textbf{Bit
+rate}: 5.4 \$\textbackslash times\$ 20 MHz = \textbf{108 Mbps}
+
+\textbf{The trade-off}: - \textbf{Higher efficiency}: More data, BUT
+needs better SNR - 1024-QAM: Amazing efficiency, but only works close to
+router - QPSK: Lower efficiency, but works far away - Your device
+\textbf{automatically adjusts} based on signal quality!
+
+\textbf{When you see it}: - \textbf{Router specs}: ``Up to 1200 Mbps on
+160 MHz'' = 7.5 bits/sec/Hz - \textbf{5G specs}: ``Peak 20 Gbps on 100
+MHz'' = 200 bits/sec/Hz (with MIMO!) - \textbf{Spectrum auctions}: ``\$1
+billion for 10 MHz'' = \$100M per MHz!
+
+\textbf{Fun fact}: The difference between 3G and 5G is mostly spectral
+efficiency improvements. Same amount of spectrum, but 5G packs
+3-4\$\textbackslash times\$ more data into it through better modulation
+(256-QAM), MIMO, and OFDM. It\textquotesingle s like upgrading from
+single-lane roads to 4-lane highways!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Spectral efficiency} (\$\textbackslash eta\$) measures how
+efficiently a communication system uses available \textbf{bandwidth}.
+
+\textbf{Definition}:
+
+\[
+\eta = \frac{R_b}{B} \quad (\text{bits/sec/Hz})
+\]
+
+Where: - \(R_b\) = Bit rate (bits/sec) - \(B\) = Occupied bandwidth (Hz)
+
+\textbf{Goal}: \textbf{Maximize data rate} within limited spectrum
+(spectrum is expensive!)
+
+\textbf{Trade-off}: Spectral efficiency
+\$\textbackslash leftrightarrow\$ Power efficiency (SNR requirement)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Fundamental Relationships}\label{fundamental-relationships}
+
+\subsubsection{Symbol Rate vs Bit Rate}\label{symbol-rate-vs-bit-rate}
+
+\textbf{Bit rate}:
+
+\[
+R_b = R_s \cdot \log_2(M) \quad (\text{bits/sec})
+\]
+
+Where: - \(R_s\) = Symbol rate (symbols/sec or baud) - \(M\) =
+Constellation size
+
+\textbf{Example}: 1 Msps QPSK (M=4) -
+\(R_b = 1 \times 10^6 \times \log_2(4) = 2\) Mbps
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Bandwidth Occupancy}\label{bandwidth-occupancy}
+
+\textbf{With pulse shaping} (raised cosine filter):
+
+\[
+B = (1 + \alpha) R_s \quad (\text{Hz})
+\]
+
+Where: - \(\alpha\) = Roll-off factor (typically 0.2-0.35) -
+\(\alpha = 0\): Minimum bandwidth (rect in freq, sinc in time) -
+\(\alpha = 1\): 2\$\textbackslash times\$ bandwidth (smoother time
+domain)
+
+\textbf{Common choice}: \(\alpha = 0.35\) (good balance)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Spectral Efficiency
+Formula}\label{spectral-efficiency-formula}
+
+\textbf{Combine equations}:
+
+\[
+\eta = \frac{R_b}{B} = \frac{R_s \cdot \log_2(M)}{(1 + \alpha) R_s} = \frac{\log_2(M)}{1 + \alpha}
+\]
+
+\textbf{Key insight}: \$\textbackslash eta\$ depends only on M and
+\$\textbackslash alpha\$ (not absolute bandwidth!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Modulation Comparison}\label{modulation-comparison}
+
+\subsubsection{Spectral Efficiency (\$\textbackslash alpha\$ =
+0.35)}\label{spectral-efficiency-ux3b1-0.35}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Modulation & M & \(\log_2(M)\) & \(\eta\) (bits/sec/Hz) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{BPSK} & 2 & 1 & 0.74 \\
+\textbf{QPSK} & 4 & 2 & 1.48 \\
+\textbf{8PSK} & 8 & 3 & 2.22 \\
+\textbf{16-QAM} & 16 & 4 & 2.96 \\
+\textbf{32-QAM} & 32 & 5 & 3.70 \\
+\textbf{64-QAM} & 64 & 6 & 4.44 \\
+\textbf{128-QAM} & 128 & 7 & 5.19 \\
+\textbf{256-QAM} & 256 & 8 & 5.93 \\
+\textbf{1024-QAM} & 1024 & 10 & 7.41 \\
+\textbf{4096-QAM} & 4096 & 12 & 8.89 \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{With Nyquist Signaling (\$\textbackslash alpha\$ =
+0)}\label{with-nyquist-signaling-ux3b1-0}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Modulation & \(\eta\) (bits/sec/Hz) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{BPSK} & 1.0 \\
+\textbf{QPSK} & 2.0 \\
+\textbf{8PSK} & 3.0 \\
+\textbf{16-QAM} & 4.0 \\
+\textbf{64-QAM} & 6.0 \\
+\textbf{256-QAM} & 8.0 \\
+\textbf{1024-QAM} & 10.0 \\
+\end{longtable}
+}
+
+\textbf{Perfect Nyquist}: \(\eta = \log_2(M)\) (theoretical best for
+single carrier)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{With Forward Error
+Correction}\label{with-forward-error-correction}
+
+\textbf{Code rate} \(r\) reduces effective bit rate:
+
+\[
+\eta_{\text{effective}} = \frac{\log_2(M)}{1 + \alpha} \cdot r
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: 64-QAM with
+LDPC}\label{example-64-qam-with-ldpc}
+
+\textbf{Parameters}: - M = 64 (6 bits/symbol) - \$\textbackslash alpha\$
+= 0.35 - Code rate r = 3/4 (25\% overhead)
+
+\textbf{Uncoded}: \(\eta = 6/1.35 = 4.44\) bits/sec/Hz
+
+\textbf{Coded}: \(\eta = 4.44 \times 0.75 = 3.33\) bits/sec/Hz
+
+\textbf{Trade-off}: 25\% spectral efficiency loss for \textasciitilde6
+dB SNR gain
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Shannon Capacity}\label{shannon-capacity}
+
+\textbf{Shannon-Hartley theorem}:
+
+\[
+C = B \log_2(1 + \text{SNR}) \quad (\text{bits/sec})
+\]
+
+\textbf{Spectral efficiency limit}:
+
+\[
+\eta_{\text{Shannon}} = \log_2(1 + \text{SNR}) \quad (\text{bits/sec/Hz})
+\]
+
+\textbf{Key insight}: Fundamental limit-\/-\/-no system can exceed this!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Shannon Limit vs SNR}\label{shannon-limit-vs-snr}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1515}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2121}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3182}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3182}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+SNR (dB)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+SNR (linear)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\eta_{\text{max}}\) (bits/sec/Hz)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Example Modulation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 1 & 1.0 & BPSK 1/2 code \\
+3 & 2 & 1.58 & QPSK 3/4 \\
+6 & 4 & 2.32 & QPSK \\
+10 & 10 & 3.46 & 8PSK \\
+15 & 31.6 & 4.98 & 16-QAM 3/4 \\
+20 & 100 & 6.66 & 64-QAM \\
+25 & 316 & 8.30 & 256-QAM 3/4 \\
+30 & 1000 & 9.97 & 1024-QAM \\
+40 & 10,000 & 13.3 & 4096-QAM \\
+\end{longtable}
+}
+
+\textbf{Practical systems}: 1-3 dB from Shannon limit (with modern codes
+like LDPC, Turbo, Polar)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Systems
+Performance}\label{practical-systems-performance}
+
+\subsubsection{WiFi (802.11)}\label{wifi-802.11}
+
+\textbf{802.11a/g} (20 MHz channel):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+MCS & Modulation & Code Rate & Data Rate & \$\textbackslash eta\$
+(bits/sec/Hz) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & BPSK & 1/2 & 6 Mbps & 0.30 \\
+1 & BPSK & 3/4 & 9 Mbps & 0.45 \\
+2 & QPSK & 1/2 & 12 Mbps & 0.60 \\
+3 & QPSK & 3/4 & 18 Mbps & 0.90 \\
+4 & 16-QAM & 1/2 & 24 Mbps & 1.20 \\
+5 & 16-QAM & 3/4 & 36 Mbps & 1.80 \\
+6 & 64-QAM & 2/3 & 48 Mbps & 2.40 \\
+7 & 64-QAM & 3/4 & 54 Mbps & 2.70 \\
+\end{longtable}
+}
+
+\textbf{OFDM}: 52 subcarriers (48 data, 4 pilots), 250 ksps per
+subcarrier
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{802.11n} (40 MHz channel, 1 spatial stream):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+MCS & Modulation & Code Rate & Data Rate & \$\textbackslash eta\$
+(bits/sec/Hz) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & BPSK & 1/2 & 13.5 Mbps & 0.34 \\
+3 & QPSK & 3/4 & 40.5 Mbps & 1.01 \\
+5 & 16-QAM & 3/4 & 81 Mbps & 2.03 \\
+7 & 64-QAM & 5/6 & 135 Mbps & 3.38 \\
+\end{longtable}
+}
+
+\textbf{With 4\$\textbackslash times\$4 MIMO}: 4\$\textbackslash times\$
+data rate (same \$\textbackslash eta\$ per stream)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{802.11ac} (80 MHz, 1 stream):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+MCS & Modulation & Code Rate & Data Rate & \$\textbackslash eta\$
+(bits/sec/Hz) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & BPSK & 1/2 & 29.3 Mbps & 0.37 \\
+5 & 16-QAM & 3/4 & 175.5 Mbps & 2.19 \\
+8 & 256-QAM & 3/4 & 351 Mbps & 4.39 \\
+9 & 256-QAM & 5/6 & 390 Mbps & 4.88 \\
+\end{longtable}
+}
+
+\textbf{802.11ax (WiFi 6)}: Adds 1024-QAM \$\textbackslash rightarrow\$
+MCS 10, 11 (\$\textbackslash eta\$ up to 6.1 bits/sec/Hz)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{LTE (20 MHz channel)}\label{lte-20-mhz-channel}
+
+\textbf{Downlink (OFDMA)}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+MCS & Modulation & Code Rate & Data Rate (1 layer) &
+\$\textbackslash eta\$ \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & QPSK & 0.08 & 1.1 Mbps & 0.055 \\
+5 & QPSK & 0.37 & 4.8 Mbps & 0.24 \\
+10 & 16-QAM & 0.48 & 11.4 Mbps & 0.57 \\
+15 & 16-QAM & 0.74 & 17.6 Mbps & 0.88 \\
+20 & 64-QAM & 0.55 & 24.5 Mbps & 1.23 \\
+25 & 64-QAM & 0.85 & 37.7 Mbps & 1.89 \\
+28 & 256-QAM & 0.93 & 55.0 Mbps & 2.75 \\
+\end{longtable}
+}
+
+\textbf{With 4\$\textbackslash times\$4 MIMO}: Max 220 Mbps (Category
+9+)
+
+\textbf{LTE-Advanced Pro}: Cat 16 = 1 Gbps (4\$\textbackslash times\$4
+MIMO, 256-QAM, carrier aggregation)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5G NR (100 MHz @ 3.5 GHz)}\label{g-nr-100-mhz-3.5-ghz}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+MCS & Modulation & Code Rate & Data Rate (1 layer) &
+\$\textbackslash eta\$ \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & QPSK & 0.12 & 13.2 Mbps & 0.13 \\
+10 & 16-QAM & 0.57 & 99 Mbps & 0.99 \\
+20 & 64-QAM & 0.74 & 194 Mbps & 1.94 \\
+27 & 256-QAM & 0.93 & 325 Mbps & 3.25 \\
+\end{longtable}
+}
+
+\textbf{With 8\$\textbackslash times\$8 MIMO}: 2.6 Gbps (8 layers
+\$\textbackslash times\$ 325 Mbps)
+
+\textbf{mmWave (28 GHz, 400 MHz BW)}: 10 Gbps+ (massive MIMO)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Satellite DVB-S2}\label{satellite-dvb-s2}
+
+\textbf{Example: 36 MHz transponder}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+MODCOD & Modulation & Code Rate & Throughput & \$\textbackslash eta\$ \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & QPSK & 1/4 & 9.9 Mbps & 0.27 \\
+6 & QPSK & 3/4 & 29.8 Mbps & 0.83 \\
+11 & 8PSK & 2/3 & 39.7 Mbps & 1.10 \\
+17 & 8PSK & 9/10 & 59.6 Mbps & 1.66 \\
+23 & 16-APSK & 5/6 & 66.2 Mbps & 1.84 \\
+28 & 32-APSK & 9/10 & 82.8 Mbps & 2.30 \\
+\end{longtable}
+}
+
+\textbf{ACM}: Adapt based on rain fade (QPSK 1/4 in heavy rain
+\$\textbackslash rightarrow\$ 32-APSK 9/10 in clear sky)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Cable (DOCSIS 3.1)}\label{cable-docsis-3.1}
+
+\textbf{192 MHz OFDM channel}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+QAM & Code Rate & Throughput & \$\textbackslash eta\$ \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+64-QAM & 0.90 & 900 Mbps & 4.7 \\
+256-QAM & 0.90 & 1.2 Gbps & 6.2 \\
+1024-QAM & 0.93 & 1.5 Gbps & 7.8 \\
+4096-QAM & 0.95 & 1.9 Gbps & 9.9 \\
+\end{longtable}
+}
+
+\textbf{Full 1 GHz spectrum}: 10 Gbps downstream (with 4096-QAM)
+
+\textbf{Advantage}: Wired channel (no fading), high SNR
+\$\textbackslash rightarrow\$ highest-order QAM practical
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Bandwidth Efficiency vs Power
+Efficiency}\label{bandwidth-efficiency-vs-power-efficiency}
+
+\textbf{Shannon tradeoff}:
+
+\[
+\frac{E_b}{N_0} = \frac{2^\eta - 1}{\eta} \quad (\text{linear})
+\]
+
+\textbf{In dB}:
+
+\[
+\frac{E_b}{N_0} \bigg|_{\text{dB}} = 10\log_{10}\left(\frac{2^\eta - 1}{\eta}\right)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Shannon Limit Curve}\label{shannon-limit-curve}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+\$\textbackslash eta\$ (bits/sec/Hz) & Min Eb/N0 (dB) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.5 & -0.8 \\
+1.0 & 0.0 \\
+2.0 & 2.0 \\
+3.0 & 4.8 \\
+4.0 & 7.0 \\
+5.0 & 9.0 \\
+6.0 & 10.8 \\
+8.0 & 14.0 \\
+10.0 & 16.8 \\
+\end{longtable}
+}
+
+\textbf{Pattern}: As \$\textbackslash eta\$ increases, required Eb/N0
+increases (power-bandwidth tradeoff)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Practical Systems vs
+Shannon}\label{practical-systems-vs-shannon}
+
+\textbf{Example: 64-QAM, r=3/4, \$\textbackslash alpha\$=0.35}
+
+\textbf{Spectral efficiency}: \$\textbackslash eta\$ = 3.33 bits/sec/Hz
+
+\textbf{Shannon limit}: Eb/N0 \$\textbackslash geq\$ 6.3 dB
+
+\textbf{Practical (with LDPC)}: Eb/N0 \$\textbackslash approx\$ 8.5 dB
+
+\textbf{Gap}: 2.2 dB (very good!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{MIMO \& Spatial
+Multiplexing}\label{mimo-spatial-multiplexing}
+
+\textbf{Multiple antenna streams} increase spectral efficiency:
+
+\[
+\eta_{\text{MIMO}} = N_s \cdot \frac{\log_2(M)}{1 + \alpha} \cdot r
+\]
+
+Where \(N_s\) = Number of spatial streams
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: 802.11ac}\label{example-802.11ac}
+
+\textbf{Parameters}: - 4\$\textbackslash times\$4 MIMO (4 spatial
+streams) - 256-QAM (8 bits/symbol) - Code rate: 5/6 -
+\$\textbackslash alpha\$ = 0.35 - 80 MHz bandwidth
+
+\textbf{Per-stream \$\textbackslash eta\$}:
+\(\frac{8}{1.35} \times \frac{5}{6} = 4.94\) bits/sec/Hz
+
+\textbf{Total \$\textbackslash eta\$}: \(4 \times 4.94 = 19.75\)
+bits/sec/Hz
+
+\textbf{Data rate}: \(80 \times 10^6 \times 19.75 = 1.58\) Gbps
+
+\textbf{Actual (with overhead)}: \textasciitilde1.3 Gbps (MAC overhead
+\textasciitilde20\%)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{OFDM Considerations}\label{ofdm-considerations}
+
+\textbf{OFDM uses multiple subcarriers}:
+
+\[
+\eta_{\text{OFDM}} = \frac{N_{\text{data}}}{N_{\text{total}}} \cdot \frac{\log_2(M)}{1 + \alpha_{\text{CP}}} \cdot r
+\]
+
+Where: - \(N_{\text{data}}\) = Data subcarriers - \(N_{\text{total}}\) =
+Total subcarriers - \(\alpha_{\text{CP}}\) = Cyclic prefix overhead
+(typically 0.07-0.25)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{WiFi 802.11a Example}\label{wifi-802.11a-example}
+
+\textbf{Parameters}: - 64 subcarriers total - 52 used (48 data + 4
+pilots) - CP: 0.8 \$\textbackslash mu\$s / 4 \$\textbackslash mu\$s =
+0.20 (20\% overhead) - 64-QAM (M=64) - Code rate: 3/4
+
+\textbf{Spectral efficiency}:
+
+\[
+\eta = \frac{48}{64} \times \frac{6}{1.20} \times 0.75 = 2.81 \text{ bits/sec/Hz}
+\]
+
+\textbf{20 MHz channel}: \(20 \times 2.81 = 56.2\) Mbps (theoretical)
+
+\textbf{Actual}: 54 Mbps (slight additional overhead)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Code Rate vs Spectral
+Efficiency}\label{code-rate-vs-spectral-efficiency}
+
+\textbf{Trade-off}: Higher code rate \$\textbackslash rightarrow\$ More
+spectral efficiency, less error protection
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Code Rate & Overhead & \$\textbackslash eta\$ Penalty & SNR
+Requirement \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{1/2} & 100\% & 0.50\$\textbackslash times\$ & Lowest SNR \\
+\textbf{2/3} & 50\% & 0.67\$\textbackslash times\$ & Low SNR \\
+\textbf{3/4} & 33\% & 0.75\$\textbackslash times\$ & Moderate SNR \\
+\textbf{5/6} & 20\% & 0.83\$\textbackslash times\$ & High SNR \\
+\textbf{9/10} & 11\% & 0.90\$\textbackslash times\$ & Very high SNR \\
+\end{longtable}
+}
+
+\textbf{Example}: 64-QAM - r = 1/2: \$\textbackslash eta\$ = 2.22
+bits/sec/Hz, Eb/N0 \$\textbackslash approx\$ 11 dB - r = 3/4:
+\$\textbackslash eta\$ = 3.33 bits/sec/Hz, Eb/N0
+\$\textbackslash approx\$ 13 dB - r = 5/6: \$\textbackslash eta\$ = 3.70
+bits/sec/Hz, Eb/N0 \$\textbackslash approx\$ 14 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Latency vs Spectral
+Efficiency}\label{latency-vs-spectral-efficiency}
+
+\textbf{Symbol duration}:
+
+\[
+T_s = \frac{1}{R_s} = \frac{B}{1 + \alpha}
+\]
+
+\textbf{Higher-order modulation} (larger M): - Same symbol rate - Higher
+bit rate - \textbf{Same latency per symbol}
+
+\textbf{Lower symbol rate} (wider pulses): - Better spectral efficiency
+(lower \$\textbackslash alpha\$ possible) - \textbf{Higher latency}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: Satellite Link}\label{example-satellite-link}
+
+\textbf{Option A}: 1 Msps QPSK - Symbol duration: 1
+\$\textbackslash mu\$s - Bit rate: 2 Mbps - Latency per symbol: 1
+\$\textbackslash mu\$s
+
+\textbf{Option B}: 500 ksps 16-QAM - Symbol duration: 2
+\$\textbackslash mu\$s - Bit rate: 2 Mbps (same!) - Latency per symbol:
+2 \$\textbackslash mu\$s (2\$\textbackslash times\$ worse)
+
+\textbf{Trade-off}: 16-QAM needs higher SNR but uses less bandwidth
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Interference \& Spectral
+Efficiency}\label{interference-spectral-efficiency}
+
+\textbf{Adjacent channel interference (ACI)} limits practical
+\$\textbackslash eta\$:
+
+\textbf{Guard bands} reduce usable spectrum:
+
+\[
+\eta_{\text{effective}} = \frac{B_{\text{usable}}}{B_{\text{allocated}}} \cdot \eta_{\text{modulation}}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: LTE Resource
+Blocks}\label{example-lte-resource-blocks}
+
+\textbf{20 MHz allocation}: - Usable: 18 MHz (100 resource blocks
+\$\textbackslash times\$ 180 kHz) - Guard bands: 2 MHz (10\% loss) - DC
+subcarrier: 1 (negligible)
+
+\textbf{Effective \$\textbackslash eta\$ reduction}: 10\%
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Emerging Technologies}\label{emerging-technologies}
+
+\subsubsection{1. Massive MIMO (5G)}\label{massive-mimo-5g}
+
+\textbf{64\$\textbackslash times\$64 antennas} (base station): - 16+
+spatial streams - Beamforming (20 dB gain) - Interference suppression
+
+\textbf{Result}: \$\textbackslash eta\$ \textgreater{} 50 bits/sec/Hz
+(system-wide with MU-MIMO)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Terahertz (THz)}\label{terahertz-thz}
+
+\textbf{100 GHz+ spectrum}: - Extremely wide channels (10+ GHz) - QPSK @
+10 Gbaud \$\textbackslash rightarrow\$ 20 Gbps - Short range (high path
+loss)
+
+\textbf{Target}: 100 Gbps wireless (6G)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Orbital Angular Momentum
+(OAM)}\label{orbital-angular-momentum-oam}
+
+\textbf{Twisted light beams}: - Multiple OAM modes (like MIMO but with
+photon spin) - Potential: 10\$\textbackslash times\$ capacity increase -
+\textbf{Status}: Research (practical issues remain)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Design Guidelines}\label{design-guidelines}
+
+\subsubsection{1. Choose Modulation for
+Channel}\label{choose-modulation-for-channel}
+
+\textbf{High SNR (\textgreater25 dB)}: 256-QAM, 1024-QAM - WiFi close
+range - Cable modems - Microwave backhaul (clear weather)
+
+\textbf{Moderate SNR (15-25 dB)}: 16-QAM, 64-QAM - WiFi medium range -
+LTE good signal - Satellite clear sky
+
+\textbf{Low SNR (\textless15 dB)}: QPSK, 8PSK - Satellite rain fade -
+Deep space - Long-range cellular (cell edge)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Select Code Rate}\label{select-code-rate}
+
+\textbf{Poor channel}: Low code rate (1/2, 2/3) - More redundancy -
+Better error correction - Lower spectral efficiency
+
+\textbf{Good channel}: High code rate (3/4, 5/6, 9/10) - Less redundancy
+- Higher spectral efficiency - Requires higher SNR
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Adaptive Modulation \& Coding
+(AMC)}\label{adaptive-modulation-coding-amc}
+
+\textbf{Measure SNR}, select MCS:
+
+\begin{verbatim}
+if SNR > 30 dB:
+    use 256-QAM, rate 5/6
+elif SNR > 20 dB:
+    use 64-QAM, rate 3/4
+elif SNR > 15 dB:
+    use 16-QAM, rate 1/2
+else:
+    use QPSK, rate 1/2
+\end{verbatim}
+
+\textbf{Update period}: 10-100 ms (faster than fading, slower than
+noise)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary Table}\label{summary-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1143}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1571}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+System
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Modulation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Code Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\$\textbackslash eta\$ (bits/sec/Hz)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peak Rate
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{GPS L1} & 2 MHz & BPSK & 1/2 & 0.25 & 50 bps (nav) \\
+\textbf{WiFi 802.11a} & 20 MHz & 64-QAM & 3/4 & 2.70 & 54 Mbps \\
+\textbf{WiFi 802.11ac} & 80 MHz & 256-QAM & 5/6 & 4.88 & 390 Mbps (1
+stream) \\
+\textbf{WiFi 802.11ax} & 80 MHz & 1024-QAM & 5/6 & 6.1 & 1.2 Gbps (8
+streams) \\
+\textbf{LTE Cat 4} & 20 MHz & 64-QAM & 0.85 & 1.89 & 150 Mbps
+(2\$\textbackslash times\$2 MIMO) \\
+\textbf{LTE Cat 16} & 100 MHz (CA) & 256-QAM & 0.93 & 2.75 & 1 Gbps
+(4\$\textbackslash times\$4 MIMO) \\
+\textbf{5G NR (sub-6)} & 100 MHz & 256-QAM & 0.93 & 3.25 & 2.5 Gbps
+(8\$\textbackslash times\$8 MIMO) \\
+\textbf{5G NR (mmWave)} & 400 MHz & 256-QAM & 0.93 & 3.25 & 10 Gbps \\
+\textbf{DVB-S2} & 36 MHz & 32-APSK & 9/10 & 2.30 & 83 Mbps \\
+\textbf{DOCSIS 3.1} & 192 MHz & 4096-QAM & 0.95 & 9.9 & 1.9 Gbps \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Limits}\label{practical-limits}
+
+\textbf{Shannon limit}: \(\eta = \log_2(1 + \text{SNR})\)
+
+\textbf{Best systems}: 1-3 dB from Shannon (with LDPC, Turbo, Polar
+codes)
+
+\textbf{Wireless}: Typically 0.5-6 bits/sec/Hz (fading, mobility)
+
+\textbf{Wired}: Up to 10 bits/sec/Hz (cable, fiber optics)
+
+\textbf{MIMO}: Multiply by \(N_s\) spatial streams
+(4-8\$\textbackslash times\$ typical)
+
+\textbf{Fundamental constraint}: Can\textquotesingle t exceed Shannon
+limit!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Shannon\textquotesingle s-Channel-Capacity-Theorem{]}{]}}:
+  Theoretical maximum
+\item
+  \textbf{{[}{[}Quadrature-Amplitude-Modulation-(QAM){]}{]}}: High
+  spectral efficiency
+\item
+  \textbf{{[}{[}Forward-Error-Correction-(FEC){]}{]}}: Code rate
+  trade-offs
+\item
+  \textbf{{[}{[}OFDM-\&-Multicarrier-Modulation{]}{]}}: Parallel
+  channels
+\item
+  \textbf{{[}{[}MIMO-\&-Spatial-Multiplexing{]}{]}}: Multiple spatial
+  streams
+\item
+  \textbf{{[}{[}Complete-Link-Budget-Analysis{]}{]}}: SNR determines
+  achievable \$\textbackslash eta\$
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Spectral efficiency
+\$\textbackslash eta\$ = Rb/B measures bits per Hz.} Higher-order
+modulation (M\$\textbackslash uparrow\$) increases
+\$\textbackslash eta\$ but requires higher SNR. Code rate r \textless{}
+1 reduces \$\textbackslash eta\$ but improves BER. Shannon limit
+\(\eta = \log_2(1+\text{SNR})\) is fundamental-\/-\/-no system can
+exceed it. Modern systems (LDPC/Turbo codes) approach Shannon limit
+within 1-3 dB. Practical wireless: 0.5-6 bits/sec/Hz. MIMO multiplies
+\$\textbackslash eta\$ by number of streams. Adaptive modulation \&
+coding (AMC) optimizes \$\textbackslash eta\$ for varying channel
+conditions. Trade-off: Spectral efficiency
+\$\textbackslash leftrightarrow\$ Power
+efficiency-\/-\/-can\textquotesingle t optimize both simultaneously.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

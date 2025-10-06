@@ -1,0 +1,514 @@
+\section{Frequency-Shift Keying (FSK)}\label{frequency-shift-keying-fsk}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{FSK is like morse code with two different musical
+notes-\/-\/-high note = 1, low note = 0. Simple, robust, and still used
+everywhere!}
+
+\textbf{The idea}: - Want to send a \textbf{1}? Transmit at \textbf{high
+frequency} (e.g., 1200 Hz) - Want to send a \textbf{0}? Transmit at
+\textbf{low frequency} (e.g., 1000 Hz) - Receiver listens for which tone
+is present
+
+\textbf{Musical analogy}: - Playing piano: \textbf{C note} = 0,
+\textbf{E note} = 1 - Song: ``C C E C E E C'' = data: ``0 0 1 0 1 1 0''
+- Your ear (receiver) easily distinguishes C from E! - FSK receiver does
+the same with radio frequencies
+
+\textbf{Why it\textquotesingle s great}: - \textbf{Super robust}: Noise
+changes amplitude, but frequency stays clear! - \textbf{Simple}: Just
+detect which frequency is present - \textbf{Immune to fading}: Signal
+can get weaker, but frequency doesn\textquotesingle t change -
+\textbf{Works in harsh environments}: Industrial, underwater, long-range
+
+\textbf{Where you encounter FSK}: - \textbf{Caller ID}: Your phone uses
+FSK to send caller info between rings! - \textbf{Old dial-up modems}:
+1980s modems used FSK (remember the screeching sound?) -
+\textbf{Bluetooth Low Energy}: Uses GFSK (Gaussian FSK) for low power -
+\textbf{RFID tags}: Many use FSK for simplicity - \textbf{Weather
+balloons}: FSK survives atmospheric interference - \textbf{Pagers}:
+Remember pagers? FSK!
+
+\textbf{Real-world sounds}: - \textbf{Fax machine}: That squawking noise
+is FSK! Listen carefully-\/-\/-you can hear the two tones alternating -
+\textbf{Dial-up internet}: BEEEE-doo-BEEEE-doo = FSK handshake -
+\textbf{Emergency broadcast tones}: Two-tone alert = FSK
+
+\textbf{Variants}: - \textbf{BFSK}: Binary (2 frequencies) = 1
+bit/symbol - \textbf{MFSK}: Multiple frequencies (4, 8, 16, etc.) = more
+bits/symbol - \textbf{GFSK}: Gaussian FSK (smooth transitions) = used in
+Bluetooth
+
+\textbf{Trade-off}: - \textbf{Advantage}: Extremely robust, immune to
+amplitude variations - \textbf{Disadvantage}: Slow compared to QAM
+(lower spectral efficiency) - Best for: Low-power, long-range, harsh
+environments
+
+\textbf{Fun fact}: Old telegraph operators could ``read'' morse code by
+EAR at 40+ words/minute. FSK is the same idea-\/-\/-humans can literally
+hear binary data if you slow it down!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Frequency-Shift Keying (FSK)} is a digital modulation scheme
+where binary data is represented by discrete changes in carrier
+frequency.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Basic
+Principle}{ Basic Principle}}\label{basic-principle}
+
+\textbf{Binary FSK (BFSK)}:
+
+\begin{verbatim}
+Bit "1": s(t) = A·cos(2f·t)
+Bit "0": s(t) = A·cos(2f·t)
+
+where:
+- A = constant amplitude
+- f = "mark" frequency (higher)
+- f = "space" frequency (lower)
+- f = f - f = frequency separation
+\end{verbatim}
+
+\textbf{Time-domain representation}:
+
+\begin{verbatim}
+Frequency
+   
+f |---|   |---|       |---|     Bit "1"
+   |   |   |   |       |   |
+f |   |---|   |-------|   |---  Bit "0"
+   +-------------------------- Time
+       1   0   1   0       1
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Mathematical
+Description}{ Mathematical Description}}\label{mathematical-description}
+
+\textbf{Transmitted signal}:
+
+\begin{verbatim}
+s(t) = A·cos[2(f_c + b_k·f/2)·t]     for kT_b  t < (k+1)T_b
+
+where:
+- f_c = carrier frequency (center)
+- b_k  {-1, +1} (or {0, 1})
+- f = frequency deviation
+- T_b = bit duration
+\end{verbatim}
+
+\textbf{Modulation index}:
+
+\begin{verbatim}
+h = 2f·T_b
+
+Common values:
+- h = 0.5 (Minimum Shift Keying - MSK)
+- h = 1.0 (Sunde's FSK)
+- h > 1 (Wideband FSK)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Spectral
+Characteristics}{ Spectral Characteristics}}\label{spectral-characteristics}
+
+\textbf{Bandwidth} (Carson\textquotesingle s rule):
+
+\begin{verbatim}
+B = 2(f + R_b)
+
+where R_b = 1/T_b = bit rate
+\end{verbatim}
+
+\textbf{Examples}: - Narrowband FSK (h = 0.5): B
+\$\textbackslash approx\$ 1.5 R\_b - Wideband FSK (h = 2): B
+\$\textbackslash approx\$ 5 R\_b
+
+\textbf{Power spectral density}: Two main lobes centered at
+f\textbackslash textsubscript\{0\} and
+f\textbackslash textsubscript\{1\}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Demodulation
+Methods}{ Demodulation Methods}}\label{demodulation-methods}
+
+\subsubsection{1. Non-Coherent Detection (Envelope
+Detector)}\label{non-coherent-detection-envelope-detector}
+
+\textbf{Simple and practical} - no carrier phase recovery!
+
+\begin{verbatim}
+Architecture:
+
+         +---------+
+    r(t)-+ BPF @ f+--+
+         +---------+  |
+                      +- Envelope  Compare  Decision
+         +---------+  |   Detectors
+    r(t)-+ BPF @ f+--+
+         +---------+
+
+Decision:
+If |output of f filter| > |output of f filter|: bit = 1
+Else: bit = 0
+\end{verbatim}
+
+\textbf{Advantages}: Simple, no synchronization \textbf{Disadvantages}:
+\textasciitilde1 dB worse than coherent
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Coherent Detection
+(Correlation)}\label{coherent-detection-correlation}
+
+\textbf{Optimal performance} but requires carrier synchronization:
+
+\begin{verbatim}
+Correlators:
+
+         +----------+
+    r(t)-+ × cos(2ft) +--   z
+         +----------+      0 to Tb
+
+         +----------+
+    r(t)-+ × cos(2ft) +--   z
+         +----------+      0 to Tb
+
+Decision:
+If z > z: bit = 1
+Else: bit = 0
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Frequency
+Discriminator}\label{frequency-discriminator}
+
+\textbf{Classic FM receiver approach}:
+
+\begin{verbatim}
+r(t)  [Limiter]  [Frequency Discriminator]  [LPF]  Decision
+\end{verbatim}
+
+\textbf{Converts frequency deviation to voltage}, then samples at bit
+boundaries.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Performance
+Analysis}{ Performance Analysis}}\label{performance-analysis}
+
+\subsubsection{Bit Error Rate (BER)}\label{bit-error-rate-ber}
+
+\textbf{With non-coherent detection} (AWGN channel):
+
+\begin{verbatim}
+BER = (1/2)exp(-E_b/2N)      for orthogonal FSK
+
+where:
+- E_b = bit energy = (A²T_b)/2
+- N = noise power spectral density
+\end{verbatim}
+
+\textbf{With coherent detection}:
+
+\begin{verbatim}
+BER = Q((E_b/N))            (1 dB better!)
+\end{verbatim}
+
+\textbf{For orthogonal FSK}: Frequencies
+f\textbackslash textsubscript\{0\} and
+f\textbackslash textsubscript\{1\} must satisfy:
+
+\begin{verbatim}
+(f - f)·T_b = n/2    (n = integer)
+
+Minimum: f = 1/(2T_b)   h = 1 (Sunde's FSK)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Advantages \&
+Disadvantages}{ Advantages \& Disadvantages}}\label{advantages-disadvantages}
+
+\subsubsection{Advantages}\label{advantages}
+
+\textbf{Constant envelope} - efficient power amplifiers (Class C)
+\textbf{Non-coherent detection} - simple receivers \textbf{Robust to
+fading} - amplitude variations don\textquotesingle t affect frequency
+\textbf{Good for noisy channels} - frequency easier to detect than phase
+\textbf{Legacy compatibility} - used in many older systems
+
+\subsubsection{Disadvantages}\label{disadvantages}
+
+\textbf{Poor spectral efficiency} - wider bandwidth than PSK
+\textbf{Moderate power efficiency} - 1-2 dB worse than {[}{[}BPSK{]}{]}
+\textbf{Frequency stability} - requires accurate oscillators
+\textbf{Doppler sensitivity} - frequency shifts problematic
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{
+Applications}{ Applications}}\label{applications}
+
+\subsubsection{Historical \& Current}\label{historical-current}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Telephone modems} (Bell 103: 1962, 300 baud,
+  f\textbackslash textsubscript\{0\}=1070 Hz,
+  f\textbackslash textsubscript\{1\}=1270 Hz)
+\item
+  \textbf{Radio teletype} (RTTY, 1930s-)
+\item
+  \textbf{Caller ID} (Bell 202: 1200 bps,
+  f\textbackslash textsubscript\{0\}=2200 Hz,
+  f\textbackslash textsubscript\{1\}=1200 Hz)
+\item
+  \textbf{Pagers} (POCSAG, FLEX protocols)
+\end{itemize}
+
+\subsubsection{Modern}\label{modern}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{LoRa} (sub-GHz IoT, chirp spread spectrum FSK)
+\item
+  \textbf{Bluetooth Low Energy} (GFSK - Gaussian FSK)
+\item
+  \textbf{Wireless sensor networks} - low power, simple receivers
+\item
+  \textbf{Optical fiber} (frequency-shifted laser)
+\item
+  \textbf{{[}{[}AID-Protocol-Case-Study{]}{]}} - 12 kHz FSK sub-carrier
+  (11,999/12,001 Hz)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ FSK
+Variants}{ FSK Variants}}\label{fsk-variants}
+
+\subsubsection{1. Minimum Shift Keying
+(MSK)}\label{minimum-shift-keying-msk}
+
+\textbf{Special case}: h = 0.5 (minimum for orthogonality)
+
+\begin{verbatim}
+Properties:
+- Continuous phase (no discontinuities)
+- Constant envelope
+- Bandwidth = 1.5 R_b (narrowest FSK)
+- Equivalent to offset QPSK with sinusoidal pulse shaping
+\end{verbatim}
+
+\textbf{Used in}: GSM cellular (GMSK - Gaussian MSK)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Gaussian FSK (GFSK)}\label{gaussian-fsk-gfsk}
+
+\textbf{MSK + Gaussian pre-modulation filter}
+
+\begin{verbatim}
+Purpose: Further reduce spectral sidelobes
+Bandwidth: ~1.2-1.5 R_b (depending on BT product)
+BT product: Bandwidth × T_b (typical: 0.3-0.5)
+\end{verbatim}
+
+\textbf{Used in}: Bluetooth, Zigbee
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Continuous Phase FSK
+(CPFSK)}\label{continuous-phase-fsk-cpfsk}
+
+\textbf{Phase is continuous} across bit boundaries:
+
+\begin{verbatim}
+(t) = 2[f_c·t + (hf/2)·^{t} b()d]
+
+Benefits:
+- No spectral splatter
+- Better spectral efficiency
+- Smoother power envelope
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Multi-Frequency FSK
+(MFSK)}\label{multi-frequency-fsk-mfsk}
+
+\textbf{M \textgreater{} 2 frequencies} for higher data rates:
+
+\begin{verbatim}
+M symbols  log(M) bits per symbol
+
+Example (4-FSK):
+- f: bits 00
+- f: bits 01
+- f: bits 10
+- f: bits 11
+
+Bandwidth: B = M·R_b (wider!)
+Power efficiency: Better than BFSK for high M
+\end{verbatim}
+
+\textbf{Used in}: HF radio (MT63, Olivia modes)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Constellation
+Diagram}{ Constellation Diagram}}\label{constellation-diagram}
+
+\textbf{BFSK in frequency space}:
+
+\begin{verbatim}
+Frequency
+   
+f |      Symbol "1"
+   |
+f_c|       (carrier)
+   |
+f |      Symbol "0"
+   +------------ Time
+\end{verbatim}
+
+\textbf{Not a traditional I/Q constellation} (frequency, not
+amplitude/phase).
+
+\textbf{Equivalent I/Q representation} (for coherent detection):
+
+\begin{verbatim}
+      Q
+      
+      |
+  0  |  1   On real axis, separated
+      |
+------+------ I
+\end{verbatim}
+
+\textbf{Distance between points}: d = \$\textbackslash sqrt\{\}\$(2E\_b)
+(for orthogonal FSK)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Comparison
+Table}{ Comparison Table}}\label{comparison-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1579}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1711}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1447}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1316}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1447}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Modulation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bits/Symbol
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Eb/N0 @ BER 10\^{}-6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Envelope
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Detection
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+{[}{[}On-Off-Keying-(OOK) & OOK{]}{]} & 1 & 2R\_b & 13.5 dB &
+Variable \\
+\textbf{FSK} & 1 & 2R\_b & 12.5 dB & Constant & Non-coherent \\
+\textbf{MSK} & 1 & 1.5R\_b & 10.5 dB & Constant & Coherent \\
+{[}{[}BPSK{]}{]} & 1 & R\_b & 10.5 dB & Constant & Coherent \\
+{[}{[}QPSK-Modulation & QPSK{]}{]} & 2 & R\_b & 10.5 dB & Constant \\
+\end{longtable}
+}
+
+\textbf{Key insight}: FSK trades bandwidth for simplicity.
+{[}{[}BPSK{]}{]}/{[}{[}QPSK-Modulation\textbar QPSK{]}{]} are more
+efficient but require phase synchronization.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Key
+Takeaways}{ Key Takeaways}}\label{key-takeaways}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Frequency switching}: Binary data
+  \$\textbackslash rightarrow\$ two different frequencies
+\item
+  \textbf{Constant envelope}: Good for non-linear amplifiers
+\item
+  \textbf{Non-coherent detection}: Simple receivers, still good
+  performance
+\item
+  \textbf{Bandwidth penalty}: \textasciitilde2\$\textbackslash times\$
+  wider than PSK
+\item
+  \textbf{Robust}: Good for noisy, fading channels
+\item
+  \textbf{Still widely used}: Bluetooth, LoRa, pagers, caller ID
+\item
+  \textbf{Gateway to chirp spread spectrum}: LoRa uses frequency chirps
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ See Also}{ See Also}}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}On-Off-Keying-(OOK){]}{]} - Simpler (amplitude modulation)
+\item
+  {[}{[}Binary-Phase-Shift-Keying-(BPSK){]}{]} - Alternative (phase
+  modulation)
+\item
+  {[}{[}QPSK-Modulation{]}{]} - More bits per symbol (phase)
+\item
+  {[}{[}Constellation-Diagrams{]}{]} - Visualizing modulation schemes
+\item
+  {[}{[}AID-Protocol-Case-Study{]}{]} - Uses 1 bps FSK sub-carrier
+  (11,999/12,001 Hz)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ References}{ References}}\label{references}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Sunde, E.D.} (1946) ``Ideal binary pulse transmission by AM
+  and FM'' \emph{Bell Syst. Tech. J.} 25, 1067-1093
+\item
+  \textbf{de Jager, F. \& Dekker, C.B.} (1978) ``Tamed Frequency
+  Modulation'' \emph{IEEE Trans. Comm.} COM-26, 534-542
+\item
+  \textbf{Proakis, J.G. \& Salehi, M.} (2008) \emph{Digital
+  Communications} 5th ed.~(McGraw-Hill)
+\item
+  \textbf{Sklar, B.} (2001) \emph{Digital Communications} 2nd
+  ed.~(Prentice Hall)
+\end{enumerate}

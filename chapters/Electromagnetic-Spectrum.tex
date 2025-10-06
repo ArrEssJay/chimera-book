@@ -1,0 +1,802 @@
+\section{Electromagnetic Spectrum}\label{electromagnetic-spectrum}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Foundation} \textbar{}
+{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}
+\textbar{} {[}{[}Frequency-Shift-Keying-(FSK){]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{The electromagnetic spectrum is like a piano keyboard-\/-\/-but
+instead of sound notes, it\textquotesingle s frequencies of light and
+radio waves.}
+
+\textbf{The big picture}: - \textbf{Low notes (low frequency)}: Radio,
+AM/FM, WiFi, microwaves - \textbf{Middle notes}: Infrared (heat you feel
+from a fire), visible light (colors we see) - \textbf{High notes (high
+frequency)}: Ultraviolet, X-rays, gamma rays
+
+\textbf{It\textquotesingle s all the same thing!} Radio waves, WiFi,
+light, X-rays are all electromagnetic waves-\/-\/-just different
+frequencies.
+
+\textbf{Real-world frequencies}: - \textbf{AM radio}: \textasciitilde1
+MHz (long waves, travel far) - \textbf{FM radio}: \textasciitilde100 MHz
+(shorter waves, better quality) - \textbf{WiFi}: 2.4 GHz or 5 GHz (very
+short waves, fast data) - \textbf{Visible light}: \textasciitilde500 THz
+(that\textquotesingle s 500,000 GHz!) - \textbf{X-rays}:
+\textasciitilde10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{8\}
+Hz (penetrate body)
+
+\textbf{Why frequency matters}: - \textbf{Low frequency}: Travels far,
+penetrates buildings, but needs big antennas - \textbf{High frequency}:
+Fast data, small antennas, but doesn\textquotesingle t travel as far
+
+\textbf{Fun fact}: The rainbow you see is less than 1 octave of
+frequency! The EM spectrum spans 20+ octaves from radio to gamma rays.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+The \textbf{electromagnetic (EM) spectrum} encompasses all frequencies
+of electromagnetic radiation, from extremely low frequency (ELF) radio
+waves to ultra-high energy gamma rays. \textbf{All EM waves travel at
+the speed of light} (\(c \approx 3 \times 10^8\) m/s in vacuum) and obey
+{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation\textbar Maxwell\textquotesingle s
+equations{]}{]}.
+
+\textbf{Key relationship}:
+
+\[
+c = \lambda f
+\]
+
+Where: - \(c\) = Speed of light (299,792,458 m/s) - \(\lambda\) =
+Wavelength (meters) - \(f\) = Frequency (Hz)
+
+\textbf{Energy per photon} (quantum perspective):
+
+\[
+E = h f
+\]
+
+Where \(h = 6.626 \times 10^{-34}\) J\$\textbackslash cdot\$s
+(Planck\textquotesingle s constant)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Spectrum Bands \&
+Applications}\label{spectrum-bands-applications}
+
+\subsubsection{Radio Frequencies (RF): 3 kHz - 300
+GHz}\label{radio-frequencies-rf-3-khz---300-ghz}
+
+\paragraph{\texorpdfstring{\textbf{ELF (Extremely Low Frequency): 3 Hz -
+3
+kHz}}{ELF (Extremely Low Frequency): 3 Hz - 3 kHz}}\label{elf-extremely-low-frequency-3-hz---3-khz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 100,000 km - 100 km
+\item
+  \textbf{Applications}: Submarine communication (penetrates seawater),
+  geophysical surveys
+\item
+  \textbf{Propagation}: Earth-ionosphere waveguide, minimal attenuation
+\item
+  \textbf{Example}: 76 Hz US Navy submarine comms
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{VLF (Very Low Frequency): 3 kHz - 30
+kHz}}{VLF (Very Low Frequency): 3 kHz - 30 kHz}}\label{vlf-very-low-frequency-3-khz---30-khz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 100 km - 10 km
+\item
+  \textbf{Applications}: Navigation (LORAN), time signals, lightning
+  detection
+\item
+  \textbf{Propagation}: Ground wave, ionospheric reflection
+\item
+  \textbf{Example}: 24 kHz VLF navigation beacon
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{LF (Low Frequency): 30 kHz - 300
+kHz}}{LF (Low Frequency): 30 kHz - 300 kHz}}\label{lf-low-frequency-30-khz---300-khz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 10 km - 1 km
+\item
+  \textbf{Applications}: AM radio (longwave), RFID, aviation beacons
+\item
+  \textbf{Propagation}: Ground wave (stable day/night), ionospheric at
+  night
+\item
+  \textbf{Example}: 153 kHz longwave broadcast
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{MF (Medium Frequency): 300 kHz - 3
+MHz}}{MF (Medium Frequency): 300 kHz - 3 MHz}}\label{mf-medium-frequency-300-khz---3-mhz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 1 km - 100 m
+\item
+  \textbf{Applications}: AM radio (broadcast), maritime communication
+\item
+  \textbf{Propagation}: Ground wave (daytime), skywave (nighttime)
+\item
+  \textbf{Example}: 540-1600 kHz AM broadcast band
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{HF (High Frequency): 3 MHz - 30
+MHz}}{HF (High Frequency): 3 MHz - 30 MHz}}\label{hf-high-frequency-3-mhz---30-mhz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 100 m - 10 m
+\item
+  \textbf{Applications}: Shortwave radio, amateur radio,
+  over-the-horizon radar
+\item
+  \textbf{Propagation}: Ionospheric refraction (skywave), global reach
+\item
+  \textbf{Example}: 14.2 MHz amateur band, intercontinental comms
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{VHF (Very High Frequency): 30 MHz -
+300
+MHz}}{VHF (Very High Frequency): 30 MHz - 300 MHz}}\label{vhf-very-high-frequency-30-mhz---300-mhz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 10 m - 1 m
+\item
+  \textbf{Applications}: FM radio (88-108 MHz), TV broadcast, aviation,
+  marine
+\item
+  \textbf{Propagation}: Line-of-sight (LOS), occasional tropospheric
+  ducting
+\item
+  \textbf{Example}: 146 MHz amateur band, 120 MHz air traffic control
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{UHF (Ultra High Frequency): 300 MHz -
+3
+GHz}}{UHF (Ultra High Frequency): 300 MHz - 3 GHz}}\label{uhf-ultra-high-frequency-300-mhz---3-ghz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 1 m - 10 cm
+\item
+  \textbf{Applications}: TV, cellular (GSM/LTE), GPS, WiFi (2.4 GHz),
+  Bluetooth
+\item
+  \textbf{Propagation}: LOS, building penetration moderate, rain
+  attenuation minimal
+\item
+  \textbf{Example}: 1.575 GHz GPS L1, 2.4 GHz ISM band
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{SHF (Super High Frequency): 3 GHz -
+30
+GHz}}{SHF (Super High Frequency): 3 GHz - 30 GHz}}\label{shf-super-high-frequency-3-ghz---30-ghz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 10 cm - 1 cm
+\item
+  \textbf{Applications}: Satellite comms, radar, 5G (3.5 GHz), WiFi (5-6
+  GHz), point-to-point links
+\item
+  \textbf{Propagation}: LOS required, rain fade significant, atmospheric
+  absorption
+\item
+  \textbf{Example}: 5.8 GHz WiFi, 12 GHz satellite downlink (Ku-band)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{\texorpdfstring{\textbf{EHF (Extremely High Frequency): 30
+GHz - 300
+GHz}}{EHF (Extremely High Frequency): 30 GHz - 300 GHz}}\label{ehf-extremely-high-frequency-30-ghz---300-ghz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 1 cm - 1 mm
+\item
+  \textbf{Applications}: mmWave 5G (28/39 GHz), automotive radar (77
+  GHz), radio astronomy
+\item
+  \textbf{Propagation}: Severe rain/foliage attenuation, oxygen
+  absorption peak @ 60 GHz
+\item
+  \textbf{Example}: 39 GHz 5G, 94 GHz cloud radar
+\end{itemize}
+
+\textbf{60 GHz oxygen absorption}: 15 dB/km (used for secure short-range
+comms)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Terahertz (THz) Gap: 300 GHz - 10
+THz}\label{terahertz-thz-gap-300-ghz---10-thz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 1 mm - 30 \$\textbackslash mu\$m
+\item
+  \textbf{Applications}: Security imaging, spectroscopy, biomedical
+  sensing, \textbf{{[}{[}AID-Protocol-Case-Study\textbar AID
+  Protocol{]}{]}} (1.875 THz)
+\item
+  \textbf{Propagation}: Atmospheric absorption severe
+  (H\textbackslash textsubscript\{2\}O lines), limited range
+\item
+  \textbf{Technology}: Quantum cascade lasers (QCLs), photoconductive
+  switches
+\item
+  \textbf{Status}: ``THz gap'' (historically difficult to
+  generate/detect)
+\end{itemize}
+
+\textbf{Key THz features}: - Non-ionizing (safe for biological tissue,
+unlike X-rays) - Penetrates clothing, paper, plastics (not metal) - High
+spatial resolution (sub-mm) - Strong water absorption (limits biomedical
+depth)
+
+\textbf{See}: {[}{[}Terahertz-(THz)-Technology{]}{]} for detailed
+discussion
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Infrared (IR): 300 GHz - 430
+THz}\label{infrared-ir-300-ghz---430-thz}
+
+\paragraph{\texorpdfstring{\textbf{Far-IR (FIR): 300 GHz - 20
+THz}}{Far-IR (FIR): 300 GHz - 20 THz}}\label{far-ir-fir-300-ghz---20-thz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 1 mm - 15 \$\textbackslash mu\$m
+\item
+  \textbf{Applications}: Thermal imaging, astronomy, spectroscopy
+\item
+  \textbf{Source}: Blackbody radiation (room temperature objects peak
+  \textasciitilde10 \$\textbackslash mu\$m)
+\end{itemize}
+
+\paragraph{\texorpdfstring{\textbf{Mid-IR (MIR): 20 THz - 120
+THz}}{Mid-IR (MIR): 20 THz - 120 THz}}\label{mid-ir-mir-20-thz---120-thz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 15 \$\textbackslash mu\$m - 2.5
+  \$\textbackslash mu\$m
+\item
+  \textbf{Applications}: Night vision, chemical sensing (molecular
+  fingerprints), CO\textbackslash textsubscript\{2\} lasers
+\end{itemize}
+
+\paragraph{\texorpdfstring{\textbf{Near-IR (NIR): 120 THz - 430
+THz}}{Near-IR (NIR): 120 THz - 430 THz}}\label{near-ir-nir-120-thz---430-thz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 2.5 \$\textbackslash mu\$m - 700 nm
+\item
+  \textbf{Applications}: Fiber optic comms (1550 nm), remote controls,
+  biomedical imaging
+\item
+  \textbf{Atmospheric window}: 1.3-1.55 \$\textbackslash mu\$m (low loss
+  in silica fiber)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Visible Light: 430 THz - 750
+THz}\label{visible-light-430-thz---750-thz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 700 nm (red) - 400 nm (violet)
+\item
+  \textbf{Frequencies}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Red: \textasciitilde430 THz (700 nm)
+  \item
+    Yellow: \textasciitilde510 THz (590 nm)
+  \item
+    Green: \textasciitilde560 THz (535 nm)
+  \item
+    Blue: \textasciitilde670 THz (450 nm)
+  \item
+    Violet: \textasciitilde750 THz (400 nm)
+  \end{itemize}
+\item
+  \textbf{Applications}: Human vision, optical comms (free-space),
+  LiDAR, photovoltaics
+\item
+  \textbf{Energy}: 1.6-3.1 eV per photon (non-ionizing)
+\end{itemize}
+
+\textbf{Solar spectrum}: Peaks at \textasciitilde550 nm (green),
+corresponds to peak sensitivity of human eye (photopic vision)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Ultraviolet (UV): 750 THz - 30
+PHz}\label{ultraviolet-uv-750-thz---30-phz}
+
+\paragraph{\texorpdfstring{\textbf{Near-UV (NUV): 750 THz - 1.5
+PHz}}{Near-UV (NUV): 750 THz - 1.5 PHz}}\label{near-uv-nuv-750-thz---1.5-phz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 400 nm - 200 nm
+\item
+  \textbf{Applications}: Sterilization, fluorescence microscopy,
+  photolithography
+\item
+  \textbf{Biological effects}: Tanning, vitamin D synthesis, DNA damage
+  (UVB)
+\end{itemize}
+
+\paragraph{\texorpdfstring{\textbf{Far-UV (FUV): 1.5 PHz - 30
+PHz}}{Far-UV (FUV): 1.5 PHz - 30 PHz}}\label{far-uv-fuv-1.5-phz---30-phz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 200 nm - 10 nm
+\item
+  \textbf{Applications}: Extreme sterilization, plasma diagnostics
+\item
+  \textbf{Absorption}: Strongly absorbed by atmosphere (ozone layer
+  blocks \textless{} 290 nm)
+\end{itemize}
+
+\textbf{UVC (\textless{} 280 nm)}: Germicidal (destroys DNA/RNA), used
+in air/water purification
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{X-Rays: 30 PHz - 30 EHz}\label{x-rays-30-phz---30-ehz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: 10 nm - 0.01 nm
+\item
+  \textbf{Energy}: 100 eV - 100 keV
+\item
+  \textbf{Applications}: Medical imaging, crystallography, security
+  screening, astronomy
+\item
+  \textbf{Generation}: Bremsstrahlung (electron deceleration),
+  synchrotron radiation
+\item
+  \textbf{Biological effects}: \textbf{Ionizing} (breaks chemical bonds,
+  causes mutations)
+\end{itemize}
+
+\textbf{Soft X-rays} (0.1-10 keV): Water window imaging, biological
+samples \textbf{Hard X-rays} (10-100 keV): Penetrates tissue, bone
+imaging (radiography)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Gamma Rays: \textgreater{} 30
+EHz}\label{gamma-rays-30-ehz}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wavelength}: \textless{} 0.01 nm
+\item
+  \textbf{Energy}: \textgreater{} 100 keV
+\item
+  \textbf{Sources}: Radioactive decay, nuclear reactions, cosmic rays,
+  pulsars
+\item
+  \textbf{Applications}: Cancer therapy (radiotherapy), sterilization,
+  astrophysics
+\item
+  \textbf{Detection}: Scintillation detectors, Compton scattering
+\item
+  \textbf{Biological effects}: \textbf{Highly ionizing} (severe DNA
+  damage, cell death)
+\end{itemize}
+
+\textbf{Cosmic gamma rays}: Up to TeV energies
+(10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+eV), from supernovae, black holes
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Atmospheric Transmission
+Windows}\label{atmospheric-transmission-windows}
+
+\textbf{Earth\textquotesingle s atmosphere is opaque to most EM
+spectrum}. Only certain ``windows'' allow propagation:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1132}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4151}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2075}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Band
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Frequency/Wavelength
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Transmission
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Absorbers
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{RF (\textless{} 30 GHz)} & All RF below mmWave & Excellent &
+Ionosphere (HF reflection) \\
+\textbf{mmWave (30-300 GHz)} & 1-10 mm & Poor & Water vapor, oxygen (60
+GHz) \\
+\textbf{THz (0.3-10 THz)} & 30 \$\textbackslash mu\$m - 1 mm & Very poor
+& Water vapor, CO\textbackslash textsubscript\{2\} \\
+\textbf{Far-IR} & 15-300 \$\textbackslash mu\$m & Poor &
+H\textbackslash textsubscript\{2\}O,
+CO\textbackslash textsubscript\{2\},
+O\textbackslash textsubscript\{3\} \\
+\textbf{Mid-IR} & 2.5-15 \$\textbackslash mu\$m & Moderate &
+H\textbackslash textsubscript\{2\}O (many lines),
+CO\textbackslash textsubscript\{2\} (15 \$\textbackslash mu\$m) \\
+\textbf{Near-IR} & 0.7-2.5 \$\textbackslash mu\$m & Good &
+H\textbackslash textsubscript\{2\}O (weak bands) \\
+\textbf{Visible} & 400-700 nm & Excellent & Rayleigh scattering (sky is
+blue) \\
+\textbf{Near-UV} & 300-400 nm & Good & Ozone (\textless{} 320 nm) \\
+\textbf{UVC / X-ray / Gamma} & \textless{} 280 nm & Blocked & Ozone,
+O\textbackslash textsubscript\{2\},
+N\textbackslash textsubscript\{2\} \\
+\end{longtable}
+}
+
+\textbf{Implications}: - \textbf{Ground-to-satellite comms}: Use RF
+(microwaves) or optical (laser comms) - \textbf{THz security imaging}:
+Indoor only (outdoor = severe H\textbackslash textsubscript\{2\}O
+absorption) - \textbf{Radio astronomy}: ``Radio window'' (few MHz - 30
+GHz) and ``optical window'' (visible/NIR)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Ionizing vs Non-Ionizing
+Radiation}\label{ionizing-vs-non-ionizing-radiation}
+
+\textbf{Critical distinction}:
+
+\subsubsection{Non-Ionizing (\textless{} 3.1 eV, \textless{} 1
+PHz)}\label{non-ionizing-3.1-ev-1-phz}
+
+\textbf{Photon energy insufficient to ionize atoms}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{RF/Microwave/IR/Visible}: Causes heating (dielectric loss),
+  molecular vibration/rotation
+\item
+  \textbf{Biological effects}: Thermal (tissue heating), non-thermal
+  (debated, e.g., RF-EMF effects)
+\item
+  \textbf{Safety}: Exposure limits based on specific absorption rate
+  (SAR, W/kg)
+\end{itemize}
+
+\textbf{Example}: WiFi (2.4 GHz, \(E = hf = 10^{-5}\) eV)
+\$\textbackslash rightarrow\$ Pure heating, no ionization
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Ionizing (\textgreater{} 10 eV, \textgreater{} 2.4
+PHz)}\label{ionizing-10-ev-2.4-phz}
+
+\textbf{Photon energy sufficient to eject electrons from atoms}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{UV (high-energy), X-rays, Gamma rays}: Breaks chemical bonds,
+  damages DNA
+\item
+  \textbf{Biological effects}: Mutations, cancer, acute radiation
+  syndrome (high dose)
+\item
+  \textbf{Safety}: Exposure limits based on dose (Sieverts, Sv)
+\end{itemize}
+
+\textbf{Ionization threshold}: \textasciitilde10 eV for biological
+molecules (double-strand DNA breaks at \textasciitilde20 eV)
+
+\textbf{Example}: X-ray (30 keV) \$\textbackslash rightarrow\$ Ejects
+inner-shell electrons, Compton scattering, DNA damage
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Frequency Allocation \&
+Regulation}\label{frequency-allocation-regulation}
+
+\textbf{International Telecommunication Union (ITU)} allocates spectrum
+globally:
+
+\subsubsection{Key Allocated Bands}\label{key-allocated-bands}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2812}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3438}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3750}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Service
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Frequency
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Regulation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+AM Radio & 530-1710 kHz & Licensed broadcast \\
+FM Radio & 88-108 MHz & Licensed broadcast \\
+TV (VHF) & 54-216 MHz & Licensed broadcast (analog legacy) \\
+Aviation & 108-137 MHz & Regulated (safety of life) \\
+Marine VHF & 156-162 MHz & Regulated \\
+Cellular (US) & 600-6000 MHz & Licensed (carriers) \\
+GPS & 1.176-1.575 GHz & Protected (military/civilian) \\
+WiFi (2.4 GHz) & 2.400-2.4835 GHz & \textbf{ISM band} (unlicensed) \\
+WiFi (5 GHz) & 5.150-5.850 GHz & \textbf{U-NII} (unlicensed,
+indoor/outdoor rules) \\
+5G mmWave & 24-47 GHz & Licensed (auction) \\
+Satellite (Ka) & 26.5-40 GHz & Licensed \\
+\end{longtable}
+}
+
+\textbf{ISM bands} (Industrial, Scientific, Medical): Unlicensed, shared
+use, higher interference - 902-928 MHz (US), 2.4-2.5 GHz (global),
+5.725-5.875 GHz
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Wavelength vs Antenna
+Size}\label{wavelength-vs-antenna-size}
+
+\textbf{Rule of thumb}: Efficient antennas are typically \(\lambda/2\)
+or \(\lambda/4\) in size.
+
+\textbf{Examples}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Frequency & Wavelength & Typical Antenna \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+150 kHz (LF) & 2000 m & 500 m tower (impractical!) \\
+1 MHz (AM) & 300 m & 75 m vertical mast \\
+100 MHz (FM) & 3 m & 1.5 m whip (\$\textbackslash lambda\$/2 dipole) \\
+1 GHz (cellular) & 30 cm & 7.5 cm patch (\$\textbackslash lambda\$/4) \\
+10 GHz (satellite) & 3 cm & 1.5 cm patch array \\
+300 GHz (mmWave) & 1 mm & 0.25 mm array element \\
+1.875 THz (AID) & 160 \$\textbackslash mu\$m & 40 \$\textbackslash mu\$m
+aperture (phased array) \\
+\end{longtable}
+}
+
+\textbf{Implication}: Higher frequencies enable \textbf{smaller antennas
+and phased arrays}, but propagation is poorer.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Spectrum Utilization
+Trends}\label{spectrum-utilization-trends}
+
+\subsubsection{Historical Progression}\label{historical-progression}
+
+\textbf{1900s}: MF/HF (AM radio, maritime) \textbf{1950s}: VHF/UHF (FM,
+TV, early mobile) \textbf{1990s}: SHF (cellular 2G/3G, WiFi, GPS)
+\textbf{2010s}: EHF (5G mmWave, 60 GHz WiGig) \textbf{2020s}: THz
+(security, 6G research, biomedical)
+
+\textbf{Driver}: \textbf{Spectrum congestion}
+\$\textbackslash rightarrow\$ Move to higher frequencies for bandwidth -
+VHF/UHF: Crowded (licensed, competitive) - mmWave: Abundant spectrum
+(GHz of bandwidth available) - THz: Virtually unlimited (atmospheric
+absorption limits range, but OK for short-range)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Propagation Characteristics by
+Band}\label{propagation-characteristics-by-band}
+
+\subsubsection{Long Wavelengths
+(LF/MF/HF)}\label{long-wavelengths-lfmfhf}
+
+\textbf{Advantages}: - Ground wave propagation (stable, follows Earth
+curvature) - Ionospheric reflection (HF skywave
+\$\textbackslash rightarrow\$ global reach) - Penetrates buildings,
+foliage, water
+
+\textbf{Disadvantages}: - Large antennas required - Low bandwidth (kHz)
+- Crowded spectrum
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Medium Wavelengths
+(VHF/UHF)}\label{medium-wavelengths-vhfuhf}
+
+\textbf{Advantages}: - Moderate antenna size - Good building penetration
+(lower UHF) - Balanced range vs bandwidth
+
+\textbf{Disadvantages}: - Line-of-sight propagation (VHF) - Spectrum
+congestion
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Short Wavelengths
+(SHF/EHF/THz)}\label{short-wavelengths-shfehfthz}
+
+\textbf{Advantages}: - Huge bandwidth (GHz available) - Small antennas
+(phased arrays feasible) - Narrow beams (spatial reuse, security)
+
+\textbf{Disadvantages}: - Severe atmospheric attenuation (rain, oxygen,
+water vapor) - No building penetration - Requires line-of-sight
+
+\textbf{Oxygen absorption}: 60 GHz (15 dB/km)
+\$\textbackslash rightarrow\$ Secure short-range comms (signals
+don\textquotesingle t travel far) \textbf{Water vapor}: THz
+(\textgreater100 dB/km) \$\textbackslash rightarrow\$ Indoor/short-range
+only
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary Table: Spectrum at a
+Glance}\label{summary-table-spectrum-at-a-glance}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0845}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1549}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1690}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2535}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1831}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1549}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Band
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Frequency
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Wavelength
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Key Applications
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Propagation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ionizing?
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ELF & 3 Hz - 3 kHz & 100,000 km - 100 km & Submarine comms &
+Earth-ionosphere waveguide & No \\
+VLF & 3-30 kHz & 100-10 km & Navigation, time signals & Ground wave &
+No \\
+LF & 30-300 kHz & 10-1 km & Longwave radio, RFID & Ground wave,
+ionosphere & No \\
+MF & 300 kHz - 3 MHz & 1 km - 100 m & AM broadcast & Ground/skywave &
+No \\
+HF & 3-30 MHz & 100-10 m & Shortwave, amateur & Ionospheric refraction &
+No \\
+VHF & 30-300 MHz & 10-1 m & FM, TV, aviation & Line-of-sight & No \\
+UHF & 300 MHz - 3 GHz & 1 m - 10 cm & Cellular, WiFi, GPS & LOS, some
+penetration & No \\
+SHF & 3-30 GHz & 10-1 cm & Satellite, 5G, radar & LOS, rain fade & No \\
+EHF & 30-300 GHz & 1 cm - 1 mm & mmWave 5G, radar & Severe attenuation &
+No \\
+THz & 0.3-10 THz & 1 mm - 30 \$\textbackslash mu\$m & Imaging,
+spectroscopy, AID & Very limited (H\textbackslash textsubscript\{2\}O) &
+No \\
+Far-IR & 10-120 THz & 30-2.5 \$\textbackslash mu\$m & Thermal imaging &
+Atmospheric windows & No \\
+Near-IR & 120-430 THz & 2.5-0.7 \$\textbackslash mu\$m & Fiber optics,
+night vision & Good (1.55 \$\textbackslash mu\$m window) & No \\
+Visible & 430-750 THz & 700-400 nm & Vision, optical comms & Excellent &
+No \\
+UV & 750 THz - 30 PHz & 400-10 nm & Sterilization, lithography &
+Absorbed (ozone) & \textbf{Yes (high-energy UV)} \\
+X-ray & 30 PHz - 30 EHz & 10-0.01 nm & Medical imaging, crystallography
+& Blocked by atmosphere & \textbf{Yes} \\
+Gamma & \textgreater{} 30 EHz & \textless{} 0.01 nm & Radiotherapy,
+astrophysics & Blocked by atmosphere & \textbf{Yes} \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}}:
+  Mathematical foundation of EM waves
+\item
+  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Frequency-dependent
+  propagation loss
+\item
+  \textbf{{[}{[}Terahertz-(THz)-Technology{]}{]}}: Applications and
+  challenges in THz band
+\item
+  \textbf{{[}{[}AID-Protocol-Case-Study{]}{]}}: 1.875 THz carrier for
+  neural modulation
+\item
+  \textbf{Antenna Theory}: Design principles for frequency-specific
+  antennas (TBD)
+\item
+  \textbf{Atmospheric Propagation}: Absorption, refraction, ducting
+  effects (TBD)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Next}: {[}{[}Antenna-Theory-Basics{]}{]} (TBD) - How to design
+antennas for different spectrum bands
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

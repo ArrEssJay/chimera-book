@@ -1,0 +1,515 @@
+\section{Intermodulation Distortion (IMD) in
+Biology}\label{intermodulation-distortion-imd-in-biology}
+
+{[}{[}Home{]}{]} \textbar{}
+{[}{[}Non-Linear-Biological-Demodulation{]}{]} \textbar{}
+{[}{[}Acoustic-Heterodyning{]}{]} \textbar{}
+{[}{[}Frey-Microwave-Auditory-Effect{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{What Is This? (For Non-Technical
+Readers)}\label{what-is-this-for-non-technical-readers}
+
+\textbf{The Simple Version:}
+
+Imagine playing two musical notes together on a guitar. Sometimes, you
+hear a \emph{third} tone that wasn\textquotesingle t in either original
+note-\/-\/-that\textquotesingle s similar to what intermodulation
+distortion (IMD) does, but with electromagnetic or sound waves.
+
+\textbf{The Radio Station Analogy:}
+
+Think of two radio stations broadcasting at slightly different
+frequencies (like 100.0 FM and 100.1 FM). If those signals pass through
+something ``nonlinear'' (like an overdriven speaker or biological
+tissue), they can create new frequencies-\/-\/-including the
+\emph{difference} between them (0.1 MHz in this example).
+
+\textbf{Why Does This Matter for Biology?}
+
+Scientists have wondered: Could we use this trick to: -
+\textbf{Stimulate neurons deep in the brain} without surgery? (Send two
+high-frequency beams from outside the skull; they ``mix'' only where
+they cross) - \textbf{Target specific molecules} by tuning the
+difference frequency to match their vibrations? - \textbf{Create sound
+inside someone\textquotesingle s head} using ultrasound or microwaves?
+
+\textbf{The Reality Check:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{It works with sound waves} (ultrasound mixing is
+  well-established in medical imaging)
+\item
+  \textbf{It\textquotesingle s mostly unproven with electromagnetic
+  waves} in biology (biological tissue isn\textquotesingle t ``nonlinear
+  enough'' at safe power levels)
+\item
+  \textbf{Many proposed applications are speculative} and lack
+  experimental evidence
+\end{itemize}
+
+\textbf{Bottom Line:} IMD is a real physics phenomenon that works great
+in electronics and acoustics, but its usefulness in biological
+electromagnetic applications remains controversial and largely
+theoretical.
+
+\textbf{Read on if you want the technical
+details\textbackslash ldots\{\}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Intermodulation distortion (IMD)} occurs when two or more
+frequencies (\(f_1\), \(f_2\)) interact in a \textbf{nonlinear system},
+producing new frequencies: \[f_{\text{IMD}} = m f_1 \pm n f_2\] where
+\(m, n\) are integers. The \textbf{order} is \(|m| + |n|\).
+
+\textbf{Established examples} : - \textbf{Electronics}: Amplifier
+distortion, mixer circuits - \textbf{Acoustics}: Parametric speakers
+(ultrasound \$\textbackslash rightarrow\$ audible difference frequency)
+
+\textbf{Speculative biological applications} : - \textbf{Neural
+stimulation}: Two high-frequency (e.g., THz) beams cross
+\$\textbackslash rightarrow\$ produce low-frequency (e.g., kHz)
+modulation \$\textbackslash rightarrow\$ activate neurons at depth -
+\textbf{Molecular excitation}: Dual-frequency RF fields mix in proteins
+\$\textbackslash rightarrow\$ excite vibrational modes - \textbf{Medical
+imaging}: Exploit tissue nonlinearity for contrast (ultrasound
+elastography uses similar principle)
+
+\textbf{Key question}: Are biological tissues sufficiently
+\textbf{nonlinear} at RF/THz frequencies to produce detectable IMD?
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{1. Fundamentals of Intermodulation
+Distortion}\label{fundamentals-of-intermodulation-distortion}
+
+\subsubsection{1.1 Nonlinear Systems}\label{nonlinear-systems}
+
+\textbf{Linear system}: Output proportional to input \[y(t) = a x(t)\]
+\textbf{Nonlinear system}: Output contains higher-order terms
+\[y(t) = a_1 x(t) + a_2 x^2(t) + a_3 x^3(t) + \cdots\]
+
+\textbf{Input two tones}:
+\(x(t) = A_1 \cos(\omega_1 t) + A_2 \cos(\omega_2 t)\)
+
+\textbf{Quadratic term} (\(a_2 x^2\)):
+\[x^2(t) = \frac{A_1^2}{2} (1 + \cos 2\omega_1 t) + \frac{A_2^2}{2} (1 + \cos 2\omega_2 t) + A_1 A_2 [\cos(\omega_1 + \omega_2)t + \cos(\omega_1 - \omega_2)t]\]
+Produces: - \textbf{Second harmonics}: \(2f_1\), \(2f_2\) -
+\textbf{Sum/difference frequencies}: \(f_1 + f_2\), \(|f_1 - f_2|\)
+
+\textbf{Cubic term} (\(a_3 x^3\)): Produces \textbf{third-order IMD}:
+\[f_{3\text{rd}} = 2f_1 \pm f_2, \quad 2f_2 \pm f_1\] These are
+particularly important because they can fall \textbf{in-band} (near
+\(f_1\) or \(f_2\)).
+
+\subsubsection{1.2 IMD Orders and
+Amplitudes}\label{imd-orders-and-amplitudes}
+
+\textbf{Power scaling}: - \(n\)-th order IMD amplitude \(\propto P^n\)
+(where \(P\) is input power) - Third-order IMD: \(\propto P^3\) -
+Fifth-order IMD: \(\propto P^5\)
+
+\textbf{Intercept points}: - \textbf{IP3} (third-order intercept point):
+Input power where third-order IMD power equals fundamental power
+(extrapolated) - Higher IP3 \$\textbackslash rightarrow\$ more linear
+system
+
+\subsubsection{1.3 Applications in
+Engineering}\label{applications-in-engineering}
+
+\textbf{Wireless communications}: IMD creates interference (two strong
+signals produce in-band distortion) \textbf{Parametric arrays}:
+Nonlinear ultrasound propagation in water/air
+\$\textbackslash rightarrow\$ audible sound from ultrasound beams
+\textbf{Frequency mixing}: Intentional IMD in mixer circuits
+(downconversion, heterodyne receivers)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Sources of Nonlinearity in Biological
+Tissue}\label{sources-of-nonlinearity-in-biological-tissue}
+
+\subsubsection{2.1 Dielectric
+Nonlinearity}\label{dielectric-nonlinearity}
+
+\textbf{Kerr effect}: Refractive index depends on electric field
+intensity \[n = n_0 + n_2 I\] where \(n_2\) is the nonlinear refractive
+index, \(I\) is intensity.
+
+\textbf{In biological tissue}: - Water has weak Kerr effect:
+\(n_2 \sim 10^{-20}\) m\textbackslash textsuperscript\{2\}/W (optical
+frequencies) - At THz frequencies: Nonlinear susceptibility
+\(\chi^{(3)} \sim 10^{-22}\)
+m\textbackslash textsuperscript\{2\}/V\textbackslash textsuperscript\{2\}
+(very weak)
+
+\textbf{Consequence}: Dielectric IMD negligible at sub-ablation
+intensities (\textless1 MW/cm\textbackslash textsuperscript\{2\})
+
+\subsubsection{2.2 Ionic Nonlinearity (Electrolyte
+Solutions)}\label{ionic-nonlinearity-electrolyte-solutions}
+
+\textbf{Mechanism}: Ion drift in strong electric fields saturates at
+high field strength (mobility decreases).
+
+\textbf{Debye-Falkenhagen effect}: Conductivity \(\sigma\) depends on
+field \(E\): \[\sigma(E) = \sigma_0 (1 - \beta E^2)\] where \(\beta\) is
+small for physiological fields.
+
+\textbf{Estimate}: For \(E \sim 1\) kV/cm (very strong),
+\(\beta E^2 \sim 10^{-3}\) (weak nonlinearity)
+
+\textbf{Conclusion}: Ionic nonlinearity becomes significant only at
+near-electroporation fields (\textgreater10 kV/cm)
+
+\subsubsection{2.3 Membrane Nonlinearity (Voltage-Gated
+Channels)}\label{membrane-nonlinearity-voltage-gated-channels}
+
+\textbf{Strongest nonlinearity} in neural tissue
+
+\textbf{Mechanism}: - Voltage-gated
+Na\textbackslash textsuperscript\{+\},
+K\textbackslash textsuperscript\{+\} channels have \textbf{sigmoidal}
+activation curves - Small changes in transmembrane voltage \(V_m\)
+\$\textbackslash rightarrow\$ large changes in conductance \(g\)
+
+\textbf{Hodgkin-Huxley equations} (highly nonlinear):
+\[I_{\text{Na}} = g_{\text{Na}} m^3 h (V_m - E_{\text{Na}})\] where
+\(m\), \(h\) are voltage-dependent gating variables.
+
+\textbf{Consequence}: If two RF/THz fields induce oscillating \(V_m\)
+(even sub-threshold), nonlinear channel kinetics can rectify or mix
+signals.
+
+\subsubsection{2.4 Protein Conformational
+Nonlinearity}\label{protein-conformational-nonlinearity}
+
+\textbf{Hypothesis} : Proteins have bistable or multistable
+conformations.
+
+\textbf{Example}: Ion channels switch between open/closed states
+(two-state system \$\textbackslash rightarrow\$ nonlinear response to
+forcing)
+
+\textbf{IMD mechanism}: 1. Two EM fields at \(f_1\), \(f_2\) drive
+protein vibrations 2. Anharmonic potential energy surface
+\$\textbackslash rightarrow\$ coupled modes 3. Beat frequency
+\(f_1 - f_2\) modulates conformation at rate matching protein relaxation
+time (\textasciitilde\$\textbackslash mu\$s-ms)
+
+\textbf{Problem}: No experimental demonstration; theoretical models
+require very high intensities.
+
+\subsubsection{2.5 Microtubule
+Nonlinearity}\label{microtubule-nonlinearity}
+
+\textbf{Hypothesis} : Microtubules act as nonlinear resonators due to: -
+Anharmonic lattice vibrations (Davydov solitons?) - Ferroelectric-like
+behavior (aligned dipoles \$\textbackslash rightarrow\$ nonlinear
+polarization)
+
+\textbf{Proposed by}: Hameroff, Tuszynski (speculative, no direct
+evidence)
+
+\textbf{IMD prediction}: Two THz beams (e.g., 0.5 THz + 0.502 THz)
+\$\textbackslash rightarrow\$ difference frequency (2 GHz) couples to
+microtubule phonon modes.
+
+\textbf{Status}: Not tested experimentally
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Proposed Biological IMD
+Mechanisms}\label{proposed-biological-imd-mechanisms}
+
+\subsubsection{3.1 Acoustic Heterodyning (Ultrasound
+\$\textbackslash rightarrow\$
+Audible)}\label{acoustic-heterodyning-ultrasound-audible}
+
+\textbf{Established phenomenon} (in water/air, not biological IMD per
+se): - Two ultrasound beams (e.g., 200 kHz + 205 kHz)
+\$\textbackslash rightarrow\$ audible tone at 5 kHz via nonlinear
+acoustic propagation
+
+\textbf{Biological application} : - Could ultrasound IMD occur
+\emph{inside tissue} to stimulate mechanoreceptors? - Requires high
+intensity (\(>1\) W/cm\textbackslash textsuperscript\{2\})
+\$\textbackslash rightarrow\$ safety concerns
+
+\textbf{See}: {[}{[}Acoustic-Heterodyning{]}{]}
+
+\subsubsection{3.2 Frey Microwave Auditory
+Effect}\label{frey-microwave-auditory-effect}
+
+\textbf{Phenomenon} : Pulsed microwaves (1-10 GHz) induce auditory
+perception without external sound.
+
+\textbf{Mechanism}: Thermoelastic expansion
+\$\textbackslash rightarrow\$ acoustic wave (not IMD, but nonlinear
+interaction)
+
+\textbf{IMD hypothesis} : Could two CW microwave beams at slightly
+different frequencies produce pulsed heating at difference frequency
+\$\textbackslash rightarrow\$ mimic Frey effect? - Theoretical models
+suggest yes, but not demonstrated
+
+\textbf{See}: {[}{[}Frey-Microwave-Auditory-Effect{]}{]}
+
+\subsubsection{3.3 Deep Brain Stimulation via THz
+IMD}\label{deep-brain-stimulation-via-thz-imd}
+
+\textbf{Concept} : - Two THz beams from surface (\(f_1 = 1.000\) THz,
+\(f_2 = 1.001\) THz) - Beams cross at depth
+\$\textbackslash rightarrow\$ difference frequency \(f_{\Delta} = 1\)
+GHz - 1 GHz modulation activates neurons (below ionizing frequency,
+above membrane RC cutoff)
+
+\textbf{Advantages} (theoretical): - Non-invasive - Spatially localized
+to beam crossing region - Tunable frequency (adjust \(f_2\))
+
+\textbf{Challenges}: 1. \textbf{Penetration}: THz
+doesn\textquotesingle t penetrate skull (see
+{[}{[}THz-Propagation-in-Biological-Tissue{]}{]}) 2.
+\textbf{Nonlinearity}: Tissue nonlinearity at THz weak; IMD products
+likely undetectable 3. \textbf{Intensity}: High power needed
+\$\textbackslash rightarrow\$ thermal damage
+
+\textbf{Current status}: Purely theoretical; no experimental validation
+
+\subsubsection{3.4 Molecular Excitation via RF
+IMD}\label{molecular-excitation-via-rf-imd}
+
+\textbf{Hypothesis} : Two RF fields mix in protein
+\$\textbackslash rightarrow\$ excite vibrational mode at difference
+frequency.
+
+\textbf{Example}: - \(f_1 = 10.000\) GHz, \(f_2 = 10.001\) GHz
+\$\textbackslash rightarrow\$ \(f_{\Delta} = 1\) GHz (far-IR, protein
+collective mode) - Resonant excitation \$\textbackslash rightarrow\$
+conformational change \$\textbackslash rightarrow\$ altered function
+
+\textbf{Problem}: Protein vibrational modes heavily damped in solution
+(linewidth \textasciitilde10-100 GHz) \$\textbackslash rightarrow\$ no
+sharp resonance.
+
+\textbf{Predicted efficiency}: \(<10^{-6}\) (six orders of magnitude
+below direct single-photon excitation)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. Experimental Evidence}\label{experimental-evidence}
+
+\subsubsection{4.1 In Vitro Studies}\label{in-vitro-studies}
+
+\textbf{Cell cultures exposed to dual-frequency RF}: - \textbf{No
+consistent IMD effects} reported at physiological intensities
+(\textless10 mW/cm\textbackslash textsuperscript\{2\}) - At high
+intensity (\textgreater1 W/cm\textbackslash textsuperscript\{2\}):
+Thermal effects dominate
+
+\textbf{Protein studies}: - \textbf{No direct demonstration} of
+IMD-induced conformational changes
+
+\subsubsection{4.2 In Vivo Studies}\label{in-vivo-studies}
+
+\textbf{Neural stimulation attempts}: - \textbf{Failed}: Dual THz beams
+did not produce measurable neural responses (limited by penetration) -
+\textbf{Ultrasound IMD}: Some evidence for nonlinear acoustic effects,
+but mechanism debated
+
+\subsubsection{4.3 Acoustic IMD (Positive Evidence
+)}\label{acoustic-imd-positive-evidence}
+
+\textbf{Parametric acoustic arrays}: - Two ultrasound beams (e.g., 1 MHz
++ 1.01 MHz) \$\textbackslash rightarrow\$ audible tone at 10 kHz
+\emph{in air and water} - Also demonstrated \emph{in tissue} (medical
+ultrasound imaging uses harmonic imaging, exploiting tissue
+nonlinearity)
+
+\textbf{Medical imaging}: \textbf{Harmonic imaging} (ultrasound at
+\(f_0\) \$\textbackslash rightarrow\$ detect \(2f_0\)) improves contrast
+by exploiting tissue nonlinearity.
+
+\textbf{Conclusion}: Acoustic IMD in tissue is \textbf{established} ; EM
+IMD is \textbf{not} .
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5. Theoretical Models}\label{theoretical-models}
+
+\subsubsection{5.1 Perturbation Theory}\label{perturbation-theory}
+
+\textbf{Approach}: Treat nonlinear term as small perturbation.
+
+\textbf{Electric field}:
+\(\mathbf{E}(t) = \mathbf{E}_1 e^{i\omega_1 t} + \mathbf{E}_2 e^{i\omega_2 t} + \text{c.c.}\)
+
+\textbf{Nonlinear polarization} (third-order):
+\[\mathbf{P}^{(3)} = \epsilon_0 \chi^{(3)} |\mathbf{E}|^2 \mathbf{E}\]
+Contains terms at \(\omega_1\), \(\omega_2\),
+\(2\omega_1 \pm \omega_2\), \(2\omega_2 \pm \omega_1\), etc.
+
+\textbf{IMD amplitude}: \[E_{\text{IMD}} \sim \chi^{(3)} E_1^2 E_2 L\]
+where \(L\) is interaction length.
+
+\textbf{Tissue estimate}: \(\chi^{(3)} \sim 10^{-22}\)
+m\textbackslash textsuperscript\{2\}/V\textbackslash textsuperscript\{2\},
+\(E_1 = E_2 = 100\) V/m, \(L = 1\) cm:
+\[E_{\text{IMD}} \sim 10^{-7} \text{ V/m} \quad (\text{undetectable})\]
+
+\subsubsection{5.2 Coupled Mode Theory}\label{coupled-mode-theory}
+
+\textbf{For acoustic waves}: Two ultrasound beams exchange energy via
+nonlinear coupling.
+
+\textbf{Wave equation} (with nonlinear term):
+\[\frac{\partial^2 p}{\partial t^2} - c^2 \nabla^2 p = \frac{\beta}{\rho_0 c^2} \frac{\partial^2 (p^2)}{\partial t^2}\]
+where \(\beta\) is nonlinear parameter (\textasciitilde5 for tissue).
+
+\textbf{Result}: Strong IMD for ultrasound; weak for EM (nonlinear
+parameter much smaller).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{6. Critical Assessment}\label{critical-assessment}
+
+\subsubsection{6.1 Why IMD is Weak in Biological Tissue
+(EM)}\label{why-imd-is-weak-in-biological-tissue-em}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Low nonlinear susceptibility}: \(\chi^{(3)}\) for tissue
+  \textasciitilde{}\(10^{-22}\)
+  m\textbackslash textsuperscript\{2\}/V\textbackslash textsuperscript\{2\}
+  (compare to \(10^{-19}\) for semiconductors)
+\item
+  \textbf{Strong absorption}: At THz, penetration \textless1 mm
+  \$\textbackslash rightarrow\$ short interaction length
+\item
+  \textbf{Phase matching}: IMD efficient only if wave vectors satisfy
+  \(\mathbf{k}_{\text{IMD}} = m\mathbf{k}_1 \pm n\mathbf{k}_2\);
+  dispersive tissue makes this hard
+\item
+  \textbf{Thermal noise}: At 310 K, thermal fluctuations mask weak IMD
+  signals
+\end{enumerate}
+
+\subsubsection{6.2 When Might IMD Be
+Significant?}\label{when-might-imd-be-significant}
+
+\textbf{High field strength}: Near electroporation threshold
+(\textgreater10 kV/cm) \$\textbackslash rightarrow\$ membrane
+nonlinearity strong \textbf{Acoustic domain}: Ultrasound IMD works
+(tissue is more nonlinear acoustically) \textbf{Quantum regime}: If
+vibronic coupling creates nonlinear response (speculative; see
+{[}{[}THz-Resonances-in-Microtubules{]}{]})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7. Future Experiments}\label{future-experiments}
+
+\subsubsection{7.1 What Would Prove Biological EM IMD
+Exists?}\label{what-would-prove-biological-em-imd-exists}
+
+\textbf{Test}: 1. Apply two RF or THz beams (\(f_1\), \(f_2\)) to cell
+culture 2. Measure electrical response (patch clamp, calcium imaging) at
+\(f_1 - f_2\) 3. Vary \(f_1 - f_2\) to test for resonance with membrane
+RC time constant 4. \textbf{Control}: Show response vanishes when either
+beam is off (not simple sum of individual effects)
+
+\textbf{Predicted outcome} (based on theory): IMD signal \(<10^{-4}\)
+times linear response \$\textbackslash rightarrow\$ hard to detect.
+
+\subsubsection{7.2 Acoustic IMD for
+Neuromodulation}\label{acoustic-imd-for-neuromodulation}
+
+\textbf{Promising approach} (unlike EM IMD): - Use focused ultrasound
+(FUS) with two frequencies - Exploit tissue acoustic nonlinearity to
+generate beat frequency - Beat frequency modulates neurons mechanically
+(TREK/TRAAK channels)
+
+\textbf{Status}: Early-stage research; some success in rodents (Ye et
+al., \emph{Neuron} 2018)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{8. Connections to Other Wiki
+Pages}\label{connections-to-other-wiki-pages}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Non-Linear-Biological-Demodulation{]}{]} -\/-\/- Overview of
+  nonlinear EM effects in biology
+\item
+  {[}{[}Acoustic-Heterodyning{]}{]} -\/-\/- Ultrasound IMD (established
+  phenomenon)
+\item
+  {[}{[}Frey-Microwave-Auditory-Effect{]}{]} -\/-\/- Nonlinear
+  microwave-acoustic transduction
+\item
+  {[}{[}THz-Bioeffects-Thermal-and-Non-Thermal{]}{]} -\/-\/- Thermal
+  vs.~nonlinear effects
+\item
+  {[}{[}THz-Resonances-in-Microtubules{]}{]} -\/-\/- Speculative quantum
+  nonlinearity
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{9. References}\label{references}
+
+\subsubsection{General Nonlinearity}\label{general-nonlinearity}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Boyd, \emph{Nonlinear Optics} (Academic Press, 2008)} -\/-\/-
+  Textbook on \(\chi^{(3)}\) and IMD
+\item
+  \textbf{Khokhlova et al., \emph{Int. J. Hyperthermia} 31, 77 (2015)}
+  -\/-\/- Acoustic nonlinearity in tissue
+\end{enumerate}
+
+\subsubsection{Biological IMD
+(Speculative)}\label{biological-imd-speculative}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Hameroff \& Penrose, \emph{Phys. Life Rev.} 11, 39 (2014)}
+  -\/-\/- Microtubule nonlinearity (Orch-OR)
+\item
+  \textbf{Lin, \emph{IEEE Trans. Microw. Theory Tech.} 24, 54 (1976)}
+  -\/-\/- RF nonlinear effects in tissue
+\end{enumerate}
+
+\subsubsection{Acoustic IMD
+(Established)}\label{acoustic-imd-established}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  \textbf{Ye et al., \emph{Neuron} 98, 1020 (2018)} -\/-\/-
+  Dual-frequency ultrasound neuromodulation
+\item
+  \textbf{Hamilton \& Blackstock, \emph{Nonlinear Acoustics} (Academic
+  Press, 1998)} -\/-\/- Parametric arrays
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Last updated}: October 2025

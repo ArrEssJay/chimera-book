@@ -1,0 +1,518 @@
+\section{Formula Reference Card}\label{formula-reference-card}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Quick Reference}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Link Budget \&
+Propagation}{ Link Budget \& Propagation}}\label{link-budget-propagation}
+
+\subsubsection{Friis Transmission
+Equation}\label{friis-transmission-equation}
+
+See {[}{[}Free-Space-Path-Loss-(FSPL){]}{]}
+
+\[
+P_r = \frac{P_t G_t G_r \lambda^2}{(4\pi R)^2}
+\]
+
+Or in dB:
+
+\[
+P_r\ (\text{dBm}) = P_t\ (\text{dBm}) + G_t\ (\text{dBi}) + G_r\ (\text{dBi}) - \text{FSPL}\ (\text{dB})
+\]
+
+\subsubsection{Free-Space Path Loss}\label{free-space-path-loss}
+
+\[
+\text{FSPL}\ (\text{dB}) = 20\log_{10}(R) + 20\log_{10}(f) + 32.45
+\]
+
+Where: R in km, f in MHz
+
+Or:
+
+\[
+\text{FSPL}\ (\text{dB}) = 20\log_{10}(R) + 20\log_{10}(f) - 147.55
+\]
+
+Where: R in meters, f in Hz
+
+\subsubsection{Power Density}\label{power-density}
+
+See {[}{[}Power-Density-\&-Field-Strength{]}{]}
+
+\[
+S = \frac{P_t G}{4\pi R^2} \quad (\text{W/m}^2)
+\]
+
+\[
+E_{\text{rms}} = \sqrt{377 \times S} \approx 19.4\sqrt{S} \quad (\text{V/m})
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Signal Quality
+Metrics}{ Signal Quality Metrics}}\label{signal-quality-metrics}
+
+\subsubsection{Signal-to-Noise Ratio}\label{signal-to-noise-ratio}
+
+See {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}
+
+\[
+\text{SNR} = \frac{P_{\text{signal}}}{P_{\text{noise}}}
+\]
+
+In dB:
+
+\[
+\text{SNR}_{\text{dB}} = 10\log_{10}(\text{SNR})
+\]
+
+\subsubsection{Energy Ratios}\label{energy-ratios}
+
+See {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]}
+
+\[
+\frac{E_b}{N_0} = \frac{P_r}{R_b N_0} = \text{SNR} \cdot \frac{B}{R_b}
+\]
+
+\[
+\frac{E_s}{N_0} = \frac{E_b}{N_0} \cdot \log_2(M)
+\]
+
+Where M = constellation size
+
+\subsubsection{Thermal Noise Power}\label{thermal-noise-power}
+
+See {[}{[}Noise-Sources-\&-Noise-Figure{]}{]}
+
+\[
+N = kTB
+\]
+
+Where: - k = 1.38 \$\textbackslash times\$
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}\textbackslash textsuperscript\{3\}
+J/K (Boltzmann\textquotesingle s constant) - T = Temperature (K) - B =
+Bandwidth (Hz)
+
+In dBm:
+
+\[
+N\ (\text{dBm}) = -174 + 10\log_{10}(B)
+\]
+
+For T = 290 K, B in Hz
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Information
+Theory}{ Information Theory}}\label{information-theory}
+
+\subsubsection{Shannon Channel Capacity}\label{shannon-channel-capacity}
+
+See {[}{[}Shannon\textquotesingle s-Channel-Capacity-Theorem{]}{]}
+
+\[
+C = B \log_2(1 + \text{SNR}) \quad (\text{bits/sec})
+\]
+
+\subsubsection{Spectral Efficiency}\label{spectral-efficiency}
+
+See {[}{[}Spectral-Efficiency-\&-Bit-Rate{]}{]}
+
+\[
+\eta = \frac{R_b}{B} \quad (\text{bits/sec/Hz})
+\]
+
+Shannon limit:
+
+\[
+\eta_{\max} = \log_2(1 + \text{SNR})
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Bit Error Rate
+(BER)}{ Bit Error Rate (BER)}}\label{bit-error-rate-ber}
+
+See {[}{[}Bit-Error-Rate-(BER){]}{]}
+
+\subsubsection{Q-Function}\label{q-function}
+
+\[
+Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} dt
+\]
+
+Approximation:
+
+\[
+Q(x) \approx \frac{1}{x\sqrt{2\pi}} e^{-x^2/2} \quad (x > 3)
+\]
+
+\subsubsection{BPSK in AWGN}\label{bpsk-in-awgn}
+
+See {[}{[}Binary-Phase-Shift-Keying-(BPSK){]}{]}
+
+\[
+\text{BER} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
+\]
+
+\subsubsection{QPSK in AWGN}\label{qpsk-in-awgn}
+
+See {[}{[}QPSK-Modulation{]}{]}
+
+\[
+\text{BER} \approx Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
+\]
+
+(Same as BPSK for Gray coding)
+
+\subsubsection{M-PSK in AWGN}\label{m-psk-in-awgn}
+
+\[
+\text{BER} \approx \frac{2}{\ log_2(M)} Q\left(\sqrt{\frac{2E_b}{N_0}\log_2(M)} \sin\left(\frac{\pi}{M}\right)\right)
+\]
+
+\subsubsection{M-QAM in AWGN}\label{m-qam-in-awgn}
+
+See {[}{[}Quadrature-Amplitude-Modulation-(QAM){]}{]}
+
+\[
+\text{BER} \approx \frac{4}{\log_2(M)}\left(1 - \frac{1}{\sqrt{M}}\right) Q\left(\sqrt{\frac{3\log_2(M)}{M-1} \cdot \frac{E_b}{N_0}}\right)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Modulation}{ Modulation}}\label{modulation}
+
+\subsubsection{IQ Representation}\label{iq-representation}
+
+See {[}{[}IQ-Representation{]}{]}
+
+\[
+s(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)
+\]
+
+Or:
+
+\[
+s(t) = \text{Re}\{[I(t) + jQ(t)]e^{j2\pi f_c t}\}
+\]
+
+\subsubsection{Symbol Rate vs Bit Rate}\label{symbol-rate-vs-bit-rate}
+
+\[
+R_b = R_s \log_2(M)
+\]
+
+Where: - R\_b = Bit rate (bits/sec) - R\_s = Symbol rate (symbols/sec) -
+M = Constellation size
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Propagation
+Effects}{ Propagation Effects}}\label{propagation-effects}
+
+\subsubsection{Doppler Shift}\label{doppler-shift}
+
+See {[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}
+
+\[
+f_d = \frac{v}{\lambda} \cos(\theta) = \frac{vf_c}{c} \cos(\theta)
+\]
+
+\subsubsection{Coherence Bandwidth}\label{coherence-bandwidth}
+
+\[
+B_c \approx \frac{1}{5\tau_{\text{rms}}}
+\]
+
+Where \$\textbackslash tau\$\_rms = RMS delay spread
+
+\subsubsection{Coherence Time}\label{coherence-time}
+
+\[
+T_c \approx \frac{0.423}{B_d} = \frac{0.423}{2f_{d,\max}}
+\]
+
+Where B\_d = Doppler spread
+
+\subsubsection{Rayleigh Fading PDF}\label{rayleigh-fading-pdf}
+
+See {[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}
+
+\[
+p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2}{2\sigma^2}\right)
+\]
+
+\subsubsection{Rician K-Factor}\label{rician-k-factor}
+
+\[
+K = \frac{A^2}{2\sigma^2} = \frac{\text{LOS power}}{\text{Scattered power}}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Antenna \&
+Polarization}{ Antenna \& Polarization}}\label{antenna-polarization}
+
+\subsubsection{Antenna Gain (Parabolic
+Dish)}\label{antenna-gain-parabolic-dish}
+
+See {[}{[}Antenna-Theory-Basics{]}{]}
+
+\[
+G \approx \eta_{\text{ant}} \left(\frac{\pi D}{\lambda}\right)^2
+\]
+
+\subsubsection{Effective Aperture}\label{effective-aperture}
+
+\[
+A_e = \frac{G\lambda^2}{4\pi}
+\]
+
+\subsubsection{Polarization Loss Factor}\label{polarization-loss-factor}
+
+See {[}{[}Wave-Polarization{]}{]}
+
+For angle mismatch \$\textbackslash theta\$:
+
+\[
+\text{PLF} = \cos^2(\theta)
+\]
+
+In dB:
+
+\[
+L_{\text{pol}}\ (\text{dB}) = -20\log_{10}(\cos\theta)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Atmospheric
+Effects}{ Atmospheric Effects}}\label{atmospheric-effects}
+
+\subsubsection{Rain Attenuation (ITU-R
+Model)}\label{rain-attenuation-itu-r-model}
+
+See {[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}
+
+\[
+A = \gamma R^{\beta} \quad (\text{dB/km})
+\]
+
+Where: - \$\textbackslash gamma\$, \$\textbackslash beta\$ depend on
+frequency and polarization - R = Rain rate (mm/hr)
+
+\subsubsection{Faraday Rotation}\label{faraday-rotation}
+
+See {[}{[}Wave-Polarization{]}{]}
+
+\[
+\Omega = 2.36 \times 10^4 \frac{B_\parallel \cdot \text{TEC}}{f^2} \quad (\text{radians})
+\]
+
+Where: - B\_\$\textbackslash parallel\$ = Magnetic field (Tesla) - TEC =
+Total Electron Content (electrons/m\textbackslash textsuperscript\{2\})
+- f = Frequency (Hz)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Error
+Correction}{ Error Correction}}\label{error-correction}
+
+\subsubsection{Hamming Distance}\label{hamming-distance}
+
+See {[}{[}Hamming-Distance-\&-Error-Detection{]}{]}
+
+\textbf{Error detection capability}:
+
+\[
+d_{\min} \geq t + 1
+\]
+
+\textbf{Error correction capability}:
+
+\[
+d_{\min} \geq 2t + 1
+\]
+
+Where: - d\_min = Minimum Hamming distance - t = Number of errors
+
+\subsubsection{Code Rate}\label{code-rate}
+
+\[
+R_c = \frac{k}{n}
+\]
+
+Where: - k = Information bits - n = Total bits (information + parity)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ System
+Parameters}{ System Parameters}}\label{system-parameters}
+
+\subsubsection{Noise Figure}\label{noise-figure}
+
+See {[}{[}Noise-Sources-\&-Noise-Figure{]}{]}
+
+\[
+F = \frac{\text{SNR}_{\text{in}}}{\text{SNR}_{\text{out}}}
+\]
+
+In dB:
+
+\[
+NF\ (\text{dB}) = 10\log_{10}(F)
+\]
+
+\subsubsection{Cascade Noise Figure}\label{cascade-noise-figure}
+
+\[
+F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \ldots
+\]
+
+\subsubsection{Processing Gain (Spread
+Spectrum)}\label{processing-gain-spread-spectrum}
+
+See {[}{[}Spread-Spectrum-(DSSS-FHSS){]}{]}
+
+\[
+G_p = \frac{B_{\text{RF}}}{B_{\text{data}}}
+\]
+
+In dB:
+
+\[
+G_p\ (\text{dB}) = 10\log_{10}\left(\frac{B_{\text{RF}}}{B_{\text{data}}}\right)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ MIMO
+Capacity}{ MIMO Capacity}}\label{mimo-capacity}
+
+See {[}{[}MIMO-\&-Spatial-Multiplexing{]}{]}
+
+\subsubsection{Ergodic Capacity (known CSI at
+RX)}\label{ergodic-capacity-known-csi-at-rx}
+
+\[
+C = \log_2 \det\left(\mathbf{I}_{N_r} + \frac{\rho}{N_t} \mathbf{HH}^H\right) \quad (\text{bits/sec/Hz})
+\]
+
+Where: - N\_r, N\_t = Number of RX/TX antennas - \$\textbackslash rho\$
+= SNR - H = Channel matrix
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Useful
+Constants}{ Useful Constants}}\label{useful-constants}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Constant & Symbol & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Speed of light} & c & 3 \$\textbackslash times\$
+10\textbackslash textsuperscript\{8\} m/s \\
+\textbf{Boltzmann\textquotesingle s constant} & k & 1.38
+\$\textbackslash times\$
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}\textbackslash textsuperscript\{3\}
+J/K \\
+\textbf{Impedance of free space} & \(\eta_0\) & 377
+\$\textbackslash Omega\$ \\
+\textbf{Thermal noise floor} (290 K, 1 Hz) & - & -174 dBm/Hz \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Unit
+Conversions}{ Unit Conversions}}\label{unit-conversions}
+
+\subsubsection{Power}\label{power}
+
+\[
+P\ (\text{dBm}) = 10\log_{10}(P\ (\text{mW}))
+\]
+
+\[
+P\ (\text{dBW}) = P\ (\text{dBm}) - 30
+\]
+
+\subsubsection{Wavelength \$\textbackslash leftrightarrow\$
+Frequency}\label{wavelength-frequency}
+
+\[
+\lambda = \frac{c}{f}
+\]
+
+\textbf{Examples}: - 2.4 GHz \$\textbackslash rightarrow\$
+\$\textbackslash lambda\$ = 12.5 cm - 900 MHz
+\$\textbackslash rightarrow\$ \$\textbackslash lambda\$ = 33.3 cm - 28
+GHz \$\textbackslash rightarrow\$ \$\textbackslash lambda\$ = 10.7 mm
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Quick Reference
+Values}{ Quick Reference Values}}\label{quick-reference-values}
+
+\subsubsection{BER vs Eb/N0 (BPSK)}\label{ber-vs-ebn0-bpsk}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Eb/N0 (dB) & BER \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 0.079 \\
+5 & 5.9 \$\textbackslash times\$
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\} \\
+10 & 3.9 \$\textbackslash times\$
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\} \\
+15 & 7.7 \$\textbackslash times\$
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\} \\
+\end{longtable}
+}
+
+\subsubsection{Typical Link Budgets}\label{typical-link-budgets}
+
+\textbf{WiFi (2.4 GHz, 10 m)}: - TX power: 20 dBm (100 mW) - FSPL: -60
+dB - RX power: -40 dBm
+
+\textbf{Satellite (12 GHz, GEO)}: - TX power (EIRP): 50 dBW - FSPL: -206
+dB - RX power: -156 dBW = -126 dBm
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Common System
+Parameters}{ Common System Parameters}}\label{common-system-parameters}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+System & Frequency & Modulation & Coding \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{WiFi 802.11g} & 2.4 GHz & OFDM (BPSK-64QAM) & Convolutional \\
+\textbf{LTE} & 700 MHz - 2.6 GHz & OFDM (QPSK-256QAM) & Turbo \\
+\textbf{5G NR} & 600 MHz - 40 GHz & OFDM (QPSK-256QAM) & LDPC, Polar \\
+\textbf{GPS} & 1.5 GHz & BPSK & None (spreading) \\
+\textbf{DVB-S2} & 10-12 GHz & 8PSK, 16/32APSK & LDPC + BCH \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{For detailed derivations, see the linked wiki pages.}
+
+\emph{Updated: October 4, 2025}

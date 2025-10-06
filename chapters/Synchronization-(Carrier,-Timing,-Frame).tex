@@ -1,0 +1,731 @@
+\section{Synchronization (Carrier, Timing,
+Frame)}\label{synchronization-carrier-timing-frame}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{System Implementation} \textbar{}
+{[}{[}Signal-Chain-(End-to-End-Processing){]}{]} \textbar{}
+{[}{[}Channel-Equalization{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{{[}clock{]} For Non-Technical
+Readers}\label{for-non-technical-readers}
+
+\textbf{Synchronization is like tuning a radio perfectly-\/-\/-the
+receiver must match the transmitter\textquotesingle s frequency, phase,
+and timing, or you just hear noise!}
+
+\textbf{The problem - Everything must align}: - Transmitter sends signal
+at exact frequency/phase/timing - Signal travels through space (delay,
+Doppler shift) - Receiver\textquotesingle s clock is slightly different
+- If misaligned: Signal is gibberish!
+
+\textbf{The three types of sync}:
+
+\textbf{1. Carrier Frequency Sync} ( Tuning the radio): -
+\textbf{Problem}: Receiver\textquotesingle s oscillator slightly
+different from transmitter - Off by 100 Hz? Signal ``wobbles'' and
+can\textquotesingle t be decoded! - \textbf{Solution}: Detect frequency
+error and adjust local oscillator - \textbf{Like}: Fine-tuning old radio
+dial to eliminate whistling
+
+\textbf{2. Carrier Phase Sync} ( Getting the angle right): -
+\textbf{Problem}: Even at right frequency, phase can be rotated -
+45\$\^{}\textbackslash circ\$ phase error? All constellation points
+rotated! - \textbf{Solution}: Use known patterns (pilot symbols) to
+measure phase - \textbf{Like}: Rotating a map to align with compass
+
+\textbf{3. Symbol Timing Sync} ({[}timer{]} Sampling at the right
+moment): - \textbf{Problem}: When does each symbol start/end? - Sample
+too early/late? Catch transition between symbols! - \textbf{Solution}:
+Find optimal sampling instant (eye diagram peak) - \textbf{Like}:
+Jumping rope -\/-\/- must jump at exactly the right moment!
+
+\textbf{4. Frame Sync} ( Finding the start of message): -
+\textbf{Problem}: Where does packet begin in the stream? -
+\textbf{Solution}: Send known preamble, receiver searches for it -
+\textbf{Like}: Finding ``Dear Sir'' at start of letter
+
+\textbf{Real-world examples}:
+
+\textbf{Your phone connecting to WiFi}: 1. \textbf{Frequency sync}: ``Is
+this really channel 6 at 2.437 GHz?'' 2. \textbf{Timing sync}: ``When
+should I sample each OFDM symbol?'' 3. \textbf{Frame sync}: ``Where does
+the packet start?'' 4. \textbf{Phase sync}: ``What\textquotesingle s the
+phase reference?'' - All this happens in milliseconds!
+
+\textbf{GPS receiver}: - Must sync to satellite signal - Doppler shift
+from moving satellite = frequency offset - Continuously tracking and
+adjusting sync - Lose sync \$\textbackslash rightarrow\$ lose position!
+
+\textbf{Why it\textquotesingle s hard}: - \textbf{Doppler}: Moving
+transmitter/receiver shifts frequency - Car at 100 km/h:
+\textasciitilde220 Hz shift at 2.4 GHz! - \textbf{Oscillator drift}:
+Cheap crystals drift with temperature - \textbf{Multipath}: Echoes
+confuse timing - \textbf{Noise}: Makes patterns hard to detect
+
+\textbf{How receivers achieve sync}:
+
+\textbf{Cold start} (no sync): 1. Search wide frequency range 2. Detect
+presence of signal 3. Coarse frequency lock (\textasciitilde kHz
+accuracy) 4. Fine frequency lock (\textasciitilde Hz accuracy) 5. Phase
+lock 6. Symbol timing lock 7. Frame sync 8. NOW can decode data!
+
+\textbf{Tracking} (maintaining sync): - Continuously monitor and adjust
+- Phase-locked loop (PLL) tracks frequency/phase - Timing recovery
+tracks symbol boundaries - Update 1000s of times per second!
+
+\textbf{When sync fails}: - \textbf{WiFi}: ``Limited connectivity'' =
+can\textquotesingle t achieve frame sync - \textbf{TV}: Picture rolls or
+has diagonal lines = bad sync - \textbf{Old modems}: ``Handshake'' =
+establishing sync - \textbf{Satellite}: Brief signal loss = must re-sync
+(takes seconds)
+
+\textbf{The sync symbols you\textquotesingle ve seen}: - \textbf{WiFi}:
+Preamble at start of packet (sync symbols) - \textbf{TV}: Black bar at
+edge of picture (sync pulse) - \textbf{Old modems}: Screeching sounds =
+training sequence for sync!
+
+\textbf{Fun fact}: The first few milliseconds of every WiFi packet are
+dedicated to synchronization-\/-\/-your device sends known patterns that
+both transmitter and receiver recognize, allowing perfect alignment
+before data transmission begins!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Synchronization} is critical for coherent
+demodulation-\/-\/-receiver must align with transmitter.
+
+\textbf{Three types}: 1. \textbf{Carrier frequency synchronization}:
+Match local oscillator frequency 2. \textbf{Carrier phase
+synchronization}: Align carrier phase (0\$\^{}\textbackslash circ\$
+reference) 3. \textbf{Symbol timing synchronization}: Sample at correct
+instants 4. \textbf{Frame synchronization}: Identify packet/frame
+boundaries
+
+\textbf{Failure modes}: - \textbf{CFO} (Carrier Frequency Offset)
+\$\textbackslash rightarrow\$ Constellation rotation, ICI -
+\textbf{Phase error} \$\textbackslash rightarrow\$ Constellation
+rotation - \textbf{Timing error} \$\textbackslash rightarrow\$ ISI,
+wrong sample points - \textbf{Frame misalignment}
+\$\textbackslash rightarrow\$ Lost packets
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Carrier Frequency
+Synchronization}\label{carrier-frequency-synchronization}
+
+\subsubsection{Carrier Frequency Offset
+(CFO)}\label{carrier-frequency-offset-cfo}
+
+\textbf{Cause}: LO frequency mismatch between TX and RX
+
+\[
+f_{\text{error}} = f_{\text{LO,RX}} - f_{\text{LO,TX}}
+\]
+
+\textbf{Effect on received signal}:
+
+\[
+r(t) = s(t) e^{j 2\pi \Delta f t} + n(t)
+\]
+
+Where \(\Delta f\) = CFO (Hz)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{CFO Impact}\label{cfo-impact}
+
+\textbf{Normalized CFO}: \(\epsilon = \Delta f \cdot T_s\) (fraction of
+symbol rate)
+
+\textbf{Effects}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Constellation rotation}: Phase rotates \(2\pi \epsilon\) per
+  symbol
+\item
+  \textbf{ICI} (Inter-Carrier Interference in OFDM): Subcarriers leak
+  into neighbors
+\item
+  \textbf{SNR degradation}: Effective SNR loss
+  \textasciitilde{}\(10 \log_{10}(1 + \text{SNR} \cdot (2\pi\epsilon)^2)\)
+  dB
+\end{enumerate}
+
+\textbf{Example}: 2.4 GHz WiFi, \$\textbackslash pm\$20 ppm crystal -
+CFO: \$\textbackslash pm\$48 kHz - Symbol rate: 250 ksps
+\$\textbackslash rightarrow\$ \(\epsilon = \pm 0.192\) (19\%!) -
+\textbf{Must correct} before demodulation
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{CFO Estimation Methods}\label{cfo-estimation-methods}
+
+\paragraph{1. Data-Aided
+(Preamble-Based)}\label{data-aided-preamble-based}
+
+\textbf{Transmit known symbols} (preamble, pilot tones)
+
+\textbf{Correlate} received with expected:
+
+\[
+\hat{\Delta f} = \frac{1}{2\pi T} \angle \left(\sum_{k} r_k \cdot s_k^*\right)
+\]
+
+Where: - \(r_k\) = Received preamble symbol \(k\) - \(s_k\) = Known
+preamble symbol \(k\) - \(T\) = Symbol period
+
+\textbf{Range}: \(|\Delta f| < 1/(2T)\) (ambiguity)
+
+\textbf{Accuracy}: \(\sim 10^{-4}\) of symbol rate
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{2. Blind (Non-Data-Aided)}\label{blind-non-data-aided}
+
+\textbf{No preamble}, use signal properties
+
+\textbf{Method}: Power spectral density peak, cyclostationary features
+
+\textbf{Example (MPSK)}:
+
+\[
+\hat{\Delta f} = \frac{1}{2\pi M T} \angle \left(\sum_{k} r_k^M\right)
+\]
+
+For M-PSK (raise to M-th power removes modulation)
+
+\textbf{Range}: \(|\Delta f| < 1/(2MT)\) (reduced ambiguity)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{3. Two-Stage Acquisition}\label{two-stage-acquisition}
+
+\textbf{Coarse acquisition}: \$\textbackslash pm\$50\% symbol rate
+(preamble autocorrelation)
+
+\textbf{Fine tracking}: \$\textbackslash pm\$0.1\% (PLL,
+decision-directed)
+
+\textbf{Example (WiFi 802.11a)}: - Short preamble: Coarse CFO
+(\$\textbackslash pm\$100 kHz range) - Long preamble: Fine CFO
+(\$\textbackslash pm\$1 kHz accuracy)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{CFO Correction}\label{cfo-correction}
+
+\textbf{Digital correction} (after downconversion):
+
+\[
+r_{\text{corrected}}[n] = r[n] \cdot e^{-j 2\pi \hat{\epsilon} n}
+\]
+
+\textbf{Analog correction}: Adjust VCO frequency (AFC, Automatic
+Frequency Control)
+
+\textbf{Hybrid}: Coarse analog, fine digital
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Carrier Phase
+Synchronization}\label{carrier-phase-synchronization}
+
+\subsubsection{Phase Offset}\label{phase-offset}
+
+\textbf{After CFO correction}, residual phase error \(\theta\):
+
+\[
+r(t) = s(t) e^{j\theta} + n(t)
+\]
+
+\textbf{Effect}: Constellation rotates by \(\theta\)
+
+\textbf{Tolerance}: - \textbf{BPSK}:
+\$\textbackslash pm\$90\$\^{}\textbackslash circ\$ (ambiguity,
+differential coding helps) - \textbf{QPSK}:
+\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ - \textbf{16-QAM}:
+\$\textbackslash pm\$22.5\$\^{}\textbackslash circ\$ - \textbf{256-QAM}:
+\$\textbackslash pm\$2.8\$\^{}\textbackslash circ\$ (very sensitive!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Phase-Locked Loop (PLL)}\label{phase-locked-loop-pll}
+
+\textbf{Classic analog/digital feedback loop}:
+
+\begin{verbatim}
+Input --> [Phase      --> [Loop    --> [VCO/NCO] --> Local
+           Detector]      Filter]                    Carrier
+                                                       |
+              +--------------------<--------------------+
+\end{verbatim}
+
+\textbf{Components}: 1. \textbf{Phase detector}: Measure phase error
+(mixer + LPF) 2. \textbf{Loop filter}: 2nd-order (PI controller) 3.
+\textbf{VCO/NCO}: Voltage/Numerically Controlled Oscillator
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Loop Dynamics}\label{loop-dynamics}
+
+\textbf{2nd-order PLL}:
+
+\[
+H(s) = \frac{2\zeta\omega_n s + \omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}
+\]
+
+Where: - \(\omega_n\) = Natural frequency (rad/s) - \(\zeta\) = Damping
+factor (0.707 critical)
+
+\textbf{Loop bandwidth} \(B_L \approx \omega_n\) (for
+\(\zeta \approx 0.7\))
+
+\textbf{Trade-off}: - \textbf{Narrow BW} (\(B_L < 0.01 R_s\)): Better
+noise rejection, slower acquisition - \textbf{Wide BW}
+(\(B_L > 0.1 R_s\)): Faster acquisition, more noise
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Costas Loop}\label{costas-loop}
+
+\textbf{For suppressed-carrier modulation} (BPSK, QPSK)
+
+\textbf{Structure}:
+
+\begin{verbatim}
+           cos(t+)
+                |
+Input --> [×] --> [LPF] --> I(t) --\
+          [×] --> [LPF] --> Q(t) ---+--> [Phase  --> [Loop   --> [VCO]
+           |                         |    Detector]     Filter]      |
+      -sin(t+)                     |                               |
+           ^                         |                               |
+           +-------------------------+-------------------------------+
+\end{verbatim}
+
+\textbf{Phase detector}: \(e = I \cdot Q\) (for BPSK)
+
+\textbf{QPSK}: \(e = \text{sign}(I) \cdot Q - I \cdot \text{sign}(Q)\)
+
+\textbf{Advantage}: Tracks phase without pilot carrier (bandwidth
+efficient)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Decision-Directed Phase
+Tracking}\label{decision-directed-phase-tracking}
+
+\textbf{Use decoded symbols} as phase reference:
+
+\[
+e[n] = \angle(r[n] \cdot \hat{s}[n]^*)
+\]
+
+Where \(\hat{s}[n]\) = Decoded symbol (nearest constellation point)
+
+\textbf{Update}:
+
+\[
+\hat{\theta}[n+1] = \hat{\theta}[n] + \mu \cdot e[n]
+\]
+
+\textbf{Step size} \(\mu\): Small (\textasciitilde0.01) for stability
+
+\textbf{Works after initial acquisition} (preamble-based)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Symbol Timing
+Synchronization}\label{symbol-timing-synchronization}
+
+\subsubsection{Timing Offset}\label{timing-offset}
+
+\textbf{Sample at wrong instant} \$\textbackslash rightarrow\$ ISI,
+degraded SNR
+
+\textbf{Optimal sampling}: Peak of matched filter output (zero ISI
+point)
+
+\textbf{Timing error} \(\tau\): Offset from optimal (fraction of symbol
+period)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Early-Late Gate}\label{early-late-gate}
+
+\textbf{Classic timing recovery} (Mueller \& Müller algorithm):
+
+\textbf{Sample at 3 points}: Early, On-time (\(t_k\)), Late
+
+\[
+e_k = \text{sign}(r[t_k - T/2]) \cdot r[t_k] - \text{sign}(r[t_k + T/2]) \cdot r[t_k]
+\]
+
+\textbf{Update}:
+
+\[
+\hat{\tau}[k+1] = \hat{\tau}[k] - \mu \cdot e_k
+\]
+
+\textbf{Advantage}: Works with any signal (blind)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Gardner Timing Error
+Detector}\label{gardner-timing-error-detector}
+
+\textbf{Improved early-late} for bandlimited signals:
+
+\[
+e_k = (r[t_k] - r[t_{k-1}]) \cdot r[t_k - T/2]
+\]
+
+\textbf{Where}: - \(r[t_k]\) = Current sample - \(r[t_{k-1}]\) =
+Previous symbol sample - \(r[t_k - T/2]\) = Mid-point sample
+
+\textbf{Advantage}: Better performance, still blind
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Maximum Likelihood (ML)
+Timing}\label{maximum-likelihood-ml-timing}
+
+\textbf{Data-aided} (preamble):
+
+\textbf{Find} \(\hat{\tau}\) that maximizes:
+
+\[
+\Lambda(\tau) = \left|\sum_{k} r[t_k + \tau] \cdot s_k^*\right|^2
+\]
+
+\textbf{Implementation}: Interpolate and search
+(\$\textbackslash pm\$0.5 symbol period)
+
+\textbf{Accuracy}: Sub-sample (\textasciitilde0.01 symbol period)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Timing Loop}\label{timing-loop}
+
+\textbf{Similar to PLL}:
+
+\begin{verbatim}
+Input --> [Timing Error --> [Loop    --> [NCO/    --> Sample
+           Detector]         Filter]      Interp]    Clock
+                                             |
+              +---------------<---------------+
+\end{verbatim}
+
+\textbf{NCO}: Numerically Controlled Oscillator (adjusts sampling phase)
+
+\textbf{Interpolator}: Polyphase filter (fractional delay)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Frame Synchronization}\label{frame-synchronization}
+
+\subsubsection{Purpose}\label{purpose}
+
+\textbf{Identify} packet/frame start in continuous bit stream
+
+\textbf{Required for}: - Header decoding (length, MCS) - Payload
+extraction - Retransmission (ARQ)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Preamble Detection}\label{preamble-detection}
+
+\textbf{Transmit known pattern} at start of frame
+
+\textbf{Receiver correlates}:
+
+\[
+C[n] = \sum_{k=0}^{L-1} r[n+k] \cdot p[k]^*
+\]
+
+Where: - \(p[k]\) = Preamble (length \(L\)) - \(r[n]\) = Received signal
+
+\textbf{Threshold}:
+
+\[
+|C[n]| > \gamma \quad \Rightarrow \quad \text{Frame detected at } n
+\]
+
+\textbf{Threshold} \(\gamma\): Balance false alarm vs missed detection
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Auto-Correlation (WiFi
+Example)}\label{auto-correlation-wifi-example}
+
+\textbf{Short preamble}: 16-sample pattern, repeated 10 times
+
+\textbf{Auto-correlate} with delayed version:
+
+\[
+R[n] = \sum_{k=0}^{15} r[n+k] \cdot r[n+k-16]^*
+\]
+
+\textbf{Peak} when aligned \$\textbackslash rightarrow\$ Frame start
+
+\textbf{Advantage}: No stored template (self-synchronizing)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Barker Code}\label{barker-code}
+
+\textbf{Binary sequence} with ideal autocorrelation:
+
+\textbf{11-bit Barker}: +1 +1 +1 \$-\$1 \$-\$1 \$-\$1 +1 \$-\$1 \$-\$1
++1 \$-\$1
+
+\textbf{Autocorrelation peak}: 11 (sidelobes \$\textbackslash leq\$1)
+
+\textbf{Used in}: 802.11b (1-2 Mbps DSSS)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Frame Structure Example (WiFi
+802.11a)}\label{frame-structure-example-wifi-802.11a}
+
+\begin{verbatim}
+[Short Preamble (8 s)] [Long Preamble (8 s)] [SIGNAL (4 s)] [DATA]
+        |                        |                      |
+   CFO coarse              CFO fine, channel est    Rate, length
+   AGC setting              Timing sync
+\end{verbatim}
+
+\textbf{Short preamble}: 10\$\textbackslash times\$ repetition (1.6
+\$\textbackslash mu\$s pattern) - AGC settling - Coarse CFO
+(\$\textbackslash pm\$100 kHz) - Frame detection
+
+\textbf{Long preamble}: 2\$\textbackslash times\$ known symbols (3.2
+\$\textbackslash mu\$s each) - Fine CFO (\$\textbackslash pm\$1 kHz) -
+Channel estimation (64 subcarriers) - Symbol timing
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical System Examples}\label{practical-system-examples}
+
+\subsubsection{1. GPS L1 C/A Acquisition}\label{gps-l1-ca-acquisition}
+
+\textbf{Challenge}: Signal below noise floor (\$-\$130 dBm)
+
+\textbf{C/A code}: 1023-chip Gold code, 1.023 MHz (1 ms period)
+
+\textbf{Acquisition}: 1. \textbf{Coarse search}: \$\textbackslash pm\$5
+kHz Doppler, 0.5-chip spacing 2. \textbf{FFT-based}: Correlate in
+frequency domain (fast) 3. \textbf{Threshold}: SNR \textgreater{} 10 dB
+after integration
+
+\textbf{Time}: 0.1-1 second (cold start), 1-10 ms (hot start)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. LTE Cell Search}\label{lte-cell-search}
+
+\textbf{PSS} (Primary Synchronization Signal): Detect slot timing, cell
+ID (mod 3)
+
+\textbf{SSS} (Secondary Synchronization Signal): Frame timing, cell ID
+(504 total)
+
+\textbf{Steps}: 1. \textbf{PSS detection}: 3 Zadoff-Chu sequences,
+correlate every 0.5 ms 2. \textbf{Coarse CFO}: From PSS phase 3.
+\textbf{SSS detection}: 168 sequences (2 per cell group) 4. \textbf{Fine
+CFO}: From SSS 5. \textbf{PBCH decode}: Master Info Block (bandwidth,
+frame number)
+
+\textbf{Time}: \textasciitilde100 ms (initial), \textasciitilde10 ms
+(handover)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. DVB-S2 Satellite
+Receiver}\label{dvb-s2-satellite-receiver}
+
+\textbf{Coarse CFO}: \$\textbackslash pm\$500 kHz (Doppler, LNB drift)
+
+\textbf{Timing offset}: \$\textbackslash pm\$100 ppm
+
+\textbf{Acquisition}: 1. \textbf{PLHEADER}: 90-symbol pilot block (start
+of frame) 2. \textbf{Coarse timing}: Sliding correlation 3. \textbf{Fine
+CFO/phase}: Pilot symbols every 16 data symbols 4. \textbf{Tracking}:
+Decision-directed on pilots
+
+\textbf{Time}: \textasciitilde1 second (blind search),
+\textasciitilde100 ms (known frequency)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Synchronization Errors}\label{synchronization-errors}
+
+\subsubsection{CFO Impact}\label{cfo-impact-1}
+
+\textbf{Small CFO} (\(\epsilon = 0.01\)): - Constellation rotates
+3.6\$\^{}\textbackslash circ\$ per symbol (10 symbols
+\$\textbackslash rightarrow\$ 36\$\^{}\textbackslash circ\$) - QPSK: OK
+(\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ tolerance) -
+256-QAM: \textbf{Fails}
+(\$\textbackslash pm\$2.8\$\^{}\textbackslash circ\$ tolerance)
+
+\textbf{Large CFO} (\(\epsilon = 0.2\)): - OFDM: ICI dominates, 10+ dB
+loss
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Phase Noise}\label{phase-noise}
+
+\textbf{Oscillator jitter} causes random phase variation:
+
+\[
+\phi_n[k] \sim \mathcal{N}(0, \sigma_\phi^2)
+\]
+
+\textbf{Effect}: Constellation spreading
+
+\textbf{Tolerance}: - \textbf{QPSK}:
+\textasciitilde10\$\^{}\textbackslash circ\$ RMS - \textbf{64-QAM}:
+\textasciitilde2\$\^{}\textbackslash circ\$ RMS - \textbf{1024-QAM}:
+\textasciitilde0.5\$\^{}\textbackslash circ\$ RMS
+
+\textbf{Mitigation}: Pilot-based tracking (common phase error
+estimation)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Timing Jitter}\label{timing-jitter}
+
+\textbf{Clock instability} \$\textbackslash rightarrow\$ Sampling time
+variation
+
+\textbf{Effect}: Effective SNR loss
+
+\[
+\text{SNR}_{\text{eff}} = \text{SNR} \cdot \text{sinc}^2(\pi \sigma_\tau)
+\]
+
+Where \(\sigma_\tau\) = RMS timing error (fraction of symbol period)
+
+\textbf{Example}: \(\sigma_\tau = 0.1\) \$\textbackslash rightarrow\$
+0.4 dB loss
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Design Guidelines}\label{design-guidelines}
+
+\subsubsection{1. Choose Loop Bandwidth}\label{choose-loop-bandwidth}
+
+\textbf{Narrow} (\(B_L < 0.01 R_s\)): - High SNR scenarios - Low phase
+noise - Stationary channel
+
+\textbf{Wide} (\(B_L > 0.1 R_s\)): - Low SNR - High Doppler (mobile) -
+Fast acquisition needed
+
+\textbf{Typical}: \(B_L \approx 0.01 - 0.05 R_s\) (compromise)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Preamble Design}\label{preamble-design}
+
+\textbf{Length}: Trade-off overhead vs accuracy - \textbf{Short} (10-50
+symbols): Low overhead, lower SNR threshold - \textbf{Long} (100+
+symbols): Better accuracy, higher overhead
+
+\textbf{Pattern}: Good autocorrelation (low sidelobes) -
+\textbf{Pseudorandom}: LFSR, Gold codes - \textbf{Constant amplitude}:
+CAZAC (Zadoff-Chu), reduce PAPR
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Pilot Density}\label{pilot-density}
+
+\textbf{OFDM subcarrier pilots}: - \textbf{Sparse} (1/12 subcarriers):
+Low overhead, slower tracking - \textbf{Dense} (1/4 subcarriers): Fast
+tracking, high overhead
+
+\textbf{Time-domain pilots} (every N symbols): - WiFi:
+\textasciitilde4-symbol pilot OFDM per packet - LTE: CRS every symbol (4
+subcarriers per 12)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Synchronization Sequence}\label{synchronization-sequence}
+
+\textbf{Typical receiver startup}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{AGC}: Adjust gain (10-100 \$\textbackslash mu\$s)
+\item
+  \textbf{Coarse CFO}: Preamble autocorrelation
+  (\$\textbackslash pm\$10\% symbol rate)
+\item
+  \textbf{Frame detect}: Cross-correlation with preamble
+\item
+  \textbf{Fine CFO}: Preamble phase (\$\textbackslash pm\$0.1\% symbol
+  rate)
+\item
+  \textbf{Symbol timing}: Early-late gate or correlator peak
+\item
+  \textbf{Phase tracking}: PLL or decision-directed
+\item
+  \textbf{Channel estimation}: Known pilots/preamble
+\item
+  \textbf{Data demodulation}: Begin
+\end{enumerate}
+
+\textbf{Total time}: 0.1-10 ms (packet systems), 0.1-1 s (initial cell
+search)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Signal-Chain-(End-to-End-Processing){]}{]}}: Overall
+  system flow
+\item
+  \textbf{{[}{[}Channel-Equalization{]}{]}}: Frequency-selective fading
+  correction
+\item
+  \textbf{{[}{[}OFDM-\&-Multicarrier-Modulation{]}{]}}: Pilot-based sync
+\item
+  \textbf{{[}{[}QPSK-Modulation{]}{]}}: Phase tracking for PSK
+\item
+  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance with sync
+  errors
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Synchronization aligns receiver with
+transmitter in frequency, phase, timing, and frame.} CFO
+(\$\textbackslash pm\$20-50 ppm typical) causes constellation
+rotation-\/-\/-correct with preamble correlation. Phase tracking uses
+PLL (Costas loop) or decision-directed feedback. Symbol timing recovery
+via early-late gate (Gardner algorithm). Frame sync via preamble
+correlation (Barker codes, CAZAC). WiFi: Short preamble (CFO coarse +
+AGC) \$\textbackslash rightarrow\$ Long preamble (CFO fine + channel
+est). GPS: Gold code correlation below noise floor. LTE: PSS/SSS for
+cell search (\textasciitilde100 ms cold start). Loop bandwidth
+trade-off: Narrow (better noise) vs Wide (faster acquisition). Pilot
+symbols (OFDM) enable continuous tracking. Synchronization errors
+degrade BER: 256-QAM needs
+\$\textbackslash pm\$2.8\$\^{}\textbackslash circ\$ phase, \textless1\%
+CFO, \textless0.1T timing. Critical for coherent demodulation!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

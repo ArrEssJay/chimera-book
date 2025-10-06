@@ -1,0 +1,811 @@
+\section{Power Density \& Field
+Strength}\label{power-density-field-strength}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{EM Fundamentals} \textbar{}
+{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}
+\textbar{} {[}{[}Wave-Polarization{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Power density is like measuring sunlight intensity-\/-\/-how
+much energy hits each square meter. Field strength is like measuring the
+``force'' of the electromagnetic wave at a point.}
+
+\textbf{Power Density (W/m\textbackslash textsuperscript\{2\})}: - How
+much power passes through 1 square meter? - Like sunlight:
+\textasciitilde1000 W/m\textbackslash textsuperscript\{2\} at noon
+(hot!) - Radio waves: 0.000001 W/m\textbackslash textsuperscript\{2\} =
+1 µW/m\textbackslash textsuperscript\{2\} (typical WiFi)
+
+\textbf{Field Strength (V/m)}: - How strong is the electric field at
+this point? - Higher V/m = stronger ``electromagnetic force'' - Think of
+it like wind speed vs wind power
+
+\textbf{Real-world examples}:
+
+\textbf{Sunlight} (for comparison): - \textbf{Power density}: 1000
+W/m\textbackslash textsuperscript\{2\} at Earth\textquotesingle s
+surface - This is why solar panels work!
+
+\textbf{WiFi router} (1 meter away): - \textbf{Power density}:
+\textasciitilde10 µW/m\textbackslash textsuperscript\{2\} (0.00001
+W/m\textbackslash textsuperscript\{2\}) - \textbf{Field strength}:
+\textasciitilde2 V/m - 100 million times weaker than sunlight!
+
+\textbf{Cell tower} (100 meters away): - \textbf{Power density}:
+\textasciitilde0.1 µW/m\textbackslash textsuperscript\{2\} -
+\textbf{Field strength}: \textasciitilde0.6 V/m - Regulations limit max
+exposure to \textasciitilde10 W/m\textbackslash textsuperscript\{2\}
+
+\textbf{Why they\textquotesingle re related}: - \textbf{Power density}
+\$\textbackslash propto\$ (Field
+strength)\textbackslash textsuperscript\{2\} - Double the field strength
+\$\textbackslash rightarrow\$ 4\$\textbackslash times\$ the power
+density! - This is why moving closer to WiFi helps so much
+
+\textbf{Inverse square law}: - Double the distance
+\$\textbackslash rightarrow\$ \$\textbackslash frac\{1\}\{4\}\$ the
+power density - This is why: - WiFi works at 50m but not 200m - Cell
+towers need to be closer in cities - Satellites need huge power
+(they\textquotesingle re 36,000 km away!)
+
+\textbf{Safety limits}: - \textbf{Sunlight}: 1000
+W/m\textbackslash textsuperscript\{2\} (safe for limited time) -
+\textbf{FCC RF limit}: 10 W/m\textbackslash textsuperscript\{2\} (safe
+for general public) - \textbf{Typical WiFi}: 0.00001
+W/m\textbackslash textsuperscript\{2\} (100,000\$\textbackslash times\$
+below limit!) - \textbf{Your phone}: 0.001
+W/m\textbackslash textsuperscript\{2\} at 1cm
+(10,000\$\textbackslash times\$ below limit)
+
+\textbf{When you encounter it}: - \textbf{RF safety assessments}: ``Max
+power density: 5 W/m\textbackslash textsuperscript\{2\}'' -
+\textbf{Antenna specifications}: ``Field strength: 50 V/m at 1 meter'' -
+\textbf{EMC testing}: Measuring field strength for interference -
+\textbf{Link budget}: Converting transmit power to received power
+
+\textbf{Fun fact}: The power density from the sun is so high (1000
+W/m\textbackslash textsuperscript\{2\}) that if WiFi routers were as
+powerful, a 100W router at 1 meter would deliver the same power
+density-\/-\/-but would violate FCC limits by
+1000\$\textbackslash times\$ and cook you like a microwave oven!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Power density} and \textbf{field strength} quantify the
+\textbf{intensity of electromagnetic radiation} at a given point in
+space.
+
+\textbf{Key relationships}: - \textbf{Field strength} (E, H)
+\$\textbackslash rightarrow\$ Measured in V/m, A/m - \textbf{Power
+density} (S) \$\textbackslash rightarrow\$ Measured in
+W/m\textbackslash textsuperscript\{2\} - \textbf{Relationship}: Power
+density proportional to E\textbackslash textsuperscript\{2\}
+
+\textbf{Why it matters}: - \textbf{Link budget calculations}: Determine
+received signal strength - \textbf{Safety standards}: RF exposure limits
+(FCC, ICNIRP) - \textbf{Antenna performance}: Radiated power
+distribution - \textbf{Radar range equation}: Detection capability vs
+distance
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Electric Field Strength
+(E)}\label{electric-field-strength-e}
+
+\textbf{Electric field} \(\vec{E}\) describes the \textbf{force per unit
+charge} exerted on a test charge:
+
+\[
+\vec{E} = \frac{\vec{F}}{q} \quad (\text{V/m or N/C})
+\]
+
+\textbf{In electromagnetic wave} (plane wave, propagating in +z):
+
+\[
+E(z,t) = E_0 \cos(\omega t - kz + \phi)
+\]
+
+Where: - \(E_0\) = Peak electric field amplitude (V/m) - Often use
+\textbf{RMS value}: \(E_{\text{rms}} = E_0 / \sqrt{2}\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Typical Values}\label{typical-values}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Source & Distance & E-field (V/m) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{AM broadcast} (50 kW) & 1 km & \textasciitilde0.1 \\
+\textbf{FM broadcast} (100 kW) & 1 km & \textasciitilde0.2 \\
+\textbf{Cell tower} (40 W ERP) & 100 m & \textasciitilde1-2 \\
+\textbf{WiFi router} (100 mW) & 1 m & \textasciitilde3 \\
+\textbf{Microwave oven} leak & 5 cm & \textasciitilde10-50 (max
+allowed) \\
+\textbf{Lightning} & Near channel &
+\textasciitilde10\textbackslash textsuperscript\{6\} \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Magnetic Field Strength
+(H)}\label{magnetic-field-strength-h}
+
+\textbf{Magnetic field} \(\vec{H}\) describes the \textbf{magnetizing
+force}:
+
+\[
+\vec{H} = \frac{\vec{B}}{\mu} \quad (\text{A/m})
+\]
+
+Where: - \(\vec{B}\) = Magnetic flux density (Tesla) - \(\mu\) =
+Permeability (H/m)
+
+\textbf{In free space}: \(\mu = \mu_0 = 4\pi \times 10^{-7}\) H/m
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Relationship Between E and H (Far
+Field)}\label{relationship-between-e-and-h-far-field}
+
+\textbf{In plane wave} (far from source), E and H are related by
+\textbf{wave impedance}:
+
+\[
+\frac{E}{H} = \eta_0 = \sqrt{\frac{\mu_0}{\epsilon_0}} \approx 377\ \Omega
+\]
+
+Where: - \(\eta_0\) = Impedance of free space \$\textbackslash approx\$
+120\$\textbackslash pi\$ \$\textbackslash Omega\$
+\$\textbackslash approx\$ 377 \$\textbackslash Omega\$ - \(\epsilon_0\)
+= Permittivity of free space
+
+\textbf{Practical form}:
+
+\[
+H = \frac{E}{377} \quad (\text{A/m})
+\]
+
+\textbf{Example}: E = 10 V/m \$\textbackslash rightarrow\$ H = 10/377
+\$\textbackslash approx\$ 0.0265 A/m
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Near Field vs Far Field}\label{near-field-vs-far-field}
+
+\paragraph{Near Field (Reactive Near
+Field)}\label{near-field-reactive-near-field}
+
+\textbf{Distance from antenna}: \(r < 0.62\sqrt{D^3/\lambda}\) (for
+large antennas)
+
+Or simpler: \(r < \lambda/(2\pi)\) (for small antennas)
+
+\textbf{Characteristics}: - E and H not in simple ratio (reactive energy
+dominates) - Energy oscillates between E-field and H-field storage -
+Fields decay faster than \(1/r\) (typically \(1/r^2\) or \(1/r^3\))
+
+\textbf{Example}: HF antenna (3 MHz, \$\textbackslash lambda\$ = 100 m)
+at 10 m distance - Near field: E/H \$\textbackslash neq\$ 377
+\$\textbackslash Omega\$ - Inductive or capacitive coupling dominates
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Far Field (Radiating Far
+Field)}\label{far-field-radiating-far-field}
+
+\textbf{Distance from antenna}: \(r > 2D^2/\lambda\) (Fraunhofer
+distance)
+
+Where D = Largest antenna dimension
+
+\textbf{Characteristics}: - E/H = 377 \$\textbackslash Omega\$ (plane
+wave approximation valid) - Radiation pattern independent of distance
+(shape constant) - Fields decay as \(1/r\) (power density as \(1/r^2\))
+
+\textbf{Example}: WiFi 2.4 GHz (\$\textbackslash lambda\$ = 12.5 cm),
+antenna size D = 5 cm
+
+\[
+r_{\text{far}} = \frac{2 \times (0.05)^2}{0.125} = 0.04\ \text{m} = 4\ \text{cm}
+\]
+
+\textbf{Far field begins at 4 cm} (very close for WiFi!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Power Density (Poynting
+Vector)}\label{power-density-poynting-vector}
+
+\textbf{Poynting vector} \(\vec{S}\) represents \textbf{power flow per
+unit area}:
+
+\[
+\vec{S} = \vec{E} \times \vec{H} \quad (\text{W/m}^2)
+\]
+
+\textbf{Magnitude} (for plane wave with E \$\textbackslash perp\$ H):
+
+\[
+S = E \cdot H = \frac{E^2}{\eta_0} = \frac{E^2}{377}
+\]
+
+Or in terms of H:
+
+\[
+S = \eta_0 H^2 = 377 H^2
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Time-Averaged Power
+Density}\label{time-averaged-power-density}
+
+\textbf{For sinusoidal wave}, instantaneous power oscillates at 2f. Use
+\textbf{time-average}:
+
+\[
+\langle S \rangle = \frac{1}{2} \frac{E_0^2}{\eta_0} = \frac{E_{\text{rms}}^2}{\eta_0} = \frac{E_{\text{rms}}^2}{377}
+\]
+
+\textbf{Example}: E\_rms = 10 V/m
+
+\[
+\langle S \rangle = \frac{100}{377} \approx 0.265\ \text{W/m}^2
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Power Density from Isotropic
+Source}\label{power-density-from-isotropic-source}
+
+\textbf{Isotropic radiator} distributes power uniformly over sphere:
+
+\[
+S = \frac{P_t}{4\pi r^2}
+\]
+
+Where: - \(P_t\) = Transmitted power (W) - \(r\) = Distance from source
+(m) - \(4\pi r^2\) = Surface area of sphere
+
+\textbf{Inverse square law}: Power density decreases as \(1/r^2\)
+
+\textbf{Example}: 100 W isotropic source at 10 m
+
+\[
+S = \frac{100}{4\pi (10)^2} = \frac{100}{1257} \approx 0.0796\ \text{W/m}^2
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Power Density from Directional
+Antenna}\label{power-density-from-directional-antenna}
+
+\textbf{Antenna with gain} G concentrates power:
+
+\[
+S = \frac{P_t \cdot G}{4\pi r^2}
+\]
+
+\textbf{Effective Isotropic Radiated Power (EIRP)}:
+
+\[
+\text{EIRP} = P_t \cdot G
+\]
+
+\textbf{Power density becomes}:
+
+\[
+S = \frac{\text{EIRP}}{4\pi r^2}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: WiFi Router}\label{example-wifi-router}
+
+\textbf{Specs}: - Transmit power: 100 mW = 0.1 W - Antenna gain: 2 dBi
+(linear gain \$\textbackslash approx\$ 1.58) - Distance: 10 m
+
+\textbf{EIRP}:
+
+\[
+\text{EIRP} = 0.1 \times 1.58 = 0.158\ \text{W}
+\]
+
+\textbf{Power density at 10 m}:
+
+\[
+S = \frac{0.158}{4\pi (10)^2} = \frac{0.158}{1257} \approx 0.000126\ \text{W/m}^2 = 0.126\ \text{mW/m}^2
+\]
+
+\textbf{Convert to E-field}:
+
+\[
+E_{\text{rms}} = \sqrt{S \times 377} = \sqrt{0.000126 \times 377} \approx 0.218\ \text{V/m}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Relationship Between Power Density and
+E-field}\label{relationship-between-power-density-and-e-field}
+
+\textbf{Summary formulas} (far field, plane wave):
+
+\[
+S = \frac{E_{\text{rms}}^2}{377} \quad (\text{W/m}^2)
+\]
+
+\[
+E_{\text{rms}} = \sqrt{377 \times S} \approx 19.4\sqrt{S} \quad (\text{V/m})
+\]
+
+\[
+E_0 = \sqrt{2} \times E_{\text{rms}} = \sqrt{2 \times 377 \times S} \approx 27.5\sqrt{S}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Quick Conversion Table}\label{quick-conversion-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Power Density (W/m\textbackslash textsuperscript\{2\}) & E\_rms (V/m) &
+E\_peak (V/m) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.001 (1 mW/m\textbackslash textsuperscript\{2\}) & 0.61 & 0.87 \\
+0.01 (10 mW/m\textbackslash textsuperscript\{2\}) & 1.94 & 2.75 \\
+0.1 & 6.14 & 8.68 \\
+1 & 19.4 & 27.5 \\
+10 & 61.4 & 86.8 \\
+100 & 194 & 275 \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Power Delivered to Receiving
+Antenna}\label{power-delivered-to-receiving-antenna}
+
+\textbf{Effective aperture} \(A_e\) captures power from incident wave:
+
+\[
+P_r = S \cdot A_e
+\]
+
+Where:
+
+\[
+A_e = \frac{G_r \lambda^2}{4\pi}
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \(G_r\) = Receive antenna gain (linear)
+\item
+  \(\lambda\) = Wavelength
+\end{itemize}
+
+\textbf{Combining}:
+
+\[
+P_r = \frac{P_t G_t G_r \lambda^2}{(4\pi r)^2}
+\]
+
+\textbf{This is the Friis transmission equation} (see
+{[}{[}Free-Space-Path-Loss-(FSPL){]}{]})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: Satellite
+Downlink}\label{example-satellite-downlink}
+
+\textbf{Specs}: - Satellite EIRP: 50 dBW = 100 kW - Frequency: 12 GHz
+(\$\textbackslash lambda\$ = 0.025 m) - Distance: 36,000 km (GEO) - RX
+antenna gain: 40 dBi (10,000 linear)
+
+\textbf{Power density at ground}:
+
+\[
+S = \frac{10^5}{4\pi (3.6 \times 10^7)^2} = \frac{10^5}{1.63 \times 10^{16}} \approx 6.1 \times 10^{-12}\ \text{W/m}^2
+\]
+
+\textbf{E-field}:
+
+\[
+E_{\text{rms}} = \sqrt{377 \times 6.1 \times 10^{-12}} \approx 1.5 \times 10^{-3}\ \text{V/m} = 1.5\ \text{mV/m}
+\]
+
+\textbf{Received power} (1 m\textbackslash textsuperscript\{2\} dish,
+A\_e \$\textbackslash approx\$ 0.5
+m\textbackslash textsuperscript\{2\}):
+
+\[
+P_r = 6.1 \times 10^{-12} \times 0.5 \approx 3 \times 10^{-12}\ \text{W} = 3\ \text{pW}
+\]
+
+\textbf{In dBm}: \(10\log_{10}(3 \times 10^{-12} / 10^{-3}) = -115\) dBm
+
+\textbf{Using Friis equation}:
+
+\[
+P_r = \frac{100,000 \times 10,000 \times (0.025)^2}{(4\pi \times 3.6 \times 10^7)^2} \approx 3 \times 10^{-12}\ \text{W}
+\]
+
+\textbf{Consistent!}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{RF Safety Standards}\label{rf-safety-standards}
+
+\textbf{Exposure limits} protect against thermal and non-thermal
+effects:
+
+\subsubsection{FCC Limits (USA)}\label{fcc-limits-usa}
+
+\textbf{Occupational/Controlled Exposure} (aware workers):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Frequency & E-field (V/m) & H-field (A/m) & Power Density
+(W/m\textbackslash textsuperscript\{2\}) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.3-3 MHz & 614 & 1.63 & - \\
+3-30 MHz & 1842/f & 4.89/f & - \\
+30-300 MHz & 61.4 & 0.163 & 1.0 \\
+300-1500 MHz & - & - & f/300 \\
+1500-100,000 MHz & - & - & 5.0 \\
+\end{longtable}
+}
+
+Where f is in MHz
+
+\textbf{General Population/Uncontrolled Exposure} (public):
+
+Limits are \textbf{5\$\textbackslash times\$ lower} (e.g., 0.2
+W/m\textbackslash textsuperscript\{2\} @ 30-300 MHz)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{ICNIRP Limits
+(International)}\label{icnirp-limits-international}
+
+\textbf{General Public} (6-minute average):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Frequency & E-field (V/m) & Power Density
+(W/m\textbackslash textsuperscript\{2\}) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+10-400 MHz & 28 & 2 \\
+400-2000 MHz & 1.375\$\textbackslash sqrt\{\}\$f & f/200 \\
+2-300 GHz & 61 & 10 \\
+\end{longtable}
+}
+
+Where f is in MHz
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: WiFi Router
+Compliance}\label{example-wifi-router-compliance}
+
+\textbf{WiFi 2.4 GHz, 100 mW, gain 2 dBi}
+
+\textbf{At 20 cm} (typical human distance):
+
+\[
+S = \frac{0.1 \times 1.58}{4\pi (0.2)^2} = \frac{0.158}{0.503} \approx 0.314\ \text{W/m}^2
+\]
+
+\textbf{FCC limit @ 2.4 GHz}: 5 W/m\textbackslash textsuperscript\{2\}
+(controlled), 1 W/m\textbackslash textsuperscript\{2\} (uncontrolled)
+
+\textbf{ICNIRP limit}: f/200 = 2400/200 = 12
+W/m\textbackslash textsuperscript\{2\}
+
+\textbf{Result}: WiFi at 20 cm = 0.314
+W/m\textbackslash textsuperscript\{2\} \textbf{\textless{} 1
+W/m\textbackslash textsuperscript\{2\}} (OK for public exposure, but
+close!)
+
+\textbf{At 1 m}: \(S = 0.0126\) W/m\textbackslash textsuperscript\{2\}
+(much safer)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Radar Power Budget}\label{radar-power-budget}
+
+\textbf{Radar equation} relates transmitted power to received echo:
+
+\[
+P_r = \frac{P_t G^2 \lambda^2 \sigma}{(4\pi)^3 R^4}
+\]
+
+Where: - \(\sigma\) = Target radar cross-section
+(m\textbackslash textsuperscript\{2\}) - R = Range to target (m)
+
+\textbf{Power density at target}:
+
+\[
+S_{\text{target}} = \frac{P_t G}{4\pi R^2}
+\]
+
+\textbf{Reflected power density back at radar}:
+
+\[
+S_{\text{return}} = \frac{S_{\text{target}} \cdot \sigma}{4\pi R^2} = \frac{P_t G \sigma}{(4\pi)^2 R^4}
+\]
+
+\textbf{Notice}: \(1/R^4\) dependence (power travels to target and back)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: Weather Radar}\label{example-weather-radar}
+
+\textbf{Specs}: - Transmit power: 1 MW (peak) - Antenna gain: 45 dBi
+(\$\textbackslash approx\$ 31,600 linear) - Frequency: 3 GHz
+(\$\textbackslash lambda\$ = 0.1 m) - Target: Raindrop,
+\$\textbackslash sigma\$ =
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+m\textbackslash textsuperscript\{2\} (light rain) - Range: 100 km
+
+\textbf{Power density at raindrop}:
+
+\[
+S_{\text{target}} = \frac{10^6 \times 31,600}{4\pi (10^5)^2} = \frac{3.16 \times 10^{10}}{1.26 \times 10^{11}} \approx 0.25\ \text{W/m}^2
+\]
+
+\textbf{Received power}:
+
+\[
+P_r = \frac{10^6 \times (31,600)^2 \times (0.1)^2 \times 10^{-6}}{(4\pi)^3 (10^5)^4} \approx 1.6 \times 10^{-13}\ \text{W} = -98\ \text{dBm}
+\]
+
+\textbf{Weak but detectable} with sensitive receiver (noise floor
+\textasciitilde{} -110 dBm)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Electromagnetic Interference
+(EMI)}\label{electromagnetic-interference-emi}
+
+\textbf{Field strength limits} for conducted and radiated emissions:
+
+\subsubsection{FCC Part 15 Radiated Emission
+Limits}\label{fcc-part-15-radiated-emission-limits}
+
+\textbf{Class B} (residential):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Frequency & E-field @ 3 m (\$\textbackslash mu\$V/m) &
+dB\$\textbackslash mu\$V/m \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+30-88 MHz & 100 & 40 \\
+88-216 MHz & 150 & 43.5 \\
+216-960 MHz & 200 & 46 \\
+Above 960 MHz & 500 & 54 \\
+\end{longtable}
+}
+
+\textbf{Measurement}: Use calibrated antenna + spectrum analyzer
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: Spurious Emission
+Check}\label{example-spurious-emission-check}
+
+\textbf{Digital device @ 300 MHz, measured 180 \$\textbackslash mu\$V/m
+@ 3 m}
+
+\textbf{Limit @ 300 MHz}: 200 \$\textbackslash mu\$V/m
+
+\textbf{Result}: 180 \textless{} 200 \$\textbackslash rightarrow\$
+\textbf{Pass}
+
+\textbf{Margin}: \(20\log_{10}(200/180) = 0.9\) dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Field Strength in Different
+Media}\label{field-strength-in-different-media}
+
+\textbf{In dielectric medium} (not free space):
+
+\[
+\eta = \sqrt{\frac{\mu}{\epsilon}} = \frac{\eta_0}{\sqrt{\epsilon_r}}
+\]
+
+Where: - \(\epsilon_r\) = Relative permittivity - \(\eta_0 = 377\)
+\$\textbackslash Omega\$ (free space)
+
+\textbf{Example}: Water (\(\epsilon_r \approx 80\) @ low freq)
+
+\[
+\eta_{\text{water}} = \frac{377}{\sqrt{80}} \approx 42\ \Omega
+\]
+
+\textbf{Power density for same E-field}:
+
+\[
+S = \frac{E^2}{42}
+\]
+
+\textbf{9\$\textbackslash times\$ higher power density} than free space
+(for same E-field)
+
+\textbf{Implication}: Underwater communications have different impedance
+matching requirements
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Antenna Gain and
+Directivity}\label{antenna-gain-and-directivity}
+
+\textbf{Gain} increases power density in preferred direction:
+
+\[
+G = \eta_{\text{ant}} \cdot D
+\]
+
+Where: - \(\eta_{\text{ant}}\) = Antenna efficiency (0-1) - D =
+Directivity (ratio of max to average power density)
+
+\textbf{Directivity}:
+
+\[
+D = \frac{S_{\text{max}}}{S_{\text{avg}}} = \frac{4\pi S_{\text{max}} r^2}{P_t}
+\]
+
+\textbf{Example}: Isotropic antenna - \(D = 1\) (0 dBi) - Power
+uniformly distributed
+
+\textbf{Half-wave dipole}: - \(D = 1.64\) (2.15 dBi) - Power
+concentrated in broadside direction
+
+\textbf{Parabolic dish} (diameter D, wavelength
+\$\textbackslash lambda\$):
+
+\[
+G \approx \eta_{\text{ant}} \left(\frac{\pi D}{\lambda}\right)^2
+\]
+
+With \(\eta_{\text{ant}} \approx 0.5-0.7\) (typical)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Skin Depth and Field
+Penetration}\label{skin-depth-and-field-penetration}
+
+\textbf{In conductors}, field decays exponentially:
+
+\[
+E(z) = E_0 e^{-z/\delta}
+\]
+
+\textbf{Skin depth} \(\delta\):
+
+\[
+\delta = \sqrt{\frac{2}{\omega \mu \sigma}} = \sqrt{\frac{1}{\pi f \mu \sigma}}
+\]
+
+Where: - \(\sigma\) = Conductivity (S/m) - Copper:
+\(\sigma = 5.8 \times 10^7\) S/m
+
+\textbf{Example}: Copper @ 1 GHz
+
+\[
+\delta = \sqrt{\frac{1}{\pi \times 10^9 \times 4\pi \times 10^{-7} \times 5.8 \times 10^7}} \approx 2.1\ \mu\text{m}
+\]
+
+\textbf{Implication}: At microwave frequencies, current flows in thin
+surface layer (\textless{} 2 \$\textbackslash mu\$m)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary Table}\label{summary-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1852}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1481}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1296}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2778}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2593}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Quantity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Symbol
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Units
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Typical Range
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Relationship
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Electric field} & E & V/m & 0.01-1000 &
+\(E = \sqrt{377 \times S}\) \\
+\textbf{Magnetic field} & H & A/m & 0.00003-3 & \(H = E/377\) \\
+\textbf{Power density} & S & W/m\textbackslash textsuperscript\{2\} &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+- 10 & \(S = E^2/377\) \\
+\textbf{Transmitted power} & \(P_t\) & W & 0.001-100,000 &
+\(S = P_t G / (4\pi r^2)\) \\
+\textbf{Distance} & r & m & 0.01-10\textbackslash textsuperscript\{8\} &
+\(S \propto 1/r^2\) \\
+\textbf{Antenna gain} & G & - & 1-10\textbackslash textsuperscript\{6\}
+& \(S \propto G\) \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Uses power density
+  to derive path loss
+\item
+  \textbf{{[}{[}Antenna-Theory-Basics{]}{]}}: Gain, effective aperture,
+  directivity
+\item
+  \textbf{{[}{[}Maxwell\textquotesingle s-Equations-\&-Wave-Propagation{]}{]}}:
+  E and H field derivation
+\item
+  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Received power from
+  power density
+\item
+  \textbf{{[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}}:
+  Power density reduction mechanisms
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Power density S =
+E\textbackslash textsuperscript\{2\}/377 in far field}. Follows inverse
+square law (\(1/r^2\)) from isotropic source. Directional antennas
+concentrate power (multiply by gain). E-field strength and power density
+determine link performance and safety compliance. Far field (E/H = 377
+\$\textbackslash Omega\$) begins at \(2D^2/\lambda\) from antenna.
+Safety limits typically 0.2-10 W/m\textbackslash textsuperscript\{2\}
+depending on frequency and exposure type.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

@@ -1,0 +1,276 @@
+\section{Signal-to-Noise Ratio (SNR)}\label{signal-to-noise-ratio-snr}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{SNR is like the difference between a conversation in a quiet
+library (high SNR) vs a loud nightclub (low SNR)-\/-\/-higher SNR =
+easier to understand the message!}
+
+\textbf{The idea - Signal vs Background}: - \textbf{Signal}: The
+information you want (voice, data, music) - \textbf{Noise}: Random
+interference you don\textquotesingle t want (static, hiss, interference)
+- \textbf{SNR}: How much stronger is signal than noise?
+
+\textbf{Real-world analogies}:
+
+\textbf{Good SNR} (Easy to hear): - \textbf{Quiet library conversation}:
+Speech is 20\$\textbackslash times\$ louder than background
+\$\textbackslash rightarrow\$ 26 dB SNR - \textbf{Clear radio station}:
+Music is 100\$\textbackslash times\$ louder than static
+\$\textbackslash rightarrow\$ 40 dB SNR - \textbf{Strong WiFi}: Data
+signal is 1000\$\textbackslash times\$ stronger than noise
+\$\textbackslash rightarrow\$ 60 dB SNR
+
+\textbf{Bad SNR} (Hard to hear): - \textbf{Loud nightclub}: Trying to
+talk, voice only 2\$\textbackslash times\$ louder than music
+\$\textbackslash rightarrow\$ 6 dB SNR - \textbf{Weak radio station}:
+Static almost as loud as music \$\textbackslash rightarrow\$ 3 dB SNR -
+\textbf{Far from router}: WiFi signal barely stronger than interference
+\$\textbackslash rightarrow\$ 5 dB SNR
+
+\textbf{The dB scale} (why engineers use it): - \textbf{Linear}:
+10\$\textbackslash times\$ stronger = 10 dB, 100\$\textbackslash times\$
+stronger = 20 dB, 1000\$\textbackslash times\$ stronger = 30 dB -
+\textbf{Logarithmic}: Makes huge ranges manageable - \textbf{Rule of
+thumb}: +3 dB = double the power, +10 dB = 10\$\textbackslash times\$
+the power
+
+\textbf{SNR quality guide}:
+
+\begin{verbatim}
+60+ dB SNR:  Perfect - Laboratory quality
+40-60 dB:    Excellent - WiFi close to router
+20-40 dB:   🟡 Good - Cell phone normal use
+10-20 dB:   🟠 Fair - Far from WiFi, slower speeds
+0-10 dB:    🔴 Poor - Lots of errors, need error correction
+Below 0 dB:  Terrible - Noise louder than signal!
+\end{verbatim}
+
+\textbf{Real examples you experience}:
+
+\textbf{WiFi speed changes}: - \textbf{Next to router}: 60 dB SNR
+\$\textbackslash rightarrow\$ Use 1024-QAM \$\textbackslash rightarrow\$
+1200 Mbps - \textbf{One room away}: 35 dB SNR
+\$\textbackslash rightarrow\$ Use 256-QAM \$\textbackslash rightarrow\$
+600 Mbps - \textbf{Two rooms away}: 20 dB SNR
+\$\textbackslash rightarrow\$ Use 64-QAM \$\textbackslash rightarrow\$
+200 Mbps - \textbf{Far corner}: 10 dB SNR \$\textbackslash rightarrow\$
+Use QPSK \$\textbackslash rightarrow\$ 50 Mbps - Your device
+\textbf{automatically adjusts} based on SNR!
+
+\textbf{Cell phone bars}: - \textbf{5 bars}: \textgreater20 dB SNR
+\$\textbackslash rightarrow\$ Fast data, clear calls - \textbf{3 bars}:
+\textasciitilde10 dB SNR \$\textbackslash rightarrow\$ Slower data,
+occasional drop - \textbf{1 bar}: \textasciitilde5 dB SNR
+\$\textbackslash rightarrow\$ Very slow, frequent errors - \textbf{No
+bars}: \textless0 dB SNR \$\textbackslash rightarrow\$
+Can\textquotesingle t connect
+
+\textbf{Voice calls}: - \textbf{Landline}: \textasciitilde40 dB SNR
+\$\textbackslash rightarrow\$ Crystal clear - \textbf{Good cell}:
+\textasciitilde20 dB SNR \$\textbackslash rightarrow\$ Clear -
+\textbf{Bad cell}: \textasciitilde10 dB SNR
+\$\textbackslash rightarrow\$ ``Can you hear me now?'' -
+\textbf{Terrible cell}: \textasciitilde5 dB SNR
+\$\textbackslash rightarrow\$ Garbled, robotic voice
+
+\textbf{Why SNR matters}:
+
+\textbf{Data rate} (how fast): - High SNR \$\textbackslash rightarrow\$
+Use complex modulation (256-QAM, 1024-QAM) \$\textbackslash rightarrow\$
+Fast! - Low SNR \$\textbackslash rightarrow\$ Use simple modulation
+(QPSK, BPSK) \$\textbackslash rightarrow\$ Slow but reliable
+
+\textbf{Error rate} (how accurate): - High SNR
+\$\textbackslash rightarrow\$ Few errors \$\textbackslash rightarrow\$
+No retransmissions \$\textbackslash rightarrow\$ Efficient - Low SNR
+\$\textbackslash rightarrow\$ Many errors \$\textbackslash rightarrow\$
+Lots of retransmissions \$\textbackslash rightarrow\$ Inefficient
+
+\textbf{Range} (how far): - Close distance \$\textbackslash rightarrow\$
+High SNR \$\textbackslash rightarrow\$ Fast connection - Far distance
+\$\textbackslash rightarrow\$ Low SNR \$\textbackslash rightarrow\$ Slow
+or no connection
+
+\textbf{Engineering trade-offs}:
+
+\textbf{Increase SNR by}: - \textbf{More transmit power}: Stronger
+signal (but uses battery, FCC limits) - \textbf{Bigger antennas}:
+Collect more signal (but bulky) - \textbf{Get closer}: Reduce distance
+(not always possible) - \textbf{Reduce noise}: Better receivers,
+shielding (expensive)
+
+\textbf{Shannon\textquotesingle s Law} (theoretical limit):
+
+\begin{verbatim}
+Max data rate = Bandwidth × log(1 + SNR)
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Double SNR \$\textbackslash rightarrow\$ \textasciitilde40\% more data
+  rate
+\item
+  10\$\textbackslash times\$ SNR \$\textbackslash rightarrow\$
+  3\$\textbackslash times\$ more data rate
+\item
+  This is why 5G needs high SNR for multi-Gbps speeds!
+\end{itemize}
+
+\textbf{When you see SNR}:
+
+\textbf{Router admin page}: ``SNR: 42 dB'' \$\textbackslash rightarrow\$
+Excellent connection \textbf{WiFi diagnostics}: ``Signal: -45 dBm,
+Noise: -95 dBm'' \$\textbackslash rightarrow\$ SNR = 50 dB \textbf{Cell
+phone}: ``RSRP: -80 dBm, SINR: 15 dB'' \$\textbackslash rightarrow\$
+Decent 4G signal \textbf{Audio recording}: ``SNR: 90 dB''
+\$\textbackslash rightarrow\$ Professional studio quality
+
+\textbf{The ultimate limit - Thermal noise}: - All electronics generate
+noise from heat - Room temperature: Noise floor \textasciitilde-174
+dBm/Hz - This sets fundamental limit for all communication -
+Can\textquotesingle t go below this (without cooling to near absolute
+zero!)
+
+\textbf{Fun fact}: Deep space communications have SNR well below 0
+dB-\/-\/-Voyager 1\textquotesingle s signal arriving at Earth is
+\textbf{10,000\$\textbackslash times\$ weaker than the noise!} Engineers
+use huge antennas, narrow filters, and sophisticated algorithms to
+extract signal from noise. It\textquotesingle s like hearing a whisper
+from 15 billion miles away!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Signal-to-Noise Ratio (SNR)} measures the strength of the
+desired signal relative to the background noise. It\textquotesingle s
+typically expressed in decibels (dB).
+
+\subsection{Understanding SNR Values}\label{understanding-snr-values}
+
+\begin{verbatim}
+Higher SNR = Better Signal Quality
+
+SNR (dB)  |  Quality          |  Typical Use Case
+----------|-------------------|----------------------------------
+> 20 dB   |  Excellent        |  Clear reception, low error rate
+10-20 dB  |  Good             |  Reliable communication
+0-10 dB   |  Poor             |  Many errors, FEC required
+< 0 dB    |  Very Poor        |  Noise stronger than signal
+\end{verbatim}
+
+\subsection{SNR Formula}\label{snr-formula}
+
+\begin{verbatim}
+SNR (linear) = Signal Power / Noise Power
+
+SNR (dB) = 10 · log(Signal Power / Noise Power)
+\end{verbatim}
+
+\subsection{SNR in Chimera}\label{snr-in-chimera}
+
+In Chimera\textquotesingle s simulation, you control the \textbf{channel
+SNR}, which determines how much noise is added to the transmitted
+signal:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Setting & Description & Constellation \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{High SNR} (-5 dB) & Minimal noise & Tight clusters \\
+\textbf{Medium SNR} (-15 dB) & Moderate noise & Visible scatter \\
+\textbf{Low SNR} (-25 dB) & Heavy noise & Large scatter, errors
+likely \\
+\end{longtable}
+}
+
+\subsubsection{Processing Gain}\label{processing-gain}
+
+Chimera achieves approximately \textbf{35 dB of processing gain} through
+symbol averaging and oversampling. This means:
+
+\begin{verbatim}
+Effective SNR = Channel SNR + Processing Gain
+              = -25 dB + 35 dB
+              = 10 dB (after processing)
+\end{verbatim}
+
+This is why the system can operate reliably even with very low channel
+SNR values.
+
+\subsection{SNR vs Es/N0}\label{snr-vs-esn0}
+
+In Chimera\textquotesingle s UI, ``Channel SNR (dB)'' represents
+\textbf{Es/N0} (symbol energy to noise ratio): - \textbf{Before
+processing}: Low Es/N0 (e.g., -25 dB) - \textbf{After processing gain}:
+Higher effective SNR (\textasciitilde10 dB) - \textbf{LDPC threshold}:
+Fails below -27 dB channel SNR
+
+\subsection{Impact on Performance}\label{impact-on-performance}
+
+\subsubsection{High SNR (\textgreater15 dB)}\label{high-snr-15-db}
+
+\begin{itemize}
+\tightlist
+\item
+  Perfect constellation separation
+\item
+  Zero or near-zero bit errors
+\item
+  FEC not strictly needed
+\item
+  BER:
+  \textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+\end{itemize}
+
+\subsubsection{Medium SNR (5-15 dB)}\label{medium-snr-5-15-db}
+
+\begin{itemize}
+\tightlist
+\item
+  Visible constellation scatter
+\item
+  Some bit errors occur
+\item
+  FEC recommended
+\item
+  BER:
+  10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+  to
+  10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+\end{itemize}
+
+\subsubsection{Low SNR (\textless5 dB)}\label{low-snr-5-db}
+
+\begin{itemize}
+\tightlist
+\item
+  Heavy constellation scatter
+\item
+  Many bit errors
+\item
+  FEC required
+\item
+  BER:
+  \textgreater10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+\end{itemize}
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]} - Related energy metrics
+\item
+  {[}{[}Additive-White-Gaussian-Noise-(AWGN){]}{]} - What creates the
+  noise
+\item
+  {[}{[}Bit-Error-Rate-(BER){]}{]} - How SNR affects errors
+\item
+  {[}{[}Constellation-Diagrams{]}{]} - Visualizing SNR impact
+\end{itemize}

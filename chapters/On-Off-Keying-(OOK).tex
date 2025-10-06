@@ -1,0 +1,394 @@
+\section{On-Off Keying (OOK)}\label{on-off-keying-ook}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{OOK is literally just turning a signal ON and
+OFF-\/-\/-it\textquotesingle s the simplest possible way to send data,
+like morse code with a flashlight!}
+
+\textbf{The idea}: - \textbf{ON} (signal present) = binary \textbf{1} -
+\textbf{OFF} (no signal) = binary \textbf{0} - That\textquotesingle s
+it! Simplest modulation possible.
+
+\textbf{Flashlight analogy}: - Shine flashlight = 1 - Turn off
+flashlight = 0 - Sequence: ON-ON-OFF-ON = ``1101'' - Morse code uses the
+same principle!
+
+\textbf{Why it\textquotesingle s everywhere (despite being old)}: -
+\textbf{Dead simple}: Easiest to transmit and receive - \textbf{Lowest
+power}: No signal = no power consumption for 0s! - \textbf{Cheap
+hardware}: Basic transistor switch = complete transmitter - \textbf{Good
+enough}: For short-range, low-speed, it just works
+
+\textbf{Where you see OOK every day}: - \textbf{Car key fobs}: Unlock
+button uses OOK! - \textbf{Garage door openers}: Yep, OOK -
+\textbf{Wireless doorbells}: OOK at \textasciitilde315/433 MHz -
+\textbf{Cheap weather sensors}: Temperature transmitter
+\$\textbackslash rightarrow\$ receiver - \textbf{RC toys}: Simple remote
+controls - \textbf{Old telegraph}: On/off keying of electrical circuit!
+
+\textbf{Why it\textquotesingle s not used for high-speed}: -
+\textbf{Bandwidth inefficient}: Need wide frequency band for sharp
+on/off transitions - \textbf{Noise sensitive}: Hard to tell weak signal
+from noise - \textbf{No error detection}: Unlike PSK/QAM,
+can\textquotesingle t detect phase errors - \textbf{Synchronization
+issues}: Receiver must guess when bits start/end
+
+\textbf{Modern variant - ASK}: - OOK is binary ASK (Amplitude-Shift
+Keying) - Instead of on/off, use multiple power levels - Still simple,
+slightly more efficient
+
+\textbf{The ultimate simplicity}: - \textbf{Transmitter}:
+Microcontroller + transistor + antenna - \textbf{Receiver}: Antenna +
+diode + microcontroller - Total cost: \textless\$2 for both sides! -
+This is why every wireless doorbell uses OOK
+
+\textbf{Fun fact}: The first wireless telegraph (Marconi, 1895) used
+OOK-\/-\/-literally just turning a spark-gap transmitter on and off to
+send morse code. 130 years later, your car keys still use the same basic
+principle!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{On-Off Keying (OOK)} is the simplest form of digital modulation,
+where the presence or absence of a carrier wave represents binary data.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Basic
+Principle}{ Basic Principle}}\label{basic-principle}
+
+\begin{verbatim}
+Bit "1": Carrier ON   s(t) = A·cos(2f_c·t)
+Bit "0": Carrier OFF  s(t) = 0
+
+where:
+- A = carrier amplitude
+- f_c = carrier frequency
+- T_b = bit duration
+\end{verbatim}
+
+\textbf{Time-domain representation}:
+
+\begin{verbatim}
+       ___     ___         ___
+      |   |   |   |       |   |
+  ____|   |___|   |_______|   |___
+      1   0   1       0       1     (data bits)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Mathematical
+Description}{ Mathematical Description}}\label{mathematical-description}
+
+\textbf{Transmitted signal}:
+
+\begin{verbatim}
+s(t) =  b_k · A·cos(2f_c·t)     for kT_b  t < (k+1)T_b
+       k
+
+where b_k  {0, 1}
+\end{verbatim}
+
+\textbf{Modulation index}: m = 1 (100\% modulation depth)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Spectral
+Characteristics}{ Spectral Characteristics}}\label{spectral-characteristics}
+
+\textbf{Bandwidth} (null-to-null):
+
+\begin{verbatim}
+B = 2/T_b = 2R_b
+
+where R_b = bit rate (bps)
+\end{verbatim}
+
+\textbf{Power spectral density}: Sinc\textbackslash textsuperscript\{2\}
+function centered at f\_c
+
+\textbf{Example}: 1 kbps data rate \$\textbackslash rightarrow\$ 2 kHz
+bandwidth
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{
+Demodulation}{ Demodulation}}\label{demodulation}
+
+\subsubsection{Non-Coherent Detection (Envelope
+Detector)}\label{non-coherent-detection-envelope-detector}
+
+\textbf{Simplest receiver} - no carrier phase recovery needed!
+
+\begin{verbatim}
+Received signal:
+r(t) = s(t) + n(t)
+
+Envelope detector:
+e(t) = |r(t)| = [I²(t) + Q²(t)]
+
+Decision:
+If e(t) > threshold: bit = 1
+If e(t) < threshold: bit = 0
+\end{verbatim}
+
+\textbf{Advantage}: Very simple hardware (diode + capacitor)
+\textbf{Disadvantage}: 3 dB worse performance than coherent detection
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Coherent Detection
+(Correlation)}\label{coherent-detection-correlation}
+
+\textbf{Better performance} but requires carrier synchronization:
+
+\begin{verbatim}
+Correlator output:
+z = ^Tb r(t)·cos(2f_c·t) dt
+
+Decision:
+If z > 0: bit = 1
+If z < 0: bit = 0
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Performance
+Analysis}{ Performance Analysis}}\label{performance-analysis}
+
+\subsubsection{Bit Error Rate (BER)}\label{bit-error-rate-ber}
+
+\textbf{With coherent detection} (AWGN channel):
+
+\begin{verbatim}
+BER = Q((E_b/N))
+
+where:
+- E_b = bit energy = (A²T_b)/2
+- N = noise power spectral density
+- Q(x) = (1/2) _x^ e^(-t²/2) dt  (tail probability of Gaussian)
+\end{verbatim}
+
+\textbf{With non-coherent detection}:
+
+\begin{verbatim}
+BER = (1/2)exp(-E_b/2N)    (3 dB worse!)
+\end{verbatim}
+
+\textbf{Example}: For BER =
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+- Coherent OOK: E\_b/N\textbackslash textsubscript\{0\}
+\$\textbackslash approx\$ 13.5 dB - Non-coherent OOK:
+E\_b/N\textbackslash textsubscript\{0\} \$\textbackslash approx\$ 16.5
+dB - {[}{[}QPSK-Modulation\textbar QPSK{]}{]}:
+E\_b/N\textbackslash textsubscript\{0\} \$\textbackslash approx\$ 10.5
+dB (better!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Advantages \&
+Disadvantages}{ Advantages \& Disadvantages}}\label{advantages-disadvantages}
+
+\subsubsection{Advantages}\label{advantages}
+
+\textbf{Simplest modulation} - minimal transmitter complexity \textbf{No
+phase synchronization} (non-coherent detection) \textbf{Power efficient
+when off} - ideal for low duty cycle \textbf{Easy to implement} -
+analog/digital
+
+\subsubsection{Disadvantages}\label{disadvantages}
+
+\textbf{Poor spectral efficiency} - 0.5 bits/s/Hz (twice bandwidth of
+BPSK) \textbf{Poor power efficiency} - needs 3 dB more power than BPSK
+for same BER \textbf{Susceptible to fading} - deep fades completely
+eliminate signal \textbf{No use of ``0'' transmission} - wastes half the
+signal space
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{
+Applications}{ Applications}}\label{applications}
+
+\subsubsection{Historical}\label{historical}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Morse code} (telegraphy, 1840s)
+\item
+  \textbf{Early radio} (spark-gap transmitters)
+\item
+  \textbf{Infrared remote controls} (TV remotes, 1980s)
+\end{itemize}
+
+\subsubsection{Modern}\label{modern}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Optical fiber} (on-off of laser)
+\item
+  \textbf{RFID tags} (passive, backscatter modulation)
+\item
+  \textbf{Low-power IoT} (e.g., LoRa preamble)
+\item
+  \textbf{Visible light communication} (LED on-off)
+\end{itemize}
+
+\textbf{Why still used?} Simplicity trumps efficiency for low-cost,
+low-power devices.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Variants}{ Variants}}\label{variants}
+
+\subsubsection{Amplitude-Shift Keying
+(ASK)}\label{amplitude-shift-keying-ask}
+
+\textbf{Generalization of OOK} with non-zero ``off'' level:
+
+\begin{verbatim}
+Bit "1": s(t) = A·cos(2f_c·t)
+Bit "0": s(t) = A·cos(2f_c·t)    (A > 0)
+\end{verbatim}
+
+\textbf{OOK is special case}: A\textbackslash textsubscript\{0\} = 0
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Pulse-Position Modulation
+(PPM)}\label{pulse-position-modulation-ppm}
+
+\textbf{Used in optical communications}:
+
+\begin{verbatim}
+Bit "1": Pulse at t = 0
+Bit "0": Pulse at t = T_b/2
+\end{verbatim}
+
+\textbf{More power-efficient} than OOK for optical systems.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Constellation
+Diagram}{ Constellation Diagram}}\label{constellation-diagram}
+
+\begin{verbatim}
+      Q
+      
+      |
+  0   |    1   Only two points!
+      |   (A, 0)
+------+------ I
+      |
+\end{verbatim}
+
+\textbf{Single dimension} (amplitude only, no phase modulation).
+
+\textbf{Distance between points}: d = A
+
+\textbf{Compare to {[}{[}QPSK-Modulation\textbar QPSK{]}{]}}: Four
+points, better use of signal space.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Comparison to Other
+Modulations}{ Comparison to Other Modulations}}\label{comparison-to-other-modulations}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1857}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3143}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1714}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Modulation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bits/Symbol
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Power (for BER 10\^{}-6)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Complexity
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{OOK} & 1 & 2R\_b & 16.5 dB (non-coh) & Lowest \\
+{[}{[}BPSK{]}{]} & 1 & R\_b & 10.5 dB & Low \\
+{[}{[}QPSK-Modulation & QPSK{]}{]} & 2 & R\_b & 10.5 dB \\
+{[}{[}16-QAM{]}{]} & 4 & R\_b & 18.5 dB & High \\
+\end{longtable}
+}
+
+\textbf{Key insight}: OOK is simple but inefficient. {[}{[}BPSK{]}{]} is
+better in almost every way (except hardware complexity).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Key
+Takeaways}{ Key Takeaways}}\label{key-takeaways}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Simplest modulation}: Just turn carrier on/off
+\item
+  \textbf{Non-coherent detection possible}: No carrier recovery needed
+\item
+  \textbf{Poor efficiency}: Both spectral and power
+\item
+  \textbf{Historical importance}: First digital modulation
+\item
+  \textbf{Still used}: Low-cost, low-power applications (optical, RFID)
+\item
+  \textbf{Gateway to understanding}: Good starting point before
+  {[}{[}FSK{]}{]}, {[}{[}BPSK{]}{]}
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ See Also}{ See Also}}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Amplitude-Shift-Keying-(ASK){]}{]} - Generalization of OOK
+  \emph{(coming soon)}
+\item
+  {[}{[}Frequency-Shift-Keying-(FSK){]}{]} - Next step in modulation
+  complexity
+\item
+  {[}{[}Binary-Phase-Shift-Keying-(BPSK){]}{]} - Better alternative
+  (same complexity, better performance)
+\item
+  {[}{[}QPSK-Modulation{]}{]} - Even more efficient
+\item
+  {[}{[}Constellation-Diagrams{]}{]} - Visual representation of
+  modulations
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ References}{ References}}\label{references}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Morse, S.} (1840) - First practical OOK system (telegraph)
+\item
+  \textbf{Proakis, J.G. \& Salehi, M.} (2008) \emph{Digital
+  Communications} 5th ed.~(McGraw-Hill)
+\item
+  \textbf{Sklar, B.} (2001) \emph{Digital Communications: Fundamentals
+  and Applications} 2nd ed.~(Prentice Hall)
+\end{enumerate}

@@ -1,0 +1,38 @@
+\documentclass[12pt, a4paper, oneside]{book}
+
+\input{preamble}
+
+\begin{document}
+
+% --- Front Matter ---
+\frontmatter
+\input{titlepage}
+\cleardoublepage
+\input{license}
+\cleardoublepage
+\tableofcontents
+\cleardoublepage
+
+% --- Introduction ---
+\input{introduction}
+\cleardoublepage
+
+% --- Main Matter (Chapters) ---
+\mainmatter
+
+% Include all chapters dynamically from chapters.list
+\newread\chapterfile
+\openin\chapterfile=chapters.list
+\loop\unless\ifeof\chapterfile
+    \read\chapterfile to \chaptername
+    \ifx\chaptername\empty\else
+        \input{chapters/\chaptername}
+    \fi
+\repeat
+\closein\chapterfile
+
+% --- Back Matter ---
+\backmatter
+\printbibliography
+
+\end{document}

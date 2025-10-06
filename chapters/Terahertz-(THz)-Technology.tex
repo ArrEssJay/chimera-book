@@ -1,0 +1,626 @@
+\section{Terahertz (THz) Technology}\label{terahertz-thz-technology}
+
+\textbf{Terahertz (THz) radiation} occupies the electromagnetic spectrum
+between microwaves and infrared light, roughly 0.1 to 10 THz (100 GHz to
+10,000 GHz).
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\subsubsection{What is THz? (Plain
+English)}\label{what-is-thz-plain-english}
+
+\textbf{Think of THz waves as invisible light} that sits between: -
+\textbf{Microwaves} (what heats your food) - \textbf{Infrared} (what you
+feel as heat from a fire)
+
+\subsubsection{Everyday Analogy}\label{everyday-analogy}
+
+Imagine the electromagnetic spectrum as a piano keyboard: -
+\textbf{Radio waves} = Low bass notes (long, slow waves) -
+\textbf{Microwaves} = Middle notes (WiFi, cell phones) -
+\textbf{\$\textbackslash rightarrow\$ THz waves} = High notes near the
+top (very fast vibrations) - \textbf{Visible light} = The highest notes
+you can ``see''
+
+\textbf{THz is the gap between} what electronics can make (microwaves)
+and what we can see (light).
+
+\subsubsection{Why Should Non-Experts
+Care?}\label{why-should-non-experts-care}
+
+\textbf{THz waves have superpowers}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{See through stuff} (like X-rays, but safer)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can see through clothing, plastic, paper
+  \item
+    Airport body scanners use THz
+  \item
+    Can\textquotesingle t see through metal or water
+  \end{itemize}
+\item
+  \textbf{Non-harmful} (unlike X-rays)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Doesn\textquotesingle t have enough energy to damage cells
+  \item
+    Safe for repeated use
+  \item
+    Mostly just causes gentle warming
+  \end{itemize}
+\item
+  \textbf{Identify materials} (like a chemical fingerprint)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Explosives have unique THz signatures
+  \item
+    Can spot fake medicines
+  \item
+    Can tell if food is contaminated
+  \end{itemize}
+\end{enumerate}
+
+\subsubsection{Real-World Examples}\label{real-world-examples}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Airport security}: Those cylinder scanners that see under
+  clothes without X-rays
+\item
+  \textbf{Quality control}: Pharmaceutical companies checking pills
+  without opening packages
+\item
+  \textbf{Art restoration}: Seeing hidden layers in paintings without
+  touching them
+\item
+  \textbf{Future 6G networks}: Ultra-fast wireless
+  (we\textquotesingle re not there yet)
+\end{itemize}
+
+\subsubsection{The Catch}\label{the-catch}
+
+\textbf{Water blocks THz completely} (like a brick wall): -
+Can\textquotesingle t work well in rain/fog - Can\textquotesingle t
+penetrate deep into your body (we\textquotesingle re mostly water) -
+Limited range outdoors
+
+\textbf{This is actually good for safety} - it means THz mostly stays on
+the surface of your skin.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{The THz Gap}\label{the-thz-gap}
+
+Historically called the ``terahertz gap,'' this frequency range was
+difficult to generate and detect: - \textbf{Below 100 GHz}: Electronic
+devices (transistors, amplifiers) work well - \textbf{Above 10 THz}:
+Optical techniques (lasers, photonics) dominate - \textbf{0.1-10 THz}:
+Neither purely electronic nor optical - required hybrid approaches
+
+\subsection{Modern THz Sources}\label{modern-thz-sources}
+
+\subsubsection{1. Quantum Cascade Lasers
+(QCLs)}\label{quantum-cascade-lasers-qcls}
+
+\textbf{Most important THz source for applications}
+
+\paragraph{Principle of Operation}\label{principle-of-operation}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Semiconductor heterostructure}: Multiple quantum wells in
+  series
+\item
+  \textbf{Intersubband transitions}: Electrons cascade through energy
+  levels
+\item
+  \textbf{Unipolar device}: Uses only one carrier type (electrons)
+\item
+  \textbf{Photon energy}: Determined by quantum well design, not bandgap
+\end{itemize}
+
+\begin{verbatim}
+Energy Diagram (Simplified):
+
+E -----+
+        | THz photon
+E -----+ emission
+        |
+E -----+
+   +-- Electron cascades down
+
+Multiple stages  Multiple photons per electron
+\end{verbatim}
+
+\paragraph{Key Characteristics}\label{key-characteristics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Frequency range}: 1-5 THz typical (can extend to 0.6-6 THz)
+\item
+  \textbf{Power output}: 1-100 mW continuous wave (CW)
+\item
+  \textbf{Operating temperature}: Cryogenic cooling often required
+  (though RT-QCLs exist)
+\item
+  \textbf{Tunability}: Limited (design-specific), but fast
+  (\textasciitilde MHz)
+\item
+  \textbf{Beam quality}: High coherence, narrow linewidth
+\end{itemize}
+
+\paragraph{Applications}\label{applications}
+
+\begin{itemize}
+\tightlist
+\item
+  Spectroscopy (molecular fingerprinting)
+\item
+  Imaging (security screening, non-destructive testing)
+\item
+  Communications (short-range, high data rate)
+\item
+  \textbf{Research}: Biological tissue interaction studies
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Photoconductive
+Antennas}\label{photoconductive-antennas}
+
+\textbf{Ultrafast optical method}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Principle}: Femtosecond laser pulses create carriers in
+  semiconductor
+\item
+  \textbf{Result}: Pulsed THz radiation (broadband, 0.1-5 THz)
+\item
+  \textbf{Advantage}: Time-domain spectroscopy capability
+\item
+  \textbf{Limitation}: Low average power
+  (\textasciitilde\$\textbackslash mu\$W)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Frequency
+Multiplication}\label{frequency-multiplication}
+
+\textbf{Electronic approach for lower frequencies}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Principle}: Multiply microwave source (e.g., 100 GHz
+  \$\textbackslash rightarrow\$ 300 GHz)
+\item
+  \textbf{Limitation}: Efficiency drops rapidly above 1 THz
+\item
+  \textbf{Advantage}: Compact, room temperature operation
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Free-Electron Lasers
+(FEL)}\label{free-electron-lasers-fel}
+
+\textbf{Large-scale facility}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Principle}: Accelerated electrons in magnetic undulator
+\item
+  \textbf{Advantage}: Extremely high power (kW), tunable
+\item
+  \textbf{Limitation}: Building-sized apparatus, very expensive
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{THz Propagation
+Characteristics}\label{thz-propagation-characteristics}
+
+\subsubsection{Atmospheric Absorption}\label{atmospheric-absorption}
+
+THz waves are \textbf{strongly absorbed} by water vapor:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Frequency & Attenuation (dB/km) & Comments \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.3 THz & 10-20 & Usable for communications \\
+1.0 THz & 100-200 & Strong water absorption \\
+2.0 THz & 500+ & Nearly opaque \\
+\end{longtable}
+}
+
+\textbf{Windows}: Narrow transmission windows exist (e.g.,
+\textasciitilde0.35, 0.85, 1.4 THz)
+
+\textbf{Weather effects}: Rain, fog, humidity drastically increase
+attenuation
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Free-Space Path Loss}\label{free-space-path-loss}
+
+Beyond standard Friis equation, THz suffers additional losses:
+
+\begin{verbatim}
+L_total = L_FSPL + L_atmospheric + L_molecular
+
+Example at 1 THz, 1 km distance:
+- FSPL: ~152 dB ( = 0.3 mm)
+- Atmospheric: ~100 dB (humid conditions)
+- Total: ~252 dB
+
+This is EXTREME attenuation!
+\end{verbatim}
+
+\textbf{Practical range}: Typically \textless{} 1 km in atmosphere,
+better in dry/vacuum conditions
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Penetration of Materials}\label{penetration-of-materials}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Material & Penetration Depth & Transparency \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Plastics & cm to m & High \\
+Dry paper & cm & Moderate \\
+Clothing & cm & Moderate-High \\
+\textbf{Water} & \textbf{\textasciitilde100 \$\textbackslash mu\$m} &
+\textbf{Very Low} \\
+Metals & \textasciitilde nm & Effectively zero \\
+\end{longtable}
+}
+
+\textbf{Key insight}: Water = THz blocker (important for biology!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{THz Biological
+Interactions}\label{thz-biological-interactions}
+
+\subsubsection{Tissue Penetration}\label{tissue-penetration}
+
+\textbf{Human tissue is \textasciitilde70\% water}
+\$\textbackslash rightarrow\$ Strong THz absorption
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Tissue Type & Penetration Depth at 1 THz \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Skin & 0.5-1 mm \\
+Fat & \textasciitilde2 mm \\
+Muscle & 0.3-0.5 mm \\
+Bone & \textasciitilde1 mm \\
+Brain tissue & \textasciitilde0.5 mm \\
+\end{longtable}
+}
+
+\textbf{Conclusion}: THz doesn\textquotesingle t penetrate deep into the
+body (surface effects only for most applications)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Energy \& Safety}\label{energy-safety}
+
+\textbf{Photon energy} at 1 THz:
+
+\begin{verbatim}
+E = h·f = (6.626×10³ J·s) × (1×10¹² Hz)
+  = 6.626×10²² J
+  = 4.1 meV (milli-electron volts)
+\end{verbatim}
+
+\textbf{Non-ionizing}: Far below ionization threshold
+(\textasciitilde eV range) - Cannot break chemical bonds - Cannot damage
+DNA directly (unlike UV, X-rays)
+
+\textbf{Primary effect}: \textbf{Heating} (ohmic absorption in tissue)
+
+\textbf{Secondary effects} (debated): - Resonant excitation of molecular
+vibrations? - Perturbation of hydrogen bond networks? - Effects on
+protein conformational dynamics?
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Safety Standards}\label{safety-standards}
+
+\textbf{IEEE/ICNIRP guidelines} (conservative):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Frequency & Power Density Limit (CW exposure) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.3 THz & \textasciitilde10 mW/cm\textbackslash textsuperscript\{2\} (6
+min average) \\
+1 THz & \textasciitilde10 mW/cm\textbackslash textsuperscript\{2\} \\
+3 THz & \textasciitilde100 mW/cm\textbackslash textsuperscript\{2\}
+(transitions to IR limits) \\
+\end{longtable}
+}
+
+\textbf{These are surface limits} (where absorption occurs)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Research Applications}\label{research-applications}
+
+\subsubsection{1. THz Spectroscopy}\label{thz-spectroscopy}
+
+\begin{itemize}
+\tightlist
+\item
+  Molecular fingerprinting (rotational states)
+\item
+  Pharmaceutical quality control
+\item
+  Explosives/drug detection
+\end{itemize}
+
+\subsubsection{2. THz Imaging}\label{thz-imaging}
+
+\begin{itemize}
+\tightlist
+\item
+  Medical imaging (skin cancer, burns)
+\item
+  Security screening (airport body scanners)
+\item
+  Art conservation (hidden layers in paintings)
+\end{itemize}
+
+\subsubsection{3. THz Communications}\label{thz-communications}
+
+\begin{itemize}
+\tightlist
+\item
+  Short-range wireless (\textless{} 100 m)
+\item
+  Very high data rates (\textgreater{} 100 Gbps)
+\item
+  Indoor applications (atmospheric absorption limits outdoor use)
+\end{itemize}
+
+\subsubsection{\texorpdfstring{4. \textbf{Biological
+Research}}{4. Biological Research}}\label{biological-research}
+
+\begin{itemize}
+\tightlist
+\item
+  Protein dynamics
+\item
+  DNA structure perturbations
+\item
+  \textbf{Neural tissue interactions} (emerging field)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Quantum Cascade Lasers in
+Detail}\label{quantum-cascade-lasers-in-detail}
+
+\subsubsection{Structure}\label{structure}
+
+\begin{verbatim}
+         Electron Injector
+              
+    +---------------------+
+    |   Active Region 1   |  THz photon
+    +---------------------+
+    |   Active Region 2   |  THz photon
+    +---------------------+
+    |        ...          |
+    +---------------------+
+    |   Active Region N   |  THz photon
+    +---------------------+
+
+Each active region: ~40-50 layers
+Total structure: 1000+ semiconductor layers
+Thickness: ~10 m
+\end{verbatim}
+
+\subsubsection{Materials}\label{materials}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{GaAs/AlGaAs}: Most common for THz QCLs
+\item
+  \textbf{InGaAs/InAlAs}: Higher frequency variants
+\item
+  \textbf{Growth}: Molecular Beam Epitaxy (MBE), ultra-precise
+\end{itemize}
+
+\subsubsection{Performance Metrics}\label{performance-metrics}
+
+\textbf{State-of-the-art THz QCLs (2025)}: - \textbf{Power}: 100+ mW at
+4 THz (cryogenic) - \textbf{Wall-plug efficiency}: 0.5-5\% (still low) -
+\textbf{Beam divergence}:
+\textasciitilde20-40\$\^{}\textbackslash circ\$ (needs collimation) -
+\textbf{Frequency stability}: MHz-level linewidth - \textbf{Modulation}:
+Up to 10+ GHz (direct current modulation)
+
+\subsubsection{Challenges}\label{challenges}
+
+\begin{itemize}
+\tightlist
+\item
+  Cryogenic cooling often required (\$\textbackslash rightarrow\$ size,
+  power, cost)
+\item
+  Low efficiency (most energy \$\textbackslash rightarrow\$ heat)
+\item
+  Limited tunability
+\item
+  High beam divergence
+\end{itemize}
+
+\subsubsection{Recent Advances}\label{recent-advances}
+
+\begin{itemize}
+\tightlist
+\item
+  Room-temperature operation (limited performance)
+\item
+  Phase-locked arrays (beam shaping)
+\item
+  Frequency combs (multi-frequency operation)
+\item
+  On-chip integration (THz systems-on-chip)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Future Directions}\label{future-directions}
+
+\subsubsection{6G Communications}\label{g-communications}
+
+\begin{itemize}
+\tightlist
+\item
+  THz bands (0.1-1 THz) under consideration
+\item
+  Indoor/short-range applications
+\item
+  Data rates: Tbps potential
+\end{itemize}
+
+\subsubsection{THz Imaging Systems}\label{thz-imaging-systems}
+
+\begin{itemize}
+\tightlist
+\item
+  Real-time video-rate imaging
+\item
+  Compact, portable devices
+\item
+  Medical diagnostics
+\end{itemize}
+
+\subsubsection{Quantum THz Sources}\label{quantum-thz-sources}
+
+\begin{itemize}
+\tightlist
+\item
+  Squeezed light generation
+\item
+  Quantum sensing applications
+\end{itemize}
+
+\subsubsection{\texorpdfstring{\textbf{Biological
+Interactions}}{Biological Interactions}}\label{biological-interactions}
+
+\begin{itemize}
+\tightlist
+\item
+  Non-thermal bioeffects (controversial)
+\item
+  Protein conformational control
+\item
+  Neural modulation (highly speculative)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Key Takeaways}\label{key-takeaways}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{THz is real technology} with growing applications
+\item
+  \textbf{QCLs are workhorse sources} for coherent THz (1-5 THz typical)
+\item
+  \textbf{Water strongly absorbs THz} \$\textbackslash rightarrow\$
+  atmospheric/biological challenges
+\item
+  \textbf{Penetration is shallow} in tissue (\textasciitilde0.5-1 mm)
+\item
+  \textbf{Non-ionizing} but can cause heating
+\item
+  \textbf{Applications focus on spectroscopy, imaging, short-range
+  comms}
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Electromagnetic-Spectrum{]}{]} - THz position in EM spectrum
+\item
+  {[}{[}THz-Propagation-in-Biological-Tissue{]}{]} - Detailed biological
+  interaction
+\item
+  {[}{[}Free-Space-Path-Loss-(FSPL){]}{]} - Link budget considerations
+\item
+  {[}{[}Quantum Cascade Lasers (Advanced){]}{]} - In-depth physics
+\item
+  {[}{[}THz Bioeffects{]}{]} - Thermal and non-thermal effects
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{References}\label{references}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Köhler et al.} (2002) ``Terahertz
+  semiconductor-heterostructure laser'' \emph{Nature} 417, 156-159
+\item
+  \textbf{Williams} (2007) ``Terahertz quantum-cascade lasers''
+  \emph{Nature Photonics} 1, 517-525
+\item
+  \textbf{Tonouchi} (2007) ``Cutting-edge terahertz technology''
+  \emph{Nature Photonics} 1, 97-105
+\item
+  \textbf{Pickwell \& Wallace} (2006) ``Biomedical applications of
+  terahertz technology'' \emph{J. Phys. D: Appl. Phys.} 39, R301
+\item
+  \textbf{IEEE Standard C95.1} (2019) - THz safety guidelines
+\end{enumerate}

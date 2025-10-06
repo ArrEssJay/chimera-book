@@ -1,0 +1,44 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.bcf
+*.run.xml
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.blg
+*.bbl
+
+# Generated PDFs (except exemplar)
+*.pdf
+!test_exemplar_v2.pdf
+
+# Minted cache
+_minted*/
+
+# Test files
+test_*.tex
+!test_exemplar_v2.tex
+
+# Validation logs
+validation_logs/
+
+# Chapter tests
+chapter_tests/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+*.backup

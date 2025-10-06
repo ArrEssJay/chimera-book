@@ -1,0 +1,156 @@
+\section{IQ Representation}\label{iq-representation}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{IQ representation is like describing a location on a map using X
+and Y coordinates-\/-\/-it lets you pinpoint any radio signal position
+in 2D space!}
+
+\textbf{What is IQ?} - \textbf{I (In-phase)}: Horizontal axis, like
+``East-West'' on a map - \textbf{Q (Quadrature)}: Vertical axis, like
+``North-South'' on a map - Together: Any point in 2D = any signal you
+can send!
+
+\textbf{Why two dimensions?} - Radio waves have \textbf{amplitude}
+(strength) AND \textbf{phase} (timing) - Phase is like ``what part of
+the wave cycle are you at?'' - Two dimensions let you control BOTH
+simultaneously
+
+\textbf{Real-world analogy - Clock hands}: - \textbf{12
+o\textquotesingle clock position}: I = max, Q = 0 - \textbf{3
+o\textquotesingle clock position}: I = 0, Q = max\\
+- \textbf{6 o\textquotesingle clock position}: I = -max, Q = 0 -
+\textbf{9 o\textquotesingle clock position}: I = 0, Q = -max - Any angle
+= unique IQ coordinate!
+
+\textbf{Why it\textquotesingle s everywhere}: - \textbf{Software Defined
+Radio (SDR)}: All processing uses IQ data - \textbf{Digital audio}:
+Left/Right channels \$\textbackslash rightarrow\$ I/Q channels -
+\textbf{Your phone}: Baseband chip outputs IQ samples, radio transmits
+them - \textbf{WiFi chips}: Process IQ data to decode constellations
+
+\textbf{The magic trick}: - One wire carries I signal, another carries Q
+signal - At transmitter: Combine using 90\$\^{}\textbackslash circ\$
+phase-shifted carriers - At receiver: Split using
+90\$\^{}\textbackslash circ\$ phase-shifted carriers - Result: Two
+independent data channels on same frequency!
+
+\textbf{Fun fact}: IQ representation is why ``quadrature'' modulation
+(QPSK, QAM) is so efficient-\/-\/-you\textquotesingle re using two
+perpendicular dimensions, doubling capacity compared to just varying
+amplitude!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Each QPSK symbol is represented as a point in 2D space with two
+components:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{I (In-phase)}: The horizontal component (real part)
+\item
+  \textbf{Q (Quadrature)}: The vertical component (imaginary part)
+\end{itemize}
+
+\subsection{What is I/Q?}\label{what-is-iq}
+
+\textbf{I} and \textbf{Q} are the two orthogonal (perpendicular)
+components of a modulated signal. They\textquotesingle re called: -
+\textbf{In-phase} (I): Aligned with the carrier wave -
+\textbf{Quadrature} (Q): 90\$\^{}\textbackslash circ\$ out of phase with
+the carrier wave
+
+\subsection{Mathematical
+Representation}\label{mathematical-representation}
+
+Any modulated signal can be expressed as:
+
+\begin{verbatim}
+Signal(t) = I(t)·cos(2ft) - Q(t)·sin(2ft)
+\end{verbatim}
+
+Where: - \texttt{f} is the carrier frequency - \texttt{I(t)} is the
+in-phase amplitude - \texttt{Q(t)} is the quadrature amplitude
+
+\subsection{Complex Number Notation}\label{complex-number-notation}
+
+In DSP, we often use complex number notation:
+
+\begin{verbatim}
+Symbol = I + jQ
+\end{verbatim}
+
+Where \texttt{j} is the imaginary unit (\$\textbackslash sqrt\{\}\$-1)
+
+\subsubsection{QPSK Example}\label{qpsk-example}
+
+For normalized QPSK symbols:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Bits & I & Q & Complex & Phase \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+00 & -0.707 & +0.707 & -0.707+j0.707 & 135\$\^{}\textbackslash circ\$ \\
+01 & +0.707 & +0.707 & +0.707+j0.707 & 45\$\^{}\textbackslash circ\$ \\
+11 & -0.707 & -0.707 & -0.707-j0.707 & 225\$\^{}\textbackslash circ\$ \\
+10 & +0.707 & -0.707 & +0.707-j0.707 & 315\$\^{}\textbackslash circ\$ \\
+\end{longtable}
+}
+
+\subsection{Why Use I/Q?}\label{why-use-iq}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Efficient Processing}: Easy to implement in digital
+  hardware/software
+\item
+  \textbf{Phase and Amplitude}: Naturally represents both
+  characteristics
+\item
+  \textbf{Orthogonality}: I and Q don\textquotesingle t interfere with
+  each other
+\item
+  \textbf{Standard Format}: Universal in modern communications
+\end{enumerate}
+
+\subsection{I/Q in Chimera}\label{iq-in-chimera}
+
+Chimera\textquotesingle s constellation diagrams plot: - \textbf{X-axis
+(horizontal)}: I component - \textbf{Y-axis (vertical)}: Q component
+
+When you see a dot at position (I=0.707, Q=0.707), that represents the
+QPSK symbol for bits \texttt{01}.
+
+\subsection{Adding Noise}\label{adding-noise}
+
+When {[}{[}Additive-White-Gaussian-Noise-(AWGN){]}{]} is added:
+
+\begin{verbatim}
+I_received = I_transmitted + N_I
+Q_received = Q_transmitted + N_Q
+\end{verbatim}
+
+Where \texttt{N\_I} and \texttt{N\_Q} are independent Gaussian random
+variables. This is why you see \textbf{clouds} instead of
+\textbf{points} in the RX constellation!
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}QPSK-Modulation{]}{]} - How bits map to I/Q values
+\item
+  {[}{[}Constellation-Diagrams{]}{]} - Visualizing I/Q space
+\item
+  {[}{[}Additive-White-Gaussian-Noise-(AWGN){]}{]} - How noise affects
+  I/Q
+\end{itemize}

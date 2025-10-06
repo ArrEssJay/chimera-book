@@ -1,0 +1,344 @@
+\section{Forward Error Correction
+(FEC)}\label{forward-error-correction-fec}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{FEC is like sending instructions with built-in spell-checker
+clues-\/-\/-even if some words get garbled, you can figure out what was
+meant!}
+
+\textbf{The problem}: - Radio channels add noise/interference - Bits get
+flipped: 1\$\textbackslash rightarrow\$0 or
+0\$\textbackslash rightarrow\$1 - By the time you notice,
+it\textquotesingle s too late to ask ``can you repeat that?''
+
+\textbf{The FEC solution - Add smart redundancy}:
+
+\textbf{Simple example - Repetition}: - Want to send: \texttt{1} - FEC
+adds redundancy: \texttt{1\ 1\ 1} (send it 3 times) - Received:
+\texttt{1\ 0\ 1} (middle bit corrupted!) - Decoder: ``Two 1s, one 0?
+Probably was \texttt{1}!''
+
+\textbf{Real codes are smarter}: - \textbf{Hamming code}: 4 data bits +
+3 parity bits = fix any single error - \textbf{Reed-Solomon}: Used in
+CDs, DVDs, QR codes-\/-\/-can fix burst errors! - \textbf{Turbo/LDPC
+codes}: Used in 4G/5G-\/-\/-nearly as good as theoretical limit!
+
+\textbf{Real-world examples}: - \textbf{QR codes}: Can work with 30\%
+missing-\/-\/-that\textquotesingle s FEC! - \textbf{Satellite TV}:
+Signal is weak, so FEC fixes errors without re-sending - \textbf{Deep
+space probes}: Can\textquotesingle t retransmit from Mars! FEC is
+critical - \textbf{Your WiFi}: Uses LDPC codes to fix interference from
+microwave ovens
+
+\textbf{Trade-off}: - More redundancy = fix more errors BUT slower
+transmission - Your phone adjusts: strong signal = less FEC (fast), weak
+signal = more FEC (reliable)
+
+\textbf{Fun fact}: The Voyager probes launched in 1977 still communicate
+with Earth (15+ billion miles away!) using FEC codes to fix the
+incredibly noisy signal.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Forward Error Correction (FEC)} adds redundancy to transmitted
+data so the receiver can detect and correct errors without
+retransmission.
+
+\subsection{How FEC Works}\label{how-fec-works}
+
+\begin{verbatim}
+Original Data:     [100 bits]
+      
+FEC Encoder:       [Add redundancy]
+      
+Encoded Data:      [150 bits with parity]
+      
+Noisy Channel:     [Errors introduced]
+      
+FEC Decoder:       [Correct errors using redundancy]
+      
+Recovered Data:    [100 bits, hopefully error-free]
+\end{verbatim}
+
+\subsection{Key Concept}\label{key-concept}
+
+FEC trades \textbf{bandwidth efficiency} for \textbf{reliability}: -
+\textbf{More redundancy} = better error correction but lower data rate -
+\textbf{Less redundancy} = higher data rate but less error protection
+
+\subsection{Code Rate}\label{code-rate}
+
+The \textbf{code rate} is the ratio of information bits to total bits:
+
+\begin{verbatim}
+Code Rate = Information Bits / Total Bits
+
+Example: 
+- 100 information bits
+- 50 parity bits
+- Total: 150 bits
+- Code Rate: 100/150 = 2/3
+\end{verbatim}
+
+Common code rates: - \textbf{1/2}: Very robust, 50\% overhead -
+\textbf{2/3}: Good balance - \textbf{3/4}: Efficient, less redundancy -
+\textbf{5/6}: High efficiency, minimal redundancy
+
+\subsection{Types of FEC Codes}\label{types-of-fec-codes}
+
+\subsubsection{Block Codes}\label{block-codes}
+
+\begin{itemize}
+\tightlist
+\item
+  Process fixed-size blocks of data
+\item
+  Examples: Hamming, Reed-Solomon, BCH, \textbf{LDPC}
+\end{itemize}
+
+\subsubsection{Convolutional Codes}\label{convolutional-codes}
+
+\begin{itemize}
+\tightlist
+\item
+  Process continuous stream of data
+\item
+  Examples: Viterbi, Turbo codes
+\end{itemize}
+
+\subsubsection{Modern Codes}\label{modern-codes}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{LDPC}: Low-Density Parity-Check (used in Chimera!)
+\item
+  \textbf{Turbo}: Parallel concatenated codes
+\item
+  \textbf{Polar}: Capacity-achieving codes
+\end{itemize}
+
+\subsection{FEC Gain (Coding Gain)}\label{fec-gain-coding-gain}
+
+\textbf{Coding Gain} measures the SNR improvement provided by FEC:
+
+\begin{verbatim}
+Without FEC: Need SNR = 10 dB for BER = 10
+With FEC:    Need SNR = 2 dB for BER = 10
+
+Coding Gain = 10 dB - 2 dB = 8 dB
+\end{verbatim}
+
+This means FEC saves 8 dB of transmit power!
+
+\subsection{FEC Performance Metrics}\label{fec-performance-metrics}
+
+\subsubsection{1. Coding Gain}\label{coding-gain}
+
+How much SNR improvement at a given BER
+
+\subsubsection{2. Error Floor}\label{error-floor}
+
+Minimum BER achievable (implementation limits)
+
+\subsubsection{3. Waterfall Region}\label{waterfall-region}
+
+SNR range where BER drops rapidly
+
+\subsubsection{4. Threshold}\label{threshold}
+
+SNR where FEC ``turns on'' effectively
+
+\begin{verbatim}
+BER Curve with FEC:
+
+BER
+ 
+10 |
+    |  
+10³ |             Waterfall
+    |               Region
+10 |        ___   Threshold
+    |            +
+10 |             +___  Error Floor
+    +------------------- SNR (dB)
+     Threshold
+\end{verbatim}
+
+\subsection{FEC in Chimera}\label{fec-in-chimera}
+
+In Chimera\textquotesingle s simulation:
+
+\subsubsection{1. Encoder}\label{encoder}
+
+\begin{itemize}
+\tightlist
+\item
+  Applies {[}{[}LDPC-Codes\textbar LDPC{]}{]} encoding to payload data
+\item
+  Adds parity symbols for error correction
+\end{itemize}
+
+\subsubsection{2. Channel}\label{channel}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Additive-White-Gaussian-Noise-(AWGN)\textbar AWGN{]}{]} corrupts
+  the transmitted symbols
+\end{itemize}
+
+\subsubsection{3. Decoder}\label{decoder}
+
+\begin{itemize}
+\tightlist
+\item
+  Iterative LDPC decoder corrects errors
+\item
+  Uses belief propagation algorithm
+\end{itemize}
+
+\subsubsection{4. Metrics}\label{metrics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{ECC symbols}: Number of parity/redundancy symbols added
+\item
+  \textbf{Pre-FEC errors}: Errors at the demodulator output\\
+\item
+  \textbf{Post-FEC errors}: Residual errors after LDPC correction
+\item
+  \textbf{Frame Error Rate}: Percentage of frames that
+  couldn\textquotesingle t be fully corrected
+\end{itemize}
+
+\subsection{Example Performance}\label{example-performance}
+
+\begin{verbatim}
+Channel Conditions:
+- SNR: -15 dB
+- BER without FEC: 10² (1%)
+
+After LDPC FEC:
+- Code rate: 1/2
+- Iterations: 50
+- Post-FEC BER: 10 (0.0001%)
+
+Result: 40 dB coding gain! 
+\end{verbatim}
+
+\subsection{Why FEC is Essential}\label{why-fec-is-essential}
+
+\subsubsection{Deep Space
+Communications}\label{deep-space-communications}
+
+\begin{itemize}
+\tightlist
+\item
+  Very weak signals (high link loss)
+\item
+  Retransmission impractical (minutes of delay)
+\item
+  FEC allows operation at lower SNR
+\end{itemize}
+
+\subsubsection{Satellite Links}\label{satellite-links}
+
+\begin{itemize}
+\tightlist
+\item
+  Power-limited transmitters
+\item
+  FEC saves precious transmit power
+\item
+  Standard in DVB-S2, GPS
+\end{itemize}
+
+\subsubsection{Mobile Communications}\label{mobile-communications}
+
+\begin{itemize}
+\tightlist
+\item
+  Fading channels, interference
+\item
+  FEC provides robustness
+\item
+  Used in LTE, 5G, WiFi
+\end{itemize}
+
+\subsubsection{Data Storage}\label{data-storage}
+
+\begin{itemize}
+\tightlist
+\item
+  Bits can flip over time
+\item
+  FEC protects against corruption
+\item
+  Used in SSDs, hard drives, QR codes
+\end{itemize}
+
+\subsection{Shannon Limit}\label{shannon-limit}
+
+\textbf{Claude Shannon} proved there\textquotesingle s a theoretical
+limit to how much FEC can help:
+
+\begin{verbatim}
+Shannon Capacity:
+C = B · log(1 + SNR)
+
+where:
+- C is channel capacity (bits/second)
+- B is bandwidth (Hz)
+- SNR is signal-to-noise ratio (linear)
+\end{verbatim}
+
+\textbf{Modern codes like LDPC approach this limit!}
+
+\subsection{Trade-offs}\label{trade-offs}
+
+\subsubsection{Advantages}\label{advantages}
+
+\begin{itemize}
+\tightlist
+\item
+  Corrects errors without retransmission
+\item
+  Improves reliability at low SNR
+\item
+  Saves transmit power
+\item
+  Enables communication over poor channels
+\end{itemize}
+
+\subsubsection{Disadvantages}\label{disadvantages}
+
+\begin{itemize}
+\tightlist
+\item
+  Adds latency (encoding/decoding delay)
+\item
+  Requires computational resources
+\item
+  Reduces effective data rate (overhead)
+\item
+  More complex implementation
+\end{itemize}
+
+\subsection{See Also}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}LDPC-Codes{]}{]} - Specific FEC code used in Chimera
+\item
+  {[}{[}Bit-Error-Rate-(BER){]}{]} - What FEC improves
+\item
+  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - FEC enables lower SNR
+  operation
+\item
+  {[}{[}Understanding BER Curves{]}{]} - Visualizing FEC performance
+\end{itemize}

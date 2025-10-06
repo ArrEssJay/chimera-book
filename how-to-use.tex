@@ -1,0 +1,147 @@
+\chapter*{How to Use This Book}
+\addcontentsline{toc}{chapter}{How to Use This Book}
+
+\section*{Visual Navigation System}
+
+This book uses a consistent visual language to help you quickly navigate and identify key information when skimming or studying. The following icons and callout boxes serve specific purposes:
+
+\subsection*{Callout Boxes}
+
+\begin{nontechnical}
+\textbf{For Non-Technical Readers}
+
+These gray boxes provide plain-English explanations of complex concepts using everyday analogies. No engineering background required to understand these sections.
+\end{nontechnical}
+
+\begin{calloutbox}{Standard Callout}
+Blue boxes highlight important concepts, insights, or supplementary information that enhances understanding of the main text.
+\end{calloutbox}
+
+\begin{keyconcept}
+\textbf{💡 Key Concept}
+
+These boxes emphasize fundamental principles or "aha moments" that are central to understanding the topic. Pay special attention to these when learning new material.
+\end{keyconcept}
+
+\begin{warning}
+\textbf{⚠️ Warning}
+
+Red warning boxes alert you to critical technical requirements, common pitfalls, or conditions that must be met for proper operation. Ignoring these can lead to system failure or incorrect results.
+\end{warning}
+
+\begin{important}
+\textbf{❗ Important}
+
+Orange boxes highlight crucial information that significantly impacts practical implementation, performance, or system design decisions.
+\end{important}
+
+\subsection*{Emoji Icons}
+
+Emoji are used sparingly and strategically throughout the book to aid visual scanning:
+
+\begin{description}
+\item[💡] \textbf{Key Concept} --- Fundamental principles worth memorizing
+\item[⚠️] \textbf{Warning} --- Critical technical requirements or common mistakes
+\item[❗] \textbf{Important} --- Significant practical considerations
+\item[📊] \textbf{Performance Data} --- Quantitative comparisons or measurements
+\item[🛰️] \textbf{Real-World Application} --- Practical implementation examples
+\item[✓] \textbf{Advantage} --- Benefits of a particular approach
+\item[✗] \textbf{Disadvantage} --- Limitations or drawbacks
+\end{description}
+
+\subsection*{Cross-References}
+
+Internal references use chapter numbers: \textit{See Chapter X} or \textit{Chapter \ref{ch:bpsk}}
+
+External references appear in footnotes or the bibliography.
+
+\subsection*{Mathematical Notation}
+
+This book follows standard signal processing conventions:
+
+\begin{itemize}
+\item Time-domain signals: lowercase $s(t)$, $x(t)$, $n(t)$
+\item Frequency-domain signals: uppercase $S(f)$, $X(f)$, $N(f)$
+\item Complex baseband: $\tilde{s}(t)$ or $s_{\mathrm{BB}}(t)$
+\item In-phase component: $I(t)$ or $s_I(t)$
+\item Quadrature component: $Q(t)$ or $s_Q(t)$
+\item Energy per bit: $E_b$
+\item Noise spectral density: $N_0$
+\item Bit error rate: BER or $P_e$
+\end{itemize}
+
+\subsection*{Code Examples}
+
+Syntax-highlighted code blocks appear with line numbers:
+
+\begin{minted}{python}
+import numpy as np
+# Generate BPSK signal
+carrier = np.cos(2 * np.pi * fc * t)
+data = np.array([1, -1, 1, 1, -1])  # Bipolar NRZ
+signal = data * carrier
+\end{minted}
+
+\subsection*{Chapter Structure}
+
+Most technical chapters follow this structure:
+
+\begin{enumerate}
+\item \textbf{Non-Technical Overview} --- Plain-English introduction
+\item \textbf{Overview} --- High-level technical summary
+\item \textbf{Mathematical Description} --- Formal definitions and equations
+\item \textbf{Implementation} --- Practical transmitter/receiver designs
+\item \textbf{Performance Analysis} --- BER, bandwidth, efficiency
+\item \textbf{Real-World Applications} --- Where it's actually used
+\item \textbf{Advantages \& Disadvantages} --- Trade-offs
+\item \textbf{Worked Example} --- Step-by-step calculation
+\item \textbf{Summary} --- Quick reference table
+\item \textbf{Further Reading} --- Related chapters
+\end{enumerate}
+
+\subsection*{Worked Examples}
+
+Step-by-step calculations are clearly labeled and show all intermediate steps. Units are always included. Results are highlighted in callout boxes.
+
+\subsection*{Tables and Figures}
+
+\begin{itemize}
+\item Tables use professional booktabs styling (no vertical lines)
+\item Figures are referenced in text: "as shown in Figure~X"
+\item All diagrams use consistent color scheme: NavyBlue for primary elements
+\item Constellation diagrams use I (horizontal) and Q (vertical) axes
+\end{itemize}
+
+\subsection*{For Self-Study}
+
+If you're learning independently:
+
+\begin{enumerate}
+\item Start with the non-technical overview (gray box)
+\item Read through the main content
+\item Pay special attention to key concepts (💡) and warnings (⚠️)
+\item Work through the examples step-by-step
+\item Review the summary table
+\item Explore related chapters for deeper understanding
+\end{enumerate}
+
+\subsection*{For Reference}
+
+When looking up specific information:
+
+\begin{enumerate}
+\item Check the table of contents or index
+\item Scan for relevant callout boxes (they stand out visually)
+\item Jump to summary tables for quick facts
+\item Use cross-references to find related material
+\end{enumerate}
+
+\vspace{1cm}
+
+\begin{center}
+\rule{0.5\linewidth}{0.5pt}
+
+\textit{This visual system is designed to make the book equally useful for}
+
+\textit{learning (linear reading) and reference (random access).}
+\end{center}

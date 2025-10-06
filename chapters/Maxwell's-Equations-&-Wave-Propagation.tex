@@ -1,0 +1,569 @@
+\section{Maxwell\textquotesingle s Equations \& Wave
+Propagation}\label{maxwells-equations-wave-propagation}
+
+\textbf{Maxwell\textquotesingle s Equations} are the fundamental laws of
+electromagnetism, describing how electric and magnetic fields interact
+and propagate through space.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{What are Maxwell\textquotesingle s Equations?}
+
+Imagine you\textquotesingle re trying to understand how your phone
+communicates with a cell tower, how light travels from the sun to Earth,
+or how a radio picks up music from thin air. All of these phenomena are
+explained by four elegant mathematical rules discovered by James Clerk
+Maxwell in the 1860s.
+
+\textbf{The Big Picture (in plain English):}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Electric charges create invisible ``force fields''} around
+  them
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Think of static electricity making your hair stand up
+  \item
+    Positive and negative charges attract or repel each other through
+    these fields
+  \end{itemize}
+\item
+  \textbf{Magnetic fields always come in pairs} (north and south poles
+  together)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You can\textquotesingle t have a magnet with just a north pole or
+    just a south pole
+  \item
+    If you break a magnet in half, you get two smaller magnets, each
+    with both poles
+  \end{itemize}
+\item
+  \textbf{Changing magnetic fields create electric fields}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is how generators work: spin a magnet near a wire, and
+    electricity flows
+  \item
+    It\textquotesingle s also why transformers can change voltage levels
+  \end{itemize}
+\item
+  \textbf{Moving electric charges (currents) and changing electric
+  fields create magnetic fields}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is how electromagnets work
+  \item
+    It\textquotesingle s also how antennas transmit radio waves
+  \end{itemize}
+\end{enumerate}
+
+\textbf{Why does this matter?}
+
+Maxwell discovered something profound: when you combine these four
+rules, they predict that electromagnetic ``waves'' can travel through
+empty space at a specific speed. When he calculated that speed, it
+turned out to be exactly the speed of light!
+
+This meant \textbf{light itself is an electromagnetic wave} - the same
+type of wave as radio, WiFi, X-rays, and microwaves, just at different
+frequencies.
+
+\textbf{Real-world impact:} - Every wireless device (phone, WiFi,
+Bluetooth, GPS) - All lighting and solar panels - Radio, TV, and
+satellite communication - Medical imaging (MRI, X-rays) - Why the sky is
+blue and sunsets are red - How your eyes see color
+
+Without Maxwell\textquotesingle s Equations, the modern wireless world
+wouldn\textquotesingle t exist!
+
+\textbf{What you\textquotesingle ll find below:}
+
+The rest of this page dives into the mathematical details.
+Don\textquotesingle t worry if the equations look intimidating - the key
+concepts above are what matter for understanding how electromagnetic
+waves work in practice.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ The Four Maxwell\textquotesingle s
+Equations}{ The Four Maxwell\textquotesingle s Equations}}\label{the-four-maxwells-equations}
+
+\subsubsection{In Differential Form
+(Local)}\label{in-differential-form-local}
+
+\textbf{1. Gauss\textquotesingle s Law} (Electric charge creates
+electric field)
+
+\begin{verbatim}
+·E = /
+
+where:
+- E = electric field vector (V/m)
+-  = charge density (C/m³)
+-  = permittivity of free space (8.854×10¹² F/m)
+\end{verbatim}
+
+\textbf{Physical meaning}: Electric field lines originate from positive
+charges and terminate on negative charges.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{2. Gauss\textquotesingle s Law for Magnetism} (No magnetic
+monopoles)
+
+\begin{verbatim}
+·B = 0
+
+where:
+- B = magnetic field vector (Tesla)
+\end{verbatim}
+
+\textbf{Physical meaning}: Magnetic field lines always form closed loops
+(no isolated north/south poles).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{3. Faraday\textquotesingle s Law} (Changing magnetic field
+creates electric field)
+
+\begin{verbatim}
+×E = -B/t
+
+where:
+- × = curl operator (measures rotation)
+- B/t = time rate of change of B
+\end{verbatim}
+
+\textbf{Physical meaning}: A time-varying magnetic field induces a
+circulating electric field (basis of generators, transformers).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{4. Ampère-Maxwell Law} (Current + changing electric field
+creates magnetic field)
+
+\begin{verbatim}
+×B = J +  E/t
+
+where:
+-  = permeability of free space (4×10 H/m)
+- J = current density (A/m²)
+- E/t = displacement current (Maxwell's addition!)
+\end{verbatim}
+
+\textbf{Physical meaning}: Moving charges (current) AND time-varying
+electric fields create circulating magnetic fields.
+
+\textbf{Maxwell\textquotesingle s insight}: The
+\$\textbackslash partial\$E/\$\textbackslash partial\$t term was missing
+from Ampère\textquotesingle s original law. Adding it made
+electromagnetic waves possible!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ The Wave
+Equation}{ The Wave Equation}}\label{the-wave-equation}
+
+\subsubsection{Derivation}\label{derivation}
+
+Taking curl of Faraday\textquotesingle s law:
+
+\begin{verbatim}
+×(×E) = -×(B/t) = -(×B)/t
+\end{verbatim}
+
+Substitute Ampère-Maxwell law (in vacuum, J=0):
+
+\begin{verbatim}
+×(×E) = - ²E/t²
+\end{verbatim}
+
+Use vector identity:
+\$\textbackslash nabla\$\$\textbackslash times\$(\$\textbackslash nabla\$\$\textbackslash times\$E)
+=
+\$\textbackslash nabla\$(\$\textbackslash nabla\$\$\textbackslash cdot\$E)
+- \$\textbackslash nabla\$\textbackslash textsuperscript\{2\}E
+
+In vacuum (\$\textbackslash rho\$=0), Gauss\textquotesingle s law gives
+\$\textbackslash nabla\$\$\textbackslash cdot\$E = 0, so:
+
+\begin{verbatim}
+²E =  ²E/t²
+\end{verbatim}
+
+\textbf{This is the wave equation!}
+
+Similar derivation for B gives:
+
+\begin{verbatim}
+²B =  ²E/t²
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Wave Speed}\label{wave-speed}
+
+The standard wave equation is:
+
+\begin{verbatim}
+²f = (1/v²) ²f/t²
+\end{verbatim}
+
+Comparing to electromagnetic wave equation:
+
+\begin{verbatim}
+v² = 1/()
+
+v = 1/() 
+  = 1/[(4×10)(8.854×10¹²)]
+  = 2.998×10 m/s
+  = c (speed of light!)
+\end{verbatim}
+
+\textbf{Maxwell\textquotesingle s triumph}: Light is an electromagnetic
+wave!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Plane Wave
+Solutions}{ Plane Wave Solutions}}\label{plane-wave-solutions}
+
+\subsubsection{General Solution}\label{general-solution}
+
+For propagation in +z direction:
+
+\begin{verbatim}
+E(z,t) = E cos(kz - t + ) x
+B(z,t) = B cos(kz - t + ) 
+
+where:
+- k = 2/ = wave number (rad/m)
+-  = 2f = angular frequency (rad/s)
+-  = wavelength (m)
+- f = frequency (Hz)
+-  = phase constant
+\end{verbatim}
+
+\textbf{Relationship between E and B}:
+
+\begin{verbatim}
+B = E/c
+
+B = (1/c) k × E
+
+where k is propagation direction
+\end{verbatim}
+
+\textbf{Key insight}: E and B are perpendicular to each other AND to
+propagation direction (transverse wave).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Dispersion Relation}\label{dispersion-relation}
+
+From wave equation:
+
+\begin{verbatim}
+ = ck  (in vacuum)
+
+or:  v = f  (wave speed = frequency × wavelength)
+\end{verbatim}
+
+\textbf{In vacuum}: All frequencies travel at same speed c
+(non-dispersive)
+
+\textbf{In matter}: v = c/n (where n = refractive index, depends on
+frequency \$\textbackslash rightarrow\$ dispersion)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Energy and
+Power}{ Energy and Power}}\label{energy-and-power}
+
+\subsubsection{Energy Density}\label{energy-density}
+
+\textbf{Electric field energy density}:
+
+\begin{verbatim}
+u_E = (1/2)E²  (J/m³)
+\end{verbatim}
+
+\textbf{Magnetic field energy density}:
+
+\begin{verbatim}
+u_B = (1/2)B²  (J/m³)
+\end{verbatim}
+
+\textbf{Total electromagnetic energy density}:
+
+\begin{verbatim}
+u = u_E + u_B = E²  (since B = E/c and c² = 1/)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Poynting Vector (Power
+Flow)}\label{poynting-vector-power-flow}
+
+\textbf{Poynting vector} S points in direction of energy flow:
+
+\begin{verbatim}
+S = (1/) E × B  (W/m²)
+
+Magnitude: |S| = (1/c) E²  (for plane wave)
+\end{verbatim}
+
+\textbf{Physical meaning}: Energy flux (power per unit area) carried by
+EM wave.
+
+\textbf{Power through area A}:
+
+\begin{verbatim}
+P =  S·dA  (Watts)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Intensity}\label{intensity}
+
+For time-harmonic wave, \textbf{intensity} (time-averaged power
+density):
+
+\begin{verbatim}
+I = <|S|> = (1/2c) E² = (c/2) E²
+
+or in terms of B:
+I = (c/2) B²
+\end{verbatim}
+
+\textbf{Units}: W/m\textbackslash textsuperscript\{2\} (same as
+irradiance, power density)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Radiation from
+Sources}{ Radiation from Sources}}\label{radiation-from-sources}
+
+\subsubsection{Dipole Radiation}\label{dipole-radiation}
+
+\textbf{Oscillating electric dipole} (simplest antenna):
+
+\begin{verbatim}
+Radiated power:
+P = (/12c)  p²
+
+where:
+-  = oscillation frequency
+- p = dipole moment amplitude
+\end{verbatim}
+
+\textbf{Key insight}: Radiated power \$\textbackslash propto\$
+\$\textbackslash omega\$\textbackslash textsuperscript\{4\} (higher
+frequencies radiate much more efficiently!)
+
+\textbf{Radiation pattern}: Doughnut shape (maximum perpendicular to
+dipole, zero along dipole axis)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Accelerating Charges}\label{accelerating-charges}
+
+\textbf{Larmor formula} (non-relativistic):
+
+\begin{verbatim}
+P = (q²a²)/(6c)
+
+where:
+- q = charge
+- a = acceleration
+\end{verbatim}
+
+\textbf{Physical meaning}: Any accelerating charge radiates EM waves.
+This is basis of: - Antennas (oscillating current = accelerating
+charges) - Synchrotron radiation (electrons in magnetic fields) -
+Bremsstrahlung (decelerating electrons)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Propagation in
+Media}{ Propagation in Media}}\label{propagation-in-media}
+
+\subsubsection{Material Properties}\label{material-properties}
+
+\textbf{Permittivity} \$\textbackslash epsilon\$: How much material
+opposes electric field - Vacuum:
+\$\textbackslash epsilon\$\textbackslash textsubscript\{0\} - Material:
+\$\textbackslash epsilon\$ = \$\textbackslash epsilon\$\_r
+\$\textbackslash epsilon\$\textbackslash textsubscript\{0\} (where
+\$\textbackslash epsilon\$\_r = relative permittivity)
+
+\textbf{Permeability} \$\textbackslash mu\$: How much material opposes
+magnetic field - Vacuum:
+\$\textbackslash mu\$\textbackslash textsubscript\{0\} - Material:
+\$\textbackslash mu\$ = \$\textbackslash mu\$\_r
+\$\textbackslash mu\$\textbackslash textsubscript\{0\} (where
+\$\textbackslash mu\$\_r = relative permeability)
+
+\textbf{Conductivity} \$\textbackslash sigma\$: How well material
+conducts current - Insulator: \$\textbackslash sigma\$
+\$\textbackslash approx\$ 0 - Conductor: \$\textbackslash sigma\$
+\$\textbackslash rightarrow\$ \$\textbackslash infty\$ (ideally)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Wave Speed in Media}\label{wave-speed-in-media}
+
+\begin{verbatim}
+v = 1/() = c/(_r _r) = c/n
+
+where n = (_r _r) is refractive index
+\end{verbatim}
+
+\textbf{Examples}: - Air: n \$\textbackslash approx\$ 1.0003 (v
+\$\textbackslash approx\$ c) - Water: n \$\textbackslash approx\$ 1.33
+(v \$\textbackslash approx\$ 0.75c) - Glass: n \$\textbackslash approx\$
+1.5 (v \$\textbackslash approx\$ 0.67c)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Attenuation in Lossy
+Media}\label{attenuation-in-lossy-media}
+
+In conductive medium, wave amplitude decays:
+
+\begin{verbatim}
+E(z) = E e^(-z) cos(kz - t)
+
+where  = skin depth parameter:
+ = (f)  (for good conductors)
+
+Skin depth:  = 1/ (depth where amplitude drops to 1/e)
+\end{verbatim}
+
+\textbf{Examples} (at 1 GHz): - Copper: \$\textbackslash delta\$
+\$\textbackslash approx\$ 2 \$\textbackslash mu\$m (EM waves
+don\textquotesingle t penetrate conductors!) - Seawater:
+\$\textbackslash delta\$ \$\textbackslash approx\$ 0.2 m (poor
+penetration) - Air: \$\textbackslash delta\$
+\$\textbackslash rightarrow\$ \$\textbackslash infty\$ (negligible loss)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Frequency
+Spectrum}{ Frequency Spectrum}}\label{frequency-spectrum}
+
+Maxwell\textquotesingle s equations apply to \textbf{all frequencies}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Band & Frequency & Wavelength & Applications \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{ELF} & 3-30 Hz & 10,000-100,000 km & Submarine communication \\
+\textbf{VLF} & 3-30 kHz & 10-100 km & Navigation \\
+\textbf{LF} & 30-300 kHz & 1-10 km & AM radio \\
+\textbf{MF} & 300 kHz-3 MHz & 100-1000 m & AM broadcast \\
+\textbf{HF} & 3-30 MHz & 10-100 m & Shortwave \\
+\textbf{VHF} & 30-300 MHz & 1-10 m & FM radio, TV \\
+\textbf{UHF} & 300 MHz-3 GHz & 10 cm-1 m & Cell phones, WiFi \\
+\textbf{SHF} & 3-30 GHz & 1-10 cm & Radar, satellite \\
+\textbf{EHF} & 30-300 GHz & 1-10 mm & mmWave, 5G \\
+\textbf{THz} & 0.3-3 THz & 0.1-1 mm & Imaging, spectroscopy \\
+\textbf{IR} & 300 THz-430 THz & 700 nm-1 mm & Thermal imaging \\
+\textbf{Visible} & 430-750 THz & 400-700 nm & Human vision \\
+\textbf{UV} & 750 THz-30 PHz & 10-400 nm & Sterilization \\
+\textbf{X-ray} & 30 PHz-30 EHz & 0.01-10 nm & Medical imaging \\
+\textbf{Gamma} & \textgreater{} 30 EHz & \textless{} 0.01 nm & Nuclear
+medicine \\
+\end{longtable}
+}
+
+\textbf{All obey Maxwell\textquotesingle s equations!} (though quantum
+effects important at high frequencies)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ Key
+Insights}{ Key Insights}}\label{key-insights}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Unification}: Electricity, magnetism, and light are different
+  manifestations of the same phenomenon
+\item
+  \textbf{Self-propagation}: EM waves don\textquotesingle t need a
+  medium (unlike sound)
+\item
+  \textbf{Speed limit}: c is the maximum speed in universe (relativity!)
+\item
+  \textbf{Transverse}: E, B, and propagation direction are mutually
+  perpendicular
+\item
+  \textbf{Duality}: E and B are inseparable (changing one creates the
+  other)
+\item
+  \textbf{Scale invariance}: Same equations for radio
+  \$\textbackslash rightarrow\$ gamma rays (though quantum effects
+  matter at high f)
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ See Also}{ See Also}}\label{see-also}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}Electromagnetic-Spectrum{]}{]} - Detailed frequency breakdown
+\item
+  {[}{[}Antenna-Theory-Basics{]}{]} - How to radiate/receive EM waves
+\item
+  {[}{[}Wave-Polarization{]}{]} - E field orientation
+\item
+  {[}{[}Free-Space-Path-Loss-(FSPL){]}{]} - How waves weaken with
+  distance
+\item
+  {[}{[}Terahertz-(THz)-Technology{]}{]} - Specific THz band
+  applications
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ References}{ References}}\label{references}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Maxwell, J.C.} (1865) ``A Dynamical Theory of the
+  Electromagnetic Field'' \emph{Phil. Trans. R. Soc.} 155, 459-512
+\item
+  \textbf{Jackson, J.D.} (1999) \emph{Classical Electrodynamics} 3rd
+  ed.~(Wiley)
+\item
+  \textbf{Griffiths, D.J.} (2017) \emph{Introduction to Electrodynamics}
+  4th ed.~(Cambridge UP)
+\item
+  \textbf{Feynman, R.P., Leighton, R.B., Sands, M.} (1964) \emph{The
+  Feynman Lectures on Physics} Vol. 2 (Addison-Wesley)
+\end{enumerate}

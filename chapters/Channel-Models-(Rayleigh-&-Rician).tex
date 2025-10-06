@@ -1,0 +1,918 @@
+\section{Channel Models: Rayleigh \& Rician
+Implementation}\label{channel-models-rayleigh-rician-implementation}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Link Budget \& System Performance}
+\textbar{}
+{[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}
+\textbar{} {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Channel models are like flight simulators for radio
+engineers-\/-\/-they let you test communication systems in virtual
+cities, tunnels, and open fields before building real hardware!}
+
+\textbf{The problem}: - Can\textquotesingle t test every scenario:
+urban, suburban, highway, indoor, etc. - Real-world testing is expensive
+(need hardware, locations, permits) - Need to test in bad conditions
+(rain, crowds, interference) - Can\textquotesingle t test satellites or
+Mars missions easily!
+
+\textbf{The solution - Mathematical simulation}: - Create computer
+models of radio environments - Run communication system in simulation -
+See how well it performs - Fix problems BEFORE building hardware!
+
+\textbf{The two main models}:
+
+\textbf{1. Rayleigh Fading} (no line-of-sight): - \textbf{Environment}:
+Dense urban (downtown), indoors, tunnels - \textbf{Characteristic}:
+Signal bounces everywhere, no direct path - \textbf{Result}: Wild signal
+fluctuations (30+ dB swings!) - \textbf{Example}: Walking through city,
+WiFi in building with walls
+
+\textbf{2. Rician Fading} (strong line-of-sight): -
+\textbf{Environment}: Suburban, rural, highways, open areas -
+\textbf{Characteristic}: One strong direct path + weaker echoes -
+\textbf{Result}: More stable signal, less severe fading -
+\textbf{Example}: Highway cell tower, rural WiFi
+
+\textbf{How engineers use models}:
+
+\textbf{Step 1}: Pick scenario - ``Designing WiFi for dense apartment
+building'' \$\textbackslash rightarrow\$ use Rayleigh - ``Designing
+highway cell system'' \$\textbackslash rightarrow\$ use Rician
+
+\textbf{Step 2}: Run simulation - Send 1 million test bits through model
+- Model adds realistic fading, multipath, noise
+
+\textbf{Step 3}: Measure performance - How many errors? (Bit Error Rate)
+- How fast can it go? (Data rate) - Does it meet requirements?
+
+\textbf{Step 4}: Iterate - Try different modulations (QPSK vs 64-QAM) -
+Add error correction (FEC) - Optimize until it works!
+
+\textbf{Real-world impact}: - \textbf{5G standard}: Tested in
+standardized channel models before deployment - \textbf{Your WiFi}:
+Manufacturers test with Rayleigh/Rician models - \textbf{Satellite
+systems}: Simulated before launching \$500M satellite! -
+\textbf{Military radios}: Tested in tactical channel models
+
+\textbf{Why simulation beats real testing}: - \textbf{Reproducible}:
+Same conditions every test - \textbf{Extreme scenarios}: Test 99.9th
+percentile bad cases - \textbf{Fast}: Test 10,000 scenarios in hours -
+\textbf{Cheap}: No hardware, no permits, no travel - \textbf{Safe}: Can
+test failure modes without consequences
+
+\textbf{Standards bodies define models}: - \textbf{3GPP}: Defines
+channel models for 4G/5G (TDL-A, TDL-B, TDL-C) - \textbf{ITU}: Defines
+models for satellite, fixed wireless - \textbf{WiFi}: IEEE 802.11
+working groups define indoor/outdoor models
+
+\textbf{Fun fact}: When engineers designed the LTE standard (4G), they
+ran over 1 million simulations using standardized channel models. This
+is why 4G ``just worked'' globally from day
+one-\/-\/-they\textquotesingle d already tested every conceivable
+environment virtually!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Channel models} simulate propagation effects for communication
+system design and testing.
+
+\textbf{Purpose}: - \textbf{System simulation}: Test modulation/coding
+without real-world deployment - \textbf{Performance prediction}:
+Estimate BER vs SNR for different environments - \textbf{Algorithm
+development}: Design equalizers, synchronizers without hardware -
+\textbf{Standards compliance}: 3GPP, ITU specify reference channel
+models
+
+\textbf{Key models}: 1. \textbf{AWGN}: Ideal (additive white Gaussian
+noise only) 2. \textbf{Rayleigh fading}: NLOS multipath (no dominant
+path) 3. \textbf{Rician fading}: LOS + multipath (K-factor parameterizes
+LOS strength) 4. \textbf{Frequency-selective}: Wideband channels with
+delay spread (ISI)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{AWGN Channel}\label{awgn-channel}
+
+\textbf{Simplest model}: Received signal = transmitted signal + Gaussian
+noise
+
+\[
+r(t) = s(t) + n(t)
+\]
+
+Where: - \(s(t)\) = Transmitted signal - \(n(t)\) = White Gaussian
+noise, variance \(\sigma^2 = N_0 B\)
+
+\subsubsection{Implementation
+(MATLAB/Python)}\label{implementation-matlabpython}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
+\KeywordTok{def}\NormalTok{ awgn\_channel(signal, snr\_db):}
+    \CommentTok{"""}
+\CommentTok{    Add AWGN to signal for target SNR}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        signal: Complex baseband signal (numpy array)}
+\CommentTok{        snr\_db: Target SNR in dB}
+\CommentTok{        }
+\CommentTok{    Returns:}
+\CommentTok{        Noisy signal}
+\CommentTok{    """}
+    \CommentTok{\# Signal power}
+\NormalTok{    signal\_power }\OperatorTok{=}\NormalTok{ np.mean(np.}\BuiltInTok{abs}\NormalTok{(signal)}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
+    
+    \CommentTok{\# Noise power for target SNR}
+\NormalTok{    snr\_linear }\OperatorTok{=} \DecValTok{10}\OperatorTok{**}\NormalTok{(snr\_db}\OperatorTok{/}\DecValTok{10}\NormalTok{)}
+\NormalTok{    noise\_power }\OperatorTok{=}\NormalTok{ signal\_power }\OperatorTok{/}\NormalTok{ snr\_linear}
+    
+    \CommentTok{\# Generate complex Gaussian noise}
+\NormalTok{    noise }\OperatorTok{=}\NormalTok{ np.sqrt(noise\_power}\OperatorTok{/}\DecValTok{2}\NormalTok{) }\OperatorTok{*}\NormalTok{ (np.random.randn(}\BuiltInTok{len}\NormalTok{(signal)) }\OperatorTok{+} 
+                                       \OtherTok{1j}\OperatorTok{*}\NormalTok{np.random.randn(}\BuiltInTok{len}\NormalTok{(signal)))}
+    
+    \ControlFlowTok{return}\NormalTok{ signal }\OperatorTok{+}\NormalTok{ noise}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Usage}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tx\_signal }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{1}\OperatorTok{+}\OtherTok{0j}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\OperatorTok{+}\OtherTok{0j}\NormalTok{, }\DecValTok{1}\OperatorTok{+}\OtherTok{1j}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\OperatorTok{{-}}\OtherTok{1j}\NormalTok{])  }\CommentTok{\# QPSK symbols}
+\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ awgn\_channel(tx\_signal, snr\_db}\OperatorTok{=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Flat Fading Channel}\label{flat-fading-channel}
+
+\textbf{Narrowband model}: Single complex gain + AWGN
+
+\[
+r(t) = h(t) \cdot s(t) + n(t)
+\]
+
+Where: - \(h(t)\) = Complex channel gain (time-varying) - \(|h(t)|\) =
+Amplitude (Rayleigh or Rician distributed) - \(\angle h(t)\) = Phase
+(uniformly distributed)
+
+\textbf{Flat fading applies when}: Signal bandwidth \(\ll\) coherence
+bandwidth
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Rayleigh Fading Channel}\label{rayleigh-fading-channel}
+
+\textbf{Model}: No LOS, many scattered paths with equal power
+
+\subsubsection{Statistical Properties}\label{statistical-properties}
+
+\textbf{Envelope} \(r = |h(t)|\) follows \textbf{Rayleigh distribution}:
+
+\[
+p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0
+\]
+
+\textbf{Mean}: \(\bar{r} = \sigma\sqrt{\pi/2}\)
+
+\textbf{Variance}: \(\sigma_r^2 = \sigma^2(2 - \pi/2)\)
+
+\textbf{Normalized} (average power = 1): \(\sigma^2 = 1/2\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Clarke\textquotesingle s Model (Isotropic
+Scattering)}\label{clarkes-model-isotropic-scattering}
+
+\textbf{Assumption}: Infinite scatterers uniformly distributed in
+azimuth
+
+\textbf{Doppler spectrum} (U-shaped):
+
+\[
+S(f) = \frac{1}{\pi f_d \sqrt{1 - (f/f_d)^2}}, \quad |f| < f_d
+\]
+
+Where \(f_d = v/\lambda\) = Maximum Doppler frequency
+
+\textbf{Autocorrelation}:
+
+\[
+R(\tau) = J_0(2\pi f_d \tau)
+\]
+
+\(J_0\) = Bessel function of first kind, order 0
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Jakes\textquotesingle{} Model (Sum of
+Sinusoids)}\label{jakes-model-sum-of-sinusoids}
+
+\textbf{Efficient implementation} using sum of sinusoids:
+
+\textbf{In-phase component}:
+
+\[
+h_I(t) = \frac{1}{\sqrt{M}} \sum_{m=1}^{M} \cos(2\pi f_d t \cos\theta_m + \phi_m)
+\]
+
+\textbf{Quadrature component}:
+
+\[
+h_Q(t) = \frac{1}{\sqrt{M}} \sum_{m=1}^{M} \sin(2\pi f_d t \cos\theta_m + \phi_m)
+\]
+
+Where: - \(M\) = Number of scatterers (typically 8-20) -
+\(\theta_m = \frac{2\pi m}{M}\) (equally spaced angles) - \(\phi_m\) =
+Random phase, uniform {[}0, 2\$\textbackslash pi\${]}
+
+\textbf{Complex channel gain}:
+
+\[
+h(t) = h_I(t) + j h_Q(t)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Implementation (Jakes\textquotesingle{}
+Model)}\label{implementation-jakes-model}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ rayleigh\_channel\_jakes(N\_samples, fd, fs, M}\OperatorTok{=}\DecValTok{8}\NormalTok{):}
+    \CommentTok{"""}
+\CommentTok{    Generate Rayleigh fading channel using Jakes\textquotesingle{} model}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        N\_samples: Number of time samples}
+\CommentTok{        fd: Maximum Doppler frequency (Hz)}
+\CommentTok{        fs: Sampling frequency (Hz)}
+\CommentTok{        M: Number of scatterers (default 8)}
+\CommentTok{        }
+\CommentTok{    Returns:}
+\CommentTok{        Complex channel gains h(t)}
+\CommentTok{    """}
+\NormalTok{    t }\OperatorTok{=}\NormalTok{ np.arange(N\_samples) }\OperatorTok{/}\NormalTok{ fs}
+\NormalTok{    h\_I }\OperatorTok{=}\NormalTok{ np.zeros(N\_samples)}
+\NormalTok{    h\_Q }\OperatorTok{=}\NormalTok{ np.zeros(N\_samples)}
+    
+    \ControlFlowTok{for}\NormalTok{ m }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, M}\OperatorTok{+}\DecValTok{1}\NormalTok{):}
+\NormalTok{        theta\_m }\OperatorTok{=} \DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\NormalTok{m }\OperatorTok{/}\NormalTok{ M}
+\NormalTok{        phi\_m }\OperatorTok{=}\NormalTok{ np.random.uniform(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi)}
+        
+\NormalTok{        h\_I }\OperatorTok{+=}\NormalTok{ np.cos(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\NormalTok{fd}\OperatorTok{*}\NormalTok{t}\OperatorTok{*}\NormalTok{np.cos(theta\_m) }\OperatorTok{+}\NormalTok{ phi\_m)}
+\NormalTok{        h\_Q }\OperatorTok{+=}\NormalTok{ np.sin(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.pi}\OperatorTok{*}\NormalTok{fd}\OperatorTok{*}\NormalTok{t}\OperatorTok{*}\NormalTok{np.cos(theta\_m) }\OperatorTok{+}\NormalTok{ phi\_m)}
+    
+\NormalTok{    h\_I }\OperatorTok{/=}\NormalTok{ np.sqrt(M)}
+\NormalTok{    h\_Q }\OperatorTok{/=}\NormalTok{ np.sqrt(M)}
+    
+\NormalTok{    h }\OperatorTok{=}\NormalTok{ (h\_I }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{h\_Q) }\OperatorTok{/}\NormalTok{ np.sqrt(}\DecValTok{2}\NormalTok{)  }\CommentTok{\# Normalize to unit power}
+    
+    \ControlFlowTok{return}\NormalTok{ h}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Usage}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Mobile @ 100 km/h (27.8 m/s), 2.4 GHz ( = 0.125 m)}
+\NormalTok{fd }\OperatorTok{=} \FloatTok{27.8} \OperatorTok{/} \FloatTok{0.125}  \CommentTok{\# 222 Hz}
+\NormalTok{fs }\OperatorTok{=} \DecValTok{10000}  \CommentTok{\# 10 kHz sampling}
+\NormalTok{N }\OperatorTok{=} \DecValTok{10000}  \CommentTok{\# 1 second}
+
+\NormalTok{h }\OperatorTok{=}\NormalTok{ rayleigh\_channel\_jakes(N, fd, fs)}
+
+\CommentTok{\# Apply to signal}
+\NormalTok{tx\_signal }\OperatorTok{=}\NormalTok{ np.ones(N)  }\CommentTok{\# Constant amplitude}
+\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ h }\OperatorTok{*}\NormalTok{ tx\_signal }\OperatorTok{+}\NormalTok{ awgn\_channel(h }\OperatorTok{*}\NormalTok{ tx\_signal, snr\_db}\OperatorTok{=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Verification}\label{verification}
+
+\textbf{Check statistics}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
+
+\CommentTok{\# Generate long realization}
+\NormalTok{h }\OperatorTok{=}\NormalTok{ rayleigh\_channel\_jakes(}\DecValTok{100000}\NormalTok{, fd}\OperatorTok{=}\DecValTok{100}\NormalTok{, fs}\OperatorTok{=}\DecValTok{10000}\NormalTok{)}
+\NormalTok{envelope }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{abs}\NormalTok{(h)}
+
+\CommentTok{\# Plot histogram vs theoretical Rayleigh PDF}
+\NormalTok{plt.hist(envelope, bins}\OperatorTok{=}\DecValTok{50}\NormalTok{, density}\OperatorTok{=}\VariableTok{True}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.7}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}Simulated\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{r }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{sigma }\OperatorTok{=} \DecValTok{1}\OperatorTok{/}\NormalTok{np.sqrt(}\DecValTok{2}\NormalTok{)  }\CommentTok{\# Normalized}
+\NormalTok{pdf\_rayleigh }\OperatorTok{=}\NormalTok{ (r}\OperatorTok{/}\NormalTok{sigma}\OperatorTok{**}\DecValTok{2}\NormalTok{) }\OperatorTok{*}\NormalTok{ np.exp(}\OperatorTok{{-}}\NormalTok{r}\OperatorTok{**}\DecValTok{2}\OperatorTok{/}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{sigma}\OperatorTok{**}\DecValTok{2}\NormalTok{))}
+\NormalTok{plt.plot(r, pdf\_rayleigh, }\StringTok{\textquotesingle{}r{-}\textquotesingle{}}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{2}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}Theoretical\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{plt.xlabel(}\StringTok{\textquotesingle{}Envelope |h|\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.ylabel(}\StringTok{\textquotesingle{}PDF\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.legend()}
+\NormalTok{plt.title(}\StringTok{\textquotesingle{}Rayleigh Fading Envelope Distribution\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.show()}
+
+\CommentTok{\# Check average power}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Average power: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\NormalTok{mean(np.}\BuiltInTok{abs}\NormalTok{(h)}\OperatorTok{**}\DecValTok{2}\NormalTok{)}\SpecialCharTok{:.3f\}}\SpecialStringTok{ (should be \textasciitilde{}1.0)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Rician Fading Channel}\label{rician-fading-channel}
+
+\textbf{Model}: Dominant LOS + scattered components
+
+\subsubsection{Statistical Properties}\label{statistical-properties-1}
+
+\textbf{Envelope} follows \textbf{Rician distribution}:
+
+\[
+p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0\left(\frac{Ar}{\sigma^2}\right)
+\]
+
+Where: - \(A\) = Amplitude of LOS component - \(I_0\) = Modified Bessel
+function of first kind, order 0
+
+\textbf{K-factor} (ratio of LOS to scattered power):
+
+\[
+K = \frac{A^2}{2\sigma^2}
+\]
+
+\textbf{In dB}: \(K_{\text{dB}} = 10\log_{10}(K)\)
+
+\textbf{Special cases}: - \(K = 0\) (K = -\$\textbackslash infty\$ dB):
+Pure Rayleigh (no LOS) - \(K \to \infty\): Pure LOS (AWGN-like)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Implementation (LOS +
+Rayleigh)}\label{implementation-los-rayleigh}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ rician\_channel(N\_samples, K\_dB, fd, fs, M}\OperatorTok{=}\DecValTok{8}\NormalTok{):}
+    \CommentTok{"""}
+\CommentTok{    Generate Rician fading channel}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        N\_samples: Number of time samples}
+\CommentTok{        K\_dB: Rician K{-}factor in dB}
+\CommentTok{        fd: Maximum Doppler frequency (Hz)}
+\CommentTok{        fs: Sampling frequency (Hz)}
+\CommentTok{        M: Number of scatterers}
+\CommentTok{        }
+\CommentTok{    Returns:}
+\CommentTok{        Complex channel gains h(t)}
+\CommentTok{    """}
+\NormalTok{    K }\OperatorTok{=} \DecValTok{10}\OperatorTok{**}\NormalTok{(K\_dB}\OperatorTok{/}\DecValTok{10}\NormalTok{)  }\CommentTok{\# Convert to linear}
+    
+    \CommentTok{\# LOS component (constant, unit phase)}
+\NormalTok{    h\_los }\OperatorTok{=}\NormalTok{ np.sqrt(K }\OperatorTok{/}\NormalTok{ (K}\OperatorTok{+}\DecValTok{1}\NormalTok{)) }\OperatorTok{*}\NormalTok{ np.ones(N\_samples)}
+    
+    \CommentTok{\# Scattered component (Rayleigh fading)}
+\NormalTok{    h\_scatter }\OperatorTok{=}\NormalTok{ rayleigh\_channel\_jakes(N\_samples, fd, fs, M)}
+\NormalTok{    h\_scatter }\OperatorTok{*=}\NormalTok{ np.sqrt(}\DecValTok{1} \OperatorTok{/}\NormalTok{ (K}\OperatorTok{+}\DecValTok{1}\NormalTok{))  }\CommentTok{\# Scale for Rician}
+    
+    \ControlFlowTok{return}\NormalTok{ h\_los }\OperatorTok{+}\NormalTok{ h\_scatter}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Usage}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Suburban environment, K = 6 dB}
+\NormalTok{h\_rician }\OperatorTok{=}\NormalTok{ rician\_channel(}\DecValTok{10000}\NormalTok{, K\_dB}\OperatorTok{=}\DecValTok{6}\NormalTok{, fd}\OperatorTok{=}\DecValTok{100}\NormalTok{, fs}\OperatorTok{=}\DecValTok{10000}\NormalTok{)}
+
+\CommentTok{\# Verify K{-}factor}
+\NormalTok{los\_power }\OperatorTok{=}\NormalTok{ np.mean(np.}\BuiltInTok{abs}\NormalTok{(np.sqrt(}\DecValTok{6}\OperatorTok{/}\NormalTok{(}\DecValTok{6}\OperatorTok{+}\DecValTok{1}\NormalTok{)) }\OperatorTok{*}\NormalTok{ np.ones(}\DecValTok{10000}\NormalTok{))}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
+\NormalTok{scatter\_power }\OperatorTok{=}\NormalTok{ np.mean(np.}\BuiltInTok{abs}\NormalTok{(h\_rician }\OperatorTok{{-}}\NormalTok{ np.sqrt(}\DecValTok{6}\OperatorTok{/}\NormalTok{(}\DecValTok{6}\OperatorTok{+}\DecValTok{1}\NormalTok{)))}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
+\NormalTok{K\_estimated }\OperatorTok{=} \DecValTok{10}\OperatorTok{*}\NormalTok{np.log10(los\_power }\OperatorTok{/}\NormalTok{ scatter\_power)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Estimated K{-}factor: }\SpecialCharTok{\{}\NormalTok{K\_estimated}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB (target: 6.0 dB)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Verification}\label{verification-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Generate Rician channel}
+\NormalTok{h }\OperatorTok{=}\NormalTok{ rician\_channel(}\DecValTok{100000}\NormalTok{, K\_dB}\OperatorTok{=}\DecValTok{6}\NormalTok{, fd}\OperatorTok{=}\DecValTok{100}\NormalTok{, fs}\OperatorTok{=}\DecValTok{10000}\NormalTok{)}
+\NormalTok{envelope }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{abs}\NormalTok{(h)}
+
+\CommentTok{\# Plot histogram}
+\NormalTok{plt.hist(envelope, bins}\OperatorTok{=}\DecValTok{50}\NormalTok{, density}\OperatorTok{=}\VariableTok{True}\NormalTok{, alpha}\OperatorTok{=}\FloatTok{0.7}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}Simulated\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# Theoretical Rician PDF}
+\ImportTok{from}\NormalTok{ scipy.special }\ImportTok{import}\NormalTok{ i0  }\CommentTok{\# Modified Bessel I0}
+\NormalTok{K }\OperatorTok{=} \DecValTok{10}\OperatorTok{**}\NormalTok{(}\DecValTok{6}\OperatorTok{/}\DecValTok{10}\NormalTok{)  }\CommentTok{\# 6 dB in linear}
+\NormalTok{A }\OperatorTok{=}\NormalTok{ np.sqrt(K }\OperatorTok{/}\NormalTok{ (K}\OperatorTok{+}\DecValTok{1}\NormalTok{))}
+\NormalTok{sigma }\OperatorTok{=}\NormalTok{ np.sqrt(}\DecValTok{1} \OperatorTok{/}\NormalTok{ (}\DecValTok{2}\OperatorTok{*}\NormalTok{(K}\OperatorTok{+}\DecValTok{1}\NormalTok{)))}
+
+\NormalTok{r }\OperatorTok{=}\NormalTok{ np.linspace(}\DecValTok{0}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{pdf\_rician }\OperatorTok{=}\NormalTok{ (r}\OperatorTok{/}\NormalTok{sigma}\OperatorTok{**}\DecValTok{2}\NormalTok{) }\OperatorTok{*}\NormalTok{ np.exp(}\OperatorTok{{-}}\NormalTok{(r}\OperatorTok{**}\DecValTok{2} \OperatorTok{+}\NormalTok{ A}\OperatorTok{**}\DecValTok{2}\NormalTok{)}\OperatorTok{/}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{sigma}\OperatorTok{**}\DecValTok{2}\NormalTok{)) }\OperatorTok{*}\NormalTok{ i0(A}\OperatorTok{*}\NormalTok{r}\OperatorTok{/}\NormalTok{sigma}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
+\NormalTok{plt.plot(r, pdf\_rician, }\StringTok{\textquotesingle{}r{-}\textquotesingle{}}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{2}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}Theoretical K=6dB\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{plt.xlabel(}\StringTok{\textquotesingle{}Envelope |h|\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.ylabel(}\StringTok{\textquotesingle{}PDF\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.legend()}
+\NormalTok{plt.title(}\StringTok{\textquotesingle{}Rician Fading Envelope Distribution (K=6 dB)\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.show()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Frequency-Selective Fading (Tapped Delay
+Line)}\label{frequency-selective-fading-tapped-delay-line}
+
+\textbf{Wideband model}: Multiple delayed copies (taps)
+
+\[
+h(t, \tau) = \sum_{l=0}^{L-1} h_l(t) \delta(\tau - \tau_l)
+\]
+
+Where: - \(L\) = Number of paths (taps) - \(h_l(t)\) = Complex gain of
+path \(l\) (Rayleigh or Rician) - \(\tau_l\) = Delay of path \(l\)
+
+\textbf{Received signal}:
+
+\[
+r(t) = \sum_{l=0}^{L-1} h_l(t) s(t - \tau_l) + n(t)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Implementation (Tapped Delay
+Line)}\label{implementation-tapped-delay-line}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ frequency\_selective\_channel(signal, fs, taps, delays\_us, fd):}
+    \CommentTok{"""}
+\CommentTok{    Frequency{-}selective fading channel (Rayleigh taps)}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        signal: Input signal (numpy array)}
+\CommentTok{        fs: Sampling frequency (Hz)}
+\CommentTok{        taps: List of tap powers (linear, sums to 1)}
+\CommentTok{        delays\_us: List of tap delays (microseconds)}
+\CommentTok{        fd: Maximum Doppler frequency (Hz)}
+\CommentTok{        }
+\CommentTok{    Returns:}
+\CommentTok{        Output signal}
+\CommentTok{    """}
+\NormalTok{    N }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(signal)}
+\NormalTok{    output }\OperatorTok{=}\NormalTok{ np.zeros(N, dtype}\OperatorTok{=}\BuiltInTok{complex}\NormalTok{)}
+    
+    \ControlFlowTok{for}\NormalTok{ tap\_power, delay\_us }\KeywordTok{in} \BuiltInTok{zip}\NormalTok{(taps, delays\_us):}
+        \CommentTok{\# Generate Rayleigh fading for this tap}
+\NormalTok{        h\_tap }\OperatorTok{=}\NormalTok{ rayleigh\_channel\_jakes(N, fd, fs)}
+\NormalTok{        h\_tap }\OperatorTok{*=}\NormalTok{ np.sqrt(tap\_power)  }\CommentTok{\# Scale by tap power}
+        
+        \CommentTok{\# Delay signal}
+\NormalTok{        delay\_samples }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(delay\_us }\OperatorTok{*} \FloatTok{1e{-}6} \OperatorTok{*}\NormalTok{ fs)}
+\NormalTok{        signal\_delayed }\OperatorTok{=}\NormalTok{ np.concatenate([np.zeros(delay\_samples), }
+\NormalTok{                                          signal[:N}\OperatorTok{{-}}\NormalTok{delay\_samples]])}
+        
+        \CommentTok{\# Apply fading and accumulate}
+\NormalTok{        output }\OperatorTok{+=}\NormalTok{ h\_tap }\OperatorTok{*}\NormalTok{ signal\_delayed}
+    
+    \ControlFlowTok{return}\NormalTok{ output}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Usage (Urban channel)}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 3GPP Urban Macro (UMa) model simplified}
+\NormalTok{taps }\OperatorTok{=}\NormalTok{ [}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.3}\NormalTok{, }\FloatTok{0.15}\NormalTok{, }\FloatTok{0.05}\NormalTok{]  }\CommentTok{\# Power profile (exponential decay)}
+\NormalTok{delays\_us }\OperatorTok{=}\NormalTok{ [}\DecValTok{0}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\FloatTok{1.0}\NormalTok{, }\FloatTok{2.0}\NormalTok{]  }\CommentTok{\# Delays in microseconds}
+\NormalTok{fd }\OperatorTok{=} \DecValTok{50}  \CommentTok{\# Hz (pedestrian)}
+
+\NormalTok{tx\_signal }\OperatorTok{=}\NormalTok{ np.random.randn(}\DecValTok{10000}\NormalTok{) }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{np.random.randn(}\DecValTok{10000}\NormalTok{)}
+\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ frequency\_selective\_channel(tx\_signal, fs}\OperatorTok{=}\FloatTok{10e6}\NormalTok{, }
+\NormalTok{                                         taps}\OperatorTok{=}\NormalTok{taps, delays\_us}\OperatorTok{=}\NormalTok{delays\_us, fd}\OperatorTok{=}\NormalTok{fd)}
+
+\CommentTok{\# Add AWGN}
+\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ awgn\_channel(rx\_signal, snr\_db}\OperatorTok{=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Standard Channel Models}\label{standard-channel-models}
+
+\subsubsection{3GPP Spatial Channel Model
+(SCM)}\label{gpp-spatial-channel-model-scm}
+
+\textbf{LTE/5G NR channel models}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1321}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2453}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1698}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1887}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Environment
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Delay Spread
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Doppler
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+K-factor
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{EPA} & Extended Pedestrian A & 0.41 \$\textbackslash mu\$s & Low
+(3 km/h) & - \\
+\textbf{EVA} & Extended Vehicular A & 2.51 \$\textbackslash mu\$s &
+Medium (30 km/h) & - \\
+\textbf{ETU} & Extended Typical Urban & 5.0 \$\textbackslash mu\$s &
+High (120 km/h) & - \\
+\textbf{CDL-A} & Clustered Delay Line A & NLOS (varies) & Configurable &
+Rayleigh \\
+\textbf{CDL-B} & Clustered Delay Line B & NLOS & Configurable &
+Rayleigh \\
+\textbf{CDL-C} & Clustered Delay Line C & LOS & Configurable & Rician
+(K=13 dB) \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{ITU-R Pedestrian/Vehicular
+Models}\label{itu-r-pedestrianvehicular-models}
+
+\textbf{Pedestrian A} (low delay spread):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Tap & Delay (ns) & Power (dB) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & 0 & 0 \\
+2 & 110 & -9.7 \\
+3 & 190 & -19.2 \\
+4 & 410 & -22.8 \\
+\end{longtable}
+}
+
+\textbf{Vehicular A} (moderate delay spread):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Tap & Delay (ns) & Power (dB) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & 0 & 0 \\
+2 & 310 & -1 \\
+3 & 710 & -9 \\
+4 & 1090 & -10 \\
+5 & 1730 & -15 \\
+6 & 2510 & -20 \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Implementation (3GPP EPA)}\label{implementation-3gpp-epa}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ epa\_channel(signal, fs, fd):}
+    \CommentTok{"""}
+\CommentTok{    3GPP Extended Pedestrian A channel}
+\CommentTok{    """}
+    \CommentTok{\# EPA tap profile}
+\NormalTok{    delays\_ns }\OperatorTok{=}\NormalTok{ [}\DecValTok{0}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{70}\NormalTok{, }\DecValTok{90}\NormalTok{, }\DecValTok{110}\NormalTok{, }\DecValTok{190}\NormalTok{, }\DecValTok{410}\NormalTok{]}
+\NormalTok{    powers\_db }\OperatorTok{=}\NormalTok{ [}\DecValTok{0}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{, }\OperatorTok{{-}}\DecValTok{2}\NormalTok{, }\OperatorTok{{-}}\DecValTok{3}\NormalTok{, }\OperatorTok{{-}}\DecValTok{8}\NormalTok{, }\OperatorTok{{-}}\FloatTok{17.2}\NormalTok{, }\OperatorTok{{-}}\FloatTok{20.8}\NormalTok{]}
+    
+    \CommentTok{\# Convert to linear}
+\NormalTok{    powers }\OperatorTok{=} \DecValTok{10}\OperatorTok{**}\NormalTok{(np.array(powers\_db)}\OperatorTok{/}\DecValTok{10}\NormalTok{)}
+\NormalTok{    powers }\OperatorTok{/=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(powers)  }\CommentTok{\# Normalize}
+    
+    \ControlFlowTok{return}\NormalTok{ frequency\_selective\_channel(signal, fs, }
+\NormalTok{                                        powers, delays\_ns}\OperatorTok{/}\DecValTok{1000}\NormalTok{, fd)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Doppler Spectrum
+Visualization}\label{doppler-spectrum-visualization}
+
+\textbf{Verify Doppler spread}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ plot\_doppler\_spectrum(h, fs):}
+    \CommentTok{"""}
+\CommentTok{    Plot PSD of channel to verify Doppler spectrum}
+\CommentTok{    """}
+    \ImportTok{from}\NormalTok{ scipy }\ImportTok{import}\NormalTok{ signal }\ImportTok{as}\NormalTok{ sig}
+    
+    \CommentTok{\# Compute PSD}
+\NormalTok{    f, Pxx }\OperatorTok{=}\NormalTok{ sig.welch(h, fs}\OperatorTok{=}\NormalTok{fs, nperseg}\OperatorTok{=}\DecValTok{1024}\NormalTok{)}
+    
+\NormalTok{    plt.figure()}
+\NormalTok{    plt.semilogy(f, Pxx)}
+\NormalTok{    plt.xlabel(}\StringTok{\textquotesingle{}Frequency (Hz)\textquotesingle{}}\NormalTok{)}
+\NormalTok{    plt.ylabel(}\StringTok{\textquotesingle{}PSD\textquotesingle{}}\NormalTok{)}
+\NormalTok{    plt.title(}\StringTok{\textquotesingle{}Doppler Power Spectrum\textquotesingle{}}\NormalTok{)}
+\NormalTok{    plt.grid(}\VariableTok{True}\NormalTok{)}
+\NormalTok{    plt.show()}
+
+\CommentTok{\# Generate Rayleigh channel with fd = 100 Hz}
+\NormalTok{h }\OperatorTok{=}\NormalTok{ rayleigh\_channel\_jakes(}\DecValTok{100000}\NormalTok{, fd}\OperatorTok{=}\DecValTok{100}\NormalTok{, fs}\OperatorTok{=}\DecValTok{10000}\NormalTok{)}
+\NormalTok{plot\_doppler\_spectrum(h, fs}\OperatorTok{=}\DecValTok{10000}\NormalTok{)}
+\CommentTok{\# Should show U{-}shaped spectrum extending ±100 Hz}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{BER Simulation with
+Fading}\label{ber-simulation-with-fading}
+
+\textbf{Complete system simulation}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ simulate\_ber\_rayleigh(EbN0\_dB\_range, M}\OperatorTok{=}\DecValTok{4}\NormalTok{, N\_bits}\OperatorTok{=}\DecValTok{100000}\NormalTok{):}
+    \CommentTok{"""}
+\CommentTok{    Simulate BER for QPSK over Rayleigh fading + AWGN}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        EbN0\_dB\_range: Array of Eb/N0 values (dB)}
+\CommentTok{        M: Modulation order (4 for QPSK)}
+\CommentTok{        N\_bits: Number of bits to simulate}
+\CommentTok{        }
+\CommentTok{    Returns:}
+\CommentTok{        BER for each Eb/N0}
+\CommentTok{    """}
+    \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+    
+\NormalTok{    BER }\OperatorTok{=}\NormalTok{ []}
+    
+    \ControlFlowTok{for}\NormalTok{ EbN0\_dB }\KeywordTok{in}\NormalTok{ EbN0\_dB\_range:}
+        \CommentTok{\# Generate random bits}
+\NormalTok{        bits }\OperatorTok{=}\NormalTok{ np.random.randint(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, N\_bits)}
+        
+        \CommentTok{\# QPSK modulation (simplified)}
+\NormalTok{        symbols }\OperatorTok{=}\NormalTok{ []}
+        \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{0}\NormalTok{, N\_bits, }\DecValTok{2}\NormalTok{):}
+\NormalTok{            b }\OperatorTok{=}\NormalTok{ bits[i:i}\OperatorTok{+}\DecValTok{2}\NormalTok{]}
+            \ControlFlowTok{if}\NormalTok{ np.array\_equal(b, [}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{]): symbols.append(}\DecValTok{1}\OperatorTok{+}\OtherTok{1j}\NormalTok{)}
+            \ControlFlowTok{elif}\NormalTok{ np.array\_equal(b, [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{]): symbols.append(}\OperatorTok{{-}}\DecValTok{1}\OperatorTok{+}\OtherTok{1j}\NormalTok{)}
+            \ControlFlowTok{elif}\NormalTok{ np.array\_equal(b, [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{]): symbols.append(}\DecValTok{1}\OperatorTok{{-}}\OtherTok{1j}\NormalTok{)}
+            \ControlFlowTok{else}\NormalTok{: symbols.append(}\OperatorTok{{-}}\DecValTok{1}\OperatorTok{{-}}\OtherTok{1j}\NormalTok{)}
+\NormalTok{        symbols }\OperatorTok{=}\NormalTok{ np.array(symbols) }\OperatorTok{/}\NormalTok{ np.sqrt(}\DecValTok{2}\NormalTok{)  }\CommentTok{\# Normalize}
+        
+        \CommentTok{\# Rayleigh fading (flat, slow fading {-} one h per symbol)}
+\NormalTok{        N\_symbols }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(symbols)}
+\NormalTok{        h }\OperatorTok{=}\NormalTok{ (np.random.randn(N\_symbols) }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{np.random.randn(N\_symbols)) }\OperatorTok{/}\NormalTok{ np.sqrt(}\DecValTok{2}\NormalTok{)}
+        
+        \CommentTok{\# Apply fading}
+\NormalTok{        rx\_symbols }\OperatorTok{=}\NormalTok{ h }\OperatorTok{*}\NormalTok{ symbols}
+        
+        \CommentTok{\# AWGN (SNR per symbol = EbN0 + 10log10(log2(M)))}
+\NormalTok{        EsN0\_dB }\OperatorTok{=}\NormalTok{ EbN0\_dB }\OperatorTok{+} \DecValTok{10}\OperatorTok{*}\NormalTok{np.log10(np.log2(M))}
+\NormalTok{        rx\_symbols }\OperatorTok{=}\NormalTok{ awgn\_channel(rx\_symbols, EsN0\_dB)}
+        
+        \CommentTok{\# Coherent demodulation (assume perfect CSI)}
+\NormalTok{        rx\_symbols\_eq }\OperatorTok{=}\NormalTok{ rx\_symbols }\OperatorTok{/}\NormalTok{ h  }\CommentTok{\# Zero{-}forcing equalization}
+        
+        \CommentTok{\# QPSK demodulation (hard decision)}
+\NormalTok{        bits\_rx }\OperatorTok{=}\NormalTok{ []}
+        \ControlFlowTok{for}\NormalTok{ sym }\KeywordTok{in}\NormalTok{ rx\_symbols\_eq:}
+            \ControlFlowTok{if}\NormalTok{ sym.real }\OperatorTok{\textgreater{}} \DecValTok{0} \KeywordTok{and}\NormalTok{ sym.imag }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{: bits\_rx.extend([}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{])}
+            \ControlFlowTok{elif}\NormalTok{ sym.real }\OperatorTok{\textless{}} \DecValTok{0} \KeywordTok{and}\NormalTok{ sym.imag }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{: bits\_rx.extend([}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{])}
+            \ControlFlowTok{elif}\NormalTok{ sym.real }\OperatorTok{\textgreater{}} \DecValTok{0} \KeywordTok{and}\NormalTok{ sym.imag }\OperatorTok{\textless{}} \DecValTok{0}\NormalTok{: bits\_rx.extend([}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{])}
+            \ControlFlowTok{else}\NormalTok{: bits\_rx.extend([}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{])}
+        
+        \CommentTok{\# Count errors}
+\NormalTok{        errors }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(bits[:}\BuiltInTok{len}\NormalTok{(bits\_rx)] }\OperatorTok{!=}\NormalTok{ np.array(bits\_rx))}
+\NormalTok{        BER.append(errors }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(bits\_rx))}
+    
+    \ControlFlowTok{return}\NormalTok{ np.array(BER)}
+
+\CommentTok{\# Run simulation}
+\NormalTok{EbN0\_range }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{0}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\NormalTok{ber\_rayleigh }\OperatorTok{=}\NormalTok{ simulate\_ber\_rayleigh(EbN0\_range)}
+
+\CommentTok{\# Plot}
+\NormalTok{plt.figure()}
+\NormalTok{plt.semilogy(EbN0\_range, ber\_rayleigh, }\StringTok{\textquotesingle{}o{-}\textquotesingle{}}\NormalTok{, label}\OperatorTok{=}\StringTok{\textquotesingle{}Rayleigh fading\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.grid(}\VariableTok{True}\NormalTok{)}
+\NormalTok{plt.xlabel(}\StringTok{\textquotesingle{}Eb/N0 (dB)\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.ylabel(}\StringTok{\textquotesingle{}BER\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.title(}\StringTok{\textquotesingle{}QPSK BER: Rayleigh Fading with Perfect CSI\textquotesingle{}}\NormalTok{)}
+\NormalTok{plt.legend()}
+\NormalTok{plt.show()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Channel Estimation}\label{channel-estimation}
+
+\textbf{Practical systems need to estimate} \(h(t)\):
+
+\subsubsection{Pilot-Based Estimation}\label{pilot-based-estimation}
+
+\textbf{Insert known symbols (pilots) periodically}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ pilot\_channel\_estimate(rx\_signal, pilot\_positions, pilot\_symbols):}
+    \CommentTok{"""}
+\CommentTok{    Estimate channel using pilots}
+\CommentTok{    }
+\CommentTok{    Args:}
+\CommentTok{        rx\_signal: Received signal}
+\CommentTok{        pilot\_positions: Indices of pilot symbols}
+\CommentTok{        pilot\_symbols: Known pilot symbols}
+\CommentTok{        }
+\CommentTok{    Returns:}
+\CommentTok{        Channel estimates at pilot positions}
+\CommentTok{    """}
+\NormalTok{    h\_est }\OperatorTok{=}\NormalTok{ np.zeros(}\BuiltInTok{len}\NormalTok{(pilot\_positions), dtype}\OperatorTok{=}\BuiltInTok{complex}\NormalTok{)}
+    
+    \ControlFlowTok{for}\NormalTok{ i, pos }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(pilot\_positions):}
+        \CommentTok{\# h = rx / tx (assuming noiseless for simplicity)}
+\NormalTok{        h\_est[i] }\OperatorTok{=}\NormalTok{ rx\_signal[pos] }\OperatorTok{/}\NormalTok{ pilot\_symbols[i]}
+    
+    \ControlFlowTok{return}\NormalTok{ h\_est}
+
+\KeywordTok{def}\NormalTok{ interpolate\_channel(h\_pilots, pilot\_positions, N\_total):}
+    \CommentTok{"""}
+\CommentTok{    Interpolate channel between pilots}
+\CommentTok{    """}
+    \CommentTok{\# Linear interpolation}
+\NormalTok{    h\_full }\OperatorTok{=}\NormalTok{ np.interp(np.arange(N\_total), pilot\_positions, h\_pilots)}
+    \ControlFlowTok{return}\NormalTok{ h\_full}
+
+\CommentTok{\# Example}
+\NormalTok{N }\OperatorTok{=} \DecValTok{1000}
+\NormalTok{pilot\_spacing }\OperatorTok{=} \DecValTok{10}
+\NormalTok{pilot\_positions }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{0}\NormalTok{, N, pilot\_spacing)}
+\NormalTok{pilot\_symbols }\OperatorTok{=}\NormalTok{ np.ones(}\BuiltInTok{len}\NormalTok{(pilot\_positions))  }\CommentTok{\# BPSK pilots}
+
+\CommentTok{\# Generate channel}
+\NormalTok{h\_true }\OperatorTok{=}\NormalTok{ rayleigh\_channel\_jakes(N, fd}\OperatorTok{=}\DecValTok{20}\NormalTok{, fs}\OperatorTok{=}\DecValTok{1000}\NormalTok{)}
+
+\CommentTok{\# Simulate RX}
+\NormalTok{tx\_signal }\OperatorTok{=}\NormalTok{ np.random.randn(N) }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{np.random.randn(N)}
+\NormalTok{tx\_signal[pilot\_positions] }\OperatorTok{=}\NormalTok{ pilot\_symbols  }\CommentTok{\# Insert pilots}
+\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ h\_true }\OperatorTok{*}\NormalTok{ tx\_signal}
+
+\CommentTok{\# Estimate}
+\NormalTok{h\_pilots }\OperatorTok{=}\NormalTok{ pilot\_channel\_estimate(rx\_signal, pilot\_positions, pilot\_symbols)}
+\NormalTok{h\_est }\OperatorTok{=}\NormalTok{ interpolate\_channel(h\_pilots, pilot\_positions, N)}
+
+\CommentTok{\# Compare}
+\NormalTok{mse }\OperatorTok{=}\NormalTok{ np.mean(np.}\BuiltInTok{abs}\NormalTok{(h\_true }\OperatorTok{{-}}\NormalTok{ h\_est)}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Channel estimation MSE: }\SpecialCharTok{\{}\DecValTok{10}\OperatorTok{*}\NormalTok{np}\SpecialCharTok{.}\NormalTok{log10(mse)}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary of Channel Models}\label{summary-of-channel-models}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1842}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2632}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3158}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2368}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Use Case
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Complexity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Realism
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{AWGN} & Satellite LOS, benchmarking & Low & Idealized \\
+\textbf{Rayleigh (Jakes)} & Urban NLOS, mobile & Medium & Good for
+NLOS \\
+\textbf{Rician} & Suburban LOS+scatter & Medium & Good for partial
+LOS \\
+\textbf{Tapped delay line} & Wideband, frequency-selective & High &
+Excellent \\
+\textbf{3GPP CDL} & LTE/5G NR & Very high & Industry standard \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Implementation
+Tips}\label{practical-implementation-tips}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Sampling rate}: Choose \(f_s \gg 2f_d\) to avoid aliasing
+  Doppler spectrum (typically \(f_s > 50 f_d\))
+\item
+  \textbf{Number of scatterers}: M = 8-16 sufficient for
+  Jakes\textquotesingle{} model (higher M = smoother statistics but
+  slower)
+\item
+  \textbf{Normalization}: Always verify average channel power = 1 (so
+  SNR definition consistent)
+\item
+  \textbf{CSI assumption}: Perfect CSI (known h)
+  \$\textbackslash rightarrow\$ Upper bound. Pilot-based estimation
+  \$\textbackslash rightarrow\$ Practical performance
+\item
+  \textbf{Long simulations}: Need many fade cycles for accurate BER
+  (typically \(> 100/\text{BER}\) bits)
+\item
+  \textbf{Tap spacing}: For frequency-selective, ensure tap delays match
+  expected delay spread (\(\tau_{\text{rms}}\))
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}}:
+  Theory behind channel models
+\item
+  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: SNR definition for
+  fading channels
+\item
+  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric vs
+  fading
+\item
+  \textbf{{[}{[}Complete-Link-Budget-Analysis{]}{]}}: Using fading
+  margin in link budget
+\item
+  \textbf{{[}{[}OFDM-\&-Multicarrier-Modulation{]}{]}}: Combats
+  frequency-selective fading
+\item
+  \textbf{{[}{[}Channel-Equalization{]}{]}}: Compensates for ISI in
+  frequency-selective channels
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Channel models enable realistic system
+simulation without hardware.} AWGN is baseline, Rayleigh for NLOS
+mobile, Rician for partial LOS, tapped delay line for wideband ISI.
+Jakes\textquotesingle{} model efficiently generates Rayleigh fading with
+correct Doppler spectrum. 3GPP CDL models are industry-standard for
+LTE/5G. Pilot-based channel estimation is practical approach. Always
+verify statistics (envelope PDF, average power, Doppler spectrum) match
+theory.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

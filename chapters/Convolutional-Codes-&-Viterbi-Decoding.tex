@@ -1,0 +1,875 @@
+\section{Convolutional Codes \& Viterbi
+Decoding}\label{convolutional-codes-viterbi-decoding}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Coding Theory} \textbar{}
+{[}{[}Block-Codes-(Hamming,-BCH,-Reed-Solomon){]}{]} \textbar{}
+{[}{[}Turbo-Codes{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Convolutional codes + Viterbi decoding is like having a GPS that
+considers your entire journey to figure out where you really
+are-\/-\/-even if some GPS samples are noisy!}
+
+\textbf{The Problem}: - Noise corrupts transmitted bits: some 0s become
+1s, some 1s become 0s - How do you figure out what was actually sent?
+
+\textbf{The Convolutional Code Solution - Add memory}: 1. Instead of
+encoding each bit independently, the encoder ``remembers'' previous bits
+2. Each output bit depends on current + past few input bits 3. This
+creates patterns-\/-\/-if one bit gets corrupted, the pattern breaks and
+decoder notices!
+
+\textbf{The GPS Analogy}: - \textbf{Bad GPS}: Each position reading is
+independent - Get noisy reading? Can\textquotesingle t tell if
+it\textquotesingle s wrong! - \textbf{Smart GPS}: Considers your speed,
+direction, previous positions - Get noisy reading that says you
+teleported 5 miles? ``That\textquotesingle s impossible, ignore it!''
+
+\textbf{Viterbi Decoding - Find the most likely path}: - Looks at entire
+received sequence - Considers all possible paths the data could have
+taken - Picks the path that best matches what was received (even with
+errors!)
+
+\textbf{Real-world example - Space probes}: - \textbf{Voyager
+spacecraft}: 15+ billion miles away, incredibly noisy signal - Uses
+convolutional code with Viterbi decoding - Can correct errors even when
+30-40\% of bits are corrupted! - This is why we still get photos from
+interstellar space!
+
+\textbf{Everyday uses}: - \textbf{WiFi}: 802.11a/g use convolutional
+codes - \textbf{Satellite TV}: DVB-S uses convolutional + Viterbi -
+\textbf{GSM (2G)}: Your old cell phone used this - \textbf{GPS signals}:
+Navigation satellites use convolutional codes
+
+\textbf{Why it works}: - Pattern-based: Errors break patterns, decoder
+spots them - Context-aware: Uses past data to correct current data -
+Optimal: Viterbi finds the single best answer (mathematically proven!)
+
+\textbf{Trade-off}: More memory = better error correction BUT more
+complex decoder. Most systems use 3-7 bits of memory (called
+``constraint length'').
+
+\textbf{Fun fact}: Andrew Viterbi invented this algorithm in 1967 for
+deep space communications-\/-\/-then co-founded Qualcomm, making
+billions from the algorithm used in every cell phone!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Convolutional codes} encode data \textbf{continuously} (not in
+fixed blocks).
+
+\textbf{Key difference from block codes}: - \textbf{Block codes}: Encode
+\(k\) bits \$\textbackslash rightarrow\$ \(n\) bits independently -
+\textbf{Convolutional codes}: Output depends on current +
+\textbf{previous} input bits (memory)
+
+\textbf{Applications}: Satellite (DVB, GPS), WiFi, LTE, deep space
+(Voyager, Mars)
+
+\textbf{Advantages}: - Excellent performance with soft-decision decoding
+- Low latency (streaming) - Viterbi algorithm (optimal ML decoding)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Basic Concepts}\label{basic-concepts}
+
+\subsubsection{Constraint Length (K)}\label{constraint-length-k}
+
+\textbf{Constraint length} \(K\) = Number of input bits affecting output
+
+\textbf{Memory}: \(m = K - 1\) (number of shift register stages)
+
+\textbf{Example}: \(K = 3\) - Current bit + 2 previous bits
+\$\textbackslash rightarrow\$ 3 total
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Code Rate (r)}\label{code-rate-r}
+
+\textbf{Rate} \(r = k/n\): - \(k\) = Input bits per time step - \(n\) =
+Output bits per time step
+
+\textbf{Common rates}: - \textbf{r = 1/2}: 1 bit in
+\$\textbackslash rightarrow\$ 2 bits out - \textbf{r = 1/3}: 1 bit in
+\$\textbackslash rightarrow\$ 3 bits out - \textbf{r = 2/3}: 2 bits in
+\$\textbackslash rightarrow\$ 3 bits out (punctured)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Encoder Structure}\label{encoder-structure}
+
+\textbf{Shift register} + \textbf{modulo-2 adders} (XOR gates)
+
+\textbf{Example (r=1/2, K=3)}:
+
+\begin{verbatim}
+Input -->  [ ]--[ ]--[ ]  (3-stage shift register)
+             |    |    |
+             v    v    v
+            [XOR1]  [XOR2]
+              |      |
+              v      v
+           Output1 Output2
+\end{verbatim}
+
+\textbf{Connections}: Define which register stages feed which XORs
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Convolutional Encoder
+Example}\label{convolutional-encoder-example}
+
+\subsubsection{NASA Standard (r=1/2, K=7)}\label{nasa-standard-r12-k7}
+
+\textbf{Used in}: Voyager, Cassini, Mars rovers
+
+\textbf{Generator polynomials} (octal notation): -
+\(g_1 = 171_8 = 1111001_2\) - \(g_2 = 133_8 = 1011011_2\)
+
+\textbf{Structure}:
+
+\begin{verbatim}
+Input -->  [D0]--[D1]--[D2]--[D3]--[D4]--[D5]--[D6]
+            |     |     |     |     |     |     |
+            v     v     v     v     v     v     v
+           [   XOR (g1: 1111001)   ] --> Output Y1
+           [   XOR (g2: 1011011)   ] --> Output Y2
+\end{verbatim}
+
+\textbf{Where}: D0 = current input, D1-D6 = previous 6 inputs
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Encoding Example}\label{encoding-example}
+
+\textbf{Input}: 101
+
+\textbf{Initial state}: All zeros {[}000000{]}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llllll@{}}
+\toprule\noalign{}
+Time & Input & State & Y1 & Y2 & Output \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 1 & 100000 & 1 & 1 & 11 \\
+1 & 0 & 010000 & 1 & 0 & 10 \\
+2 & 1 & 101000 & 0 & 1 & 01 \\
+(flush) & 0 & 010100 & 0 & 0 & 00 \\
+(flush) & 0 & 001010 & 1 & 1 & 11 \\
+\textbackslash ldots\{\} & \textbackslash ldots\{\} &
+\textbackslash ldots\{\} & \textbackslash ldots\{\} &
+\textbackslash ldots\{\} & \textbackslash ldots\{\} \\
+\end{longtable}
+}
+
+\textbf{Output}: 11 10 01 00 11 \textbackslash ldots\{\} (12 bits for 3
+input bits + flush)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{State Diagram}\label{state-diagram}
+
+\textbf{States}: All possible shift register contents
+
+\textbf{For K=3}: \(2^{K-1} = 2^2 = 4\) states - State 00, State 01,
+State 10, State 11
+
+\textbf{Transitions}: Input bit determines next state
+
+\textbf{Example (r=1/2, K=3, g1=111, g2=101)}:
+
+\begin{verbatim}
+State diagram:
+
+   00 --0/00--> 00
+    |  --1/11--> 10
+    
+   01 --0/11--> 00
+    |  --1/00--> 10
+    
+   10 --0/10--> 01
+    |  --1/01--> 11
+    
+   11 --0/01--> 01
+    |  --1/10--> 11
+\end{verbatim}
+
+\textbf{Notation}: Input/Output (e.g., ``1/11'' = input 1 produces
+output 11)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Trellis Diagram}\label{trellis-diagram}
+
+\textbf{Trellis}: State diagram \textbf{unrolled in time}
+
+\textbf{Example (K=3, 4 time steps)}:
+
+\begin{verbatim}
+Time:   0       1       2       3       4
+State
+ 00  ----------------------------
+       \     |\     |\     |\     |\
+        \    | \    | \    | \    | \
+ 01      ---+------+------+------+---
+         |   |\ |   |\ |   |\ |   |\ |
+ 10      ---+-\----+-\----+-\----+-\-
+          \  | \ \  | \ \  | \ \  | \ \
+           \ |  \ \ |  \ \ |  \ \ |  \ \
+ 11         ----------------------------
+
+Legend:
+Solid line = Input 0
+Dashed line = Input 1
+Each branch labeled with output bits
+\end{verbatim}
+
+\textbf{Path through trellis} = Encoded sequence
+
+\textbf{Decoding}: Find most likely path (Viterbi algorithm)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Viterbi Algorithm}\label{viterbi-algorithm}
+
+\textbf{Optimal maximum-likelihood (ML) decoding} for convolutional
+codes
+
+\textbf{Idea}: Find path through trellis with \textbf{minimum distance}
+to received sequence
+
+\textbf{Complexity}: \(O(2^{K-1} \cdot L)\) where \(L\) = sequence
+length
+
+\textbf{Practical}: Efficient for \(K \leq 9\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Algorithm Steps}\label{algorithm-steps}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Initialize}: Start at state 00 (or all states if unknown)
+\item
+  \textbf{For each time step}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For each state, compute metrics for incoming branches
+  \item
+    Select \textbf{survivor path} (minimum metric)
+  \item
+    Store survivor and metric
+  \end{itemize}
+\item
+  \textbf{Traceback}: From best final state, follow survivor paths
+  backward
+\item
+  \textbf{Output}: Decoded bit sequence
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Branch Metrics}\label{branch-metrics}
+
+\textbf{Hard-decision} (Hamming distance):
+
+\[
+\text{metric} = \sum_{i=1}^{n} (r_i \oplus c_i)
+\]
+
+Where: - \(r_i\) = Received bit (0 or 1) - \(c_i\) = Expected output bit
+for branch
+
+\textbf{Soft-decision} (Euclidean distance):
+
+\[
+\text{metric} = \sum_{i=1}^{n} (r_i - c_i)^2
+\]
+
+Where \(r_i \in \mathbb{R}\) (e.g., LLR from demodulator)
+
+\textbf{Benefit}: Soft-decision gains \textasciitilde2 dB over
+hard-decision
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Path Metric}\label{path-metric}
+
+\textbf{Cumulative metric} for path to state \(s\) at time \(t\):
+
+\[
+PM_t(s) = PM_{t-1}(s') + BM_t(s' \to s)
+\]
+
+Where: - \(PM_{t-1}(s')\) = Path metric to previous state -
+\(BM_t(s' \to s)\) = Branch metric for transition
+
+\textbf{Survivor path}: Path with minimum \(PM_t(s)\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example (Hard-Decision)}\label{example-hard-decision}
+
+\textbf{Code}: r=1/2, K=3 (4 states)
+
+\textbf{Received}: 11 10 01 11 00
+
+\textbf{Assume}: Start state 00, end state 00
+
+\textbf{Time 0}: Initialize all states (PM = \$\textbackslash infty\$
+except state 00)
+
+\textbf{Time 1}: Input unknown, received 11 - Branch
+00\$\textbackslash rightarrow\$00 (output 00): Hamming distance = 2 -
+Branch 00\$\textbackslash rightarrow\$10 (output 11): Hamming distance =
+0 - Update: PM(00) = 2, PM(10) = 0
+
+\textbf{Continue} for all time steps\textbackslash ldots\{\}
+
+\textbf{Final}: Traceback from state with minimum PM
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Free Distance}\label{free-distance}
+
+\textbf{Free distance} \(d_{\text{free}}\): Minimum Hamming distance
+between \textbf{any two distinct paths} in the trellis
+
+\textbf{Determines}: Error correction capability
+
+\[
+t_{\text{correct}} = \left\lfloor \frac{d_{\text{free}} - 1}{2} \right\rfloor
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example Free Distances}\label{example-free-distances}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Code & K & Rate & \(d_{\text{free}}\) & \(t\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(5, 1/2) & 3 & 1/2 & 5 & 2 \\
+(171, 133) & 7 & 1/2 & 10 & 4 \\
+(561, 753) & 9 & 1/2 & 12 & 5 \\
+(1167, 1375, 1545) & 9 & 1/3 & 18 & 8 \\
+\end{longtable}
+}
+
+\textbf{Pattern}: Larger \(K\) \$\textbackslash rightarrow\$ Higher
+\(d_{\text{free}}\) \$\textbackslash rightarrow\$ Better correction
+
+\textbf{Trade-off}: Larger \(K\) \$\textbackslash rightarrow\$ More
+states \$\textbackslash rightarrow\$ Higher complexity
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Performance Analysis}\label{performance-analysis}
+
+\subsubsection{Bit Error Rate (BER)}\label{bit-error-rate-ber}
+
+\textbf{Approximate BER} (BPSK over AWGN, hard-decision):
+
+\[
+P_b \approx \sum_{d=d_{\text{free}}}^{\infty} \beta_d \cdot Q\left(\sqrt{2 d R \frac{E_b}{N_0}}\right)
+\]
+
+Where: - \(\beta_d\) = Number of bit errors at distance \(d\) (from
+transfer function) - \(R\) = Code rate - \(Q(x)\) = Tail probability of
+Gaussian
+
+\textbf{At high SNR}: Dominated by \(d_{\text{free}}\) term
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Coding Gain}\label{coding-gain}
+
+\textbf{Coding gain} (compared to uncoded BPSK):
+
+\[
+G_c = 10 \log_{10}(R \cdot d_{\text{free}}) \quad \text{dB}
+\]
+
+\textbf{Example}: (171, 133), K=7, r=1/2, \(d_{\text{free}}=10\)
+
+\[
+G_c = 10 \log_{10}(0.5 \times 10) = 10 \log_{10}(5) = 7.0 \text{ dB}
+\]
+
+\textbf{With soft-decision}: Add \textasciitilde2 dB
+\$\textbackslash rightarrow\$ Total gain \$\textbackslash approx\$ 9 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example Performance (NASA
+K=7)}\label{example-performance-nasa-k7}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Eb/N0 (dB) & Uncoded BPSK & Conv (hard) & Conv (soft) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2 &
+2.4\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}
+&
+7\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+&
+2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\} \\
+4 &
+1.2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+&
+3\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+&
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\} \\
+6 &
+2.4\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
+&
+2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+&
+1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{7\} \\
+8 &
+1.9\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{7\}
+&
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\}
+&
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\} \\
+\end{longtable}
+}
+
+\textbf{Soft-decision gain}: \textasciitilde2 dB at BER \(10^{-5}\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Puncturing}\label{puncturing}
+
+\textbf{Puncturing}: Delete some output bits to \textbf{increase code
+rate}
+
+\textbf{Example}: r=1/2 \$\textbackslash rightarrow\$ r=2/3 (delete
+every 3rd bit)
+
+\textbf{Puncturing pattern}: Matrix specifying which bits to keep
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: Rate 2/3 from Rate
+1/2}\label{example-rate-23-from-rate-12}
+
+\textbf{Original}: 1 input \$\textbackslash rightarrow\$ 2 outputs (Y1,
+Y2)
+
+\textbf{Punctured (2 periods)}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Period & Input & Y1 & Y2 & Transmitted \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & bit 1 & & & Y1, Y2 \\
+2 & bit 2 & & & Y1 only \\
+\end{longtable}
+}
+
+\textbf{Result}: 2 inputs \$\textbackslash rightarrow\$ 3 outputs (rate
+2/3)
+
+\textbf{Puncturing matrix}:
+
+\[
+P = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}
+\]
+
+\textbf{1} = transmit, \textbf{0} = delete
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Common Punctured Rates}\label{common-punctured-rates}
+
+\textbf{From r=1/2 base code}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Target Rate & Puncturing Period & Complexity \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{2/3} & 2 & Low \\
+\textbf{3/4} & 3 & Low \\
+\textbf{4/5} & 4 & Low \\
+\textbf{5/6} & 5 & Moderate \\
+\textbf{7/8} & 7 & Moderate \\
+\end{longtable}
+}
+
+\textbf{Used in}: WiFi (802.11a/g), LTE, DVB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Tail-Biting}\label{tail-biting}
+
+\textbf{Problem}: Standard encoding requires \textbf{flushing} (adds
+\(K-1\) zero bits)
+
+\textbf{Overhead}: \((K-1)/L\) for message length \(L\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Tail-Biting Solution}\label{tail-biting-solution}
+
+\textbf{Start encoder in non-zero state} such that ending state =
+starting state
+
+\textbf{Result}: No flush bits needed (circular encoding)
+
+\textbf{Decoding}: Try all \(2^{K-1}\) starting states, pick best
+
+\textbf{Benefit}: No overhead (useful for short packets)
+
+\textbf{Used in}: LTE control channels
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Recursive Systematic Convolutional
+(RSC)}\label{recursive-systematic-convolutional-rsc}
+
+\textbf{Recursive}: Output fed back to input
+
+\textbf{Systematic}: One output = input (uncoded)
+
+\textbf{Structure}:
+
+\begin{verbatim}
+        +--------<---------+
+        |                  |
+Input ->+--[Encoder]--+----+--> Output (systematic)
+                      |
+                      +-------> Output (parity)
+\end{verbatim}
+
+\textbf{Advantage}: Better for \textbf{Turbo codes} (interleaver gain)
+
+\textbf{Used in}: Turbo codes, LTE Turbo codes
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Applications}\label{practical-applications}
+
+\subsubsection{1. Deep Space (Voyager)}\label{deep-space-voyager}
+
+\textbf{Code}: (171, 133), K=7, r=1/2
+
+\textbf{Eb/N0}: \textasciitilde1 dB (extremely weak signal)
+
+\textbf{BER}: \(5 \times 10^{-3}\) (after Viterbi)
+
+\textbf{Outer code}: RS(255,223) corrects residual errors
+
+\textbf{Final BER}: \textless{} \(10^{-10}\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. WiFi (802.11a/g)}\label{wifi-802.11ag}
+
+\textbf{Base code}: K=7, r=1/2
+
+\textbf{Punctured rates}: 1/2, 2/3, 3/4
+
+\textbf{Combined with}: OFDM (64-QAM subcarriers)
+
+\textbf{Example (54 Mbps mode)}: - 64-QAM (6 bits/symbol) - Rate 3/4
+convolutional code - Effective: 4.5 bits/symbol/subcarrier
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. LTE (Before Turbo)}\label{lte-before-turbo}
+
+\textbf{Early 3G}: Used convolutional codes
+
+\textbf{Parameters}: K=9, r=1/3
+
+\textbf{Puncturing}: Adaptive (1/2, 2/3, 3/4, 5/6) based on channel
+
+\textbf{Replaced by}: Turbo codes in LTE (better performance)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. GPS L1 C/A}\label{gps-l1-ca}
+
+\textbf{Code}: K=7, r=1/2 (similar to NASA standard)
+
+\textbf{Navigation message}: 50 bps
+
+\textbf{After encoding}: 100 sps
+
+\textbf{Combined with}: BPSK, CDMA spreading (1.023 Mcps)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5. DVB-S (Satellite TV)}\label{dvb-s-satellite-tv}
+
+\textbf{Inner code}: K=7, r=1/2, punctured to 2/3, 3/4, 5/6, 7/8
+
+\textbf{Outer code}: RS(204,188)
+
+\textbf{Concatenation}: Convolutional handles random errors, RS handles
+bursts
+
+\textbf{Result}: Robust satellite link (rain fade, interference)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Viterbi Decoder
+Implementation}\label{viterbi-decoder-implementation}
+
+\subsubsection{Computational Complexity}\label{computational-complexity}
+
+\textbf{Per time step}: - \(2^K\) branch metric computations -
+\(2^{K-1}\) add-compare-select (ACS) operations
+
+\textbf{Memory}: Store \(2^{K-1}\) survivor paths (length
+\$\textbackslash approx\$ 5K)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Traceback Depth}\label{traceback-depth}
+
+\textbf{Typical}: \(5K\) to \(7K\) (5-7 times constraint length)
+
+\textbf{Example}: K=7 \$\textbackslash rightarrow\$ Traceback 35-50
+steps
+
+\textbf{Trade-off}: Longer traceback \$\textbackslash rightarrow\$
+Better decisions, more memory/latency
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Fixed-Point vs
+Floating-Point}\label{fixed-point-vs-floating-point}
+
+\textbf{Fixed-point}: 6-8 bits sufficient for metrics (quantization)
+
+\textbf{Benefit}: Faster, less power (embedded systems)
+
+\textbf{Performance loss}: Negligible (\textless0.1 dB)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Python Example: Simple Viterbi
+(K=3)}\label{python-example-simple-viterbi-k3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
+\KeywordTok{def}\NormalTok{ convolutional\_encode\_k3(data):}
+    \CommentTok{"""Encode using K=3, r=1/2, g1=111, g2=101."""}
+\NormalTok{    state }\OperatorTok{=} \DecValTok{0}  \CommentTok{\# Initial state (00)}
+\NormalTok{    output }\OperatorTok{=}\NormalTok{ []}
+    
+    \ControlFlowTok{for}\NormalTok{ bit }\KeywordTok{in}\NormalTok{ data:}
+        \CommentTok{\# Update state}
+\NormalTok{        state }\OperatorTok{=}\NormalTok{ ((state }\OperatorTok{\textless{}\textless{}} \DecValTok{1}\NormalTok{) }\OperatorTok{|}\NormalTok{ bit) }\OperatorTok{\&} \BaseNTok{0b11}  \CommentTok{\# Shift and mask to 2 bits}
+        
+        \CommentTok{\# Compute outputs (XOR of taps)}
+        \CommentTok{\# g1 = 111 (all 3 positions)}
+        \CommentTok{\# g2 = 101 (positions 0 and 2)}
+\NormalTok{        y1 }\OperatorTok{=}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{0}\NormalTok{) }\OperatorTok{\^{}}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{1}\NormalTok{) }\OperatorTok{\^{}}\NormalTok{ (bit)  }\CommentTok{\# g1}
+\NormalTok{        y2 }\OperatorTok{=}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{0}\NormalTok{) }\OperatorTok{\^{}}\NormalTok{ (bit)  }\CommentTok{\# g2}
+        
+\NormalTok{        output.extend([y1 }\OperatorTok{\&} \DecValTok{1}\NormalTok{, y2 }\OperatorTok{\&} \DecValTok{1}\NormalTok{])}
+    
+    \CommentTok{\# Flush (add 2 zeros)}
+    \ControlFlowTok{for}\NormalTok{ \_ }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{2}\NormalTok{):}
+\NormalTok{        state }\OperatorTok{=}\NormalTok{ (state }\OperatorTok{\textless{}\textless{}} \DecValTok{1}\NormalTok{) }\OperatorTok{\&} \BaseNTok{0b11}
+\NormalTok{        y1 }\OperatorTok{=}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{0}\NormalTok{) }\OperatorTok{\^{}}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{1}\NormalTok{)}
+\NormalTok{        y2 }\OperatorTok{=}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{0}\NormalTok{)}
+\NormalTok{        output.extend([y1 }\OperatorTok{\&} \DecValTok{1}\NormalTok{, y2 }\OperatorTok{\&} \DecValTok{1}\NormalTok{])}
+    
+    \ControlFlowTok{return}\NormalTok{ output}
+
+\KeywordTok{def}\NormalTok{ viterbi\_decode\_k3(received):}
+    \CommentTok{"""Viterbi decoding for K=3, r=1/2, g1=111, g2=101."""}
+    \CommentTok{\# Trellis: 4 states (00, 01, 10, 11)}
+    \CommentTok{\# Branch outputs (state, input) {-}\textgreater{} (next\_state, output)}
+    
+    \CommentTok{\# Precompute branch outputs}
+    \KeywordTok{def}\NormalTok{ branch\_output(state, input\_bit):}
+\NormalTok{        next\_state }\OperatorTok{=}\NormalTok{ ((state }\OperatorTok{\textless{}\textless{}} \DecValTok{1}\NormalTok{) }\OperatorTok{|}\NormalTok{ input\_bit) }\OperatorTok{\&} \BaseNTok{0b11}
+\NormalTok{        y1 }\OperatorTok{=}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{0}\NormalTok{) }\OperatorTok{\^{}}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{1}\NormalTok{) }\OperatorTok{\^{}}\NormalTok{ input\_bit}
+\NormalTok{        y2 }\OperatorTok{=}\NormalTok{ (state }\OperatorTok{\textgreater{}\textgreater{}} \DecValTok{0}\NormalTok{) }\OperatorTok{\^{}}\NormalTok{ input\_bit}
+        \ControlFlowTok{return}\NormalTok{ next\_state, [y1 }\OperatorTok{\&} \DecValTok{1}\NormalTok{, y2 }\OperatorTok{\&} \DecValTok{1}\NormalTok{]}
+    
+\NormalTok{    num\_states }\OperatorTok{=} \DecValTok{4}
+\NormalTok{    L }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(received) }\OperatorTok{//} \DecValTok{2}  \CommentTok{\# Number of time steps}
+    
+    \CommentTok{\# Initialize path metrics (PM)}
+\NormalTok{    pm }\OperatorTok{=}\NormalTok{ [}\BuiltInTok{float}\NormalTok{(}\StringTok{\textquotesingle{}inf\textquotesingle{}}\NormalTok{)] }\OperatorTok{*}\NormalTok{ num\_states}
+\NormalTok{    pm[}\DecValTok{0}\NormalTok{] }\OperatorTok{=} \DecValTok{0}  \CommentTok{\# Start at state 00}
+    
+    \CommentTok{\# Survivor paths}
+\NormalTok{    survivors }\OperatorTok{=}\NormalTok{ [[]]  }\OperatorTok{*}\NormalTok{ num\_states}
+    
+    \CommentTok{\# Process each time step}
+    \ControlFlowTok{for}\NormalTok{ t }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(L):}
+\NormalTok{        r }\OperatorTok{=}\NormalTok{ received[}\DecValTok{2}\OperatorTok{*}\NormalTok{t:}\DecValTok{2}\OperatorTok{*}\NormalTok{t}\OperatorTok{+}\DecValTok{2}\NormalTok{]  }\CommentTok{\# Received 2 bits}
+        
+\NormalTok{        new\_pm }\OperatorTok{=}\NormalTok{ [}\BuiltInTok{float}\NormalTok{(}\StringTok{\textquotesingle{}inf\textquotesingle{}}\NormalTok{)] }\OperatorTok{*}\NormalTok{ num\_states}
+\NormalTok{        new\_survivors }\OperatorTok{=}\NormalTok{ [}\VariableTok{None}\NormalTok{] }\OperatorTok{*}\NormalTok{ num\_states}
+        
+        \ControlFlowTok{for}\NormalTok{ s }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(num\_states):}
+            \ControlFlowTok{if}\NormalTok{ pm[s] }\OperatorTok{==} \BuiltInTok{float}\NormalTok{(}\StringTok{\textquotesingle{}inf\textquotesingle{}}\NormalTok{):}
+                \ControlFlowTok{continue}
+            
+            \ControlFlowTok{for}\NormalTok{ input\_bit }\KeywordTok{in}\NormalTok{ [}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{]:}
+\NormalTok{                next\_s, expected }\OperatorTok{=}\NormalTok{ branch\_output(s, input\_bit)}
+                
+                \CommentTok{\# Hamming distance (hard decision)}
+\NormalTok{                metric }\OperatorTok{=} \BuiltInTok{sum}\NormalTok{(r[i] }\OperatorTok{!=}\NormalTok{ expected[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{2}\NormalTok{))}
+                
+                \CommentTok{\# Update path metric}
+\NormalTok{                candidate\_pm }\OperatorTok{=}\NormalTok{ pm[s] }\OperatorTok{+}\NormalTok{ metric}
+                
+                \ControlFlowTok{if}\NormalTok{ candidate\_pm }\OperatorTok{\textless{}}\NormalTok{ new\_pm[next\_s]:}
+\NormalTok{                    new\_pm[next\_s] }\OperatorTok{=}\NormalTok{ candidate\_pm}
+\NormalTok{                    new\_survivors[next\_s] }\OperatorTok{=}\NormalTok{ survivors[s] }\OperatorTok{+}\NormalTok{ [input\_bit]}
+        
+\NormalTok{        pm }\OperatorTok{=}\NormalTok{ new\_pm}
+\NormalTok{        survivors }\OperatorTok{=}\NormalTok{ new\_survivors}
+    
+    \CommentTok{\# Find best final state (should be 00 after flushing)}
+\NormalTok{    best\_state }\OperatorTok{=} \DecValTok{0}
+\NormalTok{    best\_pm }\OperatorTok{=}\NormalTok{ pm[}\DecValTok{0}\NormalTok{]}
+    
+    \CommentTok{\# Traceback}
+\NormalTok{    decoded }\OperatorTok{=}\NormalTok{ survivors[best\_state][:}\OperatorTok{{-}}\DecValTok{2}\NormalTok{]  }\CommentTok{\# Remove flush bits}
+    \ControlFlowTok{return}\NormalTok{ decoded}
+
+\CommentTok{\# Example usage}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{]}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Original data: }\SpecialCharTok{\{}\NormalTok{data}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\NormalTok{encoded }\OperatorTok{=}\NormalTok{ convolutional\_encode\_k3(data)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Encoded: }\SpecialCharTok{\{}\NormalTok{encoded}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\CommentTok{\# Simulate error (flip 1 bit)}
+\NormalTok{received }\OperatorTok{=}\NormalTok{ encoded.copy()}
+\NormalTok{received[}\DecValTok{3}\NormalTok{] }\OperatorTok{\^{}=} \DecValTok{1}  \CommentTok{\# Flip bit 3}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Received (1 error): }\SpecialCharTok{\{}\NormalTok{received}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+
+\NormalTok{decoded }\OperatorTok{=}\NormalTok{ viterbi\_decode\_k3(received)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Decoded: }\SpecialCharTok{\{}\NormalTok{decoded}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Match: }\SpecialCharTok{\{}\NormalTok{decoded }\OperatorTok{==}\NormalTok{ data}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Output}:
+
+\begin{verbatim}
+Original data: [1, 0, 1, 1, 0]
+Encoded: [1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1]
+Received (1 error): [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1]
+Decoded: [1, 0, 1, 1, 0]
+Match: True
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Comparison: Block vs
+Convolutional}\label{comparison-block-vs-convolutional}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Property & Block Codes & Convolutional Codes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Encoding} & Fixed blocks & Continuous stream \\
+\textbf{Memory} & None (memoryless) & Yes (shift register) \\
+\textbf{Decoding} & Algebraic (syndrome) & Viterbi (trellis search) \\
+\textbf{Latency} & Block delay & Traceback depth (\textasciitilde5K) \\
+\textbf{Soft-decision} & Possible (LLRs) & Natural (Viterbi) \\
+\textbf{Best use} & Burst errors (RS) & Random errors (AWGN) \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Design Guidelines}\label{design-guidelines}
+
+\textbf{Choose K}: - \textbf{K=3-5}: Low complexity, embedded systems -
+\textbf{K=7}: Standard (NASA, WiFi), good performance - \textbf{K=9}:
+Better performance, higher complexity
+
+\textbf{Choose rate}: - \textbf{1/2}: Strong coding (deep space) -
+\textbf{1/3}: Very strong (low SNR) - \textbf{2/3, 3/4}: High throughput
+(punctured)
+
+\textbf{Soft-decision}: Always use if demodulator provides LLRs (+2 dB
+free gain!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Block-Codes-(Hamming,-BCH,-Reed-Solomon){]}{]}}:
+  Alternative FEC approach
+\item
+  \textbf{{[}{[}Turbo-Codes{]}{]}}: Concatenated convolutional codes
+  (next-gen)
+\item
+  \textbf{{[}{[}LDPC-Codes{]}{]}}: Modern capacity-approaching codes
+\item
+  \textbf{{[}{[}Forward-Error-Correction-(FEC){]}{]}}: General FEC
+  overview
+\item
+  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Convolutional codes use memory (shift
+register + XOR) for continuous encoding.} Constraint length \(K\)
+determines states (\(2^{K-1}\)) and performance (\(d_{\text{free}}\)
+increases with \(K\)). Viterbi algorithm performs optimal ML decoding
+via trellis search. Soft-decision Viterbi gains \textasciitilde2 dB over
+hard-decision. Puncturing increases code rate (1/2
+\$\textbackslash rightarrow\$ 2/3, 3/4). NASA standard (171, 133) K=7,
+\(d_{\text{free}}=10\), \textasciitilde7 dB coding gain. Used in
+Voyager, GPS, WiFi, DVB. Turbo codes (parallel concatenated
+convolutional) achieve near-Shannon performance. Trade-off: Larger \(K\)
+= better correction but higher complexity.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

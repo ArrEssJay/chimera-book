@@ -1,0 +1,872 @@
+\section{Noise Sources \& Noise
+Figure}\label{noise-sources-noise-figure}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Link Budget \& System Performance}
+\textbar{} {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} \textbar{}
+{[}{[}Complete-Link-Budget-Analysis{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Think of radio communication like having a conversation in a
+crowded restaurant:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Signal} = Your friend\textquotesingle s voice trying to reach
+  you
+\item
+  \textbf{Noise} = All the background chatter, kitchen sounds, and air
+  conditioning
+\item
+  \textbf{Noise Figure} = How much your hearing aids (or bad acoustics)
+  make it harder to understand
+\end{itemize}
+
+\textbf{Why noise matters:} If the background noise is too loud, you
+can\textquotesingle t hear your friend-\/-\/-even if
+they\textquotesingle re shouting. Same with radio: if noise is too high,
+the receiver can\textquotesingle t ``hear'' the signal, no matter how
+powerful the transmitter.
+
+\textbf{Key insights in plain English:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Thermal noise is everywhere}: Just like atoms vibrating
+  creates heat, electrons vibrating creates random electrical ``static''
+  in every wire, antenna, and amplifier. This sets a fundamental
+  limit-\/-\/-you can\textquotesingle t eliminate it, only work around
+  it.
+\item
+  \textbf{The -174 dBm magic number}: This is the ``noise floor'' at
+  room temperature for a 1 Hz bandwidth. Think of it as the quietest
+  possible ``background hum'' in radio. Everything adds noise on top of
+  this baseline.
+\item
+  \textbf{Amplifiers make noise worse}: Every amplifier adds its own
+  noise (like a hearing aid with poor quality that adds hiss). The
+  \textbf{noise figure} tells you how much worse the amplifier makes the
+  signal-to-noise ratio.
+\item
+  \textbf{First stage is critical}: Just like you want your hearing aid
+  right at your ear (not connected by a long cable), you want the first
+  amplifier (Low-Noise Amplifier, or LNA) as close to the antenna as
+  possible. Once noise is added early, you can\textquotesingle t remove
+  it later.
+\item
+  \textbf{Wider bandwidth = more noise}: Like opening more windows lets
+  in more outside noise, using a wider radio bandwidth lets in more
+  thermal noise. This is why high-speed data links (wide bandwidth) need
+  stronger signals than voice links (narrow bandwidth).
+\end{enumerate}
+
+\textbf{Real-world impact:} - \textbf{Satellite TV}: Premium receivers
+have better (lower) noise figures, letting them work with smaller dishes
+- \textbf{GPS}: Your phone\textquotesingle s GPS can detect signals
+1,000\$\textbackslash times\$ weaker than WiFi because it fights noise
+cleverly (spread spectrum) - \textbf{Deep space missions}: NASA uses
+cryogenically-cooled amplifiers (like refrigerating your hearing aid!)
+to reduce noise and hear probes billions of miles away
+
+\textbf{Bottom line}: If you want to receive weak signals (long range,
+small antenna, low power), you must minimize noise.
+That\textquotesingle s why the first few inches of cable and the first
+amplifier matter more than anything else in the receiver chain.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Noise} is unwanted random signal that degrades communication
+system performance.
+
+\textbf{Key metrics}: - \textbf{Noise power} (N): Total noise at
+receiver input (dBm, watts) - \textbf{Noise figure} (NF): How much a
+component degrades SNR (dB) - \textbf{Noise temperature} (T\_e):
+Equivalent thermal noise (Kelvin)
+
+\textbf{Why it matters}: - Determines \textbf{receiver sensitivity}
+(minimum detectable signal) - Sets \textbf{SNR} at demodulator input -
+Dominates link performance in low-signal scenarios (satellite, deep
+space)
+
+\textbf{Bottom line}: Lower noise = Better sensitivity = Longer range
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Thermal Noise}\label{thermal-noise}
+
+\textbf{Fundamental noise source}: Random motion of charge carriers due
+to thermal agitation
+
+\subsubsection{Johnson-Nyquist Noise}\label{johnson-nyquist-noise}
+
+\textbf{Noise power} in resistor at temperature T:
+
+\[
+N = k T B \quad (\text{watts})
+\]
+
+Where: - \(k = 1.38 \times 10^{-23}\) J/K (Boltzmann constant) - \(T\) =
+Absolute temperature (Kelvin) - \(B\) = Bandwidth (Hz)
+
+\textbf{Standard reference}: \(T_0 = 290\) K (room temperature,
+\textasciitilde17\$\^{}\textbackslash circ\$C)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Noise Power Spectral
+Density}\label{noise-power-spectral-density}
+
+\textbf{Noise power per Hz}:
+
+\[
+N_0 = k T \quad (\text{W/Hz})
+\]
+
+\textbf{At 290 K}:
+
+\[
+N_0 = 1.38 \times 10^{-23} \times 290 = 4 \times 10^{-21}\ \text{W/Hz}
+\]
+
+\textbf{In dBm/Hz}:
+
+\[
+N_0 = 10\log_{10}\left(\frac{4 \times 10^{-21}}{10^{-3}}\right) = -174\ \text{dBm/Hz}
+\]
+
+\textbf{This is the famous -174 dBm/Hz thermal noise floor!}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Noise Power in Bandwidth
+B}\label{noise-power-in-bandwidth-b}
+
+\[
+N = N_0 \times B = kTB \quad (\text{watts})
+\]
+
+\textbf{In dB}:
+
+\[
+N_{\text{dBm}} = -174 + 10\log_{10}(B) \quad (\text{dBm})
+\]
+
+\textbf{Example}: 1 MHz bandwidth @ 290 K
+
+\[
+N = -174 + 10\log_{10}(10^6) = -174 + 60 = -114\ \text{dBm}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Typical Bandwidths and Noise
+Power}\label{typical-bandwidths-and-noise-power}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+System & Bandwidth & Noise Power @ 290 K \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{GPS C/A code} & 2 MHz & -111 dBm \\
+\textbf{WiFi 20 MHz} & 20 MHz & -101 dBm \\
+\textbf{LTE 10 MHz} & 10 MHz & -104 dBm \\
+\textbf{DVB-S2 36 MHz} & 36 MHz & -98.4 dBm \\
+\textbf{Radar (1 GHz pulse)} & 1 GHz & -84 dBm \\
+\end{longtable}
+}
+
+\textbf{Key insight}: Wider bandwidth = More noise power
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Noise Figure (NF)}\label{noise-figure-nf}
+
+\textbf{Definition}: \textbf{Degradation of SNR} through a component or
+system
+
+\[
+\text{NF} = \frac{\text{SNR}_{\text{in}}}{\text{SNR}_{\text{out}}} \quad (\text{linear ratio})
+\]
+
+\textbf{In dB}:
+
+\[
+\text{NF}_{\text{dB}} = 10\log_{10}(\text{NF}) = \text{SNR}_{\text{in,dB}} - \text{SNR}_{\text{out,dB}}
+\]
+
+\textbf{Interpretation}: - \textbf{NF = 1 (0 dB)}: Ideal (no noise
+added) - \textbf{NF = 2 (3 dB)}: SNR halved (doubles noise power) -
+\textbf{NF = 10 (10 dB)}: SNR reduced by 10\$\textbackslash times\$
+(10\$\textbackslash times\$ noise power)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Noise Figure vs Noise
+Factor}\label{noise-figure-vs-noise-factor}
+
+\textbf{Noise factor} (F): Linear ratio
+
+\textbf{Noise figure} (NF): Logarithmic (dB)
+
+\[
+\text{NF}_{\text{dB}} = 10\log_{10}(F)
+\]
+
+\textbf{Example}: F = 2 \$\textbackslash rightarrow\$ NF = 3 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Typical Noise Figures}\label{typical-noise-figures}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Component & Noise Figure (dB) & Notes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Passive cable} & Loss in dB & Lossy line: NF = loss \\
+\textbf{Ideal amplifier} & 0 & Theoretical only \\
+\textbf{Cryogenic LNA} & 0.3-0.8 & Cooled to 20-80 K \\
+\textbf{Premium LNA} & 0.8-1.5 & GaAs HEMT, room temp \\
+\textbf{Good LNA} & 1.5-3 & Typical satellite ground \\
+\textbf{WiFi/cellular front-end} & 5-9 & Consumer devices \\
+\textbf{Mixer (passive)} & 6-10 & Diode mixer \\
+\textbf{Mixer (active)} & 10-15 & Gilbert cell \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Noise Temperature}\label{noise-temperature}
+
+\textbf{Alternative to noise figure}: Equivalent input noise temperature
+
+\[
+T_e = T_0 (F - 1) \quad (\text{K})
+\]
+
+Where \(T_0 = 290\) K (reference)
+
+\textbf{Relationship}:
+
+\[
+F = 1 + \frac{T_e}{T_0}
+\]
+
+\[
+\text{NF}_{\text{dB}} = 10\log_{10}\left(1 + \frac{T_e}{290}\right)
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Noise Figure \$\textbackslash leftrightarrow\$ Noise
+Temperature}\label{noise-figure-noise-temperature}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+NF (dB) & Noise Factor F & \(T_e\) (K) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 1 & 0 \\
+0.5 & 1.12 & 35 \\
+1 & 1.26 & 75 \\
+2 & 1.58 & 169 \\
+3 & 2 & 290 \\
+6 & 4 & 870 \\
+10 & 10 & 2610 \\
+\end{longtable}
+}
+
+\textbf{Usage}: Satellite/radio astronomy communities prefer \(T_e\), RF
+engineers prefer NF
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Cascaded Noise Figure (Friis
+Formula)}\label{cascaded-noise-figure-friis-formula}
+
+\textbf{Multi-stage system}: Amplifiers, mixers, filters in series
+
+\textbf{Total noise factor}:
+
+\[
+F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \frac{F_4 - 1}{G_1 G_2 G_3} + \ldots
+\]
+
+Where: - \(F_i\) = Noise factor of stage \(i\) (linear) - \(G_i\) = Gain
+of stage \(i\) (linear)
+
+\textbf{In dB}:
+
+\[
+\text{NF}_{\text{total}} = 10\log_{10}(F_{\text{total}})
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Key Insights from Friis
+Formula}\label{key-insights-from-friis-formula}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{First stage dominates}: \(F_1\) appears without division
+  \$\textbackslash rightarrow\$ \textbf{LNA critical!}
+\item
+  \textbf{High gain helps}: Later stages divided by \(G_1 G_2 \ldots\)
+  \$\textbackslash rightarrow\$ Less impact
+\item
+  \textbf{Avoid loss before LNA}: Cable loss before LNA directly adds to
+  NF
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example 1: Simple Receiver
+Chain}\label{example-1-simple-receiver-chain}
+
+\textbf{Components}: 1. \textbf{Cable}: Loss 2 dB (NF = 2 dB, F = 1.58,
+G = 0.63 = -2 dB) 2. \textbf{LNA}: NF = 1 dB, F = 1.26, G = 20 dB
+(100\$\textbackslash times\$) 3. \textbf{Mixer}: NF = 10 dB, F = 10, G =
+-6 dB (0.25\$\textbackslash times\$)
+
+\textbf{Total NF}:
+
+\[
+F_{\text{total}} = 1.58 + \frac{1.26 - 1}{0.63} + \frac{10 - 1}{0.63 \times 100}
+\]
+
+\[
+= 1.58 + 0.41 + 0.14 = 2.13
+\]
+
+\[
+\text{NF}_{\text{total}} = 10\log_{10}(2.13) = 3.3\ \text{dB}
+\]
+
+\textbf{Dominated by cable loss!}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example 2: Cable After LNA (Best
+Practice)}\label{example-2-cable-after-lna-best-practice}
+
+\textbf{Components}: 1. \textbf{LNA}: NF = 1 dB, F = 1.26, G = 20 dB
+(100\$\textbackslash times\$) 2. \textbf{Cable}: Loss 2 dB, F = 1.58, G
+= 0.63 3. \textbf{Mixer}: NF = 10 dB, F = 10, G = -6 dB
+(0.25\$\textbackslash times\$)
+
+\textbf{Total NF}:
+
+\[
+F_{\text{total}} = 1.26 + \frac{1.58 - 1}{100} + \frac{10 - 1}{100 \times 0.63}
+\]
+
+\[
+= 1.26 + 0.0058 + 0.14 = 1.41
+\]
+
+\[
+\text{NF}_{\text{total}} = 10\log_{10}(1.41) = 1.5\ \text{dB}
+\]
+
+\textbf{Much better! LNA at antenna isolates from cable loss.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example 3: Two-Stage LNA}\label{example-3-two-stage-lna}
+
+\textbf{Components}: 1. \textbf{LNA1}: NF = 0.8 dB, F = 1.2, G = 15 dB
+(31.6\$\textbackslash times\$) 2. \textbf{LNA2}: NF = 1.5 dB, F = 1.41,
+G = 20 dB (100\$\textbackslash times\$) 3. \textbf{Mixer}: NF = 10 dB, F
+= 10, G = -6 dB (0.25\$\textbackslash times\$)
+
+\textbf{Total NF}:
+
+\[
+F_{\text{total}} = 1.2 + \frac{1.41 - 1}{31.6} + \frac{10 - 1}{31.6 \times 100}
+\]
+
+\[
+= 1.2 + 0.013 + 0.0028 = 1.216
+\]
+
+\[
+\text{NF}_{\text{total}} = 10\log_{10}(1.216) = 0.85\ \text{dB}
+\]
+
+\textbf{Excellent! High gain LNA1 suppresses later stages.}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{System Noise Temperature}\label{system-noise-temperature}
+
+\textbf{Total noise temperature} of cascaded system:
+
+\[
+T_{\text{sys}} = T_{\text{ant}} + T_e
+\]
+
+Where: - \(T_{\text{ant}}\) = Antenna noise temperature (K) - \(T_e\) =
+Receiver equivalent noise temperature (K)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Antenna Noise
+Temperature}\label{antenna-noise-temperature}
+
+\textbf{Antenna picks up thermal radiation} from environment:
+
+\textbf{Sources}: - \textbf{Sky}: 3-300 K (depends on frequency,
+elevation) - \textbf{Ground}: 290 K (room temperature) - \textbf{Sun}:
+\textasciitilde10,000 K (if pointed directly) - \textbf{Cosmic
+background}: 2.7 K (everywhere)
+
+\textbf{Typical values}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Scenario & Frequency & Elevation & \(T_{\text{ant}}\) (K) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Deep space} & Any & - & 3-5 \\
+\textbf{Satellite (clear sky)} & 1-10 GHz &
+30\$\^{}\textbackslash circ\$ & 20-50 \\
+\textbf{Satellite (rain)} & 12 GHz & 30\$\^{}\textbackslash circ\$ &
+100-200 \\
+\textbf{Terrestrial} & Any & Horizon & 290 \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{G/T Ratio (Figure of
+Merit)}\label{gt-ratio-figure-of-merit}
+
+\textbf{System performance metric} for satellite ground stations:
+
+\[
+\frac{G}{T} = G_r - 10\log_{10}(T_{\text{sys}}) \quad (\text{dB/K})
+\]
+
+Where: - \(G_r\) = RX antenna gain (dBi) - \(T_{\text{sys}}\) = System
+noise temperature (K)
+
+\textbf{Interpretation}: Higher G/T = Better sensitivity
+
+\textbf{Example}: 3 m Ku-band dish, LNA at feed - Antenna gain: 48 dBi -
+Antenna temp: 30 K (clear sky, 30\$\^{}\textbackslash circ\$ elevation)
+- LNA NF: 0.8 dB \$\textbackslash rightarrow\$ \(T_e = 55\) K -
+\(T_{\text{sys}} = 30 + 55 = 85\) K
+
+\[
+\frac{G}{T} = 48 - 10\log_{10}(85) = 48 - 19.3 = 28.7\ \text{dB/K}
+\]
+
+\textbf{Typical G/T}: - \textbf{VSAT terminals} (0.6-1.2 m): 10-20 dB/K
+- \textbf{Professional earth stations} (3-9 m): 25-35 dB/K -
+\textbf{Large observatories} (25+ m): 40-60 dB/K
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Other Noise Sources}\label{other-noise-sources}
+
+\subsubsection{1. Shot Noise}\label{shot-noise}
+
+\textbf{Due to discrete nature of charge carriers}:
+
+\[
+i_n^2 = 2 q I_{\text{DC}} B
+\]
+
+Where: - \(q = 1.6 \times 10^{-19}\) C (electron charge) -
+\(I_{\text{DC}}\) = DC current (A) - \(B\) = Bandwidth (Hz)
+
+\textbf{Significant in}: Photodetectors, diodes, low-current circuits
+
+\textbf{Example}: Photodiode @ 1 mA DC, 1 MHz BW
+
+\[
+i_n = \sqrt{2 \times 1.6 \times 10^{-19} \times 10^{-3} \times 10^6} = 5.7 \times 10^{-10}\ \text{A}_{\text{rms}}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Flicker Noise (1/f
+Noise)}\label{flicker-noise-1f-noise}
+
+\textbf{Low-frequency noise}, power inversely proportional to frequency:
+
+\[
+S(f) \propto \frac{1}{f}
+\]
+
+\textbf{Significant}: \textless{} 1 kHz (audio, low-IF systems)
+
+\textbf{Mitigation}: Use higher IF, differential circuits, chopper
+stabilization
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Phase Noise}\label{phase-noise}
+
+\textbf{Oscillator noise} causes frequency jitter:
+
+\textbf{Specified as} \(\mathcal{L}(f_m)\) (dBc/Hz at offset \(f_m\)
+from carrier)
+
+\textbf{Example}: Satellite LO @ 10 GHz - Phase noise: -90 dBc/Hz @ 10
+kHz offset - Degrades SNR in adjacent channels
+
+\textbf{See}: {[}{[}Synchronization-(Carrier,-Timing,-Frame){]}{]} for
+impact on coherent demodulation
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. Quantization Noise}\label{quantization-noise}
+
+\textbf{Analog-to-digital conversion} introduces rounding error:
+
+\[
+\text{SNR}_{\text{quant}} = 6.02n + 1.76 \quad (\text{dB})
+\]
+
+Where \(n\) = Number of bits
+
+\textbf{Example}: 12-bit ADC - SNR = 6.02 \$\textbackslash times\$ 12 +
+1.76 = 74 dB
+
+\textbf{Implication}: Need enough ADC bits to avoid degrading RF SNR
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{5. Intermodulation Distortion
+(IMD)}\label{intermodulation-distortion-imd}
+
+\textbf{Non-linear components} create spurious products:
+
+\textbf{Two-tone test}: Inputs at \(f_1\) and \(f_2\)
+\$\textbackslash rightarrow\$ Products at \(2f_1 - f_2\), \(2f_2 - f_1\)
+(3rd order)
+
+\textbf{IP3} (Third-order intercept point):
+
+\[
+\text{IMD3}_{\text{dBc}} = 2(P_{\text{IP3}} - P_{\text{in}})
+\]
+
+\textbf{Example}: Mixer with IP3 = +10 dBm, input = -20 dBm - IMD3 =
+2(10 - (-20)) = 60 dBc below carrier
+
+\textbf{Implication}: Strong interferers create in-band noise
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{6. Atmospheric Noise}\label{atmospheric-noise}
+
+\textbf{Natural sources}: - \textbf{Lightning}: Dominates \textless{} 30
+MHz (HF, VHF) - \textbf{Cosmic noise}: Galactic background (0.1-3 GHz) -
+\textbf{Solar noise}: Sun radiation (all frequencies)
+
+\textbf{External noise temperature} \(T_{\text{ext}}\):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Frequency & \(T_{\text{ext}}\) (K) & Dominant Source \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+10 MHz & 10,000-100,000 & Lightning (HF) \\
+100 MHz & 1,000-10,000 & Galactic noise \\
+1 GHz & 10-100 & Cosmic background \\
+10 GHz & 3-30 & Sky temp (clear) \\
+60 GHz & 100-300 & Atmospheric O\textbackslash textsubscript\{2\} \\
+\end{longtable}
+}
+
+\textbf{Antenna noise temp}:
+
+\[
+T_{\text{ant}} = T_{\text{ext}} \eta + T_0 (1 - \eta)
+\]
+
+Where \(\eta\) = Antenna efficiency
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{7. Man-Made Noise}\label{man-made-noise}
+
+\textbf{Interference from}: Power lines, electric motors, computers,
+switching power supplies
+
+\textbf{Impulsive noise}: Short bursts (microseconds)
+\$\textbackslash rightarrow\$ High peak power
+
+\textbf{Mitigation}: Filtering, shielding, time diversity
+(retransmission)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Receiver Sensitivity
+Calculation}\label{receiver-sensitivity-calculation}
+
+\textbf{Minimum detectable signal} for target SNR:
+
+\[
+P_{\text{min}} = N + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}}
+\]
+
+Where (all in dB): - \(N = -174 + 10\log_{10}(B)\) (thermal noise in
+bandwidth B) - NF = Receiver noise figure (dB) - SNR\_req = Required SNR
+for demodulation (dB) - \(L_{\text{impl}}\) = Implementation loss (1-3
+dB typical)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: GPS Receiver}\label{example-gps-receiver}
+
+\textbf{Specs}: - Bandwidth: 2 MHz (C/A code) - NF: 3 dB (typical GPS
+front-end) - SNR\_req: -20 dB (spread spectrum processing gain 43 dB,
+need C/N\textbackslash textsubscript\{0\} = 33 dB-Hz) - Impl loss: 2 dB
+
+\textbf{Thermal noise}:
+
+\[
+N = -174 + 10\log_{10}(2 \times 10^6) = -174 + 63 = -111\ \text{dBm}
+\]
+
+\textbf{Sensitivity}:
+
+\[
+P_{\text{min}} = -111 + 3 + (-20) + 2 = -126\ \text{dBm}
+\]
+
+\textbf{But wait!} GPS uses C/N\textbackslash textsubscript\{0\} metric
+(per Hz):
+
+\textbf{C/N\textbackslash textsubscript\{0\}} requirement: 33 dB-Hz
+(acquisition), 28 dB-Hz (tracking)
+
+\textbf{Sensitivity} (alternate method):
+
+\[
+P_{\text{min}} = -174 + 33 + 3 + 2 = -136\ \text{dBm}
+\]
+
+\textbf{Typical GPS signal}: -130 dBm (open sky)
+\$\textbackslash rightarrow\$ 6 dB margin
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: Satellite DVB-S2
+Receiver}\label{example-satellite-dvb-s2-receiver}
+
+\textbf{Specs}: - Bandwidth: 36 MHz - NF: 1.5 dB (LNA at feed) -
+Modulation: QPSK 3/4 (LDPC) - SNR\_req: 6.5 dB (for BER \textless{}
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{7\}
+post-FEC) - Impl loss: 1.5 dB
+
+\textbf{Thermal noise}:
+
+\[
+N = -174 + 10\log_{10}(36 \times 10^6) = -174 + 75.6 = -98.4\ \text{dBm}
+\]
+
+\textbf{Sensitivity}:
+
+\[
+P_{\text{min}} = -98.4 + 1.5 + 6.5 + 1.5 = -88.9\ \text{dBm}
+\]
+
+\textbf{Link budget must deliver} \textgreater{} -88.9 dBm at LNB output
+for proper operation
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Noise Figure Measurement}\label{noise-figure-measurement}
+
+\subsubsection{Y-Factor Method}\label{y-factor-method}
+
+\textbf{Standard technique} using hot/cold loads:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Measure noise power with \textbf{hot load} (\(T_h = 290\) K): \(P_h\)
+\item
+  Measure noise power with \textbf{cold load} (\(T_c = 77\) K, liquid
+  N\textbackslash textsubscript\{2\}): \(P_c\)
+\item
+  Calculate \textbf{Y-factor}:
+\end{enumerate}
+
+\[
+Y = \frac{P_h}{P_c}
+\]
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{Noise figure}:
+\end{enumerate}
+
+\[
+\text{NF} = 10\log_{10}\left(\frac{T_h - YT_c}{290(Y-1)}\right)
+\]
+
+\textbf{Example}: \(P_h = 100\) units, \(P_c = 80\) units - Y = 100/80 =
+1.25 - NF = \(10\log_{10}[(290 - 1.25 \times 77)/(290 \times 0.25)]\) =
+1.8 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Noise Source Method}\label{noise-source-method}
+
+\textbf{Use calibrated noise source} (ENR = Excess Noise Ratio in dB):
+
+\[
+\text{NF} = \text{ENR} - 10\log_{10}(Y - 1)
+\]
+
+Where Y = ratio of power with noise source ON/OFF
+
+\textbf{Example}: ENR = 15 dB noise source, Y = 10 - NF = 15 - 10log(9)
+= 15 - 9.54 = 5.46 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Design Guidelines}\label{design-guidelines}
+
+\subsubsection{Optimize Noise Figure}\label{optimize-noise-figure}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{LNA at antenna}: Minimize cable loss before LNA
+\item
+  \textbf{High LNA gain}: 15-20 dB isolates from later stages
+\item
+  \textbf{Low-loss transmission}: Use low-loss cable (LMR-400, hardline)
+\item
+  \textbf{Cool LNA}: Cryogenic cooling for satellite ground stations
+\item
+  \textbf{Avoid passive loss}: No attenuators, splitters before LNA
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Trade-offs}\label{trade-offs}
+
+\textbf{Lower NF \$\textbackslash rightarrow\$ Higher cost}: - Premium
+LNA: 0.8 dB NF = \$500+ - Standard LNA: 2 dB NF = \$50 - Difference: 1.2
+dB sensitivity = 1.3\$\textbackslash times\$ range improvement
+
+\textbf{Cryogenic cooling}: - Cooled LNA: 0.3 dB NF @ 20 K - Room temp
+LNA: 1.5 dB NF @ 290 K - Difference: 1.2 dB (worth it for deep space,
+not for WiFi!)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Summary Table}\label{summary-table}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2258}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2903}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2903}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1935}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Noise Source
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Spectral Density
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+When Significant
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mitigation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Thermal} & \(kT\) = -174 dBm/Hz & Always (fundamental) & Low NF,
+high gain \\
+\textbf{Shot} & \(\sqrt{2qI_{\text{DC}}B}\) & Low-light photodetectors &
+Increase optical power \\
+\textbf{Flicker (1/f)} & \(\propto 1/f\) & \textless{} 1 kHz & Higher
+IF, differential \\
+\textbf{Phase} & \(\mathcal{L}(f_m)\) & Near carrier & Better
+oscillator, PLL \\
+\textbf{Quantization} & \(-6n\) dB & Low SNR, few ADC bits & More bits,
+higher SNR \\
+\textbf{IMD} & Nonlinear products & Strong interferers & Higher IP3,
+filtering \\
+\textbf{Atmospheric} & Varies (10-100,000 K) & HF, low VHF & Directional
+antenna \\
+\textbf{Man-made} & Impulsive/broadband & Urban, near power lines &
+Shielding, filtering \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Determines BER
+  performance
+\item
+  \textbf{{[}{[}Complete-Link-Budget-Analysis{]}{]}}: Uses NF for
+  sensitivity
+\item
+  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Degrades with noise
+\item
+  \textbf{{[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]}}: Normalized SNR
+  metrics
+\item
+  \textbf{{[}{[}Antenna-Theory-Basics{]}{]}}: Antenna noise temperature
+\item
+  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Path loss + noise
+  \$\textbackslash rightarrow\$ Link budget
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Noise limits receiver sensitivity.}
+Thermal noise floor = -174 dBm/Hz @ 290 K. Noise figure (NF) quantifies
+SNR degradation through receiver. Friis formula shows first stage (LNA)
+dominates total NF. Low-NF LNA at antenna, high gain, and minimal
+pre-LNA loss are critical. Sensitivity = Noise floor + NF + Required
+SNR. Lower noise = longer range, higher data rate, better reliability.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

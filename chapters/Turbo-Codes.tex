@@ -1,0 +1,941 @@
+\section{Turbo Codes}\label{turbo-codes}
+
+{[}{[}Home{]}{]} \textbar{} \textbf{Coding Theory} \textbar{}
+{[}{[}Convolutional-Codes-\&-Viterbi-Decoding{]}{]} \textbar{}
+{[}{[}LDPC-Codes{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{ For Non-Technical
+Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+
+\textbf{Turbo codes are like having two spell-checkers that help each
+other-\/-\/-when one is unsure, the other provides hints, and they
+iterate back and forth until they agree. Revolutionary in 1993!}
+
+\textbf{The breakthrough}: - \textbf{Before 1993}: Best codes were
+\textasciitilde3 dB from theoretical limit - \textbf{Turbo codes
+(1993)}: Got within 0.5 dB of Shannon limit! - \textbf{Impact}:
+``Impossible'' performance, shocked the world - \textbf{Today}: In 3G/4G
+phones, deep space, satellites
+
+\textbf{How they work - Two encoders help each other}:
+
+\textbf{Step 1}: Encode data with TWO different convolutional encoders -
+Encoder 1: Sees data in original order - Encoder 2: Sees data scrambled
+(interleaved) - Send both encoded versions
+
+\textbf{Step 2}: Receiver iteratively decodes - Decoder 1: ``I think bit
+5 is probably a 1\textbackslash ldots\{\} 80\% sure'' - Decoder 2: ``I
+think bit 5 is definitely a 1\textbackslash ldots\{\} 95\% sure!'' -
+Decoder 1: ``Oh! With that info, I\textquotesingle m now 98\% sure!'' -
+They ping-pong back and forth \textasciitilde5-10 iterations - Final
+result: Near-perfect decoding!
+
+\textbf{The magic - ``Turbo'' analogy}: - Like a turbo charger: Output
+feeds back to improve input - Each decoder\textquotesingle s output
+improves the other\textquotesingle s input - After several iterations,
+converges to correct answer - Hence: ``Turbo'' codes!
+
+\textbf{Real-world use}: - \textbf{3G (UMTS)}: Turbo codes for data
+channels - \textbf{4G (LTE)}: Turbo codes (before LDPC in 5G) -
+\textbf{Deep space}: Mars rovers use turbo codes - \textbf{Satellite
+phones}: Iridium, Globalstar - \textbf{Military}: Tactical
+communications
+
+\textbf{Why ``revolutionary'' in 1993}: - Shannon\textquotesingle s
+limit (1948): Theoretical best = 0 dB Eb/N0 - Best codes before 1993:
+\textasciitilde3 dB from limit - Turbo codes: 0.5-1 dB from limit! -
+Engineers thought this was impossible!
+
+\textbf{The famous 1993 paper}: - Presented at ICC \textquotesingle93
+conference - Audience: Stunned silence, then standing ovation - ``We
+must have made a mistake'' - initial reaction - Verified by others:
+IT\textquotesingle S REAL! - Changed communication systems forever
+
+\textbf{Comparison with other codes}: - \textbf{Convolutional +
+Viterbi}: Simple, but \textasciitilde5 dB from limit - \textbf{Turbo
+codes}: 0.5-1 dB from limit, complex - \textbf{LDPC codes}: 0.5 dB from
+limit, easier to implement - \textbf{Polar codes}: Proven optimal,
+simpler structure
+
+\textbf{Trade-offs}: - \textbf{Advantage}: Amazing performance,
+near-Shannon limit - \textbf{Disadvantage}: Complex decoder, high
+latency (iterations) - \textbf{Why 5G switched to LDPC/Polar}: Simpler,
+lower latency
+
+\textbf{The iterative decoding process}:
+
+\begin{verbatim}
+Iteration 1: 60% confidence
+Iteration 2: 80% confidence
+Iteration 3: 95% confidence  
+Iteration 4: 99% confidence
+Iteration 5: 99.9% confidence  DONE!
+\end{verbatim}
+
+\textbf{Fun fact}: The inventors (Berrou, Glavieux, Thitimajshima)
+almost didn\textquotesingle t publish because they thought
+they\textquotesingle d made a mistake-\/-\/-the performance seemed too
+good to be true. When they finally presented in 1993, it sparked a
+revolution in error correction!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+\textbf{Turbo codes} achieve \textbf{near-Shannon-limit} performance
+(within 0.5-1 dB of capacity).
+
+\textbf{Key innovation}: \textbf{Parallel concatenation} of
+convolutional codes with \textbf{iterative decoding}
+
+\textbf{Discovery}: Berrou, Glavieux, and Thitimajshima (1993) -
+Revolutionary breakthrough
+
+\textbf{Performance}: BER \(10^{-5}\) at Eb/N0 \$\textbackslash approx\$
+0.7 dB (rate 1/2, BPSK) - Only 0.5 dB from Shannon limit!
+
+\textbf{Applications}: 3G/4G cellular (UMTS, LTE), deep space (Mars
+rovers, New Horizons), DVB-RCS satellite
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Basic Structure}\label{basic-structure}
+
+\textbf{Parallel Concatenated Convolutional Codes (PCCC)}:
+
+\begin{verbatim}
+                +---> [RSC Encoder 1] ---> Parity 1
+                |
+Input data ---> | 
+                |
+                +---> [Interleaver] ---> [RSC Encoder 2] ---> Parity 2
+\end{verbatim}
+
+\textbf{Components}: 1. \textbf{Two RSC encoders} (Recursive Systematic
+Convolutional) 2. \textbf{Interleaver} (pseudo-random permutation) 3.
+\textbf{Systematic output} (original data)
+
+\textbf{Output}: Systematic bits + Parity1 + Parity2
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Recursive Systematic Convolutional (RSC)
+Encoder}\label{recursive-systematic-convolutional-rsc-encoder}
+
+\textbf{Why RSC?} Better iterative decoding than non-recursive
+
+\textbf{Structure}:
+
+\begin{verbatim}
+        +--------<----------+
+        |                   |
+Input ->--[Shift Register]---> Systematic output (same as input)
+            |                |
+            +--[XOR logic]---+--> Parity output
+\end{verbatim}
+
+\textbf{Recursive}: Output fed back to input (creates infinite impulse
+response)
+
+\textbf{Systematic}: One output = input (uncoded)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Example: RSC (37, 21)
+Octal}\label{example-rsc-37-21-octal}
+
+\textbf{Generator polynomials} (octal): - Feedback:
+37\textbackslash textsubscript\{8\} =
+011111\textbackslash textsubscript\{2\} - Feedforward:
+21\textbackslash textsubscript\{8\} =
+010001\textbackslash textsubscript\{2\}
+
+\textbf{K = 5} (constraint length)
+
+\textbf{Rate}: 1/2 (1 systematic + 1 parity per input bit)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Interleaver}\label{interleaver}
+
+\textbf{Purpose}: Break correlation between encoder inputs
+
+\textbf{Types}: 1. \textbf{Random interleaver}: Pseudo-random
+permutation 2. \textbf{Block interleaver}: Write row-wise, read
+column-wise 3. \textbf{S-random interleaver}: Constrained randomness (no
+nearby indices)
+
+\textbf{Length}: Typically 1000-10,000 bits (longer = better
+performance)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Why Interleaving Works}\label{why-interleaving-works}
+
+\textbf{Input sequence}: 11111 (low Hamming weight)
+
+\textbf{Encoder 1}: Produces low-weight parity (correlated errors)
+
+\textbf{After interleaver}: 10101 (scattered)
+
+\textbf{Encoder 2}: Produces high-weight parity (uncorrelated)
+
+\textbf{Result}: Combined code has high minimum distance
+\$\textbackslash rightarrow\$ Good error correction
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{S-Random Interleaver}\label{s-random-interleaver}
+
+\textbf{Constraint}: Indices \(i\) and \(j\) separated by \(< S\) in
+input \$\textbackslash rightarrow\$ Separated by \(\geq S\) in output
+
+\textbf{Example} (S=3): - If positions 0, 1, 2 are adjacent in input -
+After interleaving: Must be \$\textbackslash geq\$3 positions apart
+
+\textbf{Benefit}: Prevents clustered low-weight codewords
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Encoding Process}\label{encoding-process}
+
+\textbf{Input}: Data block \(\mathbf{d} = [d_1, d_2, \ldots, d_K]\)
+
+\textbf{Steps}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Encoder 1}: Encode \(\mathbf{d}\)
+  \$\textbackslash rightarrow\$ Parity1 \(\mathbf{p}_1\)
+\item
+  \textbf{Interleave}: \(\mathbf{d}' = \pi(\mathbf{d})\) (permutation)
+\item
+  \textbf{Encoder 2}: Encode \(\mathbf{d}'\)
+  \$\textbackslash rightarrow\$ Parity2 \(\mathbf{p}_2\)
+\item
+  \textbf{Transmit}: \([\mathbf{d}, \mathbf{p}_1, \mathbf{p}_2]\) (rate
+  1/3)
+\end{enumerate}
+
+\textbf{Or puncture} to rate 1/2: Transmit
+\([\mathbf{d}, \mathbf{p}_1^{(even)}, \mathbf{p}_2^{(odd)}]\)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Rate Matching
+(Puncturing)}\label{rate-matching-puncturing}
+
+\textbf{Achieve flexible rates} by deleting parity bits:
+
+\textbf{Example (rate 1/3 \$\textbackslash rightarrow\$ rate 1/2)}:
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Time & Systematic & Parity1 & Parity2 & Transmitted \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \(d_1\) & \(p_{11}\) & \(p_{21}\) & \(d_1, p_{11}\) \\
+2 & \(d_2\) & \(p_{12}\) & \(p_{22}\) & \(d_2, p_{22}\) \\
+3 & \(d_3\) & \(p_{13}\) & \(p_{23}\) & \(d_3, p_{13}\) \\
+\end{longtable}
+}
+
+\textbf{Result}: 3 data + 3 parity = rate 1/2
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Iterative Decoding}\label{iterative-decoding}
+
+\textbf{Key innovation}: Two decoders exchange \textbf{extrinsic
+information}
+
+\textbf{Algorithm}: BCJR (Bahl-Cocke-Jelinek-Raviv) or SOVA (Soft-Output
+Viterbi)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Decoder Structure}\label{decoder-structure}
+
+\begin{verbatim}
+Received  --> [SISO Decoder 1] <---> [Interleaver]   <---> [SISO Decoder 2]
+systematic         |                                             |
++ parity1          +------------------->  <--------------------+
+                        (extrinsic info exchange)
+\end{verbatim}
+
+\textbf{SISO}: Soft-In Soft-Out decoder (outputs LLRs, not hard
+decisions)
+
+\textbf{Iteration}: Decoders alternate, passing improved soft
+information
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Log-Likelihood Ratios
+(LLR)}\label{log-likelihood-ratios-llr}
+
+\textbf{LLR for bit} \(d_k\):
+
+\[
+L(d_k) = \log\frac{P(d_k = 0 | \text{received})}{P(d_k = 1 | \text{received})}
+\]
+
+\textbf{Decomposition}:
+
+\[
+L(d_k) = L_c(d_k) + L_a(d_k) + L_e(d_k)
+\]
+
+Where: - \(L_c\) = \textbf{Channel LLR} (from demodulator) - \(L_a\) =
+\textbf{A priori LLR} (from other decoder) - \(L_e\) = \textbf{Extrinsic
+LLR} (new information from this decoder)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Iterative Decoding Steps}\label{iterative-decoding-steps}
+
+\textbf{Iteration \(i\)}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Decoder 1}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Input: \(L_c(\mathbf{d})\), \(L_c(\mathbf{p}_1)\),
+    \(L_a^{(i)}(\mathbf{d})\) (from Dec2)
+  \item
+    Compute: \(L_e^{(i)}(\mathbf{d})\) (extrinsic info)
+  \item
+    Output: \(L_1^{(i)}(\mathbf{d}) = L_c + L_a + L_e\)
+  \end{itemize}
+\item
+  \textbf{Interleave}:
+  \(L_e^{(i)}(\mathbf{d}') = \pi(L_e^{(i)}(\mathbf{d}))\)
+\item
+  \textbf{Decoder 2}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Input: \(L_c(\mathbf{d}')\), \(L_c(\mathbf{p}_2)\),
+    \(L_e^{(i)}(\mathbf{d}')\) (from Dec1)
+  \item
+    Compute: \(L_e^{(i)}(\mathbf{d}')\) (extrinsic info)
+  \item
+    Output: \(L_2^{(i)}(\mathbf{d}')\)
+  \end{itemize}
+\item
+  \textbf{De-interleave}:
+  \(L_a^{(i+1)}(\mathbf{d}) = \pi^{-1}(L_e^{(i)}(\mathbf{d}'))\)
+\item
+  \textbf{Repeat} for \(N\) iterations (typically 4-10)
+\item
+  \textbf{Hard decision}:
+  \(\hat{d}_k = \text{sign}(L_1^{(N)}(d_k) + L_2^{(N)}(d_k))\)
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Why Iterative Decoding
+Works}\label{why-iterative-decoding-works}
+
+\textbf{Decoder 1}: Uses channel info + parity1
+\$\textbackslash rightarrow\$ Produces soft estimates
+
+\textbf{Decoder 2}: Uses channel info + parity2 + \textbf{extrinsic from
+Dec1} \$\textbackslash rightarrow\$ Refines estimates
+
+\textbf{Iteration}: Each decoder improves estimates using
+other\textquotesingle s extrinsic info
+
+\textbf{Convergence}: LLRs \$\textbackslash rightarrow\$ High magnitude
+(high confidence) after \textasciitilde4-10 iterations
+
+\textbf{Analogy}: Two experts discussing a problem, each bringing unique
+perspective
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{BCJR Algorithm}\label{bcjr-algorithm}
+
+\textbf{Bahl-Cocke-Jelinek-Raviv}: Optimal soft-output decoder (MAP)
+
+\textbf{Computes}: A posteriori probability (APP) for each bit
+
+\textbf{Recursions} (forward-backward):
+
+\textbf{Forward} \(\alpha\):
+
+\[
+\alpha_k(s) = \sum_{s'} \alpha_{k-1}(s') \cdot \gamma_k(s', s)
+\]
+
+\textbf{Backward} \(\beta\):
+
+\[
+\beta_{k-1}(s') = \sum_{s} \beta_k(s) \cdot \gamma_k(s', s)
+\]
+
+\textbf{Branch metric} \(\gamma\):
+
+\[
+\gamma_k(s', s) = P(\text{transition } s' \to s | \text{received})
+\]
+
+\textbf{LLR}:
+
+\[
+L(d_k) = \log\frac{\sum_{(s',s): d_k=0} \alpha(s') \gamma(s',s) \beta(s)}{\sum_{(s',s): d_k=1} \alpha(s') \gamma(s',s) \beta(s)}
+\]
+
+\textbf{Complexity}: \(O(2^{2K})\) per bit (manageable for K
+\$\textbackslash leq\$ 7)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Performance Analysis}\label{performance-analysis}
+
+\subsubsection{BER vs Eb/N0}\label{ber-vs-ebn0}
+
+\textbf{Typical performance} (rate 1/2, K=4, random interleaver, 10
+iterations):
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Eb/N0 (dB) & Uncoded BPSK & Turbo Code & Shannon Limit \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+-1.6 & 0.27 & - & 0 (capacity) \\
+0 & 0.08 & 0.01 & - \\
+0.5 & 0.04 &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+& - \\
+0.7 & 0.03 &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
+& Gap = 0.5 dB \\
+1.0 & 0.02 &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+& - \\
+2.0 &
+5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\}
+& - \\
+\end{longtable}
+}
+
+\textbf{Waterfall region}: Sharp BER drop at \textasciitilde0.5-1.0 dB
+
+\textbf{Error floor}: BER flattens at
+\textasciitilde10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+to
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
+(due to low-weight codewords)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Convergence Analysis}\label{convergence-analysis}
+
+\textbf{EXIT Charts} (Extrinsic Information Transfer):
+
+\textbf{Plots}: Mutual information \(I_e\) vs \(I_a\) for each decoder
+
+\textbf{Convergence}: If curves don\textquotesingle t cross
+\$\textbackslash rightarrow\$ Decoders converge to low BER
+
+\textbf{Tunnel opening}: Gap between curves
+\$\textbackslash rightarrow\$ Convergence speed
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Interleaver Length
+Effect}\label{interleaver-length-effect}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Interleaver Size & BER @ 0.7 dB & Error Floor & Notes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{100 bits} &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+& Poor (short) \\
+\textbf{1,000 bits} &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+& Moderate \\
+\textbf{10,000 bits} &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
+& Good \\
+\textbf{100,000 bits} &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
+&
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\}
+& Excellent (high latency) \\
+\end{longtable}
+}
+
+\textbf{Trade-off}: Longer interleaver \$\textbackslash rightarrow\$
+Better performance, higher latency/memory
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Turbo Code Variants}\label{turbo-code-variants}
+
+\subsubsection{1. Duo-Binary Turbo Codes}\label{duo-binary-turbo-codes}
+
+\textbf{Process 2 bits at a time}: \((d_1, d_2)\) jointly
+
+\textbf{Advantage}: Better performance, lower error floor
+
+\textbf{Used in}: DVB-RCS (satellite return channel)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. Serial Concatenated Convolutional Codes
+(SCCC)}\label{serial-concatenated-convolutional-codes-sccc}
+
+\textbf{Structure}: Inner encoder \$\textbackslash rightarrow\$
+Interleaver \$\textbackslash rightarrow\$ Outer encoder (serial)
+
+\textbf{Performance}: Lower error floor than PCCC
+
+\textbf{Decoding}: Similar iterative structure
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Repeat-Accumulate (RA)
+Codes}\label{repeat-accumulate-ra-codes}
+
+\textbf{Simplified turbo code}:
+
+\begin{verbatim}
+Input --> [Repeat r times] --> [Interleaver] --> [Accumulator] --> Output
+\end{verbatim}
+
+\textbf{Accumulator}: Simple RSC with feedback polynomial 1/(1+D)
+
+\textbf{Advantage}: Very simple encoder
+
+\textbf{Performance}: Near-turbo with less complexity
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Practical Implementations}\label{practical-implementations}
+
+\subsubsection{1. 3G UMTS (WCDMA)}\label{g-umts-wcdma}
+
+\textbf{Turbo code}: Rate 1/3, K=4 - Two RSC encoders (G={[}1,
+13/15{]}\textbackslash textsubscript\{8\}) - Interleaver: Length 40-5114
+bits - 8 iterations
+
+\textbf{Channels}: Data (up to 2 Mbps)
+
+\textbf{BER}:
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+@ Eb/N0 \$\textbackslash approx\$ 1.5 dB
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{2. 4G LTE}\label{g-lte}
+
+\textbf{Turbo code}: Rate 1/3, K=4 - Two RSC encoders - QPP interleaver
+(Quadratic Permutation Polynomial) - 6-8 iterations
+
+\textbf{Data rates}: 1 Mbps - 100 Mbps (Cat 3), up to 1 Gbps (Cat 16)
+
+\textbf{Block sizes}: 40-6144 bits
+
+\textbf{Puncturing}: Adaptive (1/2, 2/3, 3/4, 5/6) based on MCS
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{3. Deep Space (NASA/ESA)}\label{deep-space-nasaesa}
+
+\textbf{Mars Exploration Rovers}: Turbo code rate 1/6 - K=5 RSC encoders
+- 65,536-bit interleaver - 15 iterations
+
+\textbf{Performance}: BER \textless{}
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
+@ Eb/N0 \$\textbackslash approx\$ 0 dB
+
+\textbf{Data rate}: 128 kbps (from Mars surface)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{4. DVB-RCS (Satellite
+Return)}\label{dvb-rcs-satellite-return}
+
+\textbf{Duo-binary turbo code}: Rate 1/3 to 6/7 (punctured)
+
+\textbf{Block sizes}: 48-1504 bits
+
+\textbf{Iterations}: 6-8
+
+\textbf{Application}: Interactive satellite broadband (uplink)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Encoder Complexity}\label{encoder-complexity}
+
+\textbf{Encoding}: Linear complexity \(O(K)\) per bit
+
+\textbf{Example}: K=4, rate 1/3 - 2 RSC encoders (4 states each) -
+Interleaver (memory access) - \textbf{Total}: \textasciitilde10-20
+operations per bit
+
+\textbf{Hardware}: Easy to implement (shift registers + XORs)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Decoder Complexity}\label{decoder-complexity}
+
+\textbf{BCJR per iteration}: - \(O(2^K)\) states - \(O(K)\) operations
+per state - Total: \(O(K \cdot 2^K)\) per bit
+
+\textbf{Example}: K=4, 8 iterations - 16 states, \textasciitilde50
+operations per state per iteration - \textbf{Total}: \textasciitilde6400
+operations per bit
+
+\textbf{SOVA alternative}: Lower complexity (\textasciitilde40\% of
+BCJR), 0.3 dB performance loss
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Optimization Techniques}\label{optimization-techniques}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Max-Log-MAP}: Approximation (replace sum with max)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Complexity: 50\% reduction
+  \item
+    Loss: \textasciitilde0.3 dB
+  \end{itemize}
+\item
+  \textbf{Sliding window}: Process trellis in windows (reduce memory)
+\item
+  \textbf{Early termination}: Stop if LLRs exceed threshold (save
+  iterations)
+\item
+  \textbf{Radix-4}: Process 2 bits at a time (2\$\textbackslash times\$
+  throughput)
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Stopping Criteria}\label{stopping-criteria}
+
+\textbf{Problem}: Fixed iteration count wastes power (good SNR needs
+fewer iterations)
+
+\textbf{Solution}: Early stopping
+
+\textbf{Criteria}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{LLR magnitude}: \(|L(d_k)| > T\) for all \(k\) (high
+  confidence)
+\item
+  \textbf{Cross-entropy}: \(H(L^{(i)}, L^{(i-1)}) < \epsilon\)
+  (convergence)
+\item
+  \textbf{CRC check}: If CRC passes, stop (used in LTE)
+\end{enumerate}
+
+\textbf{Benefit}: Average 3-5 iterations (vs 8 worst-case)
+\$\textbackslash rightarrow\$ 40\% power savings
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Error Floor}\label{error-floor}
+
+\textbf{Error floor}: BER stops improving (flattens) at high SNR
+
+\textbf{Cause}: Low-weight codewords (small \(d_{\text{free}}\))
+
+\textbf{Dominant}: Input sequences causing low-weight output in
+\textbf{both} encoders
+
+\textbf{Example}: Input weight 2, output weight 4
+\$\textbackslash rightarrow\$ \(d_{\text{free}} = 6\) (poor)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Mitigation Strategies}\label{mitigation-strategies}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Interleaver design}: S-random, dithered (avoid bad patterns)
+\item
+  \textbf{Longer interleaver}: Reduces probability of bad patterns
+\item
+  \textbf{Increase K}: Larger constraint length
+  \$\textbackslash rightarrow\$ Higher \(d_{\text{free}}\)
+\item
+  \textbf{Post-processing}: Outer code (e.g., CRC + retransmission)
+\end{enumerate}
+
+\textbf{Typical floor}:
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
+to
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
+(acceptable for most applications)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Comparison with Other
+Codes}\label{comparison-with-other-codes}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0870}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3768}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2319}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1739}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1304}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Eb/N0 @ 10\^{}-5 (rate 1/2)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Gap to Shannon
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Complexity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Latency
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Uncoded} & 9.6 dB & +11 dB & - & 0 \\
+\textbf{Conv (K=7)} & 4.5 dB & +6 dB & Low & Low \\
+\textbf{Turbo} & 0.7 dB & +0.5 dB & Moderate & Moderate \\
+\textbf{LDPC} & 0.5 dB & +0.3 dB & Moderate & Low \\
+\textbf{Polar} & 1.0 dB & +0.8 dB & Low & Low \\
+\end{longtable}
+}
+
+\textbf{Turbo advantages}: Near-Shannon, proven performance,
+standardized
+
+\textbf{Turbo disadvantages}: Latency (iterative), error floor
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Turbo vs LDPC}\label{turbo-vs-ldpc}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Aspect & Turbo Codes & LDPC Codes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Eb/N0 @
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}}
+& 0.7 dB & 0.5 dB \\
+\textbf{Error floor} &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{7\}
+typical &
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
+possible \\
+\textbf{Decoding latency} & High (iterations) & Lower (parallel) \\
+\textbf{Complexity} & Moderate & Moderate \\
+\textbf{Hardware} & Serial (trellis) & Parallel (graph) \\
+\textbf{Standardization} & 3G, 4G LTE & 5G NR, WiFi 6, DVB-S2 \\
+\textbf{Flexibility} & Puncturing & Structured graphs \\
+\end{longtable}
+}
+
+\textbf{Trend}: LDPC replacing Turbo in new standards (5G, WiFi 6,
+802.11ax)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Design Guidelines}\label{design-guidelines}
+
+\subsubsection{Choose Turbo Code When:}\label{choose-turbo-code-when}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Near-capacity performance} critical (\textless{} 1 dB from
+  Shannon)
+\item
+  \textbf{Moderate block sizes} (1000-10000 bits)
+\item
+  \textbf{Latency acceptable} (iterative decoding OK)
+\item
+  \textbf{Error floor
+  10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}}
+  sufficient
+\item
+  \textbf{Existing hardware} (3G/4G infrastructure)
+\end{enumerate}
+
+\subsubsection{Avoid Turbo Code If:}\label{avoid-turbo-code-if}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Ultra-low error floor} needed (\textless{}
+  10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\})
+  \$\textbackslash rightarrow\$ Use LDPC
+\item
+  \textbf{Low latency} critical \$\textbackslash rightarrow\$ Use LDPC
+  or Polar
+\item
+  \textbf{Very short blocks} (\textless{} 100 bits)
+  \$\textbackslash rightarrow\$ Use Polar or convolutional
+\item
+  \textbf{New design} (future-proof) \$\textbackslash rightarrow\$
+  Consider LDPC (5G standard)
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Python Example: Simple Turbo
+Encoder}\label{python-example-simple-turbo-encoder}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
+\KeywordTok{def}\NormalTok{ rsc\_encode(data, g\_fb}\OperatorTok{=}\NormalTok{[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{], g\_ff}\OperatorTok{=}\NormalTok{[}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{]):}
+    \CommentTok{"""RSC encoder (K=3 example)."""}
+\NormalTok{    K }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(g\_fb)}
+\NormalTok{    state }\OperatorTok{=} \DecValTok{0}
+\NormalTok{    systematic }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{    parity }\OperatorTok{=}\NormalTok{ []}
+    
+    \ControlFlowTok{for}\NormalTok{ bit }\KeywordTok{in}\NormalTok{ data:}
+        \CommentTok{\# Feedback XOR}
+\NormalTok{        fb }\OperatorTok{=}\NormalTok{ bit}
+        \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{1}\NormalTok{, K):}
+            \ControlFlowTok{if}\NormalTok{ g\_fb[i] }\KeywordTok{and}\NormalTok{ (state }\OperatorTok{\&}\NormalTok{ (}\DecValTok{1} \OperatorTok{\textless{}\textless{}}\NormalTok{ (i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{))):}
+\NormalTok{                fb }\OperatorTok{\^{}=} \DecValTok{1}
+        
+        \CommentTok{\# Parity XOR}
+\NormalTok{        p }\OperatorTok{=} \DecValTok{0}
+        \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(K):}
+            \ControlFlowTok{if}\NormalTok{ i }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
+                \ControlFlowTok{if}\NormalTok{ g\_ff[}\DecValTok{0}\NormalTok{]:}
+\NormalTok{                    p }\OperatorTok{\^{}=}\NormalTok{ fb}
+            \ControlFlowTok{else}\NormalTok{:}
+                \ControlFlowTok{if}\NormalTok{ g\_ff[i] }\KeywordTok{and}\NormalTok{ (state }\OperatorTok{\&}\NormalTok{ (}\DecValTok{1} \OperatorTok{\textless{}\textless{}}\NormalTok{ (i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{))):}
+\NormalTok{                    p }\OperatorTok{\^{}=} \DecValTok{1}
+        
+        \CommentTok{\# Update state (shift in feedback bit)}
+\NormalTok{        state }\OperatorTok{=}\NormalTok{ ((state }\OperatorTok{\textless{}\textless{}} \DecValTok{1}\NormalTok{) }\OperatorTok{|}\NormalTok{ fb) }\OperatorTok{\&}\NormalTok{ ((}\DecValTok{1} \OperatorTok{\textless{}\textless{}}\NormalTok{ (K}\OperatorTok{{-}}\DecValTok{1}\NormalTok{)) }\OperatorTok{{-}} \DecValTok{1}\NormalTok{)}
+        
+\NormalTok{        systematic.append(bit)}
+\NormalTok{        parity.append(p)}
+    
+    \ControlFlowTok{return}\NormalTok{ systematic, parity}
+
+\KeywordTok{def}\NormalTok{ turbo\_encode(data, interleaver\_indices):}
+    \CommentTok{"""Turbo encoder (rate 1/3)."""}
+    \CommentTok{\# Encoder 1}
+\NormalTok{    sys1, par1 }\OperatorTok{=}\NormalTok{ rsc\_encode(data)}
+    
+    \CommentTok{\# Interleave}
+\NormalTok{    data\_int }\OperatorTok{=}\NormalTok{ [data[i] }\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in}\NormalTok{ interleaver\_indices]}
+    
+    \CommentTok{\# Encoder 2}
+\NormalTok{    sys2, par2 }\OperatorTok{=}\NormalTok{ rsc\_encode(data\_int)}
+    
+    \CommentTok{\# Output: systematic + parity1 + parity2}
+    \CommentTok{\# (sys1 and sys2 are same as data, use sys1)}
+    \ControlFlowTok{return}\NormalTok{ sys1, par1, par2}
+
+\CommentTok{\# Example}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{]}
+\NormalTok{interleaver }\OperatorTok{=}\NormalTok{ [}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{]  }\CommentTok{\# S{-}random example}
+
+\NormalTok{sys, par1, par2 }\OperatorTok{=}\NormalTok{ turbo\_encode(data, interleaver)}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Data:       }\SpecialCharTok{\{}\NormalTok{data}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Systematic: }\SpecialCharTok{\{}\NormalTok{sys}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Parity 1:   }\SpecialCharTok{\{}\NormalTok{par1}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Parity 2:   }\SpecialCharTok{\{}\NormalTok{par2}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Code rate:  }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(data)}\SpecialCharTok{\}}\SpecialStringTok{/}\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(sys)}\OperatorTok{+}\BuiltInTok{len}\NormalTok{(par1)}\OperatorTok{+}\BuiltInTok{len}\NormalTok{(par2)}\SpecialCharTok{\}}\SpecialStringTok{ = 1/3"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Note}: Full iterative decoder (BCJR) is complex
+(\textasciitilde200+ lines). Use libraries like \texttt{commpy} for
+production.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Related Topics}\label{related-topics}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{{[}{[}Convolutional-Codes-\&-Viterbi-Decoding{]}{]}}: Building
+  block for Turbo
+\item
+  \textbf{{[}{[}LDPC-Codes{]}{]}}: Modern alternative (5G, WiFi 6)
+\item
+  \textbf{{[}{[}Polar-Codes{]}{]}}: Another near-capacity code (5G
+  control)
+\item
+  \textbf{{[}{[}Forward-Error-Correction-(FEC){]}{]}}: General FEC
+  overview
+\item
+  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key takeaway}: \textbf{Turbo codes achieve near-Shannon-limit
+performance (0.5-1 dB gap) via parallel concatenated RSC encoders +
+iterative decoding.} Two SISO decoders exchange extrinsic LLRs, refining
+estimates over 4-10 iterations. Interleaver breaks correlation (critical
+for performance). Used in 3G UMTS, 4G LTE, deep space (Mars rovers). BER
+\(10^{-5}\) @ Eb/N0 \$\textbackslash approx\$ 0.7 dB (rate 1/2). Error
+floor at \(10^{-6}\) to \(10^{-8}\) due to low-weight codewords. BCJR
+algorithm provides optimal soft-output decoding. Longer interleaver
+(10k+ bits) improves performance but increases latency. Being replaced
+by LDPC in 5G/WiFi 6 (lower error floor, lower latency, better
+parallelization). Revolutionary 1993 discovery-\/-\/-brought information
+theory to practice.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
+documentation.}

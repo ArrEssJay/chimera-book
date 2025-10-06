@@ -1,0 +1,593 @@
+\section{THz Bioeffects: Thermal and
+Non-Thermal}\label{thz-bioeffects-thermal-and-non-thermal}
+
+{[}{[}Home{]}{]} \textbar{} {[}{[}Terahertz-(THz)-Technology{]}{]}
+\textbar{} {[}{[}THz-Propagation-in-Biological-Tissue{]}{]} \textbar{}
+{[}{[}THz-Resonances-in-Microtubules{]}{]}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Overview}\label{overview}
+
+Terahertz (THz) radiation (0.1-10 THz) interacts with biological systems
+through \textbf{thermal} (heating) and potentially \textbf{non-thermal}
+(resonant or quantum) mechanisms. Understanding these effects is
+critical for: - \textbf{Safety standards}: Protecting workers and
+patients from excessive exposure - \textbf{Therapeutic applications}:
+Exploiting beneficial effects (if any) - \textbf{Fundamental
+biophysics}: Understanding molecule-THz interactions
+
+\textbf{Current consensus} : Thermal effects well-established;
+non-thermal effects controversial.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{For Non-Technical Readers
+}{For Non-Technical Readers }}\label{for-non-technical-readers}
+
+\textbf{What is terahertz radiation?}\\
+Think of it as invisible light that sits between microwaves (used in
+your microwave oven) and infrared (what you feel as heat from the sun).
+It\textquotesingle s completely different from dangerous ionizing
+radiation like X-rays-\/-\/-THz waves don\textquotesingle t have enough
+energy to damage DNA or cause cancer directly.
+
+\textbf{Why does this matter?}\\
+THz technology is being developed for: - \textbf{Security scanning}
+(airport body scanners) - \textbf{Medical imaging} (seeing skin cancer
+without biopsies) - \textbf{Quality control} (checking pills for
+defects) - \textbf{Communication} (future 6G wireless networks)
+
+As these applications grow, we need to know: \emph{Is THz radiation
+safe?}
+
+\textbf{The Two Types of Effects:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Thermal Effects (Heating)} -\/-\/- \textbf{Well Understood}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{What happens}: THz waves make water molecules jiggle faster,
+    creating heat (like a microwave oven, but much weaker)
+  \item
+    \textbf{Is it dangerous?}: Only at high power. Safety guidelines
+    keep exposure low enough that heating is less than
+    1\$\^{}\textbackslash circ\$C-\/-\/-similar to walking from shade
+    into sunlight
+  \item
+    \textbf{Analogy}: Standing near a campfire. Get too close = you feel
+    heat and can get burned. Stay at a safe distance = perfectly fine
+  \item
+    \textbf{Current safety standards}: Designed to prevent any
+    significant heating
+  \end{itemize}
+\item
+  \textbf{Non-Thermal Effects (Molecular Resonance?)} -\/-\/-
+  \textbf{Controversial and Unproven}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{What\textquotesingle s claimed}: Some scientists hypothesize
+    that THz might affect biology \emph{without} heating-\/-\/-by
+    vibrating specific molecules at their ``natural frequencies'' (like
+    shattering a wine glass with sound)
+  \item
+    \textbf{Why it\textquotesingle s controversial}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Hard to prove the effects aren\textquotesingle t just from tiny
+      amounts of heating we can\textquotesingle t measure
+    \item
+      Many studies can\textquotesingle t be replicated by other labs
+    \item
+      No agreed-upon mechanism for how it would work
+    \end{itemize}
+  \item
+    \textbf{Analogy}: Imagine claiming a dog whistle (which humans
+    can\textquotesingle t hear) gives you headaches. Is it the sound
+    frequency, or stress from thinking about it? Hard to prove.
+  \item
+    \textbf{Current consensus}: Most scientists are skeptical; safety
+    standards ignore non-thermal effects because evidence is weak
+  \end{itemize}
+\end{enumerate}
+
+\textbf{Should I worry about THz exposure?}\\
+\textbf{No, if exposure is within guidelines.} Current safety limits are
+conservative-\/-\/-they\textquotesingle re set well below levels that
+cause heating. It\textquotesingle s like speed limits: if everyone
+follows them, the risk is minimal.
+
+\textbf{What about long-term effects?}\\
+We don\textquotesingle t have 50-year studies yet (THz tech is
+relatively new), but: - No mechanism for cancer (THz photons are too
+weak to break chemical bonds) - No evidence of cumulative damage in
+animal studies - Similar to concerns about cell phones 20 years
+ago-\/-\/-still being studied, but no confirmed harm at safe levels
+
+\textbf{The Bottom Line:}\\
+THz technology is probably safe at low power, but research continues.
+The document below dives into the science for those who want details.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{1. Thermal Effects (Established
+)}\label{thermal-effects-established}
+
+\subsubsection{1.1 Absorption and Heating}\label{absorption-and-heating}
+
+\textbf{Mechanism}: THz radiation absorbed by tissue
+\$\textbackslash rightarrow\$ molecular kinetic energy
+\$\textbackslash rightarrow\$ temperature rise
+
+\textbf{Governing equation} (heat diffusion):
+\[\rho c_p \frac{\partial T}{\partial t} = \nabla \cdot (k \nabla T) + Q\]
+where: - \(\rho\): Tissue density (\textasciitilde1
+g/cm\textbackslash textsuperscript\{3\}) - \(c_p\): Specific heat
+capacity (\textasciitilde3.6 J/g/K for tissue) - \(k\): Thermal
+conductivity (\textasciitilde0.5 W/m/K) - \(Q\): Heat source =
+\(\alpha I\) (absorption coefficient \$\textbackslash times\$ intensity)
+
+\textbf{Temperature rise} (steady-state, no blood flow):
+\[\Delta T \approx \frac{\alpha I \delta^2}{k}\] where
+\(\delta = 1/\alpha\) is penetration depth.
+
+\textbf{Example}: 1 W/cm\textbackslash textsuperscript\{2\} at 1 THz,
+\(\alpha = 200\)
+cm\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\},
+\(\delta = 50\) \$\textbackslash mu\$m:
+\[\Delta T \approx \frac{200 \times 10^4 \times 10^{-6} \times (50 \times 10^{-6})^2}{0.005} \approx 1^\circ\text{C}\]
+
+\textbf{Safety threshold}: \(\Delta T < 1^\circ\)C for prolonged
+exposure (ICNIRP guideline)
+
+\subsubsection{1.2 Depth Dependence}\label{depth-dependence}
+
+\textbf{Shallow heating}: THz absorption strongest at surface
+\$\textbackslash rightarrow\$ temperature peak at skin surface
+
+\textbf{Thermal diffusion time}:
+\[\tau_{\text{th}} = \frac{L^2}{\kappa}\] where
+\(\kappa = k/(\rho c_p)\) is thermal diffusivity (\textasciitilde1.3
+\$\textbackslash times\$
+10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
+cm\textbackslash textsuperscript\{2\}/s for tissue).
+
+For \(L = 100\) \$\textbackslash mu\$m: \(\tau_{\text{th}} \approx 0.1\)
+s (heat dissipates quickly)
+
+\textbf{Pulsed exposure}: Short pulses (\textless1
+\$\textbackslash mu\$s) create transient temperature spikes that relax
+before tissue damage.
+
+\subsubsection{1.3 Biological Consequences of
+Heating}\label{biological-consequences-of-heating}
+
+\textbf{Mild heating} (1-2\$\^{}\textbackslash circ\$C): - Increased
+metabolic rate - Altered enzyme kinetics - Enhanced blood flow
+(vasodilation)
+
+\textbf{Moderate heating} (5-10\$\^{}\textbackslash circ\$C): - Protein
+denaturation (irreversible above
+\textasciitilde50\$\^{}\textbackslash circ\$C) - Cell membrane
+disruption - Apoptosis (programmed cell death)
+
+\textbf{Severe heating} (\textgreater20\$\^{}\textbackslash circ\$C): -
+Tissue ablation - Burns
+
+\textbf{Threshold for damage}:
+\textasciitilde43\$\^{}\textbackslash circ\$C for prolonged exposure
+(\textgreater1 hour) \$\textbackslash rightarrow\$ cumulative equivalent
+minutes (CEM43)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Non-Thermal Effects (Speculative
+)}\label{non-thermal-effects-speculative}
+
+\subsubsection{2.1 Definition}\label{definition}
+
+\textbf{Non-thermal effect}: Biological response that occurs at
+intensities too low to cause measurable heating
+(\(\Delta T < 0.1^\circ\)C) OR that persists after heating stops.
+
+\textbf{Challenge}: Distinguishing non-thermal from: - \textbf{Localized
+heating}: Hot spots due to field enhancement - \textbf{Transient
+heating}: Temporary temperature spikes below detection threshold -
+\textbf{Indirect thermal effects}: Heat-activated signaling cascades
+
+\subsubsection{2.2 Proposed Mechanisms}\label{proposed-mechanisms}
+
+\paragraph{2.2.1 Resonant Absorption by
+Biomolecules}\label{resonant-absorption-by-biomolecules}
+
+\textbf{Hypothesis}: THz frequencies match vibrational modes of
+proteins, DNA, or membranes \$\textbackslash rightarrow\$ selective
+excitation.
+
+\textbf{Evidence}: - Proteins have collective vibrational modes at 0.1-3
+THz (low-frequency Raman, THz-TDS) - DNA backbone vibrations at
+\textasciitilde1 THz (B-form helix breathing modes)
+
+\textbf{Problem}: In solution, these modes are heavily broadened
+(lifetime \textasciitilde ps) \$\textbackslash rightarrow\$ weak
+resonance peak. Excitation is non-selective.
+
+\textbf{Counterpoint}: \emph{In vitro} studies show altered protein
+function at sub-thermal intensities (see Section 3.1)
+
+\paragraph{2.2.2 Membrane
+Electroporation}\label{membrane-electroporation}
+
+\textbf{Hypothesis}: THz electric fields induce transmembrane voltage
+\$\textbackslash rightarrow\$ pore formation.
+
+\textbf{Induced voltage}: \[V_m = 1.5 r E \cos\theta\] where \(r\) is
+cell radius, \(E\) is external field, \(\theta\) is angle.
+
+For \(r = 10\) \$\textbackslash mu\$m, \(E = 10\) kV/cm:
+\(V_m \approx 15\) mV (below electroporation threshold \textasciitilde1
+V)
+
+\textbf{Conclusion}: Unlikely at THz (frequency too high for membrane
+charging; shielded by ionic double layer)
+
+\paragraph{2.2.3 Microtubule Resonances}\label{microtubule-resonances}
+
+\textbf{Hypothesis}: THz resonates with microtubule vibrational modes
+\$\textbackslash rightarrow\$ alters quantum coherence
+\$\textbackslash rightarrow\$ affects neural function (see
+{[}{[}THz-Resonances-in-Microtubules{]}{]}).
+
+\textbf{Predicted frequencies}: 0.5-10 THz (acoustic phonons, optical
+phonons)
+
+\textbf{Quantum mechanism}: Vibronic coupling (electron-phonon) sustains
+coherence at 310 K; THz drives transitions between vibronic states.
+
+\textbf{Status}: No direct experimental test; theoretical models exist
+but lack validation.
+
+\paragraph{2.2.4 Water Structuring}\label{water-structuring}
+
+\textbf{Hypothesis}: THz alters hydrogen bond network dynamics in
+vicinal water (near protein/membrane surfaces)
+\$\textbackslash rightarrow\$ affects protein function.
+
+\textbf{Mechanism}: THz drives librational modes (hindered rotations)
+\$\textbackslash rightarrow\$ transiently disrupts H-bond network
+\$\textbackslash rightarrow\$ lowers activation barrier for
+conformational changes.
+
+\textbf{Evidence}: Simulations suggest THz can perturb water structure
+on \textasciitilde ps timescales; biological relevance unclear.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Experimental Evidence}\label{experimental-evidence}
+
+\subsubsection{3.1 Cell-Level Studies}\label{cell-level-studies}
+
+\textbf{Gene expression} : - \textbf{Observation}: Altered mRNA levels
+after THz exposure (0.1-2.5 THz, \textless1
+mW/cm\textbackslash textsuperscript\{2\},
+\textless1\$\^{}\textbackslash circ\$C heating) - \textbf{Example}:
+Upregulation of heat shock proteins (HSP70) in human keratinocytes
+(Wilmink et al., 2010) - \textbf{Interpretation}: Could be indirect
+thermal effect (transient microheating) OR non-thermal stress response
+
+\textbf{Membrane permeability} : - \textbf{Observation}: Increased
+uptake of fluorescent dyes after THz pulse exposure (Bock et al., 2010)
+- \textbf{Interpretation}: Pore formation? Or thermal disruption? -
+\textbf{Control needed}: Measure temperature with high spatial/temporal
+resolution
+
+\textbf{Calcium signaling} : - \textbf{Observation}: Transient
+Ca\textbackslash textsuperscript\{2\}\textbackslash textsuperscript\{+\}
+influx in neurons after THz exposure (Zhao et al., 2019) -
+\textbf{Mechanism}: THz-sensitive ion channels? Or indirect heating? -
+\textbf{Problem}: Calcium-sensitive dyes themselves have temperature
+dependence
+
+\subsubsection{3.2 Protein Studies}\label{protein-studies}
+
+\textbf{Enzyme activity} (thermal) / (non-thermal?): -
+\textbf{Observation}: Altered kinetics of lysozyme, alkaline phosphatase
+at sub-thermal intensities (Cherkasova et al., 2009) -
+\textbf{Interpretation}: Possible resonant excitation of active site
+modes; but thermal artifacts not fully ruled out
+
+\textbf{Protein unfolding} (thermal): - Clear correlation with
+temperature; follows Arrhenius kinetics
+
+\subsubsection{3.3 DNA Studies}\label{dna-studies}
+
+\textbf{Strand breaks} (thermal at high intensity): - Observed at
+\textgreater100 W/cm\textbackslash textsuperscript\{2\} (ablation
+regime); clearly thermal
+
+\textbf{Transcription} : - \emph{In vitro} transcription assays: Some
+studies report altered transcription rates at \textless1
+W/cm\textbackslash textsuperscript\{2\} - \textbf{Problem}: DNA
+polymerase highly temperature-sensitive; even
+0.1\$\^{}\textbackslash circ\$C affects rate
+
+\subsubsection{3.4 Whole-Animal Studies}\label{whole-animal-studies}
+
+\textbf{Developmental effects} : - \textbf{Zebrafish embryos}: Some
+studies report abnormal development after THz exposure (Titova et al.,
+2013) - \textbf{Confounding factors}: Dehydration, handling stress,
+temperature gradients in aquarium
+
+\textbf{Behavioral effects} : - \textbf{Mice}: No consistent behavioral
+changes at sub-thermal intensities - \textbf{Drosophila}: Some reports
+of altered locomotion; not reproduced independently
+
+\textbf{Conclusion}: No robust, reproducible whole-animal non-thermal
+effects demonstrated.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. Critical Analysis: Are Non-Thermal Effects
+Real?}\label{critical-analysis-are-non-thermal-effects-real}
+
+\subsubsection{\texorpdfstring{4.1 Arguments For
+}{4.1 Arguments For }}\label{arguments-for}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Molecular resonances exist}: Proteins, DNA have THz
+  vibrational modes
+\item
+  \textbf{Some cellular effects at low intensity}: Not all studies show
+  strict temperature correlation
+\item
+  \textbf{Precedent in other bands}: RF/microwave ``non-thermal
+  effects'' debated for decades
+\end{enumerate}
+
+\subsubsection{\texorpdfstring{4.2 Arguments Against
+}{4.2 Arguments Against }}\label{arguments-against}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{No consensus mechanism}: Multiple proposed mechanisms, none
+  with strong evidence
+\item
+  \textbf{Reproducibility issues}: Many studies lack independent
+  replication
+\item
+  \textbf{Thermal artifacts}: Hard to rule out localized or transient
+  heating
+\item
+  \textbf{Lack of dose-response}: No clear threshold or saturation
+  behavior for ``non-thermal'' effects
+\item
+  \textbf{Evolutionary perspective}: If THz resonances were functionally
+  important, natural selection would have exploited or shielded them
+\end{enumerate}
+
+\subsubsection{4.3 Current Scientific
+Consensus}\label{current-scientific-consensus}
+
+\textbf{ICNIRP position} (2013): ``There is no consistent evidence for
+non-thermal effects at intensities below thermal damage thresholds.''
+
+\textbf{WHO position}: THz safety guidelines based on thermal effects
+only.
+
+\textbf{Research community}: Divided; ongoing studies but skepticism
+high.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5. Safety Standards}\label{safety-standards}
+
+\subsubsection{5.1 ICNIRP Guidelines
+(2013)}\label{icnirp-guidelines-2013}
+
+\textbf{Frequency range}: 0.3-3 THz
+
+\textbf{Power density limits}: - \textbf{Occupational exposure}: 10
+mW/cm\textbackslash textsuperscript\{2\} (averaged over
+68/f\textbackslash textsuperscript\{1\}\$\textbackslash cdot\$\textbackslash textsuperscript\{0\}\textbackslash textsuperscript\{5\}
+minutes, \(f\) in THz) - \textbf{General public exposure}: 2
+mW/cm\textbackslash textsuperscript\{2\} (same averaging)
+
+\textbf{Rationale}: Keep \(\Delta T < 1^\circ\)C
+
+\subsubsection{5.2 IEEE Standards
+(C95.1-2019)}\label{ieee-standards-c95.1-2019}
+
+\textbf{Similar limits}: \textasciitilde10
+mW/cm\textbackslash textsuperscript\{2\} for controlled environments
+
+\textbf{Frequency gaps}: Standards less developed for 3-10 THz (far-IR
+overlap)
+
+\subsubsection{5.3 Medical Device
+Regulations}\label{medical-device-regulations}
+
+\textbf{THz imaging systems}: Require FDA clearance (USA) or CE mark
+(EU)
+
+\textbf{Approval criteria}: - Demonstrate temperature rise
+\textless1\$\^{}\textbackslash circ\$C in vivo - No evidence of
+long-term effects (mutagenicity, carcinogenicity)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{6. Therapeutic Potential (Speculative
+)}\label{therapeutic-potential-speculative}
+
+\subsubsection{6.1 THz-Induced
+Neuromodulation}\label{thz-induced-neuromodulation}
+
+\textbf{Hypothesis}: THz pulses could activate neurons non-invasively.
+
+\textbf{Mechanisms} (proposed): - \textbf{TRPV channels}:
+Temperature-sensitive ion channels activated by localized heating -
+\textbf{Microtubule resonances}: Quantum effects alter neuronal
+excitability
+
+\textbf{Challenges}: Penetration (THz doesn\textquotesingle t reach deep
+brain), specificity (heating is non-selective)
+
+\subsubsection{6.2 Cancer Therapy}\label{cancer-therapy}
+
+\textbf{Hypothesis}: Cancer cells more sensitive to THz due to altered
+water content or membrane properties.
+
+\textbf{Evidence}: Minimal; no clinical trials
+
+\textbf{Alternative}: THz imaging for cancer detection (established)
+vs.~THz ablation (speculative)
+
+\subsubsection{6.3 Wound Healing}\label{wound-healing}
+
+\textbf{Hypothesis}: Low-intensity THz stimulates cell proliferation.
+
+\textbf{Evidence}: \emph{In vitro} studies show increased fibroblast
+migration at \textless1 mW/cm\textbackslash textsuperscript\{2\};
+mechanism unknown.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7. Future Directions}\label{future-directions}
+
+\subsubsection{7.1 What Experiments Are
+Needed?}\label{what-experiments-are-needed}
+
+\textbf{To prove non-thermal effects exist}: 1. \textbf{High-resolution
+thermometry}: Measure temperature with
+\$\textbackslash pm\$0.01\$\^{}\textbackslash circ\$C accuracy,
+\textless10 \$\textbackslash mu\$m spatial resolution 2. \textbf{Isotope
+substitution}: Deuterate proteins (H \$\textbackslash rightarrow\$ D
+shifts vibrational modes); predict frequency-dependent effects 3.
+\textbf{Molecular dynamics simulations}: Model THz-biomolecule
+interactions at atomic resolution 4. \textbf{Dose-response curves}:
+Establish clear thresholds and saturation 5. \textbf{Blind studies}:
+Eliminate experimenter bias
+
+\textbf{To understand thermal effects better}: 1. \textbf{Pulsed vs.~CW
+comparison}: Do transient spikes matter more than average temperature?
+2. \textbf{Tissue-specific thresholds}: Map safe exposure limits for
+skin, eye, brain
+
+\subsubsection{7.2 Proposed Mechanisms to
+Test}\label{proposed-mechanisms-to-test}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Vibronic coupling in microtubules}: Measure quantum variance
+  (see {[}{[}Quantum-Coherence-in-Biological-Systems{]}{]}); test if THz
+  modulates coherence time
+\item
+  \textbf{Water structuring}: Time-resolved spectroscopy of vicinal
+  water during THz exposure
+\item
+  \textbf{Resonant protein excitation}: Site-directed mutagenesis to
+  shift vibrational frequencies; predict altered THz sensitivity
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{8. Connections to Other Wiki
+Pages}\label{connections-to-other-wiki-pages}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}{[}THz-Propagation-in-Biological-Tissue{]}{]} -\/-\/- Absorption
+  and penetration depth
+\item
+  {[}{[}THz-Resonances-in-Microtubules{]}{]} -\/-\/- Speculative quantum
+  mechanism
+\item
+  {[}{[}Terahertz-(THz)-Technology{]}{]} -\/-\/- Sources and detectors
+\item
+  {[}{[}Quantum-Coherence-in-Biological-Systems{]}{]} -\/-\/-
+  Theoretical framework for non-thermal effects
+\item
+  {[}{[}Frey-Microwave-Auditory-Effect{]}{]} -\/-\/- Analogous RF
+  non-thermal effect (pulsed microwaves \$\textbackslash rightarrow\$
+  auditory perception)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{9. References}\label{references}
+
+\subsubsection{Thermal Effects
+(Established)}\label{thermal-effects-established-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{ICNIRP, \emph{Health Phys.} 105, 171 (2013)} -\/-\/- THz
+  exposure guidelines
+\item
+  \textbf{Pickwell \& Wallace, \emph{J. Phys. D} 39, R301 (2006)}
+  -\/-\/- THz-tissue interactions
+\end{enumerate}
+
+\subsubsection{Non-Thermal Effects
+(Speculative)}\label{non-thermal-effects-speculative-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Wilmink et al., \emph{J. Infrared Millim. THz Waves} 31, 1234
+  (2010)} -\/-\/- Gene expression changes
+\item
+  \textbf{Titova et al., \emph{Sci. Rep.} 3, 2363 (2013)} -\/-\/-
+  Zebrafish developmental effects
+\item
+  \textbf{Zhao et al., \emph{Neurophotonics} 6, 011004 (2019)} -\/-\/-
+  Calcium signaling in neurons
+\end{enumerate}
+
+\subsubsection{Critical Reviews}\label{critical-reviews}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  \textbf{Alexandrov et al., \emph{Phys. Lett. A} 374, 1214 (2010)}
+  -\/-\/- DNA resonances (controversial)
+\item
+  \textbf{Foster, \emph{Radiat. Res.} 162, 492 (2004)} -\/-\/- Critique
+  of non-thermal RF/THz effects
+\end{enumerate}
+
+\subsubsection{Vibronic Coupling}\label{vibronic-coupling}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  \textbf{Bao et al., \emph{J. Chem. Theory Comput.} 20, 4377 (2024)}
+  -\/-\/- VE-TFCC theory (thermal coherence)
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Last updated}: October 2025
