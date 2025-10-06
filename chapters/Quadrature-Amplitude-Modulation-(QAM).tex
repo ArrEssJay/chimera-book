@@ -874,19 +874,26 @@ subcarriers \$\textbackslash rightarrow\$ 10 Gbps downstream
 
 \subsection{Microwave Backhaul}
 
-\textbf{Point-to-point links}: - \textbf{Clear weather}: 2048-QAM,
-4096-QAM (\$\textbackslash geq\$30 dB SNR) - \textbf{Light rain}:
-256-QAM - \textbf{Heavy rain}: Adaptive down to 16-QAM or QPSK
+Point-to-point microwave links use adaptive QAM:
 
-\textbf{Frequency}: 6-42 GHz (E-band: 70-80 GHz)
+\textbf{Weather-dependent modulation:}
+\begin{itemize}
+\item \textbf{Clear weather:} 2048-QAM, 4096-QAM ($\geq 30$~dB SNR)
+\item \textbf{Light rain:} 256-QAM
+\item \textbf{Heavy rain:} Adaptive fallback to 16-QAM or QPSK
+\end{itemize}
 
-\textbf{Example}: 28 GHz link, 56 MHz channel - 4096-QAM: 12 bits/symbol
-\$\textbackslash rightarrow\$ 672 Mbps (no coding) - With FEC 3/4: 504
-Mbps net
+\textbf{Frequency bands:} 6--42~GHz (E-band: 70--80~GHz)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Example:} 28~GHz link with 56~MHz channel:
+\begin{itemize}
+\item 4096-QAM: 12 bits/symbol $\rightarrow$ 672~Mbps (uncoded)
+\item With FEC rate 3/4: 504~Mbps net throughput
+\end{itemize}
 
-\subsection{QAM vs PSK}\label{qam-vs-psk}
+\section{Comparison and Tradeoffs}
+
+\subsection{QAM vs PSK}
 
 \textbf{Same spectral efficiency}:
 
@@ -906,47 +913,47 @@ M-PSK & M-QAM & Comparison \\
 \end{longtable}
 }
 
-\textbf{General rule}: For M \textgreater{} 8, QAM always better than
-M-PSK
+\textbf{General rule:} For $M > 8$, QAM significantly outperforms M-PSK.
 
-\textbf{Reason}: 2D rectangular grid (QAM) uses signal space more
-efficiently than circle (PSK)
+\textbf{Reason:} The 2D rectangular grid of QAM uses signal space more efficiently than the circular PSK constellation. QAM achieves larger minimum distance for the same average power.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{keyconcept}
+QAM's superiority over PSK arises from optimal packing in 2D space. While PSK points lie on a circle (wasting corners of the I/Q square), QAM fills the entire signal space uniformly, maximizing the minimum distance between symbols.
+\end{keyconcept}
 
-\subsection{Non-Square QAM}\label{non-square-qam}
+\subsection{Non-Square QAM}
 
-\textbf{Cross QAM}: Non-square constellations (e.g., 32-QAM, 128-QAM)
+\textbf{Cross QAM:} Non-square constellations for non-power-of-2 constellation sizes.
 
-\textbf{32-QAM}: 5 bits/symbol - Constellation: 4 inner points + 12
-middle + 16 outer (hexagonal-like) - Used in some proprietary systems
+\textbf{32-QAM} (5 bits/symbol):
+\begin{itemize}
+\item Constellation: 4 inner + 12 middle + 16 outer points (hexagonal-like pattern)
+\item Used in some proprietary systems
+\end{itemize}
 
-\textbf{128-QAM}: 7 bits/symbol - Between 64-QAM and 256-QAM
+\textbf{128-QAM} (7 bits/symbol):
+\begin{itemize}
+\item Fills gap between 64-QAM and 256-QAM
+\item Optimized constellation placement for best performance
+\end{itemize}
 
-\textbf{Trade-off}: Slightly worse performance than square QAM, but
-allows finer granularity
+\textbf{Trade-off:} Slightly worse performance than square QAM, but allows finer granularity in adaptive rate selection.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Constellation Shaping}
 
-\subsection{Constellation Shaping}\label{constellation-shaping}
+\textbf{Probabilistic shaping} uses non-uniform symbol probability distribution.
 
-\textbf{Probabilistic shaping}: Non-uniform symbol probability
+\textbf{Key idea:} Transmit inner constellation points (lower energy) more frequently than outer points $\rightarrow$ reduces average transmitted power for same information rate.
 
-\textbf{Idea}: Transmit inner points more often (lower energy)
-\$\textbackslash rightarrow\$ Reduce average power
+\textbf{Benefit:} $\sim$0.5--1~dB SNR gain, approaches Shannon capacity limit.
 
-\textbf{Benefit}: \textasciitilde0.5-1 dB SNR gain (approaching Shannon
-limit)
+\textbf{Applications:} High-capacity optical communications (400G/800G coherent systems), submarine cables.
 
-\textbf{Used in}: Optical communications (400G/800G), submarine cables
+\subsection{Adaptive QAM}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Link adaptation dynamically selects QAM order and FEC rate based on measured channel SNR.
 
-\subsection{Adaptive QAM}\label{adaptive-qam}
-
-\textbf{Link adaptation}: Select QAM order based on channel
-
-\textbf{SNR thresholds} (example):
+\textbf{Typical SNR thresholds:}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
@@ -1009,24 +1016,25 @@ SNR (dB) & Modulation & Code Rate & Spectral Eff. \\
 
 \subsection{Implementation Tips}
 
-\subsubsection{Constellation
-Normalization}\label{constellation-normalization}
+\subsection{Constellation Normalization}
 
-\textbf{Normalize average power to 1}:
-
-\[
+For fair performance comparisons, normalize constellations to unit average energy:
+\begin{equation}
 \bar{E}_s = \frac{1}{M}\sum_{m=0}^{M-1} |s_m|^2 = 1
-\]
+\label{eq:constellation-normalization}
+\end{equation}
 
-\textbf{Example (16-QAM)}: - Un-normalized:
-\(I, Q \in \{-3, -1, +1, +3\}\) - Average power: 10 - Normalized:
-\(I, Q \in \{-3, -1, +1, +3\}/\sqrt{10}\)
+\textbf{Example (16-QAM):}
+\begin{itemize}
+\item Un-normalized: $I, Q \in \{-3, -1, +1, +3\}$
+\item Average power: $\bar{E}_s = 10$
+\item Normalized: $I, Q \in \{-3, -1, +1, +3\}/\sqrt{10}$
+\item Result: $\bar{E}_s = 1$
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Gray Coding Implementation}
 
-\subsubsection{Gray Coding}\label{gray-coding}
-
-\textbf{Map bits \$\textbackslash rightarrow\$ I/Q using Gray code}:
+Map bits to I/Q symbols using Gray code to minimize bit errors:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1046,22 +1054,21 @@ Normalization}\label{constellation-normalization}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Soft-Decision LLR
-Calculation}\label{soft-decision-llr-calculation}
+\subsection{Soft-Decision LLR Calculation}
 
-\textbf{For bit \(b_k\) in constellation}:
-
-\[
+For optimal FEC decoder performance, compute LLR for each bit:
+\begin{equation}
 \text{LLR}(b_k) = \log\frac{\sum_{s \in S_0} e^{-|r-s|^2/(2\sigma^2)}}{\sum_{s \in S_1} e^{-|r-s|^2/(2\sigma^2)}}
-\]
-
-Where: - \(S_0\) = Constellation points with \(b_k = 0\) - \(S_1\) =
-Constellation points with \(b_k = 1\) - \(r\) = Received symbol -
-\(\sigma^2\) = Noise variance
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\label{eq:llr-calculation}
+\end{equation}
+where:
+\begin{itemize}
+\item $S_0$ = constellation points with bit $b_k = 0$
+\item $S_1$ = constellation points with bit $b_k = 1$
+\item $r$ = received complex symbol
+\item $\sigma^2$ = noise variance estimate
+\end{itemize}
 
 \section{Summary}
 
