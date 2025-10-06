@@ -1,719 +1,648 @@
-\section{Amplitude-Shift Keying (ASK)}\label{amplitude-shift-keying-ask}
+\chapter{Amplitude-Shift Keying (ASK)}
+\label{ch:ask}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{Digital Modulation} \textbar{}
-{[}{[}On-Off-Keying-(OOK){]}{]} \textbar{} {[}{[}QPSK-Modulation{]}{]}
+\begin{nontechnical}
+\textbf{ASK is like using a dimmer switch on a flashlight}---bright = 1, dim = 0. Simple to understand, but noise makes it hard to tell bright from dim!
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
-
-\textbf{ASK is like using a dimmer switch on a flashlight-\/-\/-bright =
-1, dim = 0. Simple to understand, but noise makes it hard to tell bright
-from dim!}
-
-\textbf{The idea - Vary the volume}: - Want to send \textbf{1}? Transmit
-at \textbf{full power} - Want to send \textbf{0}? Transmit at
-\textbf{low power} (or off) - Receiver measures: ``How loud is the
-signal right now?''
-
-\textbf{Real-world analogy - Theater lights}: - \textbf{Full brightness}
-= data bit ``1'' - \textbf{Dim/off} = data bit ``0'' - Audience
-(receiver) can see which state you\textquotesingle re in - But if room
-is smoky (noise), hard to tell bright from dim!
-
-\textbf{Why it\textquotesingle s problematic}: - \textbf{Noise affects
-amplitude}: Interference makes signal stronger/weaker - \textbf{Fading
-affects amplitude}: Obstacles change signal strength - Hard to tell:
-``Is this a dim signal, or a faded bright signal?'' - This is why ASK
-isn\textquotesingle t used much in modern systems!
-
-\textbf{Where ASK is still used}: - \textbf{RFID tags}: Extremely
-simple, low power (backscatter modulation) - \textbf{Fiber optic}:
-Optical fiber has low noise, so ASK works well - \textbf{Historical
-modems}: Old 300 baud modems used ASK - \textbf{Combined with PSK}: QAM
-= ASK + PSK together (best of both!)
-
-\textbf{Advanced: M-ary ASK}: - Instead of 2 levels (on/off), use 4, 8,
-or 16 levels - \textbf{4-ASK}: Four brightness levels = 2 bits/symbol -
-\textbf{8-ASK}: Eight brightness levels = 3 bits/symbol - Even more
-sensitive to noise!
-
-\textbf{Why phase (PSK) or frequency (FSK) is better}: - \textbf{PSK}:
-Noise changes amplitude, phase stays stable - \textbf{FSK}: Noise
-changes amplitude, frequency stays stable - \textbf{ASK}: Noise directly
-corrupts the information!
-
-\textbf{Fun fact}: Your TV remote uses a form of ASK-\/-\/-infrared LED
-blinks on/off to send button codes. It works because the path from
-remote to TV is short and clean (low noise)!
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Overview}\label{overview}
-
-\textbf{Amplitude-Shift Keying (ASK)} encodes digital data by varying
-the \textbf{amplitude} of a carrier wave.
-
-\textbf{Principle}: Different symbols represented by different amplitude
-levels
-
-\textbf{M-ary ASK}: M distinct amplitude levels encode \(\log_2(M)\)
-bits per symbol
-
-\textbf{Relationship to OOK}: OOK is binary ASK (M=2, one amplitude is
-zero)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Binary ASK (2-ASK)}\label{binary-ask-2-ask}
-
-\textbf{Two amplitude levels}: \(A_1\) and \(A_2\) (typically 0 and A)
-
-\textbf{Signal}:
-
-\[
-s(t) = \begin{cases}
-A \cos(2\pi f_c t) & \text{bit = 1} \\
-0 & \text{bit = 0}
-\end{cases}
-\]
-
-\textbf{This is On-Off Keying (OOK)}
-
-\textbf{See}: {[}{[}On-Off-Keying-(OOK){]}{]}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{M-ary ASK}\label{m-ary-ask}
-
-\textbf{M amplitude levels}: \(A_m\) for \(m = 0, 1, \ldots, M-1\)
-
-\textbf{Signal for symbol} \(m\):
-
-\[
-s_m(t) = A_m \cos(2\pi f_c t), \quad 0 \leq t < T_s
-\]
-
-\textbf{Amplitude levels} (equally spaced):
-
-\[
-A_m = A_0 + m \cdot \Delta A
-\]
-
-Where: - \(A_0\) = Minimum amplitude (often 0) - \(\Delta A\) =
-Amplitude spacing - \(m\) = Symbol index (0 to M-1)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4-ASK Example}\label{ask-example}
-
-\textbf{4 amplitude levels}: 0, A, 2A, 3A
-
-\textbf{Bits per symbol}: \(\log_2(4) = 2\) bits
-
-\textbf{Mapping}:
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Bits & Symbol & Amplitude \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-00 & 0 & 0 \\
-01 & 1 & A \\
-10 & 2 & 2A \\
-11 & 3 & 3A \\
-\end{longtable}
-}
-
-\textbf{Constellation diagram} (1D):
-
-\begin{verbatim}
-      0   A   2A  3A
-      |   |   |   |
-     [] [] [] []
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{8-ASK Example}\label{ask-example-1}
-
-\textbf{8 amplitude levels}: 0, A, 2A, \textbackslash ldots\{\}, 7A
-
-\textbf{Bits per symbol}: \(\log_2(8) = 3\) bits
-
-\textbf{Spectral efficiency}: 3 bits/symbol (3\$\textbackslash times\$
-binary ASK for same bandwidth)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Modulation \& Demodulation}\label{modulation-demodulation}
-
-\subsubsection{ASK Modulator}\label{ask-modulator}
-
-\textbf{Block diagram}:
-
-\begin{verbatim}
-Data bits --> [Serial to     --> [DAC] --> [×] --> ASK signal
-               Parallel (log2M)]              |
-                                          cos(2f_c t)
-\end{verbatim}
-
-\textbf{Steps}: 1. Group bits into symbols (\(\log_2(M)\) bits per
-symbol) 2. Map symbol to amplitude level \(A_m\) 3. Multiply amplitude
-by carrier
-
-\textbf{Baseband equivalent}:
-
-\[
-s(t) = A_m(t) \cos(2\pi f_c t)
-\]
-
-Where \(A_m(t)\) = Pulse-shaped amplitude sequence
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Coherent Demodulation}\label{coherent-demodulation}
-
-\textbf{Optimal detector} (requires carrier phase reference):
-
-\textbf{Receiver}:
-
-\begin{verbatim}
-ASK signal --> [×] --> [LPF] --> [Sample] --> [Threshold] --> Bits
-                |                             Detector
-           cos(2f_c t)          t = kT_s
-\end{verbatim}
-
-\textbf{Steps}: 1. Multiply by synchronized carrier (coherent mixing) 2.
-Low-pass filter \$\textbackslash rightarrow\$ Baseband amplitude 3.
-Sample at symbol rate 4. Threshold detection (compare to M-1 thresholds)
-
-\textbf{Decision thresholds}:
-
-\[
-\text{Threshold}_k = \frac{A_k + A_{k+1}}{2}, \quad k = 0, 1, \ldots, M-2
-\]
-
-\textbf{Example (4-ASK)}: Thresholds at A/2, 3A/2, 5A/2
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Non-Coherent
-Demodulation}\label{non-coherent-demodulation}
-
-\textbf{Envelope detector} (no phase reference needed):
-
-\textbf{Block diagram}:
-
-\begin{verbatim}
-ASK signal --> [Envelope] --> [Sample] --> [Threshold] --> Bits
-               Detector                   Detector
-                             t = kT_s
-\end{verbatim}
-
-\textbf{Envelope detector}: Rectifier + low-pass filter (extracts
-\textbar s(t)\textbar)
-
-\textbf{Advantage}: Simple, no carrier recovery
-
-\textbf{Disadvantage}: \textasciitilde3 dB worse SNR than coherent
-
-\textbf{Used in}: AM radio, OOK (IR remote, RFID)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Signal Space
-Representation}\label{signal-space-representation}
-
-\textbf{1-dimensional constellation} (real axis only):
-
-\[
-s_m(t) = A_m \phi(t)
-\]
-
-Where \(\phi(t) = \sqrt{\frac{2}{T_s}} \cos(2\pi f_c t)\) (orthonormal
-basis)
-
-\textbf{Energy per symbol}:
-
-\[
-E_m = \int_0^{T_s} s_m^2(t) dt = A_m^2
-\]
-
-\textbf{Average symbol energy} (assuming equal probability):
-
-\[
-\bar{E}_s = \frac{1}{M} \sum_{m=0}^{M-1} A_m^2
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Performance Analysis}\label{performance-analysis}
-
-\subsubsection{Bit Error Rate (BER) - Coherent
-Detection}\label{bit-error-rate-ber---coherent-detection}
-
-\textbf{Symbol error rate} (SER) for M-ASK in AWGN:
-
-\[
-P_s \approx 2\left(1 - \frac{1}{M}\right) Q\left(\sqrt{\frac{6\log_2(M)}{M^2 - 1} \cdot \frac{E_b}{N_0}}\right)
-\]
-
-\textbf{Gray coding assumed} (SER \$\textbackslash approx\$ BER /
-\(\log_2(M)\)):
-
-\[
-\text{BER} \approx \frac{2}{M\log_2(M)}\left(1 - \frac{1}{M}\right) Q\left(\sqrt{\frac{6\log_2(M)}{M^2 - 1} \cdot \frac{E_b}{N_0}}\right)
-\]
-
-\textbf{Where}:
-\(Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} dt\)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{BER for Specific M}\label{ber-for-specific-m}
-
-\textbf{2-ASK (OOK)} @ 10 dB Eb/N0:
-
-\[
-\text{BER} = Q\left(\sqrt{2 \cdot 10}\right) \approx 3.9 \times 10^{-6}
-\]
-
-\textbf{4-ASK} @ 10 dB Eb/N0:
-
-\[
-\text{BER} \approx \frac{3}{4} Q\left(\sqrt{\frac{12}{15} \cdot 10}\right) = 0.75 \times Q(2.83) \approx 1.8 \times 10^{-3}
-\]
-
-\textbf{Observation}: Higher M \$\textbackslash rightarrow\$ Worse BER
-(smaller amplitude spacing \$\textbackslash rightarrow\$ more noise
-sensitivity)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Required Eb/N0 for BER =
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}}\label{required-ebn0-for-ber-10ux2076}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Modulation & Required Eb/N0 (dB) & Notes \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{2-ASK (OOK)} & 10.5 & Baseline \\
-\textbf{4-ASK} & 14 & +3.5 dB penalty \\
-\textbf{8-ASK} & 18 & +7.5 dB penalty \\
-\textbf{16-ASK} & 22 & +11.5 dB penalty \\
-\end{longtable}
-}
-
-\textbf{Pattern}: Each doubling of M adds \textasciitilde3.5-4 dB
-penalty
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Power Efficiency}\label{power-efficiency}
-
-\textbf{Average power} for M-ASK:
-
-\[
-\bar{P} = \frac{1}{M} \sum_{m=0}^{M-1} \frac{A_m^2}{2}
-\]
-
-\textbf{Peak-to-average power ratio (PAPR)}:
-
-\[
-\text{PAPR} = \frac{A_{\max}^2}{\bar{P}}
-\]
-
-\textbf{For M-ASK with amplitudes 0, A, 2A, \textbackslash ldots\{\},
-(M-1)A}:
-
-\[
-\text{PAPR} = \frac{(M-1)^2}{\frac{1}{M}\sum_{m=0}^{M-1} m^2} = \frac{3(M-1)^2}{M(M-1)(2M-1)/3} = \frac{3(M-1)}{2M-1}
-\]
-
-\textbf{Example}: - 2-ASK: PAPR = 3 (4.8 dB) - 4-ASK: PAPR = 9/7
-\$\textbackslash approx\$ 1.1 dB - 8-ASK: PAPR = 21/15 = 1.4 (1.5 dB)
-
-\textbf{Problem}: High PAPR stresses power amplifier (requires large
-backoff)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Bandwidth Efficiency}\label{bandwidth-efficiency}
-
-\textbf{Occupied bandwidth} (with pulse shaping):
-
-\[
-B = (1 + \alpha) R_s \quad (\text{Hz})
-\]
-
-Where: - \(R_s\) = Symbol rate (symbols/sec) - \(\alpha\) = Roll-off
-factor (0-1, typically 0.35)
-
-\textbf{Bit rate}:
-
-\[
-R_b = R_s \log_2(M) \quad (\text{bits/sec})
-\]
-
-\textbf{Spectral efficiency}:
-
-\[
-\eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad (\text{bits/sec/Hz})
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Comparison}\label{comparison}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Modulation & Bits/symbol & \(\eta\) (\(\alpha\)=0.35) & Notes \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{2-ASK} & 1 & 0.74 & Same as BPSK \\
-\textbf{4-ASK} & 2 & 1.48 & 2\$\textbackslash times\$ bandwidth
-efficiency \\
-\textbf{8-ASK} & 3 & 2.22 & 3\$\textbackslash times\$ bandwidth
-efficiency \\
-\textbf{16-ASK} & 4 & 2.96 & 4\$\textbackslash times\$ bandwidth
-efficiency \\
-\end{longtable}
-}
-
-\textbf{Trade-off}: Higher \$\textbackslash eta\$ but worse BER (need
-higher SNR)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{ASK vs PSK vs QAM}\label{ask-vs-psk-vs-qam}
-
-\textbf{At same bit rate}:
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-Modulation & Bits/symbol & Constellation & BER (@ 10 dB) & Notes \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{BPSK} & 1 & 2 points (1D) & 3.9 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-& Best BER \\
-\textbf{2-ASK} & 1 & 2 points (1D) & 3.9 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-& Same as BPSK \\
-\textbf{QPSK} & 2 & 4 points (2D) & 3.9 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-& 2\$\textbackslash times\$ efficiency, same BER \\
-\textbf{4-ASK} & 2 & 4 points (1D) & 1.8 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
-& Worse BER (1D) \\
-\textbf{16-QAM} & 4 & 16 points (2D) &
-\textasciitilde10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\}
-& Better than 16-ASK \\
-\textbf{16-ASK} & 4 & 16 points (1D) &
-\textasciitilde10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}
-& Worst BER (1D) \\
-\end{longtable}
-}
-
-\textbf{Key insight}: \textbf{QAM (2D) outperforms ASK (1D)} for M
-\textgreater{} 2
-
-\textbf{Why QAM better}: Spreads points in 2D
-\$\textbackslash rightarrow\$ Larger minimum distance for same average
-power
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Practical Applications}\label{practical-applications}
-
-\subsubsection{1. Optical Communications
-(OOK)}\label{optical-communications-ook}
-
-\textbf{Binary ASK (OOK)} dominates fiber optics: - \textbf{10 Gbps
-Ethernet}: OOK with direct detection - \textbf{PON (Passive Optical
-Networks)}: OOK upstream - \textbf{Simple}: LED/laser ON/OFF, photodiode
-detection
-
-\textbf{Higher-order}: 4-ASK (PAM-4) emerging for 100G+ (50 Gbaud PAM-4
-= 100 Gbps)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. RFID (OOK/2-ASK)}\label{rfid-ook2-ask}
-
-\textbf{Passive RFID tags}: OOK modulation - \textbf{Reader
-\$\textbackslash rightarrow\$ Tag}: Continuous carrier (powers tag) -
-\textbf{Tag \$\textbackslash rightarrow\$ Reader}: Load modulation (OOK)
-- \textbf{Frequency}: 125 kHz (LF), 13.56 MHz (HF), 900 MHz (UHF)
-
-\textbf{Advantage}: Non-coherent detection (simple tag circuit)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Infrared (IR) Remote
-Controls}\label{infrared-ir-remote-controls}
-
-\textbf{Consumer IR}: OOK at 38 kHz carrier - \textbf{Protocol}:
-Manchester-encoded OOK - \textbf{Range}: 5-10 meters - \textbf{Power}:
-\textless10 mW (eye safety)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4. DSL (Discrete Multi-Tone with
-ASK)}\label{dsl-discrete-multi-tone-with-ask}
-
-\textbf{ADSL/VDSL}: Multi-carrier system with per-tone QAM/ASK - Each
-subcarrier uses 2-15 bit QAM (includes ASK as subset) - Adaptive bit
-loading per tone (waterfilling)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{5. Visible Light Communication
-(VLC)}\label{visible-light-communication-vlc}
-
-\textbf{LED-based VLC}: OOK or M-ASK - \textbf{OOK}: Simple, high speed
-(100+ Mbps) - \textbf{Dimming}: Adjust average amplitude (DC level) -
-\textbf{Application}: Indoor positioning, LiFi
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Pulse Shaping}\label{pulse-shaping}
-
-\textbf{Rectangular pulses} cause excessive ISI and spectral regrowth
-
-\textbf{Raised cosine (RC)} pulse:
-
-\[
-p(t) = \frac{\sin(\pi t/T_s)}{\pi t/T_s} \cdot \frac{\cos(\alpha \pi t/T_s)}{1 - (2\alpha t/T_s)^2}
-\]
-
-\textbf{Properties}: - \textbf{\$\textbackslash alpha\$ = 0}: Sinc pulse
-(infinite time, brick-wall spectrum) - \textbf{\$\textbackslash alpha\$
-= 0.35}: Common (35\% excess bandwidth) -
-\textbf{\$\textbackslash alpha\$ = 1}: Smoother time domain,
-2\$\textbackslash times\$ bandwidth
-
-\textbf{Root raised cosine (RRC)}: Split filtering between TX and RX
-(matched filter)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Noise Analysis}\label{noise-analysis}
-
-\textbf{Additive noise} \(n(t)\) with power \(\sigma^2 = N_0/2\)
-(single-sided PSD)
-
-\textbf{After coherent demodulation}:
-
-\[
-r_m = A_m + n
-\]
-
-Where \(n \sim \mathcal{N}(0, \sigma^2)\) (Gaussian noise)
-
-\textbf{Symbol error} if noise pushes sample past threshold:
-
-\textbf{Example (4-ASK, symbol 1 at amplitude A)}: - Error if
-\(r_1 < A/2\) (decide symbol 0) or \(r_1 > 3A/2\) (decide symbol 2)
-
-\[
-P_{e|1} = Q\left(\frac{A/2}{\sigma}\right) + Q\left(\frac{A/2}{\sigma}\right) = 2Q\left(\frac{A}{2\sigma}\right)
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Implementation
-Considerations}\label{implementation-considerations}
-
-\subsubsection{1. Carrier Recovery}\label{carrier-recovery}
-
-\textbf{Coherent ASK} requires carrier phase/frequency sync:
-
-\textbf{Methods}: - \textbf{Squaring loop}: Square signal
-\$\textbackslash rightarrow\$ 2f\_c component
-\$\textbackslash rightarrow\$ PLL \$\textbackslash rightarrow\$ Divide
-by 2 - \textbf{Costas loop}: Feedback loop with I/Q arms - \textbf{Pilot
-tone}: Transmit unmodulated carrier (reduces efficiency)
-
-\textbf{See}: {[}{[}Synchronization-(Carrier,-Timing,-Frame){]}{]}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. Automatic Gain Control
-(AGC)}\label{automatic-gain-control-agc}
-
-\textbf{Received amplitude varies} due to fading, path loss:
-
-\textbf{AGC} adjusts receiver gain to maintain constant amplitude:
-
-\[
-\text{Gain}(t) = \frac{A_{\text{target}}}{\hat{A}_{\text{received}}(t)}
-\]
-
-\textbf{Critical for M-ASK} (M \textgreater{} 2) to maintain threshold
-accuracy
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Nonlinear Distortion}\label{nonlinear-distortion}
-
-\textbf{Power amplifier (PA) nonlinearity} compresses high amplitudes:
-
-\textbf{Effect}: Amplitude levels not equally spaced
-\$\textbackslash rightarrow\$ Increased BER
-
-\textbf{Mitigation}: - \textbf{Backoff}: Operate PA below saturation
-(reduces efficiency) - \textbf{Predistortion}: Digital or analog
-linearization - \textbf{Consider PSK/FSK}: Constant envelope (less
-sensitive to PA)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4. Frequency-Selective
-Fading}\label{frequency-selective-fading}
-
-\textbf{Multipath fading} distorts amplitude:
-
-\[
-r(t) = h(t) \cdot s(t) + n(t)
-\]
-
-\textbf{Problem}: Fading gain \(|h(t)|\) multiplies signal amplitude
-\$\textbackslash rightarrow\$ ASK especially vulnerable
-
-\textbf{Mitigation}: - \textbf{Equalization}: Compensate for channel
-(see {[}{[}Channel-Equalization{]}{]}) - \textbf{OFDM}: Flat fading per
-subcarrier - \textbf{Consider PSK}: Less sensitive to amplitude fading
-(phase-based)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Advantages of ASK}\label{advantages-of-ask}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Simple modulator}: Single mixer, no phase shifter
-\item
-  \textbf{Non-coherent detection}: Envelope detector (OOK)
-\item
-  \textbf{Low cost}: Used in RFID, IR remotes
-\item
-  \textbf{Compatible with intensity modulation}: Optical, VLC (LED
-  can\textquotesingle t do phase)
-\end{enumerate}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Disadvantages of ASK}\label{disadvantages-of-ask}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Poor power efficiency}: 1D constellation
-  \$\textbackslash rightarrow\$ Worse BER than 2D (QAM)
-\item
-  \textbf{Susceptible to fading}: Amplitude-based (fading directly
-  affects signal)
-\item
-  \textbf{Nonlinear PA distortion}: High PAPR, AM-AM conversion
-\item
-  \textbf{Threshold sensitivity}: AGC critical for M \textgreater{} 2
-\item
-  \textbf{No advantage over PSK}: For M \textgreater{} 2, PSK/QAM
-  preferred (except optical)
-\end{enumerate}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Summary Table}\label{summary-table}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2286}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3714}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Aspect
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-2-ASK (OOK)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-4-ASK
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-M-ASK
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Bits/symbol} & 1 & 2 &
-log\textbackslash textsubscript\{2\}(M) \\
-\textbf{Complexity} & Very simple & Simple & Moderate \\
-\textbf{BER @ 10 dB} & 3.9 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-& 1.8 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
-& Degrades with M \\
-\textbf{Detection} & Non-coherent OK & Coherent preferred & Coherent
-required \\
-\textbf{Applications} & RFID, IR, optical & Rarely used & Optical
-(PAM-4) \\
-\textbf{vs QAM} & Equivalent (M=2) & 3 dB worse & Much worse \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Related Topics}\label{related-topics}
-
+\textbf{Simple idea:}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}On-Off-Keying-(OOK){]}{]}}: Binary ASK (M=2)
-\item
-  \textbf{{[}{[}QPSK-Modulation{]}{]}}: 2D alternative (better than
-  4-ASK)
-\item
-  \textbf{{[}{[}Frequency-Shift-Keying-(FSK){]}{]}}: Frequency-based
-  modulation
-\item
-  \textbf{{[}{[}Constellation-Diagrams{]}{]}}: Visualizing signal space
-\item
-  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric
-\item
-  \textbf{{[}{[}Synchronization-(Carrier,-Timing,-Frame){]}{]}}: Carrier
-  recovery for coherent detection
+\item Bit 0 = low amplitude (dim or off)
+\item Bit 1 = high amplitude (bright)
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Real use:} Fiber optics uses On-Off Keying (binary ASK) at 10--100~Gbps. RFID tags use ASK for simple, low-power communication.
 
-\textbf{Key takeaway}: \textbf{ASK encodes data in amplitude levels.}
-OOK (2-ASK) is simple and widely used (RFID, IR, optical). Higher-order
-ASK (M \textgreater{} 2) is power-inefficient compared to PSK/QAM due to
-1D constellation. QAM dominates RF, ASK dominates optical (intensity
-modulation). Coherent detection needed for M \textgreater{} 2.
-Susceptible to fading, PA nonlinearity, and amplitude noise.
+\textbf{Why amplitude-based is problematic:} Noise and fading directly affect amplitude, making it hard to distinguish signal levels. Phase (PSK) and frequency (FSK) modulation are more robust. Trade-off: Simple implementation but poor noise immunity compared to phase-based schemes.
+\end{nontechnical}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Overview}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+\textbf{Amplitude-Shift Keying (ASK)} encodes digital data by varying the \textbf{amplitude} of a carrier wave while maintaining constant phase and frequency.
+
+\begin{keyconcept}
+ASK is the simplest form of digital modulation but suffers from \textbf{poor noise immunity} because noise directly affects amplitude. It is primarily used in \textbf{optical communications} (fiber optics) where the channel has inherently low noise, and in \textbf{RFID systems} where simplicity is paramount.
+\end{keyconcept}
+
+ASK modulation maps digital symbols to different amplitude levels. For M-ary ASK with $M$ distinct amplitude levels, each symbol carries $\log_2(M)$ bits of information. On-Off Keying (OOK) is the special case of binary ASK ($M=2$) where one amplitude is typically zero.
+
+\section{Mathematical Description}
+
+\subsection{Time-Domain Signal}
+
+The general M-ary ASK waveform is expressed as:
+\begin{equation}
+s_m(t) = A_m \cos(2\pi f_c t), \quad 0 \leq t < T_s, \quad m = 0, 1, \ldots, M-1
+\end{equation}
+where:
+\begin{itemize}
+\item $A_m$ = amplitude level for symbol $m$
+\item $f_c$ = carrier frequency (Hz)
+\item $T_s$ = symbol period (seconds)
+\item $M$ = number of distinct amplitude levels
+\end{itemize}
+
+\subsection{Binary ASK (2-ASK)}
+
+For binary ASK with two amplitude levels $A_1$ and $A_2$ (typically 0 and $A$):
+\begin{equation}
+s(t) = \begin{cases}
+A \cos(2\pi f_c t) & \text{if bit = 1} \\
+0 & \text{if bit = 0}
+\end{cases}
+\end{equation}
+
+This special case is called \textbf{On-Off Keying (OOK)} and is the most widely used form of ASK in practical systems.
+
+\subsection{M-ary ASK}
+
+For higher-order ASK, amplitude levels are typically equally spaced:
+\begin{equation}
+A_m = A_0 + m \cdot \Delta A
+\end{equation}
+where:
+\begin{itemize}
+\item $A_0$ = minimum amplitude (often 0)
+\item $\Delta A$ = amplitude spacing between levels
+\item $m$ = symbol index ($0$ to $M-1$)
+\end{itemize}
+
+\textbf{Bits per symbol:}
+\begin{equation}
+\text{Bits/symbol} = \log_2(M)
+\end{equation}
+
+\subsection{Constellation Diagram}
+
+ASK constellation points lie on a single dimension (the real/I axis) since only amplitude varies:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+% Axes
+\draw[->] (-0.5,0) -- (5,0) node[right] {\sffamily\small $I$ (Real)};
+\draw[->] (0,-2) -- (0,2) node[above] {\sffamily\small $Q$ (Imaginary)};
+
+% Grid
+\draw[very thin,gray!30] (0,-1.5) grid[step=0.5] (4.5,1.5);
+
+% 4-ASK Constellation points
+\fill[black] (0,0) circle (3pt);
+\fill[black] (1.5,0) circle (3pt);
+\fill[black] (3,0) circle (3pt);
+\fill[black] (4.5,0) circle (3pt);
+
+% Labels
+\node[below=8pt,align=center] at (0,0) {\sffamily\small 00\\$0$};
+\node[below=8pt,align=center] at (1.5,0) {\sffamily\small 01\\$A$};
+\node[below=8pt,align=center] at (3,0) {\sffamily\small 10\\$2A$};
+\node[below=8pt,align=center] at (4.5,0) {\sffamily\small 11\\$3A$};
+
+% Distance annotation
+\draw[<->,thick] (0,1) -- (1.5,1) node[midway,above] {\sffamily\small $\Delta A$};
+
+\node[above,font=\sffamily\bfseries] at (2.25,2) {4-ASK Constellation};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Key observations:}
+\begin{itemize}
+\item All constellation points lie on the I-axis ($Q = 0$)
+\item Minimum distance between adjacent points: $d_{\min} = \Delta A$
+\item Unlike 2D modulation (QAM, PSK), 1D arrangement is inherently less power-efficient
+\item Noise must exceed $\Delta A/2$ to cause a symbol error
+\end{itemize}
+
+\begin{calloutbox}[colback=black!5!white,colframe=black]{4-ASK Example}
+\textbf{Parameters:}
+\begin{itemize}
+\item Four amplitude levels: $0, A, 2A, 3A$
+\item Bits per symbol: $\log_2(4) = 2$ bits
+\item Symbol mapping: 00$\rightarrow$0, 01$\rightarrow A$, 10$\rightarrow 2A$, 11$\rightarrow 3A$
+\item Spectral efficiency: 2 bits/symbol (double that of binary ASK)
+\end{itemize}
+\end{calloutbox}
+
+\section{Modulation and Demodulation}
+
+\subsection{Transmitter (Modulator)}
+
+The ASK modulator generates amplitude-modulated carrier signals:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
+  font=\small
+]
+\node (input) {\sffamily Binary\\Data};
+\node[block, right of=input, node distance=3cm] (s2p) {Serial to\\Parallel};
+\node[block, right of=s2p, node distance=3.2cm] (map) {Symbol\\Mapper};
+\node[block, right of=map, node distance=3cm] (mult) {Mixer\\$\times$};
+\node[block, right of=mult, node distance=3cm] (filter) {Bandpass\\Filter};
+\node[right of=filter, node distance=2.8cm] (output) {\sffamily ASK\\Output};
+
+\node[below of=mult, node distance=1.5cm, font=\small] (carrier) {$\cos(2\pi f_c t)$};
+
+\draw[->,thick] (input) -- (s2p);
+\draw[->,thick] (s2p) -- node[above,font=\scriptsize] {$\log_2(M)$ bits} (map);
+\draw[->,thick] (map) -- node[above,font=\scriptsize] {$A_m$} (mult);
+\draw[->,thick] (carrier) -- (mult);
+\draw[->,thick] (mult) -- (filter);
+\draw[->,thick] (filter) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Modulation process:}
+\begin{enumerate}
+\item \textbf{Serial-to-parallel conversion:} Group incoming bits into symbols of $\log_2(M)$ bits each
+\item \textbf{Symbol mapping:} Map bit pattern to amplitude level $A_m$
+\item \textbf{Multiply by carrier:} $s(t) = A_m \cos(2\pi f_c t)$
+\item \textbf{Pulse shaping:} Apply bandpass filter to:
+  \begin{itemize}
+  \item Limit occupied bandwidth
+  \item Reduce intersymbol interference (ISI)
+  \item Meet spectral mask requirements
+  \end{itemize}
+\end{enumerate}
+
+\subsection{Receiver (Coherent Detector)}
+
+Coherent detection requires a phase-synchronized local oscillator:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2cm,
+  font=\small
+]
+\node (input) {\sffamily RX\\Signal};
+\node[block, right of=input, node distance=2.5cm] (mult) {Mixer\\$\times$};
+\node[block, right of=mult, node distance=2.8cm] (lpf) {Lowpass\\Filter};
+\node[block, right of=lpf, node distance=2.8cm] (sample) {Sample\\$@T_s$};
+\node[block, right of=sample, node distance=2.8cm] (thresh) {Threshold\\Detector};
+\node[right of=thresh, node distance=2.8cm] (output) {\sffamily Data\\Bits};
+
+\node[below of=mult, node distance=1.5cm, font=\scriptsize, align=center] (lo) {$2\cos(2\pi f_c t)$\\Local Oscillator};
+
+\draw[->,thick] (input) -- (mult);
+\draw[->,thick] (lo) -- (mult);
+\draw[->,thick] (mult) -- (lpf);
+\draw[->,thick] (lpf) -- (sample);
+\draw[->,thick] (sample) -- (thresh);
+\draw[->,thick] (thresh) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Detection process:}
+\begin{enumerate}
+\item \textbf{Multiply by local carrier:}
+\begin{equation}
+r(t) = A_m \cos(2\pi f_c t) \cdot 2\cos(2\pi f_c t) = A_m[1 + \cos(4\pi f_c t)]
+\end{equation}
+
+\item \textbf{Lowpass filter} removes $2f_c$ component:
+\begin{equation}
+y(t) = A_m + n(t)
+\end{equation}
+where $n(t)$ is additive white Gaussian noise (AWGN)
+
+\item \textbf{Sample at symbol rate} $T_s$: obtain $y_k = A_m + n_k$
+
+\item \textbf{Threshold detection:} Compare $y_k$ to $(M-1)$ decision thresholds
+\begin{equation}
+\text{Threshold}_k = \frac{A_k + A_{k+1}}{2}, \quad k = 0, 1, \ldots, M-2
+\end{equation}
+\end{enumerate}
+
+For 4-ASK, thresholds are placed at $A/2$, $3A/2$, and $5A/2$.
+
+\subsection{Non-Coherent Detection (Envelope Detector)}
+
+For binary ASK (OOK), a simpler non-coherent receiver can be used:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
+  font=\small
+]
+\node (input) {\sffamily RX\\Signal};
+\node[block, right of=input, node distance=3cm] (env) {Envelope\\Detector};
+\node[block, right of=env, node distance=3.2cm] (sample) {Sample\\$@T_s$};
+\node[block, right of=sample, node distance=3.2cm] (thresh) {Threshold\\Detector};
+\node[right of=thresh, node distance=3cm] (output) {\sffamily Data\\Bits};
+
+\draw[->,thick] (input) -- (env);
+\draw[->,thick] (env) -- node[above,font=\scriptsize] {$|s(t)|$} (sample);
+\draw[->,thick] (sample) -- (thresh);
+\draw[->,thick] (thresh) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Envelope detector:} Rectifier followed by lowpass filter to extract signal magnitude $|s(t)|$
+
+\textbf{Advantages:}
+\begin{itemize}
+\item[\checkmark] Simple circuit (no carrier recovery needed)
+\item[\checkmark] Low complexity, low cost
+\item[\checkmark] Suitable for RFID and IR remote applications
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+\item[\texttimes] Approximately 3~dB worse performance than coherent detection
+\item[\texttimes] Only practical for binary ASK (OOK)
+\item[\texttimes] More sensitive to noise
+\end{itemize}
+
+\section{Signal Space Representation}
+
+ASK signals form a one-dimensional constellation on the real axis:
+\begin{equation}
+s_m(t) = A_m \phi(t)
+\end{equation}
+where $\phi(t) = \sqrt{\frac{2}{T_s}} \cos(2\pi f_c t)$ is the orthonormal basis function.
+
+\subsection{Energy Calculations}
+
+\textbf{Energy per symbol:}
+\begin{equation}
+E_m = \int_0^{T_s} s_m^2(t) \, dt = \frac{A_m^2 T_s}{2}
+\end{equation}
+
+\textbf{Average symbol energy} (assuming equiprobable symbols):
+\begin{equation}
+\bar{E}_s = \frac{1}{M} \sum_{m=0}^{M-1} E_m = \frac{T_s}{2M} \sum_{m=0}^{M-1} A_m^2
+\end{equation}
+
+\textbf{Energy per bit:}
+\begin{equation}
+E_b = \frac{\bar{E}_s}{\log_2(M)}
+\end{equation}
+
+\section{Bit Error Rate (BER) Performance}
+
+\subsection{Coherent Detection in AWGN Channel}
+
+For M-ary ASK with coherent detection, the symbol error rate is:
+\begin{equation}
+P_s \approx 2\left(1 - \frac{1}{M}\right) Q\left(\sqrt{\frac{6\log_2(M)}{M^2 - 1} \cdot \frac{E_b}{N_0}}\right)
+\end{equation}
+where:
+\begin{itemize}
+\item $E_b$ = energy per bit (joules)
+\item $N_0$ = noise power spectral density (W/Hz)
+\item $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^\infty e^{-t^2/2}\,dt$ (Gaussian Q-function)
+\end{itemize}
+
+Assuming Gray coding, the bit error rate is approximately:
+\begin{equation}
+\mathrm{BER} \approx \frac{P_s}{\log_2(M)} = \frac{2}{M\log_2(M)}\left(1 - \frac{1}{M}\right) Q\left(\sqrt{\frac{6\log_2(M)}{M^2 - 1} \cdot \frac{E_b}{N_0}}\right)
+\end{equation}
+
+\subsection{Performance Benchmarks}
+
+At $E_b/N_0 = 10$~dB:
+
+\begin{center}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Modulation & \multicolumn{1}{c}{BER} & Observation \\
+\midrule
+2-ASK (OOK) & $3.9 \times 10^{-6}$ & 1 error in 250,000 bits \\
+4-ASK & $1.8 \times 10^{-3}$ & 1 error in 556 bits \\
+8-ASK & $\sim 10^{-2}$ & 1 error in 100 bits \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{keyconcept}
+\textbf{Why does BER degrade with higher M?}
+
+As $M$ increases, amplitude levels become closer together ($\Delta A$ decreases for fixed power). This makes the constellation more sensitive to noise. Each doubling of $M$ requires approximately 3--4~dB more $E_b/N_0$ to maintain the same BER.
+\end{keyconcept}
+
+\subsection{Required $E_b/N_0$ for Target BER}
+
+For BER $= 10^{-6}$:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Modulation & Required $E_b/N_0$ (dB) & Penalty vs 2-ASK \\
+\midrule
+2-ASK (OOK) & 10.5 & Baseline \\
+4-ASK & 14.0 & +3.5~dB \\
+8-ASK & 18.0 & +7.5~dB \\
+16-ASK & 22.0 & +11.5~dB \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Pattern:} Each doubling of $M$ adds approximately 3.5--4~dB penalty.
+
+\section{Bandwidth Efficiency}
+
+The occupied bandwidth with raised-cosine pulse shaping is:
+\begin{equation}
+B = (1 + \alpha) R_s
+\end{equation}
+where:
+\begin{itemize}
+\item $R_s$ = symbol rate (symbols/sec)
+\item $\alpha$ = roll-off factor (typically 0.35)
+\end{itemize}
+
+Since the bit rate is:
+\begin{equation}
+R_b = R_s \log_2(M)
+\end{equation}
+
+The spectral efficiency becomes:
+\begin{equation}
+\eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad \text{(bits/sec/Hz)}
+\end{equation}
+
+\subsection{Spectral Efficiency Comparison}
+
+For $\alpha = 0.35$:
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Modulation & Bits/symbol & $\eta$ (bps/Hz) & Bandwidth Efficiency \\
+\midrule
+2-ASK & 1 & 0.74 & Baseline \\
+4-ASK & 2 & 1.48 & $2\times$ better \\
+8-ASK & 3 & 2.22 & $3\times$ better \\
+16-ASK & 4 & 2.96 & $4\times$ better \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Trade-off:} Higher spectral efficiency requires higher SNR to maintain acceptable BER.
+
+\section{Power Efficiency}
+
+\textbf{Average power:}
+\begin{equation}
+\bar{P} = \frac{1}{M} \sum_{m=0}^{M-1} \frac{A_m^2}{2}
+\end{equation}
+
+\textbf{Peak-to-average power ratio (PAPR):}
+\begin{equation}
+\mathrm{PAPR} = \frac{A_{\max}^2}{\bar{P}}
+\end{equation}
+
+For M-ASK with equally-spaced amplitudes $\{0, A, 2A, \ldots, (M-1)A\}$:
+\begin{equation}
+\mathrm{PAPR} = \frac{3(M-1)}{2M-1}
+\end{equation}
+
+\begin{warningbox}
+High PAPR stresses power amplifiers, requiring significant backoff to avoid nonlinear distortion. This reduces overall transmitter efficiency.
+\end{warningbox}
+
+\section{Comparison with Other Modulation Schemes}
+
+At the same bit rate and $E_b/N_0 = 10$~dB:
+
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Modulation & Bits/symbol & Constellation & BER & Notes \\
+\midrule
+BPSK & 1 & 2 points (1D) & $3.9 \times 10^{-6}$ & Optimal for $M=2$ \\
+2-ASK (OOK) & 1 & 2 points (1D) & $3.9 \times 10^{-6}$ & Same as BPSK \\
+QPSK & 2 & 4 points (2D) & $3.9 \times 10^{-6}$ & $2\times$ efficiency \\
+4-ASK & 2 & 4 points (1D) & $1.8 \times 10^{-3}$ & Much worse BER \\
+16-QAM & 4 & 16 points (2D) & $\sim 10^{-4}$ & Better than 16-ASK \\
+16-ASK & 4 & 16 points (1D) & $\sim 10^{-2}$ & Worst BER \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{keyconcept}
+\textbf{Why does QAM outperform ASK for $M > 2$?}
+
+QAM uses a 2D constellation (both I and Q axes), allowing greater separation between constellation points for the same average power. ASK uses only 1D (I-axis only), resulting in tighter symbol spacing and worse noise immunity. This fundamental geometric advantage makes QAM the preferred choice for RF communications when $M > 2$.
+\end{keyconcept}
+
+\section{Practical Implementations}
+
+\subsection{Fiber Optic Communications}
+
+Binary ASK (On-Off Keying) dominates short-reach optical links:
+
+\begin{itemize}
+\item \textbf{10 Gigabit Ethernet (10GBASE-SR/LR):} OOK with direct detection
+\item \textbf{Passive Optical Networks (PON):} OOK for upstream transmission
+\item \textbf{Implementation:} Laser ON/OFF modulation, photodiode detection
+\item \textbf{Data rate:} 1--100~Gbps depending on generation
+\end{itemize}
+
+\textbf{Higher-order ASK:} PAM-4 (4-ASK) is emerging for 100G+ applications:
+\begin{itemize}
+\item 50~Gbaud PAM-4 = 100~Gbps (2 bits/symbol)
+\item Used in 400G Ethernet (4$\times$100G lanes)
+\item Trade-off: Higher spectral efficiency vs increased SNR requirement
+\end{itemize}
+
+\subsection{RFID Systems}
+
+Passive RFID tags use backscatter modulation with OOK:
+
+\begin{itemize}
+\item \textbf{Reader$\rightarrow$Tag:} Continuous carrier provides power
+\item \textbf{Tag$\rightarrow$Reader:} Load modulation (reflection vs absorption)
+\item \textbf{Frequencies:} 125~kHz (LF), 13.56~MHz (HF), 900~MHz (UHF)
+\item \textbf{Data rate:} 40--640~kbps (EPC Gen2 standard)
+\item \textbf{Range:} 10~cm (HF) to 10~m (UHF)
+\end{itemize}
+
+\textbf{Advantage:} Non-coherent detection enables extremely simple tag circuitry with minimal power consumption.
+
+\subsection{Infrared Remote Controls}
+
+Consumer electronics use OOK at 38~kHz carrier frequency:
+
+\begin{itemize}
+\item \textbf{Protocol:} Manchester-encoded OOK
+\item \textbf{Range:} 5--10 meters (line-of-sight)
+\item \textbf{Power:} $<$10~mW (eye safety)
+\item \textbf{Receiver:} Simple envelope detector with bandpass filter
+\end{itemize}
+
+\subsection{Visible Light Communication (VLC)}
+
+LED-based VLC systems use intensity modulation (OOK or M-ASK):
+
+\begin{itemize}
+\item \textbf{Data rate:} 100+~Mbps with OOK
+\item \textbf{Dimming support:} Adjust average amplitude (DC bias)
+\item \textbf{Applications:} Indoor positioning, Li-Fi broadband
+\item \textbf{Advantage:} Simultaneous illumination and data transmission
+\end{itemize}
+
+
+
+\section{Implementation Challenges}
+
+\subsection{Carrier Recovery}
+
+Coherent ASK detection requires precise carrier synchronization:
+
+\textbf{Common techniques:}
+\begin{itemize}
+\item \textbf{Squaring loop:} Square signal to remove modulation, extract carrier at $2f_c$, then divide by 2
+\item \textbf{Costas loop:} PLL-based feedback with I/Q arms for phase tracking
+\item \textbf{Pilot tone:} Transmit unmodulated carrier (wastes 10--20\% power)
+\end{itemize}
+
+For binary ASK (OOK), non-coherent envelope detection avoids this complexity at the cost of 3~dB performance penalty.
+
+\subsection{Automatic Gain Control (AGC)}
+
+\begin{warningbox}
+Received signal amplitude varies due to path loss, fading, and shadowing. For M-ASK with $M > 2$, \textbf{precise AGC is critical} to maintain threshold accuracy. AGC errors directly translate to increased BER.
+\end{warningbox}
+
+The AGC adjusts receiver gain to maintain constant signal level:
+\begin{equation}
+\text{Gain}(t) = \frac{A_{\text{target}}}{\hat{A}_{\text{received}}(t)}
+\end{equation}
+
+\subsection{Nonlinear Distortion}
+
+Power amplifier nonlinearity compresses high amplitude levels, causing:
+\begin{itemize}
+\item Unequal spacing between constellation points
+\item Increased symbol error rate
+\item Spectral regrowth
+\end{itemize}
+
+\textbf{Mitigation strategies:}
+\begin{itemize}
+\item \textbf{Backoff:} Operate PA below saturation (reduces efficiency)
+\item \textbf{Predistortion:} Digital or analog linearization techniques
+\item \textbf{Alternative:} Use constant-envelope modulation (PSK, FSK)
+\end{itemize}
+
+\subsection{Fading Channels}
+
+ASK is particularly vulnerable to fading because amplitude directly carries information:
+\begin{equation}
+r(t) = h(t) \cdot s(t) + n(t)
+\end{equation}
+
+where fading coefficient $|h(t)|$ multiplies the signal amplitude, potentially causing severe performance degradation.
+
+\textbf{Mitigation:}
+\begin{itemize}
+\item Channel equalization to compensate for fading
+\item OFDM to convert frequency-selective fading to flat fading per subcarrier
+\item Consider phase-based modulation (PSK) for fading channels
+\end{itemize}
+
+\section{Worked Example: Fiber Optic Link}
+
+\textbf{Scenario:} 10~Gbps OOK fiber optic link with direct detection
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Data rate & $R_b = 10$~Gbps \\
+Laser power & $P_t = 0$~dBm = 1~mW \\
+Fiber loss & 0.2~dB/km \\
+Link distance & $L = 10$~km \\
+Receiver sensitivity & $-28$~dBm (for BER $= 10^{-12}$) \\
+Connector losses & 1~dB (2 connectors $\times$ 0.5~dB) \\
+\end{tabular}
+
+\subsection*{Step 1: Total Link Loss}
+
+\begin{equation}
+L_{\text{total}} = L_{\text{fiber}} + L_{\text{connectors}} = (0.2 \times 10) + 1 = 3~\text{dB}
+\end{equation}
+
+\subsection*{Step 2: Received Power}
+
+\begin{equation}
+P_r = P_t - L_{\text{total}} = 0 - 3 = -3~\text{dBm}
+\end{equation}
+
+\subsection*{Step 3: Link Margin}
+
+\begin{equation}
+\text{Margin} = P_r - P_{\text{sensitivity}} = -3 - (-28) = 25~\text{dB}
+\end{equation}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
+\textbf{Result: Link closes with 25~dB margin}
+
+This comfortable margin accommodates:
+\begin{itemize}
+\item Fiber aging and macrobending losses ($\sim$5~dB)
+\item Temperature variations ($\sim$2--3~dB)
+\item Component degradation over lifetime
+\item Safety factor for repairs/splices
+\end{itemize}
+
+\textbf{Conclusion:} Link is highly viable for 10~Gbps OOK transmission over 10~km with excellent reliability margin.
+\end{calloutbox}
+
+\section{Advantages and Disadvantages}
+
+\subsection*{Advantages}
+
+\begin{enumerate}
+\item \textbf{Simple implementation:} Single mixer, no quadrature components
+\item \textbf{Non-coherent detection possible:} Envelope detector for OOK (no carrier recovery)
+\item \textbf{Low cost:} Minimal hardware complexity suitable for RFID and IR remotes
+\item \textbf{Ideal for optical systems:} Directly compatible with intensity modulation (lasers/LEDs)
+\end{enumerate}
+
+\subsection*{Disadvantages}
+
+\begin{enumerate}
+\item \textbf{Poor power efficiency:} 1D constellation gives worse BER than 2D schemes (QAM, PSK)
+\item \textbf{Highly susceptible to fading:} Amplitude fluctuations directly corrupt information
+\item \textbf{Nonlinear amplifier sensitivity:} High PAPR causes distortion in power amplifiers
+\item \textbf{Requires accurate AGC:} Critical for $M > 2$ to maintain threshold accuracy
+\item \textbf{Inferior to alternatives:} For $M > 2$ in RF, QAM/PSK strongly preferred
+\end{enumerate}
+
+\section{Summary}
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Bits per symbol & $\log_2(M)$ \\
+Constellation dimensionality & 1D (I-axis only) \\
+Spectral efficiency (2-ASK) & $\sim$0.7--1.0~bps/Hz \\
+Spectral efficiency (M-ASK) & $\sim\log_2(M)/(1+\alpha)$~bps/Hz \\
+BER @ 10~dB $E_b/N_0$ (2-ASK) & $3.9 \times 10^{-6}$ \\
+BER @ 10~dB $E_b/N_0$ (4-ASK) & $1.8 \times 10^{-3}$ \\
+Carrier recovery & Required for coherent (not for OOK envelope) \\
+Implementation complexity & Low (simple) \\
+Best application & Optical communications, RFID \\
+Typical uses & Fiber optics, RFID, IR remotes, VLC \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter 5:} On-Off Keying (OOK)---binary ASK implementation details
+\item \textbf{Chapter 6:} Frequency-Shift Keying (FSK)---alternative binary modulation
+\item \textbf{Chapter 7:} Binary Phase-Shift Keying (BPSK)---phase-based alternative
+\item \textbf{Chapter 8:} Quadrature Phase-Shift Keying (QPSK)---2D phase modulation
+\item \textbf{Chapter 9:} Quadrature Amplitude Modulation (QAM)---superior 2D scheme
+\item \textbf{Chapter 12:} Constellation Diagrams---signal space visualization
+\item \textbf{Chapter 13:} IQ Representation---complex baseband analysis
+\item \textbf{Chapter 18:} Bit Error Rate Analysis---performance metrics and theory
+\item \textbf{Chapter 25:} Carrier Recovery Techniques---synchronization methods
+\end{itemize}
