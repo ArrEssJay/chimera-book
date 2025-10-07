@@ -212,12 +212,11 @@ Frequency & \(k\) & \(\alpha\) & Attenuation @ 25 mm/hr rain \\
 }
 
 \textbf{Note}: Vertical polarization has slightly different coefficients
-(typically \textasciitilde10-20\% more attenuation)
+(typically $\sim$10-20\% more attenuation)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Rain Rate
-Classifications}\label{rain-rate-classifications}
+
+\subsubsection{Rain Rate Classifications}
 
 \textbf{ITU rain zones} (global climate regions):
 
@@ -255,10 +254,7 @@ H & Intense tropical & 95 mm/hr & Extreme storms \\
 \textbf{Design criterion}: Typically design for 99.9\% availability
 (0.01\% outage time) - Temperate: 12 mm/hr - Tropical: 42-63 mm/hr
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Link Budget Impact: Satellite
-Examples}\label{link-budget-impact-satellite-examples}
 
 \section{Performance Analysis}
 
@@ -431,8 +427,7 @@ where:
 \item Dense fog: $M = 0.5$~g/m$^3$
 \end{itemize}
 
-\subsubsection{Coefficients by
-Frequency}\label{coefficients-by-frequency-1}
+\subsubsection{Coefficients by Frequency}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
@@ -516,7 +511,7 @@ Condition & Attenuation \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Clear air & \textasciitilde0.1 dB \\
+Clear air & $\sim$0.1 dB \\
 Dense fog (0.5 g/m\textbackslash textsuperscript\{3\}) & 0.10 dB \\
 Light rain (5 mm/hr) & 3.7 dB \\
 Moderate rain (12 mm/hr) & 7.1 dB \\
@@ -526,7 +521,7 @@ Heavy rain (25 mm/hr) & 12.5 dB \\
 
 \textbf{Rain dominates} at microwave/mmWave frequencies.
 
-\textbf{Fog becomes important} at THz (\textgreater{} 100 GHz):
+\textbf{Fog becomes important} at THz ($>$ 100 GHz):
 
 \textbf{At 300 GHz (THz), 100 m path}:
 
@@ -538,13 +533,13 @@ Condition & Attenuation \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Clear air & \textasciitilde5 dB (water vapor) \\
+Clear air & $\sim$5 dB (water vapor) \\
 Dense fog & 0.75 dB \\
 Light rain (5 mm/hr) & \textbf{300+ dB} (complete blockage) \\
 \end{longtable}
 }
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 \section{Snow \& Ice Attenuation}
 
@@ -569,7 +564,7 @@ where:
 
 \textbf{Practical implication:} Snow is \textbf{far less problematic} than rain for RF links.
 
-\subsection{Hail Attenuation}\label{hail-attenuation}
+\subsection{Hail Attenuation}
 
 \textbf{Hailstones}: Large (5-50 mm), but mostly ice (low loss tangent)
 
@@ -582,13 +577,11 @@ water content}
 \textbf{Concern}: \textbf{Depolarization} (hailstones tumble, scatter
 energy to cross-pol)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Frequency-Specific
-Considerations}\label{frequency-specific-considerations}
 
-\subsubsection{Bands Most Affected by
-Rain}\label{bands-most-affected-by-rain}
+\subsection{Frequency-Specific Considerations}
+
+\subsubsection{Bands Most Affected by Rain}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
@@ -630,11 +623,11 @@ fade)
 \textbf{Ka-band challenge}: High data rates, but needs ACM and large
 margins
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Mitigation Techniques}\label{mitigation-techniques}
 
-\subsubsection{1. Link Margin}\label{link-margin}
+\subsection{Mitigation Techniques}
+
+\subsubsection{1. Link Margin}
 
 \textbf{Add extra dB to link budget} for rain:
 
@@ -645,15 +638,14 @@ margins
 \item
   Tropical climate, Ka-band: \textbf{+8-15 dB}
 \item
-  mmWave terrestrial (\textless{} 1 km): \textbf{+2-3 dB}
+  mmWave terrestrial ($<$ 1 km): \textbf{+2-3 dB}
 \end{itemize}
 
 \textbf{Tradeoff}: Higher TX power or larger antennas (more expensive)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{2. Adaptive Coding \& Modulation
-(ACM)}\label{adaptive-coding-modulation-acm}
+
+\subsubsection{2. Adaptive Coding \& Modulation (ACM)}
 
 \textbf{Dynamically adjust modulation} based on link quality:
 
@@ -672,14 +664,14 @@ of outage)
 
 \textbf{Used in}: DVB-S2, 5G NR, satellite modems
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{3. Site Diversity}\label{site-diversity}
+
+\subsubsection{3. Site Diversity}
 
 \textbf{Multiple ground stations} separated by 5-20 km:
 
 \textbf{Principle}: Rain cells are \textbf{localized}
-(\textasciitilde5-10 km diameter) - Probability both sites in heavy rain
+($\sim$5-10 km diameter) - Probability both sites in heavy rain
 is low - Switch to non-rainy site
 
 \textbf{Diversity gain}: 5-10 dB improvement in availability
@@ -687,9 +679,9 @@ is low - Switch to non-rainy site
 \textbf{Example}: Satellite gateways often have 2-3 sites for 99.99\%
 uptime
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{4. Frequency Diversity}\label{frequency-diversity}
+
+\subsubsection{4. Frequency Diversity}
 
 \textbf{Backup link at lower frequency}:
 
@@ -703,10 +695,9 @@ uptime
 
 \textbf{Switchover}: Automatic when Ka-band SNR drops
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{5. Uplink Power Control
-(UPC)}\label{uplink-power-control-upc}
+
+\subsubsection{5. Uplink Power Control (UPC)}
 
 \textbf{Increase TX power during rain} to compensate for attenuation:
 
@@ -715,32 +706,31 @@ uptime
 \item
   Monitor beacon signal from satellite
 \item
-  Detect fade, boost uplink power (up to \textasciitilde10 dB)
+  Detect fade, boost uplink power (up to $\sim$10 dB)
 \item
   Avoid saturating satellite transponder
 \end{itemize}
 
-\textbf{Limitation}: Power amplifier headroom (can\textquotesingle t
-boost infinitely)
+\textbf{Limitation}: Power amplifier headroom (can't boost infinitely)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{6. Orbit Selection}\label{orbit-selection}
+
+\subsubsection{6. Orbit Selection}
 
 \textbf{Low Earth Orbit (LEO)} satellites have shorter slant paths:
 
 \begin{itemize}
 \tightlist
 \item
-  GEO: \textasciitilde40,000 km, slant path through rain
-  \textasciitilde6 km @ 30\$\^{}\textbackslash circ\$ elevation
+  GEO: $\sim$40,000 km, slant path through rain
+  $\sim$6 km @ 30\$\^{}\textbackslash circ\$ elevation
 \item
-  LEO: \textasciitilde550 km, slant path \textasciitilde2 km @
+  LEO: $\sim$550 km, slant path $\sim$2 km @
   30\$\^{}\textbackslash circ\$ elevation
 \end{itemize}
 
 \textbf{Rain attenuation}:
-\textbf{\textasciitilde3\$\textbackslash times\$ less for LEO} (shorter
+\textbf{$\sim$3\$\textbackslash times\$ less for LEO} (shorter
 path)
 
 \textbf{Starlink/OneWeb advantage}: Better rain performance than GEO
@@ -932,8 +922,7 @@ where:
 
 \textbf{Real-time fade monitoring} for UPC systems.
 
-\subsubsection{Weather Radar
-Integration}\label{weather-radar-integration}
+\subsubsection{Weather Radar Integration}
 
 \textbf{Use ground-based weather radar} to predict rain attenuation:
 
