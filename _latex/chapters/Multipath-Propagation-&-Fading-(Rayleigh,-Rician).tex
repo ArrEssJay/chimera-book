@@ -795,136 +795,73 @@ FEC with interleaving protects against error bursts. Interleaving spreads coded 
 
 Multipath fading is the dominant channel impairment in numerous wireless systems:
 
-\subsection{Practical Examples}\label{practical-examples}
+\subsection{Cellular Networks}
 
-\subsubsection{Example 1: Urban Cellular (900
-MHz)}\label{example-1-urban-cellular-900-mhz}
+\textbf{GSM (900~MHz):} Dense urban environments experience severe Rayleigh fading. Equalizers combat ISI from multipath delay spread (1--5~$\mu$s). Frequency hopping provides frequency diversity across 200~kHz channels.
 
-\textbf{Environment}: Dense urban, NLOS
+\textbf{LTE (1.8--2.6~GHz):} OFDM transforms frequency-selective fading into flat fading per subcarrier. MIMO exploits spatial diversity with multiple antennas. Turbo codes provide robust FEC against fading-induced error bursts.
 
-\textbf{Parameters}: - Delay spread: \(\tau_{\text{rms}} = 3\ \mu\)s -
-Doppler: \(f_d = 50\) Hz (30 km/h) - Fading: Rayleigh
+\textbf{5G NR (sub-6~GHz, mmWave):} Massive MIMO (64--256 antennas) creates highly directional beams, increasing K-factor and reducing multipath severity. Beamforming tracks users to maintain strong LOS component.
 
-\textbf{Coherence bandwidth}:
+\subsection{WiFi (802.11)}
 
-\[
-B_c = \frac{1}{5 \times 3 \times 10^{-6}} = 67\ \text{kHz}
-\]
+Indoor environments exhibit Rayleigh fading due to reflections from walls, furniture, and people. 802.11n/ac/ax use OFDM (20--160~MHz channels) and MIMO to combat multipath. Channel coherence time ($\sim$10--100~ms for stationary users) enables effective channel estimation.
 
-\textbf{Implication}: GSM channel (200 kHz) experiences
-frequency-selective fading \$\textbackslash rightarrow\$ Equalizer
-needed
+\subsection{Satellite Communications}
 
-\textbf{Coherence time}:
+\textbf{Mobile satellite (L-band, 1.5~GHz):} Handheld terminals experience Rician fading (K = 5--10~dB) with weak LOS plus ground reflections. Systems use low-rate coding and interleaving to handle fading.
 
-\[
-T_c = \frac{0.423}{100} = 4.23\ \text{ms}
-\]
+\textbf{Fixed satellite (Ku/Ka-band):} Clear LOS yields K $>$ 15~dB, approaching AWGN. Rain fade dominates over multipath in these links.
 
-\textbf{Implication}: Channel constant over \textasciitilde18 GSM
-symbols (0.577 ms/symbol) \$\textbackslash rightarrow\$ Slow fading
+\subsection{IoT and M2M}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+LoRaWAN, NB-IoT, and Sigfox operate in sub-GHz bands with severe Rayleigh fading in urban deployments. Narrow bandwidths ($<$ 125~kHz) experience flat fading. Repetition and strong FEC ensure reliability despite deep fades.
 
-\subsubsection{Example 2: Suburban LTE (2.6
-GHz)}\label{example-2-suburban-lte-2.6-ghz}
+\section{Summary}
 
-\textbf{Environment}: Suburban, partial LOS
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\textbf{Parameter} & \textbf{Rayleigh} & \textbf{Rician (K=6~dB)} & \textbf{AWGN} \\
+\midrule
+LOS component & None & Dominant & Pure LOS \\
+Fade depth (10\% time) & $-10$~dB & $-5$~dB & 0~dB \\
+BER penalty @ 10~dB SNR & $1000\times$ & $10\times$ & $1\times$ (baseline) \\
+Mitigation & Diversity, FEC & Moderate FEC & Minimal FEC \\
+Typical environment & Dense urban, indoor & Suburban, elevated & Free space, satellite \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Parameters}: - Delay spread: \(\tau_{\text{rms}} = 0.5\ \mu\)s -
-Doppler: \(f_d = 240\) Hz (100 km/h) - Fading: Rician K=5 dB
-
-\textbf{Coherence bandwidth}:
-
-\[
-B_c = \frac{1}{5 \times 0.5 \times 10^{-6}} = 400\ \text{kHz}
-\]
-
-\textbf{Implication}: LTE RB (180 kHz) \textless{} \(B_c\)
-\$\textbackslash rightarrow\$ Mostly flat fading per RB
-
-\textbf{Coherence time}:
-
-\[
-T_c = \frac{0.423}{480} = 0.88\ \text{ms}
-\]
-
-\textbf{Implication}: Channel changes over \textasciitilde12 OFDM
-symbols (71 \$\textbackslash mu\$s/symbol) \$\textbackslash rightarrow\$
-Moderate fading, pilot-aided tracking
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Summary Table}\label{summary-table}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2273}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3864}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1364}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Parameter
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Rayleigh
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Rician (K=6 dB)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-AWGN
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{LOS component} & None & Dominant & Pure LOS \\
-\textbf{Fade depth (10\% time)} & -10 dB & -5 dB & 0 dB \\
-\textbf{BER penalty @ 10 dB SNR} & 1000\$\textbackslash times\$ &
-10\$\textbackslash times\$ & 1\$\textbackslash times\$ (baseline) \\
-\textbf{Mitigation} & Diversity, FEC & Moderate FEC & Minimal FEC \\
-\textbf{Typical environment} & Dense urban, indoor & Suburban, elevated
-& Free space, satellite \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Related Topics}\label{related-topics}
-
+\textbf{Key insights:}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}Propagation-Modes-(Ground-Wave,-Sky-Wave,-Line-of-Sight){]}{]}}:
-  LOS vs NLOS propagation
-\item
-  \textbf{{[}{[}Atmospheric-Effects-(Ionospheric,-Tropospheric){]}{]}}:
-  Clear-air effects (different from multipath)
-\item
-  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Fading reduces
-  instantaneous SNR
-\item
-  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Fading degrades BER
-  significantly
-\item
-  \textbf{{[}{[}QPSK-Modulation{]}{]}} /
-  \textbf{{[}{[}LDPC-Codes{]}{]}}: Require fade mitigation
-\item
-  \textbf{{[}{[}OFDM-\&-Multicarrier-Modulation{]}{]}}: Combats
-  frequency-selective fading
-\item
-  \textbf{{[}{[}Spread-Spectrum-(DSSS-FHSS){]}{]}}: Provides frequency
-  diversity
+\item \textbf{Multipath fading is the dominant impairment} in mobile/urban wireless systems
+\item Rayleigh fading (no LOS) causes severe performance degradation (1000× BER penalty)
+\item Rician fading (with LOS) is moderate, performance interpolates between Rayleigh and AWGN
+\item Coherence bandwidth $B_c$ and coherence time $T_c$ determine whether fading is frequency-selective or flat, fast or slow
+\item Effective mitigation requires: diversity (spatial/frequency/time), OFDM, equalization, and robust FEC
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Further Reading}
 
-\textbf{Key takeaway}: \textbf{Multipath fading is the dominant
-impairment} in mobile/urban wireless. Rayleigh fading (no LOS) is
-severe, Rician fading (with LOS) is moderate. Mitigation requires
-diversity, equalization, OFDM, and robust FEC. Understanding \(B_c\) and
-\(T_c\) is critical for system design.
+\textbf{Related chapters in this book:}
+\begin{itemize}
+\item Chapter~\ref{ch:propagation}: Propagation modes (ground wave, sky wave, line-of-sight)
+\item Chapter~\ref{ch:atmospheric}: Atmospheric effects (ionospheric, tropospheric)
+\item Chapter~\ref{ch:snr}: Signal-to-noise ratio fundamentals
+\item Chapter~\ref{ch:ber}: Bit error rate analysis
+\item Chapter~\ref{ch:equalization}: Channel equalization techniques
+\item Chapter~\ref{ch:ofdm}: OFDM and multicarrier modulation
+\item Chapter~\ref{ch:spread}: Spread spectrum (DSSS, FHSS)
+\item Chapter~\ref{ch:fec}: Forward error correction
+\item Chapter~\ref{ch:ldpc}: LDPC codes
+\item Chapter~\ref{ch:mimo}: MIMO and spatial multiplexing
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+\textbf{Classic textbooks:}
+\begin{itemize}
+\item Proakis \& Salehi, \textit{Digital Communications} (5th ed.), Chapter 14: Multipath Fading Channels
+\item Goldsmith, \textit{Wireless Communications}, Chapter 3: Statistical Multipath Channel Models
+\item Rappaport, \textit{Wireless Communications: Principles and Practice}, Chapter 5: Mobile Radio Propagation
+\item Tse \& Viswanath, \textit{Fundamentals of Wireless Communication}, Chapter 2: The Wireless Channel
+\end{itemize}
