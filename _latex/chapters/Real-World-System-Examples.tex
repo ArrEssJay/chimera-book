@@ -1446,7 +1446,119 @@ limited)
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Comparison Summary}\label{comparison-summary}
+\section{System Comparison and Trade-offs}
+\label{sec:comparison}
+
+\subsection{Performance Trade-off Analysis}
+
+Real-world systems optimize for different objectives. The fundamental trade-offs are visualized below:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Data Rate vs Range plot
+\begin{scope}
+\node[above] at (5,6) {\sffamily\bfseries\large Data Rate vs Range Trade-off};
+
+% Axes
+\draw[->] (0,0) -- (10,0) node[right,font=\small] {Range (m, log scale)};
+\draw[->] (0,0) -- (0,5) node[above,font=\small] {Data Rate (Mbps, log scale)};
+
+% Logarithmic tick marks and labels
+\foreach \x/\label in {1/10, 3/100, 5/1k, 7/10k, 9/100k} {
+  \draw (\x,0.1) -- (\x,-0.1) node[below,font=\scriptsize] {\label};
+}
+\foreach \y/\label in {0.5/0.1, 1.5/1, 2.5/10, 3.5/100, 4.5/1000} {
+  \draw (0.1,\y) -- (-0.1,\y) node[left,font=\scriptsize] {\label};
+}
+
+% Plot systems
+\node[circle,fill=blue,inner sep=2pt,label={right:\scriptsize\textbf{WiFi}}] at (1.5,3.8) {};
+\node[circle,fill=red,inner sep=2pt,label={right:\scriptsize\textbf{LTE}}] at (4.5,3.0) {};
+\node[circle,fill=purple,inner sep=2pt,label={above:\scriptsize\textbf{DVB-S2X}}] at (8.5,3.2) {};
+\node[circle,fill=orange,inner sep=2pt,label={above:\scriptsize\textbf{Bluetooth}}] at (2.5,1.5) {};
+\node[circle,fill=green!50!black,inner sep=2pt,label={below:\scriptsize\textbf{LoRaWAN}}] at (6.5,0.2) {};
+\node[circle,fill=black,inner sep=2pt,label={left:\scriptsize\textbf{GPS}}] at (9.5,-0.5) {};
+
+% Inverse relationship line
+\draw[dashed,gray,thick] (0.5,4.5) -- (9.5,0.5);
+\node[rotate=-23,gray,font=\scriptsize] at (5,2.5) {Inverse relationship};
+
+\end{scope}
+
+% Power vs Range plot
+\begin{scope}[shift={(0,-8)}]
+\node[above] at (5,6) {\sffamily\bfseries\large Power Consumption vs Range};
+
+% Axes
+\draw[->] (0,0) -- (10,0) node[right,font=\small] {Range (m, log scale)};
+\draw[->] (0,0) -- (0,5) node[above,font=\small] {TX Power (mW, log scale)};
+
+% Tick marks
+\foreach \x/\label in {1/10, 3/100, 5/1k, 7/10k, 9/100k} {
+  \draw (\x,0.1) -- (\x,-0.1) node[below,font=\scriptsize] {\label};
+}
+\foreach \y/\label in {0/1, 1/10, 2/100, 3/1k, 4/10k, 5/100k} {
+  \draw (0.1,\y) -- (-0.1,\y) node[left,font=\scriptsize] {\label};
+}
+
+% Plot systems
+\node[circle,fill=blue,inner sep=2pt,label={right:\scriptsize WiFi (100~mW)}] at (1.5,2.0) {};
+\node[circle,fill=red,inner sep=2pt,label={right:\scriptsize LTE (200~mW)}] at (4.5,2.3) {};
+\node[circle,fill=purple,inner sep=2pt,label={above:\scriptsize DVB-S2X (100~W)}] at (8.5,5.0) {};
+\node[circle,fill=orange,inner sep=2pt,label={above:\scriptsize Bluetooth (10~mW)}] at (2.5,1.0) {};
+\node[circle,fill=green!50!black,inner sep=2pt,label={right:\scriptsize LoRaWAN (25~mW)}] at (6.5,1.4) {};
+\node[circle,fill=black,inner sep=2pt,label={left:\scriptsize GPS (50~W sat)}] at (9.5,4.7) {};
+
+% Trend line
+\draw[dashed,gray,thick] (0.5,0.5) -- (9.5,5.0);
+\node[rotate=26,gray,font=\scriptsize] at (5,2.8) {Range $\propto$ $\sqrt{\text{Power}}$};
+
+\end{scope}
+
+% Latency comparison
+\begin{scope}[shift={(12,0)}]
+\node[above] at (2.5,6) {\sffamily\bfseries\large Latency};
+
+\draw[thick] (0,0) rectangle (5,5.5);
+
+% Bars
+\fill[blue!60] (0.5,0) rectangle (1.3,0.5);
+\node[right,font=\scriptsize] at (1.4,0.25) {WiFi: 1--5~ms};
+
+\fill[red!60] (0.5,1.0) rectangle (1.8,1.5);
+\node[right,font=\scriptsize] at (1.9,1.25) {LTE: 10~ms};
+
+\fill[orange!60] (0.5,2.0) rectangle (2.0,2.5);
+\node[right,font=\scriptsize] at (2.1,2.25) {Bluetooth: 7--40~ms};
+
+\fill[green!40!black] (0.5,3.0) rectangle (4.5,3.5);
+\node[right,font=\scriptsize] at (4.6,3.25) {LoRa: 1--10~s};
+
+\fill[purple!60] (0.5,4.0) rectangle (4.8,4.5);
+\node[right,font=\scriptsize] at (4.9,4.25) {DVB-S2X: 600~ms};
+
+\node[font=\scriptsize] at (2.5,5.2) {(GPS: N/A, broadcast only)};
+
+% Scale annotation
+\draw[<->,thick] (0.2,0) -- (0.2,5) node[midway,left,font=\scriptsize,rotate=90] {Increasing latency};
+
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{keyconcept}
+\textbf{Fundamental Trade-offs:}
+\begin{enumerate}
+\item \textbf{Shannon Limit:} Data rate inversely proportional to range (for fixed power and frequency)
+\item \textbf{Power-Range Relationship:} Doubling range requires 4$\times$ power (free-space, 2D)
+\item \textbf{Latency vs Power:} Long-range systems (LoRa, satellite) sacrifice latency for energy efficiency
+\item \textbf{Bandwidth vs Coexistence:} Wider bandwidth = higher rate but harder to avoid interference
+\end{enumerate}
+
+\textbf{No system optimizes all parameters simultaneously.} System design chooses the appropriate balance for the application.
+\end{keyconcept}
+
+\subsection{Quantitative Comparison Table}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
@@ -1497,27 +1609,130 @@ Hamming & 1-10 s & 25 mW \\
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Key Takeaways by System}\label{key-takeaways-by-system}
+\subsection{System Characteristics Summary}
 
-\textbf{WiFi}: High throughput, OFDM handles multipath, MIMO for
-capacity, short range
+\begin{itemize}
+\item \textbf{WiFi 802.11n:}
+  \begin{itemize}
+  \item High throughput (65--600~Mbps) over short range (10--100~m)
+  \item OFDM with 52 subcarriers handles indoor multipath
+  \item MIMO spatial multiplexing for capacity
+  \item CSMA/CA contention-based access
+  \item \textbf{Use case:} Home/office internet access, video streaming
+  \end{itemize}
 
-\textbf{LTE}: Cellular coverage, adaptive MCS, OFDMA multi-user,
-handover at 300 km/h
+\item \textbf{LTE (4G):}
+  \begin{itemize}
+  \item Wide-area coverage (1--15~km cells)
+  \item Adaptive MCS per user (QPSK to 64-QAM)
+  \item Centralized OFDMA scheduling eliminates collisions
+  \item Seamless handover at 350~km/h
+  \item \textbf{Use case:} Mobile broadband, voice, video calls
+  \end{itemize}
 
-\textbf{DVB-S2X}: Satellite broadcast, ACM for rain fade, long latency
-(GEO), high EIRP
+\item \textbf{DVB-S2X:}
+  \begin{itemize}
+  \item Geostationary satellite broadcast (36,000~km)
+  \item Adaptive Coding \& Modulation (ACM) for rain fade
+  \item Very high EIRP (85~dBW) from satellite
+  \item 600~ms round-trip latency (GEO)
+  \item \textbf{Use case:} Direct-to-home TV, rural internet
+  \end{itemize}
 
-\textbf{GPS}: Below noise floor (-143 dBm), spread spectrum (43 dB
-gain), 5-10 m accuracy
+\item \textbf{GPS L1 C/A:}
+  \begin{itemize}
+  \item Sub-noise signal acquisition ($-143$~dBm, 35~dB below noise)
+  \item 43~dB processing gain from spread spectrum (1.023~MHz / 50~bps)
+  \item 5--10~m positioning accuracy (standalone)
+  \item Global coverage (24+ satellites visible)
+  \item \textbf{Use case:} Navigation, timing reference, surveying
+  \end{itemize}
 
-\textbf{Bluetooth}: Low power, AFH avoids WiFi, LE Coded for range, 7.5
-ms latency
+\item \textbf{Bluetooth 5.0:}
+  \begin{itemize}
+  \item Ultra-low power (10~mW typical, $<1~\mu$W sleep)
+  \item Adaptive Frequency Hopping (AFH) avoids WiFi
+  \item LE Coded mode extends range to 400~m
+  \item 7.5--40~ms latency for real-time audio
+  \item \textbf{Use case:} Wireless audio, wearables, sensors
+  \end{itemize}
 
-\textbf{LoRaWAN}: Ultra-long range (15+ km), sub-noise detection (CSS),
-years battery life
+\item \textbf{LoRaWAN:}
+  \begin{itemize}
+  \item Ultra-long range (2--50~km) with low power
+  \item Chirp Spread Spectrum (CSS) enables sub-noise detection
+  \item Adaptive Data Rate (ADR): SF7 to SF12
+  \item 5--15 year battery life on coin cells
+  \item \textbf{Use case:} IoT sensors, smart meters, agriculture
+  \end{itemize}
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Applications and Use Cases}
+\label{sec:applications}
+
+\subsection{System Selection Criteria}
+
+Choosing the appropriate wireless system depends on application requirements:
+
+\begin{center}
+\begin{tikzpicture}[
+  decision/.style={diamond, draw, aspect=2, font=\sffamily\scriptsize, align=center},
+  system/.style={rectangle, draw, rounded corners, fill=blue!20, font=\sffamily\scriptsize, align=center},
+  node distance=1.8cm
+]
+
+\node[decision] (start) {Data rate\\requirement?};
+
+\node[decision, below left of=start, node distance=3cm] (highrate) {Range?};
+\node[decision, below right of=start, node distance=3cm] (lowrate) {Battery\\life?};
+
+\node[system, below left of=highrate, node distance=2.5cm] (wifi) {WiFi\\(indoor\\high speed)};
+\node[system, below right of=highrate, node distance=2.5cm] (lte) {LTE\\(mobile\\broadband)};
+
+\node[system, below left of=lowrate, node distance=2.5cm] (bt) {Bluetooth\\(wearables)};
+\node[system, below right of=lowrate, node distance=2.5cm] (lora) {LoRaWAN\\(sensors)};
+
+\draw[->] (start) -- node[left,font=\scriptsize] {>10~Mbps} (highrate);
+\draw[->] (start) -- node[right,font=\scriptsize] {<1~Mbps} (lowrate);
+
+\draw[->] (highrate) -- node[left,font=\scriptsize] {<100~m} (wifi);
+\draw[->] (highrate) -- node[right,font=\scriptsize] {>1~km} (lte);
+
+\draw[->] (lowrate) -- node[left,font=\scriptsize] {Hours} (bt);
+\draw[->] (lowrate) -- node[right,font=\scriptsize] {Years} (lora);
+
+\end{tikzpicture}
+\end{center}
+
+\subsection{Practical Implementation Examples}
+
+\subsubsection*{Smart Home}
+\begin{itemize}
+\item \textbf{WiFi:} Security cameras (2~Mbps per stream), smart TV (25~Mbps 4K), laptops
+\item \textbf{Bluetooth:} Wireless speakers, headphones, smart door locks
+\item \textbf{LoRaWAN:} Outdoor sensors (temperature, moisture) reporting hourly
+\end{itemize}
+
+\subsubsection*{Connected Vehicle}
+\begin{itemize}
+\item \textbf{LTE:} Infotainment streaming, over-the-air updates, emergency calls
+\item \textbf{GPS:} Navigation, fleet tracking, geo-fencing
+\item \textbf{Bluetooth:} Phone integration, tire pressure sensors
+\end{itemize}
+
+\subsubsection*{Industrial IoT}
+\begin{itemize}
+\item \textbf{LoRaWAN:} Remote monitoring (pipelines, storage tanks) over 10--20~km
+\item \textbf{LTE-M:} Asset tracking with mobility support
+\item \textbf{WiFi:} Factory automation (deterministic low-latency)
+\end{itemize}
+
+\subsubsection*{Agriculture (Precision Farming)}
+\begin{itemize}
+\item \textbf{LoRaWAN:} Soil moisture sensors across 100+ hectare fields
+\item \textbf{GPS:} Tractor auto-steering (RTK for cm-level accuracy)
+\item \textbf{LTE:} Remote camera monitoring, drone control
+\end{itemize}
 
 \subsection{Related Topics}\label{related-topics}
 
@@ -1604,21 +1819,93 @@ Standards}\label{external-resources-standards}
   textbooks, and resources
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Summary}
 
-\textbf{Key takeaway}: \textbf{Real systems integrate all concepts:
-modulation (BPSK to 256-QAM), coding (convolutional to LDPC), multiple
-access (CSMA, OFDMA, TDMA), sync (preambles, pilots), equalization
-(MMSE, DFE), and link budgets.} WiFi achieves 600 Mbps via MIMO + 64-QAM
-OFDM over 100 m. LTE provides 100 Mbps cellular over 15 km with ACM.
-DVB-S2X delivers 160 Mbps from GEO (36,000 km) using 32APSK. GPS
-operates at -143 dBm (below noise!) via 43 dB spreading gain. Bluetooth
-5 extends to 400 m with FEC (LE Coded). LoRaWAN reaches 50 km rural with
-CSS sub-noise detection. Each system optimizes for different
-constraints: throughput vs range vs power vs latency. Understanding
-these trade-offs is key to system design!
+Real-world communication systems represent the culmination of all fundamental concepts studied throughout this book---modulation, coding, synchronization, equalization, and link budget analysis all working in concert.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Concept} & \textbf{Theory} & \textbf{Real System Example} \\
+\midrule
+Modulation & BPSK, QPSK, QAM & WiFi: 64-QAM per subcarrier \\
+Multiple access & TDMA, FDMA, CDMA & LTE: OFDMA resource blocks \\
+Coding & Convolutional, Turbo, LDPC & DVB-S2X: LDPC + BCH concatenated \\
+Spread spectrum & DSSS, FHSS & GPS: 43~dB processing gain \\
+Equalization & ZF, MMSE, DFE & WiFi: Per-subcarrier MMSE \\
+Link budget & Friis equation, path loss & All: Complete power analysis \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+\textbf{Key Insights:}
+
+\begin{enumerate}
+\item \textbf{Trade-offs are fundamental:} No system optimizes all parameters (data rate, range, power, latency) simultaneously. Each system makes deliberate engineering choices for its use case.
+
+\item \textbf{Adaptive techniques are essential:} Modern systems (LTE, DVB-S2X, LoRaWAN) adapt modulation and coding in real-time based on channel conditions, maximizing throughput while maintaining link reliability.
+
+\item \textbf{Processing gain enables sub-noise operation:} GPS demonstrates that signals 35~dB below the noise floor are recoverable through spread spectrum techniques---a counter-intuitive but mathematically rigorous result.
+
+\item \textbf{Multiple access determines efficiency:} Contention-based WiFi sacrifices efficiency for simplicity, while centralized LTE scheduling eliminates collisions at the cost of infrastructure complexity.
+
+\item \textbf{Bandwidth is precious:} Spectral efficiency (bits/s/Hz) determines how much data can be transmitted in limited spectrum. WiFi achieves $\sim$5~bps/Hz (64-QAM), while GPS uses $\sim$0.025~bps/Hz (DSSS).
+
+\item \textbf{Link budgets close with margin:} All successful systems include 10--20~dB margin for fading, interference, and implementation losses. GPS operates with 8~dB SNR after 43~dB processing gain, providing minimal margin for indoor use.
+\end{enumerate}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Practical System Design Philosophy}
+\textbf{``Perfect is the enemy of good enough.''}
+
+Real systems prioritize:
+\begin{itemize}
+\item \textbf{Robustness} over peak performance (error correction, adaptive modulation)
+\item \textbf{Backward compatibility} over clean-sheet design (802.11 preambles, LTE legacy support)
+\item \textbf{Cost and power} over optimal spectral efficiency (GPS uses no FEC, Bluetooth uses simple GFSK)
+\item \textbf{Regulatory compliance} over technical optimality (power limits, spectral masks, coordination)
+\end{itemize}
+
+Understanding deployed systems reveals the gap between theoretical limits (Shannon capacity) and practical implementations (regulatory, cost, backward compatibility constraints).
+\end{calloutbox}
+
+\textbf{Summary Table:}
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{System} & \textbf{Optimization Goal} & \textbf{Key Technique} & \textbf{Limiting Factor} \\
+\midrule
+WiFi & Throughput & MIMO + OFDM & Range (10--100~m) \\
+LTE & Coverage + mobility & Adaptive MCS & Cell capacity \\
+DVB-S2X & Capacity over satellite & ACM + LDPC & Latency (600~ms) \\
+GPS & Global positioning & DSSS 43~dB gain & Accuracy (5--10~m) \\
+Bluetooth & Power efficiency & Frequency hopping & Data rate (<2~Mbps) \\
+LoRaWAN & Range on battery & CSS sub-noise & Latency (1--10~s) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Further Reading}
+
+\textbf{Related chapters for deeper understanding:}
+
+\begin{itemize}
+\item \textbf{Chapter 15:} OFDM \& Multicarrier Modulation---mathematical foundations of WiFi/LTE PHY
+\item \textbf{Chapter 18:} Adaptive Modulation \& Coding (AMC)---link adaptation algorithms
+\item \textbf{Chapter 22:} Spread Spectrum (DSSS/FHSS)---GPS and Bluetooth techniques
+\item \textbf{Chapter 25:} Complete Link Budget Analysis---systematic power calculations
+\item \textbf{Chapter 28:} MIMO \& Spatial Multiplexing---capacity enhancement theory
+\item \textbf{Chapter 31:} Forward Error Correction---Turbo codes and LDPC
+\item \textbf{Chapter 35:} Synchronization techniques---carrier and timing recovery
+\end{itemize}
+
+\textbf{Standards and specifications:}
+
+\begin{itemize}
+\item IEEE 802.11-2020: WiFi physical layer and MAC
+\item 3GPP TS 36.211/212: LTE physical channels and coding
+\item ETSI EN 302 307-1: DVB-S2 satellite broadcast
+\item IS-GPS-200: GPS signal specification
+\item Bluetooth Core Specification 5.4
+\item LoRaWAN 1.0.4 Specification
+\end{itemize}
