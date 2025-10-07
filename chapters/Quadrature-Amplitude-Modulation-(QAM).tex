@@ -51,18 +51,14 @@ range with zero interference---it's like threading a needle with radio waves!
 
 \section{Overview}
 
-\textbf{Quadrature Amplitude Modulation (QAM)} encodes data by
-modulating \textbf{both amplitude and phase} of a carrier wave.
+\textbf{The trade-off:} More positions = faster, BUT positions are closer together and easier to confuse when signal is noisy. Strong signal (close to router): use 1024-QAM. Weak signal (far from router): use QPSK.
 
-\textbf{Key insight}: Combine \textbf{ASK} (amplitude-shift keying) and
-\textbf{PSK} (phase-shift keying) in \textbf{2D constellation} (I/Q
-plane)
+\textbf{Fun fact:} Modern WiFi 6E can use 1024-QAM, but ONLY at close range with zero interference---it's like threading a needle with radio waves!
+\end{nontechnical}
 
-\textbf{Advantage}: \textbf{Best spectral efficiency} for given SNR
-(optimal use of 2D signal space)
+\section{Overview}
 
-\textbf{Applications}: WiFi, LTE/5G, cable modems (DOCSIS), DSL, digital
-TV (DVB-C), microwave backhaul
+\textbf{Quadrature Amplitude Modulation (QAM)} is a digital modulation scheme that encodes data by modulating \textbf{both the amplitude and phase} of a carrier wave, achieving optimal use of the two-dimensional signal space.
 
 \begin{keyconcept}
 QAM achieves \textbf{superior spectral efficiency} by utilizing both amplitude and phase dimensions of the signal space. While PSK uses only phase, QAM leverages the entire I/Q plane, making it the optimal choice for high-throughput systems where bandwidth is constrained but SNR is adequate.
@@ -164,30 +160,26 @@ The 16-QAM constellation forms a $4 \times 4$ square grid in the I/Q plane:
 
 where $d$ = unit spacing (normalized distance)
 
-\subsubsection{Bit Mapping (Gray Coding)}\label{bit-mapping-gray-coding}
+For square QAM, the constellation forms a $\sqrt{M} \times \sqrt{M}$ grid in the I/Q plane.
 
-\textbf{4 bits per symbol}: \(b_3 b_2 b_1 b_0\)
+\section{Constellation Diagrams}
 
-\textbf{Typical mapping}: - \(b_3 b_2\) \$\textbackslash rightarrow\$ I
-component (00=-3d, 01=-d, 11=+d, 10=+3d) - \(b_1 b_0\)
-\$\textbackslash rightarrow\$ Q component (00=-3d, 01=-d, 11=+d, 10=+3d)
+QAM constellations are visualized as grids in the I/Q plane, with symbol positions determined by discrete amplitude levels on both axes.
 
-\textbf{Example symbols}:
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% 16-QAM
+\begin{scope}[shift={(0,0)}]
+\node[above,font=\sffamily\bfseries] at (0,3) {16-QAM ($4 \times 4$ grid)};
+\draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-2,-2) grid[step=0.5] (2,2);
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Bits & I & Q & Position \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-0000 & -3d & -3d & Bottom-left corner \\
-0001 & -3d & -d & \\
-0011 & -3d & +d & \\
-0010 & -3d & +3d & Top-left corner \\
-1010 & +3d & +3d & Top-right corner \\
-\end{longtable}
+% 16-QAM constellation points
+\foreach \i in {-1.5,-0.5,0.5,1.5} {
+  \foreach \q in {-1.5,-0.5,0.5,1.5} {
+    \fill[black] (\i,\q) circle (2pt);
+  }
 }
 
 \textbf{Gray coding}: Adjacent symbols differ by exactly 1 bit, minimizing bit errors when symbol errors occur.
@@ -349,58 +341,21 @@ Modulation & Bits/symbol & Required Eb/N0 (dB) & SNR Penalty vs QPSK \\
 \end{longtable}
 }
 
-\textbf{Pattern}: Each 4\$\textbackslash times\$ increase in M adds
-\textasciitilde4 dB
+\node[below,font=\small] at (0,-3) {$k = 6$ bits/symbol};
+\end{scope}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% 256-QAM
+\begin{scope}[shift={(14,0)}]
+\node[above,font=\sffamily\bfseries] at (0,3) {256-QAM ($16 \times 16$ grid)};
+\draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-2.25,-2.25) grid[step=0.15] (2.25,2.25);
 
-\subsubsection{BER Comparison Table}\label{ber-comparison-table}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-Eb/N0 (dB) & QPSK & 16-QAM & 64-QAM & 256-QAM \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-10 &
-3.9\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-&
-2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
-& 0.1 & 0.3 \\
-15 &
-7\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\}
-&
-5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}
-&
-5\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\}
-& 0.08 \\
-20 &
-\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
-&
-1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\}
-&
-1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
-&
-3\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{3\} \\
-25 &
-\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
-&
-\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
-&
-1\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\}
-&
-2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\} \\
-30 &
-\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
-&
-\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
-&
-\textless10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
-&
-2\$\textbackslash times\$10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{8\} \\
-\end{longtable}
+% 256-QAM constellation points (16x16 grid - subset for clarity)
+\foreach \i in {-2.175,-1.875,...,2.175} {
+  \foreach \q in {-2.175,-1.875,...,2.175} {
+    \fill[black] (\i,\q) circle (1pt);
+  }
 }
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -425,8 +380,7 @@ The spectral efficiency is:
 \label{eq:qam-spectral-efficiency}
 \end{equation}
 
-\subsubsection{Comparison (\$\textbackslash alpha\$ =
-0.35)}\label{comparison-ux3b1-0.35}
+where $d$ is the unit spacing (normalized distance between adjacent symbols).
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
@@ -843,10 +797,7 @@ MIMO, 160 MHz \\
 \textbf{5G NR}: Up to 256-QAM (mmWave can use 1024-QAM in some
 scenarios)
 
-\textbf{Example}: LTE Cat 16 (1 Gbps downlink) -
-4\$\textbackslash times\$4 MIMO, 256-QAM, 20 MHz carrier aggregation -
-Per-carrier: 4 layers \$\textbackslash times\$ 8 bits/symbol
-\$\textbackslash times\$ 75k symbols/sec = 2.4 Gbps (theoretical)
+\subsection{WiFi (IEEE 802.11)}
 
 \textbf{Adaptive MCS} (Modulation \& Coding Scheme):
 \begin{itemize}
@@ -856,21 +807,24 @@ Per-carrier: 4 layers \$\textbackslash times\$ 8 bits/symbol
 
 \subsection{Cable Modems (DOCSIS)}
 
-\textbf{DOCSIS 3.0}: 256-QAM (8 bits/symbol)
+\subsection{Cellular: LTE and 5G NR}
 
-\textbf{DOCSIS 3.1}: 4096-QAM (12 bits/symbol) - Requires SNR
-\textgreater{} 40 dB (excellent cable plant) - OFDM with 4096-QAM
-subcarriers \$\textbackslash rightarrow\$ 10 Gbps downstream
+\textbf{LTE:} Up to 256-QAM (Category 9+) with carrier aggregation
 
 \textbf{Key advantage:} Wired channel has no fading, enabling high SNR and thus very high-order QAM.
 
 \subsection{Digital TV}
 
-\textbf{DVB-C (Cable)}: 256-QAM standard
+\subsection{Cable Modems (DOCSIS)}
 
-\textbf{DVB-T2 (Terrestrial)}: Up to 256-QAM (typically 64-QAM)
+\textbf{DOCSIS 3.0:} 256-QAM standard (8 bits/symbol)
 
-\textbf{ATSC 3.0 (US)}: 256-QAM, 1024-QAM, 4096-QAM (OFDM)
+\textbf{DOCSIS 3.1:} 4096-QAM (12 bits/symbol) achieving 10~Gbps downstream
+\begin{itemize}
+\item Requires SNR $> 40$~dB (excellent cable plant)
+\item OFDM with up to 4096-QAM per subcarrier
+\item Wired channel enables very high-order QAM
+\end{itemize}
 
 \subsection{Microwave Backhaul}
 
@@ -895,22 +849,69 @@ Point-to-point microwave links use adaptive QAM:
 
 \subsection{QAM vs PSK}
 
-\textbf{Same spectral efficiency}:
+\textbf{Typical link:} 28~GHz, 56~MHz channel
+\begin{itemize}
+\item 4096-QAM: 12 bits/symbol $\rightarrow$ 672~Mbps raw
+\item With FEC (rate 3/4): 504~Mbps net throughput
+\end{itemize}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-M-PSK & M-QAM & Comparison \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-4-PSK (QPSK) & 4-QAM (identical) & Same constellation \\
-8-PSK & 8-QAM (rare) & 8-PSK used (const envelope) \\
-16-PSK & 16-QAM & \textbf{16-QAM 4 dB better} \\
-32-PSK & 32-QAM & \textbf{32-QAM much better} \\
-64-PSK & 64-QAM & \textbf{64-QAM far superior} \\
-\end{longtable}
+\section{Advantages and Disadvantages}
+
+\subsection*{Advantages}
+
+\begin{enumerate}
+\item \textbf{Highest spectral efficiency:} Optimal use of 2D signal space (rectangular grid more efficient than circular PSK constellation)
+\item \textbf{Scalable data rates:} Easily extend from 4-QAM (QPSK) to 16/64/256/1024/4096-QAM
+\item \textbf{Adaptive modulation:} Dynamic switching based on channel SNR maximizes throughput
+\item \textbf{Standard support:} Used in virtually all modern broadband systems (WiFi, LTE, 5G, cable, DSL)
+\item \textbf{Mature technology:} Well-understood theory, established hardware implementations
+\end{enumerate}
+
+\subsection*{Disadvantages}
+
+\begin{enumerate}
+\item \textbf{High SNR requirement:} Higher-order QAM needs excellent signal quality (256-QAM requires $\sim$23~dB $E_b/N_0$)
+\item \textbf{Varying envelope (PAPR):} Requires linear PA with backoff, reducing power efficiency
+\item \textbf{Sensitivity to impairments:} I/Q imbalance, phase noise, and nonlinearity severely degrade high-order QAM
+\item \textbf{Coherent detection required:} Must maintain precise carrier phase synchronization
+\item \textbf{Not constant envelope:} Cannot use nonlinear Class-C/D/E amplifiers (unlike QPSK/FSK)
+\end{enumerate}
+
+\section{Comparison: QAM vs PSK}
+
+\subsection{Evolution from PSK to QAM}
+
+QPSK (4-QAM) uses only phase modulation with constant amplitude. QAM extends this by adding amplitude variation:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% QPSK (4-QAM)
+\begin{scope}[shift={(0,0)}]
+\node[above,font=\sffamily\bfseries] at (0,2.5) {QPSK (4-QAM)};
+\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2) -- (0,2) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-1.5,-1.5) grid[step=0.5] (1.5,1.5);
+% Constant amplitude circle
+\draw[dashed,gray] (0,0) circle (1.06);
+\fill[black] (1.06,1.06) circle (2.5pt);
+\fill[black] (-1.06,1.06) circle (2.5pt);
+\fill[black] (-1.06,-1.06) circle (2.5pt);
+\fill[black] (1.06,-1.06) circle (2.5pt);
+\node[below=12pt,font=\small] at (0,-2) {4 points, 2 bits/symbol};
+\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Constant amplitude};
+\end{scope}
+
+% 16-QAM
+\begin{scope}[shift={(6,0)}]
+\node[above,font=\sffamily\bfseries] at (0,2.5) {16-QAM};
+\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2) -- (0,2) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-1.5,-1.5) grid[step=0.5] (1.5,1.5);
+% Multiple amplitude levels
+\foreach \i in {-1.5,-0.5,0.5,1.5} {
+  \foreach \q in {-1.5,-0.5,0.5,1.5} {
+    \fill[black] (\i,\q) circle (2pt);
+  }
 }
 
 \textbf{General rule:} For $M > 8$, QAM significantly outperforms M-PSK.
