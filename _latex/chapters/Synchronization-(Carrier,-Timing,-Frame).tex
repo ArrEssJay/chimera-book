@@ -765,168 +765,184 @@ Satellite links have large frequency offsets due to Doppler shift and local osci
 \item Known frequency: $\sim 100$~ms
 \end{itemize}
 
-\subsection{Synchronization Errors}\label{synchronization-errors}
+\section{Performance Analysis}
 
-\subsubsection{CFO Impact}\label{cfo-impact-1}
+\subsection{Impact of Synchronization Errors on BER}
 
-\textbf{Small CFO} (\(\epsilon = 0.01\)): - Constellation rotates
-3.6\$\^{}\textbackslash circ\$ per symbol (10 symbols
-\$\textbackslash rightarrow\$ 36\$\^{}\textbackslash circ\$) - QPSK: OK
-(\$\textbackslash pm\$45\$\^{}\textbackslash circ\$ tolerance) -
-256-QAM: \textbf{Fails}
-(\$\textbackslash pm\$2.8\$\^{}\textbackslash circ\$ tolerance)
+Synchronization errors directly degrade bit error rate performance.
 
-\textbf{Large CFO} (\(\epsilon = 0.2\)): - OFDM: ICI dominates, 10+ dB
-loss
+\subsubsection{CFO Impact on Constellation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Small normalized CFO ($\epsilon = 0.01$):
+\begin{equation}
+\phi_{\text{rotation}} = 2\pi \epsilon \cdot n = 0.0628n \text{ radians/symbol}
+\end{equation}
 
-\subsubsection{Phase Noise}\label{phase-noise}
+After 10 symbols: $\phi = 0.628$ radians $\approx 36°$.
 
-\textbf{Oscillator jitter} causes random phase variation:
-
-\[
-\phi_n[k] \sim \mathcal{N}(0, \sigma_\phi^2)
-\]
-
-\textbf{Effect}: Constellation spreading
-
-\textbf{Tolerance}: - \textbf{QPSK}:
-\textasciitilde10\$\^{}\textbackslash circ\$ RMS - \textbf{64-QAM}:
-\textasciitilde2\$\^{}\textbackslash circ\$ RMS - \textbf{1024-QAM}:
-\textasciitilde0.5\$\^{}\textbackslash circ\$ RMS
-
-\textbf{Mitigation}: Pilot-based tracking (common phase error
-estimation)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Timing Jitter}\label{timing-jitter}
-
-\textbf{Clock instability} \$\textbackslash rightarrow\$ Sampling time
-variation
-
-\textbf{Effect}: Effective SNR loss
-
-\[
-\text{SNR}_{\text{eff}} = \text{SNR} \cdot \text{sinc}^2(\pi \sigma_\tau)
-\]
-
-Where \(\sigma_\tau\) = RMS timing error (fraction of symbol period)
-
-\textbf{Example}: \(\sigma_\tau = 0.1\) \$\textbackslash rightarrow\$
-0.4 dB loss
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Design Guidelines}\label{design-guidelines}
-
-\subsubsection{1. Choose Loop Bandwidth}\label{choose-loop-bandwidth}
-
-\textbf{Narrow} (\(B_L < 0.01 R_s\)): - High SNR scenarios - Low phase
-noise - Stationary channel
-
-\textbf{Wide} (\(B_L > 0.1 R_s\)): - Low SNR - High Doppler (mobile) -
-Fast acquisition needed
-
-\textbf{Typical}: \(B_L \approx 0.01 - 0.05 R_s\) (compromise)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. Preamble Design}\label{preamble-design}
-
-\textbf{Length}: Trade-off overhead vs accuracy - \textbf{Short} (10-50
-symbols): Low overhead, lower SNR threshold - \textbf{Long} (100+
-symbols): Better accuracy, higher overhead
-
-\textbf{Pattern}: Good autocorrelation (low sidelobes) -
-\textbf{Pseudorandom}: LFSR, Gold codes - \textbf{Constant amplitude}:
-CAZAC (Zadoff-Chu), reduce PAPR
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Pilot Density}\label{pilot-density}
-
-\textbf{OFDM subcarrier pilots}: - \textbf{Sparse} (1/12 subcarriers):
-Low overhead, slower tracking - \textbf{Dense} (1/4 subcarriers): Fast
-tracking, high overhead
-
-\textbf{Time-domain pilots} (every N symbols): - WiFi:
-\textasciitilde4-symbol pilot OFDM per packet - LTE: CRS every symbol (4
-subcarriers per 12)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Synchronization Sequence}\label{synchronization-sequence}
-
-\textbf{Typical receiver startup}:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{AGC}: Adjust gain (10-100 \$\textbackslash mu\$s)
-\item
-  \textbf{Coarse CFO}: Preamble autocorrelation
-  (\$\textbackslash pm\$10\% symbol rate)
-\item
-  \textbf{Frame detect}: Cross-correlation with preamble
-\item
-  \textbf{Fine CFO}: Preamble phase (\$\textbackslash pm\$0.1\% symbol
-  rate)
-\item
-  \textbf{Symbol timing}: Early-late gate or correlator peak
-\item
-  \textbf{Phase tracking}: PLL or decision-directed
-\item
-  \textbf{Channel estimation}: Known pilots/preamble
-\item
-  \textbf{Data demodulation}: Begin
-\end{enumerate}
-
-\textbf{Total time}: 0.1-10 ms (packet systems), 0.1-1 s (initial cell
-search)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Related Topics}\label{related-topics}
-
+\textbf{Result:}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}Signal-Chain-(End-to-End-Processing){]}{]}}: Overall
-  system flow
-\item
-  \textbf{{[}{[}Channel-Equalization{]}{]}}: Frequency-selective fading
-  correction
-\item
-  \textbf{{[}{[}OFDM-\&-Multicarrier-Modulation{]}{]}}: Pilot-based sync
-\item
-  \textbf{{[}{[}QPSK-Modulation{]}{]}}: Phase tracking for PSK
-\item
-  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance with sync
-  errors
+\item QPSK: Acceptable ($\pm 45°$ tolerance)
+\item 256-QAM: \textbf{Fails} ($\pm 2.8°$ tolerance exceeded)
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Large CFO ($\epsilon = 0.2$) in OFDM causes severe ICI, resulting in $>10$~dB SNR loss.
 
-\textbf{Key takeaway}: \textbf{Synchronization aligns receiver with
-transmitter in frequency, phase, timing, and frame.} CFO
-(\$\textbackslash pm\$20-50 ppm typical) causes constellation
-rotation-\/-\/-correct with preamble correlation. Phase tracking uses
-PLL (Costas loop) or decision-directed feedback. Symbol timing recovery
-via early-late gate (Gardner algorithm). Frame sync via preamble
-correlation (Barker codes, CAZAC). WiFi: Short preamble (CFO coarse +
-AGC) \$\textbackslash rightarrow\$ Long preamble (CFO fine + channel
-est). GPS: Gold code correlation below noise floor. LTE: PSS/SSS for
-cell search (\textasciitilde100 ms cold start). Loop bandwidth
-trade-off: Narrow (better noise) vs Wide (faster acquisition). Pilot
-symbols (OFDM) enable continuous tracking. Synchronization errors
-degrade BER: 256-QAM needs
-\$\textbackslash pm\$2.8\$\^{}\textbackslash circ\$ phase, \textless1\%
-CFO, \textless0.1T timing. Critical for coherent demodulation!
+\subsubsection{Phase Noise Effects}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Oscillator phase jitter modeled as Gaussian:
+\begin{equation}
+\phi_n[k] \sim \mathcal{N}(0, \sigma_\phi^2)
+\end{equation}
+where:
+\begin{itemize}
+\item $\phi_n[k]$ = phase noise at symbol $k$
+\item $\sigma_\phi$ = RMS phase error (radians)
+\end{itemize}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+\textbf{Phase noise tolerance by modulation:}
+
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Modulation} & \textbf{RMS Phase Tolerance} \\
+\midrule
+QPSK & $\sim 10°$ \\
+16-QAM & $\sim 5°$ \\
+64-QAM & $\sim 2°$ \\
+256-QAM & $\sim 1°$ \\
+1024-QAM & $\sim 0.5°$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{Timing Jitter Impact}
+
+Clock instability causes sampling time variation. Effective SNR degradation:
+\begin{equation}
+\text{SNR}_{\text{eff}} = \text{SNR} \cdot \text{sinc}^2(\pi \sigma_\tau)
+\end{equation}
+where:
+\begin{itemize}
+\item $\sigma_\tau$ = RMS timing error (fraction of symbol period)
+\end{itemize}
+
+\textbf{Example:} $\sigma_\tau = 0.1$ results in 0.4~dB SNR loss.
+
+\section{Worked Example: WiFi 802.11n Synchronization}
+
+\textbf{Scenario:} Design synchronization for WiFi 802.11n receiver at 2.4~GHz.
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Carrier frequency & $f_c = 2.437$~GHz (channel 6) \\
+Crystal tolerance & $\pm 20$~ppm \\
+OFDM subcarrier spacing & $\Delta f = 312.5$~kHz \\
+Symbol rate & $R_s = 250$~ksps (per subcarrier) \\
+Modulation & 64-QAM \\
+Required BER & $10^{-5}$ \\
+\end{tabular}
+
+\subsection*{Step 1: Calculate Maximum CFO}
+
+\begin{equation}
+\Delta f_{\max} = f_c \times \text{tolerance} \times 2
+\end{equation}
+\begin{equation}
+\Delta f_{\max} = 2.437 \times 10^9 \times 20 \times 10^{-6} \times 2 = 97.5 \text{ kHz}
+\end{equation}
+
+Factor of 2 accounts for TX and RX oscillator errors combining.
+
+\subsection*{Step 2: Calculate Normalized CFO}
+
+\begin{equation}
+\epsilon_{\max} = \frac{\Delta f_{\max}}{R_s} = \frac{97{,}500}{250{,}000} = 0.39
+\end{equation}
+
+This is 39\% of symbol rate---\textbf{severely degrading without correction}.
+
+\subsection*{Step 3: Phase Error Tolerance for 64-QAM}
+
+64-QAM constellation has 8 points per axis, angular spacing:
+\begin{equation}
+\Delta\phi_{\text{decision}} = \frac{360°}{64} = 5.625°
+\end{equation}
+
+Safe margin: $\pm 2°$ RMS phase error.
+
+\subsection*{Step 4: Timing Error Tolerance}
+
+For negligible BER degradation ($< 0.5$~dB loss):
+\begin{equation}
+\sigma_\tau < 0.1T \quad \text{(10\% of symbol period)}
+\end{equation}
+
+\subsection*{Step 5: Synchronization Strategy}
+
+\textbf{Two-stage acquisition:}
+\begin{enumerate}
+\item \textbf{Coarse CFO (short preamble):} Auto-correlation, range $\pm 100$~kHz
+\item \textbf{Fine CFO (long preamble):} Cross-correlation, accuracy $\pm 1$~kHz
+\item \textbf{Phase tracking:} Decision-directed, loop BW $= 0.02 R_s = 5$~kHz
+\item \textbf{Timing recovery:} Gardner detector, loop BW $= 0.01 R_s = 2.5$~kHz
+\end{enumerate}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Synchronization Budget}
+\textbf{Result: System meets 64-QAM requirements}
+
+Residual errors after sync:
+\begin{itemize}
+\item CFO: $< 1$~kHz ($\epsilon = 0.004$) $\rightarrow$ $< 1.5°$ rotation per symbol
+\item Phase error: $< 1.5°$ RMS (pilot-aided tracking)
+\item Timing error: $< 0.08T$ (Gardner detector)
+\end{itemize}
+
+\textbf{Conclusion:} Synchronization overhead (16~$\mu$s preamble) enables reliable 64-QAM operation in 20~ppm crystal environment.
+\end{calloutbox}
+
+\section{Summary}
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Synchronization Type} & \textbf{Key Characteristics} \\
+\midrule
+Carrier frequency & Range: $\pm 20$--50~ppm typical \\
+                  & Methods: Preamble correlation, blind \\
+Carrier phase     & Tolerance: $\pm 90°$ (BPSK) to $\pm 2.8°$ (256-QAM) \\
+                  & Methods: PLL, Costas loop, decision-directed \\
+Symbol timing     & Tolerance: $< 0.1T$ for negligible loss \\
+                  & Methods: Early-late, Gardner, ML \\
+Frame sync        & Detection: Correlation with preamble \\
+                  & Sequences: Barker codes, Zadoff-Chu \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Key trade-offs:}
+\begin{itemize}
+\item \textbf{Loop bandwidth:} Narrow (better noise rejection) vs wide (faster acquisition)
+\item \textbf{Preamble length:} Short (low overhead) vs long (better accuracy)
+\item \textbf{Pilot density:} Sparse (low overhead) vs dense (better tracking)
+\end{itemize}
+
+\textbf{Typical synchronization times:}
+\begin{itemize}
+\item WiFi packet: 16~$\mu$s
+\item LTE cell search: 100~ms (cold start)
+\item GPS acquisition: 0.1--1~second
+\item Satellite (DVB-S2): 1~second (blind)
+\end{itemize}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter~\ref{ch:bpsk}:} Binary Phase-Shift Keying---carrier recovery for PSK
+\item \textbf{Chapter~\ref{ch:qpsk}:} QPSK Modulation---phase synchronization requirements
+\item \textbf{Signal Chain:} End-to-end processing flow including sync
+\item \textbf{Channel Equalization:} Frequency-selective fading correction
+\item \textbf{OFDM:} Pilot-based synchronization in multicarrier systems
+\item \textbf{Bit Error Rate:} Performance degradation with sync errors
+\end{itemize}
