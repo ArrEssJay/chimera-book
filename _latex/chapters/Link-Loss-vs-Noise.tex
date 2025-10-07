@@ -642,6 +642,14 @@ Primary impact & Power budget & BER performance \\
 
 \section{Further Reading}
 
+\draw[->,thick] (tx) -- (loss);
+\draw[->,thick] (loss) -- (rx);
+\draw[->,thick] (rx) -- (snr);
+\draw[->,thick] (snr) -- (ber);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Practical limits:}
 \begin{itemize}
 \item \textbf{Chapter 4:} Signal-to-Noise Ratio (SNR)---detailed SNR analysis
 \item \textbf{Chapter 5:} Additive White Gaussian Noise (AWGN)---noise modeling
