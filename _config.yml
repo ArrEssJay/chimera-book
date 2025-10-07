@@ -1,0 +1,51 @@
+# Jekyll Configuration for Chimera Book
+title: "Chimera: Signal Processing Book"
+description: "A comprehensive open-source textbook on digital signal processing, modulation techniques, and communication systems"
+author: "The Chimera Project"
+email: chimera@impermanent.io
+baseurl: "/chimera-book"
+url: "https://arressjay.github.io"
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  math_engine: mathjax
+
+# Collections
+collections:
+  chapters:
+    output: true
+    permalink: /chapters/:name
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "chapters"
+    values:
+      layout: "chapter"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - scripts
+  - .github
+  - chapters/*.tex
+  - "*.tex"
+  - "*.sh"
+  - "*.pdf"
+  - README.md
+  - LICENSE
+
+# Theme
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
