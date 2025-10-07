@@ -17,6 +17,7 @@ When it rains, you notice that:
 
 \textbf{Raindrops absorb and scatter radio waves}, weakening the signal. The problem is worse when:
 
+Raindrops absorb and scatter radio waves, weakening the signal. The problem is worse when:
 \begin{enumerate}
 \item \textbf{Higher frequencies} (like 5G's ``millimeter wave'') are used
   \begin{itemize}
@@ -95,10 +96,14 @@ The technical sections below answer questions like:
 
 \textbf{Raindrops act as lossy dielectric spheres}, introducing two primary loss mechanisms:
 
+\begin{keyconcept}
+Weather attenuation increases with three primary factors:
 \begin{enumerate}
-\item \textbf{Absorption:} EM energy heats water molecules (dielectric loss)
-\item \textbf{Scattering:} Raindrops redirect energy out of main beam (Mie scattering when droplet size $\approx \lambda$)
+\item \textbf{Frequency}: Higher frequencies experience greater attenuation (proportional to $f^{2-3}$ in most cases)
+\item \textbf{Precipitation rate}: Heavier rainfall or denser fog causes more signal loss
+\item \textbf{Path length}: Longer propagation paths through weather accumulate greater total attenuation
 \end{enumerate}
+\end{keyconcept}
 
 \textbf{Frequency dependence:}
 \begin{itemize}
@@ -300,7 +305,9 @@ A_{\text{rain}} = 6.3 \times 6 = 37.8~\text{dB}
 
 \subsubsection{Example 2: Ka-Band Satellite (20~GHz Downlink)}
 
-\textbf{Same scenario} as Ku-band:
+% Frequency markers
+\draw[dashed,gray] (2,0) -- (2,-0.3) node[below,font=\scriptsize] {10};
+\draw[dashed,gray] (8,0) -- (8,-0.3) node[below,font=\scriptsize] {100};
 
 \textbf{Temperate climate (12~mm/hr):}
 
@@ -429,30 +436,99 @@ where:
 
 \subsubsection{Coefficients by Frequency}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1571}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3429}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5000}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Frequency
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\(K_l\) (dB/km per g/m\textbackslash textsuperscript\{3\})
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Attenuation (dense fog, 0.5 g/m\textbackslash textsuperscript\{3\})
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-10 GHz & 0.01 & 0.005 dB/km \\
-20 GHz & 0.07 & 0.035 dB/km \\
-30 GHz & 0.20 & 0.10 dB/km \\
-60 GHz & 1.0 & 0.50 dB/km \\
-100 GHz & 2.5 & 1.25 dB/km \\
-300 GHz & 15 & 7.5 dB/km \\
-\end{longtable}
+\subsection{Fog Attenuation Coefficients}
+
+Table~\ref{tab:fog-coeffs} provides frequency-dependent fog attenuation coefficients.
+
+\begin{table}[h!]
+\centering
+\caption{Fog attenuation coefficients and representative values}
+\label{tab:fog-coeffs}
+\begin{tabular}{@{}crr@{}}
+\toprule
+Frequency & $K_l$ (dB/km per g/m$^3$) & $\gamma$ (dense fog, $M = 0.5$~g/m$^3$) \\
+\midrule
+10~GHz & 0.01 & 0.005~dB/km \\
+20~GHz & 0.07 & 0.035~dB/km \\
+30~GHz & 0.20 & 0.10~dB/km \\
+60~GHz & 1.0 & 0.50~dB/km \\
+100~GHz & 2.5 & 1.25~dB/km \\
+300~GHz & 15 & 7.5~dB/km \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{keyconcept}
+\textbf{Fog vs Rain:} Below 30~GHz, fog attenuation is \textbf{negligible compared to rain}. However, at terahertz frequencies ($>$ 100~GHz), fog becomes a significant impairment, particularly for short-range THz communication systems.
+\end{keyconcept}
+
+\subsection{Rain vs Fog: Comparative Analysis}
+
+\subsubsection{Microwave/mmWave Regime (30~GHz, 1~km path)}
+
+\begin{table}[h!]
+\centering
+\caption{Weather attenuation comparison at 30~GHz}
+\label{tab:rain-fog-30ghz}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Weather Condition & Total Attenuation \\
+\midrule
+Clear air & $\sim$0.1~dB \\
+Dense fog ($M = 0.5$~g/m$^3$) & 0.10~dB \\
+Light rain ($R = 5$~mm/hr) & 3.7~dB \\
+Moderate rain ($R = 12$~mm/hr) & 7.1~dB \\
+Heavy rain ($R = 25$~mm/hr) & 12.5~dB \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Conclusion:} At microwave and millimeter-wave frequencies, \textbf{rain dominates} weather-induced attenuation. Fog is negligible by comparison.
+
+\subsubsection{Terahertz Regime (300~GHz, 100~m path)}
+
+\begin{table}[h!]
+\centering
+\caption{Weather attenuation comparison at 300~GHz (THz)}
+\label{tab:rain-fog-300ghz}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Weather Condition & Total Attenuation \\
+\midrule
+Clear air (water vapor) & $\sim$5~dB \\
+Dense fog ($M = 0.5$~g/m$^3$) & 0.75~dB \\
+Light rain ($R = 5$~mm/hr) & $>$ 300~dB (complete blockage) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Title
+\node[font=\sffamily\bfseries] at (5,5.5) {Attenuation vs Frequency: Rain vs Fog};
+
+% Axes
+\draw[->] (0,0) -- (10,0) node[right,font=\small] {Frequency (GHz)};
+\draw[->] (0,0) -- (0,5) node[above,font=\small] {Attenuation (dB/km)};
+
+% Grid
+\draw[very thin,gray!30] (0,0) grid[step=1] (9,4.5);
+
+% Rain curves (25 mm/hr)
+\draw[thick,red,dashed] plot[smooth,tension=0.7] coordinates {
+  (0.5,0.1) (1,0.2) (2,0.5) (3,1.0) (4,1.8) (5,2.8) (6,4.0) (7,5.5) (8,7.0) (9,8.5)
+};
+\node[right,font=\scriptsize,red] at (9.2,8.5) {Rain (25~mm/hr)};
+
+% Fog curve (dense fog, 0.5 g/m³)
+\draw[thick,blue] plot[smooth,tension=0.8] coordinates {
+  (0.5,0.005) (1,0.01) (2,0.02) (3,0.04) (4,0.08) (5,0.15) (6,0.25) (7,0.40) (8,0.60) (9,0.85)
+};
+\node[right,font=\scriptsize,blue] at (9.2,0.85) {Fog (dense)};
+
+% Frequency markers
+\foreach \x/\label in {1/10, 3/30, 6/60, 9/90} {
+  \draw[dashed,gray] (\x,0) -- (\x,-0.2) node[below,font=\scriptsize] {\label};
 }
 
 \textbf{Key insight}: Fog is \textbf{negligible below 30~GHz}, but significant at THz frequencies.
@@ -523,7 +599,8 @@ Heavy rain (25 mm/hr) & 12.5 dB \\
 
 \textbf{Fog becomes important} at THz ($>$ 100 GHz):
 
-\textbf{At 300 GHz (THz), 100 m path}:
+\end{tikzpicture}
+\end{center}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
@@ -566,141 +643,125 @@ where:
 
 \subsection{Hail Attenuation}
 
-\textbf{Hailstones}: Large (5-50 mm), but mostly ice (low loss tangent)
+Different frequency bands exhibit vastly different susceptibility to rain attenuation, influencing their suitability for various applications.
 
-\textbf{Attenuation}: Typically \textbf{less than rain of equivalent
-water content}
+\begin{table}[h!]
+\centering
+\caption{Rain sensitivity by frequency band}
+\label{tab:band-sensitivity}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Band & Frequency & Primary Use & Rain Sensitivity @ 25~mm/hr \\
+\midrule
+C-band & 4--8~GHz & Satellite TV, radar & \textbf{Low} (0.05~dB/km) \\
+X-band & 8--12~GHz & Military, radar & \textbf{Moderate} (0.5~dB/km) \\
+Ku-band & 12--18~GHz & Satellite TV/broadband & \textbf{Moderate-High} (1--2~dB/km) \\
+Ka-band & 26.5--40~GHz & Satellite, 5G backhaul & \textbf{High} (3--12~dB/km) \\
+V-band & 40--75~GHz & Next-gen satellite & \textbf{Very High} (12--20~dB/km) \\
+W-band & 75--110~GHz & Automotive radar & \textbf{Extreme} (20--30~dB/km) \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\textbf{Why?}: Ice has lower dielectric loss than liquid water
-(\(\tan \delta_{\text{ice}} \ll \tan \delta_{\text{water}}\))
+\textbf{C-band Advantage:} Widely deployed in tropical regions due to excellent rain tolerance. Lower bandwidth but highly reliable.
 
-\textbf{Concern}: \textbf{Depolarization} (hailstones tumble, scatter
-energy to cross-pol)
+\textbf{Ka-band Challenge:} Offers high data rates and bandwidth, but requires adaptive coding/modulation (ACM) and large link margins (10--15~dB) to maintain availability.
 
+\section{Mitigation Techniques}
 
+Engineers employ several strategies to maintain link availability despite weather-induced attenuation.
 
-\subsection{Frequency-Specific Considerations}
+\subsection{Static Link Margin}
 
-\subsubsection{Bands Most Affected by Rain}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2292}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2708}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3750}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Band
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Frequency
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Primary Use
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Rain Sensitivity
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-C-band & 4-8 GHz & Satellite TV, radar & \textbf{Low} (0.05 dB/km @ 25
-mm/hr) \\
-X-band & 8-12 GHz & Military, radar & \textbf{Moderate} (0.5 dB/km) \\
-Ku-band & 12-18 GHz & Satellite TV/broadband & \textbf{Moderate-High}
-(1-2 dB/km) \\
-Ka-band & 26.5-40 GHz & Satellite, 5G backhaul & \textbf{High} (3-12
-dB/km) \\
-V-band & 40-75 GHz & Next-gen satellite & \textbf{Very High} (12-20
-dB/km) \\
-W-band & 75-110 GHz & Automotive radar, imaging & \textbf{Extreme}
-(20-30 dB/km) \\
-\end{longtable}
-}
-
-\textbf{C-band advantage}: Widely used for tropical regions (low rain
-fade)
-
-\textbf{Ka-band challenge}: High data rates, but needs ACM and large
-margins
-
-
-
-\subsection{Mitigation Techniques}
-
-\subsubsection{1. Link Margin}
-
-\textbf{Add extra dB to link budget} for rain:
+The simplest approach is to \textbf{add extra power margin} to the link budget:
 
 \begin{itemize}
-\tightlist
-\item
-  Temperate climate, Ku-band: \textbf{+3-5 dB}
-\item
-  Tropical climate, Ka-band: \textbf{+8-15 dB}
-\item
-  mmWave terrestrial ($<$ 1 km): \textbf{+2-3 dB}
+\item Temperate climate, Ku-band: +3--5~dB
+\item Tropical climate, Ka-band: +8--15~dB
+\item mmWave terrestrial ($< 1$~km): +2--3~dB
 \end{itemize}
 
-\textbf{Tradeoff}: Higher TX power or larger antennas (more expensive)
+\textbf{Trade-off:} Requires higher transmit power or larger antennas, increasing cost and complexity.
 
+\subsection{Adaptive Coding and Modulation (ACM)}
 
+ACM systems \textbf{dynamically adjust modulation order and coding rate} based on real-time link quality:
 
-\subsubsection{2. Adaptive Coding \& Modulation (ACM)}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Title
+\node[font=\sffamily\bfseries] at (5,4.8) {ACM Operating Modes};
 
-\textbf{Dynamically adjust modulation} based on link quality:
+% States
+\draw[fill=green!20,thick] (0,3) rectangle (3,4) node[pos=0.5,align=center] {Clear Sky\\16-APSK\\4 bps/Hz};
+\draw[fill=yellow!30,thick] (3.5,3) rectangle (6.5,4) node[pos=0.5,align=center] {Light Rain\\QPSK\\2 bps/Hz};
+\draw[fill=red!20,thick] (7,3) rectangle (10,4) node[pos=0.5,align=center] {Heavy Rain\\BPSK+FEC\\0.5 bps/Hz};
+
+% Arrows showing transitions
+\draw[->,thick] (1.5,2.8) -- (1.5,2.2) node[midway,right,font=\scriptsize] {Rain starts};
+\draw[->,thick] (8.5,2.8) -- (8.5,2.2) node[midway,right,font=\scriptsize] {Rain clears};
+
+% SNR axis
+\draw[->] (0,1.5) -- (10,1.5) node[right,font=\small] {Link SNR};
+\draw[thick] (0,1.3) -- (0,1.7) node[below=8pt,font=\scriptsize] {Low};
+\draw[thick] (10,1.3) -- (10,1.7) node[below=8pt,font=\scriptsize] {High};
+
+% Operating points
+\fill[green!60!black] (8,1.5) circle (3pt);
+\fill[yellow!60!black] (5,1.5) circle (3pt);
+\fill[red!60!black] (2,1.5) circle (3pt);
+
+\end{tikzpicture}
+\end{center}
+
+\textbf{Result:} Graceful degradation---system maintains connectivity at reduced data rate rather than complete outage.
+
+\textbf{Applications:} DVB-S2 (satellite TV), 5G NR, VSAT modems.
+
+\subsection{Site Diversity}
+
+Multiple ground stations separated by 5--20~km exploit the \textbf{localized nature of rain cells} (typically 5--10~km diameter):
+
+\begin{equation}
+P_{\text{both fade}} = P_{\text{site 1}} \times P_{\text{site 2}} \times \rho
+\end{equation}
+where $\rho < 1$ is the spatial correlation factor.
+
+\textbf{Diversity gain:} 5--10~dB improvement in link availability.
+
+\textbf{Example:} Commercial satellite gateways deploy 2--3 geographically separated sites to achieve 99.99\% uptime.
+
+\subsection{Uplink Power Control (UPC)}
+
+UPC systems \textbf{increase transmit power during rain} to compensate for attenuation:
+
+\begin{enumerate}
+\item Monitor satellite beacon signal strength
+\item Detect fade depth in real-time
+\item Boost uplink power (typically up to 10~dB)
+\item Avoid saturating satellite transponder
+\end{enumerate}
+
+\textbf{Limitation:} Power amplifier headroom is finite. Cannot compensate for extreme fades ($> 15$~dB).
+
+\subsection{Orbit Selection}
+
+Low Earth Orbit (LEO) satellites offer \textbf{inherently shorter rain paths}:
 
 \begin{itemize}
-\tightlist
-\item
-  Clear sky: 16-APSK (4 bits/symbol)
-\item
-  Light rain: QPSK (2 bits/symbol)
-\item
-  Heavy rain: BPSK + strong FEC (0.5 bits/symbol effective)
+\item \textbf{GEO} (36,000~km altitude): Rain path $\approx 6$~km at 30° elevation
+\item \textbf{LEO} (550~km altitude): Rain path $\approx 2$~km at 30° elevation
 \end{itemize}
 
-\textbf{Result}: \textbf{Graceful degradation} (lower data rate instead
-of outage)
+\textbf{Result:} LEO systems experience approximately \textbf{3$\times$ less rain attenuation} than GEO for the same frequency and rain rate. This is a key advantage of Starlink and OneWeb constellations.
 
-\textbf{Used in}: DVB-S2, 5G NR, satellite modems
+\section{Depolarization Effects}
 
+Beyond simple attenuation, rain also causes \textbf{cross-polarization interference} due to the oblate (flattened) shape of raindrops.
 
+\subsection{Physical Mechanism}
 
-\subsubsection{3. Site Diversity}
-
-\textbf{Multiple ground stations} separated by 5-20 km:
-
-\textbf{Principle}: Rain cells are \textbf{localized}
-($\sim$5-10 km diameter) - Probability both sites in heavy rain
-is low - Switch to non-rainy site
-
-\textbf{Diversity gain}: 5-10 dB improvement in availability
-
-\textbf{Example}: Satellite gateways often have 2-3 sites for 99.99\%
-uptime
-
-
-
-\subsubsection{4. Frequency Diversity}
-
-\textbf{Backup link at lower frequency}:
-
-\begin{itemize}
-\tightlist
-\item
-  Primary: Ka-band (high data rate, rain-sensitive)
-\item
-  Backup: Ku-band (lower rate, rain-tolerant)
-\end{itemize}
-
-\textbf{Switchover}: Automatic when Ka-band SNR drops
-
-
-
-\subsubsection{5. Uplink Power Control (UPC)}
-
-\textbf{Increase TX power during rain} to compensate for attenuation:
-
+Raindrops are not spherical---they flatten into oblate spheroids as they fall. This asymmetry causes:
 \begin{itemize}
 \tightlist
 \item
@@ -719,6 +780,12 @@ uptime
 
 \textbf{Low Earth Orbit (LEO)} satellites have shorter slant paths:
 
+The rain-induced XPD degradation is modeled by:
+\begin{equation}
+\text{XPD}_{\text{rain}} = U - V \log_{10}(A_{\text{rain}}) \quad \text{(dB)}
+\label{eq:xpd-rain}
+\end{equation}
+where:
 \begin{itemize}
 \tightlist
 \item
@@ -924,18 +991,16 @@ where:
 
 \subsubsection{Weather Radar Integration}
 
-\textbf{Use ground-based weather radar} to predict rain attenuation:
+\subsection{Design Guidelines}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Measure rain rate along path (3D map)
-\item
-  Apply ITU model
-\item
-  Predict fade 5-10 minutes ahead
-\end{enumerate}
+\item \textbf{Frequency Selection:}
+  \begin{itemize}
+  \item C-band: Robust in all climates, bandwidth-limited
+  \item Ku-band: Good balance for temperate regions
+  \item Ka-band: High capacity, requires mitigation
+  \item mmWave: Only for short terrestrial or inter-satellite links
+  \end{itemize}
 
 \textbf{Proactive ACM}: Adjust modulation before fade hits (minimize disruption)
 
