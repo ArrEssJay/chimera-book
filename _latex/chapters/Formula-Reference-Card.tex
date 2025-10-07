@@ -572,105 +572,112 @@ $90°$ (orthogonal) & 0.0 & $\infty$ dB \\
 \label{sec:atmospheric-effects}
 
 \subsection{Rain Attenuation (ITU-R Model)}
-\label{sec:rain-attenuation}
+\label{subsec:rain-attenuation}
 
-Frequency-dependent rain attenuation. See Chapter~\ref{ch:weather-effects}.
+Rain attenuation using the ITU-R power-law model:
 
 \begin{equation}
-A = \gamma R^{\beta} \quad (\text{dB/km})
 \label{eq:rain-attenuation}
+A = \gamma R^{\beta} \quad (\text{dB/km})
 \end{equation}
+
 where:
 \begin{itemize}
-\item $A$ = Specific attenuation (dB/km)
-\item $\gamma$, $\beta$ = Frequency and polarization-dependent coefficients
-\item $R$ = Rain rate (mm/hr)
+\item $A$ = specific attenuation (dB/km)
+\item $R$ = rain rate (mm/hr)
+\item $\gamma$, $\beta$ = frequency and polarization-dependent coefficients
 \end{itemize}
 
-\begin{calloutbox}{Typical Rain Attenuation @ 100 mm/hr}
-\begin{tabular}{@{}ll@{}}
-\toprule
-Frequency & Attenuation \\
-\midrule
-2 GHz & $\sim$0.2 dB/km \\
-10 GHz & $\sim$4 dB/km \\
-20 GHz & $\sim$8 dB/km \\
-30 GHz & $\sim$12 dB/km \\
-\bottomrule
-\end{tabular}
+\begin{calloutbox}{Example Rain Coefficients at 12~GHz}
+For horizontal polarization at 12~GHz:
+\begin{itemize}
+\item $\gamma \approx 0.0188$
+\item $\beta \approx 1.217$
+\end{itemize}
+For $R = 25$~mm/hr (heavy rain): $A \approx 1.26$~dB/km
 \end{calloutbox}
 
-\subsection{Faraday Rotation}
-\label{sec:faraday-rotation}
+\textbf{See Chapter on Weather Effects for detailed tables and applications.}
 
-Polarization rotation due to ionospheric effects. See Chapter~\ref{ch:polarization}.
+\subsection{Faraday Rotation}
+\label{subsec:faraday-rotation}
+
+Faraday rotation of polarization in the ionosphere:
 
 \begin{equation}
-\Omega = 2.36 \times 10^4 \frac{B_\parallel \cdot \text{TEC}}{f^2} \quad (\text{radians})
 \label{eq:faraday-rotation}
+\Omega = 2.36 \times 10^4 \frac{B_\parallel \cdot \text{TEC}}{f^2} \quad (\text{radians})
 \end{equation}
+
 where:
 \begin{itemize}
-\item $\Omega$ = Rotation angle (radians)
-\item $B_\parallel$ = Magnetic field parallel to propagation (Tesla)
+\item $\Omega$ = rotation angle (radians)
+\item $B_\parallel$ = magnetic field component parallel to propagation (Tesla)
 \item TEC = Total Electron Content (electrons/m²)
-\item $f$ = Frequency (Hz)
+\item $f$ = frequency (Hz)
 \end{itemize}
 
-Note: Effect decreases as $1/f^2$ (negligible above 10 GHz).
+\begin{importantbox}
+Faraday rotation is \textbf{proportional to $1/f^2$}, making it severe at lower frequencies (VHF/UHF) but negligible above 10~GHz. Satellite systems below 2~GHz must use circular polarization.
+\end{importantbox}
+
+\textbf{See Chapter on Wave Polarization for mitigation techniques.}
 
 \section{Error Correction}
 \label{sec:error-correction}
 
 \subsection{Hamming Distance}
-\label{sec:hamming-distance}
+\label{subsec:hamming-distance}
 
-Minimum distance between codewords---determines error correction capability. See Chapter~\ref{ch:hamming}.
+The Hamming distance between two codewords is the number of bit positions in which they differ.
 
 \textbf{Error detection capability:}
 \begin{equation}
+\label{eq:hamming-detection}
 d_{\min} \geq t + 1
-\label{eq:error-detection}
 \end{equation}
 
 \textbf{Error correction capability:}
 \begin{equation}
+\label{eq:hamming-correction}
 d_{\min} \geq 2t + 1
-\label{eq:error-correction}
 \end{equation}
+
 where:
 \begin{itemize}
-\item $d_{\min}$ = Minimum Hamming distance
-\item $t$ = Number of errors to detect/correct
+\item $d_{\min}$ = minimum Hamming distance between any two codewords
+\item $t$ = number of errors
 \end{itemize}
 
-\subsection{Code Rate}
-\label{sec:code-rate}
+\begin{keyconcept}
+To correct $t$ errors, the code must have $d_{\min} \geq 2t + 1$. This ensures that even with $t$ errors, the received codeword is still closer to the transmitted one than to any other valid codeword.
+\end{keyconcept}
 
-Fraction of information bits in coded transmission.
+\textbf{See \Cref{ch:hamming-distance} for detailed examples.}
+
+\subsection{Code Rate}
+\label{subsec:code-rate}
+
+The code rate measures coding efficiency:
 
 \begin{equation}
-R_c = \frac{k}{n}
 \label{eq:code-rate}
+R_c = \frac{k}{n}
 \end{equation}
+
 where:
 \begin{itemize}
-\item $R_c$ = Code rate (dimensionless)
-\item $k$ = Information bits
-\item $n$ = Total bits (information + parity)
+\item $k$ = number of information bits
+\item $n$ = total number of bits (information + parity)
 \end{itemize}
 
 \begin{calloutbox}{Common Code Rates}
-\begin{tabular}{@{}lll@{}}
-\toprule
-Code Rate & Overhead & Application \\
-\midrule
-1/2 & 100\% & Deep space \\
-2/3 & 50\% & Satellite \\
-3/4 & 33\% & Cellular \\
-5/6 & 20\% & WiFi, fiber \\
-\bottomrule
-\end{tabular}
+\begin{itemize}
+\item \textbf{$R_c = 1/2$:} 1 info bit per 2 transmitted bits (strong coding)
+\item \textbf{$R_c = 2/3$:} 2 info bits per 3 transmitted bits (moderate)
+\item \textbf{$R_c = 5/6$:} 5 info bits per 6 transmitted bits (light)
+\end{itemize}
+Higher code rate = higher throughput but less error protection.
 \end{calloutbox}
 
 \section{System Parameters}
@@ -689,88 +696,120 @@ F = \frac{\text{SNR}_{\text{in}}}{\text{SNR}_{\text{out}}}
 
 \textbf{Logarithmic form:}
 \begin{equation}
-NF\ (\text{dB}) = 10\log_{10}(F)
 \label{eq:noise-figure-db}
+NF\ (\text{dB}) = 10\log_{10}(F)
 \end{equation}
-where $F \geq 1$ (SNR can only degrade or stay constant).
+
+\textbf{See Chapter on Noise Sources \& Noise Figure for measurement techniques.}
 
 \subsection{Cascade Noise Figure (Friis Formula)}
-\label{sec:cascade-nf}
+\label{subsec:cascade-noise-figure}
 
-Noise figure of cascaded components.
+For cascaded components, the total noise figure is:
 
 \begin{equation}
+\label{eq:friis-noise}
 F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \frac{F_4 - 1}{G_1 G_2 G_3} + \ldots
-\label{eq:cascade-nf}
 \end{equation}
-where:
-\begin{itemize}
-\item $F_i$ = Noise figure of stage $i$ (linear)
-\item $G_i$ = Gain of stage $i$ (linear)
-\end{itemize}
+
+where $F_i$ and $G_i$ are the noise factor and gain (linear) of stage $i$.
 
 \begin{keyconcept}
-\textbf{First stage dominates:} Use a low-noise amplifier (LNA) first in the receiver chain to minimize total noise figure.
+The first stage dominates the overall noise figure if it has sufficient gain. This is why low-noise amplifiers (LNA) are placed first in receiver chains, immediately after the antenna.
 \end{keyconcept}
 
+\begin{calloutbox}{Worked Example: Two-Stage Amplifier}
+\textbf{Given:} Stage 1: $NF_1 = 2$~dB, $G_1 = 20$~dB; Stage 2: $NF_2 = 6$~dB
+
+\textbf{Solution:} Convert to linear: $F_1 = 1.585$, $G_1 = 100$, $F_2 = 3.981$
+
+\[
+F_{\text{total}} = 1.585 + \frac{3.981 - 1}{100} = 1.585 + 0.0298 = 1.615
+\]
+
+$NF_{\text{total}} = 10\log_{10}(1.615) = \textbf{2.08~dB}$
+
+Note: The high gain of stage 1 minimizes the impact of stage 2's noise.
+\end{calloutbox}
+
 \subsection{Processing Gain (Spread Spectrum)}
-\label{sec:processing-gain}
+\label{subsec:processing-gain}
 
-Interference rejection in spread spectrum systems. See Chapter~\ref{ch:spread-spectrum}.
+Processing gain in spread spectrum systems:
 
-\textbf{Linear form:}
 \begin{equation}
+\label{eq:processing-gain-linear}
 G_p = \frac{B_{\text{RF}}}{B_{\text{data}}}
-\label{eq:processing-gain}
 \end{equation}
 
 \textbf{Logarithmic form:}
 \begin{equation}
-G_p\ (\text{dB}) = 10\log_{10}\left(\frac{B_{\text{RF}}}{B_{\text{data}}}\right)
 \label{eq:processing-gain-db}
+G_p\ (\text{dB}) = 10\log_{10}\left(\frac{B_{\text{RF}}}{B_{\text{data}}}\right)
 \end{equation}
+
 where:
 \begin{itemize}
 \item $B_{\text{RF}}$ = RF bandwidth (Hz)
-\item $B_{\text{data}}$ = Data bandwidth (Hz)
+\item $B_{\text{data}}$ = data bandwidth (Hz)
 \end{itemize}
 
-\subsection{MIMO Capacity}
+\begin{importantbox}
+Processing gain enables communication below the noise floor and provides resistance to jamming. GPS uses $G_p \approx 43$~dB, allowing reception of signals 20~dB below thermal noise.
+\end{importantbox}
+
+\textbf{See Chapter on Spread Spectrum for DSSS and FHSS implementations.}
+
+\section{MIMO Capacity}
 \label{sec:mimo-capacity}
 
-Capacity of multiple-input multiple-output systems. See Chapter~\ref{ch:mimo}.
+\subsection{Ergodic Capacity (Channel State Information at RX)}
+\label{subsec:mimo-capacity}
 
-\textbf{Ergodic capacity (known CSI at RX):}
+MIMO channel capacity with known CSI at receiver:
+
 \begin{equation}
-C = \log_2 \det\left(\mathbf{I}_{N_r} + \frac{\rho}{N_t} \mathbf{HH}^H\right) \quad (\text{bps/Hz})
 \label{eq:mimo-capacity}
+C = \log_2 \det\left(\mathbf{I}_{N_r} + \frac{\rho}{N_t} \mathbf{HH}^H\right) \quad (\text{bits/sec/Hz})
 \end{equation}
+
 where:
 \begin{itemize}
-\item $N_r$ = Number of receive antennas
-\item $N_t$ = Number of transmit antennas
+\item $C$ = channel capacity (bits/s/Hz)
+\item $N_r$ = number of receive antennas
+\item $N_t$ = number of transmit antennas
 \item $\rho$ = SNR (linear)
-\item $\mathbf{H}$ = Channel matrix
-\item $\mathbf{H}^H$ = Hermitian transpose of $\mathbf{H}$
+\item $\mathbf{H}$ = $N_r \times N_t$ channel matrix
+\item $\mathbf{I}_{N_r}$ = $N_r \times N_r$ identity matrix
+\item $\mathbf{H}^H$ = conjugate transpose of $\mathbf{H}$
 \end{itemize}
+
+\begin{keyconcept}
+MIMO capacity scales linearly with $\min(N_t, N_r)$ at high SNR. A $4\times4$ MIMO system can theoretically achieve 4× the capacity of a single-antenna system in the same bandwidth.
+\end{keyconcept}
+
+\textbf{See \Cref{ch:mimo} for spatial multiplexing and beamforming.}
 
 \section{Useful Constants}
 \label{sec:useful-constants}
 
-\begin{center}
+\begin{table}[h]
+\centering
 \begin{tabular}{@{}lll@{}}
 \toprule
-Constant & Symbol & Value \\
+\textbf{Constant} & \textbf{Symbol} & \textbf{Value} \\
 \midrule
-\textbf{Speed of light} & $c$ & $3 \times 10^8$ m/s \\
-\textbf{Boltzmann's constant} & $k$ & $1.38 \times 10^{-23}$ J/K \\
-\textbf{Impedance of free space} & $\eta_0$ & $377\ \Omega$ \\
-\textbf{Thermal noise floor} (290 K, 1 Hz) & -- & $-174$ dBm/Hz \\
-\textbf{Permittivity of free space} & $\epsilon_0$ & $8.85 \times 10^{-12}$ F/m \\
-\textbf{Permeability of free space} & $\mu_0$ & $4\pi \times 10^{-7}$ H/m \\
+Speed of light & $c$ & $3 \times 10^8$ m/s \\
+Boltzmann's constant & $k$ & $1.38 \times 10^{-23}$ J/K \\
+Impedance of free space & $\eta_0$ & $377$ Ω \\
+Thermal noise floor (290 K, 1 Hz) & --- & $-174$ dBm/Hz \\
+Planck constant & $h$ & $6.626 \times 10^{-34}$ J·s \\
+Elementary charge & $e$ & $1.602 \times 10^{-19}$ C \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{Physical constants used in wireless communications}
+\label{tab:constants}
+\end{table}
 
 \section{Unit Conversions}
 \label{sec:unit-conversions}
@@ -1082,132 +1121,86 @@ The link can reliably support 100 Mbps with 16-QAM modulation even in adverse we
 \section{Applications}
 \label{sec:applications}
 
-\subsection{Satellite Communication Design}
+\subsection{Complete Link Budget Calculation}
+\label{subsec:link-budget-example}
 
-\textbf{Challenge:} Extreme path loss ($>$ 200 dB) requires careful power budgeting.
-
-\textbf{Key formulas:}
+\begin{calloutbox}{Worked Example: 5G Base Station to Mobile}
+\textbf{Given:}
 \begin{itemize}
-\item FSPL (Equation~\ref{eq:fspl-km-mhz}): Dominates link budget
-\item $E_b/N_0$ (Equation~\ref{eq:eb-n0}): Determines achievable data rate
-\item Rain attenuation (Equation~\ref{eq:rain-attenuation}): Critical at Ka-band (20+ GHz)
+\item Frequency: 3.5 GHz
+\item Distance: 500 m
+\item TX power: 46 dBm (40 W)
+\item TX antenna gain: 18 dBi (sector antenna)
+\item RX antenna gain: 0 dBi (mobile phone)
+\item Required SNR for 64-QAM: 20 dB
+\item System bandwidth: 20 MHz
 \end{itemize}
 
-\textbf{Design approach:}
-\begin{enumerate}
-\item Calculate FSPL for GEO (36,000 km) or LEO (500--2,000 km)
-\item Add rain margin (5--10 dB depending on frequency and climate)
-\item Select modulation based on available $E_b/N_0$
-\item Use FEC coding (Equation~\ref{eq:code-rate}) to improve link margin
-\end{enumerate}
+\textbf{Solution:}
 
-\subsection{Cellular Network Planning}
+\textbf{Step 1: Calculate FSPL}
+\begin{align*}
+\text{FSPL} &= 20\log_{10}(0.5) + 20\log_{10}(3500) + 32.45 \\
+&= -6.02 + 70.88 + 32.45 = 97.31~\text{dB}
+\end{align*}
 
-\textbf{Challenge:} Coverage and capacity trade-offs in urban environments.
+\textbf{Step 2: Calculate received power}
+\begin{align*}
+P_r &= P_t + G_t + G_r - \text{FSPL} \\
+&= 46 + 18 + 0 - 97.31 = -33.31~\text{dBm}
+\end{align*}
 
-\textbf{Key formulas:}
-\begin{itemize}
-\item FSPL (Equation~\ref{eq:fspl-km-mhz}): Determines cell radius
-\item Shannon capacity (Equation~\ref{eq:shannon-capacity}): Upper bound on throughput
-\item Spectral efficiency (Equation~\ref{eq:spectral-efficiency}): Determines modulation scheme
-\end{itemize}
+\textbf{Step 3: Calculate noise floor}
+\begin{align*}
+N &= -174 + 10\log_{10}(20 \times 10^6) = -101~\text{dBm}
+\end{align*}
 
-\textbf{Design approach:}
-\begin{enumerate}
-\item Calculate maximum range for target SNR
-\item Estimate capacity using Shannon limit
-\item Select adaptive modulation (QPSK to 256-QAM) based on channel quality
-\item Account for interference using MIMO (Equation~\ref{eq:mimo-capacity})
-\end{enumerate}
+\textbf{Step 4: Calculate SNR}
+\begin{align*}
+\text{SNR} &= P_r - N = -33.31 - (-101) = 67.69~\text{dB}
+\end{align*}
 
-\subsection{IoT and Sensor Networks}
+\textbf{Result:} SNR = 67.69~dB $\gg$ 20~dB required. Link has 47.69~dB margin.
+\end{calloutbox}
 
-\textbf{Challenge:} Battery-powered devices require power-efficient communication.
+\subsection{Common System Parameters}
+\label{subsec:common-systems}
 
-\textbf{Key formulas:}
-\begin{itemize}
-\item Thermal noise (Equation~\ref{eq:thermal-noise-db}): Sets sensitivity floor
-\item Processing gain (Equation~\ref{eq:processing-gain}): Improves range via spreading
-\item BER for BPSK (Equation~\ref{eq:ber-bpsk}): Most power-efficient modulation
-\end{itemize}
-
-\textbf{Design approach:}
-\begin{enumerate}
-\item Use BPSK or FSK for maximum power efficiency
-\item Apply spread spectrum (LoRa, Sigfox) for extended range
-\item Minimize bandwidth to reduce noise power
-\item Trade data rate for battery life
-\end{enumerate}
-
-\subsection{Radar and Sensing}
-
-\textbf{Challenge:} Detect weak echoes in presence of noise and clutter.
-
-\textbf{Key formulas:}
-\begin{itemize}
-\item Power density (Equation~\ref{eq:power-density}): Illuminates target
-\item Friis equation (Equation~\ref{eq:friis-linear}): Round-trip path loss
-\item SNR (Equation~\ref{eq:snr-linear}): Detection threshold
-\end{itemize}
-
-\textbf{Design approach:}
-\begin{enumerate}
-\item Calculate radar range equation (modified Friis for bistatic)
-\item Determine required SNR for target detection probability
-\item Use pulse compression for processing gain
-\item Apply Doppler filtering (Equation~\ref{eq:doppler}) to separate targets
-\end{enumerate}
-
-\section{Summary}
-\label{sec:summary}
-
-This reference card provides essential formulas for:
-\begin{itemize}
-\item \textbf{Link budgets:} Friis equation, FSPL, power density
-\item \textbf{Signal quality:} SNR, $E_b/N_0$, thermal noise
-\item \textbf{Performance:} BER formulas, Shannon capacity, spectral efficiency
-\item \textbf{Propagation:} Doppler, fading, atmospheric effects
-\item \textbf{System design:} Noise figure, coding, MIMO
-\end{itemize}
-
-\begin{center}
-\begin{tabular}{@{}lll@{}}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}llll@{}}
 \toprule
-\textbf{Category} & \textbf{Key Equation} & \textbf{Primary Use} \\
+\textbf{System} & \textbf{Frequency} & \textbf{Modulation} & \textbf{Coding} \\
 \midrule
-Link budget & Equation~\ref{eq:friis-db} & Received power \\
-Path loss & Equation~\ref{eq:fspl-km-mhz} & Range calculation \\
-Signal quality & Equation~\ref{eq:eb-n0} & Modulation selection \\
-Performance & Equation~\ref{eq:ber-bpsk} & BER estimation \\
-Capacity & Equation~\ref{eq:shannon-capacity} & Theoretical limit \\
+WiFi 802.11g & 2.4 GHz & OFDM (BPSK--64QAM) & Convolutional \\
+WiFi 802.11ax & 2.4/5 GHz & OFDM (BPSK--1024QAM) & LDPC \\
+LTE & 700 MHz--2.6 GHz & OFDM (QPSK--256QAM) & Turbo \\
+5G NR & 600 MHz--40 GHz & OFDM (QPSK--256QAM) & LDPC, Polar \\
+GPS L1 & 1.575 GHz & BPSK & None (DSSS) \\
+DVB-S2 & 10--12 GHz & 8PSK, 16/32APSK & LDPC + BCH \\
+Bluetooth & 2.4 GHz & GFSK & None \\
+LoRa & 433/868/915 MHz & CSS & Hamming \\
 \bottomrule
 \end{tabular}
-\end{center}
+\caption{Parameters for common wireless systems}
+\label{tab:systems}
+\end{table}
 
-\section{Further Reading}
-\label{sec:further-reading}
+\section{Summary}
 
-For detailed derivations and applications of these formulas, consult:
+This formula reference card provides quick access to the essential equations for wireless communications analysis and design. Each formula has been presented with:
 
 \begin{itemize}
-\item \textbf{Chapter~\ref{ch:fspl}:} Free-Space Path Loss---derivation and applications
-\item \textbf{Chapter~\ref{ch:snr}:} Signal-to-Noise Ratio---interpretation and measurement
-\item \textbf{Chapter~\ref{ch:ber}:} Bit Error Rate Analysis---performance curves and testing
-\item \textbf{Chapter~\ref{ch:bpsk}:} Binary Phase-Shift Keying---complete modulation example
-\item \textbf{Chapter~\ref{ch:qpsk}:} QPSK Modulation---extension to higher order
-\item \textbf{Chapter~\ref{ch:qam}:} QAM---high spectral efficiency modulation
-\item \textbf{Chapter~\ref{ch:shannon}:} Shannon's Theorem---theoretical foundations
-\item \textbf{Chapter~\ref{ch:noise}:} Noise Sources \& Noise Figure---system design
-\item \textbf{Chapter~\ref{ch:multipath}:} Multipath \& Fading---channel models
-\item \textbf{Chapter~\ref{ch:mimo}:} MIMO \& Spatial Multiplexing---advanced techniques
+\item \textbf{Clear definitions} of all variables with proper units
+\item \textbf{Both linear and logarithmic} forms where applicable
+\item \textbf{Worked examples} demonstrating practical calculations
+\item \textbf{Cross-references} to detailed chapters for derivations
+\item \textbf{Application context} for real-world systems
 \end{itemize}
 
-\begin{calloutbox}{How to Use This Reference}
-\begin{enumerate}
-\item \textbf{Quick lookup:} Find the formula you need using section headings
-\item \textbf{Check units:} All formulas include variable definitions and units
-\item \textbf{Verify assumptions:} Note when formulas apply (e.g., ``for AWGN channel'')
-\item \textbf{Cross-reference:} Follow chapter references for derivations
-\item \textbf{Practice:} Work through the example in Section~\ref{sec:worked-example}
-\end{enumerate}
-\end{calloutbox}
+\begin{keyconcept}
+Master these formulas and you have the foundation for analyzing any wireless communication system---from link budgets to error rates, from modulation schemes to channel effects.
+\end{keyconcept}
+
+For detailed derivations, proofs, and advanced topics, refer to the cross-referenced chapters throughout this book.

@@ -1,243 +1,399 @@
-\section{Block Codes (Hamming, BCH,
-Reed-Solomon)}\label{block-codes-hamming-bch-reed-solomon}
+\chapter{Block Codes (Hamming, BCH, Reed-Solomon)}
+\label{ch:block-codes}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{Coding Theory} \textbar{}
-{[}{[}Hamming-Distance-\&-Error-Detection{]}{]} \textbar{}
-{[}{[}Convolutional-Codes-\&-Viterbi-Decoding{]}{]}
+\begin{nontechnical}
+\textbf{Block codes are like adding sudoku-style clues to your message}---if some numbers get corrupted, you can solve for the missing ones using the patterns!
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Simple idea:}
+\begin{itemize}
+\item Take a block of data (e.g., 4 bits: \texttt{1011})
+\item Add parity bits using math (e.g., 3 extra bits: \texttt{010})
+\item Send the whole thing: \texttt{1011010} (7 bits total)
+\item Receiver checks if the math works out
+\item If errors detected, use the math to FIX them!
+\end{itemize}
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\textbf{Real uses:} 
+\begin{itemize}
+\item \textbf{RAM}: Hamming codes fix single-bit errors in computer memory
+\item \textbf{QR codes}: Reed-Solomon allows scanning with 30\% damage
+\item \textbf{CDs/DVDs}: Reed-Solomon fixes scratches (up to 2.5~mm!)
+\item \textbf{Satellite}: Voyager probes use RS codes to send photos from interstellar space
+\end{itemize}
 
-\textbf{Block codes are like adding sudoku-style clues to your
-message-\/-\/-if some numbers get corrupted, you can solve for the
-missing ones using the patterns!}
+\textbf{Trade-off:} More redundancy = fix more errors but less efficient. Hamming (7,4): 43\% overhead, fixes 1 error. Reed-Solomon (255,223): 14\% overhead, fixes 16 symbol errors!
+\end{nontechnical}
 
-\textbf{The idea - Add smart redundancy}: 1. Take a block of data (e.g.,
-4 bits: \texttt{1011}) 2. Add parity bits using math (e.g., 3 extra
-bits: \texttt{010}) 3. Send the whole thing: \texttt{1011010} (7 bits
-total) 4. Receiver checks if the math works out 5. If errors detected,
-use the math to FIX them!
+\section{Overview}
 
-\textbf{Three famous block codes}:
+\textbf{Block codes} are a fundamental class of error-correcting codes that encode fixed-length blocks of $k$ data symbols into $n$ code symbols by adding $n-k$ redundant parity symbols.
 
-\textbf{1. Hamming Code} (invented 1950): - \textbf{Use case}: Computer
-RAM error correction - \textbf{Example}: (7,4) Hamming code - 4 data
-bits + 3 parity bits = 7 total - Can fix any single bit error
-automatically! - \textbf{Your computer}: Uses Hamming codes in ECC RAM
+\begin{keyconcept}
+Block codes provide \textbf{guaranteed error correction capability} through systematic redundancy. An $(n,k)$ block code with minimum distance $d_{\min}$ can \textbf{detect} up to $d_{\min}-1$ errors and \textbf{correct} up to $t = \lfloor (d_{\min}-1)/2 \rfloor$ errors.
+\end{keyconcept}
 
-\textbf{2. BCH Code} (Bose-Chaudhuri-Hocquenghem): - \textbf{Use case}:
-QR codes, flash memory, DVDs - \textbf{Power}: Can fix multiple errors
-in a block - \textbf{Example}: QR code can work with 30\% damaged! -
-\textbf{Your phone}: Flash storage uses BCH to survive wear
+The notation $(n,k)$ specifies:
+\begin{itemize}
+\item $n$ = codeword length (total symbols)
+\item $k$ = message length (data symbols)
+\item $n-k$ = redundancy (parity symbols)
+\end{itemize}
 
-\textbf{3. Reed-Solomon Code} (most powerful!): - \textbf{Use case}:
-CDs, DVDs, Blu-ray, satellite TV, QR codes - \textbf{Power}: Can fix
-burst errors (many consecutive bits) - \textbf{Example}: CD can have
-2.5mm scratch and still play! - \textbf{Your life}: Every CD/DVD/QR code
-you\textquotesingle ve used!
+The \textbf{code rate} measures efficiency:
+\begin{equation}
+R = \frac{k}{n}
+\end{equation}
+where:
+\begin{itemize}
+\item $R$ = code rate (dimensionless, $0 < R < 1$)
+\item Higher $R$ means more efficient (less redundancy)
+\item Lower $R$ means stronger error correction
+\end{itemize}
 
-\textbf{How Reed-Solomon saves your music}: - \textbf{CD without
-Reed-Solomon}: Tiny scratch = music skips - \textbf{CD with
-Reed-Solomon}: Can fix 4000 consecutive bad bits! - This is why CDs
-still play with scratches
+Block codes divide into three main categories:
+\begin{enumerate}
+\item \textbf{Linear block codes}: Codewords form a vector space; encoding via matrix multiplication
+\item \textbf{Cyclic codes}: Cyclic shifts of codewords are also valid codewords (enables shift-register implementation)
+\item \textbf{Non-linear codes}: More complex structure (rarely used in practice)
+\end{enumerate}
 
-\textbf{Real-world magic}:
+\section{Mathematical Description}
 
-\textbf{QR Code} (Reed-Solomon): - Generate QR code - Cover 30\% with
-sticker - Scan \$\textbackslash rightarrow\$ STILL WORKS! - Reed-Solomon
-fills in the missing parts!
+\subsection{Linear Block Codes}
 
-\textbf{DVD scratch} (Reed-Solomon): - Scratch covers 2mm -
-That\textquotesingle s \textasciitilde6000 bits corrupted -
-Reed-Solomon: ``I got this'' - Movie plays perfectly
+A linear block code over $\mathrm{GF}(q)$ is a $k$-dimensional subspace of the $n$-dimensional vector space $\mathrm{GF}(q)^n$. For binary codes, $q=2$.
 
-\textbf{The trade-off}: - \textbf{More redundancy} = fix more errors BUT
-slower/less efficient - Hamming (7,4): 43\% overhead, fixes 1 error -
-Reed-Solomon (255,223): 14\% overhead, fixes 16 errors!
+\subsection{Generator Matrix}
 
-\textbf{Block sizes}: - \textbf{Small blocks} (7 bits): Simple, fast,
-low latency - \textbf{Large blocks} (255 bytes): Powerful, efficient,
-but complex - \textbf{Huge blocks} (8192 bytes): Maximum power, used in
-deep space!
+Encoding in linear block codes uses matrix multiplication:
+\begin{equation}
+\mathbf{c} = \mathbf{d} \cdot G
+\end{equation}
+where:
+\begin{itemize}
+\item $\mathbf{d}$ = data vector $(1 \times k)$
+\item $G$ = generator matrix $(k \times n)$
+\item $\mathbf{c}$ = codeword vector $(1 \times n)$
+\end{itemize}
 
-\textbf{Fun fact}: The Voyager space probes (launched 1977) use
-Reed-Solomon codes to transmit photos from interstellar space. With
-signal so weak it\textquotesingle s barely detectable, Reed-Solomon
-error correction is the ONLY reason we can still see those stunning
-images!
+For \textbf{systematic encoding}, the generator matrix takes the form:
+\begin{equation}
+G = [I_k \mid P]
+\end{equation}
+where:
+\begin{itemize}
+\item $I_k$ = $k \times k$ identity matrix
+\item $P$ = $k \times (n-k)$ parity submatrix
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+This produces codewords where the first $k$ symbols are the original data (unchanged), and the last $n-k$ symbols are parity.
 
-\subsection{Overview}\label{overview}
+\subsection{Parity-Check Matrix}
 
-\textbf{Block codes} encode fixed-length blocks of \(k\) data symbols
-into \(n\) code symbols.
-
-\textbf{Notation}: \((n, k)\) code - \(n\) = Codeword length - \(k\) =
-Message length - \(n - k\) = Redundancy (parity symbols)
-
-\textbf{Code rate}: \(R = k/n\) (fraction of data)
-
-\textbf{Types}: 1. \textbf{Linear block codes}: Codewords form vector
-space 2. \textbf{Cyclic codes}: Codewords are cyclic shifts of each
-other 3. \textbf{Non-linear codes}: More complex (less common)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Linear Block Codes}\label{linear-block-codes}
-
-\subsubsection{Generator Matrix}\label{generator-matrix}
-
-\textbf{Encoding}: \(\mathbf{c} = \mathbf{d} \cdot G\)
-
-Where: - \(\mathbf{d}\) = Data vector (1\$\textbackslash times\$k) -
-\(G\) = Generator matrix (k\$\textbackslash times\$n) - \(\mathbf{c}\) =
-Codeword vector (1\$\textbackslash times\$n)
-
-\textbf{Systematic form}: \(G = [I_k | P]\) - First \(k\) bits = data
-(unchanged) - Last \(n-k\) bits = parity
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Parity-Check Matrix}\label{parity-check-matrix}
-
-\textbf{Matrix} \(H\) (\((n-k) \times n\)) such that:
-
-\[
+The parity-check matrix $H$ of dimension $(n-k) \times n$ satisfies:
+\begin{equation}
 \mathbf{c} \cdot H^T = \mathbf{0}
-\]
+\end{equation}
+for all valid codewords $\mathbf{c}$.
 
-For all valid codewords \(\mathbf{c}\)
+For systematic codes with $G = [I_k \mid P]$, the parity-check matrix is:
+\begin{equation}
+H = [-P^T \mid I_{n-k}]
+\end{equation}
+where:
+\begin{itemize}
+\item $P^T$ = transpose of parity submatrix
+\item $I_{n-k}$ = $(n-k) \times (n-k)$ identity matrix
+\item For binary codes, $-P^T = P^T$ (modulo-2 arithmetic)
+\end{itemize}
 
-\textbf{Systematic form}: \(H = [-P^T | I_{n-k}]\)
+\subsection{Syndrome Decoding}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+When a codeword $\mathbf{c}$ is transmitted through a noisy channel, the received vector is:
+\begin{equation}
+\mathbf{r} = \mathbf{c} + \mathbf{e}
+\end{equation}
+where:
+\begin{itemize}
+\item $\mathbf{r}$ = received vector
+\item $\mathbf{e}$ = error vector (1 where errors occurred, 0 elsewhere)
+\end{itemize}
 
-\subsubsection{Syndrome Decoding}\label{syndrome-decoding}
+The \textbf{syndrome} is computed as:
+\begin{equation}
+\mathbf{s} = \mathbf{r} \cdot H^T
+\end{equation}
 
-\textbf{Receive} \(\mathbf{r} = \mathbf{c} + \mathbf{e}\) (error vector
-\(\mathbf{e}\))
+Since $\mathbf{c} \cdot H^T = \mathbf{0}$:
+\begin{equation}
+\mathbf{s} = (\mathbf{c} + \mathbf{e}) \cdot H^T = \mathbf{e} \cdot H^T
+\end{equation}
 
-\textbf{Syndrome}: \(\mathbf{s} = \mathbf{r} \cdot H^T\)
+\textbf{Key property:} The syndrome depends \textbf{only on the error pattern}, not on the transmitted codeword.
 
-\textbf{Property}: \(\mathbf{s} = \mathbf{e} \cdot H^T\) (independent of
-codeword!)
+\textbf{Decoding procedure:}
+\begin{enumerate}
+\item Calculate syndrome $\mathbf{s} = \mathbf{r} \cdot H^T$
+\item Look up error pattern $\mathbf{e}$ from syndrome table
+\item Correct: $\hat{\mathbf{c}} = \mathbf{r} - \mathbf{e}$ (for binary: $\mathbf{r} \oplus \mathbf{e}$)
+\end{enumerate}
 
-\textbf{Decoding}: 1. Calculate syndrome \(\mathbf{s}\) 2. Lookup error
-pattern \(\mathbf{e}\) from syndrome table 3. Correct:
-\(\hat{\mathbf{c}} = \mathbf{r} - \mathbf{e}\)
+\subsection{Block Diagram: Encoding and Decoding}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
+  node distance=2.5cm,
+  font=\small
+]
+% Encoder section
+\node (input) {\sffamily Data\\$\mathbf{d}$\\$(k$ bits$)$};
+\node[block, right of=input, node distance=3cm] (encoder) {Encoder\\$\mathbf{c}=\mathbf{d}G$};
+\node[block, right of=encoder, node distance=3.2cm] (channel) {Noisy\\Channel};
+\node[right of=channel, node distance=3cm] (received) {\sffamily Received\\$\mathbf{r}$};
 
-\subsection{Hamming Codes}\label{hamming-codes}
+% Decoder section
+\node[block, below of=received, node distance=2cm] (syndrome) {Syndrome\\$\mathbf{s}=\mathbf{r}H^T$};
+\node[block, left of=syndrome, node distance=3.5cm] (lookup) {Error\\Lookup};
+\node[block, left of=lookup, node distance=3.5cm] (correct) {Correct\\$\hat{\mathbf{c}}=\mathbf{r}-\mathbf{e}$};
+\node[left of=correct, node distance=3.2cm] (output) {\sffamily Data\\$\hat{\mathbf{d}}$\\$(k$ bits$)$};
 
-\textbf{Family}: \((2^m - 1, 2^m - m - 1)\) for \(m \geq 2\)
+% Arrows - Encoder path
+\draw[->,thick] (input) -- (encoder);
+\draw[->,thick] (encoder) -- node[above,font=\scriptsize] {$\mathbf{c}$ ($n$ bits)} (channel);
+\draw[->,thick] (channel) -- node[above,font=\scriptsize] {$+\mathbf{e}$} (received);
 
-\textbf{Common examples}: - \((7, 4)\): 4 data, 3 parity - \((15, 11)\):
-11 data, 4 parity - \((31, 26)\): 26 data, 5 parity
+% Arrows - Decoder path
+\draw[->,thick] (received) -- (syndrome);
+\draw[->,thick] (syndrome) -- node[above,font=\scriptsize] {$\mathbf{s}$} (lookup);
+\draw[->,thick] (lookup) -- node[above,font=\scriptsize] {$\mathbf{e}$} (correct);
+\draw[->,thick] (correct) -- (output);
 
-\textbf{Properties}: - \(d_{\min} = 3\) - Correct 1 error - Detect 2
-errors - \textbf{Perfect code} (meets Hamming bound)
+% Annotations
+\node[above=0.3cm of encoder, font=\scriptsize\itshape] {Transmitter};
+\node[above=0.3cm of syndrome, font=\scriptsize\itshape] {Receiver};
+\end{tikzpicture}
+\end{center}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Hamming Codes}\label{hamming-codes}
 
-\subsubsection{Hamming(7,4) Example}\label{hamming74-example}
+Hamming codes, invented by Richard Hamming in 1950, form a family of perfect single-error-correcting codes.
+
+\subsection{Parameters and Properties}
+
+The Hamming code family is defined by:
+\begin{equation}
+(n, k) = (2^m - 1, 2^m - m - 1) \quad \text{for } m \geq 2
+\end{equation}
+where:
+\begin{itemize}
+\item $m$ = number of parity bits
+\item $n = 2^m - 1$ = codeword length
+\item $k = 2^m - m - 1$ = data length
+\end{itemize}
+
+Common Hamming codes:
+\begin{itemize}
+\item $(7, 4)$: 4 data bits, 3 parity bits
+\item $(15, 11)$: 11 data bits, 4 parity bits
+\item $(31, 26)$: 26 data bits, 5 parity bits
+\end{itemize}
+
+The minimum Hamming distance is:
+\begin{equation}
+d_{\min} = 3
+\end{equation}
+
+This provides:
+\begin{itemize}
+\item \textbf{Error correction:} $t = \lfloor (d_{\min}-1)/2 \rfloor = 1$ bit
+\item \textbf{Error detection:} $d_{\min} - 1 = 2$ bits
+\end{itemize}
+
+\begin{keyconcept}
+Hamming codes are \textbf{perfect codes}---they achieve the Hamming bound with equality. Every possible received vector is within distance 1 of exactly one codeword, meaning the sphere-packing efficiency is 100\%.
+\end{keyconcept}
+
+\subsection{Hamming(7,4) Example}\label{hamming74-example}
+
+The Hamming(7,4) code encodes 4 data bits into 7 code bits.
 
 \textbf{Generator matrix} (systematic form):
-
-\[
+\begin{equation}
 G = \begin{bmatrix}
 1 & 0 & 0 & 0 & 1 & 1 & 0 \\
 0 & 1 & 0 & 0 & 1 & 0 & 1 \\
 0 & 0 & 1 & 0 & 0 & 1 & 1 \\
 0 & 0 & 0 & 1 & 1 & 1 & 1
-\end{bmatrix}
-\]
+\end{bmatrix} = [I_4 \mid P]
+\end{equation}
+where:
+\begin{itemize}
+\item Columns 1--4: Identity matrix (data bits pass through unchanged)
+\item Columns 5--7: Parity bits computed from data
+\end{itemize}
 
 \textbf{Parity-check matrix}:
-
-\[
+\begin{equation}
 H = \begin{bmatrix}
 1 & 1 & 0 & 1 & 1 & 0 & 0 \\
 1 & 0 & 1 & 1 & 0 & 1 & 0 \\
 0 & 1 & 1 & 1 & 0 & 0 & 1
-\end{bmatrix}
-\]
+\end{bmatrix} = [P^T \mid I_3]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{TikZ Diagram: Generator Matrix Structure}
 
-\subsubsection{Encoding Example}\label{encoding-example}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+% Draw the matrix
+\matrix (m) [matrix of math nodes,
+  left delimiter=[,
+  right delimiter={]},
+  row sep=0.5cm,
+  column sep=0.4cm] {
+  1 & 0 & 0 & 0 & 1 & 1 & 0 \\
+  0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+  0 & 0 & 1 & 0 & 0 & 1 & 1 \\
+  0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+};
 
-\textbf{Data}: \(\mathbf{d} = [1, 0, 1, 1]\)
+% Highlight identity section
+\draw[thick, blue] ($(m-1-1.north west) + (-0.15,0.15)$) rectangle ($(m-4-4.south east) + (0.15,-0.15)$);
+\node[above=0.3cm of m-1-2, blue, font=\sffamily\small] {$I_4$ (Data)};
 
-\textbf{Encode}:
+% Highlight parity section
+\draw[thick, red] ($(m-1-5.north west) + (-0.15,0.15)$) rectangle ($(m-4-7.south east) + (0.15,-0.15)$);
+\node[above=0.3cm of m-1-6, red, font=\sffamily\small] {$P$ (Parity)};
 
-\[
-\mathbf{c} = \mathbf{d} \cdot G = [1, 0, 1, 1, 0, 0, 1]
-\]
+% Arrows showing structure
+\draw[<->, thick] ($(m-1-1.north west) + (-0.3,0.5)$) -- ($(m-1-4.north east) + (0.3,0.5)$) node[midway, above, font=\scriptsize] {$k=4$ columns};
+\draw[<->, thick] ($(m-1-5.north west) + (-0.3,0.5)$) -- ($(m-1-7.north east) + (0.3,0.5)$) node[midway, above, font=\scriptsize] {$n-k=3$ columns};
+\end{tikzpicture}
+\end{center}
 
-\textbf{Verification}: \(\mathbf{c} \cdot H^T = [0, 0, 0]^T\)
+\subsection{Encoding Example}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Data vector:} $\mathbf{d} = [1, 0, 1, 1]$
 
-\subsubsection{Decoding Example}\label{decoding-example}
+\textbf{Encoding operation:}
+\begin{equation}
+\mathbf{c} = \mathbf{d} \cdot G = [1, 0, 1, 1] \cdot G = [1, 0, 1, 1, 0, 0, 1]
+\end{equation}
+where:
+\begin{itemize}
+\item First 4 bits $[1, 0, 1, 1]$ are the original data (systematic)
+\item Last 3 bits $[0, 0, 1]$ are computed parity bits
+\end{itemize}
 
-\textbf{Receive}: \(\mathbf{r} = [1, 0, 1, 0, 0, 0, 1]\) (error in
-position 4)
+\textbf{Verification using parity-check matrix:}
+\begin{equation}
+\mathbf{c} \cdot H^T = [0, 0, 0]^T \quad \checkmark
+\end{equation}
 
-\textbf{Syndrome}:
+A zero syndrome confirms this is a valid codeword.
 
-\[
-\mathbf{s} = \mathbf{r} \cdot H^T = [1, 1, 1]^T = \text{column 4 of } H
-\]
+\subsection{Decoding Example with Error Correction}
 
-\textbf{Interpretation}: Syndrome points to error position!
+\textbf{Transmitted codeword:} $\mathbf{c} = [1, 0, 1, 1, 0, 0, 1]$
 
-\textbf{Correct}: Flip bit 4 \$\textbackslash rightarrow\$
-\(\hat{\mathbf{c}} = [1, 0, 1, 1, 0, 0, 1]\)
+\textbf{Received vector (with error in position 4):} 
+\begin{equation}
+\mathbf{r} = [1, 0, 1, \underline{0}, 0, 0, 1]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Syndrome calculation:}
+\begin{equation}
+\mathbf{s} = \mathbf{r} \cdot H^T = [1, 1, 1]^T
+\end{equation}
 
-\subsubsection{Extended Hamming Code}\label{extended-hamming-code}
+\textbf{Error localization:} The syndrome $[1, 1, 1]^T$ matches column 4 of $H$, indicating the error is in bit position 4.
 
-\textbf{Add 1 overall parity bit}: \((2^m, 2^m - m - 1)\)
+\textbf{Correction:}
+\begin{equation}
+\hat{\mathbf{c}} = \mathbf{r} \oplus \mathbf{e} = [1, 0, 1, 0, 0, 0, 1] \oplus [0, 0, 0, 1, 0, 0, 0] = [1, 0, 1, 1, 0, 0, 1]
+\end{equation}
+where:
+\begin{itemize}
+\item $\mathbf{e} = [0, 0, 0, 1, 0, 0, 0]$ is the error vector
+\item $\oplus$ denotes XOR (modulo-2 addition)
+\end{itemize}
 
-\textbf{Example}: Hamming(8,4) - \(d_{\min} = 4\) - Correct 1 error -
-Detect 3 errors (SECDED: Single Error Correction, Double Error
-Detection)
+\begin{calloutbox}{Syndrome Decoding Insight}
+The syndrome uniquely identifies the error position. For Hamming codes, the syndrome value equals the binary representation of the error position, making decoding extremely efficient.
+\end{calloutbox}
 
-\textbf{Use case}: ECC RAM
+\subsection{Extended Hamming Code}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Adding one overall parity bit to a Hamming code creates an \textbf{extended Hamming code}:
+\begin{equation}
+(n, k) = (2^m, 2^m - m - 1)
+\end{equation}
 
-\subsection{BCH Codes}\label{bch-codes}
+This increases the minimum distance:
+\begin{equation}
+d_{\min} = 4
+\end{equation}
 
-\textbf{Bose-Chaudhuri-Hocquenghem (BCH)}: Powerful cyclic codes
+\textbf{Capabilities:}
+\begin{itemize}
+\item \textbf{Correct:} 1 error ($t = 1$)
+\item \textbf{Detect:} 3 errors
+\item Known as \textbf{SECDED}: Single Error Correction, Double Error Detection
+\end{itemize}
 
-\textbf{Parameters}: \((n, k, d_{\min})\) over \(\mathrm{GF}(q)\)
+\textbf{Example:} Hamming(8,4) with $d_{\min} = 4$ is used in ECC RAM to protect against single-bit upsets while detecting multi-bit errors.
 
-\textbf{Key feature}: Can be designed for specific \(d_{\min}\) (error
-correction capability)
+\section{BCH Codes}\label{bch-codes}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Bose-Chaudhuri-Hocquenghem (BCH) codes} are a class of powerful cyclic codes that generalize Hamming codes to correct multiple errors.
 
-\subsubsection{BCH Code Properties}\label{bch-code-properties}
+\subsection{BCH Code Parameters}
 
-\textbf{Binary BCH}: \(q = 2\)
+BCH codes over $\mathrm{GF}(q)$ are characterized by:
+\begin{equation}
+(n, k, d_{\min})
+\end{equation}
+where:
+\begin{itemize}
+\item $n$ = codeword length
+\item $k$ = message length
+\item $d_{\min}$ = minimum distance
+\end{itemize}
 
-\textbf{Block length}: \(n = 2^m - 1\)
+\textbf{Key feature:} BCH codes can be \textbf{designed for any desired error correction capability} $t$ by choosing appropriate parameters.
 
-\textbf{Minimum distance}: \(d_{\min} \geq 2t + 1\) (correct \(t\)
-errors)
+\subsection{Binary BCH Code Properties}
 
-\textbf{Systematic}: First \(k\) bits are data
+For binary BCH codes ($q = 2$):
 
-\textbf{Decoding}: Berlekamp-Massey algorithm,
-Peterson-Gorenstein-Zierler
+\textbf{Block length:}
+\begin{equation}
+n = 2^m - 1 \quad \text{for } m \geq 3
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Minimum distance guarantee:}
+\begin{equation}
+d_{\min} \geq 2t + 1
+\end{equation}
+where:
+\begin{itemize}
+\item $t$ = designed error correction capability (number of errors correctable)
+\item This guarantees correction of $t$ errors
+\end{itemize}
+
+\textbf{Generator polynomial:} BCH codes are defined by their generator polynomial $g(x)$ of degree $n-k$:
+\begin{equation}
+g(x) = \mathrm{LCM}(m_1(x), m_2(x), \ldots, m_{2t}(x))
+\end{equation}
+where $m_i(x)$ are the minimal polynomials of $\alpha^i$ over $\mathrm{GF}(2^m)$.
+
+\textbf{Decoding algorithms:}
+\begin{itemize}
+\item Berlekamp-Massey algorithm (efficient for multiple errors)
+\item Peterson-Gorenstein-Zierler algorithm
+\item Euclidean algorithm
+\end{itemize}
 
 \subsubsection{Common BCH Codes}\label{common-bch-codes}
 
@@ -272,45 +428,62 @@ Hamming(31,26,3) corrects only \(t = 1\)
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Reed-Solomon Codes}\label{reed-solomon-codes}
+\section{Reed-Solomon Codes}\label{reed-solomon-codes}
 
-\textbf{Non-binary BCH codes} over \(\mathrm{GF}(2^m)\) (Galois field)
+\textbf{Reed-Solomon (RS) codes} are non-binary BCH codes operating over Galois fields $\mathrm{GF}(2^m)$. They are among the most widely used error-correcting codes due to their excellent burst error correction capability.
 
-\textbf{Symbol-based}: Operate on \(m\)-bit symbols (not individual
-bits)
+\subsection{RS Code Parameters}
 
-\textbf{Parameters}: RS\((n, k)\) over \(\mathrm{GF}(2^m)\) -
-\(n = 2^m - 1\) symbols - \(k\) = Data symbols - \(n - k = 2t\) = Parity
-symbols (correct \(t\) symbol errors)
+An RS code over $\mathrm{GF}(2^m)$ is denoted RS$(n,k)$:
+\begin{equation}
+n = 2^m - 1 \quad \text{(maximum block length)}
+\end{equation}
+where:
+\begin{itemize}
+\item $n$ = codeword length (in $m$-bit symbols)
+\item $k$ = message length (in $m$-bit symbols)
+\item $m$ = bits per symbol (typically $m = 8$ for byte-oriented systems)
+\end{itemize}
 
-\textbf{Key property}: \textbf{Maximum Distance Separable (MDS)}
+\textbf{Number of parity symbols:}
+\begin{equation}
+n - k = 2t
+\end{equation}
+where:
+\begin{itemize}
+\item $t$ = number of symbol errors that can be corrected
+\end{itemize}
 
-\[
+\subsection{Maximum Distance Separable Property}
+
+RS codes are \textbf{Maximum Distance Separable (MDS)}, meaning they achieve the Singleton bound:
+\begin{equation}
 d_{\min} = n - k + 1
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $d_{\min}$ = minimum distance (in symbols)
+\item This is the maximum possible for any code with given $n$ and $k$
+\end{itemize}
 
-\textbf{Interpretation}: Optimal! Meets Singleton bound.
+\textbf{Error correction capability:}
+\begin{equation}
+t = \left\lfloor \frac{d_{\min} - 1}{2} \right\rfloor = \left\lfloor \frac{n-k}{2} \right\rfloor
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{keyconcept}
+The MDS property makes RS codes \textbf{optimal}---no other $(n,k)$ code can correct more errors. This explains their dominance in applications requiring maximum error correction for a given redundancy level.
+\end{keyconcept}
 
-\subsubsection{RS Code Advantages}\label{rs-code-advantages}
+\subsection{RS Code Advantages}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Burst error correction}: One symbol error = up to \(m\) bit
-  errors
-\item
-  \textbf{Optimal distance}: MDS property
-\item
-  \textbf{Well-understood decoding}: Berlekamp-Massey, Euclidean
-  algorithm
-\item
-  \textbf{Flexible}: Can shorten/puncture for different rates
+\item \textbf{Burst error correction}: One symbol error can contain up to $m$ bit errors, making RS codes ideal for channels with burst noise
+\item \textbf{Optimal distance}: MDS property ensures maximum error correction for given redundancy
+\item \textbf{Well-understood decoding}: Efficient algorithms (Berlekamp-Massey, Euclidean)
+\item \textbf{Flexible}: Can be shortened or punctured for different rates
+\item \textbf{Widely deployed}: Proven track record in CDs, DVDs, QR codes, satellites
 \end{enumerate}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsubsection{Common Reed-Solomon
 Codes}\label{common-reed-solomon-codes}
@@ -353,153 +526,381 @@ Overhead
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Example: QR Code
-RS(255,223)}\label{example-qr-code-rs255223}
+\subsection{Example: QR Code RS(255,223)}
 
-\textbf{Parameters}: - \(m = 8\) (8-bit symbols = bytes) - \(n = 255\)
-bytes - \(k = 223\) bytes (data) - \(2t = 32\) bytes (parity) - Correct
-up to \(t = 16\) byte errors
+QR codes use RS(255,223) with the following parameters:
+\begin{itemize}
+\item $m = 8$ (8-bit symbols = bytes)
+\item $n = 255$ bytes (codeword length)
+\item $k = 223$ bytes (data)
+\item $2t = 32$ bytes (parity symbols)
+\end{itemize}
 
-\textbf{Error burst}: If 128 consecutive bits corrupted (16 bytes),
-fully correctable!
+\textbf{Error correction capability:}
+\begin{equation}
+t = \frac{n-k}{2} = \frac{32}{2} = 16 \text{ byte errors}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Burst error tolerance:} If 128 consecutive bits (16 bytes) are corrupted, the code can fully correct them! This is why QR codes work even when partially obscured.
 
-\subsubsection{RS Encoding}\label{rs-encoding}
+\subsection{RS Encoding}
 
-\textbf{Polynomial representation}:
+RS codes use polynomial representation over $\mathrm{GF}(2^m)$.
 
-\textbf{Data}: \(d_0, d_1, \ldots, d_{k-1}\) (coefficients)
-
-\[
+\textbf{Data polynomial:}
+\begin{equation}
 D(x) = d_0 + d_1 x + \cdots + d_{k-1} x^{k-1}
-\]
+\end{equation}
+where $d_i \in \mathrm{GF}(2^m)$ are the data symbols.
 
-\textbf{Generator polynomial} (degree \(2t\)):
-
-\[
+\textbf{Generator polynomial} (degree $2t = n-k$):
+\begin{equation}
 g(x) = \prod_{i=1}^{2t} (x - \alpha^i)
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $\alpha$ = primitive element of $\mathrm{GF}(2^m)$
+\item $\alpha^i$ are the roots of the generator polynomial
+\end{itemize}
 
-Where \(\alpha\) = Primitive element of \(\mathrm{GF}(2^m)\)
+\textbf{Systematic encoding:}
+\begin{equation}
+C(x) = x^{2t} D(x) + R(x)
+\end{equation}
+where:
+\begin{itemize}
+\item $R(x) = [x^{2t} D(x)] \mod g(x)$ is the parity polynomial
+\item Multiplication by $x^{2t}$ shifts data to high-order positions
+\end{itemize}
 
-\textbf{Codeword polynomial}: \(C(x) = x^{2t} D(x) + R(x)\)
+\subsection{RS Decoding}
 
-Where \(R(x) = x^{2t} D(x) \mod g(x)\) (remainder)
+The RS decoding process consists of five steps:
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Step 1: Syndrome calculation}
+\begin{equation}
+S_i = R(\alpha^i) \quad \text{for } i = 1, 2, \ldots, 2t
+\end{equation}
+where $R(x)$ is the received polynomial.
 
-\subsubsection{RS Decoding}\label{rs-decoding}
+\textbf{Step 2: Error locator polynomial} computed using Berlekamp-Massey algorithm:
+\begin{equation}
+\Lambda(x) = 1 + \Lambda_1 x + \Lambda_2 x^2 + \cdots + \Lambda_v x^v
+\end{equation}
+where $v \leq t$ is the number of errors.
 
-\textbf{Steps}: 1. \textbf{Syndrome calculation}: \(S_i = R(\alpha^i)\)
-for \(i = 1, \ldots, 2t\) 2. \textbf{Error locator polynomial}:
-Berlekamp-Massey algorithm 3. \textbf{Error positions}: Chien search
-(find roots) 4. \textbf{Error values}: Forney algorithm 5.
-\textbf{Correction}: Subtract errors from received symbols
+\textbf{Step 3: Error positions} found using Chien search (finding roots of $\Lambda(x)$)
 
-\textbf{Complexity}: \(O(t^2)\) or \(O(t \log^2 t)\) with FFT-based
-methods
+\textbf{Step 4: Error values} computed using Forney algorithm
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Step 5: Correction}
+\begin{equation}
+\hat{C}(x) = R(x) - E(x)
+\end{equation}
+where $E(x)$ is the error polynomial.
 
-\subsection{Cyclic Codes}\label{cyclic-codes}
+\textbf{Computational complexity:}
+\begin{itemize}
+\item Standard algorithms: $O(t^2)$
+\item FFT-based methods: $O(t \log^2 t)$
+\end{itemize}
 
-\textbf{Property}: If \(\mathbf{c} = [c_0, c_1, \ldots, c_{n-1}]\) is a
-codeword, so is any cyclic shift:
+\subsection{TikZ Diagram: Syndrome Decoding Flowchart}
 
-\[
-[c_{n-1}, c_0, c_1, \ldots, c_{n-2}]
-\]
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=3cm, minimum height=0.8cm, font=\sffamily\small, align=center},
+  decision/.style={diamond, draw, minimum width=2.5cm, minimum height=2cm, font=\sffamily\small, align=center, aspect=2},
+  node distance=1.8cm,
+  font=\small
+]
+\node[block] (input) {Received $\mathbf{r}$};
+\node[block, below of=input] (syndrome) {Calculate Syndrome\\$\mathbf{s} = \mathbf{r} H^T$};
+\node[decision, below of=syndrome, node distance=2.5cm] (check) {$\mathbf{s} = 0$?};
+\node[block, right of=check, node distance=4cm] (noerror) {No errors\\Output $\mathbf{r}$};
+\node[block, below of=check, node distance=2.5cm] (locate) {Locate error\\from syndrome};
+\node[block, below of=locate] (correct) {Correct errors\\$\hat{\mathbf{c}} = \mathbf{r} - \mathbf{e}$};
+\node[block, below of=correct] (output) {Output $\hat{\mathbf{c}}$};
 
-\textbf{Advantages}: - Efficient encoding/decoding (shift registers) -
-Algebraic structure (polynomials over \(\mathrm{GF}(q)\))
+\draw[->,thick] (input) -- (syndrome);
+\draw[->,thick] (syndrome) -- (check);
+\draw[->,thick] (check) -- node[above,font=\scriptsize] {Yes} (noerror);
+\draw[->,thick] (check) -- node[right,font=\scriptsize] {No} (locate);
+\draw[->,thick] (locate) -- (correct);
+\draw[->,thick] (correct) -- (output);
+\end{tikzpicture}
+\end{center}
 
-\textbf{Examples}: Hamming codes, BCH codes, Reed-Solomon codes, CRC
-codes
+\section{Performance Analysis}\label{performance-analysis}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Error Correction Probability}
 
-\subsubsection{Generator Polynomial}\label{generator-polynomial}
+For a binary symmetric channel (BSC) with bit error probability $p$, and a code that corrects $t$ errors:
 
-\textbf{Every cyclic code} defined by generator polynomial \(g(x)\)
-
-\textbf{Degree}: \(\deg(g) = n - k\)
-
-\textbf{Property}: \(g(x)\) divides \(x^n - 1\)
-
-\textbf{Encoding}: \(C(x) = D(x) \cdot g(x)\) (non-systematic)
-
-Or systematic: \(C(x) = x^{n-k} D(x) + [x^{n-k} D(x) \mod g(x)]\)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Performance Analysis}\label{performance-analysis}
-
-\subsubsection{Error Correction
-Probability}\label{error-correction-probability}
-
-\textbf{For random errors} (BSC with error probability \(p\)):
-
-\textbf{Probability of correct decoding} (code correcting \(t\) errors):
-
-\[
+\textbf{Probability of successful decoding:}
+\begin{equation}
 P_{\text{correct}} = \sum_{i=0}^{t} \binom{n}{i} p^i (1-p)^{n-i}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $\binom{n}{i}$ = number of ways to have $i$ errors in $n$ bits
+\item $p^i$ = probability of $i$ errors
+\item $(1-p)^{n-i}$ = probability of $n-i$ correct bits
+\end{itemize}
 
-\textbf{Decoding failure} (more than \(t\) errors):
+\textbf{Block error rate (decoding failure):}
+\begin{equation}
+P_{\text{block}} = 1 - P_{\text{correct}} = \sum_{i=t+1}^{n} \binom{n}{i} p^i (1-p)^{n-i}
+\end{equation}
 
-\[
-P_{\text{fail}} = 1 - P_{\text{correct}}
-\]
+\subsection{Bit Error Rate Performance}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Uncoded BER} on BSC:
+\begin{equation}
+\text{BER}_{\text{uncoded}} = p
+\end{equation}
 
-\subsubsection{Example: Hamming(7,4)}\label{example-hamming74}
+\textbf{Coded BER} (after decoding):
+\begin{equation}
+\text{BER}_{\text{coded}} \approx \frac{P_{\text{block}}}{n}
+\end{equation}
 
-\textbf{Channel}: BSC with \(p = 10^{-3}\)
+This approximation assumes errors are uniformly distributed when decoding fails.
 
-\textbf{Can correct \(t = 1\) error}:
+\subsection{Example: Hamming(7,4) Performance}
 
-\[
-P_{\text{correct}} = (1-p)^7 + \binom{7}{1} p (1-p)^6 = 0.9997
-\]
+\textbf{Channel:} BSC with $p = 10^{-3}$ (raw BER)
 
-\textbf{Block error rate}: \(P_{\text{fail}} = 0.0003\)
+\textbf{Error correction capability:} $t = 1$ error
 
-\textbf{Bit error rate} (after decoding):
-\(\approx P_{\text{fail}}/7 = 4.3 \times 10^{-5}\)
+\textbf{Probability of successful decoding:}
+\begin{equation}
+\begin{aligned}
+P_{\text{correct}} &= (1-p)^7 + \binom{7}{1} p (1-p)^6 \\
+&= (0.999)^7 + 7(0.001)(0.999)^6 \\
+&= 0.9930 + 0.0069 = 0.9999
+\end{aligned}
+\end{equation}
 
-\textbf{Improvement}: \(10^{-3} \to 4.3 \times 10^{-5}\)
-(23\$\textbackslash times\$ better!)
+\textbf{Block error rate:}
+\begin{equation}
+P_{\text{block}} = 1 - 0.9999 = 10^{-4}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Coded BER:}
+\begin{equation}
+\text{BER}_{\text{coded}} \approx \frac{10^{-4}}{7} = 1.4 \times 10^{-5}
+\end{equation}
 
-\subsection{Concatenated Codes}\label{concatenated-codes}
+\textbf{Coding gain:}
+\begin{equation}
+\text{Improvement} = \frac{10^{-3}}{1.4 \times 10^{-5}} \approx 71\times
+\end{equation}
 
-\textbf{Idea}: Use two codes in series
+\begin{calloutbox}{Performance Improvement}
+The Hamming(7,4) code reduces BER from $10^{-3}$ to $1.4 \times 10^{-5}$---a \textbf{71-fold improvement}---with only 75\% overhead (3 parity bits for 4 data bits).
+\end{calloutbox}
 
-\textbf{Outer code}: Strong, complex (e.g., Reed-Solomon)
+\subsection{TikZ Diagram: BER Performance Comparison}
 
-\textbf{Inner code}: Weaker, fast (e.g., convolutional, LDPC)
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% Axes
+\draw[->] (0,0) -- (7,0) node[right,font=\sffamily\small] {$E_b/N_0$ (dB)};
+\draw[->] (0,0) -- (0,5) node[above,font=\sffamily\small] {BER};
 
-\textbf{Benefit}: Inner code reduces error rate for outer code
+% Grid
+\draw[very thin,gray!30] (0,0) grid (7,5);
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Y-axis labels (log scale)
+\node[left,font=\scriptsize] at (0,5) {$10^{-1}$};
+\node[left,font=\scriptsize] at (0,4) {$10^{-2}$};
+\node[left,font=\scriptsize] at (0,3) {$10^{-3}$};
+\node[left,font=\scriptsize] at (0,2) {$10^{-4}$};
+\node[left,font=\scriptsize] at (0,1) {$10^{-5}$};
+\node[left,font=\scriptsize] at (0,0) {$10^{-6}$};
 
-\subsubsection{Example: Voyager Mission}\label{example-voyager-mission}
+% X-axis labels
+\foreach \x in {0,2,4,6}
+  \node[below,font=\scriptsize] at (\x,0) {\x};
 
-\textbf{Inner}: Convolutional code (rate 1/2) - Reduces raw BER from
-\(5 \times 10^{-3}\) to \(10^{-5}\)
+% Uncoded curve (steeper)
+\draw[thick,red,dashed] (0,4.5) .. controls (2,3) and (4,1.5) .. (6,0.5);
+\node[red,font=\small,right] at (6.5,0.5) {Uncoded};
 
-\textbf{Outer}: RS(255,223) - Corrects 16 symbol errors - Final BER:
-\textless{} \(10^{-10}\)
+% Hamming(7,4) curve
+\draw[thick,blue] (1,4.5) .. controls (3,2.5) and (5,1) .. (7,0.2);
+\node[blue,font=\small,right] at (7.2,0.2) {Hamming(7,4)};
 
-\textbf{Total rate}: \(0.5 \times (223/255) = 0.437\) (56\% overhead)
+% BCH(31,16) curve
+\draw[thick,green!60!black] (2,4.5) .. controls (4,2) and (6,0.5) .. (7,0.1);
+\node[green!60!black,font=\small,above right] at (7,0.1) {BCH(31,16)};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% RS(255,223) curve
+\draw[thick,orange!80!black] (2.5,4.5) .. controls (4.5,1.8) and (6.2,0.3) .. (7,0.05);
+\node[orange!80!black,font=\small,below right] at (6.8,0.05) {RS(255,223)};
 
-\subsection{Shortened \& Punctured
-Codes}\label{shortened-punctured-codes}
+% Annotation: Coding Gain
+\draw[<->,thick,purple] (3.5,2.5) -- (5.5,2.5);
+\node[purple,font=\scriptsize,above] at (4.5,2.5) {Coding Gain};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Key observations:}
+\begin{itemize}
+\item Stronger codes (lower rate) provide steeper BER curves
+\item Coding gain increases with $E_b/N_0$
+\item At high SNR, powerful codes (RS, BCH) significantly outperform weak codes
+\item Trade-off: Stronger codes have lower rate (more overhead)
+\end{itemize}
+
+\section{Concatenated Codes}\label{concatenated-codes}
+
+Concatenated codes combine two codes in series to achieve extremely low error rates.
+
+\subsection{Architecture}
+
+\textbf{Outer code:} Strong, symbol-based code (typically Reed-Solomon)
+\begin{itemize}
+\item Operates on symbols
+\item High error correction capability
+\item More complex decoding
+\end{itemize}
+
+\textbf{Inner code:} Faster, bit-level code (typically convolutional or LDPC)
+\begin{itemize}
+\item Operates on bits
+\item Reduces bit errors to symbol errors
+\item Simpler, faster decoding
+\end{itemize}
+
+\textbf{Overall code rate:}
+\begin{equation}
+R_{\text{total}} = R_{\text{inner}} \times R_{\text{outer}}
+\end{equation}
+
+\subsection{Example: Voyager Deep Space Mission}
+
+The Voyager spacecraft use concatenated coding for reliable communication from interstellar distances.
+
+\textbf{Inner code:} Convolutional code, rate $R_{\text{inner}} = 1/2$
+\begin{itemize}
+\item Reduces raw BER from $5 \times 10^{-3}$ to $10^{-5}$
+\item Constraint length $K = 7$
+\item Viterbi decoding
+\end{itemize}
+
+\textbf{Outer code:} RS(255,223), rate $R_{\text{outer}} = 223/255 = 0.875$
+\begin{itemize}
+\item Corrects up to $t = 16$ symbol (byte) errors
+\item At inner code output BER of $10^{-5}$, expected symbol errors are well within correction capability
+\item Final BER after RS decoding: $< 10^{-10}$
+\end{itemize}
+
+\textbf{Overall system:}
+\begin{equation}
+R_{\text{total}} = 0.5 \times 0.875 = 0.4375 \quad (56\% \text{ overhead})
+\end{equation}
+
+\begin{keyconcept}
+Concatenation achieves \textbf{BER improvement from $5 \times 10^{-3}$ to $< 10^{-10}$}---a factor of $5 \times 10^{7}$ improvement---enabling reliable communication from billions of kilometers away.
+\end{keyconcept}
+
+\section{Worked Example: Designing a Storage System}
+
+\textbf{Problem:} Design an error correction system for a storage device that experiences random bit errors.
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Storage medium BER & $p = 10^{-4}$ \\
+Data block size & 512 bytes = 4096 bits \\
+Required final BER & $< 10^{-12}$ \\
+Maximum overhead & 25\% \\
+\end{tabular}
+
+\subsection*{Required}
+
+Select appropriate block code(s) and verify performance.
+
+\subsection*{Solution}
+
+\textit{Step 1: Evaluate single-code options}
+
+For a single Hamming(7,4) code applied to 4096 bits:
+\begin{equation}
+\text{Blocks needed} = \frac{4096}{4} = 1024 \text{ blocks}
+\end{equation}
+
+\begin{equation}
+\text{Overhead} = \frac{3}{4} = 75\% \quad \text{(exceeds 25\% limit)}
+\end{equation}
+
+Hamming codes alone are unsuitable due to excessive overhead.
+
+\textit{Step 2: Consider Reed-Solomon code}
+
+Use RS(255,223) over $\mathrm{GF}(2^8)$:
+\begin{itemize}
+\item Each symbol = 8 bits
+\item $n = 255$ bytes, $k = 223$ bytes
+\item Overhead: $(255-223)/223 = 14.3\%$ \checkmark
+\end{itemize}
+
+Number of RS blocks needed:
+\begin{equation}
+\text{Blocks} = \frac{512 \text{ bytes}}{223 \text{ bytes/block}} \approx 2.3 \text{ blocks}
+\end{equation}
+
+Use 3 blocks (with shortened codes).
+
+\textit{Step 3: Calculate expected errors per RS block}
+
+At BER $= 10^{-4}$:
+\begin{equation}
+\text{Expected bit errors per block} = 255 \times 8 \times 10^{-4} = 0.204 \text{ bits}
+\end{equation}
+
+Expected symbol errors (pessimistic, assuming each bit error affects different symbol):
+\begin{equation}
+\text{Expected symbol errors} \approx 0.204 \text{ symbols}
+\end{equation}
+
+Since RS(255,223) corrects up to $t = 16$ symbol errors, this is well within capability.
+
+\textit{Step 4: Calculate block error rate}
+
+Probability that more than 16 symbols have errors (using Poisson approximation with $\lambda = 0.204$):
+\begin{equation}
+P_{\text{block}} \approx e^{-\lambda} \frac{\lambda^{17}}{17!} + \ldots \approx 10^{-28}
+\end{equation}
+
+This is negligible.
+
+\textit{Step 5: Estimate final BER}
+
+\begin{equation}
+\text{BER}_{\text{final}} \approx \frac{P_{\text{block}}}{255 \times 8} < 10^{-30}
+\end{equation}
+
+\subsection*{Answer}
+
+Use \textbf{RS(255,223)} code with the following characteristics:
+\begin{itemize}
+\item Overhead: 14.3\% (within 25\% budget)
+\item Expected final BER: $< 10^{-30}$ (far exceeds requirement of $10^{-12}$)
+\item Number of blocks: 3 (with shortened RS for exact fit)
+\end{itemize}
+
+\subsection*{Interpretation}
+
+The RS(255,223) code provides enormous margin over the requirement. In practice, a weaker code like RS(255,239) with only 6.7\% overhead would still meet the $10^{-12}$ requirement while reducing overhead further.
+
+\begin{calloutbox}{Design Lesson}
+Reed-Solomon codes are extremely efficient for storage applications. Even with modest overhead (14\%), they can reduce BER by many orders of magnitude, making them ideal for flash memory, hard drives, and optical media.
+\end{calloutbox}
+
+\section{Shortened \& Punctured Codes}\label{shortened-punctured-codes}
 
 \subsubsection{Shortened Codes}\label{shortened-codes}
 
@@ -525,235 +926,199 @@ BCH(30,21,4) - Remove 1 parity bit - \(d_{\min}\) reduces: 5
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Practical Implementations}\label{practical-implementations}
+\section{Applications}\label{applications}
 
-\subsubsection{1. Memory ECC}\label{memory-ecc}
+Block codes are deployed in virtually every digital communication and storage system. This section examines key real-world implementations.
 
-\textbf{ECC DIMM}: Uses Hamming SECDED (72 bits for 64-bit data)
+\subsection{Computer Memory (ECC DRAM)}
 
-\textbf{Chipkill}: RS code across multiple chips - Tolerate entire chip
-failure (\$\textbackslash times\$8 chip = 8-bit symbol error)
+\textbf{System:} Error-Correcting Code (ECC) memory modules
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. Storage (Hard Drives,
-SSDs)}\label{storage-hard-drives-ssds}
-
-\textbf{RAID-6}: Uses RS(n, n-2) - Tolerate 2 disk failures - Example:
-10 disks (8 data + 2 parity)
-
-\textbf{SSD error correction}: - BCH codes (10-60 bit correction per 1
-KB page) - LDPC (modern SSDs, better performance)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Optical Media}\label{optical-media}
-
-\textbf{CD (Compact Disc)}: - CIRC (Cross-Interleaved Reed-Solomon Code)
-- Two RS codes with interleaving - RS(32,28,5) outer, RS(28,24,5) inner
-- Tolerates 4000 consecutive error bits (\textasciitilde2.5mm scratch)
-
-\textbf{DVD}: - RS(208,192,17) (correct 8 symbol errors) - Better than
-CD
-
-\textbf{Blu-ray}: - RS(216,192,25) or LDPC (more efficient)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4. QR Codes}\label{qr-codes}
-
-\textbf{Four error correction levels}: - \textbf{Level L}: 7\% recovery
-(RS with \(t=2\)) - \textbf{Level M}: 15\% recovery (\(t=5\)) -
-\textbf{Level Q}: 25\% recovery (\(t=8\)) - \textbf{Level H}: 30\%
-recovery (\(t=11\))
-
-\textbf{Example}: High-res QR code (Version 40) - 2953 bytes data + 688
-bytes parity (Level H) - Can recover from 30\% data loss (dirt, damage)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{5. Satellite
-Communication}\label{satellite-communication}
-
-\textbf{DVB-S2} (Digital Video Broadcasting): - Outer: BCH(n, k) -
-Inner: LDPC (rate 1/4 to 9/10) - Concatenation for robustness
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Python Example: RS(7,3) over
-GF(8)}\label{python-example-rs73-over-gf8}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-
-\KeywordTok{class}\NormalTok{ GF8:}
-    \CommentTok{"""Galois Field GF(2\^{}3) arithmetic."""}
-    \CommentTok{\# Primitive polynomial: x\^{}3 + x + 1}
-    \CommentTok{\# Field elements: 0, 1, , \^{}2, ..., \^{}6}
-    
-\NormalTok{    exp\_table }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{5}\NormalTok{]  }\CommentTok{\# Powers of }
-\NormalTok{    log\_table }\OperatorTok{=}\NormalTok{ [}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{]  }\CommentTok{\# Discrete logs}
-    
-    \AttributeTok{@staticmethod}
-    \KeywordTok{def}\NormalTok{ add(a, b):}
-        \ControlFlowTok{return}\NormalTok{ a }\OperatorTok{\^{}}\NormalTok{ b  }\CommentTok{\# XOR (addition in GF(2\^{}m))}
-    
-    \AttributeTok{@staticmethod}
-    \KeywordTok{def}\NormalTok{ multiply(a, b):}
-        \ControlFlowTok{if}\NormalTok{ a }\OperatorTok{==} \DecValTok{0} \KeywordTok{or}\NormalTok{ b }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
-            \ControlFlowTok{return} \DecValTok{0}
-\NormalTok{        log\_a }\OperatorTok{=}\NormalTok{ GF8.log\_table[a]}
-\NormalTok{        log\_b }\OperatorTok{=}\NormalTok{ GF8.log\_table[b]}
-\NormalTok{        log\_prod }\OperatorTok{=}\NormalTok{ (log\_a }\OperatorTok{+}\NormalTok{ log\_b) }\OperatorTok{\%} \DecValTok{7}
-        \ControlFlowTok{return}\NormalTok{ GF8.exp\_table[log\_prod]}
-    
-    \AttributeTok{@staticmethod}
-    \KeywordTok{def}\NormalTok{ divide(a, b):}
-        \ControlFlowTok{if}\NormalTok{ b }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
-            \ControlFlowTok{raise} \PreprocessorTok{ZeroDivisionError}\NormalTok{(}\StringTok{"Division by zero in GF(8)"}\NormalTok{)}
-        \ControlFlowTok{if}\NormalTok{ a }\OperatorTok{==} \DecValTok{0}\NormalTok{:}
-            \ControlFlowTok{return} \DecValTok{0}
-\NormalTok{        log\_a }\OperatorTok{=}\NormalTok{ GF8.log\_table[a]}
-\NormalTok{        log\_b }\OperatorTok{=}\NormalTok{ GF8.log\_table[b]}
-\NormalTok{        log\_quot }\OperatorTok{=}\NormalTok{ (log\_a }\OperatorTok{{-}}\NormalTok{ log\_b) }\OperatorTok{\%} \DecValTok{7}
-        \ControlFlowTok{return}\NormalTok{ GF8.exp\_table[log\_quot]}
-
-
-\KeywordTok{def}\NormalTok{ rs\_encode\_7\_3():}
-    \CommentTok{"""Reed{-}Solomon (7,3) encoding over GF(8)."""}
-    \CommentTok{\# Generator polynomial: g(x) = (x{-})(x{-}\^{}2)(x{-}\^{}3)(x{-}\^{}4)}
-    \CommentTok{\# For simplicity, use syndrome{-}based encoding}
-    
-    \CommentTok{\# Example: Encode data [d0, d1, d2]}
-\NormalTok{    data }\OperatorTok{=}\NormalTok{ [}\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{]  }\CommentTok{\# 3 symbols from GF(8)}
-    
-    \CommentTok{\# Compute 4 parity symbols (systematic encoding)}
-    \CommentTok{\# c(x) = x\^{}4 * d(x) + [x\^{}4 * d(x) mod g(x)]}
-    
-    \CommentTok{\# Placeholder: This is simplified (full RS encoding complex)}
-\NormalTok{    parity }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{]  }\CommentTok{\# Precomputed for example}
-    
-\NormalTok{    codeword }\OperatorTok{=}\NormalTok{ data }\OperatorTok{+}\NormalTok{ parity}
-    \ControlFlowTok{return}\NormalTok{ codeword}
-
-\CommentTok{\# Example}
-\NormalTok{codeword }\OperatorTok{=}\NormalTok{ rs\_encode\_7\_3()}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"RS(7,3) codeword: }\SpecialCharTok{\{}\NormalTok{codeword}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)  }\CommentTok{\# [3, 5, 2, 1, 4, 6, 7]}
-
-\CommentTok{\# Simulate error}
-\NormalTok{received }\OperatorTok{=}\NormalTok{ codeword.copy()}
-\NormalTok{received[}\DecValTok{1}\NormalTok{] }\OperatorTok{=} \DecValTok{0}  \CommentTok{\# Error in position 1}
-\NormalTok{received[}\DecValTok{5}\NormalTok{] }\OperatorTok{=} \DecValTok{0}  \CommentTok{\# Error in position 5}
-
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Received (2 errors): }\SpecialCharTok{\{}\NormalTok{received}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-
-\CommentTok{\# Decoding (syndrome calculation, error locator, Forney)}
-\CommentTok{\# ... (complex, omitted for brevity)}
-\end{Highlighting}
-\end{Shaded}
-
-\textbf{Note}: Full RS encoding/decoding requires polynomial operations
-over GF-\/-\/-use libraries like \texttt{reedsolo} for production.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Comparison Table}\label{comparison-table}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2321}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1964}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2143}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1786}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1786}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Code Family
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\(d_{\min}\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Correction
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Decoding
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Best For
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Hamming} & 3 & 1 bit & Simple (syndrome) & RAM, simple
-systems \\
-\textbf{Extended Hamming} & 4 & 1 bit, detect 2 & Simple & ECC RAM
-(SECDED) \\
-\textbf{BCH} & \(2t+1\) & \(t\) bits & BM algorithm & Moderate errors \\
-\textbf{Reed-Solomon} & \(n-k+1\) & \(t=(n-k)/2\) symbols & BM + Forney
-& Burst errors, storage \\
-\textbf{Golay(23,12)} & 7 & 3 bits & Table lookup & Legacy (NASA) \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Design Trade-offs}\label{design-trade-offs}
-
-\textbf{Code rate} (R) vs \textbf{Error correction} (\(t\)):
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-Code & Rate & \(t\) (bits) & Overhead & Complexity \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Hamming(7,4) & 0.57 & 1 & 75\% & Very low \\
-BCH(31,16) & 0.52 & 3 & 94\% & Moderate \\
-RS(255,223) & 0.875 & 16 symbols & 14\% & Moderate \\
-Golay(23,12) & 0.52 & 3 & 92\% & Low \\
-\end{longtable}
-}
-
-\textbf{General rule}: Stronger correction \$\textbackslash rightarrow\$
-More overhead \$\textbackslash rightarrow\$ Lower rate
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Related Topics}\label{related-topics}
-
+\textbf{Code:} Extended Hamming SECDED (Single Error Correction, Double Error Detection)
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}Hamming-Distance-\&-Error-Detection{]}{]}}: Foundation
-  for block codes
-\item
-  \textbf{{[}{[}Convolutional-Codes-\&-Viterbi-Decoding{]}{]}}:
-  Sequential codes
-\item
-  \textbf{{[}{[}LDPC-Codes{]}{]}}: Modern capacity-approaching codes
-\item
-  \textbf{{[}{[}Forward-Error-Correction-(FEC){]}{]}}: General FEC
-  principles
-\item
-  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric
+\item Configuration: 72 bits total (64 data + 8 parity)
+\item Code: Hamming(72,64) with SECDED
+\item Corrects: 1-bit errors
+\item Detects: 2-bit errors
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Why it matters:} Cosmic rays and alpha particles cause random bit flips in DRAM. ECC prevents system crashes and data corruption, critical for servers and workstations.
 
-\textbf{Key takeaway}: \textbf{Block codes encode \(k\) data symbols
-into \(n\) code symbols.} Linear block codes use generator matrix \(G\)
-for encoding, parity-check matrix \(H\) for syndrome decoding.
-\textbf{Hamming codes}: \((2^m-1, 2^m-m-1, 3)\) correct 1 bit error,
-perfect codes. \textbf{BCH codes}: Cyclic codes designed for specific
-\(t\)-error correction (Berlekamp-Massey decoding). \textbf{Reed-Solomon
-codes}: Non-binary (\(\mathrm{GF}(2^m)\)), MDS property
-(\(d_{\min} = n-k+1\)), optimal for burst errors. RS used in CDs, DVDs,
-QR codes, RAID, satellite. Concatenated codes (inner + outer) achieve
-very low BER (e.g., Voyager \textless{} \(10^{-10}\)). Trade-off: Higher
-correction capability requires more parity (lower rate).
+\textbf{Advanced systems (Chipkill):} Use Reed-Solomon codes across multiple memory chips to tolerate entire chip failures.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Solid-State Drives (Flash Memory)}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+\textbf{System:} NAND flash SSDs
+
+\textbf{Code:} BCH codes (traditional) or LDPC (modern)
+\begin{itemize}
+\item BCH: 10--60 bit correction per 1~KB page
+\item Error rate increases with flash wear (P/E cycles)
+\item Stronger codes needed for MLC/TLC/QLC flash
+\end{itemize}
+
+\textbf{Challenge:} Flash memory error rate increases exponentially with write/erase cycles. Block codes extend device lifetime by correcting errors from cell wear-out.
+
+\subsection{Optical Media (CD/DVD/Blu-ray)}
+
+\textbf{Compact Disc (CD):}
+\begin{itemize}
+\item Code: CIRC (Cross-Interleaved Reed-Solomon Code)
+\item Structure: RS(32,28) outer + RS(28,24) inner with interleaving
+\item Capability: Corrects 4000 consecutive error bits ($\sim$2.5~mm scratch)
+\item Interleaving spreads burst errors across multiple codewords
+\end{itemize}
+
+\textbf{DVD:}
+\begin{itemize}
+\item Code: RS(208,192)
+\item Corrects: 8 symbol errors per block
+\item Improved over CD due to higher data density
+\end{itemize}
+
+\textbf{Blu-ray:}
+\begin{itemize}
+\item Code: RS(216,192) or LDPC
+\item Higher density requires stronger codes
+\end{itemize}
+
+\subsection{QR Codes (2D Barcodes)}
+
+\textbf{System:} Quick Response codes for data encoding
+
+\textbf{Code:} Reed-Solomon with selectable error correction levels
+
+\textbf{Four levels:}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Level & Recovery & Description \\
+\midrule
+L & 7\% & Low (default) \\
+M & 15\% & Medium \\
+Q & 25\% & Quartile \\
+H & 30\% & High \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Example (Level H):} QR code can be 30\% obscured (dirt, damage, logos) and still scan successfully. This enables creative QR code designs with embedded graphics.
+
+\subsection{Deep Space Communications}
+
+\textbf{System:} Voyager 1 and 2 spacecraft (launched 1977)
+
+\textbf{Code:} Concatenated coding
+\begin{itemize}
+\item Inner: Convolutional code, rate 1/2, $K=7$
+\item Outer: RS(255,223), corrects 16 byte errors
+\item Combined rate: 0.4375 (43.75\% overhead)
+\end{itemize}
+
+\textbf{Performance:}
+\begin{itemize}
+\item Input BER: $5 \times 10^{-3}$ (extremely noisy channel)
+\item Output BER: $< 10^{-10}$ (virtually error-free)
+\item Improvement: Factor of $5 \times 10^{7}$
+\end{itemize}
+
+\textbf{Why critical:} At 24 billion km distance, received signal power is only $-196$~dBm. Without powerful error correction, no communication would be possible.
+
+\subsection{RAID Storage Arrays}
+
+\textbf{System:} RAID-6 disk arrays
+
+\textbf{Code:} Reed-Solomon RS$(n, n-2)$
+\begin{itemize}
+\item Example: 10 disks (8 data + 2 parity)
+\item Tolerates: Any 2 simultaneous disk failures
+\item Each disk failure = complete symbol loss
+\end{itemize}
+
+\textbf{Advantage:} Dual parity provides better protection than RAID-5 during disk rebuilds, when system is vulnerable.
+
+\subsection{Digital Video Broadcasting (DVB-S2)}
+
+\textbf{System:} Satellite television transmission
+
+\textbf{Code:} Concatenated BCH + LDPC
+\begin{itemize}
+\item Outer: BCH code
+\item Inner: LDPC codes with rates 1/4 to 9/10
+\item Adaptive coding based on channel conditions
+\end{itemize}
+
+\textbf{Benefit:} Near-Shannon-limit performance enables higher data rates and better picture quality over limited satellite bandwidth.
+
+\section{Summary}\label{summary}
+
+\subsection{Comparison of Block Code Families}
+
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Code Family & $d_{\min}$ & Correction & Decoding & Best For \\
+\midrule
+\textbf{Hamming} & 3 & 1 bit & Simple (syndrome) & RAM, simple systems \\
+\textbf{Extended Hamming} & 4 & 1 bit, detect 2 & Simple & ECC RAM (SECDED) \\
+\textbf{BCH} & $2t+1$ & $t$ bits & BM algorithm & Moderate errors \\
+\textbf{Reed-Solomon} & $n-k+1$ & $t=(n-k)/2$ symbols & BM + Forney & Burst errors, storage \\
+\textbf{Golay(23,12)} & 7 & 3 bits & Table lookup & Legacy systems \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Design Trade-offs}
+
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Code & Rate & $t$ (errors) & Overhead & Complexity \\
+\midrule
+Hamming(7,4) & 0.57 & 1 bit & 75\% & Very low \\
+BCH(31,16) & 0.52 & 3 bits & 94\% & Moderate \\
+RS(255,223) & 0.875 & 16 symbols & 14\% & Moderate \\
+Golay(23,12) & 0.52 & 3 bits & 92\% & Low \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{General design principle:} Stronger error correction requires more redundancy (lower rate). The choice depends on:
+\begin{itemize}
+\item Channel error characteristics (random vs. burst)
+\item Acceptable overhead
+\item Implementation complexity
+\item Required error rate
+\end{itemize}
+
+\subsection{Key Concepts Summary}
+
+\begin{enumerate}
+\item \textbf{Linear block codes} use generator matrix $G$ for encoding and parity-check matrix $H$ for syndrome decoding
+\item \textbf{Hamming codes}: $(2^m-1, 2^m-m-1)$ are perfect codes, correct 1 bit error
+\item \textbf{BCH codes}: Generalizations of Hamming codes, designed for any desired $t$ errors
+\item \textbf{Reed-Solomon codes}: Non-binary MDS codes, optimal for burst errors
+\item \textbf{Concatenated codes}: Combine inner + outer codes for extremely low BER
+\item \textbf{Trade-off}: Higher correction capability $\rightarrow$ more parity $\rightarrow$ lower rate
+\end{enumerate}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter 2:} Hamming Distance \& Error Detection---foundation for understanding error detection and correction capability
+\item \textbf{Chapter 3:} Forward Error Correction (FEC)---general principles of error correction
+\item \textbf{Chapter 15:} Convolutional Codes \& Viterbi Decoding---sequential codes for continuous data streams
+\item \textbf{Chapter 17:} LDPC Codes---modern capacity-approaching codes used in 5G and storage
+\item \textbf{Chapter 19:} Turbo Codes---another class of capacity-approaching codes
+\item \textbf{Chapter 24:} Bit Error Rate (BER)---performance metrics and testing
+\item \textbf{Chapter 28:} Channel Capacity (Shannon Limit)---theoretical limits of reliable communication
+\end{itemize}
+
+\begin{calloutbox}{Further Study}
+For rigorous mathematical treatment, see:
+\begin{itemize}
+\item Lin \& Costello: \textit{Error Control Coding} (comprehensive textbook)
+\item MacWilliams \& Sloane: \textit{The Theory of Error-Correcting Codes} (mathematical foundations)
+\item Proakis \& Salehi: \textit{Digital Communications} (systems perspective)
+\end{itemize}
+\end{calloutbox}
