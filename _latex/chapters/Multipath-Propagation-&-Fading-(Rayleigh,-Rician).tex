@@ -234,71 +234,88 @@ Urban environment with $\tau_{\text{rms}} = 1~\mu$s:
 B_c \approx \frac{1}{5 \times 10^{-6}} = 200~\text{kHz}
 \end{equation*}
 
+\textbf{Typical $\tau_{\text{rms}}$ values:}
 \begin{itemize}
-\item \textbf{Narrowband signal} ($< 200$~kHz): Flat fading
-\item \textbf{Wideband signal} ($> 200$~kHz): Frequency-selective fading (ISI)
+\item \textbf{Rural/suburban}: 0.1--1~$\mu$s
+\item \textbf{Urban}: 1--5~$\mu$s
+\item \textbf{Indoor}: 10--100~ns
 \end{itemize}
 \end{calloutbox}
 
-\subsection{Intersymbol Interference (ISI)}
+\subsection{Coherence Bandwidth}
 
-\textbf{Delayed multipath overlaps with next symbol.}
+The \textbf{coherence bandwidth} $B_c$ defines the frequency range over which the channel response is approximately flat (constant amplitude and linear phase):
 
-\textbf{Condition for ISI:}
 \begin{equation}
-\tau_{\text{rms}} > T_s
-\label{eq:isi-condition}
+B_c \approx \frac{1}{5\tau_{\text{rms}}}
 \end{equation}
 where:
 \begin{itemize}
-\item $T_s$ = symbol period (s)
-\item $\tau_{\text{rms}}$ = RMS delay spread (s)
+\item $B_c$ = coherence bandwidth (Hz)
+\item $\tau_{\text{rms}}$ = RMS delay spread (seconds)
 \end{itemize}
 
 \begin{warningbox}
-ISI occurs when delayed multipath components arrive during subsequent symbol periods, causing symbols to overlap and interfere. This is the primary impairment in wideband systems operating in multipath channels.
+If signal bandwidth $B > B_c$, the channel exhibits \textbf{frequency-selective fading}---different frequency components fade independently, causing \textbf{intersymbol interference (ISI)}. Equalization or OFDM is required.
 \end{warningbox}
 
-\begin{calloutbox}{Example: Severe ISI}
-1~Mbps data ($T_s = 1~\mu$s), urban channel ($\tau_{\text{rms}} = 3~\mu$s):
+\textbf{Example:} Urban environment with $\tau_{\text{rms}} = 1~\mu$s:
+\begin{equation}
+B_c \approx \frac{1}{5 \times 10^{-6}} = 200~\text{kHz}
+\end{equation}
+
+\textbf{Classification:}
 \begin{itemize}
-\item ISI is severe (3 symbols overlap!)
-\item \textbf{Mitigation:} Equalization, OFDM
+\item \textbf{Narrowband signal} ($B < 200$~kHz): Flat fading (all frequencies fade together)
+\item \textbf{Wideband signal} ($B > 200$~kHz): Frequency-selective fading (ISI present)
 \end{itemize}
-\end{calloutbox}
+
+\subsection{Intersymbol Interference (ISI)}
+
+Delayed multipath components overlap with subsequent symbols, causing \textbf{intersymbol interference}. The condition for significant ISI is:
+\begin{equation}
+\tau_{\text{rms}} > T_s
+\end{equation}
+where:
+\begin{itemize}
+\item $T_s$ = symbol period (seconds)
+\item $\tau_{\text{rms}}$ = RMS delay spread (seconds)
+\end{itemize}
+
+\textbf{Example:} 1~Mbps data rate ($T_s = 1~\mu$s) in urban channel ($\tau_{\text{rms}} = 3~\mu$s):
+
+The condition $\tau_{\text{rms}} > T_s$ is satisfied ($3 > 1$), meaning \textbf{ISI is severe}---up to 3 symbols overlap simultaneously!
+
+\textbf{Mitigation:} Channel equalization (see Chapter~\ref{ch:equalization}) or OFDM (see Chapter~\ref{ch:ofdm}) is required to combat ISI.
 
 \section{Frequency-Domain Effects}
 
 \subsection{Doppler Shift}
 
-\textbf{Relative motion between TX/RX causes frequency shift:}
+Relative motion between transmitter and receiver causes a \textbf{Doppler frequency shift}:
 \begin{equation}
-f_d = \frac{v}{\lambda} \cos(\theta) = \frac{v f_c}{c} \cos(\theta)
-\label{eq:doppler-shift}
+f_d = \frac{v}{\lambda} \cos(\theta) = \frac{v \cdot f_c}{c} \cos(\theta)
 \end{equation}
 where:
 \begin{itemize}
-\item $v$ = velocity (m/s)
-\item $\theta$ = angle between velocity vector and signal direction (rad)
 \item $f_d$ = Doppler shift (Hz)
+\item $v$ = relative velocity (m/s)
 \item $\lambda$ = wavelength (m)
+\item $\theta$ = angle between velocity vector and signal direction
 \item $f_c$ = carrier frequency (Hz)
 \item $c$ = speed of light ($3 \times 10^8$~m/s)
 \end{itemize}
 
-\begin{calloutbox}{Example: Doppler at Highway Speed}
-Car at 100~km/h (27.8~m/s), 2~GHz signal ($\lambda = 0.15$~m):
-\begin{equation*}
-f_d = \frac{27.8}{0.15} \cos(0°) = 185~\text{Hz}
-\end{equation*}
-\end{calloutbox}
+\textbf{Example:} Vehicle at 100~km/h (27.8~m/s), 2~GHz signal, direct approach ($\theta = 0°$):
+\begin{equation}
+f_d = \frac{27.8 \times 2 \times 10^9}{3 \times 10^8} \cos(0°) = 185~\text{Hz}
+\end{equation}
 
 \subsection{Doppler Spread}
 
-\textbf{Multiple paths with different Doppler shifts:}
+In multipath environments, different paths have different Doppler shifts due to varying angles of arrival. The \textbf{Doppler spread} is:
 \begin{equation}
-B_d = 2f_{d,\text{max}} = \frac{2v}{\lambda}
-\label{eq:doppler-spread}
+B_d = 2f_{d,\text{max}} = \frac{2v}{\lambda} = \frac{2v \cdot f_c}{c}
 \end{equation}
 where:
 \begin{itemize}
@@ -306,15 +323,57 @@ where:
 \item $f_{d,\text{max}}$ = maximum Doppler shift (Hz)
 \end{itemize}
 
-\textbf{Coherence time} (how long channel stays constant):
+The \textbf{coherence time} characterizes how long the channel remains approximately constant:
 \begin{equation}
 T_c \approx \frac{0.423}{B_d}
-\label{eq:coherence-time}
 \end{equation}
 where:
 \begin{itemize}
-\item $T_c$ = coherence time (s)
+\item $T_c$ = coherence time (seconds)
+\item $B_d$ = Doppler spread (Hz)
 \end{itemize}
+
+\textbf{Example:} 100~km/h at 2~GHz:
+\begin{equation}
+B_d = 2 \times 185 = 370~\text{Hz}
+\end{equation}
+\begin{equation}
+T_c = \frac{0.423}{370} = 1.14~\text{ms}
+\end{equation}
+
+\textbf{Implication:} Channel changes every $\sim$1~ms. This is \textbf{fast fading} for low data rates but \textbf{slow fading} for high-speed systems where many symbols transmit within $T_c$.
+
+\subsection{Fading Classifications}\label{fading-classifications}
+
+\subsubsection{Flat vs
+Frequency-Selective}\label{flat-vs-frequency-selective}
+
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1622}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2973}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2162}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3243}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Effect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mitigation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Flat} & \(B \ll B_c\) & All frequencies fade together &
+Diversity, FEC \\
+\textbf{Frequency-selective} & \(B \gg B_c\) & Different frequencies
+fade independently & Equalization, OFDM \\
+\end{longtable}
+}
 
 \begin{calloutbox}{Example: Channel Coherence Time}
 100~km/h at 2~GHz:
@@ -326,169 +385,165 @@ T_c &= \frac{0.423}{370} = 1.14~\text{ms}
 \textbf{Implication:} Channel changes every $\sim$1~ms (fast fading for stationary systems, slow fading for fast data rates).
 \end{calloutbox}
 
-\section{Fading Classifications}
-
-\subsection{Flat vs Frequency-Selective Fading}
-
-\begin{center}
-\begin{tabular}{@{}llll@{}}
-\toprule
-\textbf{Type} & \textbf{Condition} & \textbf{Effect} & \textbf{Mitigation} \\
-\midrule
-\textbf{Flat} & $B \ll B_c$ & All frequencies fade together & Diversity, FEC \\
-\textbf{Frequency-selective} & $B \gg B_c$ & Different frequencies fade independently & Equalization, OFDM \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\subsection{Fast vs Slow Fading}
-
-\begin{center}
-\begin{tabular}{@{}llll@{}}
-\toprule
-\textbf{Type} & \textbf{Condition} & \textbf{Effect} & \textbf{Mitigation} \\
-\midrule
-\textbf{Slow} & $T_c \gg T_s$ & Channel constant over many symbols & Interleaving, FEC \\
-\textbf{Fast} & $T_c \ll T_s$ & Channel changes within symbol & Pilot-aided estimation \\
-\bottomrule
-\end{tabular}
-\end{center}
-
 \section{Rayleigh Fading}
 
-\textbf{Occurs when:} \textbf{No dominant LOS path}---many scattered components with random phases.
+\textbf{Rayleigh fading} occurs when there is \textbf{no dominant line-of-sight (LOS) path} and the received signal consists of many scattered components with random phases.
 
-\textbf{Statistical model:} Envelope follows \textbf{Rayleigh distribution}.
+\begin{keyconcept}
+When numerous multipath components with random phases combine, the Central Limit Theorem predicts that the in-phase and quadrature components are Gaussian distributed. The signal \textbf{envelope} then follows a Rayleigh distribution.
+\end{keyconcept}
 
 \subsection{Mathematical Description}
 
-\subsubsection{PDF (Probability Density Function)}
-
+The \textbf{probability density function (PDF)} of the Rayleigh envelope is:
 \begin{equation}
-p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0
-\label{eq:rayleigh-pdf}
+p_R(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0
 \end{equation}
 where:
 \begin{itemize}
-\item $r$ = signal envelope (V)
-\item $\sigma^2$ = average power (W)
+\item $r$ = signal envelope amplitude
+\item $\sigma^2$ = average power of in-phase or quadrature component
+\item Total average power: $\Omega = 2\sigma^2$
 \end{itemize}
 
-\textbf{Mean:}
+The \textbf{mean} and \textbf{variance} are:
 \begin{equation}
-\bar{r} = \sigma\sqrt{\frac{\pi}{2}} \approx 1.253\sigma
-\label{eq:rayleigh-mean}
+\bar{r} = \sigma\sqrt{\frac{\pi}{2}} = \sqrt{\frac{\pi \Omega}{4}}
+\end{equation}
+\begin{equation}
+\text{Var}(r) = \sigma^2\left(2 - \frac{\pi}{2}\right) = \frac{\Omega}{2}\left(2 - \frac{\pi}{2}\right)
 \end{equation}
 
-\textbf{Variance:}
-\begin{equation}
-\text{Var}(r) = \sigma^2\left(2 - \frac{\pi}{2}\right) \approx 0.429\sigma^2
-\label{eq:rayleigh-variance}
-\end{equation}
+\subsection{Cumulative Distribution Function}
 
-\subsubsection{CDF (Cumulative Distribution Function)}
-
-\textbf{Probability that signal $<$ threshold:}
+The \textbf{CDF} gives the probability that the signal envelope falls below a threshold $R$:
 \begin{equation}
-P(r < R) = 1 - \exp\left(-\frac{R^2}{2\sigma^2}\right)
-\label{eq:rayleigh-cdf}
+F_R(R) = P(r < R) = 1 - \exp\left(-\frac{R^2}{2\sigma^2}\right)
 \end{equation}
 where:
 \begin{itemize}
-\item $R$ = threshold level (V)
+\item $F_R(R)$ = probability of signal below threshold $R$
+\item $R$ = threshold level
 \end{itemize}
 
-\begin{calloutbox}{Example: Deep Fade Probability}
-Probability signal drops below 10~dB below average (i.e., $R = 0.316\bar{r}$):
-\begin{equation*}
-P(r < 0.316\bar{r}) = 1 - \exp(-0.05) \approx 5\%
-\end{equation*}
-This means the signal is in a deep fade approximately 5\% of the time.
-\end{calloutbox}
-
-\subsection{Performance Impact}
-
-\textbf{Rayleigh fading severely degrades performance.}
-
-\textbf{BPSK in Rayleigh fading:}
+\textbf{Example:} Probability signal drops 10~dB below average (i.e., $R = 0.316\bar{r}$):
 \begin{equation}
-\text{BER} = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right)
-\label{eq:bpsk-rayleigh-ber}
+P(r < 0.316\bar{r}) = 1 - \exp\left(-\frac{(0.316\bar{r})^2}{2\sigma^2}\right) = 1 - \exp(-0.05) \approx 5\%
 \end{equation}
-where:
-\begin{itemize}
-\item $\bar{\gamma} = E_b/N_0$ = average SNR (linear)
-\end{itemize}
 
-\textbf{Comparison at 10~dB average SNR:}
+This shows Rayleigh fading causes frequent deep fades---the signal drops more than 10~dB about 5\% of the time.
+
+\subsection{PDF Comparison: Rayleigh vs Rician}
+
 \begin{center}
-\begin{tabular}{@{}lrl@{}}
-\toprule
-Channel & BER & Performance Ratio \\
-\midrule
-\textbf{AWGN} & $3.9 \times 10^{-6}$ & Baseline \\
-\textbf{Rayleigh fading} & $0.005$ & \textbf{1000$\times$ worse!} \\
-\bottomrule
-\end{tabular}
+\begin{tikzpicture}[scale=1.0]
+% Axes
+\draw[->] (0,0) -- (10,0) node[right] {Envelope $r$};
+\draw[->] (0,0) -- (0,5) node[above] {$p(r)$};
+
+% Rayleigh PDF (K=0)
+\draw[thick, blue, domain=0:9, samples=100, smooth] plot (\x, {(\x/2)*exp(-(\x*\x)/8)});
+\node[blue, font=\small] at (6,3.5) {Rayleigh ($K=0$)};
+
+% Rician K=6 dB (K=4)
+\draw[thick, red, domain=0:9, samples=100, smooth] plot (\x, {0.8*(\x/2)*exp(-(\x*\x + 16)/8)*1.2});
+\node[red, font=\small] at (8,2) {Rician ($K=6$~dB)};
+
+% Rician K=10 dB (K=10) - more concentrated
+\draw[thick, green!60!black, domain=0:9, samples=100, smooth] plot (\x, {(\x > 5 && \x < 7) ? 1.5*exp(-8*(\x-6)*(\x-6)) : 0});
+\node[green!60!black, font=\small] at (3.5,1) {Rician ($K=10$~dB)};
+
+% Grid
+\draw[gray!30, very thin] (0,0) grid[step=1] (10,5);
+
+% Annotations
+\node[font=\scriptsize, align=left] at (5,-1) {
+Strong LOS component (high $K$) $\rightarrow$ concentrated PDF\\
+No LOS (Rayleigh) $\rightarrow$ wide spread, deep fades
+};
+\end{tikzpicture}
 \end{center}
 
-\begin{keyconcept}
-Deep fades cause \textbf{error bursts} when the signal drops into the noise floor. This is why Rayleigh fading is considered the most severe impairment in mobile wireless---even with adequate average SNR, momentary deep fades cause catastrophic errors.
-\end{keyconcept}
+\subsection{Impact on BER}
+
+Rayleigh fading \textbf{severely degrades} bit error rate performance. For \textbf{coherent BPSK} in Rayleigh fading:
+\begin{equation}
+\text{BER}_{\text{Rayleigh}} = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right)
+\end{equation}
+where:
+\begin{itemize}
+\item $\bar{\gamma} = \frac{E_b}{N_0}$ = average SNR per bit
+\end{itemize}
+
+Compare this to AWGN performance:
+\begin{equation}
+\text{BER}_{\text{AWGN}} = Q\left(\sqrt{2\bar{\gamma}}\right)
+\end{equation}
+
+\textbf{Comparison at $\bar{\gamma} = 10$~dB:}
+\begin{itemize}
+\item \textbf{AWGN channel}: BER = $3.9 \times 10^{-6}$
+\item \textbf{Rayleigh fading}: BER = $0.005$ (\textbf{1000× worse!})
+\end{itemize}
+
+\begin{calloutbox}{Physical Explanation}
+Deep fades push the instantaneous SNR into the noise floor, causing \textbf{error bursts}. Even though fades are brief, they dominate the average BER. This is why diversity and coding are essential for fading channels.
+\end{calloutbox}
 
 \subsection{Typical Rayleigh Environments}
 
+Rayleigh fading is characteristic of:
 \begin{itemize}
-\item \textbf{Dense urban:} No LOS, many reflections from buildings
-\item \textbf{Indoor:} Office spaces, corridors with obstructions
-\item \textbf{Suburban/rural:} Obstructed by trees and buildings
+\item \textbf{Dense urban areas}: No LOS, many reflections from buildings (urban canyons)
+\item \textbf{Indoor environments}: Office buildings, corridors, shopping malls
+\item \textbf{Suburban/rural NLOS}: Heavy vegetation, obstructions blocking direct path
+\item \textbf{Mobile-to-mobile communications}: Both terminals moving, no stable LOS
 \end{itemize}
 
 \section{Rician Fading}
 
-\textbf{Occurs when:} \textbf{Dominant LOS path + scattered components}.
-
-\textbf{Statistical model:} Envelope follows \textbf{Rician distribution}.
+\textbf{Rician fading} occurs when there is a \textbf{dominant line-of-sight (LOS) path} plus additional scattered components. The Rician distribution generalizes the Rayleigh distribution by adding a deterministic LOS component.
 
 \subsection{Mathematical Description}
 
-\subsubsection{PDF (Probability Density Function)}
-
+The \textbf{Rician PDF} is:
 \begin{equation}
-p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0\left(\frac{Ar}{\sigma^2}\right)
-\label{eq:rician-pdf}
+p_{\text{Ric}}(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0\left(\frac{Ar}{\sigma^2}\right), \quad r \geq 0
 \end{equation}
 where:
 \begin{itemize}
-\item $A$ = amplitude of LOS component (V)
-\item $I_0$ = modified Bessel function of first kind, order 0
-\item $\sigma^2$ = power of scattered components (W)
+\item $r$ = envelope amplitude
+\item $A$ = amplitude of LOS component
+\item $\sigma^2$ = average power of scattered components (per quadrature)
+\item $I_0(\cdot)$ = modified Bessel function of the first kind, order zero
 \end{itemize}
 
-\textbf{Rician K-factor:}
+The \textbf{Rician K-factor} characterizes the ratio of LOS to scattered power:
 \begin{equation}
 K = \frac{A^2}{2\sigma^2} = \frac{\text{LOS power}}{\text{Scattered power}}
-\label{eq:rician-k-factor}
 \end{equation}
 
-\textbf{K in dB:}
+In decibels:
 \begin{equation}
 K_{\text{dB}} = 10\log_{10}(K)
-\label{eq:k-factor-db}
 \end{equation}
+
+\begin{keyconcept}
+When $K = 0$ (no LOS), the Rician distribution \textbf{reduces to Rayleigh}. As $K \to \infty$ (pure LOS), the channel approaches AWGN. The K-factor thus interpolates between Rayleigh and AWGN behavior.
+\end{keyconcept}
 
 \subsection{Interpretation of K-factor}
 
 \begin{center}
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{lll}
 \toprule
-$K$ (dB) & Environment & Fading Severity \\
+\textbf{K (dB)} & \textbf{Environment} & \textbf{Fading Severity} \\
 \midrule
-\textbf{$-\infty$ ($K=0$)} & No LOS (pure Rayleigh) & \textbf{Severe} (deep fades) \\
-\textbf{0~dB ($K=1$)} & Equal LOS/scatter & Moderate \\
-\textbf{6~dB ($K=4$)} & Strong LOS & Mild \\
-\textbf{10~dB ($K=10$)} & Dominant LOS & Negligible fading \\
-\textbf{$+\infty$} & Pure LOS (AWGN-like) & None \\
+$-\infty$ ($K=0$) & No LOS (pure Rayleigh) & \textbf{Severe} (deep fades) \\
+0~dB ($K=1$) & Equal LOS/scatter & Moderate \\
+6~dB ($K=4$) & Strong LOS & Mild \\
+10~dB ($K=10$) & Dominant LOS & Negligible fading \\
+$+\infty$ & Pure LOS (AWGN-like) & None \\
 \bottomrule
 \end{tabular}
 \end{center}
