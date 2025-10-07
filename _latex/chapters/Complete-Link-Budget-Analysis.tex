@@ -433,499 +433,578 @@ Figure~\ref{fig:link-margin} illustrates the relationship between received power
 \end{tikzpicture}
 \end{center}
 
-\subsection{Example 1: WiFi Indoor
-Link}\label{example-1-wifi-indoor-link}
+\section{Worked Example: WiFi Indoor Link}
 
-\textbf{Scenario}: 2.4 GHz WiFi, 802.11n, 20 MHz, QPSK 1/2, 50 m indoor
+\textbf{Scenario:} 2.4~GHz WiFi 802.11n link, 20~MHz channel, QPSK 1/2 coding, 50~m indoor range with wall penetration.
 
-\subsubsection{Transmitter}\label{transmitter}
+\subsection*{Given Parameters}
 
+\begin{tabular}{@{}ll@{}}
+Frequency & 2.4~GHz \\
+Distance & 50~m \\
+Modulation & QPSK, rate 1/2 \\
+Bandwidth & 20~MHz \\
+PA output & 20~dBm \\
+TX cable loss & 0.5~dB \\
+TX antenna gain & 2~dBi \\
+Wall penetration & 2 walls $\times$ 5~dB $= 10$~dB \\
+RX antenna gain & 0~dBi (laptop internal) \\
+RX noise figure & 6~dB \\
+Required SNR & 5~dB \\
+Implementation loss & 2~dB \\
+\end{tabular}
+
+\subsection*{Step 1: Transmitter EIRP}
+
+\begin{align}
+P_t &= P_{\text{amp}} - L_{\text{TX}} = 20 - 0.5 = 19.5\text{~dBm} \notag \\
+\text{EIRP} &= P_t + G_t = 19.5 + 2 = 21.5\text{~dBm}
+\label{eq:ex1-eirp}
+\end{align}
+
+\subsection*{Step 2: Path Loss}
+
+\begin{align}
+L_{\text{FSPL}} &= 32.45 + 20\log_{10}(0.05) + 20\log_{10}(2400) \notag \\
+&= 32.45 - 26 + 67.6 = 74.0\text{~dB} \notag \\
+L_{\text{total}} &= L_{\text{FSPL}} + L_{\text{walls}} = 74 + 10 = 84\text{~dB}
+\label{eq:ex1-path-loss}
+\end{align}
+
+\subsection*{Step 3: Received Power}
+
+\begin{equation}
+P_r = \text{EIRP} - L_{\text{total}} + G_r = 21.5 - 84 + 0 = -62.5\text{~dBm}
+\label{eq:ex1-rx-power}
+\end{equation}
+
+\subsection*{Step 4: Receiver Sensitivity}
+
+\begin{align}
+N_0 &= -174\text{~dBm/Hz} + 10\log_{10}(20 \times 10^6) = -174 + 73 = -101\text{~dBm} \notag \\
+P_{\text{min}} &= N_0 + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}} \notag \\
+&= -101 + 6 + 5 + 2 = -88\text{~dBm}
+\label{eq:ex1-sensitivity}
+\end{align}
+
+\subsection*{Step 5: Link Margin}
+
+\begin{equation}
+M = P_r - P_{\text{min}} = -62.5 - (-88) = 25.5\text{~dB}
+\label{eq:ex1-margin}
+\end{equation}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
+\textbf{Result: Link closes with 25.5~dB margin}
+
+This comfortable margin accommodates:
 \begin{itemize}
-\tightlist
-\item
-  PA output: 20 dBm
-\item
-  Cable loss: 0.5 dB
-\item
-  \textbf{P\_t}: 19.5 dBm
-\item
-  Antenna gain: 2 dBi
-\item
-  \textbf{EIRP}: 21.5 dBm
+\item Fast fading (Rayleigh/Rician)
+\item Interference from adjacent networks
+\item Component aging and temperature variations
+\item Movement and multipath effects
 \end{itemize}
 
-\subsubsection{Path}\label{path}
+\textbf{Conclusion:} Link is highly reliable for stationary indoor WiFi applications.
+\end{calloutbox}
+
+\section{Worked Example: GEO Satellite Ku-band Downlink}
+
+\textbf{Scenario:} Geostationary satellite downlink at 12~GHz, 36,000~km slant range, 1~m receive dish, clear sky conditions.
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Frequency & 12~GHz (Ku-band) \\
+Distance & 36,000~km (GEO orbit) \\
+Satellite PA & 100~W $= 50$~dBm \\
+TX antenna gain & 30~dBi (spot beam) \\
+Atmospheric loss & 0.5~dB ($5°$ elevation) \\
+Scintillation margin & 2~dB \\
+RX dish diameter & 1~m \\
+RX dish efficiency & 60\% \\
+LNA noise figure & 0.8~dB (cryogenic) \\
+Cable loss & 1~dB \\
+Bandwidth & 36~MHz (DVB-S2) \\
+Modulation & QPSK 3/4 with LDPC \\
+Required SNR & 6.5~dB \\
+Implementation loss & 1.5~dB \\
+\end{tabular}
+
+\subsection*{Step 1: Satellite EIRP}
+
+\begin{equation}
+\text{EIRP} = P_t + G_t = 50 + 30 = 80\text{~dBm}
+\label{eq:ex2-eirp}
+\end{equation}
+
+\subsection*{Step 2: Path Loss}
+
+\begin{align}
+L_{\text{FSPL}} &= 32.45 + 20\log_{10}(36{,}000) + 20\log_{10}(12{,}000) \notag \\
+&= 32.45 + 91.1 + 81.6 = 205.2\text{~dB} \notag \\
+L_{\text{total}} &= L_{\text{FSPL}} + L_{\text{atm}} + L_{\text{scint}} \notag \\
+&= 205.2 + 0.5 + 2.0 = 207.7\text{~dB}
+\label{eq:ex2-path-loss}
+\end{align}
+
+\subsection*{Step 3: Receive Antenna Gain}
+
+For a parabolic dish with diameter $D$ and efficiency $\eta$:
+\begin{align}
+G_r &= 10\log_{10}\left(\eta \left(\frac{\pi D}{\lambda}\right)^2\right) \notag \\
+&= 10\log_{10}\left(0.6 \times \left(\frac{\pi \times 1}{0.025}\right)^2\right) \notag \\
+&= 10\log_{10}(948) = 37.8\text{~dBi}
+\label{eq:ex2-rx-gain}
+\end{align}
+
+\subsection*{Step 4: Received Power}
+
+\begin{align}
+P_r &= \text{EIRP} - L_{\text{total}} + G_r - L_{\text{cable}} \notag \\
+&= 80 - 207.7 + 37.8 - 1 = -90.9\text{~dBm}
+\label{eq:ex2-rx-power}
+\end{align}
+
+\subsection*{Step 5: Receiver Sensitivity}
+
+\begin{align}
+N_0 &= -174 + 10\log_{10}(36 \times 10^6) = -174 + 75.6 = -98.4\text{~dBm} \notag \\
+P_{\text{min}} &= N_0 + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}} \notag \\
+&= -98.4 + 0.8 + 6.5 + 1.5 = -89.6\text{~dBm}
+\label{eq:ex2-sensitivity}
+\end{align}
+
+\subsection*{Step 6: Link Margin}
+
+\begin{equation}
+M = P_r - P_{\text{min}} = -90.9 - (-89.6) = -1.3\text{~dB}
+\label{eq:ex2-margin}
+\end{equation}
+
+\begin{warningbox}
+\textbf{Link fails!} Negative margin indicates the link cannot close under these conditions. The 1~m dish is insufficient.
+\end{warningbox}
+
+\subsection*{Solution: Increase Dish Size}
+
+\textbf{Option 1: 1.8~m dish}
+\begin{align*}
+G_r &= 37.8 + 20\log_{10}(1.8) = 42.9\text{~dBi} \\
+P_r &= 80 - 207.7 + 42.9 - 1 = -85.8\text{~dBm} \\
+M &= -85.8 - (-89.6) = 3.8\text{~dB (marginal)}
+\end{align*}
+
+\textbf{Option 2: 2.4~m dish (recommended)}
+\begin{align*}
+G_r &= 37.8 + 20\log_{10}(2.4) = 45.4\text{~dBi} \\
+P_r &= 80 - 207.7 + 45.4 - 1 = -83.3\text{~dBm} \\
+M_{\text{clear}} &= -83.3 - (-89.6) = 6.3\text{~dB}
+\end{align*}
+
+With 5~dB rain margin for 99\% availability:
+\begin{align*}
+P_r(\text{rain}) &= -83.3 - 5 = -88.3\text{~dBm} \\
+M_{\text{rain}} &= -88.3 - (-89.6) = 1.3\text{~dB (acceptable)}
+\end{align*}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Design Recommendation}
+\textbf{Result: 2.4~m dish provides adequate margin}
 
 \begin{itemize}
-\tightlist
-\item
-  Free-space loss @ 50 m, 2.4 GHz:
+\item Clear-sky margin: 6.3~dB
+\item Rain-faded margin: 1.3~dB (99\% availability)
+\item Trades cost vs reliability
 \end{itemize}
 
-\[
-L_{\text{FSPL}} = 32.45 + 20\log_{10}(0.05) + 20\log_{10}(2400) = 32.45 - 26 + 67.6 = 74\ \text{dB}
-\]
+\textbf{Conclusion:} Link design requires careful margin analysis. Undersized antennas lead to outages; oversized antennas increase cost unnecessarily.
+\end{calloutbox}
+
+\section{Worked Example: Cellular LTE Link}
+
+\textbf{Scenario:} LTE eNodeB (cell tower) to user equipment (UE) at 2.6~GHz, 10~MHz resource block, QPSK 1/2 coding, 5~km suburban environment with building penetration.
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Frequency & 2.6~GHz \\
+Distance & 5~km \\
+Modulation & QPSK, rate 1/2 Turbo \\
+Bandwidth & 10~MHz \\
+eNodeB PA & 43~dBm (20~W per antenna) \\
+TX antenna gain & 17~dBi (sector antenna) \\
+TX cable loss & 2~dB \\
+Shadowing margin & 8~dB (90\% coverage) \\
+Building penetration & 10~dB \\
+UE antenna gain & $-2$~dBi (internal, near body) \\
+UE noise figure & 9~dB \\
+Required SNR & 4~dB \\
+Implementation loss & 2~dB \\
+\end{tabular}
+
+\subsection*{Step 1: Transmitter EIRP}
+
+\begin{equation}
+\text{EIRP} = P_t + G_t - L_{\text{TX}} = 43 + 17 - 2 = 58\text{~dBm}
+\label{eq:ex3-eirp}
+\end{equation}
+
+\subsection*{Step 2: Path Loss}
+
+\begin{align}
+L_{\text{FSPL}} &= 32.45 + 20\log_{10}(5) + 20\log_{10}(2600) \notag \\
+&= 32.45 + 14.0 + 68.3 = 114.8\text{~dB} \notag \\
+L_{\text{total}} &= L_{\text{FSPL}} + L_{\text{shadow}} + L_{\text{building}} \notag \\
+&= 114.8 + 8 + 10 = 132.8\text{~dB}
+\label{eq:ex3-path-loss}
+\end{align}
+
+\subsection*{Step 3: Received Power}
+
+\begin{equation}
+P_r = \text{EIRP} - L_{\text{total}} + G_r = 58 - 132.8 - 2 = -76.8\text{~dBm}
+\label{eq:ex3-rx-power}
+\end{equation}
+
+\subsection*{Step 4: Receiver Sensitivity}
+
+\begin{align}
+N_0 &= -174 + 10\log_{10}(10 \times 10^6) = -174 + 70 = -104\text{~dBm} \notag \\
+P_{\text{min}} &= N_0 + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}} \notag \\
+&= -104 + 9 + 4 + 2 = -89\text{~dBm}
+\label{eq:ex3-sensitivity}
+\end{align}
+
+\subsection*{Step 5: Link Margin}
+
+\begin{equation}
+M = P_r - P_{\text{min}} = -76.8 - (-89) = 12.2\text{~dB}
+\label{eq:ex3-margin}
+\end{equation}
+
+\subsection*{Fading Considerations}
+
+\textbf{Rayleigh fading (10~dB fade depth, 10\% of time):}
+\begin{align*}
+P_r(\text{fade}) &= -76.8 - 10 = -86.8\text{~dBm} \\
+M(\text{fade}) &= -86.8 - (-89) = 2.2\text{~dB (marginal)}
+\end{align*}
+
+\textbf{With 2-antenna diversity (MRC):}
+\begin{align*}
+\text{Diversity gain} &= 5\text{~dB (typical for 2-branch)} \\
+P_r(\text{fade+div}) &= -86.8 + 5 = -81.8\text{~dBm} \\
+M(\text{fade+div}) &= -81.8 - (-89) = 7.2\text{~dB (improved)}
+\end{align*}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Mobile Link Analysis}
+\textbf{Result: Link closes with 12.2~dB margin (static)}
+
+Mobile considerations:
+\begin{itemize}
+\item Static/slow-moving UE: 12.2~dB margin (good)
+\item Deep Rayleigh fade: 2.2~dB margin (service degradation)
+\item With diversity: 7.2~dB margin in fade (acceptable)
+\end{itemize}
+
+\textbf{Conclusion:} Antenna diversity is critical for mobile cellular systems to maintain quality during fading. Single-antenna UE experiences intermittent outages in deep fades.
+\end{calloutbox}
+
+\section{Link Budget Table Template}
+
+The following template provides a systematic framework for link budget calculations:
+
+\begin{center}
+\begin{tabular}{@{}p{0.25\linewidth}p{0.15\linewidth}p{0.12\linewidth}p{0.10\linewidth}p{0.28\linewidth}@{}}
+\toprule
+\textbf{Parameter} & \textbf{Symbol} & \textbf{Value} & \textbf{Units} & \textbf{Notes} \\
+\midrule
+\multicolumn{5}{l}{\textbf{TRANSMITTER}} \\
+TX power (PA) & $P_{\text{amp}}$ & --- & dBm & \\
+TX losses & $L_{\text{TX}}$ & --- & dB & Cables, filters \\
+Transmit power & $P_t$ & --- & dBm & $P_{\text{amp}} - L_{\text{TX}}$ \\
+TX antenna gain & $G_t$ & --- & dBi & \\
+\textbf{EIRP} & --- & --- & dBm & $P_t + G_t$ \\
+\midrule
+\multicolumn{5}{l}{\textbf{PROPAGATION}} \\
+Distance & $d$ & --- & km & \\
+Frequency & $f$ & --- & GHz & \\
+Free-space loss & $L_{\text{FSPL}}$ & --- & dB & Eq.~\ref{eq:fspl-practical} \\
+Atmospheric loss & $L_{\text{atm}}$ & --- & dB & \\
+Rain attenuation & $L_{\text{rain}}$ & --- & dB & ITU-R model \\
+Other losses & $L_{\text{other}}$ & --- & dB & Multipath, etc. \\
+\textbf{Total path loss} & $L_{\text{total}}$ & --- & dB & Sum of above \\
+\midrule
+\multicolumn{5}{l}{\textbf{RECEIVER}} \\
+RX antenna gain & $G_r$ & --- & dBi & \\
+RX losses & $L_{\text{RX}}$ & --- & dB & Cables, connectors \\
+\textbf{Received power} & $P_r$ & --- & dBm & Eq.~\ref{eq:link-budget-complete} \\
+\midrule
+\multicolumn{5}{l}{\textbf{PERFORMANCE}} \\
+Bandwidth & $B$ & --- & MHz & \\
+Thermal noise & $N_0$ & $-174 + 10\log(B)$ & dBm & \\
+Noise figure & NF & --- & dB & \\
+Required SNR & $\text{SNR}_{\text{req}}$ & --- & dB & For target BER \\
+Impl. loss & $L_{\text{impl}}$ & --- & dB & Typically 1--3~dB \\
+\textbf{Sensitivity} & $P_{\text{min}}$ & --- & dBm & Eq.~\ref{eq:receiver-sensitivity} \\
+\midrule
+\textbf{MARGIN} & $M$ & --- & dB & $P_r - P_{\text{min}}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Fade Margin Design Guidelines}
+
+System designers must allocate sufficient margin to accommodate various impairments. The total margin requirement depends on the propagation environment and target availability.
+
+\subsection{Clear-Sky Margin}
+
+Minimum margin required under ideal propagation conditions:
 
 \begin{itemize}
-\tightlist
-\item
-  Wall penetration (2 walls \$\textbackslash times\$ 5 dB): 10 dB
-\item
-  \textbf{Total path loss}: 74 + 10 = 84 dB
+\item \textbf{Satellite (GEO Ku/Ka-band):} 5--10~dB
+\item \textbf{Terrestrial line-of-sight:} 10--15~dB
+\item \textbf{Mobile non-line-of-sight:} 15--20~dB
 \end{itemize}
 
-\subsubsection{Receiver}\label{receiver}
+\subsection{Rain Margin (Satellite)}
+
+Additional margin for rain attenuation depends on target availability:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Availability} & \textbf{Ku-band} & \textbf{Ka-band} \\
+\midrule
+99.0\% & 5--8~dB & 10--15~dB \\
+99.9\% & 10--15~dB & 20--25~dB \\
+99.99\% & 20--30~dB & 30--40~dB \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Multipath Fading Margin}
+
+For mobile and urban environments:
 
 \begin{itemize}
-\tightlist
-\item
-  Antenna gain: 0 dBi (laptop internal)
-\item
-  Cable loss: 0 dB (integrated)
-\item
-  \textbf{Received power}:
+\item \textbf{Rayleigh fading:} 20--30~dB for 90\% location reliability
+\item \textbf{Rician fading ($K = 6$~dB):} 10--15~dB
 \end{itemize}
 
-\[
-P_r = 21.5 - 84 + 0 = -62.5\ \text{dBm}
-\]
+\subsection{Total Margin Budget}
 
-\subsubsection{Sensitivity}\label{sensitivity}
-
-\begin{itemize}
-\tightlist
-\item
-  Thermal noise: -174 dBm/Hz + 73 dBHz = -101 dBm
-\item
-  NF: 6 dB
-\item
-  SNR\_req: 5 dB (QPSK 1/2)
-\item
-  Impl loss: 2 dB
-\item
-  \textbf{P\_min}: -101 + 6 + 5 + 2 = -88 dBm
-\end{itemize}
-
-\subsubsection{Margin}\label{margin}
-
-\[
-M = -62.5 - (-88) = 25.5\ \text{dB}
-\]
-
-\textbf{Result}: Link \textbf{closes comfortably} with 25.5 dB margin
-(can tolerate fading, interference)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Example 2: GEO Satellite Ku-band
-Downlink}\label{example-2-geo-satellite-ku-band-downlink}
-
-\textbf{Scenario}: 12 GHz downlink, 36,000 km slant range, 1 m dish RX,
-clear sky
-
-\subsubsection{Transmitter (Satellite)}\label{transmitter-satellite}
-
-\begin{itemize}
-\tightlist
-\item
-  Satellite PA: 100 W = 50 dBm
-\item
-  TX antenna gain: 30 dBi (spot beam)
-\item
-  \textbf{EIRP}: 80 dBm = 80 dBW
-\end{itemize}
-
-\subsubsection{Path}\label{path-1}
-
-\begin{itemize}
-\tightlist
-\item
-  Distance: 36,000 km
-\item
-  Frequency: 12 GHz
-\end{itemize}
-
-\[
-L_{\text{FSPL}} = 32.45 + 20\log_{10}(36,000) + 20\log_{10}(12,000)
-\]
-
-\[
-= 32.45 + 91.1 + 81.6 = 205\ \text{dB}
-\]
-
-\begin{itemize}
-\tightlist
-\item
-  Atmospheric absorption (5\$\^{}\textbackslash circ\$ elevation): 0.5
-  dB
-\item
-  Clear-sky rain (0.01 mm/hr): 0.01 dB (negligible)
-\item
-  Ionospheric scintillation margin: 2 dB
-\item
-  \textbf{Total path loss}: 205 + 0.5 + 0 + 2 = 207.5 dB
-\end{itemize}
-
-\subsubsection{Receiver (Ground Station)}\label{receiver-ground-station}
-
-\begin{itemize}
-\tightlist
-\item
-  Dish diameter: 1 m
-\item
-  Antenna gain (eff 60\%):
-\end{itemize}
-
-\[
-G_r = 10\log_{10}\left(0.6 \times \left(\frac{\pi \times 1}{0.025}\right)^2\right) = 10\log_{10}(0.6 \times 1580) = 37.8\ \text{dBi}
-\]
-
-\begin{itemize}
-\tightlist
-\item
-  LNA noise figure: 0.8 dB (cryogenic)
-\item
-  Cable loss: 1 dB
-\item
-  \textbf{Net RX gain}: 37.8 - 1 = 36.8 dB
-\end{itemize}
-
-\textbf{Received power}:
-
-\[
-P_r = 80 - 207.5 + 36.8 = -90.7\ \text{dBm}
-\]
-
-\subsubsection{Sensitivity (DVB-S2, QPSK 3/4, 36 MHz
-bandwidth)}\label{sensitivity-dvb-s2-qpsk-34-36-mhz-bandwidth}
-
-\begin{itemize}
-\tightlist
-\item
-  Bandwidth: 36 MHz = 75.6 dBHz
-\item
-  Thermal noise: -174 + 75.6 = -98.4 dBm
-\item
-  NF: 0.8 dB (LNA at antenna)
-\item
-  SNR\_req: 6.5 dB (QPSK 3/4 with LDPC)
-\item
-  Impl loss: 1.5 dB
-\item
-  \textbf{P\_min}: -98.4 + 0.8 + 6.5 + 1.5 = -89.6 dBm
-\end{itemize}
-
-\subsubsection{Margin (Clear Sky)}\label{margin-clear-sky}
-
-\[
-M = -90.7 - (-89.6) = -1.1\ \text{dB}
-\]
-
-\textbf{Uh oh!} Link \textbf{fails} in clear sky (need higher gain or
-more TX power)
-
-\textbf{Fix}: Increase dish to 1.8 m - New gain: 37.8 + 20log(1.8) =
-42.9 dBi - New \(P_r\): 80 - 207.5 + 42.9 = -84.6 dBm - \textbf{New
-margin}: -84.6 - (-89.6) = \textbf{5 dB} (marginal)
-
-\textbf{With 99\% rain margin} (add 5 dB rain attenuation): - \(P_r\) in
-rain: -84.6 - 5 = -89.6 dBm - \textbf{Rain margin}: 0 dB (link at
-threshold!)
-
-\textbf{Better fix}: Use 2.4 m dish - Gain: 47.5 dBi - Clear sky: -80
-dBm, margin 10 dB - 99\% rain: -85 dBm, margin 5 dB
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Example 3: Cellular LTE (2.6
-GHz)}\label{example-3-cellular-lte-2.6-ghz}
-
-\textbf{Scenario}: eNodeB to UE, 2.6 GHz, 10 MHz RB, QPSK 1/2, 5 km
-suburban
-
-\subsubsection{Transmitter (Cell Tower)}\label{transmitter-cell-tower}
-
-\begin{itemize}
-\tightlist
-\item
-  PA per antenna: 43 dBm (20 W)
-\item
-  TX antenna: 17 dBi (sector antenna)
-\item
-  Cable loss: 2 dB
-\item
-  \textbf{EIRP}: 43 + 17 - 2 = 58 dBm
-\end{itemize}
-
-\subsubsection{Path}\label{path-2}
-
-\begin{itemize}
-\tightlist
-\item
-  FSPL @ 5 km, 2.6 GHz:
-\end{itemize}
-
-\[
-L_{\text{FSPL}} = 32.45 + 20\log_{10}(5) + 20\log_{10}(2600) = 32.45 + 14 + 68.3 = 115\ \text{dB}
-\]
-
-\begin{itemize}
-\tightlist
-\item
-  Shadowing margin (suburban log-normal): 8 dB (for 90\% coverage)
-\item
-  Building penetration: 10 dB (indoor UE)
-\item
-  \textbf{Total path loss}: 115 + 8 + 10 = 133 dB
-\end{itemize}
-
-\subsubsection{Receiver (UE)}\label{receiver-ue}
-
-\begin{itemize}
-\tightlist
-\item
-  Antenna gain: -2 dBi (internal, near body)
-\item
-  \textbf{Received power}:
-\end{itemize}
-
-\[
-P_r = 58 - 133 - 2 = -77\ \text{dBm}
-\]
-
-\subsubsection{Sensitivity (10 MHz, QPSK
-1/2)}\label{sensitivity-10-mhz-qpsk-12}
-
-\begin{itemize}
-\tightlist
-\item
-  Bandwidth: 10 MHz = 70 dBHz
-\item
-  Thermal noise: -174 + 70 = -104 dBm
-\item
-  NF: 9 dB (smartphone front-end)
-\item
-  SNR\_req: 4 dB (QPSK 1/2 Turbo code)
-\item
-  Impl loss: 2 dB
-\item
-  \textbf{P\_min}: -104 + 9 + 4 + 2 = -89 dBm
-\end{itemize}
-
-\subsubsection{Margin}\label{margin-1}
-
-\[
-M = -77 - (-89) = 12\ \text{dB}
-\]
-
-\textbf{Result}: Link \textbf{closes} with 12 dB margin (adequate for
-mobile fading)
-
-\textbf{With Rayleigh fading} (10 dB fade depth @ 10\% time): - Faded
-\(P_r\): -77 - 10 = -87 dBm - \textbf{Faded margin}: -87 - (-89) = 2 dB
-(still works, but error rate increases)
-
-\textbf{Diversity RX} (2 antennas, max ratio combining): - Diversity
-gain: 5 dB (typical for 2-branch) - Effective \(P_r\) in fade: -87 + 5 =
--82 dBm - \textbf{Margin with diversity}: -82 - (-89) = 7 dB (much
-better!)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Link Budget Table
-Template}\label{link-budget-table-template}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2750}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1750}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1750}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1750}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Parameter
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Symbol
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Value
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Units
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Notes
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{TRANSMITTER} & & & & \\
-TX power (PA) & \(P_{\text{amp}}\) & & dBm & \\
-TX losses & \(L_{\text{TX}}\) & & dB & Cables, filters \\
-Transmit power & \(P_t\) & & dBm & \(P_{\text{amp}} - L_{\text{TX}}\) \\
-TX antenna gain & \(G_t\) & & dBi & \\
-\textbf{EIRP} & & & dBm & \(P_t + G_t\) \\
-\textbf{PROPAGATION} & & & & \\
-Distance & \(d\) & & km & \\
-Frequency & \(f\) & & GHz & \\
-Free-space loss & \(L_{\text{FSPL}}\) & & dB & 32.45 + 20log(d) +
-20log(f) \\
-Atmospheric loss & \(L_{\text{atm}}\) & & dB & \\
-Rain attenuation & \(L_{\text{rain}}\) & & dB & ITU model \\
-Other losses & \(L_{\text{other}}\) & & dB & Multipath, penetration,
-etc. \\
-\textbf{Total path loss} & \(L_{\text{total}}\) & & dB & Sum \\
-\textbf{RECEIVER} & & & & \\
-RX antenna gain & \(G_r\) & & dBi & \\
-RX losses & \(L_{\text{RX}}\) & & dB & Cables, connectors \\
-\textbf{Received power} & \(P_r\) & & dBm & EIRP - \(L_{\text{total}}\)
-+ \(G_r\) - \(L_{\text{RX}}\) \\
-\textbf{PERFORMANCE} & & & & \\
-Bandwidth & \(B\) & & MHz & \\
-Thermal noise & \(N_0\) & -174 + 10log(B) & dBm & \\
-Noise figure & NF & & dB & \\
-Noise power & \(N\) & \(N_0\) + NF & dBm & \\
-Required SNR & SNR\_req & & dB & For target BER \\
-Impl loss & \(L_{\text{impl}}\) & & dB & Typically 1-3 dB \\
-\textbf{Sensitivity} & \(P_{\text{min}}\) & & dBm & \(N\) + SNR\_req +
-\(L_{\text{impl}}\) \\
-\textbf{MARGIN} & \(M\) & & dB & \(P_r - P_{\text{min}}\) \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Fade Margin Design
-Guidelines}\label{fade-margin-design-guidelines}
-
-\textbf{Clear-sky margin} (no fading): - \textbf{Satellite (GEO Ku/Ka)}:
-5-10 dB - \textbf{Terrestrial LOS}: 10-15 dB - \textbf{Mobile (NLOS)}:
-15-20 dB
-
-\textbf{Rain margin} (satellite): - \textbf{Availability}: 99\%
-\$\textbackslash rightarrow\$ 5-8 dB, 99.9\%
-\$\textbackslash rightarrow\$ 10-15 dB, 99.99\%
-\$\textbackslash rightarrow\$ 20-30 dB - \textbf{Frequency}: Ku-band:
-3-10 dB, Ka-band: 10-20 dB
-
-\textbf{Multipath fading margin}: - \textbf{Rayleigh fading}: 20-30 dB
-for 90\% location reliability - \textbf{Rician K=6 dB}: 10-15 dB
-
-\textbf{Total design margin}:
-
-\[
+\begin{equation}
 M_{\text{total}} = M_{\text{clear}} + M_{\text{rain}} + M_{\text{fade}}
-\]
+\label{eq:total-margin}
+\end{equation}
 
-\textbf{Trade-off}: Higher margin \$\textbackslash rightarrow\$ More
-expensive (bigger antennas, more power)
+Figure~\ref{fig:fade-margin} illustrates the margin allocation strategy.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+% Stacked bar chart showing margin allocation
+\draw[thick,->] (0,0) -- (0,7) node[above] {\sffamily Margin (dB)};
+\draw[thick] (0,0) -- (10,0);
 
-\subsection{Adaptive Techniques}\label{adaptive-techniques}
+% Satellite example
+\fill[black!10] (0.5,0) rectangle (2.5,1.5);
+\node[font=\sffamily\scriptsize] at (1.5,0.75) {Clear};
+\node[below, font=\sffamily\scriptsize] at (1.5,0) {5 dB};
 
-\textbf{Adaptive Coding and Modulation (ACM)}:
+\fill[black!30] (0.5,1.5) rectangle (2.5,3.5);
+\node[font=\sffamily\scriptsize] at (1.5,2.5) {Rain};
+\node[above, font=\sffamily\scriptsize] at (1.5,1.5) {8 dB};
 
-\textbf{Concept}: Change modulation/code rate based on channel
-conditions
+\fill[black!50] (0.5,3.5) rectangle (2.5,5.5);
+\node[font=\sffamily\scriptsize, text=white] at (1.5,4.5) {Scint.};
+\node[above, font=\sffamily\scriptsize] at (1.5,3.5) {2 dB};
 
-\textbf{Example}: DVB-S2X satellite - Clear sky: 32APSK 9/10
-\$\textbackslash rightarrow\$ 3.5 bits/symbol, needs C/N = 16 dB - Light
-rain: 8PSK 3/4 \$\textbackslash rightarrow\$ 2.25 bits/symbol, needs C/N
-= 11 dB - Heavy rain: QPSK 1/2 \$\textbackslash rightarrow\$ 1
-bit/symbol, needs C/N = 4 dB
+\draw[thick] (0.5,0) rectangle (2.5,5.5);
+\node[below, font=\sffamily\small\bfseries] at (1.5,-0.3) {Satellite};
+\node[above, font=\sffamily\small] at (1.5,5.5) {15 dB};
 
-\textbf{Benefit}: Maximize throughput when conditions good, maintain
-connectivity when conditions poor
+% Terrestrial LOS
+\fill[black!10] (3.5,0) rectangle (5.5,2.5);
+\node[font=\sffamily\scriptsize] at (4.5,1.25) {Clear};
+\node[below, font=\sffamily\scriptsize] at (4.5,0) {10 dB};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\fill[black!30] (3.5,2.5) rectangle (5.5,4);
+\node[font=\sffamily\scriptsize] at (4.5,3.25) {Weather};
+\node[above, font=\sffamily\scriptsize] at (4.5,2.5) {3 dB};
 
-\subsection{Link Availability}\label{link-availability}
+\draw[thick] (3.5,0) rectangle (5.5,4);
+\node[below, font=\sffamily\small\bfseries] at (4.5,-0.3) {Terrestrial};
+\node[above, font=\sffamily\small] at (4.5,4) {13 dB};
 
-\textbf{Probability link meets performance requirement}:
+% Mobile NLOS
+\fill[black!10] (6.5,0) rectangle (8.5,1.5);
+\node[font=\sffamily\scriptsize] at (7.5,0.75) {Clear};
+\node[below, font=\sffamily\scriptsize] at (7.5,0) {5 dB};
 
-\[
-\text{Availability} = \frac{\text{Time link works}}{\text{Total time}} \times 100\%
-\]
+\fill[black!30] (6.5,1.5) rectangle (8.5,3);
+\node[font=\sffamily\scriptsize] at (7.5,2.25) {Shadow};
+\node[above, font=\sffamily\scriptsize] at (7.5,1.5) {8 dB};
 
-\textbf{Target availability} (depends on application): - \textbf{Data
-networks}: 99.9\% (8.76 hours/year downtime) - \textbf{Voice}: 99.99\%
-(52.6 minutes/year) - \textbf{Mission-critical}: 99.999\% (5.26
-minutes/year)
+\fill[black!50] (6.5,3) rectangle (8.5,6);
+\node[font=\sffamily\scriptsize, text=white] at (7.5,4.5) {Multipath};
+\node[above, font=\sffamily\scriptsize] at (7.5,3) {10 dB};
 
-\textbf{Dominated by rain} (for satellite Ku/Ka-band):
+\draw[thick] (6.5,0) rectangle (8.5,6);
+\node[below, font=\sffamily\small\bfseries] at (7.5,-0.3) {Mobile};
+\node[above, font=\sffamily\small] at (7.5,6) {23 dB};
 
-\textbf{ITU rain statistics}: - Temperate: 12 mm/hr exceeded 1\% of time
-(3.65 days/year) - Tropical: 42 mm/hr exceeded 1\% of time
+\end{tikzpicture}
+\end{center}
 
-\textbf{Design procedure}: 1. Choose target availability (e.g., 99.9\%)
-2. Find rain rate exceeded 0.1\% of time (e.g., 25 mm/hr temperate) 3.
-Calculate rain attenuation for that rain rate 4. Ensure link margin
-\textgreater{} rain attenuation
+\begin{keyconcept}
+\textbf{Trade-off:} Higher margin increases link reliability but requires larger antennas, more transmit power, or lower data rates. Cost-optimized designs balance margin against system requirements.
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Adaptive Techniques}
 
-\subsection{Summary}\label{summary}
+\subsection{Adaptive Coding and Modulation (ACM)}
 
-\textbf{Link budget essentials}:
+ACM dynamically adjusts modulation order and coding rate based on instantaneous channel conditions, maximizing spectral efficiency while maintaining connectivity.
 
+\textbf{Principle:} Select modulation/coding combination that maximizes throughput for current SNR.
+
+\begin{calloutbox}{Example: DVB-S2X Satellite ACM}
+\textbf{Operating modes:}
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Conditions} & \textbf{ModCod} & \textbf{Spectral Eff.} & \textbf{Required C/N} \\
+\midrule
+Clear sky & 32APSK 9/10 & 3.5~bps/Hz & 16~dB \\
+Light rain & 8PSK 3/4 & 2.25~bps/Hz & 11~dB \\
+Heavy rain & QPSK 1/2 & 1.0~bps/Hz & 4~dB \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Benefit:} Throughput adapts gracefully to channel degradation. Link maintains connectivity even during severe fades at reduced data rate.
+\end{calloutbox}
+
+\subsection{Link Availability}
+
+Link availability quantifies the percentage of time the link meets performance requirements:
+\begin{equation}
+\text{Availability} = \frac{\text{Time link operational}}{\text{Total time}} \times 100\%
+\label{eq:availability}
+\end{equation}
+
+\textbf{Target availability by application:}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Application} & \textbf{Availability} & \textbf{Downtime/year} \\
+\midrule
+Data networks & 99.9\% & 8.76~hours \\
+Voice telephony & 99.99\% & 52.6~minutes \\
+Mission-critical & 99.999\% & 5.26~minutes \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Rain Statistics and Design}
+
+For satellite Ku/Ka-band links, rain is the dominant availability-limiting factor.
+
+\textbf{ITU rain statistics:}
+\begin{itemize}
+\item \textbf{Temperate climate:} 12~mm/hr exceeded 1\% of time (3.65~days/year)
+\item \textbf{Tropical climate:} 42~mm/hr exceeded 1\% of time
+\end{itemize}
+
+\textbf{Design procedure:}
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{EIRP} = TX power + TX gain (dBm)
-\item
-  \textbf{Path loss} = FSPL + atmospheric + rain + other (dB)
-\item
-  \textbf{RX power} = EIRP - path loss + RX gain - RX losses (dBm)
-\item
-  \textbf{Sensitivity} = Noise floor + NF + SNR\_req + impl loss (dBm)
-\item
-  \textbf{Margin} = RX power - sensitivity (dB, must be positive!)
+\item Choose target availability (e.g., 99.9\%)
+\item Determine rain rate exceeded $(100 - 99.9) = 0.1\%$ of time
+\item Calculate rain attenuation using ITU-R model (Eq.~\ref{eq:rain-attenuation})
+\item Ensure clear-sky margin $\geq$ rain attenuation
 \end{enumerate}
 
-\textbf{Design targets}: - Clear-sky margin: 10+ dB - Rain margin: 5-20
-dB (depends on frequency, availability) - Total margin: 15-30 dB typical
+\section{Applications}
 
-\textbf{Adaptive techniques} (ACM, diversity) improve spectral
-efficiency and availability.
+Link budget analysis is fundamental to the design and operation of wireless communication systems across diverse applications:
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Related Topics}\label{related-topics}
+\subsection{Satellite Communications}
 
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Dominant loss
-  mechanism
-\item
-  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Determines required
-  C/N
-\item
-  \textbf{{[}{[}Noise-Sources-\&-Noise-Figure{]}{]}}: RX sensitivity
-  calculation
-\item
-  \textbf{{[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]}}: Alternative SNR
-  metrics
-\item
-  \textbf{{[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}}:
-  Rain margin design
-\item
-  \textbf{{[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}}:
-  Fade margin for mobile
-\item
-  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric vs SNR
+\item \textbf{GEO broadcast (TV, radio):} Massive path loss (200+~dB) requires high EIRP, large ground station antennas
+\item \textbf{LEO constellations (Starlink, OneWeb):} Lower path loss but rapid satellite motion requires beam steering
+\item \textbf{Deep-space missions (Voyager, Mars rovers):} Extreme distances demand every millidecibel of margin
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Cellular Networks}
 
-\textbf{Key takeaway}: \textbf{Link budget is systematic accounting of
-all gains/losses from TX to RX.} Start with EIRP, subtract path losses,
-add RX gain, compare to sensitivity. Margin = difference. Design for
-10-30 dB total margin to handle fading, rain, interference. Adaptive
-techniques maximize throughput while maintaining connectivity.
+\begin{itemize}
+\item \textbf{Coverage planning:} Cell tower placement based on link budget to achieve target coverage area
+\item \textbf{Capacity optimization:} Balance transmit power, antenna height, frequency reuse
+\item \textbf{5G mmWave:} High path loss and rain attenuation require dense small-cell deployment
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{WiFi and Wireless LANs}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+\begin{itemize}
+\item \textbf{Access point placement:} Indoor propagation dominated by wall/floor penetration losses
+\item \textbf{Range extension:} External antennas, higher transmit power, or mesh networks
+\item \textbf{Interference management:} Margin allocation for co-channel and adjacent-channel interference
+\end{itemize}
+
+\subsection{Point-to-Point Microwave}
+
+\begin{itemize}
+\item \textbf{Backhaul links:} Fiber alternative for cellular/internet infrastructure
+\item \textbf{High availability required:} 99.999\% typical, requires substantial rain margin
+\item \textbf{Frequency selection:} Higher frequencies offer more bandwidth but suffer greater rain attenuation
+\end{itemize}
+
+\subsection{Radar and Sensing}
+
+\begin{itemize}
+\item \textbf{Weather radar:} Two-way link budget accounts for round-trip path loss
+\item \textbf{Automotive radar (77~GHz):} Short range but high attenuation in rain/fog
+\item \textbf{Synthetic aperture radar (SAR):} Extreme sensitivity requirements for earth observation
+\end{itemize}
+
+\section{Summary}
+
+\textbf{Link budget essentials:}
+
+\begin{enumerate}
+\item \textbf{EIRP} $=$ TX power $+$ TX antenna gain (dBm)
+\item \textbf{Path loss} $=$ FSPL $+$ atmospheric $+$ rain $+$ other (dB)
+\item \textbf{Received power} $=$ EIRP $-$ path loss $+$ RX gain $-$ RX losses (dBm)
+\item \textbf{Sensitivity} $=$ Noise floor $+$ NF $+$ SNR$_{\text{req}}$ $+$ implementation loss (dBm)
+\item \textbf{Margin} $=$ Received power $-$ sensitivity (dB, \textbf{must be positive})
+\end{enumerate}
+
+\textbf{Design targets:}
+\begin{itemize}
+\item Clear-sky margin: $10+$~dB
+\item Rain margin (satellite): 5--20~dB (depends on frequency, availability)
+\item Total margin: 15--30~dB typical
+\end{itemize}
+
+\begin{keyconcept}
+\textbf{Link budget is systematic accounting of all gains/losses from transmitter to receiver.} Start with EIRP, subtract path losses, add receiver gain, compare to sensitivity. Positive margin ensures link closure. Design for adequate margin (10--30~dB) to handle fading, rain, interference, and aging. Adaptive techniques (ACM, diversity) maximize throughput while maintaining connectivity.
+\end{keyconcept}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter~\ref{ch:fspl}:} Free-Space Path Loss---dominant loss mechanism in link budget
+\item \textbf{Chapter~\ref{ch:snr}:} Signal-to-Noise Ratio---determines required carrier-to-noise ratio
+\item \textbf{Chapter~\ref{ch:noise-figure}:} Noise Sources \& Noise Figure---receiver sensitivity calculation
+\item \textbf{Chapter~\ref{ch:eb-n0}:} Energy Ratios ($E_s/N_0$ and $E_b/N_0$)---alternative SNR metrics
+\item \textbf{Chapter~\ref{ch:rain-fade}:} Weather Effects---rain fade and fog attenuation for margin design
+\item \textbf{Chapter~\ref{ch:multipath}:} Multipath Propagation \& Fading---Rayleigh and Rician fading for mobile links
+\item \textbf{Chapter~\ref{ch:ber}:} Bit Error Rate---performance metric versus SNR
+\item \textbf{Chapter~\ref{ch:modulation}:} Digital Modulation---impact on required SNR and spectral efficiency
+\item \textbf{Chapter~\ref{ch:fec}:} Forward Error Correction---coding gain reduces required margin
+\item \textbf{Chapter~\ref{ch:diversity}:} Antenna Diversity---improves margin in fading channels
+\end{itemize}
