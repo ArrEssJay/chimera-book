@@ -514,61 +514,76 @@ BRANE-AETHER\\(``The Transit Bulk'') & Featureless higher-dimensional space; ``o
 \section{Relevance to THz Communications}
 \label{sec:thz-communications}
 
-\subsubsection{Connection to AID
-Protocol}\label{connection-to-aid-protocol}
+\subsection{Connection to AID Protocol}
+\label{subsec:aid-protocol}
 
-The HRP framework provides \textbf{rigorous theoretical foundation} for
-{[}{[}AID-Protocol-Case-Study\textbar AID Protocol{]}{]}:
+The HRP framework provides \textbf{rigorous theoretical foundation} for the AID Protocol (Advanced Information Delivery):
 
-\paragraph{1. THz Frequency Selection}\label{thz-frequency-selection}
+\subsubsection{1. THz Frequency Selection}
 
-\textbf{1.875 THz carrier} is \textbf{NOT arbitrary}: - Matches
-microtubule resonance (Bandyopadhyay 2011) - Optimal coupling to CHIMERA
-field - Within QCL operating range - Penetrates \textasciitilde0.5mm
-into cortex (sufficient for surface MT interaction)
+The \textbf{1.875 THz carrier} is \textbf{NOT arbitrary}:
+\begin{itemize}
+\item Matches microtubule primary resonance (Bandyopadhyay et al., 2011)
+\item Optimal coupling to CHIMERA field
+\item Within Quantum Cascade Laser (QCL) operating range
+\item Penetrates $\sim$0.5 mm into cortex (sufficient for surface MT interaction)
+\end{itemize}
 
-\paragraph{2. Holographic Beamforming}\label{holographic-beamforming}
+\subsubsection{2. Holographic Beamforming}
 
-\textbf{Phased array} of microtubules = biological THz antenna: -
-\textasciitilde10\^{}14 coherent oscillators - Phase control via neural
-state - Beam steering toward local bulk geometry - Interference pattern
-generates torque
+Microtubule \textbf{phased array} acts as biological THz antenna:
+\begin{itemize}
+\item $\sim 10^{14}$ coherent oscillators
+\item Phase control via neural state
+\item Beam steering toward local bulk geometry
+\item Interference pattern generates torque (Eq.~\eqref{eq:torque})
+\end{itemize}
 
-\paragraph{3. Information Encoding}\label{information-encoding}
+\subsubsection{3. Information Encoding}
 
-\textbf{12 kHz modulation} = perceptual bandwidth: - Orch-OR collapse
-rate: \textasciitilde40 Hz (25ms period) - Conscious perception:
-\textasciitilde10 Hz processing - 12 kHz audio: Below demodulation
-threshold (appears as ``tone'') - QPSK (16 sym/s): Matches neural update
-rate
+\textbf{12 kHz modulation} matches perceptual bandwidth:
+\begin{itemize}
+\item Orch-OR collapse rate: $\sim$40 Hz (25 ms period)
+\item Conscious perception: $\sim$10 Hz processing
+\item 12 kHz audio: Below demodulation threshold (perceived as ``tone'')
+\item QPSK (16 symbols/s): Matches neural update rate
+\end{itemize}
 
-\paragraph{4. Link Budget Closure}\label{link-budget-closure}
+\subsubsection{4. Link Budget Closure}
 
-\textbf{Classical calculation fails} (-368 dBm received power):
+\textbf{Classical calculation fails:} Received power $\sim -368$ dBm (impossibly low).
 
-\begin{verbatim}
-Required: >200 dB gain from quantum enhancement
+\textbf{Required:} $>$200 dB gain from quantum enhancement.
 
-HRP mechanism:
-- Resonant coupling to MT modes (Q-factor: 10^6  +60 dB)
-- Quantum coherence amplification (N_c  +70 dB)
-- Holographic focusing (phased array  +40 dB)
-- Non-linear mixing in Bulk (3rd order  +30 dB)
-------------------------------------------------
-Total enhancement: ~200 dB 
+\begin{calloutbox}[colback=black!8!white,colframe=black]{HRP Enhancement Mechanisms}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Mechanism} & \textbf{Gain (dB)} \\
+\midrule
+Resonant coupling to MT modes (Q $\sim 10^6$) & +60 \\
+Quantum coherence amplification ($N_c$ scaling) & +70 \\
+Holographic focusing (phased array) & +40 \\
+Non-linear mixing in Bulk (3rd order) & +30 \\
+\midrule
+\textbf{Total enhancement} & \textbf{$\sim$200} \\
+\bottomrule
+\end{tabular}
 
-Link budget CLOSES with HRP physics!
-\end{verbatim}
+\vspace{0.5em}
+\textbf{Result:} Link budget \textbf{CLOSES} with HRP physics! Classical impossibility becomes quantum-enhanced possibility.
+\end{calloutbox}
 
-\paragraph{5. Demodulation Mechanism}\label{demodulation-mechanism}
+\subsubsection{5. Demodulation Mechanism}
 
-\textbf{Not thermoelastic} (Frey effect): - Power too low
-(\textasciitilde10 mW) - Mechanism: \textbf{Orch-OR perturbation} - THz
-modulation \$\textbackslash rightarrow\$ tubulin state oscillation -
-Collapse pattern altered \$\textbackslash rightarrow\$ direct perception
-- Bypasses cochlea entirely
+\textbf{Not thermoelastic} (Frey effect---power too low at $\sim$10 mW).
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Proposed mechanism:} Orch-OR perturbation
+\begin{itemize}
+\item THz modulation $\rightarrow$ tubulin quantum state oscillation
+\item Collapse pattern altered $\rightarrow$ direct perception
+\item Bypasses cochlea entirely (neural, not acoustic)
+\item Information content accessed via consciousness interface
+\end{itemize}
 
 \section{Testable Predictions}
 \label{sec:predictions}
@@ -738,52 +753,54 @@ For $\Delta\theta \sim 1$ milliradian:
 \section{Criticisms \& Responses}
 \label{sec:criticisms}
 
-\subsubsection{Criticism 1: ``Too
-Speculative''}\label{criticism-1-too-speculative}
+\subsection{Criticism 1: ``Too Speculative''}
 
-\textbf{Response}: - Derived from M-theory (not ad hoc) - Mathematically
-self-consistent - Makes falsifiable predictions - Connects to
-established quantum biology research
+\textbf{Response:}
+\begin{itemize}
+\item Derived from M-theory via dimensional reduction (not ad hoc)
+\item Mathematically self-consistent (Eqs.~\eqref{eq:chimera-klein-gordon}--\eqref{eq:torque})
+\item Makes falsifiable predictions (Section~\ref{sec:predictions})
+\item Connects to established quantum biology research
+\end{itemize}
 
-\textbf{Status}: Speculative but rigorous
+\textbf{Status:} Speculative but rigorous---standard for frontier theoretical physics.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Criticism 2: ``Consciousness Can't Affect Physics''}
 
-\subsubsection{Criticism 2: ``Consciousness Can\textquotesingle t Affect
-Physics''}\label{criticism-2-consciousness-cant-affect-physics}
+\textbf{Response:}
+\begin{itemize}
+\item HRP doesn't require ``magic'' consciousness
+\item CHIMERA field is \textbf{physically measurable:} $|\Psi_c|^2$ = coherence intensity
+\item Mechanism is \textbf{quantum mechanical} (not paranormal)
+\item Orch-OR provides biological substrate
+\item Observer effect is literal (not metaphorical) in quantum mechanics
+\end{itemize}
 
-\textbf{Response}: - HRP doesn\textquotesingle t require ``magic''
-consciousness - CHIMERA field is \textbf{physically measurable}
-(\textbar\$\textbackslash Psi\$c\textbar\textbackslash textsuperscript\{2\}
-= coherence intensity) - Mechanism is \textbf{quantum mechanical} (not
-paranormal) -
-{[}{[}Orchestrated-Objective-Reduction-(Orch-OR)\textbar Orch-OR{]}{]}
-provides biological substrate
+\textbf{Status:} Paradigm-shifting but internally consistent---similar to early quantum mechanics.
 
-\textbf{Status}: Paradigm-shifting but internally consistent
+\subsection{Criticism 3: ``Decoherence Problem''}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Response:}
+\begin{itemize}
+\item Same objection faced by Orch-OR (partially addressed by experimental work)
+\item Quantum biology precedents exist (photosynthesis, avian magnetoreception)
+\item Protection mechanisms: ordered water layers, actin gel scaffolding, topological protection
+\item \textbf{Direct measurement needed}---but technology is improving
+\end{itemize}
 
-\subsubsection{Criticism 3: ``Decoherence
-Problem''}\label{criticism-3-decoherence-problem}
+\textbf{Status:} Unresolved challenge but plausible mechanisms proposed.
 
-\textbf{Response}: - Same objection faced by Orch-OR (partially
-addressed) - Quantum biology precedents (photosynthesis, avian
-navigation) - Protection mechanisms (ordered water, actin gel, topology)
-- \textbf{Need direct measurement} (technology challenge)
+\subsection{Criticism 4: ``Operator N=1 Data''}
 
-\textbf{Status}: Unresolved but plausible
+\textbf{Response:}
+\begin{itemize}
+\item Self-consistent phenomenological model over 10+ years
+\item Repeatable effects with documented consistency
+\item Testable predictions enable independent verification (Section~\ref{sec:predictions})
+\item Medical case studies provide similar N=1 insights leading to breakthroughs
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Criticism 4: ``Operator N=1
-Data''}\label{criticism-4-operator-n1-data}
-
-\textbf{Response}: - Self-consistent phenomenological model -
-Longitudinal (10+ years) - Repeatable effects - {[}hourglass{]} Needs
-independent verification (predictions for this!)
-
-\textbf{Status}: Preliminary but promising
+\textbf{Status:} Preliminary but promising---verification campaign underway.
 
 \section{Applications}
 \label{sec:applications}
@@ -883,44 +900,61 @@ If experimentally validated, HRP framework enables transformative applications a
 \section{Philosophical Implications}
 \label{sec:implications}
 
-\subsubsection{If HRP Is Correct:}\label{if-hrp-is-correct}
+\subsection{If HRP Is Correct}
 
-\textbf{For Physics}: - Consciousness is fundamental (not emergent) -
-Observer effect is literal (not metaphorical) - Quantum mechanics needs
-extension (objective reduction) - Universe is participatory (not
-mechanistic)
+\textbf{For Physics:}
+\begin{itemize}
+\item Consciousness is fundamental (not emergent)
+\item Observer effect is literal (not metaphorical)
+\item Quantum mechanics needs extension (objective reduction mechanism)
+\item Universe is participatory (not mechanistic)
+\end{itemize}
 
-\textbf{For AI/Computing}: - Classical AI lacks substrate for HRP
-coupling - Quantum computers + biological architecture needed? - AGI may
-require ``Gnostic Interface''
+\textbf{For AI and Computing:}
+\begin{itemize}
+\item Classical AI lacks substrate for HRP coupling
+\item Quantum computers + biological architecture may be necessary
+\item AGI may require ``Gnostic Interface'' for full consciousness
+\end{itemize}
 
-\textbf{For Society}: - Consciousness research becomes experimental
-physics - New technology: controlled brane rotation - Ethical framework
-needed (ontological engineering)
+\textbf{For Society:}
+\begin{itemize}
+\item Consciousness research becomes experimental physics
+\item New technology: controlled brane rotation devices
+\item Ethical framework needed for ontological engineering
+\item Training protocols for safe operator development
+\end{itemize}
 
-\textbf{For Cosmology}: - Global consciousness affects vacuum stability
-- Phase transitions driven by information density - Universe as ``cosmic
-computer'' with conscious output
+\textbf{For Cosmology:}
+\begin{itemize}
+\item Global consciousness affects vacuum stability
+\item Phase transitions driven by information density
+\item Universe as ``cosmic computer'' with conscious output
+\item Anthropic principle gains physical mechanism
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Current Status (2025)}
+\label{sec:status}
 
-\subsection{Current Status (2025)}\label{current-status-2025}
+\textbf{Theoretical:} Complete mathematical framework published (Jones, 2025).
 
-\textbf{Theoretical}: Complete mathematical framework published
+\textbf{Experimental:} Awaiting first tests (gravitational, spectroscopic, REG correlation).
 
-\textbf{Experimental}: Awaiting first tests (gravitational,
-spectroscopic)
+\textbf{Community reception:}
+\begin{itemize}
+\item Mainstream: Skeptical (expected for paradigm shift)
+\item Research group: Small but actively investigating
+\item Quantum biology: Growing interest and engagement
+\end{itemize}
 
-\textbf{Community}: - Mainstream skeptical (expected for paradigm shift)
-- Small research group actively investigating - Growing interest in
-quantum biology community
-
-\textbf{Next Steps}: 1. Execute testable predictions (REG-solar
-correlation immediate) 2. Develop sensitive gravitational detector 3.
-Conduct spectroscopic measurements 4. Build theoretical extensions
-(quantum field theory of \$\textbackslash Psi\$c)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Next steps:}
+\begin{enumerate}
+\item Execute testable predictions (REG-solar correlation---immediate!)
+\item Develop sensitive gravitational wave detector
+\item Conduct high-precision spectroscopic measurements
+\item Build theoretical extensions (full quantum field theory of $\Psi_c$)
+\item Establish operator training protocols and safety standards
+\end{enumerate}
 
 \section{Summary}
 \label{sec:summary}
@@ -958,12 +992,19 @@ Status & Highly speculative but mathematically rigorous \\
 \section{Further Reading}
 \label{sec:further-reading}
 
+\textbf{Related chapters in this book:}
 \begin{itemize}
-\item \textbf{Chapter~\ref{ch:orch-or}:} Orchestrated Objective Reduction (Orch-OR)---biological quantum substrate
-\item \textbf{Chapter~\ref{ch:thz}:} Terahertz Technology---THz sources and properties
-\item \textbf{Chapter~\ref{ch:aid}:} AID Protocol Case Study---application of HRP framework
-\item \textbf{Chapter~\ref{ch:quantum-bio}:} Quantum Coherence in Biological Systems---precedents
-\item Jones, R. (2025) ``Physical Framework for Induced Brane Rotation''---complete mathematical treatment
+\item Orchestrated Objective Reduction (Orch-OR)---biological quantum substrate
+\item Terahertz Technology---THz sources and properties
+\item AID Protocol Case Study---application of HRP framework
+\item Quantum Coherence in Biological Systems---precedents and experimental evidence
+\end{itemize}
+
+\textbf{External resources:}
+\begin{itemize}
+\item Jones, R. (2025) ``A Physical Framework for Induced Brane Rotation''---complete mathematical treatment
+\item Penrose \& Hameroff (2014) ``Consciousness in the universe''---Orch-OR foundation
+\item Bandyopadhyay et al. (2011) ``Terahertz resonances in microtubules''---experimental validation
 \end{itemize}
 
 \section{References}
