@@ -284,4 +284,4 @@ Before committing changes, ensure:
 
 **Last Updated**: 2025-10-06  
 **Version**: 1.0 (LaTeX production established)  
-**Maintained by**: Rowan Jones
+**Maintained by**: The Chimera Project (chimera@impermanent.io)
