@@ -399,45 +399,127 @@ Mbps)}: 100+ m outdoor (line-of-sight)
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{2. LTE (100 Mbps, Cat 3)}\label{lte-100-mbps-cat-3}
+\section{LTE: Wide-Area Cellular}
+\label{sec:lte}
 
-\subsubsection{System Parameters}\label{system-parameters-1}
+\subsection{System Parameters}
 
-\textbf{Standard}: 3GPP Release 8 (2008)
+\textbf{Long-Term Evolution (LTE)} represents the 4G cellular standard, designed for wide-area mobility with adaptive modulation and MIMO spatial multiplexing.
 
-\textbf{Frequency}: 700-2600 MHz (various bands)
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Standard & 3GPP Release 8 (2008) \\
+Frequency bands & 700--2600~MHz (FDD \& TDD) \\
+Channel bandwidth & 1.4, 3, 5, 10, 15, 20~MHz \\
+Downlink & OFDMA (multi-user) \\
+Uplink & SC-FDMA (lower PAPR) \\
+Modulation & QPSK, 16-QAM, 64-QAM (per user) \\
+FEC coding & Turbo codes ($K = 4$, rate $\frac{1}{3}$ mother code) \\
+MIMO & $2 \times 2$, $4 \times 4$ (DL), $1 \times 2$ (UL) \\
+Peak data rate & 300~Mbps (DL, Cat 4), 100~Mbps (DL, Cat 3) \\
+\bottomrule
+\end{tabular}
 
-\textbf{Bandwidth}: 1.4, 3, 5, 10, 15, 20 MHz
+\begin{calloutbox}[colback=green!5!white,colframe=green!75!black]{Key Innovation: Resource Block Scheduling}
+Unlike WiFi's contention-based CSMA/CA, LTE uses \textbf{centralized scheduling}. The eNodeB (base station) allocates specific time-frequency resource blocks to each user based on:
+\begin{itemize}
+\item Channel Quality Indicator (CQI) reports
+\item Queue status and latency requirements
+\item Fairness algorithms (proportional fair, round-robin)
+\end{itemize}
 
-\textbf{Downlink}: OFDMA (Orthogonal Frequency Division Multiple Access)
+This eliminates collisions and enables \textbf{adaptive modulation per user}---the cell-edge user gets robust QPSK while the nearby user enjoys 64-QAM.
+\end{calloutbox}
 
-\textbf{Uplink}: SC-FDMA (Single Carrier FDMA, lower PAPR)
+\subsection{LTE Resource Grid Structure}
 
-\textbf{Modulation}: QPSK, 16-QAM, 64-QAM (adaptive per user)
+The fundamental scheduling unit in LTE is the \textbf{Resource Block (RB)}:
+\begin{equation}
+\text{RB} = 12~\text{subcarriers} \times 7~\text{OFDM symbols} = 84~\text{resource elements}
+\end{equation}
 
-\textbf{Coding}: Turbo codes (K=4, rate 1/3, punctured)
+\textbf{Time-frequency parameters:}
+\begin{itemize}
+\item Subcarrier spacing: $\Delta f = 15$~kHz
+\item RB bandwidth: $12 \times 15~\text{kHz} = 180$~kHz
+\item Slot duration: $T_{\text{slot}} = 0.5$~ms (7 OFDM symbols)
+\item Subframe: $T_{\text{subframe}} = 1$~ms (2 slots = 14 OFDM symbols)
+\item Frame: $T_{\text{frame}} = 10$~ms (10 subframes)
+\end{itemize}
 
-\textbf{MIMO}: 2\$\textbackslash times\$2, 4\$\textbackslash times\$4
-(downlink)
+\textbf{20~MHz bandwidth configuration:}
+\begin{equation}
+N_{\text{RB}} = \left\lfloor \frac{20~\text{MHz}}{180~\text{kHz}} \right\rfloor = 100~\text{RBs}
+\end{equation}
+This yields $100 \times 12 = 1200$ subcarriers.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+% LTE Resource Grid
+\draw[thick] (0,0) rectangle (10,7);
 
-\subsubsection{Resource Grid}\label{resource-grid}
+% Draw grid
+\foreach \x in {0,1.428,...,10} {
+  \draw[thin,gray!40] (\x,0) -- (\x,7);
+}
+\foreach \y in {0,1,...,7} {
+  \draw[thin,gray!40] (0,\y) -- (10,\y);
+}
 
-\textbf{Resource Block (RB)}: 12 subcarriers \$\textbackslash times\$ 7
-OFDM symbols (0.5 ms slot)
+% Highlight one Resource Block
+\draw[very thick,blue] (1.428,1) rectangle (2.856,2);
+\node[blue,font=\sffamily\small] at (2.142,1.5) {1 RB};
 
-\textbf{Subcarrier spacing}: 15 kHz
+% Color different RBs for different users
+\fill[red!20] (0,0) rectangle (2.856,1);
+\fill[blue!20] (2.856,0) rectangle (5.712,1);
+\fill[green!20] (5.712,0) rectangle (8.568,1);
+\fill[orange!20] (8.568,0) rectangle (10,1);
 
-\textbf{RB bandwidth}: 180 kHz
+\fill[red!20] (0,2) rectangle (1.428,3);
+\fill[green!20] (1.428,2) rectangle (4.284,3);
+\fill[blue!20] (4.284,2) rectangle (7.14,3);
+\fill[orange!20] (7.14,2) rectangle (10,3);
 
-\textbf{20 MHz bandwidth}: 100 RBs (1200 subcarriers)
+% Reference signals (pilots)
+\foreach \x in {0.357,1.785,3.213,4.641,6.069,7.497,8.925} {
+  \foreach \y in {0.5,2.5,4.5,6.5} {
+    \fill[black] (\x,\y) circle (2pt);
+  }
+}
 
-\textbf{OFDM symbol}: 66.7 \$\textbackslash mu\$s (normal CP)
+% Labels
+\node[below,font=\small] at (5,-0.5) {Frequency (100 RBs $\times$ 12 subcarriers = 1200 subcarriers)};
+\node[rotate=90,left,font=\small] at (-0.5,3.5) {Time (7 OFDM symbols = 0.5~ms slot)};
 
-\textbf{Frame}: 10 ms (10 subframes, 20 slots)
+% User labels
+\node[font=\scriptsize,red] at (1.428,0.3) {User 1};
+\node[font=\scriptsize,blue] at (4.284,0.3) {User 2};
+\node[font=\scriptsize,green] at (7.14,0.3) {User 3};
+\node[font=\scriptsize,orange] at (9.284,0.3) {User 4};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Dimensions
+\draw[<->] (2.856,-1.5) -- (1.428,-1.5) node[midway,below,font=\scriptsize] {180~kHz};
+\draw[<->] (10.5,1) -- (10.5,2) node[midway,right,font=\scriptsize] {$\frac{0.5}{7}$~ms};
+
+% Legend
+\node[below right,font=\scriptsize] at (10,7) {$\bullet$ = Reference signals};
+\end{tikzpicture}
+\end{center}
+
+\begin{calloutbox}[colback=blue!5!white,colframe=blue!75!black]{Time-Frequency Resource Allocation}
+The eNodeB scheduler assigns RBs dynamically every 1~ms (subframe):
+\begin{itemize}
+\item \textbf{User 1} (cell edge): Allocated 20 RBs with QPSK $\rightarrow$ 3~Mbps
+\item \textbf{User 2} (mid-cell): Allocated 30 RBs with 16-QAM $\rightarrow$ 12~Mbps
+\item \textbf{User 3} (near base): Allocated 25 RBs with 64-QAM $\rightarrow$ 15~Mbps
+\item \textbf{User 4} (stationary): Allocated 25 RBs with 64-QAM $\rightarrow$ 15~Mbps
+\end{itemize}
+
+Total cell throughput: 45~Mbps with 4 active users, adapting MCS based on individual channel quality.
+\end{calloutbox}
 
 \subsubsection{Modulation \& Coding}\label{modulation-coding}
 
@@ -466,34 +548,94 @@ Quality Indicator) reports
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Link Budget (Downlink, 2 GHz, 20
-MHz)}\label{link-budget-downlink-2-ghz-20-mhz}
+\subsection{Link Budget: Urban Macrocell}
 
-\textbf{eNodeB} (base station): - TX power: +46 dBm (40 W, macrocell) -
-Antenna gain: +17 dBi (sector antenna, 3-sector site) - Cable loss: -3
-dB - EIRP: +60 dBm
+\textbf{Scenario:} Downlink from macrocell tower to indoor smartphone at 1~km distance, 2~GHz band
 
-\textbf{Path Loss} (urban, 1 km): - Free space: 92 dB - Urban clutter:
-20 dB - Building penetration: 15 dB (indoor UE) - \textbf{Total}: 127 dB
+\subsubsection*{Given Parameters}
 
-\textbf{UE} (user equipment): - RX antenna gain: 0 dBi (phone,
-omnidirectional) - Noise figure: 9 dB - Noise floor: -174 + 73 + 9 = -92
-dBm (20 MHz)
+\begin{tabular}{@{}ll@{}}
+eNodeB TX power & $P_t = 46$~dBm (40~W total, 20~W per sector) \\
+eNodeB antenna gain & $G_t = 17$~dBi (120° sector antenna) \\
+Cable loss & $L_{\text{cable}} = 3$~dB \\
+Distance & $d = 1$~km \\
+Frequency & $f = 2.0$~GHz \\
+Bandwidth & $B = 20$~MHz \\
+UE antenna gain & $G_r = 0$~dBi (omnidirectional phone antenna) \\
+UE noise figure & $NF = 9$~dB \\
+Building penetration loss & $L_{\text{building}} = 15$~dB \\
+Urban clutter loss & $L_{\text{urban}} = 20$~dB \\
+\end{tabular}
 
-\textbf{Received signal}: - P\_r = 60 - 127 + 0 = \textbf{-67 dBm}
+\subsubsection*{Step 1: EIRP Calculation}
 
-\textbf{SNR}: -67 - (-92) = \textbf{25 dB}
+\begin{equation}
+\text{EIRP} = P_t + G_t - L_{\text{cable}} = 46 + 17 - 3 = 60~\text{dBm}
+\end{equation}
 
-\textbf{MCS}: 64-QAM, rate 0.7 (MCS 23)
+\subsubsection*{Step 2: Path Loss}
 
-\textbf{Data rate} (100 RBs, 2\$\textbackslash times\$2 MIMO): - 100 RB
-\$\textbackslash times\$ 12 subcarriers \$\textbackslash times\$ 7
-symbols \$\textbackslash times\$ 6 bits \$\textbackslash times\$ 2
-layers / 0.5 ms - = 100,800 bits / 0.5 ms = \textbf{201.6 Mbps}
-(physical) - With code rate 0.7 and overhead:
-\textasciitilde{}\textbf{100 Mbps} (MAC)
+Free-space path loss:
+\begin{equation}
+\text{FSPL} = 20\log_{10}(1000) + 20\log_{10}(2000) + 32.45 = 60 + 66.0 + 32.45 = 92.0~\text{dB}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Total path loss including propagation environment:
+\begin{equation}
+L_{\text{total}} = \text{FSPL} + L_{\text{urban}} + L_{\text{building}} = 92 + 20 + 15 = 127~\text{dB}
+\end{equation}
+
+\subsubsection*{Step 3: Received Signal Power}
+
+\begin{equation}
+P_r = \text{EIRP} + G_r - L_{\text{total}} = 60 + 0 - 127 = -67~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 4: Noise Power}
+
+\begin{equation}
+N = -174 + 10\log_{10}(20 \times 10^6) + 9 = -174 + 73.0 + 9 = -92~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 5: SNR and MCS Selection}
+
+\begin{equation}
+\text{SNR} = P_r - N = -67 - (-92) = 25~\text{dB}
+\end{equation}
+
+With 25~dB SNR, the scheduler selects:
+\begin{itemize}
+\item \textbf{MCS 23:} 64-QAM with code rate $r = 0.7$
+\item \textbf{Spectral efficiency:} $\eta = 6 \times 0.7 = 4.2$~bits/s/Hz
+\end{itemize}
+
+\subsubsection*{Step 6: Data Rate Calculation}
+
+For $2 \times 2$ MIMO with 100 RBs allocated:
+\begin{equation}
+R = N_{\text{RB}} \times N_{\text{sc}} \times N_{\text{sym}} \times M \times r \times N_{\text{layers}} / T_{\text{slot}}
+\end{equation}
+\begin{equation}
+R = 100 \times 12 \times 7 \times 6 \times 0.7 \times 2 / 0.5~\text{ms} = 141,120 / 0.5 = 141.1~\text{Mbps}
+\end{equation}
+
+After accounting for reference signals, control overhead, and protocol layers:
+\begin{equation}
+R_{\text{MAC}} \approx 0.7 \times 141.1 \approx 100~\text{Mbps}
+\end{equation}
+
+\begin{calloutbox}{LTE Link Budget Summary}
+\textbf{Result: 100~Mbps achievable at 1~km with 25~dB SNR}
+
+This link operates in a \textbf{coverage-limited} regime:
+\begin{itemize}
+\item Cell-edge users (weak signal): Use QPSK, achieve $\sim$5~Mbps
+\item Mid-cell users (moderate signal): Use 16-QAM, achieve $\sim$20--40~Mbps
+\item Near-tower users (strong signal): Use 64-QAM, achieve 80--100~Mbps
+\end{itemize}
+
+\textbf{Handover margins:} LTE maintains soft handover with $\sim$3~dB hysteresis to prevent ping-ponging between cells at speeds up to 350~km/h.
+\end{calloutbox}
 
 \subsubsection{Synchronization \& Cell
 Search}\label{synchronization-cell-search}
