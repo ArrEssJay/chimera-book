@@ -1,14 +1,7 @@
-\section{Noise Sources \& Noise
-Figure}\label{noise-sources-noise-figure}
+\chapter{Noise Sources \& Noise Figure}
+\label{ch:noise-figure}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{Link Budget \& System Performance}
-\textbar{} {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} \textbar{}
-{[}{[}Complete-Link-Budget-Analysis{]}{]}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\begin{nontechnical}
 
 \textbf{Think of radio communication like having a conversation in a
 crowded restaurant:}
@@ -77,10 +70,9 @@ to reduce noise and hear probes billions of miles away
 small antenna, low power), you must minimize noise.
 That\textquotesingle s why the first few inches of cable and the first
 amplifier matter more than anything else in the receiver chain.
+\end{nontechnical}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Overview}\label{overview}
+\section{Overview}
 
 \textbf{Noise} is unwanted random signal that degrades communication
 system performance.
@@ -90,81 +82,93 @@ receiver input (dBm, watts) - \textbf{Noise figure} (NF): How much a
 component degrades SNR (dB) - \textbf{Noise temperature} (T\_e):
 Equivalent thermal noise (Kelvin)
 
-\textbf{Why it matters}: - Determines \textbf{receiver sensitivity}
-(minimum detectable signal) - Sets \textbf{SNR} at demodulator input -
-Dominates link performance in low-signal scenarios (satellite, deep
-space)
+\textbf{Why it matters}:
+\begin{itemize}
+\item Determines \textbf{receiver sensitivity} (minimum detectable signal)
+\item Sets \textbf{SNR} at demodulator input
+\item Dominates link performance in low-signal scenarios (satellite, deep space)
+\end{itemize}
 
-\textbf{Bottom line}: Lower noise = Better sensitivity = Longer range
+\begin{keyconcept}
+Lower noise = Better sensitivity = Longer range. The noise figure of the first amplifier (Low-Noise Amplifier, LNA) dominates the entire receiver chain performance due to the Friis formula.
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Mathematical Description}
 
-\subsection{Thermal Noise}\label{thermal-noise}
+\subsection{Thermal Noise}
 
 \textbf{Fundamental noise source}: Random motion of charge carriers due
 to thermal agitation
 
-\subsubsection{Johnson-Nyquist Noise}\label{johnson-nyquist-noise}
+\subsubsection{Johnson-Nyquist Noise}
 
-\textbf{Noise power} in resistor at temperature T:
+\textbf{Noise power} in resistor at temperature $T$:
 
-\[
-N = k T B \quad (\text{watts})
-\]
+\begin{equation}
+N = k T B
+\end{equation}
+where:
+\begin{itemize}
+\item $N$ = noise power (watts)
+\item $k = 1.38 \times 10^{-23}$ J/K (Boltzmann constant)
+\item $T$ = absolute temperature (Kelvin)
+\item $B$ = bandwidth (Hz)
+\end{itemize}
 
-Where: - \(k = 1.38 \times 10^{-23}\) J/K (Boltzmann constant) - \(T\) =
-Absolute temperature (Kelvin) - \(B\) = Bandwidth (Hz)
+\textbf{Standard reference temperature}: $T_0 = 290$ K (room temperature, $\approx 17°$C)
 
-\textbf{Standard reference}: \(T_0 = 290\) K (room temperature,
-\textasciitilde17\$\^{}\textbackslash circ\$C)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Noise Power Spectral
-Density}\label{noise-power-spectral-density}
+\subsubsection{Noise Power Spectral Density}
 
 \textbf{Noise power per Hz}:
 
-\[
-N_0 = k T \quad (\text{W/Hz})
-\]
+\begin{equation}
+N_0 = k T
+\end{equation}
+where:
+\begin{itemize}
+\item $N_0$ = noise power spectral density (W/Hz)
+\item $k$ = Boltzmann constant
+\item $T$ = temperature (K)
+\end{itemize}
 
-\textbf{At 290 K}:
+\textbf{At reference temperature} $T_0 = 290$ K:
 
-\[
-N_0 = 1.38 \times 10^{-23} \times 290 = 4 \times 10^{-21}\ \text{W/Hz}
-\]
+\begin{equation}
+N_0 = 1.38 \times 10^{-23} \times 290 = 4 \times 10^{-21}~\text{W/Hz}
+\end{equation}
 
 \textbf{In dBm/Hz}:
 
-\[
-N_0 = 10\log_{10}\left(\frac{4 \times 10^{-21}}{10^{-3}}\right) = -174\ \text{dBm/Hz}
-\]
+\begin{equation}
+N_0 = 10\log_{10}\left(\frac{4 \times 10^{-21}}{10^{-3}}\right) = -174~\text{dBm/Hz}
+\end{equation}
 
-\textbf{This is the famous -174 dBm/Hz thermal noise floor!}
+\begin{calloutbox}{The Famous $-174$ dBm/Hz Thermal Noise Floor}
+This is the fundamental noise floor at room temperature (290 K) in a 1 Hz bandwidth. All receiver noise calculations start from this baseline. It represents the minimum detectable signal level in an ideal noiseless receiver.
+\end{calloutbox}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsubsection{Noise Power in Bandwidth B}
 
-\subsubsection{Noise Power in Bandwidth
-B}\label{noise-power-in-bandwidth-b}
+\begin{equation}
+N = N_0 \times B = kTB
+\end{equation}
+where:
+\begin{itemize}
+\item $N$ = total noise power (watts)
+\item $B$ = bandwidth (Hz)
+\end{itemize}
 
-\[
-N = N_0 \times B = kTB \quad (\text{watts})
-\]
+\textbf{In logarithmic form (dBm)}:
 
-\textbf{In dB}:
-
-\[
-N_{\text{dBm}} = -174 + 10\log_{10}(B) \quad (\text{dBm})
-\]
+\begin{equation}
+N_{\text{dBm}} = -174 + 10\log_{10}(B)
+\end{equation}
 
 \textbf{Example}: 1 MHz bandwidth @ 290 K
 
-\[
-N = -174 + 10\log_{10}(10^6) = -174 + 60 = -114\ \text{dBm}
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{equation}
+N = -174 + 10\log_{10}(10^6) = -174 + 60 = -114~\text{dBm}
+\end{equation}
 
 \subsubsection{Typical Bandwidths and Noise
 Power}\label{typical-bandwidths-and-noise-power}
@@ -187,44 +191,44 @@ System & Bandwidth & Noise Power @ 290 K \\
 
 \textbf{Key insight}: Wider bandwidth = More noise power
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Noise Figure (NF)}
 
-\subsection{Noise Figure (NF)}\label{noise-figure-nf}
+\textbf{Definition}: Noise figure quantifies the \textbf{degradation of SNR} through a component or system.
 
-\textbf{Definition}: \textbf{Degradation of SNR} through a component or
-system
+\begin{equation}
+F = \frac{\text{SNR}_{\text{in}}}{\text{SNR}_{\text{out}}}
+\end{equation}
+where:
+\begin{itemize}
+\item $F$ = noise factor (linear ratio)
+\item $\text{SNR}_{\text{in}}$ = signal-to-noise ratio at input
+\item $\text{SNR}_{\text{out}}$ = signal-to-noise ratio at output
+\end{itemize}
 
-\[
-\text{NF} = \frac{\text{SNR}_{\text{in}}}{\text{SNR}_{\text{out}}} \quad (\text{linear ratio})
-\]
+\textbf{In logarithmic form (dB)}:
 
-\textbf{In dB}:
+\begin{equation}
+\text{NF}_{\text{dB}} = 10\log_{10}(F) = \text{SNR}_{\text{in,dB}} - \text{SNR}_{\text{out,dB}}
+\end{equation}
 
-\[
-\text{NF}_{\text{dB}} = 10\log_{10}(\text{NF}) = \text{SNR}_{\text{in,dB}} - \text{SNR}_{\text{out,dB}}
-\]
+\textbf{Physical Interpretation}:
+\begin{itemize}
+\item \textbf{NF = 0 dB} ($F = 1$): Ideal component (no noise added)
+\item \textbf{NF = 3 dB} ($F = 2$): SNR halved (noise power doubled)
+\item \textbf{NF = 10 dB} ($F = 10$): SNR reduced by $10\times$ (noise power increased $10\times$)
+\end{itemize}
 
-\textbf{Interpretation}: - \textbf{NF = 1 (0 dB)}: Ideal (no noise
-added) - \textbf{NF = 2 (3 dB)}: SNR halved (doubles noise power) -
-\textbf{NF = 10 (10 dB)}: SNR reduced by 10\$\textbackslash times\$
-(10\$\textbackslash times\$ noise power)
+\subsubsection{Noise Figure vs Noise Factor}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Noise Figure vs Noise
-Factor}\label{noise-figure-vs-noise-factor}
-
-\textbf{Noise factor} (F): Linear ratio
+\textbf{Noise factor} ($F$): Linear ratio
 
 \textbf{Noise figure} (NF): Logarithmic (dB)
 
-\[
+\begin{equation}
 \text{NF}_{\text{dB}} = 10\log_{10}(F)
-\]
+\end{equation}
 
-\textbf{Example}: F = 2 \$\textbackslash rightarrow\$ NF = 3 dB
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Example}: $F = 2$ $\rightarrow$ $\text{NF} = 3$ dB
 
 \subsubsection{Typical Noise Figures}\label{typical-noise-figures}
 
@@ -247,29 +251,29 @@ Component & Noise Figure (dB) & Notes \\
 \end{longtable}
 }
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Noise Temperature}
 
-\subsection{Noise Temperature}\label{noise-temperature}
+\textbf{Alternative representation}: Equivalent input noise temperature
 
-\textbf{Alternative to noise figure}: Equivalent input noise temperature
+\begin{equation}
+T_e = T_0 (F - 1)
+\end{equation}
+where:
+\begin{itemize}
+\item $T_e$ = equivalent noise temperature (K)
+\item $T_0 = 290$ K (reference temperature)
+\item $F$ = noise factor
+\end{itemize}
 
-\[
-T_e = T_0 (F - 1) \quad (\text{K})
-\]
+\textbf{Inverse relationship}:
 
-Where \(T_0 = 290\) K (reference)
-
-\textbf{Relationship}:
-
-\[
+\begin{equation}
 F = 1 + \frac{T_e}{T_0}
-\]
+\end{equation}
 
-\[
+\begin{equation}
 \text{NF}_{\text{dB}} = 10\log_{10}\left(1 + \frac{T_e}{290}\right)
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\end{equation}
 
 \subsubsection{Noise Figure \$\textbackslash leftrightarrow\$ Noise
 Temperature}\label{noise-figure-noise-temperature}
@@ -292,130 +296,160 @@ NF (dB) & Noise Factor F & \(T_e\) (K) \\
 \end{longtable}
 }
 
-\textbf{Usage}: Satellite/radio astronomy communities prefer \(T_e\), RF
-engineers prefer NF
+\textbf{Usage}: Satellite and radio astronomy communities prefer $T_e$, RF engineers prefer NF.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Cascaded Systems and Friis Formula}
 
-\subsection{Cascaded Noise Figure (Friis
-Formula)}\label{cascaded-noise-figure-friis-formula}
+\subsection{Friis Formula for Cascaded Stages}
 
-\textbf{Multi-stage system}: Amplifiers, mixers, filters in series
+For a multi-stage system with amplifiers, mixers, and filters in series:
 
-\textbf{Total noise factor}:
+\begin{equation}
+F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \frac{F_4 - 1}{G_1 G_2 G_3} + \cdots
+\end{equation}
+where:
+\begin{itemize}
+\item $F_{\text{total}}$ = total system noise factor
+\item $F_i$ = noise factor of stage $i$ (linear ratio)
+\item $G_i$ = power gain of stage $i$ (linear ratio, not dB)
+\end{itemize}
 
-\[
-F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \frac{F_4 - 1}{G_1 G_2 G_3} + \ldots
-\]
+\textbf{In logarithmic form}:
 
-Where: - \(F_i\) = Noise factor of stage \(i\) (linear) - \(G_i\) = Gain
-of stage \(i\) (linear)
+\begin{equation}
+\text{NF}_{\text{total,dB}} = 10\log_{10}(F_{\text{total}})
+\end{equation}
 
-\textbf{In dB}:
+\subsection{Key Insights from Friis Formula}
 
-\[
-\text{NF}_{\text{total}} = 10\log_{10}(F_{\text{total}})
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Key Insights from Friis
-Formula}\label{key-insights-from-friis-formula}
+\begin{warningbox}
+\textbf{Three Critical Design Rules:}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{First stage dominates}: \(F_1\) appears without division
-  \$\textbackslash rightarrow\$ \textbf{LNA critical!}
-\item
-  \textbf{High gain helps}: Later stages divided by \(G_1 G_2 \ldots\)
-  \$\textbackslash rightarrow\$ Less impact
-\item
-  \textbf{Avoid loss before LNA}: Cable loss before LNA directly adds to
-  NF
+\item \textbf{First stage dominates}: $F_1$ appears without division $\rightarrow$ \textbf{LNA is critical!}
+\item \textbf{High gain helps}: Later stages are divided by $G_1 G_2 \cdots$ $\rightarrow$ Less impact on total NF
+\item \textbf{Avoid loss before LNA}: Cable loss before the LNA directly degrades system NF by the same amount
+\end{enumerate}
+\end{warningbox}
+
+\subsection{Worked Example 1: Cable Before LNA (Poor Design)}
+
+\textbf{Configuration}:
+\begin{enumerate}
+\item \textbf{Cable}: Loss = 2 dB ($F = 1.58$, $G = 0.63$)
+\item \textbf{LNA}: NF = 1 dB ($F = 1.26$), Gain = 20 dB ($G = 100$)
+\item \textbf{Mixer}: NF = 10 dB ($F = 10$), Gain = $-6$ dB ($G = 0.25$)
 \end{enumerate}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Solution}:
 
-\subsubsection{Example 1: Simple Receiver
-Chain}\label{example-1-simple-receiver-chain}
-
-\textbf{Components}: 1. \textbf{Cable}: Loss 2 dB (NF = 2 dB, F = 1.58,
-G = 0.63 = -2 dB) 2. \textbf{LNA}: NF = 1 dB, F = 1.26, G = 20 dB
-(100\$\textbackslash times\$) 3. \textbf{Mixer}: NF = 10 dB, F = 10, G =
--6 dB (0.25\$\textbackslash times\$)
-
-\textbf{Total NF}:
-
-\[
+Using Friis formula:
+\begin{equation}
 F_{\text{total}} = 1.58 + \frac{1.26 - 1}{0.63} + \frac{10 - 1}{0.63 \times 100}
-\]
+\end{equation}
 
-\[
-= 1.58 + 0.41 + 0.14 = 2.13
-\]
+\begin{equation}
+F_{\text{total}} = 1.58 + 0.41 + 0.14 = 2.13
+\end{equation}
 
-\[
-\text{NF}_{\text{total}} = 10\log_{10}(2.13) = 3.3\ \text{dB}
-\]
+\begin{equation}
+\text{NF}_{\text{total}} = 10\log_{10}(2.13) = 3.3~\text{dB}
+\end{equation}
 
-\textbf{Dominated by cable loss!}
+\textbf{Analysis}: System noise figure is dominated by the 2 dB cable loss before the LNA!
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Worked Example 2: LNA Before Cable (Best Practice)}
 
-\subsubsection{Example 2: Cable After LNA (Best
-Practice)}\label{example-2-cable-after-lna-best-practice}
+\textbf{Configuration}:
+\begin{enumerate}
+\item \textbf{LNA}: NF = 1 dB ($F = 1.26$), Gain = 20 dB ($G = 100$)
+\item \textbf{Cable}: Loss = 2 dB ($F = 1.58$, $G = 0.63$)
+\item \textbf{Mixer}: NF = 10 dB ($F = 10$), Gain = $-6$ dB ($G = 0.25$)
+\end{enumerate}
 
-\textbf{Components}: 1. \textbf{LNA}: NF = 1 dB, F = 1.26, G = 20 dB
-(100\$\textbackslash times\$) 2. \textbf{Cable}: Loss 2 dB, F = 1.58, G
-= 0.63 3. \textbf{Mixer}: NF = 10 dB, F = 10, G = -6 dB
-(0.25\$\textbackslash times\$)
+\textbf{Solution}:
 
-\textbf{Total NF}:
-
-\[
+Using Friis formula:
+\begin{equation}
 F_{\text{total}} = 1.26 + \frac{1.58 - 1}{100} + \frac{10 - 1}{100 \times 0.63}
-\]
+\end{equation}
 
-\[
-= 1.26 + 0.0058 + 0.14 = 1.41
-\]
+\begin{equation}
+F_{\text{total}} = 1.26 + 0.0058 + 0.14 = 1.41
+\end{equation}
 
-\[
-\text{NF}_{\text{total}} = 10\log_{10}(1.41) = 1.5\ \text{dB}
-\]
+\begin{equation}
+\text{NF}_{\text{total}} = 10\log_{10}(1.41) = 1.5~\text{dB}
+\end{equation}
 
-\textbf{Much better! LNA at antenna isolates from cable loss.}
+\begin{calloutbox}{Design Lesson}
+\textbf{1.8 dB improvement!} Placing the LNA at the antenna (before the cable) dramatically improves system noise figure. The LNA's high gain ($G = 100$) reduces the impact of the cable loss from 2.0 dB to only 0.006 dB in the total NF calculation.
+\end{calloutbox}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Worked Example 3: Two-Stage LNA}
 
-\subsubsection{Example 3: Two-Stage LNA}\label{example-3-two-stage-lna}
+\textbf{Configuration}:
+\begin{enumerate}
+\item \textbf{LNA1}: NF = 0.8 dB ($F = 1.2$), Gain = 15 dB ($G = 31.6$)
+\item \textbf{LNA2}: NF = 1.5 dB ($F = 1.41$), Gain = 20 dB ($G = 100$)
+\item \textbf{Mixer}: NF = 10 dB ($F = 10$), Gain = $-6$ dB ($G = 0.25$)
+\end{enumerate}
 
-\textbf{Components}: 1. \textbf{LNA1}: NF = 0.8 dB, F = 1.2, G = 15 dB
-(31.6\$\textbackslash times\$) 2. \textbf{LNA2}: NF = 1.5 dB, F = 1.41,
-G = 20 dB (100\$\textbackslash times\$) 3. \textbf{Mixer}: NF = 10 dB, F
-= 10, G = -6 dB (0.25\$\textbackslash times\$)
+\textbf{Solution}:
 
-\textbf{Total NF}:
-
-\[
+Using Friis formula:
+\begin{equation}
 F_{\text{total}} = 1.2 + \frac{1.41 - 1}{31.6} + \frac{10 - 1}{31.6 \times 100}
-\]
+\end{equation}
 
-\[
-= 1.2 + 0.013 + 0.0028 = 1.216
-\]
+\begin{equation}
+F_{\text{total}} = 1.2 + 0.013 + 0.0028 = 1.216
+\end{equation}
 
-\[
-\text{NF}_{\text{total}} = 10\log_{10}(1.216) = 0.85\ \text{dB}
-\]
+\begin{equation}
+\text{NF}_{\text{total}} = 10\log_{10}(1.216) = 0.85~\text{dB}
+\end{equation}
 
-\textbf{Excellent! High gain LNA1 suppresses later stages.}
+\textbf{Analysis}: Excellent performance! The high-gain first-stage LNA effectively isolates the system from later stage noise contributions.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Cascaded System Architecture}
 
-\subsection{System Noise Temperature}\label{system-noise-temperature}
+The following diagram illustrates a typical receiver chain showing how noise accumulates through cascaded stages:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
+  font=\small
+]
+\node (input) {\sffamily Antenna\\Input};
+\node[block, right of=input, node distance=2.8cm] (lna) {LNA\\$F_1, G_1$};
+\node[block, right of=lna, node distance=3cm] (cable) {Cable\\$F_2, G_2$};
+\node[block, right of=cable, node distance=3cm] (mixer) {Mixer\\$F_3, G_3$};
+\node[block, right of=mixer, node distance=3cm] (if) {IF Amp\\$F_4, G_4$};
+\node[right of=if, node distance=2.8cm] (output) {\sffamily Baseband\\Output};
+
+% Signal flow arrows
+\draw[->,thick] (input) -- (lna);
+\draw[->,thick] (lna) -- (cable);
+\draw[->,thick] (cable) -- (mixer);
+\draw[->,thick] (mixer) -- (if);
+\draw[->,thick] (if) -- (output);
+
+% Noise contributions
+\node[below=0.3cm of lna, font=\scriptsize, text=red] {$F_1$ (dominant)};
+\node[below=0.3cm of cable, font=\scriptsize, text=orange] {$\frac{F_2-1}{G_1}$};
+\node[below=0.3cm of mixer, font=\scriptsize, text=blue] {$\frac{F_3-1}{G_1G_2}$};
+\node[below=0.3cm of if, font=\scriptsize, text=gray] {$\frac{F_4-1}{G_1G_2G_3}$};
+
+% Friis formula annotation
+\node[below=1.5cm of cable, font=\scriptsize, align=center, text width=6cm] {
+Friis Formula: $F_{\text{tot}} = F_1 + \frac{F_2-1}{G_1} + \frac{F_3-1}{G_1G_2} + \cdots$
+};
+\end{tikzpicture}
+\end{center}
+
+\subsection{System Noise Temperature}
 
 \textbf{Total noise temperature} of cascaded system:
 
