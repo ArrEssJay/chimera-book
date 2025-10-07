@@ -1591,48 +1591,6 @@ M_J = 28 - 4.6 = 23.4 \text{ dB}
 
 \textbf{Interpretation:} This example demonstrates the power of combining spread spectrum (30 dB processing gain), forward error correction (5 dB coding gain), and spatial filtering (20 dB antenna nulling). Even with a 1 kW jammer at 50 km overpowering the satellite signal by 53 dB, the system maintains robust communication with over 23 dB margin. This is why GPS M-code and military SATCOM systems can operate in hostile electromagnetic environments.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Summary Table: Military
-Techniques}{ Summary Table: Military Techniques}}\label{summary-table-military-techniques}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1897}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2414}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3276}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2414}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Technique
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Primary Gain
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Typical Advantage
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Applications
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{DSSS} & Processing gain 20-40 dB & AJ, LPI & GPS M-code,
-tactical radios \\
-\textbf{FHSS} & Frequency diversity & LPD, follower-jam resistance &
-MILSTAR, Link 16, Bluetooth \\
-\textbf{AESA} & Beamforming, agility & LPI, multi-target, EA & APG-77,
-AN/SPY-6, THAAD \\
-\textbf{Nulling Antenna} & Spatial filtering 20-40 dB & Jammer rejection
-& CRPA, adaptive arrays \\
-\textbf{Burst Transmission} & Temporal LPD & Minimize exposure &
-Submarine comms, UAV links \\
-\textbf{Encryption} & Content security & Prevent exploitation & All
-military systems \\
-\textbf{Adaptive Coding} & Link optimization & Maximize throughput under
-AJ & MUOS, 5G tactical \\
-\end{longtable}
-}
-
 \section{Performance Analysis}
 
 \subsection{Processing Gain vs. Jamming Resistance}
@@ -1660,10 +1618,49 @@ Different military systems employ various combinations of spread spectrum, frequ
 \item Tactical radios: $G = 20-30$ dB (typical DSSS)
 \end{itemize}
 
-\subsection{Summary}
+\section{Summary}
 
-\subsection{\texorpdfstring{Further
-Reading}{ Further Reading}}\label{further-reading}
+Military communications systems employ a sophisticated combination of techniques to achieve robust, secure, and covert operation in hostile electromagnetic environments. The fundamental enabler is \textbf{processing gain} from spread spectrum modulation, which allows signals to operate below the noise floor while maintaining reliable links.
+
+\textbf{Core Principles:}
+\begin{itemize}
+\item \textbf{Processing Gain:} $G = B_{\text{spread}}/B_{\text{info}}$ provides anti-jam capability and LPI/LPD characteristics
+\item \textbf{Jamming Margin:} $M_J = G_{\text{dB}} - (J/S)_{\text{dB}} - (E_b/N_0)_{\text{req}} - L_{\text{impl}}$ quantifies link robustness
+\item \textbf{LPD Threshold:} PSD must be below thermal noise floor ($N_0 \approx -174$ dBm/Hz)
+\end{itemize}
+
+\textbf{Comparison of Military Communication Techniques:}
+
+Table~\ref{tab:military-techniques} provides a comprehensive comparison of techniques, their primary advantages, and typical applications.
+
+\begin{table}[h]
+\centering
+\caption{Military Communication Techniques Comparison}
+\label{tab:military-techniques}
+\begin{tabular}{llll}
+\toprule
+\textbf{Technique} & \textbf{Primary Gain} & \textbf{Advantage} & \textbf{Applications} \\
+\midrule
+DSSS & 20-40 dB proc. gain & AJ, LPI & GPS M-code, tactical radios \\
+FHSS & Frequency diversity & LPD, follower-jam resist. & MILSTAR, Link 16 \\
+AESA & Beamforming, agility & LPI, multi-target, EA & APG-77, AN/SPY-6 \\
+Nulling Antenna & 20-40 dB spatial filter & Jammer rejection & CRPA, adaptive arrays \\
+Burst TX & Temporal LPD & Minimize exposure & Submarine, UAV links \\
+Encryption & Content security & Prevent exploitation & All military systems \\
+Adaptive Coding & Link optimization & Maximize throughput & MUOS, 5G tactical \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key Achievements:}
+\begin{itemize}
+\item GPS M-code: 50 dB processing gain + BOC modulation + CRPA nulling = $>60$ dB jamming resistance
+\item MILSTAR FHSS: 1000+ frequency hops across 1 GHz bandwidth, PSD below noise floor
+\item AESA radars: Electronic beam steering in $<1$ µs, simultaneous multi-target tracking
+\item Link 16: 70,000 hops/second with cryptographic hopping for jam-resistant tactical networking
+\end{itemize}
+
+\section{Further Reading}
 
 \subsubsection{Textbooks}\label{textbooks}
 
