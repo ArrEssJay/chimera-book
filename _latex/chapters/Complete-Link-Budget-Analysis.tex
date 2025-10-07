@@ -1,364 +1,437 @@
-\section{Complete Link Budget
-Analysis}\label{complete-link-budget-analysis}
+\chapter{Complete Link Budget Analysis}
+\label{ch:link-budget}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{Link Budget \& System Performance}
-\textbar{} {[}{[}Free-Space-Path-Loss-(FSPL){]}{]} \textbar{}
-{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}
+\begin{nontechnical}
+\textbf{Link budget is like a financial budget for radio power}---you start with transmit power, subtract losses, add gains, and see if there's enough ``money'' (signal) left at the receiver!
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{The fundamental question:} ``If I transmit from HERE to THERE, will the receiver get enough signal?''
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\textbf{The accounting:}
 
-\textbf{Link budget is like a financial budget for radio power-\/-\/-you
-start with transmit power, subtract losses, add gains, and see if
-there\textquotesingle s enough ``money'' (signal) left at the receiver!}
-
-\textbf{The fundamental question}: \textgreater{} ``If I transmit from
-HERE to THERE, will the receiver get enough signal?''
-
-\textbf{The accounting}:
-
-\textbf{START}: Transmit power - Your WiFi router: 100 mW (20 dBm) -
-Your phone: 200 mW (23 dBm) - Cell tower: 20 W (43 dBm) - Satellite: 100
-W (50 dBm)
-
-\textbf{GAINS} (things that help): - \textbf{ Transmit antenna gain}:
-Directional antenna focuses power - WiFi router: +2 dB (omnidirectional)
-- Satellite dish: +40 dB (very focused!) - \textbf{ Receive antenna
-gain}: Bigger receiver antenna collects more - Phone: +0 dB (tiny
-antenna) - Satellite dish: +35 dB
-
-\textbf{LOSSES} (things that hurt): - \textbf{ Free space path loss}:
-Signal spreads out with distance - WiFi (50m): -74 dB - Cell tower (1
-km): -100 dB\\
-- Satellite (36,000 km): -206 dB! - \textbf{ Obstacles}: Walls, trees,
-rain - One wall: -5 dB - Heavy rain: -10 dB - \textbf{ Cable losses}:
-Connectors, imperfect cables - Typical: -1 to -3 dB
-
-\textbf{END}: Received signal power - Must be stronger than noise floor!
-- Typical requirement: Signal \textgreater{} Noise + 10 to 20 dB
-
-\textbf{Example - WiFi Link Budget}:
-
-\begin{verbatim}
-Transmit power:          +20 dBm  (100 mW)
-+ Transmit antenna:        +2 dB
-------------------------------
-EIRP (total radiated):   +22 dBm
-
-- Free space loss (50m):  -74 dB
-- Wall loss (2 walls):    -10 dB
-------------------------------
-Received power:          -62 dBm
-
-Noise floor:             -90 dBm
-SNR:                      28 dB   Good!
-\end{verbatim}
-
-\textbf{Real-world example - Satellite TV}:
-
-\begin{verbatim}
-Satellite transmit:      +50 dBm  (100 W)
-+ Satellite antenna:      +35 dB   (huge!)
-- Path loss (36,000 km): -206 dB   (ouch!)
-+ Your dish:              +35 dB
-------------------------------
-Received power:          -86 dBm  (tiny!)
-
-Noise floor:             -100 dBm
-SNR:                      14 dB    Just enough!
-\end{verbatim}
-
-\textbf{Why link budget matters}: - \textbf{System design}: ``Do I need
-a bigger antenna?'' - \textbf{Troubleshooting}: ``Why is my signal
-weak?'' - \textbf{Standards}: ``What\textquotesingle s the maximum
-range?'' - \textbf{Cost optimization}: ``Can I use cheaper components?''
-
-\textbf{The critical moment}: - If received power \textgreater{} noise +
-margin \$\textbackslash rightarrow\$ Link works! - If received power
-\textless{} noise + margin \$\textbackslash rightarrow\$ Link fails! -
-\textbf{Margin}: Extra dB for safety (rain, interference, fading) - Good
-design: 10-20 dB margin - Marginal design: 3-5 dB margin (risky!)
-
-\textbf{When you see it}: - \textbf{WiFi extender ads}: ``Extends range
-by 20 dB!'' (link budget calc) - \textbf{Satellite dish size}: Bigger =
-more gain = closes link budget - \textbf{Cell tower placement}:
-Engineers run link budgets for coverage - \textbf{``Can you hear me
-now?''}: That\textquotesingle s a link budget test!
-
-\textbf{Fun fact}: The Voyager 1 spacecraft (13+ billion miles away)
-transmits at 23 W, but by the time it reaches Earth, the signal is
-10\^{}-16 watts-\/-\/-that\textquotesingle s 0.0000000000000001 watts!
-Only massive 70-meter dishes with careful link budgets can hear it!
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Overview}\label{overview}
-
-\textbf{Link budget} is a comprehensive accounting of \textbf{all gains
-and losses} from transmitter to receiver, determining if a communication
-link will work.
-
-\textbf{Purpose}: Answer the critical question: \textgreater{} ``Will
-the receiver get enough signal power to achieve the required data rate
-and error rate?''
-
-\textbf{Bottom line}:
-
-\[
-P_r = P_t + G_t - L_{\text{total}} + G_r \quad (\text{dBm or dBW})
-\]
-
-Where all gains/losses are in dB
-
-\textbf{Link closes} if: \(P_r > P_{\text{min}}\) (receiver sensitivity)
-
-\textbf{Margin}: \(M = P_r - P_{\text{min}}\) (dB of safety buffer)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Link Budget Components}\label{link-budget-components}
-
-\subsubsection{1. Transmitter Side}\label{transmitter-side}
-
-\paragraph{Transmitted Power (P\_t)}\label{transmitted-power-p_t}
-
-\textbf{RF power delivered to antenna} (after all TX losses):
-
-\[
-P_t = P_{\text{amp}} - L_{\text{TX}} \quad (\text{dB})
-\]
-
-Where: - \(P_{\text{amp}}\) = Power amplifier output (dBm) -
-\(L_{\text{TX}}\) = TX losses (cables, filters, circulators)
-
-\textbf{Example}: WiFi router - PA output: 20 dBm (100 mW) -
-Cable/connector loss: 0.5 dB - \(P_t = 20 - 0.5 = 19.5\) dBm
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Transmit Antenna Gain
-(G\_t)}\label{transmit-antenna-gain-g_t}
-
-\textbf{Gain relative to isotropic radiator} (dBi):
-
-\textbf{EIRP} (Effective Isotropic Radiated Power):
-
-\[
-\text{EIRP} = P_t + G_t \quad (\text{dBm or dBW})
-\]
-
-\textbf{Example}: - \(P_t = 19.5\) dBm - \(G_t = 2\) dBi (WiFi router) -
-EIRP = 19.5 + 2 = 21.5 dBm
-
-\textbf{Regulatory limits}: FCC limits EIRP (e.g., 36 dBm for 2.4 GHz
-WiFi)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. Propagation Path}\label{propagation-path}
-
-\paragraph{Free-Space Path Loss (FSPL)}\label{free-space-path-loss-fspl}
-
-\textbf{Loss due to spherical spreading}:
-
-\[
-L_{\text{FSPL}} = 20\log_{10}(d) + 20\log_{10}(f) + 20\log_{10}\left(\frac{4\pi}{c}\right)
-\]
-
-\textbf{Simplified}:
-
-\[
-L_{\text{FSPL}} = 32.45 + 20\log_{10}(d_{\text{km}}) + 20\log_{10}(f_{\text{MHz}}) \quad (\text{dB})
-\]
-
-\textbf{Example}: WiFi @ 2.4 GHz, 100 m - \(f = 2400\) MHz, \(d = 0.1\)
-km
-
-\[
-L_{\text{FSPL}} = 32.45 + 20\log_{10}(0.1) + 20\log_{10}(2400)
-\]
-
-\[
-= 32.45 - 20 + 67.6 = 80\ \text{dB}
-\]
-
-\textbf{See}: {[}{[}Free-Space-Path-Loss-(FSPL){]}{]}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Atmospheric Absorption}\label{atmospheric-absorption}
-
-\textbf{Oxygen and water vapor absorption} (significant \textgreater{}
-10 GHz):
-
-\textbf{Zenith attenuation} (at sea level):
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Frequency & Attenuation (dB/km) & Notes \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textless{} 10 GHz & \textless{} 0.01 & Negligible \\
-22.2 GHz & 0.2 & H\textbackslash textsubscript\{2\}O resonance \\
-60 GHz & 15 & O\textbackslash textsubscript\{2\} resonance (peak) \\
-120 GHz & 2 & Secondary O\textbackslash textsubscript\{2\} line \\
-183 GHz & 5 & H\textbackslash textsubscript\{2\}O line \\
-\end{longtable}
-}
-
-\textbf{Example}: Ka-band satellite @ 20 GHz,
-5\$\^{}\textbackslash circ\$ elevation (path length \textasciitilde{} 11
-km through atmosphere) - Attenuation: \textasciitilde0.05 dB/km
-\$\textbackslash times\$ 11 km = \textbf{0.55 dB}
-
-\textbf{See}:
-{[}{[}Atmospheric-Effects-(Ionospheric,-Tropospheric){]}{]}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Rain Attenuation}\label{rain-attenuation}
-
-\textbf{Dominant impairment for satellite Ku/Ka/V-band}:
-
-\textbf{ITU-R model}: \(\gamma_R = k \cdot R^{\alpha}\) (dB/km)
-
-\textbf{Example}: Ku-band @ 12 GHz, heavy rain (25 mm/hr), 4 km path - k
-= 0.0188, \$\textbackslash alpha\$ = 1.217 -
-\(\gamma_R = 0.0188 \times 25^{1.217} = 1.2\) dB/km - \textbf{Total
-loss}: 1.2 \$\textbackslash times\$ 4 = 4.8 dB
-
-\textbf{At 99\% availability}: Design for rain rate exceeded 1\% of time
-(temperate: 12 mm/hr, tropical: 42 mm/hr)
-
-\textbf{See}: {[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Other Propagation Effects}\label{other-propagation-effects}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2051}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3590}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4359}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Effect
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Typical Loss
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-When Applicable
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Ionospheric scintillation} & 1-20 dB & L-band satellite,
-equatorial, solar max \\
-\textbf{Tropospheric scintillation} & 0.5-2 dB & Low elevation,
-\textgreater{} 10 GHz \\
-\textbf{Polarization mismatch} & 0-\$\textbackslash infty\$ dB & Antenna
-misalignment, Faraday rotation \\
-\textbf{Multipath fading} & 10-30 dB & Mobile, urban NLOS \\
-\textbf{Foliage loss} & 0.3-1 dB/m & Trees, vegetation (VHF/UHF) \\
-\textbf{Building penetration} & 5-20 dB & Indoor (depends on freq,
-materials) \\
-\end{longtable}
-}
-
-\textbf{See}:
-{[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]},
-{[}{[}Wave-Polarization{]}{]}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Receiver Side}\label{receiver-side}
-
-\paragraph{Receive Antenna Gain (G\_r)}\label{receive-antenna-gain-g_r}
-
-\textbf{Same concept as TX antenna} (reciprocity):
-
-\textbf{Example}: WiFi laptop - \(G_r = 0\) dBi (omnidirectional)
-
-\textbf{Directional antenna}: - Parabolic dish: 30-60 dBi (satellite) -
-Yagi: 10-15 dBi (TV, point-to-point)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Receiver Losses (L\_RX)}\label{receiver-losses-l_rx}
-
-\textbf{Losses between antenna and receiver input}:
-
+\textbf{START (Transmit power):}
 \begin{itemize}
-\tightlist
-\item
-  Cable loss: 0.5-3 dB (depends on length, freq, cable type)
-\item
-  Connector loss: 0.1-0.5 dB per connector
-\item
-  Filter loss: 0.5-2 dB (bandpass filters)
-\item
-  Circulator/duplexer loss: 0.5-1 dB
+\item WiFi router: 100~mW (20~dBm)
+\item Cell tower: 20~W (43~dBm)
+\item Satellite: 100~W (50~dBm)
 \end{itemize}
 
-\textbf{Example}: Satellite ground station - Cable: 2 dB (long run from
-dish to equipment room) - Connectors: 0.3 dB - LNA inline: -40 dB (gain,
-not loss!) - \textbf{Net}: 2 + 0.3 - 40 = -37.7 dB (LNA provides gain)
+\textbf{GAINS (things that help):}
+\begin{itemize}
+\item \textbf{Transmit antenna gain:} Directional antenna focuses power
+  \begin{itemize}
+  \item WiFi router: $+2$~dB
+  \item Satellite dish: $+40$~dB (very focused!)
+  \end{itemize}
+\item \textbf{Receive antenna gain:} Bigger antenna collects more
+  \begin{itemize}
+  \item Phone: $0$~dB (tiny antenna)
+  \item Satellite dish: $+35$~dB
+  \end{itemize}
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{LOSSES (things that hurt):}
+\begin{itemize}
+\item \textbf{Free-space path loss:} Signal spreads with distance
+  \begin{itemize}
+  \item WiFi (50~m): $-74$~dB
+  \item Cell tower (1~km): $-100$~dB
+  \item Satellite (36,000~km): $-206$~dB!
+  \end{itemize}
+\item \textbf{Obstacles:} Walls, trees, rain
+  \begin{itemize}
+  \item One wall: $-5$~dB
+  \item Heavy rain: $-10$~dB
+  \end{itemize}
+\item \textbf{Cable losses:} Connectors, cables ($-1$ to $-3$~dB)
+\end{itemize}
 
-\paragraph{Receiver Sensitivity
-(P\_min)}\label{receiver-sensitivity-p_min}
+\textbf{END (Received power):} Must be stronger than noise floor! Typical requirement: Signal $>$ Noise $+ 10$ to $20$~dB.
 
-\textbf{Minimum signal power for acceptable performance}:
+\textbf{Real example---WiFi link:} Transmit 20~dBm $+$ antenna 2~dB $= $ 22~dBm EIRP. Subtract free-space loss 74~dB and wall loss 10~dB $= -62$~dBm received. Noise floor $-90$~dBm gives SNR $= 28$~dB. Link works!
 
-\[
-P_{\text{min}} = -174 + 10\log_{10}(B) + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}} \quad (\text{dBm})
-\]
+\textbf{Fun fact:} Voyager~1 spacecraft (over 13 billion miles away) transmits at 23~W. By the time it reaches Earth, the signal is $10^{-16}$~watts! Only massive 70-meter dishes with careful link budgets can hear it.
+\end{nontechnical}
 
-Where: - \textbf{-174 dBm/Hz}: Thermal noise floor at 290 K -
-\textbf{B}: Bandwidth (Hz) - \textbf{NF}: Noise figure (dB) -
-\textbf{SNR\_req}: Required SNR for demodulation (dB) -
-\textbf{L\_impl}: Implementation loss (quantization, imperfect sync,
-etc.) \textasciitilde1-3 dB
+\section{Overview}
 
-\textbf{Example}: WiFi 802.11n, 20 MHz channel, QPSK 1/2 - Bandwidth: 20
-MHz = 73 dBHz - NF: 6 dB (typical WiFi chipset) - SNR\_req: 5 dB (QPSK
-with robust FEC) - L\_impl: 2 dB -
-\(P_{\text{min}} = -174 + 73 + 6 + 5 + 2 = -88\) dBm
+\textbf{Link budget} is a comprehensive accounting of \textbf{all gains and losses} from transmitter to receiver, determining whether a communication link will function reliably under specified conditions.
 
-\textbf{See}: {[}{[}Noise-Sources-\&-Noise-Figure{]}{]}
+\begin{keyconcept}
+Link budget analysis answers the critical question: \textbf{``Will the receiver obtain sufficient signal power to achieve the required data rate and bit error rate?''}
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+The fundamental link budget equation expresses received power in logarithmic units (dBm or dBW):
+\begin{equation}
+P_r = P_t + G_t - L_{\text{total}} + G_r
+\label{eq:link-budget-basic}
+\end{equation}
+where:
+\begin{itemize}
+\item $P_r$ = received signal power (dBm)
+\item $P_t$ = transmit power (dBm)
+\item $G_t$ = transmit antenna gain (dBi)
+\item $L_{\text{total}}$ = total path loss (dB)
+\item $G_r$ = receive antenna gain (dBi)
+\end{itemize}
 
-\subsection{Complete Link Budget
-Equation}\label{complete-link-budget-equation}
+\textbf{Link closure criterion:}
+\begin{equation}
+P_r > P_{\text{min}}
+\label{eq:link-closure}
+\end{equation}
+where $P_{\text{min}}$ is the receiver sensitivity (minimum detectable signal).
 
-\[
+\textbf{Link margin:}
+\begin{equation}
+M = P_r - P_{\text{min}} \quad \text{(dB)}
+\label{eq:link-margin}
+\end{equation}
+
+The margin $M$ provides a safety buffer against fading, interference, and implementation losses. Positive margin is required for link closure; typical design targets range from 10 to 30~dB depending on the application.
+
+\section{Link Budget System Overview}
+
+A complete link budget encompasses transmitter, propagation path, and receiver subsystems. Figure~\ref{fig:link-budget-system} illustrates the end-to-end signal flow and associated gains and losses.
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1.2cm, font=\sffamily\small, align=center},
+  gain/.style={isosceles triangle, draw, shape border rotate=0, minimum width=1cm, minimum height=1.2cm, font=\sffamily\scriptsize},
+  node distance=1.8cm,
+  font=\small
+]
+% Transmitter chain
+\node[block] (pa) {Power\\Amplifier\\$P_t$};
+\node[block, right of=pa, node distance=2.5cm] (txant) {TX\\Antenna\\$G_t$};
+
+% Path
+\node[right of=txant, node distance=3.5cm, align=center, font=\sffamily\small] (path) {Free Space\\$L_{\text{FSPL}}$\\Atmosphere\\Rain};
+
+% Receiver chain
+\node[block, right of=path, node distance=3.5cm] (rxant) {RX\\Antenna\\$G_r$};
+\node[block, right of=rxant, node distance=2.5cm] (lna) {LNA\\NF};
+\node[block, right of=lna, node distance=2.5cm] (demod) {Demod\\$P_r$};
+
+% Signal flow
+\draw[->,thick] (pa) -- node[above,font=\scriptsize] {$P_t$~dBm} (txant);
+\draw[->,thick] (txant) -- node[above,font=\scriptsize] {EIRP} (path);
+\draw[->,thick] (path) -- node[above,font=\scriptsize] {$-L$~dB} (rxant);
+\draw[->,thick] (rxant) -- node[above,font=\scriptsize] {$+G_r$~dB} (lna);
+\draw[->,thick] (lna) -- (demod);
+
+% Loss/gain annotations
+\node[below of=pa, node distance=1.5cm, font=\scriptsize, align=center] {TX losses\\$L_{\text{TX}}$};
+\node[below of=rxant, node distance=1.5cm, font=\scriptsize, align=center] {RX losses\\$L_{\text{RX}}$};
+
+% System boundaries
+\draw[dashed, gray] (-1.5,-2) rectangle (3,1.5);
+\node[above, font=\sffamily\scriptsize\bfseries] at (0.75,1.5) {TRANSMITTER};
+
+\draw[dashed, gray] (8,-2) rectangle (13.5,1.5);
+\node[above, font=\sffamily\scriptsize\bfseries] at (10.75,1.5) {RECEIVER};
+\end{tikzpicture}
+\end{center}
+
+\section{Link Budget Components}\label{link-budget-components}
+
+\subsection{Transmitter Side}
+
+\subsubsection{Transmitted Power}
+
+The transmitted power $P_t$ is the RF power delivered to the transmit antenna after accounting for all losses in the transmitter chain:
+\begin{equation}
+P_t = P_{\text{amp}} - L_{\text{TX}}
+\label{eq:tx-power}
+\end{equation}
+where:
+\begin{itemize}
+\item $P_{\text{amp}}$ = power amplifier output power (dBm)
+\item $L_{\text{TX}}$ = transmitter losses including cables, filters, circulators, and connectors (dB)
+\end{itemize}
+
+\begin{calloutbox}{Example: WiFi Router Transmit Power}
+\textbf{Given:}
+\begin{itemize}
+\item PA output: $P_{\text{amp}} = 20$~dBm (100~mW)
+\item Cable/connector loss: $L_{\text{TX}} = 0.5$~dB
+\end{itemize}
+
+\textbf{Solution:}
+\begin{equation*}
+P_t = 20 - 0.5 = 19.5\text{~dBm}
+\end{equation*}
+\end{calloutbox}
+
+\subsubsection{Transmit Antenna Gain and EIRP}
+
+The transmit antenna gain $G_t$ is measured relative to an isotropic radiator and expressed in dBi. The combination of transmit power and antenna gain yields the \textbf{Effective Isotropic Radiated Power (EIRP)}:
+\begin{equation}
+\text{EIRP} = P_t + G_t
+\label{eq:eirp}
+\end{equation}
+
+\textbf{Example:} For $P_t = 19.5$~dBm and $G_t = 2$~dBi (omnidirectional WiFi antenna):
+\begin{equation*}
+\text{EIRP} = 19.5 + 2 = 21.5\text{~dBm}
+\end{equation*}
+
+\begin{warningbox}
+\textbf{Regulatory compliance is mandatory.} Most jurisdictions limit EIRP to prevent interference. For example, FCC regulations limit EIRP to 36~dBm (4~W) for unlicensed 2.4~GHz WiFi operations. Exceeding these limits can result in legal penalties and harmful interference to other systems.
+\end{warningbox}
+
+\subsection{Propagation Path}
+
+\subsubsection{Free-Space Path Loss}
+
+Free-space path loss (FSPL) quantifies the attenuation of electromagnetic waves propagating through free space due to spherical wavefront expansion. The loss is derived from the Friis transmission equation:
+\begin{equation}
+L_{\text{FSPL}} = 20\log_{10}(d) + 20\log_{10}(f) + 20\log_{10}\left(\frac{4\pi}{c}\right)
+\label{eq:fspl-full}
+\end{equation}
+where:
+\begin{itemize}
+\item $d$ = distance between transmitter and receiver (m)
+\item $f$ = frequency (Hz)
+\item $c = 3 \times 10^8$~m/s = speed of light
+\end{itemize}
+
+\textbf{Practical form} with distance in kilometers and frequency in MHz:
+\begin{equation}
+L_{\text{FSPL}} = 32.45 + 20\log_{10}(d_{\text{km}}) + 20\log_{10}(f_{\text{MHz}})
+\label{eq:fspl-practical}
+\end{equation}
+
+\begin{calloutbox}{Example: WiFi Free-Space Path Loss}
+\textbf{Given:}
+\begin{itemize}
+\item Frequency: $f = 2.4$~GHz $= 2400$~MHz
+\item Distance: $d = 100$~m $= 0.1$~km
+\end{itemize}
+
+\textbf{Solution:}
+\begin{align*}
+L_{\text{FSPL}} &= 32.45 + 20\log_{10}(0.1) + 20\log_{10}(2400) \\
+&= 32.45 - 20 + 67.6 \\
+&= 80.0\text{~dB}
+\end{align*}
+\end{calloutbox}
+
+\textbf{Cross-reference:} See Chapter~\ref{ch:fspl} for detailed derivation and frequency dependence analysis.
+
+\subsubsection{Atmospheric Absorption}
+
+Oxygen and water vapor molecules exhibit resonant absorption at specific frequencies, producing additional attenuation. This effect becomes significant above 10~GHz and must be accounted for in satellite and millimeter-wave links.
+
+\textbf{Zenith attenuation at sea level:}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Frequency & Attenuation (dB/km) & Notes \\
+\midrule
+$< 10$~GHz & $< 0.01$ & Negligible \\
+22.2~GHz & 0.2 & H$_2$O resonance \\
+60~GHz & 15 & O$_2$ resonance (peak) \\
+120~GHz & 2 & Secondary O$_2$ line \\
+183~GHz & 5 & H$_2$O line \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{calloutbox}{Example: Ka-band Satellite Atmospheric Loss}
+\textbf{Given:}
+\begin{itemize}
+\item Frequency: 20~GHz
+\item Elevation angle: $5°$ (path length $\approx 11$~km through atmosphere)
+\item Attenuation rate: $\approx 0.05$~dB/km
+\end{itemize}
+
+\textbf{Solution:}
+\begin{equation*}
+L_{\text{atm}} = 0.05 \times 11 = 0.55\text{~dB}
+\end{equation*}
+\end{calloutbox}
+
+\subsubsection{Rain Attenuation}
+
+Rain attenuation is the dominant propagation impairment for satellite links operating in Ku-band (12--18~GHz), Ka-band (26.5--40~GHz), and V-band (40--75~GHz). The \textbf{ITU-R rain attenuation model} expresses specific attenuation as:
+\begin{equation}
+\gamma_R = k \cdot R^{\alpha} \quad \text{(dB/km)}
+\label{eq:rain-attenuation}
+\end{equation}
+where:
+\begin{itemize}
+\item $\gamma_R$ = specific rain attenuation (dB/km)
+\item $R$ = rain rate (mm/hr)
+\item $k, \alpha$ = frequency-dependent coefficients (from ITU-R tables)
+\end{itemize}
+
+\begin{calloutbox}{Example: Ku-band Heavy Rain Attenuation}
+\textbf{Given:}
+\begin{itemize}
+\item Frequency: 12~GHz (Ku-band downlink)
+\item Rain rate: $R = 25$~mm/hr (heavy rain)
+\item Path length through rain: 4~km
+\item ITU-R coefficients: $k = 0.0188$, $\alpha = 1.217$
+\end{itemize}
+
+\textbf{Solution:}
+\begin{align*}
+\gamma_R &= 0.0188 \times 25^{1.217} = 1.2\text{~dB/km} \\
+L_{\text{rain}} &= 1.2 \times 4 = 4.8\text{~dB}
+\end{align*}
+\end{calloutbox}
+
+\textbf{Design criterion:} For 99\% link availability, design for the rain rate exceeded 1\% of the time. Typical values: temperate climate 12~mm/hr, tropical climate 42~mm/hr.
+
+\subsubsection{Other Propagation Effects}
+
+Additional impairments must be considered depending on the link geometry, frequency band, and environmental conditions:
+
+\begin{center}
+\begin{tabular}{@{}p{0.25\linewidth}p{0.25\linewidth}p{0.40\linewidth}@{}}
+\toprule
+\textbf{Effect} & \textbf{Typical Loss} & \textbf{When Applicable} \\
+\midrule
+Ionospheric scintillation & 1--20~dB & L-band satellite, equatorial, solar max \\
+Tropospheric scintillation & 0.5--2~dB & Low elevation, $> 10$~GHz \\
+Polarization mismatch & 0--$\infty$~dB & Antenna misalignment, Faraday rotation \\
+Multipath fading & 10--30~dB & Mobile, urban NLOS \\
+Foliage loss & 0.3--1~dB/m & Trees, vegetation (VHF/UHF) \\
+Building penetration & 5--20~dB & Indoor (depends on frequency, materials) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Receiver Side}
+
+\subsubsection{Receive Antenna Gain}
+
+The receive antenna gain $G_r$ follows the same definition as transmit antenna gain due to antenna reciprocity. Common antenna gains:
+
+\begin{itemize}
+\item \textbf{Omnidirectional:} $G_r = 0$~dBi (WiFi laptop, smartphone)
+\item \textbf{Yagi antenna:} $G_r = 10$--15~dBi (TV reception, point-to-point)
+\item \textbf{Parabolic dish:} $G_r = 30$--60~dBi (satellite ground stations)
+\end{itemize}
+
+\subsubsection{Receiver Losses}
+
+Losses between the antenna and receiver input degrade the received signal:
+
+\begin{itemize}
+\item \textbf{Cable loss:} 0.5--3~dB (depends on length, frequency, cable type)
+\item \textbf{Connector loss:} 0.1--0.5~dB per connector
+\item \textbf{Filter loss:} 0.5--2~dB (bandpass filters)
+\item \textbf{Circulator/duplexer loss:} 0.5--1~dB
+\end{itemize}
+
+\begin{calloutbox}{Example: Satellite Ground Station Receiver Chain}
+\textbf{Given:}
+\begin{itemize}
+\item Cable loss (dish to equipment room): 2~dB
+\item Connector losses: 0.3~dB
+\item LNA gain (at antenna): $-40$~dB (gain, not loss)
+\end{itemize}
+
+\textbf{Net effect:}
+\begin{equation*}
+L_{\text{net}} = 2 + 0.3 - 40 = -37.7\text{~dB (net gain)}
+\end{equation*}
+
+\textbf{Note:} Placing the LNA at the antenna minimizes cable losses before amplification, optimizing noise figure.
+\end{calloutbox}
+
+\subsubsection{Receiver Sensitivity}
+
+Receiver sensitivity $P_{\text{min}}$ is the minimum signal power required to achieve a specified bit error rate (BER) or signal quality. It is computed from the thermal noise floor, receiver noise figure, required SNR, and implementation losses:
+\begin{equation}
+P_{\text{min}} = -174 + 10\log_{10}(B) + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}}
+\label{eq:receiver-sensitivity}
+\end{equation}
+where:
+\begin{itemize}
+\item $-174$~dBm/Hz = thermal noise floor at $T = 290$~K
+\item $B$ = receiver bandwidth (Hz)
+\item $\text{NF}$ = receiver noise figure (dB)
+\item $\text{SNR}_{\text{req}}$ = required SNR for target BER (dB)
+\item $L_{\text{impl}}$ = implementation losses (quantization, imperfect synchronization, etc.) $\approx 1$--3~dB
+\end{itemize}
+
+\begin{calloutbox}{Example: WiFi 802.11n Receiver Sensitivity}
+\textbf{Given:}
+\begin{itemize}
+\item Bandwidth: $B = 20$~MHz $= 73$~dBHz
+\item Noise figure: $\text{NF} = 6$~dB (typical WiFi chipset)
+\item Required SNR: $\text{SNR}_{\text{req}} = 5$~dB (QPSK 1/2 with FEC)
+\item Implementation loss: $L_{\text{impl}} = 2$~dB
+\end{itemize}
+
+\textbf{Solution:}
+\begin{align*}
+P_{\text{min}} &= -174 + 73 + 6 + 5 + 2 \\
+&= -88\text{~dBm}
+\end{align*}
+\end{calloutbox}
+
+\section{Complete Link Budget Equation}
+
+The complete link budget equation aggregates all transmitter gains, propagation losses, and receiver gains/losses:
+\begin{equation}
 P_r = \text{EIRP} - L_{\text{FSPL}} - L_{\text{atm}} - L_{\text{rain}} - L_{\text{other}} + G_r - L_{\text{RX}}
-\]
+\label{eq:link-budget-complete}
+\end{equation}
 
-\textbf{Expanded}:
-
-\[
+\textbf{Expanded form:}
+\begin{equation}
 P_r = [P_t + G_t] - L_{\text{FSPL}} - L_{\text{atm}} - L_{\text{rain}} - L_{\text{multipath}} - L_{\text{misc}} + [G_r - L_{\text{cable}}]
-\]
+\label{eq:link-budget-expanded}
+\end{equation}
 
-\textbf{Link margin}:
+\subsection{Link Margin}
 
-\[
+Link margin quantifies the excess signal power available beyond the minimum required for operation:
+\begin{equation}
 M = P_r - P_{\text{min}}
-\]
+\label{eq:margin-definition}
+\end{equation}
 
-\textbf{Design guideline}: \(M \geq 10\) dB (provides fade margin,
-interference tolerance)
+\begin{keyconcept}
+\textbf{Design guideline:} $M \geq 10$~dB provides adequate margin against fading, interference, and component aging. Systems with $M < 5$~dB are considered marginal and prone to outages.
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Figure~\ref{fig:link-margin} illustrates the relationship between received power, sensitivity, and margin.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% Power levels
+\draw[thick,->] (0,0) -- (0,6) node[above] {\sffamily Power (dBm)};
+
+% Received power
+\draw[thick, NavyBlue] (0.5,4.5) -- (8,4.5) node[right, font=\sffamily\small] {$P_r$ (Received Power)};
+\fill[NavyBlue] (0.5,4.5) circle (2pt);
+
+% Receiver sensitivity
+\draw[thick, red] (0.5,2) -- (8,2) node[right, font=\sffamily\small] {$P_{\text{min}}$ (Sensitivity)};
+\fill[red] (0.5,2) circle (2pt);
+
+% Noise floor
+\draw[thick, gray] (0.5,0.5) -- (8,0.5) node[right, font=\sffamily\small] {Noise Floor};
+\fill[gray] (0.5,0.5) circle (2pt);
+
+% Margin annotation
+\draw[<->, thick] (7.5,2) -- (7.5,4.5) node[midway, right, align=left, font=\sffamily\small] {Link Margin\\$M = P_r - P_{\text{min}}$};
+
+% Required SNR annotation
+\draw[<->, thick, dashed] (7,0.5) -- (7,2) node[midway, right, align=left, font=\sffamily\scriptsize] {Required\\SNR};
+
+% Grid
+\draw[very thin, gray!30] (0,0) grid[step=0.5] (8,6);
+
+% Labels
+\node[below, font=\sffamily\scriptsize] at (4,0) {Time / Frequency};
+\end{tikzpicture}
+\end{center}
 
 \subsection{Example 1: WiFi Indoor
 Link}\label{example-1-wifi-indoor-link}
