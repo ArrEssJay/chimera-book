@@ -42,3 +42,8 @@ Thumbs.db
 # Backup files
 *.bak
 *.backup
+preamble.tex
+test_*.tex
+test_*.pdf
+test_*.aux
+test_*.log

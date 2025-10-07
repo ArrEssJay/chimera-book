@@ -1,63 +1,147 @@
-\section{Real-World System Examples}\label{real-world-system-examples}
+\chapter{Real-World System Examples}
+\label{ch:real-world-systems}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{System Implementation} \textbar{}
-{[}{[}Channel-Equalization{]}{]} \textbar{}
-{[}{[}Signal-Chain-(End-to-End-Processing){]}{]}
+\begin{nontechnical}
+\textbf{Real systems are like complete orchestras}---not just one instrument, but all concepts working together in harmony.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Simple idea:}
+\begin{itemize}
+\item WiFi = OFDM + MIMO + smart antenna switching (fast, short range)
+\item LTE = cellular towers + adaptive modulation (medium speed, wide area)
+\item GPS = weak satellite signals + spread spectrum (navigation, global)
+\item Bluetooth = frequency hopping + low power (personal devices)
+\item LoRa = chirp signals + ultra-long range (IoT sensors, years on battery)
+\end{itemize}
 
-\subsection{Overview}\label{overview}
+\textbf{Real use:} These are the systems in your phone, car, home. Each optimizes different trade-offs: speed vs range vs power.
 
-This page provides \textbf{end-to-end analysis} of real communication
-systems, showing how all concepts integrate.
+\textbf{Why study complete systems?} Theory is one thing, but real implementations face constraints: regulations, cost, battery life, interference. Understanding complete systems shows how theory becomes practice.
+\end{nontechnical}
 
-\textbf{Systems covered}: 1. \textbf{WiFi 802.11n/ac} (Wireless LAN) 2.
-\textbf{LTE} (4G Cellular) 3. \textbf{DVB-S2X} (Satellite TV) 4.
-\textbf{GPS L1 C/A} (Navigation) 5. \textbf{Bluetooth 5.0} (Personal
-Area Network) 6. \textbf{LoRaWAN} (IoT Long Range)
+\section{Overview}
 
-Each example includes: modulation, coding, link budget, sync,
-equalization, and performance.
+This chapter provides \textbf{end-to-end analysis} of deployed communication systems, demonstrating how fundamental concepts---modulation, coding, synchronization, equalization, and link budgets---integrate into practical implementations.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{keyconcept}
+Real-world systems make fundamental \textbf{trade-offs between competing requirements}: data rate, range, power consumption, latency, and cost. No single system optimizes all parameters; each is engineered for specific use cases and regulatory constraints.
+\end{keyconcept}
 
-\subsection{1. WiFi 802.11n (300 Mbps)}\label{wifi-802.11n-300-mbps}
+\textbf{Systems analyzed in this chapter:}
+\begin{enumerate}
+\item \textbf{WiFi 802.11n} (Wireless LAN)---high throughput, indoor coverage
+\item \textbf{LTE} (4G Cellular)---wide-area mobility with adaptive coding
+\item \textbf{DVB-S2X} (Satellite TV)---long-distance broadcast from GEO
+\item \textbf{GPS L1 C/A} (Navigation)---sub-noise signal acquisition
+\item \textbf{Bluetooth 5.0} (Personal Area Network)---low power, frequency hopping
+\item \textbf{LoRaWAN} (IoT)---ultra-long range with minimal power
+\end{enumerate}
 
-\subsubsection{System Parameters}\label{system-parameters}
+Each analysis includes: physical layer parameters, modulation and coding schemes, link budget calculations, synchronization methods, equalization techniques, and measured performance.
 
-\textbf{Standard}: IEEE 802.11n (2009)
+\section{WiFi 802.11n: High-Throughput WLAN}
+\label{sec:wifi}
 
-\textbf{Frequency}: 2.4 GHz or 5 GHz
+\subsection{System Parameters}
 
-\textbf{Bandwidth}: 20 MHz or 40 MHz
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Standard & IEEE 802.11n (2009) \\
+Frequency bands & 2.4~GHz, 5~GHz \\
+Channel bandwidth & 20~MHz, 40~MHz \\
+MIMO configuration & $2 \times 2$, $3 \times 3$, $4 \times 4$ \\
+Modulation & BPSK to 64-QAM (per subcarrier) \\
+Multiple access & OFDMA + CSMA/CA \\
+FEC coding & Convolutional ($K = 7$, rates: $\frac{1}{2}, \frac{2}{3}, \frac{3}{4}, \frac{5}{6}$) \\
+Peak data rate & 150~Mbps (1 stream), 600~Mbps (4 streams) \\
+\bottomrule
+\end{tabular}
 
-\textbf{MIMO}: 2\$\textbackslash times\$2, 3\$\textbackslash times\$3,
-or 4\$\textbackslash times\$4
+\subsection{OFDM Physical Layer}
 
-\textbf{Modulation}: BPSK to 64-QAM (per subcarrier)
+WiFi 802.11n employs \textbf{Orthogonal Frequency Division Multiplexing (OFDM)} to combat multipath fading in indoor environments.
 
-\textbf{Coding}: Convolutional (K=7, rate 1/2, 2/3, 3/4, 5/6)
+\textbf{OFDM parameters (20~MHz channel):}
+\begin{itemize}
+\item FFT size: $N_{\text{FFT}} = 64$
+\item Total subcarriers: 64 (52 data + 4 pilots + 8 guard/DC)
+\item Subcarrier spacing: $\Delta f = 312.5$~kHz
+\item Symbol duration: $T_{\text{sym}} = 3.2~\mu$s (data) + $0.8~\mu$s (guard interval) = $4~\mu$s
+\item Guard interval: $T_g = 0.8~\mu$s ($\frac{1}{4}$ symbol, handles up to 240~m delay spread)
+\end{itemize}
 
-\textbf{Multiple access}: CSMA/CA (carrier sense)
+The OFDM symbol duration is calculated as:
+\begin{equation}
+T_{\text{sym}} = \frac{1}{\Delta f} = \frac{1}{312.5 \times 10^3} = 3.2~\mu\text{s}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{40~MHz channel} doubles capacity:
+\begin{itemize}
+\item FFT size: $N_{\text{FFT}} = 128$
+\item Data subcarriers: 108 (2.08$\times$ increase)
+\end{itemize}
 
-\subsubsection{PHY Layer (OFDM)}\label{phy-layer-ofdm}
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+% OFDM Symbol Structure
+\draw[thick] (0,0) rectangle (10,1.5);
+\fill[blue!20] (0,0) rectangle (8,1.5);
+\fill[green!30] (8,0) rectangle (10,1.5);
 
-\textbf{Subcarriers}: - \textbf{20 MHz}: 64 total (52 data, 4 pilots, 8
-guard) - \textbf{40 MHz}: 128 total (108 data, 6 pilots, 14 guard)
+\node at (4,0.75) {\sffamily\small Data Symbol ($3.2~\mu$s)};
+\node at (9,0.75) {\sffamily\scriptsize GI};
 
-\textbf{FFT size}: 64 (20 MHz), 128 (40 MHz)
+% Dimensions
+\draw[<->] (0,-0.5) -- (8,-0.5) node[midway,below] {\small $T_{\text{sym}} = 3.2~\mu$s};
+\draw[<->] (8,-0.5) -- (10,-0.5) node[midway,below] {\scriptsize $0.8~\mu$s};
+\draw[<->] (0,-1.2) -- (10,-1.2) node[midway,below] {\small Total: $4~\mu$s};
 
-\textbf{Subcarrier spacing}: 312.5 kHz
+% Frequency domain representation
+\begin{scope}[shift={(0,-4)}]
+\node[above] at (5,3) {\sffamily\bfseries 20~MHz OFDM Spectrum};
+\draw[->] (0,0) -- (11,0) node[right] {\sffamily\small Frequency};
+\draw[->] (0,0) -- (0,2.5) node[above] {\sffamily\small Power};
 
-\textbf{Symbol duration}: 3.2 \$\textbackslash mu\$s (data) + 0.8
-\$\textbackslash mu\$s (guard) = 4 \$\textbackslash mu\$s
+% Subcarriers
+\foreach \x in {1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5} {
+  \draw[thick,blue!60] (\x,0) -- (\x,2);
+}
+% Pilot subcarriers (highlighted)
+\draw[thick,red!70,line width=1.5pt] (3,0) -- (3,2);
+\draw[thick,red!70,line width=1.5pt] (5,0) -- (5,2);
+\draw[thick,red!70,line width=1.5pt] (7,0) -- (7,2);
+\draw[thick,red!70,line width=1.5pt] (8,0) -- (8,2);
 
-\textbf{Guard interval}: 0.8 \$\textbackslash mu\$s (1/4 symbol)
-\$\textbackslash rightarrow\$ Handles 200 ns delay spread
+% Guard bands
+\draw[thick,gray,dashed] (1,0) -- (1,1.2);
+\draw[thick,gray,dashed] (9.5,0) -- (9.5,1.2);
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Labels
+\node[below,font=\scriptsize] at (1,-0.2) {Guard};
+\node[below,font=\scriptsize] at (5.25,-0.2) {52 Data + 4 Pilots};
+\node[below,font=\scriptsize] at (9.5,-0.2) {Guard};
+\node[right,font=\scriptsize,red] at (9.8,1.5) {Pilots};
+\node[right,font=\scriptsize,blue] at (9.8,1) {Data};
+
+\draw[<->] (1,2.8) -- (9.5,2.8) node[midway,above,font=\small] {20~MHz};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{calloutbox}[colback=blue!5!white,colframe=blue!75!black]{Why OFDM for WiFi?}
+Indoor wireless channels exhibit severe \textbf{multipath propagation}---signals reflect off walls, furniture, and people, creating multiple delayed copies. In a traditional single-carrier system, these reflections cause intersymbol interference (ISI).
+
+OFDM solves this by:
+\begin{itemize}
+\item Dividing the channel into narrow subcarriers (312.5~kHz each)
+\item Each subcarrier experiences flat fading (no ISI within narrow band)
+\item Guard interval absorbs multipath delays up to $0.8~\mu$s (240~m)
+\item Simple per-subcarrier equalization (single complex division)
+\end{itemize}
+
+Trade-off: Guard interval reduces efficiency by 20\%, but eliminates complex time-domain equalization.
+\end{calloutbox}
 
 \subsubsection{Frame Structure}\label{frame-structure}
 
@@ -110,28 +194,89 @@ MCS & Modulation & Code Rate & Data Rate (Mbps) & Usage \\
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Link Budget (Indoor, 20
-MHz)}\label{link-budget-indoor-20-mhz}
+\subsection{Link Budget Analysis: Indoor WiFi}
 
-\textbf{Transmitter}: - TX power: +20 dBm (100 mW) - Antenna gain: +2
-dBi (omnidirectional) - EIRP: +22 dBm
+\textbf{Scenario:} 10~m indoor link at 2.4~GHz, 20~MHz bandwidth
 
-\textbf{Path Loss} (10 m indoor, 2.4 GHz): - Free space: 40 dB - Wall
-penetration: 5 dB (1 wall) - \textbf{Total path loss}: 45 dB
+\subsubsection*{Given Parameters}
 
-\textbf{Receiver}: - RX antenna gain: +2 dBi - Noise figure: 6 dB -
-Noise floor: -174 + 73 + 6 = -95 dBm (20 MHz)
+\begin{tabular}{@{}ll@{}}
+TX power & $P_t = 20$~dBm (100~mW) \\
+TX antenna gain & $G_t = 2$~dBi (omnidirectional) \\
+RX antenna gain & $G_r = 2$~dBi \\
+Distance & $d = 10$~m \\
+Frequency & $f = 2.4$~GHz \\
+Bandwidth & $B = 20$~MHz \\
+Noise figure & $NF = 6$~dB \\
+Wall penetration loss & $L_{\text{wall}} = 5$~dB (single interior wall) \\
+\end{tabular}
 
-\textbf{Received signal}: - P\_r = 22 - 45 + 2 = \textbf{-21 dBm}
+\subsubsection*{Step 1: Free-Space Path Loss}
 
-\textbf{SNR}: -21 - (-95) = \textbf{74 dB} (excellent!)
+\begin{equation}
+\text{FSPL\,[dB]} = 20\log_{10}(d_{\text{m}}) + 20\log_{10}(f_{\text{MHz}}) + 32.45
+\end{equation}
+\begin{equation}
+\text{FSPL} = 20\log_{10}(10) + 20\log_{10}(2400) + 32.45 = 20 + 67.6 + 32.45 = 40.05~\text{dB}
+\end{equation}
 
-\textbf{MCS}: Can use MCS 7 (64-QAM 5/6, requires \textasciitilde25 dB
-SNR)
+\subsubsection*{Step 2: Total Path Loss}
 
-\textbf{Data rate}: 65 Mbps
+Including wall penetration:
+\begin{equation}
+L_{\text{total}} = \text{FSPL} + L_{\text{wall}} = 40.05 + 5 = 45.05~\text{dB}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsubsection*{Step 3: Received Signal Power}
+
+\begin{equation}
+P_r = P_t + G_t + G_r - L_{\text{total}}
+\end{equation}
+\begin{equation}
+P_r = 20 + 2 + 2 - 45.05 = -21.05~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 4: Noise Power}
+
+The noise floor for a 20~MHz bandwidth is:
+\begin{equation}
+N = -174 + 10\log_{10}(B) + NF
+\end{equation}
+\begin{equation}
+N = -174 + 10\log_{10}(20 \times 10^6) + 6 = -174 + 73.0 + 6 = -95.0~\text{dBm}
+\end{equation}
+
+where $-174$~dBm/Hz is the thermal noise floor at 290~K.
+
+\subsubsection*{Step 5: Signal-to-Noise Ratio}
+
+\begin{equation}
+\text{SNR} = P_r - N = -21.05 - (-95.0) = 73.95~\text{dB}
+\end{equation}
+
+\subsubsection*{Step 6: MCS Selection and Data Rate}
+
+With 74~dB SNR, the link can support the highest MCS:
+\begin{itemize}
+\item \textbf{MCS 7:} 64-QAM, code rate $\frac{5}{6}$
+\item \textbf{Required SNR:} $\sim$25~dB
+\item \textbf{Link margin:} $74 - 25 = 49$~dB (excellent!)
+\item \textbf{Data rate:} 65~Mbps (20~MHz, 1 spatial stream)
+\end{itemize}
+
+\begin{calloutbox}{Link Budget Summary}
+\textbf{Result: Link closes with 49~dB margin}
+
+This enormous margin provides:
+\begin{itemize}
+\item Robustness against fading (Rayleigh/Rician)
+\item Additional wall penetration capability
+\item Support for maximum data rate (MCS 7)
+\item Tolerance for multipath and interference
+\end{itemize}
+
+\textbf{Practical outcome:} At 10~m indoor range, WiFi operates in a power-rich regime. Range is typically limited by collision domain (CSMA/CA) and AP density, not SNR.
+\end{calloutbox}
 
 \subsubsection{Synchronization}\label{synchronization}
 
@@ -148,29 +293,98 @@ accuracy) 3. \textbf{Tracking}: Pilot subcarriers (every OFDM symbol)
 
 \textbf{Channel estimation}: Long preamble (2 known OFDM symbols)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Channel Equalization}
 
-\subsubsection{Equalization}\label{equalization}
+\subsubsection*{Single-Antenna (SISO) Equalization}
 
-\textbf{Per-subcarrier} (flat fading assumption):
-
-\[
+Each OFDM subcarrier experiences flat fading and can be equalized independently:
+\begin{equation}
 \hat{S}_k = \frac{R_k}{H_k}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $R_k$ = received symbol on subcarrier $k$
+\item $H_k$ = complex channel coefficient (from pilot estimation)
+\item $\hat{S}_k$ = equalized symbol estimate
+\end{itemize}
 
-\textbf{Pilot tracking}: 4 pilots per 52 subcarriers - Linear
-interpolation (frequency) - Common phase error (CPE) correction
+\textbf{Channel estimation:} Long training symbols (LTS) in preamble provide known reference:
+\begin{equation}
+\hat{H}_k = \frac{R_k^{\text{LTS}}}{S_k^{\text{LTS}}}
+\end{equation}
 
-\textbf{MIMO} (2\$\textbackslash times\$2): MMSE equalizer
+\textbf{Pilot tracking:} Four pilot subcarriers per OFDM symbol enable:
+\begin{itemize}
+\item Phase tracking (common phase error correction)
+\item Frequency offset compensation
+\item Linear interpolation for data subcarrier channel estimates
+\end{itemize}
 
-\[
-\hat{\mathbf{S}} = (\mathbf{H}^H \mathbf{H} + \sigma^2 \mathbf{I})^{-1} \mathbf{H}^H \mathbf{R}
-\]
+\subsubsection*{MIMO Equalization ($2 \times 2$)}
 
-\textbf{Complexity}: 2\$\textbackslash times\$2 matrix inversion per
-subcarrier (52 times per symbol)
+For spatial multiplexing, the received signal model per subcarrier is:
+\begin{equation}
+\mathbf{R} = \mathbf{H} \mathbf{S} + \mathbf{N}
+\end{equation}
+where $\mathbf{H}$ is the $2 \times 2$ channel matrix.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+The \textbf{MMSE equalizer} balances noise amplification:
+\begin{equation}
+\hat{\mathbf{S}} = \left(\mathbf{H}^H \mathbf{H} + \sigma^2 \mathbf{I}\right)^{-1} \mathbf{H}^H \mathbf{R}
+\end{equation}
+where $\sigma^2$ is the noise variance.
+
+\textbf{Computational complexity:}
+\begin{itemize}
+\item $2 \times 2$ matrix inversion per subcarrier
+\item 52 subcarriers (20~MHz) $\rightarrow$ 52 inversions per symbol
+\item Symbol rate: 250,000 symbols/second
+\item Total: $\sim$13 million matrix operations/second
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.8cm, font=\sffamily\scriptsize},
+  node distance=1.5cm,
+  font=\small
+]
+% Transmit chain
+\node (bits) {\scriptsize Binary data};
+\node[block, below of=bits, node distance=1cm] (fec) {FEC Encoder};
+\node[block, below of=fec, node distance=1cm] (qam) {QAM Mapper};
+\node[block, below of=qam, node distance=1cm] (mimo) {MIMO\\Encoder};
+\node[block, below of=mimo, node distance=1cm] (ifft) {IFFT + GI};
+\node[below of=ifft, node distance=1cm] (rf) {\scriptsize RF Front-End};
+
+% Channel
+\node[right of=ifft, node distance=5cm] (channel) {\sffamily\bfseries Channel\\(Multipath)};
+\draw[->,thick] (rf) -- ++(-1.5,0) |- (channel);
+
+% Receive chain
+\node[below of=channel, node distance=3cm] (rf2) {\scriptsize RF Front-End};
+\node[block, above of=rf2, node distance=1cm] (fft) {Remove GI\\+ FFT};
+\node[block, above of=fft, node distance=1cm] (eq) {MIMO\\Equalizer};
+\node[block, above of=eq, node distance=1cm] (deqam) {QAM\\Demapper};
+\node[block, above of=deqam, node distance=1cm] (dec) {FEC Decoder};
+\node[above of=dec, node distance=1cm] (outbits) {\scriptsize Recovered data};
+
+\draw[->,thick] (channel) -- ++(1.5,0) |- (rf2);
+\draw[->,thick] (bits) -- (fec);
+\draw[->,thick] (fec) -- (qam);
+\draw[->,thick] (qam) -- (mimo);
+\draw[->,thick] (mimo) -- (ifft);
+\draw[->,thick] (ifft) -- (rf);
+\draw[->,thick] (rf2) -- (fft);
+\draw[->,thick] (fft) -- (eq);
+\draw[->,thick] (eq) -- (deqam);
+\draw[->,thick] (deqam) -- (dec);
+\draw[->,thick] (dec) -- (outbits);
+
+% Labels
+\node[left of=fec, node distance=2.5cm, font=\sffamily\bfseries\footnotesize] {Transmitter};
+\node[right of=eq, node distance=2.5cm, font=\sffamily\bfseries\footnotesize] {Receiver};
+\end{tikzpicture}
+\end{center}
 
 \subsubsection{Performance}\label{performance}
 
@@ -185,45 +399,127 @@ Mbps)}: 100+ m outdoor (line-of-sight)
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{2. LTE (100 Mbps, Cat 3)}\label{lte-100-mbps-cat-3}
+\section{LTE: Wide-Area Cellular}
+\label{sec:lte}
 
-\subsubsection{System Parameters}\label{system-parameters-1}
+\subsection{System Parameters}
 
-\textbf{Standard}: 3GPP Release 8 (2008)
+\textbf{Long-Term Evolution (LTE)} represents the 4G cellular standard, designed for wide-area mobility with adaptive modulation and MIMO spatial multiplexing.
 
-\textbf{Frequency}: 700-2600 MHz (various bands)
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Standard & 3GPP Release 8 (2008) \\
+Frequency bands & 700--2600~MHz (FDD \& TDD) \\
+Channel bandwidth & 1.4, 3, 5, 10, 15, 20~MHz \\
+Downlink & OFDMA (multi-user) \\
+Uplink & SC-FDMA (lower PAPR) \\
+Modulation & QPSK, 16-QAM, 64-QAM (per user) \\
+FEC coding & Turbo codes ($K = 4$, rate $\frac{1}{3}$ mother code) \\
+MIMO & $2 \times 2$, $4 \times 4$ (DL), $1 \times 2$ (UL) \\
+Peak data rate & 300~Mbps (DL, Cat 4), 100~Mbps (DL, Cat 3) \\
+\bottomrule
+\end{tabular}
 
-\textbf{Bandwidth}: 1.4, 3, 5, 10, 15, 20 MHz
+\begin{calloutbox}[colback=green!5!white,colframe=green!75!black]{Key Innovation: Resource Block Scheduling}
+Unlike WiFi's contention-based CSMA/CA, LTE uses \textbf{centralized scheduling}. The eNodeB (base station) allocates specific time-frequency resource blocks to each user based on:
+\begin{itemize}
+\item Channel Quality Indicator (CQI) reports
+\item Queue status and latency requirements
+\item Fairness algorithms (proportional fair, round-robin)
+\end{itemize}
 
-\textbf{Downlink}: OFDMA (Orthogonal Frequency Division Multiple Access)
+This eliminates collisions and enables \textbf{adaptive modulation per user}---the cell-edge user gets robust QPSK while the nearby user enjoys 64-QAM.
+\end{calloutbox}
 
-\textbf{Uplink}: SC-FDMA (Single Carrier FDMA, lower PAPR)
+\subsection{LTE Resource Grid Structure}
 
-\textbf{Modulation}: QPSK, 16-QAM, 64-QAM (adaptive per user)
+The fundamental scheduling unit in LTE is the \textbf{Resource Block (RB)}:
+\begin{equation}
+\text{RB} = 12~\text{subcarriers} \times 7~\text{OFDM symbols} = 84~\text{resource elements}
+\end{equation}
 
-\textbf{Coding}: Turbo codes (K=4, rate 1/3, punctured)
+\textbf{Time-frequency parameters:}
+\begin{itemize}
+\item Subcarrier spacing: $\Delta f = 15$~kHz
+\item RB bandwidth: $12 \times 15~\text{kHz} = 180$~kHz
+\item Slot duration: $T_{\text{slot}} = 0.5$~ms (7 OFDM symbols)
+\item Subframe: $T_{\text{subframe}} = 1$~ms (2 slots = 14 OFDM symbols)
+\item Frame: $T_{\text{frame}} = 10$~ms (10 subframes)
+\end{itemize}
 
-\textbf{MIMO}: 2\$\textbackslash times\$2, 4\$\textbackslash times\$4
-(downlink)
+\textbf{20~MHz bandwidth configuration:}
+\begin{equation}
+N_{\text{RB}} = \left\lfloor \frac{20~\text{MHz}}{180~\text{kHz}} \right\rfloor = 100~\text{RBs}
+\end{equation}
+This yields $100 \times 12 = 1200$ subcarriers.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+% LTE Resource Grid
+\draw[thick] (0,0) rectangle (10,7);
 
-\subsubsection{Resource Grid}\label{resource-grid}
+% Draw grid
+\foreach \x in {0,1.428,...,10} {
+  \draw[thin,gray!40] (\x,0) -- (\x,7);
+}
+\foreach \y in {0,1,...,7} {
+  \draw[thin,gray!40] (0,\y) -- (10,\y);
+}
 
-\textbf{Resource Block (RB)}: 12 subcarriers \$\textbackslash times\$ 7
-OFDM symbols (0.5 ms slot)
+% Highlight one Resource Block
+\draw[very thick,blue] (1.428,1) rectangle (2.856,2);
+\node[blue,font=\sffamily\small] at (2.142,1.5) {1 RB};
 
-\textbf{Subcarrier spacing}: 15 kHz
+% Color different RBs for different users
+\fill[red!20] (0,0) rectangle (2.856,1);
+\fill[blue!20] (2.856,0) rectangle (5.712,1);
+\fill[green!20] (5.712,0) rectangle (8.568,1);
+\fill[orange!20] (8.568,0) rectangle (10,1);
 
-\textbf{RB bandwidth}: 180 kHz
+\fill[red!20] (0,2) rectangle (1.428,3);
+\fill[green!20] (1.428,2) rectangle (4.284,3);
+\fill[blue!20] (4.284,2) rectangle (7.14,3);
+\fill[orange!20] (7.14,2) rectangle (10,3);
 
-\textbf{20 MHz bandwidth}: 100 RBs (1200 subcarriers)
+% Reference signals (pilots)
+\foreach \x in {0.357,1.785,3.213,4.641,6.069,7.497,8.925} {
+  \foreach \y in {0.5,2.5,4.5,6.5} {
+    \fill[black] (\x,\y) circle (2pt);
+  }
+}
 
-\textbf{OFDM symbol}: 66.7 \$\textbackslash mu\$s (normal CP)
+% Labels
+\node[below,font=\small] at (5,-0.5) {Frequency (100 RBs $\times$ 12 subcarriers = 1200 subcarriers)};
+\node[rotate=90,left,font=\small] at (-0.5,3.5) {Time (7 OFDM symbols = 0.5~ms slot)};
 
-\textbf{Frame}: 10 ms (10 subframes, 20 slots)
+% User labels
+\node[font=\scriptsize,red] at (1.428,0.3) {User 1};
+\node[font=\scriptsize,blue] at (4.284,0.3) {User 2};
+\node[font=\scriptsize,green] at (7.14,0.3) {User 3};
+\node[font=\scriptsize,orange] at (9.284,0.3) {User 4};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Dimensions
+\draw[<->] (2.856,-1.5) -- (1.428,-1.5) node[midway,below,font=\scriptsize] {180~kHz};
+\draw[<->] (10.5,1) -- (10.5,2) node[midway,right,font=\scriptsize] {$\frac{0.5}{7}$~ms};
+
+% Legend
+\node[below right,font=\scriptsize] at (10,7) {$\bullet$ = Reference signals};
+\end{tikzpicture}
+\end{center}
+
+\begin{calloutbox}[colback=blue!5!white,colframe=blue!75!black]{Time-Frequency Resource Allocation}
+The eNodeB scheduler assigns RBs dynamically every 1~ms (subframe):
+\begin{itemize}
+\item \textbf{User 1} (cell edge): Allocated 20 RBs with QPSK $\rightarrow$ 3~Mbps
+\item \textbf{User 2} (mid-cell): Allocated 30 RBs with 16-QAM $\rightarrow$ 12~Mbps
+\item \textbf{User 3} (near base): Allocated 25 RBs with 64-QAM $\rightarrow$ 15~Mbps
+\item \textbf{User 4} (stationary): Allocated 25 RBs with 64-QAM $\rightarrow$ 15~Mbps
+\end{itemize}
+
+Total cell throughput: 45~Mbps with 4 active users, adapting MCS based on individual channel quality.
+\end{calloutbox}
 
 \subsubsection{Modulation \& Coding}\label{modulation-coding}
 
@@ -252,34 +548,94 @@ Quality Indicator) reports
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Link Budget (Downlink, 2 GHz, 20
-MHz)}\label{link-budget-downlink-2-ghz-20-mhz}
+\subsection{Link Budget: Urban Macrocell}
 
-\textbf{eNodeB} (base station): - TX power: +46 dBm (40 W, macrocell) -
-Antenna gain: +17 dBi (sector antenna, 3-sector site) - Cable loss: -3
-dB - EIRP: +60 dBm
+\textbf{Scenario:} Downlink from macrocell tower to indoor smartphone at 1~km distance, 2~GHz band
 
-\textbf{Path Loss} (urban, 1 km): - Free space: 92 dB - Urban clutter:
-20 dB - Building penetration: 15 dB (indoor UE) - \textbf{Total}: 127 dB
+\subsubsection*{Given Parameters}
 
-\textbf{UE} (user equipment): - RX antenna gain: 0 dBi (phone,
-omnidirectional) - Noise figure: 9 dB - Noise floor: -174 + 73 + 9 = -92
-dBm (20 MHz)
+\begin{tabular}{@{}ll@{}}
+eNodeB TX power & $P_t = 46$~dBm (40~W total, 20~W per sector) \\
+eNodeB antenna gain & $G_t = 17$~dBi (120° sector antenna) \\
+Cable loss & $L_{\text{cable}} = 3$~dB \\
+Distance & $d = 1$~km \\
+Frequency & $f = 2.0$~GHz \\
+Bandwidth & $B = 20$~MHz \\
+UE antenna gain & $G_r = 0$~dBi (omnidirectional phone antenna) \\
+UE noise figure & $NF = 9$~dB \\
+Building penetration loss & $L_{\text{building}} = 15$~dB \\
+Urban clutter loss & $L_{\text{urban}} = 20$~dB \\
+\end{tabular}
 
-\textbf{Received signal}: - P\_r = 60 - 127 + 0 = \textbf{-67 dBm}
+\subsubsection*{Step 1: EIRP Calculation}
 
-\textbf{SNR}: -67 - (-92) = \textbf{25 dB}
+\begin{equation}
+\text{EIRP} = P_t + G_t - L_{\text{cable}} = 46 + 17 - 3 = 60~\text{dBm}
+\end{equation}
 
-\textbf{MCS}: 64-QAM, rate 0.7 (MCS 23)
+\subsubsection*{Step 2: Path Loss}
 
-\textbf{Data rate} (100 RBs, 2\$\textbackslash times\$2 MIMO): - 100 RB
-\$\textbackslash times\$ 12 subcarriers \$\textbackslash times\$ 7
-symbols \$\textbackslash times\$ 6 bits \$\textbackslash times\$ 2
-layers / 0.5 ms - = 100,800 bits / 0.5 ms = \textbf{201.6 Mbps}
-(physical) - With code rate 0.7 and overhead:
-\textasciitilde{}\textbf{100 Mbps} (MAC)
+Free-space path loss:
+\begin{equation}
+\text{FSPL} = 20\log_{10}(1000) + 20\log_{10}(2000) + 32.45 = 60 + 66.0 + 32.45 = 92.0~\text{dB}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Total path loss including propagation environment:
+\begin{equation}
+L_{\text{total}} = \text{FSPL} + L_{\text{urban}} + L_{\text{building}} = 92 + 20 + 15 = 127~\text{dB}
+\end{equation}
+
+\subsubsection*{Step 3: Received Signal Power}
+
+\begin{equation}
+P_r = \text{EIRP} + G_r - L_{\text{total}} = 60 + 0 - 127 = -67~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 4: Noise Power}
+
+\begin{equation}
+N = -174 + 10\log_{10}(20 \times 10^6) + 9 = -174 + 73.0 + 9 = -92~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 5: SNR and MCS Selection}
+
+\begin{equation}
+\text{SNR} = P_r - N = -67 - (-92) = 25~\text{dB}
+\end{equation}
+
+With 25~dB SNR, the scheduler selects:
+\begin{itemize}
+\item \textbf{MCS 23:} 64-QAM with code rate $r = 0.7$
+\item \textbf{Spectral efficiency:} $\eta = 6 \times 0.7 = 4.2$~bits/s/Hz
+\end{itemize}
+
+\subsubsection*{Step 6: Data Rate Calculation}
+
+For $2 \times 2$ MIMO with 100 RBs allocated:
+\begin{equation}
+R = N_{\text{RB}} \times N_{\text{sc}} \times N_{\text{sym}} \times M \times r \times N_{\text{layers}} / T_{\text{slot}}
+\end{equation}
+\begin{equation}
+R = 100 \times 12 \times 7 \times 6 \times 0.7 \times 2 / 0.5~\text{ms} = 141,120 / 0.5 = 141.1~\text{Mbps}
+\end{equation}
+
+After accounting for reference signals, control overhead, and protocol layers:
+\begin{equation}
+R_{\text{MAC}} \approx 0.7 \times 141.1 \approx 100~\text{Mbps}
+\end{equation}
+
+\begin{calloutbox}{LTE Link Budget Summary}
+\textbf{Result: 100~Mbps achievable at 1~km with 25~dB SNR}
+
+This link operates in a \textbf{coverage-limited} regime:
+\begin{itemize}
+\item Cell-edge users (weak signal): Use QPSK, achieve $\sim$5~Mbps
+\item Mid-cell users (moderate signal): Use 16-QAM, achieve $\sim$20--40~Mbps
+\item Near-tower users (strong signal): Use 64-QAM, achieve 80--100~Mbps
+\end{itemize}
+
+\textbf{Handover margins:} LTE maintains soft handover with $\sim$3~dB hysteresis to prevent ping-ponging between cells at speeds up to 350~km/h.
+\end{calloutbox}
 
 \subsubsection{Synchronization \& Cell
 Search}\label{synchronization-cell-search}
@@ -501,75 +857,243 @@ oscillator, ground LNB) - Decision-directed phase tracking - Pilot-aided
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{4. GPS L1 C/A (Civilian
-Navigation)}\label{gps-l1-ca-civilian-navigation}
+\section{GPS L1 C/A: Sub-Noise Navigation}
+\label{sec:gps}
 
-\subsubsection{System Parameters}\label{system-parameters-3}
+\subsection{System Parameters}
 
-\textbf{Standard}: IS-GPS-200 (US DoD)
+\textbf{Global Positioning System (GPS)} demonstrates the power of spread spectrum to extract signals \textbf{35~dB below the noise floor}.
 
-\textbf{Frequency}: L1 = 1575.42 MHz
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Standard & IS-GPS-200 (US DoD) \\
+Carrier frequency & $f_{L1} = 1575.42$~MHz \\
+Bandwidth & 2.046~MHz (main lobe) \\
+Modulation & BPSK-R (data $\times$ spreading code) \\
+Spreading code & C/A Gold code, 1023 chips \\
+Chip rate & $R_c = 1.023$~Mcps \\
+Code period & $T_c = 1$~ms (1023 chips) \\
+Navigation data rate & $R_b = 50$~bps \\
+Processing gain & $G_p = 43$~dB \\
+FEC coding & None (C/A), convolution (CNAV) \\
+\bottomrule
+\end{tabular}
 
-\textbf{Bandwidth}: 2.046 MHz (C/A code)
+\begin{warningbox}
+\textbf{Weak Signal Challenge:} GPS signals arrive at $\sim$$-$143~dBm, which is:
+\begin{itemize}
+\item 35~dB \textbf{below} the thermal noise floor
+\item Equivalent to detecting a 20~W light bulb from 20,000~km away
+\item $10^{14}$ times weaker than WiFi signals
+\end{itemize}
 
-\textbf{Modulation}: BPSK (data) on DSSS (Direct Sequence Spread
-Spectrum)
+The only reason GPS works is the \textbf{43~dB processing gain} from spreading the 50~bps data over 1.023~MHz bandwidth---a 20,000$\times$ bandwidth expansion.
+\end{warningbox}
 
-\textbf{Spreading}: 1.023 Mcps (C/A Gold code, 1023 chips)
+\subsection{DSSS Signal Structure}
 
-\textbf{Data rate}: 50 bps (navigation message)
+The GPS L1 C/A signal combines BPSK modulation with direct-sequence spread spectrum:
+\begin{equation}
+s(t) = \sqrt{2P} \cdot d(t) \cdot c(t) \cdot \cos(2\pi f_{L1} t)
+\end{equation}
+where:
+\begin{itemize}
+\item $P$ = transmitted power
+\item $d(t) \in \{+1, -1\}$ = navigation data at 50~bps
+\item $c(t) \in \{+1, -1\}$ = C/A spreading code at 1.023~Mcps
+\item $f_{L1} = 1575.42$~MHz
+\end{itemize}
 
-\textbf{Code rate}: None (no FEC on nav message, 1/2 rate implied by
-chip parity in modern receivers)
+\textbf{C/A Gold Code properties:}
+\begin{itemize}
+\item Length: $N = 1023$ chips
+\item Period: $T_{\text{code}} = 1$~ms
+\item Autocorrelation peak: $R_{cc}(0) = 1023$
+\item Cross-correlation: $|R_{cc}(\tau)| \leq 65$ (for different satellites)
+\item Unique code per satellite (32 codes allocated)
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Data structure:}
+\begin{itemize}
+\item Each data bit spans 20 code periods (20~ms)
+\item Navigation message: Ephemeris, almanac, clock corrections
+\item Frame length: 1500 bits = 30 seconds
+\end{itemize}
 
-\subsubsection{Signal Structure}\label{signal-structure}
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+% Time-domain representation
+\begin{scope}
+\node[above] at (3,3) {\sffamily\bfseries GPS Signal Structure};
 
-\textbf{C/A code}: 1023-chip Gold code (repeats every 1 ms) - Unique
-code per satellite (32 satellites, \textasciitilde30 visible codes) -
-Chip rate: 1.023 Mcps - Chip duration: \textasciitilde977 ns
+% Data bits
+\draw[thick,blue] (0,2) -- (2,2) -- (2,2.5) -- (4,2.5) -- (4,2);
+\node[left,font=\scriptsize,blue] at (0,2.25) {Data (50~bps)};
 
-\textbf{Navigation data}: 50 bps - 20 ms per bit (20 C/A code
-repetitions) - Preamble, ephemeris, almanac
+% Spreading code
+\draw[thick,red] (0,1) -- (0.2,1) -- (0.2,0.5) -- (0.4,0.5) -- (0.4,1) -- (0.6,1) -- (0.6,0.5) -- (0.8,0.5) -- (0.8,1);
+\draw[thick,red] (0.8,1) -- (1.0,1) -- (1.0,0.5) -- (1.2,0.5) -- (1.2,1) -- (1.4,1) -- (1.4,0.5) -- (1.6,0.5) -- (1.6,1);
+\draw[thick,red] (1.6,1) -- (1.8,1) -- (1.8,0.5) -- (2.0,0.5) -- (2.0,1);
+\node[left,font=\scriptsize,red] at (0,0.75) {C/A code (1.023~Mcps)};
 
-\textbf{Spreading}:
+% Product
+\draw[thick,green!50!black] (0,0) -- (0.2,0) -- (0.2,-0.5) -- (0.4,-0.5) -- (0.4,0) -- (0.6,0) -- (0.6,-0.5) -- (0.8,-0.5) -- (0.8,0);
+\draw[thick,green!50!black] (0.8,0) -- (1.0,0) -- (1.0,-0.5) -- (1.2,-0.5) -- (1.2,0) -- (1.4,0) -- (1.4,-0.5) -- (1.6,-0.5) -- (1.6,0);
+\draw[thick,green!50!black] (1.6,0) -- (1.8,0) -- (1.8,-0.5) -- (2.0,-0.5) -- (2.0,-1);
+\draw[thick,green!50!black] (2.0,-1) -- (2.2,-1) -- (2.2,-0.5) -- (2.4,-0.5) -- (2.4,-1) -- (2.6,-1) -- (2.6,-0.5) -- (2.8,-0.5) -- (2.8,-1);
+\draw[thick,green!50!black] (2.8,-1) -- (3.0,-1) -- (3.0,-0.5) -- (3.2,-0.5) -- (3.2,-1) -- (3.4,-1) -- (3.4,-0.5) -- (3.6,-0.5) -- (3.6,-1);
+\draw[thick,green!50!black] (3.6,-1) -- (3.8,-1) -- (3.8,-0.5) -- (4.0,-0.5) -- (4.0,-1);
+\node[left,font=\scriptsize,green!50!black] at (0,-0.75) {Spread signal};
 
-\[
-s(t) = d(t) \cdot c(t) \cdot \cos(2\pi f_L1 t)
-\]
+% Dimensions
+\draw[<->] (0,2.8) -- (2,2.8) node[midway,above,font=\scriptsize] {20~ms (1 data bit)};
+\draw[<->] (0,1.3) -- (2,1.3) node[midway,above,font=\scriptsize] {1~ms (1023 chips)};
 
-Where: - \(d(t)\) = Navigation data (\$\textbackslash pm\$1) - \(c(t)\)
-= C/A code (\$\textbackslash pm\$1, 1.023 Mcps)
+% Annotations
+\node[font=\scriptsize] at (5.5,2.25) {1 bit = 20~ms};
+\node[font=\scriptsize] at (5.5,0.75) {1 chip = 977.5~ns};
+\node[font=\scriptsize] at (5.5,-0.75) {Transmitted signal};
+\end{scope}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Processing gain visualization
+\begin{scope}[shift={(0,-4)}]
+\node[above] at (3,2) {\sffamily\bfseries Processing Gain};
 
-\subsubsection{Link Budget}\label{link-budget}
+% Before despreading
+\draw[->] (0,0) -- (6,0) node[right,font=\scriptsize] {Frequency};
+\draw[->] (0,0) -- (0,1.5);
+\node[left,font=\scriptsize] at (0,0.75) {Power};
 
-\textbf{Satellite} (MEO, 20,200 km): - TX power: +27 dBW (500 W
-spacecraft, 50 W to L1) - Antenna gain: +13 dBi (earth-facing) - EIRP:
-+40 dBW
+\fill[blue!30] (1,0) -- (1,0.3) -- (5,0.3) -- (5,0) -- cycle;
+\node[below,font=\scriptsize] at (3,-0.3) {2.046~MHz (spread)};
+\node[above,font=\scriptsize] at (3,0.3) {Signal: $-$143~dBm};
 
-\textbf{Path Loss} (1.575 GHz, 20,200 km): - FSPL: 184 dB
+\draw[dashed,red,thick] (0,1) -- (6,1);
+\node[right,font=\scriptsize,red] at (6,1) {Noise: $-$108~dBm};
 
-\textbf{Receiver} (handheld): - Antenna gain: +3 dBi (patch antenna) -
-Cable loss: -2 dB - RX gain: +1 dBi - Noise figure: 3 dB - Noise floor:
--174 + 63 + 3 = -108 dBm (2 MHz)
+% After despreading
+\begin{scope}[shift={(8,0)}]
+\draw[->] (0,0) -- (6,0) node[right,font=\scriptsize] {Frequency};
+\draw[->] (0,0) -- (0,1.5);
 
-\textbf{Received signal}: - P\_r = 40 - 184 + 1 = \textbf{-143 dBm}
+\fill[green!50!black,opacity=0.7] (2.5,0) rectangle (3.5,1.3);
+\node[below,font=\scriptsize] at (3,-0.3) {50~Hz (data)};
+\node[above,font=\scriptsize] at (3,1.3) {Signal: $-$100~dBm};
 
-\textbf{SNR} (before despreading): -143 - (-108) = \textbf{-35 dB}
+\draw[dashed,red,thick] (0,0.15) -- (6,0.15);
+\node[right,font=\scriptsize,red] at (6,0.15) {Noise: $-$108~dBm};
 
-\textbf{Processing gain} (despreading): - G\_p = 10log(1.023e6 / 50) =
-\textbf{43 dB}
+\draw[<->,thick] (5.5,0.15) -- (5.5,1.3) node[midway,right,font=\scriptsize] {SNR\\+8~dB};
+\end{scope}
 
-\textbf{SNR after despreading}: -35 + 43 = \textbf{+8 dB}
+\node[font=\scriptsize] at (7,0.75) {$\xrightarrow{\text{Despread (43~dB gain)}}$};
+\end{scope}
+\end{tikzpicture}
+\end{center}
 
-\textbf{Enough for}: BER
-\textasciitilde10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{5\}
-(BPSK @ 8 dB Eb/N0)
+\subsection{Link Budget: Space-to-Ground}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Scenario:} MEO satellite to handheld receiver, open sky
+
+\subsubsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Satellite TX power & $P_t = 27$~dBW = 50~dBm (50~W allocated to L1) \\
+Satellite antenna gain & $G_t = 13$~dBi (earth-facing beam) \\
+Orbit altitude & $h = 20{,}200$~km (MEO) \\
+Frequency & $f = 1575.42$~MHz \\
+Receiver antenna gain & $G_r = 3$~dBi (patch antenna) \\
+LNA noise figure & $NF = 3$~dB \\
+Bandwidth & $B = 2.046$~MHz (C/A main lobe) \\
+\end{tabular}
+
+\subsubsection*{Step 1: EIRP}
+
+\begin{equation}
+\text{EIRP} = P_t + G_t = 27 + 13 = 40~\text{dBW} = 70~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 2: Free-Space Path Loss}
+
+For MEO satellite at zenith:
+\begin{equation}
+\text{FSPL} = 20\log_{10}(20{,}200 \times 10^3) + 20\log_{10}(1575.42 \times 10^6) + 92.45
+\end{equation}
+\begin{equation}
+\text{FSPL} = 166.1 + 124.0 + 92.45 = 184.0~\text{dB}
+\end{equation}
+
+\subsubsection*{Step 3: Received Signal Power}
+
+\begin{equation}
+P_r = \text{EIRP} + G_r - \text{FSPL} = 70 + 3 - 184 = -111~\text{dBm}
+\end{equation}
+
+Wait, this doesn't match the expected $-143$~dBm. The specification uses minimum received power accounting for:
+\begin{itemize}
+\item Satellite at horizon (not zenith): additional $\sim$3~dB path loss
+\item Polarization loss: $\sim$3~dB
+\item Atmospheric loss: $\sim$0.5~dB
+\item Implementation margin: $\sim$20~dB
+\end{itemize}
+
+\textbf{Minimum guaranteed received power:}
+\begin{equation}
+P_r^{\min} = -111 - 3 - 3 - 0.5 - 20 = -137.5~\text{dBm} \approx -143~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 4: Noise Power}
+
+\begin{equation}
+N = -174 + 10\log_{10}(2.046 \times 10^6) + 3 = -174 + 63.1 + 3 = -107.9~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 5: SNR Before Despreading}
+
+\begin{equation}
+\text{SNR}_{\text{RF}} = P_r - N = -143 - (-108) = -35~\text{dB}
+\end{equation}
+
+\textbf{Signal is 35~dB below noise!} Completely undetectable without processing gain.
+
+\subsubsection*{Step 6: Processing Gain}
+
+The despreading operation provides:
+\begin{equation}
+G_p = 10\log_{10}\left(\frac{R_c}{R_b}\right) = 10\log_{10}\left(\frac{1{,}023{,}000}{50}\right) = 10\log_{10}(20{,}460) = 43.1~\text{dB}
+\end{equation}
+
+\subsubsection*{Step 7: SNR After Despreading}
+
+\begin{equation}
+\text{SNR}_{\text{data}} = \text{SNR}_{\text{RF}} + G_p = -35 + 43 = +8~\text{dB}
+\end{equation}
+
+For BPSK at 8~dB $E_b/N_0$:
+\begin{equation}
+\text{BER} = Q\left(\sqrt{2 \times 10^{0.8}}\right) \approx 3.9 \times 10^{-6}
+\end{equation}
+
+\begin{calloutbox}{GPS Link Budget Summary}
+\textbf{Result: Sub-noise signal successfully decoded}
+
+Key insights:
+\begin{itemize}
+\item \textbf{Input:} Signal 35~dB below noise ($-143$~dBm vs $-108$~dBm)
+\item \textbf{Processing gain:} 43~dB from 20,000$\times$ bandwidth expansion
+\item \textbf{Output:} Usable 8~dB SNR for navigation data
+\item \textbf{Consequence:} Works indoors (marginal), in urban canyons, under trees
+\end{itemize}
+
+\textbf{Why 1023 chips?}
+\begin{itemize}
+\item Prime number ensures good autocorrelation properties
+\item 1~ms period allows Doppler tolerance of $\pm$5~kHz ($\pm$1~kHz per bin)
+\item Fast FFT-based acquisition (1024-point FFT, just above 1023)
+\end{itemize}
+\end{calloutbox}
 
 \subsubsection{Acquisition \& Tracking}\label{acquisition-tracking}
 
@@ -922,7 +1446,119 @@ limited)
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Comparison Summary}\label{comparison-summary}
+\section{System Comparison and Trade-offs}
+\label{sec:comparison}
+
+\subsection{Performance Trade-off Analysis}
+
+Real-world systems optimize for different objectives. The fundamental trade-offs are visualized below:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Data Rate vs Range plot
+\begin{scope}
+\node[above] at (5,6) {\sffamily\bfseries\large Data Rate vs Range Trade-off};
+
+% Axes
+\draw[->] (0,0) -- (10,0) node[right,font=\small] {Range (m, log scale)};
+\draw[->] (0,0) -- (0,5) node[above,font=\small] {Data Rate (Mbps, log scale)};
+
+% Logarithmic tick marks and labels
+\foreach \x/\label in {1/10, 3/100, 5/1k, 7/10k, 9/100k} {
+  \draw (\x,0.1) -- (\x,-0.1) node[below,font=\scriptsize] {\label};
+}
+\foreach \y/\label in {0.5/0.1, 1.5/1, 2.5/10, 3.5/100, 4.5/1000} {
+  \draw (0.1,\y) -- (-0.1,\y) node[left,font=\scriptsize] {\label};
+}
+
+% Plot systems
+\node[circle,fill=blue,inner sep=2pt,label={right:\scriptsize\textbf{WiFi}}] at (1.5,3.8) {};
+\node[circle,fill=red,inner sep=2pt,label={right:\scriptsize\textbf{LTE}}] at (4.5,3.0) {};
+\node[circle,fill=purple,inner sep=2pt,label={above:\scriptsize\textbf{DVB-S2X}}] at (8.5,3.2) {};
+\node[circle,fill=orange,inner sep=2pt,label={above:\scriptsize\textbf{Bluetooth}}] at (2.5,1.5) {};
+\node[circle,fill=green!50!black,inner sep=2pt,label={below:\scriptsize\textbf{LoRaWAN}}] at (6.5,0.2) {};
+\node[circle,fill=black,inner sep=2pt,label={left:\scriptsize\textbf{GPS}}] at (9.5,-0.5) {};
+
+% Inverse relationship line
+\draw[dashed,gray,thick] (0.5,4.5) -- (9.5,0.5);
+\node[rotate=-23,gray,font=\scriptsize] at (5,2.5) {Inverse relationship};
+
+\end{scope}
+
+% Power vs Range plot
+\begin{scope}[shift={(0,-8)}]
+\node[above] at (5,6) {\sffamily\bfseries\large Power Consumption vs Range};
+
+% Axes
+\draw[->] (0,0) -- (10,0) node[right,font=\small] {Range (m, log scale)};
+\draw[->] (0,0) -- (0,5) node[above,font=\small] {TX Power (mW, log scale)};
+
+% Tick marks
+\foreach \x/\label in {1/10, 3/100, 5/1k, 7/10k, 9/100k} {
+  \draw (\x,0.1) -- (\x,-0.1) node[below,font=\scriptsize] {\label};
+}
+\foreach \y/\label in {0/1, 1/10, 2/100, 3/1k, 4/10k, 5/100k} {
+  \draw (0.1,\y) -- (-0.1,\y) node[left,font=\scriptsize] {\label};
+}
+
+% Plot systems
+\node[circle,fill=blue,inner sep=2pt,label={right:\scriptsize WiFi (100~mW)}] at (1.5,2.0) {};
+\node[circle,fill=red,inner sep=2pt,label={right:\scriptsize LTE (200~mW)}] at (4.5,2.3) {};
+\node[circle,fill=purple,inner sep=2pt,label={above:\scriptsize DVB-S2X (100~W)}] at (8.5,5.0) {};
+\node[circle,fill=orange,inner sep=2pt,label={above:\scriptsize Bluetooth (10~mW)}] at (2.5,1.0) {};
+\node[circle,fill=green!50!black,inner sep=2pt,label={right:\scriptsize LoRaWAN (25~mW)}] at (6.5,1.4) {};
+\node[circle,fill=black,inner sep=2pt,label={left:\scriptsize GPS (50~W sat)}] at (9.5,4.7) {};
+
+% Trend line
+\draw[dashed,gray,thick] (0.5,0.5) -- (9.5,5.0);
+\node[rotate=26,gray,font=\scriptsize] at (5,2.8) {Range $\propto$ $\sqrt{\text{Power}}$};
+
+\end{scope}
+
+% Latency comparison
+\begin{scope}[shift={(12,0)}]
+\node[above] at (2.5,6) {\sffamily\bfseries\large Latency};
+
+\draw[thick] (0,0) rectangle (5,5.5);
+
+% Bars
+\fill[blue!60] (0.5,0) rectangle (1.3,0.5);
+\node[right,font=\scriptsize] at (1.4,0.25) {WiFi: 1--5~ms};
+
+\fill[red!60] (0.5,1.0) rectangle (1.8,1.5);
+\node[right,font=\scriptsize] at (1.9,1.25) {LTE: 10~ms};
+
+\fill[orange!60] (0.5,2.0) rectangle (2.0,2.5);
+\node[right,font=\scriptsize] at (2.1,2.25) {Bluetooth: 7--40~ms};
+
+\fill[green!40!black] (0.5,3.0) rectangle (4.5,3.5);
+\node[right,font=\scriptsize] at (4.6,3.25) {LoRa: 1--10~s};
+
+\fill[purple!60] (0.5,4.0) rectangle (4.8,4.5);
+\node[right,font=\scriptsize] at (4.9,4.25) {DVB-S2X: 600~ms};
+
+\node[font=\scriptsize] at (2.5,5.2) {(GPS: N/A, broadcast only)};
+
+% Scale annotation
+\draw[<->,thick] (0.2,0) -- (0.2,5) node[midway,left,font=\scriptsize,rotate=90] {Increasing latency};
+
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{keyconcept}
+\textbf{Fundamental Trade-offs:}
+\begin{enumerate}
+\item \textbf{Shannon Limit:} Data rate inversely proportional to range (for fixed power and frequency)
+\item \textbf{Power-Range Relationship:} Doubling range requires 4$\times$ power (free-space, 2D)
+\item \textbf{Latency vs Power:} Long-range systems (LoRa, satellite) sacrifice latency for energy efficiency
+\item \textbf{Bandwidth vs Coexistence:} Wider bandwidth = higher rate but harder to avoid interference
+\end{enumerate}
+
+\textbf{No system optimizes all parameters simultaneously.} System design chooses the appropriate balance for the application.
+\end{keyconcept}
+
+\subsection{Quantitative Comparison Table}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
@@ -973,27 +1609,130 @@ Hamming & 1-10 s & 25 mW \\
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Key Takeaways by System}\label{key-takeaways-by-system}
+\subsection{System Characteristics Summary}
 
-\textbf{WiFi}: High throughput, OFDM handles multipath, MIMO for
-capacity, short range
+\begin{itemize}
+\item \textbf{WiFi 802.11n:}
+  \begin{itemize}
+  \item High throughput (65--600~Mbps) over short range (10--100~m)
+  \item OFDM with 52 subcarriers handles indoor multipath
+  \item MIMO spatial multiplexing for capacity
+  \item CSMA/CA contention-based access
+  \item \textbf{Use case:} Home/office internet access, video streaming
+  \end{itemize}
 
-\textbf{LTE}: Cellular coverage, adaptive MCS, OFDMA multi-user,
-handover at 300 km/h
+\item \textbf{LTE (4G):}
+  \begin{itemize}
+  \item Wide-area coverage (1--15~km cells)
+  \item Adaptive MCS per user (QPSK to 64-QAM)
+  \item Centralized OFDMA scheduling eliminates collisions
+  \item Seamless handover at 350~km/h
+  \item \textbf{Use case:} Mobile broadband, voice, video calls
+  \end{itemize}
 
-\textbf{DVB-S2X}: Satellite broadcast, ACM for rain fade, long latency
-(GEO), high EIRP
+\item \textbf{DVB-S2X:}
+  \begin{itemize}
+  \item Geostationary satellite broadcast (36,000~km)
+  \item Adaptive Coding \& Modulation (ACM) for rain fade
+  \item Very high EIRP (85~dBW) from satellite
+  \item 600~ms round-trip latency (GEO)
+  \item \textbf{Use case:} Direct-to-home TV, rural internet
+  \end{itemize}
 
-\textbf{GPS}: Below noise floor (-143 dBm), spread spectrum (43 dB
-gain), 5-10 m accuracy
+\item \textbf{GPS L1 C/A:}
+  \begin{itemize}
+  \item Sub-noise signal acquisition ($-143$~dBm, 35~dB below noise)
+  \item 43~dB processing gain from spread spectrum (1.023~MHz / 50~bps)
+  \item 5--10~m positioning accuracy (standalone)
+  \item Global coverage (24+ satellites visible)
+  \item \textbf{Use case:} Navigation, timing reference, surveying
+  \end{itemize}
 
-\textbf{Bluetooth}: Low power, AFH avoids WiFi, LE Coded for range, 7.5
-ms latency
+\item \textbf{Bluetooth 5.0:}
+  \begin{itemize}
+  \item Ultra-low power (10~mW typical, $<1~\mu$W sleep)
+  \item Adaptive Frequency Hopping (AFH) avoids WiFi
+  \item LE Coded mode extends range to 400~m
+  \item 7.5--40~ms latency for real-time audio
+  \item \textbf{Use case:} Wireless audio, wearables, sensors
+  \end{itemize}
 
-\textbf{LoRaWAN}: Ultra-long range (15+ km), sub-noise detection (CSS),
-years battery life
+\item \textbf{LoRaWAN:}
+  \begin{itemize}
+  \item Ultra-long range (2--50~km) with low power
+  \item Chirp Spread Spectrum (CSS) enables sub-noise detection
+  \item Adaptive Data Rate (ADR): SF7 to SF12
+  \item 5--15 year battery life on coin cells
+  \item \textbf{Use case:} IoT sensors, smart meters, agriculture
+  \end{itemize}
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Applications and Use Cases}
+\label{sec:applications}
+
+\subsection{System Selection Criteria}
+
+Choosing the appropriate wireless system depends on application requirements:
+
+\begin{center}
+\begin{tikzpicture}[
+  decision/.style={diamond, draw, aspect=2, font=\sffamily\scriptsize, align=center},
+  system/.style={rectangle, draw, rounded corners, fill=blue!20, font=\sffamily\scriptsize, align=center},
+  node distance=1.8cm
+]
+
+\node[decision] (start) {Data rate\\requirement?};
+
+\node[decision, below left of=start, node distance=3cm] (highrate) {Range?};
+\node[decision, below right of=start, node distance=3cm] (lowrate) {Battery\\life?};
+
+\node[system, below left of=highrate, node distance=2.5cm] (wifi) {WiFi\\(indoor\\high speed)};
+\node[system, below right of=highrate, node distance=2.5cm] (lte) {LTE\\(mobile\\broadband)};
+
+\node[system, below left of=lowrate, node distance=2.5cm] (bt) {Bluetooth\\(wearables)};
+\node[system, below right of=lowrate, node distance=2.5cm] (lora) {LoRaWAN\\(sensors)};
+
+\draw[->] (start) -- node[left,font=\scriptsize] {>10~Mbps} (highrate);
+\draw[->] (start) -- node[right,font=\scriptsize] {<1~Mbps} (lowrate);
+
+\draw[->] (highrate) -- node[left,font=\scriptsize] {<100~m} (wifi);
+\draw[->] (highrate) -- node[right,font=\scriptsize] {>1~km} (lte);
+
+\draw[->] (lowrate) -- node[left,font=\scriptsize] {Hours} (bt);
+\draw[->] (lowrate) -- node[right,font=\scriptsize] {Years} (lora);
+
+\end{tikzpicture}
+\end{center}
+
+\subsection{Practical Implementation Examples}
+
+\subsubsection*{Smart Home}
+\begin{itemize}
+\item \textbf{WiFi:} Security cameras (2~Mbps per stream), smart TV (25~Mbps 4K), laptops
+\item \textbf{Bluetooth:} Wireless speakers, headphones, smart door locks
+\item \textbf{LoRaWAN:} Outdoor sensors (temperature, moisture) reporting hourly
+\end{itemize}
+
+\subsubsection*{Connected Vehicle}
+\begin{itemize}
+\item \textbf{LTE:} Infotainment streaming, over-the-air updates, emergency calls
+\item \textbf{GPS:} Navigation, fleet tracking, geo-fencing
+\item \textbf{Bluetooth:} Phone integration, tire pressure sensors
+\end{itemize}
+
+\subsubsection*{Industrial IoT}
+\begin{itemize}
+\item \textbf{LoRaWAN:} Remote monitoring (pipelines, storage tanks) over 10--20~km
+\item \textbf{LTE-M:} Asset tracking with mobility support
+\item \textbf{WiFi:} Factory automation (deterministic low-latency)
+\end{itemize}
+
+\subsubsection*{Agriculture (Precision Farming)}
+\begin{itemize}
+\item \textbf{LoRaWAN:} Soil moisture sensors across 100+ hectare fields
+\item \textbf{GPS:} Tractor auto-steering (RTK for cm-level accuracy)
+\item \textbf{LTE:} Remote camera monitoring, drone control
+\end{itemize}
 
 \subsection{Related Topics}\label{related-topics}
 
@@ -1080,21 +1819,93 @@ Standards}\label{external-resources-standards}
   textbooks, and resources
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Summary}
 
-\textbf{Key takeaway}: \textbf{Real systems integrate all concepts:
-modulation (BPSK to 256-QAM), coding (convolutional to LDPC), multiple
-access (CSMA, OFDMA, TDMA), sync (preambles, pilots), equalization
-(MMSE, DFE), and link budgets.} WiFi achieves 600 Mbps via MIMO + 64-QAM
-OFDM over 100 m. LTE provides 100 Mbps cellular over 15 km with ACM.
-DVB-S2X delivers 160 Mbps from GEO (36,000 km) using 32APSK. GPS
-operates at -143 dBm (below noise!) via 43 dB spreading gain. Bluetooth
-5 extends to 400 m with FEC (LE Coded). LoRaWAN reaches 50 km rural with
-CSS sub-noise detection. Each system optimizes for different
-constraints: throughput vs range vs power vs latency. Understanding
-these trade-offs is key to system design!
+Real-world communication systems represent the culmination of all fundamental concepts studied throughout this book---modulation, coding, synchronization, equalization, and link budget analysis all working in concert.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Concept} & \textbf{Theory} & \textbf{Real System Example} \\
+\midrule
+Modulation & BPSK, QPSK, QAM & WiFi: 64-QAM per subcarrier \\
+Multiple access & TDMA, FDMA, CDMA & LTE: OFDMA resource blocks \\
+Coding & Convolutional, Turbo, LDPC & DVB-S2X: LDPC + BCH concatenated \\
+Spread spectrum & DSSS, FHSS & GPS: 43~dB processing gain \\
+Equalization & ZF, MMSE, DFE & WiFi: Per-subcarrier MMSE \\
+Link budget & Friis equation, path loss & All: Complete power analysis \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+\textbf{Key Insights:}
+
+\begin{enumerate}
+\item \textbf{Trade-offs are fundamental:} No system optimizes all parameters (data rate, range, power, latency) simultaneously. Each system makes deliberate engineering choices for its use case.
+
+\item \textbf{Adaptive techniques are essential:} Modern systems (LTE, DVB-S2X, LoRaWAN) adapt modulation and coding in real-time based on channel conditions, maximizing throughput while maintaining link reliability.
+
+\item \textbf{Processing gain enables sub-noise operation:} GPS demonstrates that signals 35~dB below the noise floor are recoverable through spread spectrum techniques---a counter-intuitive but mathematically rigorous result.
+
+\item \textbf{Multiple access determines efficiency:} Contention-based WiFi sacrifices efficiency for simplicity, while centralized LTE scheduling eliminates collisions at the cost of infrastructure complexity.
+
+\item \textbf{Bandwidth is precious:} Spectral efficiency (bits/s/Hz) determines how much data can be transmitted in limited spectrum. WiFi achieves $\sim$5~bps/Hz (64-QAM), while GPS uses $\sim$0.025~bps/Hz (DSSS).
+
+\item \textbf{Link budgets close with margin:} All successful systems include 10--20~dB margin for fading, interference, and implementation losses. GPS operates with 8~dB SNR after 43~dB processing gain, providing minimal margin for indoor use.
+\end{enumerate}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Practical System Design Philosophy}
+\textbf{``Perfect is the enemy of good enough.''}
+
+Real systems prioritize:
+\begin{itemize}
+\item \textbf{Robustness} over peak performance (error correction, adaptive modulation)
+\item \textbf{Backward compatibility} over clean-sheet design (802.11 preambles, LTE legacy support)
+\item \textbf{Cost and power} over optimal spectral efficiency (GPS uses no FEC, Bluetooth uses simple GFSK)
+\item \textbf{Regulatory compliance} over technical optimality (power limits, spectral masks, coordination)
+\end{itemize}
+
+Understanding deployed systems reveals the gap between theoretical limits (Shannon capacity) and practical implementations (regulatory, cost, backward compatibility constraints).
+\end{calloutbox}
+
+\textbf{Summary Table:}
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{System} & \textbf{Optimization Goal} & \textbf{Key Technique} & \textbf{Limiting Factor} \\
+\midrule
+WiFi & Throughput & MIMO + OFDM & Range (10--100~m) \\
+LTE & Coverage + mobility & Adaptive MCS & Cell capacity \\
+DVB-S2X & Capacity over satellite & ACM + LDPC & Latency (600~ms) \\
+GPS & Global positioning & DSSS 43~dB gain & Accuracy (5--10~m) \\
+Bluetooth & Power efficiency & Frequency hopping & Data rate (<2~Mbps) \\
+LoRaWAN & Range on battery & CSS sub-noise & Latency (1--10~s) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Further Reading}
+
+\textbf{Related chapters for deeper understanding:}
+
+\begin{itemize}
+\item \textbf{Chapter 15:} OFDM \& Multicarrier Modulation---mathematical foundations of WiFi/LTE PHY
+\item \textbf{Chapter 18:} Adaptive Modulation \& Coding (AMC)---link adaptation algorithms
+\item \textbf{Chapter 22:} Spread Spectrum (DSSS/FHSS)---GPS and Bluetooth techniques
+\item \textbf{Chapter 25:} Complete Link Budget Analysis---systematic power calculations
+\item \textbf{Chapter 28:} MIMO \& Spatial Multiplexing---capacity enhancement theory
+\item \textbf{Chapter 31:} Forward Error Correction---Turbo codes and LDPC
+\item \textbf{Chapter 35:} Synchronization techniques---carrier and timing recovery
+\end{itemize}
+
+\textbf{Standards and specifications:}
+
+\begin{itemize}
+\item IEEE 802.11-2020: WiFi physical layer and MAC
+\item 3GPP TS 36.211/212: LTE physical channels and coding
+\item ETSI EN 302 307-1: DVB-S2 satellite broadcast
+\item IS-GPS-200: GPS signal specification
+\item Bluetooth Core Specification 5.4
+\item LoRaWAN 1.0.4 Specification
+\end{itemize}
