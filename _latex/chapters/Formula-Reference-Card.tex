@@ -1,518 +1,1115 @@
-\section{Formula Reference Card}\label{formula-reference-card}
+\chapter{Formula Reference Card}
+\label{ch:formula-reference}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{Quick Reference}
+\begin{nontechnical}
+\textbf{This is your cheat sheet}---all the essential formulas you need for wireless communications in one place.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Simple idea:}
+\begin{itemize}
+\item Quick reference for calculations
+\item Real-world examples included
+\item Cross-referenced to detailed chapters
+\end{itemize}
 
-\subsection{\texorpdfstring{ Link Budget \&
-Propagation}{ Link Budget \& Propagation}}\label{link-budget-propagation}
+\textbf{Real use:} Whether you're designing a link budget, calculating BER, or sizing an antenna, this chapter has the formulas you need with clear definitions and worked examples.
 
-\subsubsection{Friis Transmission
-Equation}\label{friis-transmission-equation}
+\textbf{How to use this:} Each formula includes variable definitions, units, and links to chapters with detailed derivations. Skip to the section you need, or read through to see how everything connects.
+\end{nontechnical}
 
-See {[}{[}Free-Space-Path-Loss-(FSPL){]}{]}
+\section{Overview}
 
-\[
+This chapter provides a comprehensive collection of the most important formulas in wireless communications and signal processing. Each formula is presented with:
+
+\begin{itemize}
+\item \textbf{Clear variable definitions} with proper units
+\item \textbf{Worked examples} showing practical calculations
+\item \textbf{Cross-references} to detailed explanations in other chapters
+\item \textbf{Application context} for when to use each formula
+\end{itemize}
+
+\begin{keyconcept}
+This reference card is organized by topic area, making it easy to find the right formula for your analysis. All formulas are numbered for easy reference and include both linear and logarithmic (dB) forms where applicable.
+\end{keyconcept}
+
+\subsection{Formula Organization}
+
+The formulas in this reference are organized hierarchically by function:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, fill=black!10, minimum width=3cm, minimum height=0.8cm, font=\sffamily\small},
+  line/.style={draw, ->, thick},
+  node distance=1.2cm
+]
+
+% Top level
+\node[block] (top) {Link Budget \& Propagation};
+
+% Second level
+\node[block, below left=of top, xshift=-1.5cm] (sig) {Signal Quality};
+\node[block, below right=of top, xshift=1.5cm] (info) {Information Theory};
+
+% Third level
+\node[block, below=of sig] (ber) {BER \& Performance};
+\node[block, below=of info] (mod) {Modulation};
+
+% Fourth level
+\node[block, below left=of ber, xshift=-1cm] (sys) {System Parameters};
+\node[block, below right=of mod, xshift=1cm] (app) {Applications};
+
+% Connections
+\draw[line] (top) -- (sig);
+\draw[line] (top) -- (info);
+\draw[line] (sig) -- (ber);
+\draw[line] (info) -- (mod);
+\draw[line] (ber) -- (sys);
+\draw[line] (mod) -- (app);
+
+\end{tikzpicture}
+\end{center}
+
+\section{Link Budget \& Propagation}
+\label{sec:link-budget-propagation}
+
+\subsection{Friis Transmission Equation}
+\label{subsec:friis-equation}
+
+The Friis transmission equation relates transmit and receive power for a line-of-sight radio link:
+
+\begin{equation}
+\label{eq:friis-linear}
 P_r = \frac{P_t G_t G_r \lambda^2}{(4\pi R)^2}
-\]
+\end{equation}
 
-Or in dB:
+where:
+\begin{itemize}
+\item $P_r$ = received power (W)
+\item $P_t$ = transmitted power (W)
+\item $G_t$ = transmit antenna gain (linear)
+\item $G_r$ = receive antenna gain (linear)
+\item $\lambda$ = wavelength (m)
+\item $R$ = distance between antennas (m)
+\end{itemize}
 
-\[
+\textbf{Logarithmic form (dB):}
+\begin{equation}
+\label{eq:friis-db}
 P_r\ (\text{dBm}) = P_t\ (\text{dBm}) + G_t\ (\text{dBi}) + G_r\ (\text{dBi}) - \text{FSPL}\ (\text{dB})
-\]
+\end{equation}
 
-\subsubsection{Free-Space Path Loss}\label{free-space-path-loss}
+\textbf{See \Cref{ch:free-space-path-loss} for detailed derivation.}
 
-\[
+\subsection{Free-Space Path Loss (FSPL)}
+\label{subsec:fspl}
+
+Free-space path loss represents the signal attenuation over distance in an ideal propagation environment:
+
+\begin{equation}
+\label{eq:fspl-km-mhz}
 \text{FSPL}\ (\text{dB}) = 20\log_{10}(R) + 20\log_{10}(f) + 32.45
-\]
+\end{equation}
 
-Where: R in km, f in MHz
+where $R$ is in kilometers and $f$ is in MHz.
 
-Or:
-
-\[
+\textbf{Alternative form (SI units):}
+\begin{equation}
+\label{eq:fspl-m-hz}
 \text{FSPL}\ (\text{dB}) = 20\log_{10}(R) + 20\log_{10}(f) - 147.55
-\]
+\end{equation}
 
-Where: R in meters, f in Hz
+where $R$ is in meters and $f$ is in Hz.
 
-\subsubsection{Power Density}\label{power-density}
+\begin{calloutbox}{Worked Example: WiFi Link}
+\textbf{Problem:} Calculate FSPL for a 2.4~GHz WiFi link over 50~meters.
 
-See {[}{[}Power-Density-\&-Field-Strength{]}{]}
+\textbf{Solution:} Using \Cref{eq:fspl-km-mhz}:
+\begin{align*}
+\text{FSPL} &= 20\log_{10}(0.05) + 20\log_{10}(2400) + 32.45 \\
+&= 20(-1.301) + 20(3.380) + 32.45 \\
+&= -26.02 + 67.60 + 32.45 \\
+&= \textbf{74.03~dB}
+\end{align*}
 
-\[
+This means the signal is attenuated by 74~dB over this distance.
+\end{calloutbox}
+
+\subsection{Link Budget Visualization}
+\label{subsec:link-budget-visual}
+
+A simple link budget can be visualized as gains and losses:
+
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, minimum width=2.5cm, minimum height=0.8cm, font=\sffamily\small},
+  node distance=0.3cm
+]
+
+% Transmit side
+\node[box, fill=green!20] (tx) {TX Power\\+20 dBm};
+\node[box, fill=green!20, below=of tx] (txgain) {TX Gain\\+5 dBi};
+
+% Path loss
+\node[box, fill=red!20, below=of txgain, yshift=-0.5cm] (fspl) {Path Loss\\-70 dB};
+
+% Receive side
+\node[box, fill=green!20, below=of fspl, yshift=-0.5cm] (rxgain) {RX Gain\\+3 dBi};
+\node[box, fill=blue!20, below=of rxgain] (rx) {RX Power\\-42 dBm};
+
+% Arrows and labels
+\draw[->, thick] (tx) -- (txgain);
+\draw[->, thick] (txgain) -- (fspl);
+\draw[->, thick] (fspl) -- (rxgain);
+\draw[->, thick] (rxgain) -- (rx);
+
+% Side annotations
+\node[right=1cm of tx, align=left, font=\scriptsize] {Transmitter};
+\node[right=1cm of fspl, align=left, font=\scriptsize] {Propagation};
+\node[right=1cm of rx, align=left, font=\scriptsize] {Receiver};
+
+\end{tikzpicture}
+\end{center}
+
+\textbf{Budget calculation:} $P_r = 20 + 5 - 70 + 3 = -42$~dBm
+
+\subsection{Power Density}
+\label{subsec:power-density}
+
+Power density describes the intensity of electromagnetic radiation at a given distance:
+
+\begin{equation}
+\label{eq:power-density}
 S = \frac{P_t G}{4\pi R^2} \quad (\text{W/m}^2)
-\]
+\end{equation}
 
-\[
+where:
+\begin{itemize}
+\item $S$ = power density (W/m²)
+\item $P_t$ = transmitted power (W)
+\item $G$ = antenna gain (linear)
+\item $R$ = distance from antenna (m)
+\end{itemize}
+
+\textbf{Electric field strength from power density:}
+\begin{equation}
+\label{eq:field-strength}
 E_{\text{rms}} = \sqrt{377 \times S} \approx 19.4\sqrt{S} \quad (\text{V/m})
-\]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+where 377~Ω is the impedance of free space.
 
-\subsection{\texorpdfstring{ Signal Quality
-Metrics}{ Signal Quality Metrics}}\label{signal-quality-metrics}
+\textbf{See Chapter on Power Density \& Field Strength for applications.}
 
-\subsubsection{Signal-to-Noise Ratio}\label{signal-to-noise-ratio}
+\section{Signal Quality Metrics}
+\label{sec:signal-quality}
 
-See {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}
+\subsection{Signal-to-Noise Ratio (SNR)}
+\label{subsec:snr}
 
-\[
+The signal-to-noise ratio is the fundamental metric for signal quality:
+
+\begin{equation}
+\label{eq:snr-linear}
 \text{SNR} = \frac{P_{\text{signal}}}{P_{\text{noise}}}
-\]
+\end{equation}
 
-In dB:
-
-\[
+\textbf{Logarithmic form:}
+\begin{equation}
+\label{eq:snr-db}
 \text{SNR}_{\text{dB}} = 10\log_{10}(\text{SNR})
-\]
+\end{equation}
 
-\subsubsection{Energy Ratios}\label{energy-ratios}
+\begin{keyconcept}
+SNR is the single most important parameter affecting link performance. Higher SNR enables higher data rates, lower error rates, and more complex modulation schemes.
+\end{keyconcept}
 
-See {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]}
+\textbf{See \Cref{ch:snr} for detailed analysis and measurement techniques.}
 
-\[
+\subsection{Energy Ratios (Eb/N0 and Es/N0)}
+\label{subsec:energy-ratios}
+
+Energy per bit to noise density ratio:
+\begin{equation}
+\label{eq:eb-n0}
 \frac{E_b}{N_0} = \frac{P_r}{R_b N_0} = \text{SNR} \cdot \frac{B}{R_b}
-\]
+\end{equation}
 
-\[
+where:
+\begin{itemize}
+\item $E_b$ = energy per bit (J)
+\item $N_0$ = noise power spectral density (W/Hz)
+\item $P_r$ = received power (W)
+\item $R_b$ = bit rate (bits/s)
+\item $B$ = signal bandwidth (Hz)
+\end{itemize}
+
+\textbf{Energy per symbol to noise density ratio:}
+\begin{equation}
+\label{eq:es-n0}
 \frac{E_s}{N_0} = \frac{E_b}{N_0} \cdot \log_2(M)
-\]
+\end{equation}
 
-Where M = constellation size
+where $M$ is the constellation size (e.g., $M=4$ for QPSK, $M=16$ for 16-QAM).
 
-\subsubsection{Thermal Noise Power}\label{thermal-noise-power}
+\begin{importantbox}
+$E_b/N_0$ is the preferred metric for comparing different modulation schemes because it normalizes for data rate. Higher-order modulations require higher $E_b/N_0$ for the same BER.
+\end{importantbox}
 
-See {[}{[}Noise-Sources-\&-Noise-Figure{]}{]}
+\textbf{See \Cref{ch:energy-ratios} for derivations and BER relationships.}
 
-\[
+\subsection{Thermal Noise Power}
+\label{subsec:thermal-noise}
+
+Thermal noise power is given by:
+\begin{equation}
+\label{eq:thermal-noise}
 N = kTB
-\]
+\end{equation}
 
-Where: - k = 1.38 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}\textbackslash textsuperscript\{3\}
-J/K (Boltzmann\textquotesingle s constant) - T = Temperature (K) - B =
-Bandwidth (Hz)
+where:
+\begin{itemize}
+\item $k = 1.38 \times 10^{-23}$~J/K (Boltzmann's constant)
+\item $T$ = temperature (K)
+\item $B$ = bandwidth (Hz)
+\end{itemize}
 
-In dBm:
-
-\[
+\textbf{Logarithmic form for standard temperature (T = 290~K):}
+\begin{equation}
+\label{eq:thermal-noise-dbm}
 N\ (\text{dBm}) = -174 + 10\log_{10}(B)
-\]
+\end{equation}
 
-For T = 290 K, B in Hz
+where $B$ is in Hz.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{Worked Example: Noise Floor}
+\textbf{Problem:} Calculate thermal noise power for a 20~MHz channel at 290~K.
 
-\subsection{\texorpdfstring{ Information
-Theory}{ Information Theory}}\label{information-theory}
+\textbf{Solution:} Using \Cref{eq:thermal-noise-dbm}:
+\begin{align*}
+N &= -174 + 10\log_{10}(20 \times 10^6) \\
+&= -174 + 10(7.301) \\
+&= -174 + 73.01 \\
+&= \textbf{-100.99~dBm}
+\end{align*}
 
-\subsubsection{Shannon Channel Capacity}\label{shannon-channel-capacity}
+This is the minimum noise floor for this bandwidth.
+\end{calloutbox}
 
-See {[}{[}Shannon\textquotesingle s-Channel-Capacity-Theorem{]}{]}
+\textbf{See Chapter on Noise Sources \& Noise Figure for detailed analysis.}
 
-\[
+\section{Information Theory}
+\label{sec:information-theory}
+
+\subsection{Shannon Channel Capacity}
+\label{subsec:shannon-capacity}
+
+Shannon's channel capacity theorem defines the maximum achievable data rate:
+
+\begin{equation}
+\label{eq:shannon-capacity}
 C = B \log_2(1 + \text{SNR}) \quad (\text{bits/sec})
-\]
+\end{equation}
 
-\subsubsection{Spectral Efficiency}\label{spectral-efficiency}
+where:
+\begin{itemize}
+\item $C$ = channel capacity (bits/s)
+\item $B$ = bandwidth (Hz)
+\item SNR = signal-to-noise ratio (linear)
+\end{itemize}
 
-See {[}{[}Spectral-Efficiency-\&-Bit-Rate{]}{]}
+\begin{keyconcept}
+Shannon's theorem is a fundamental limit: no error-correction coding can enable reliable communication above this rate. Modern systems like LTE and 5G approach within 1--2~dB of the Shannon limit.
+\end{keyconcept}
 
-\[
+\textbf{See \Cref{ch:shannon-capacity} for proof and implications.}
+
+\subsection{Spectral Efficiency}
+\label{subsec:spectral-efficiency}
+
+Spectral efficiency measures how efficiently bandwidth is used:
+
+\begin{equation}
+\label{eq:spectral-efficiency}
 \eta = \frac{R_b}{B} \quad (\text{bits/sec/Hz})
-\]
+\end{equation}
 
-Shannon limit:
+where $R_b$ is the bit rate and $B$ is the bandwidth.
 
-\[
+\textbf{Shannon limit on spectral efficiency:}
+\begin{equation}
+\label{eq:spectral-efficiency-max}
 \eta_{\max} = \log_2(1 + \text{SNR})
-\]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{Practical Spectral Efficiencies}
+\begin{itemize}
+\item \textbf{BPSK:} $\eta \approx 0.5$ bits/s/Hz
+\item \textbf{QPSK:} $\eta \approx 1.5$ bits/s/Hz
+\item \textbf{16-QAM:} $\eta \approx 2.5$ bits/s/Hz
+\item \textbf{64-QAM:} $\eta \approx 4.5$ bits/s/Hz
+\item \textbf{LTE (peak):} $\eta \approx 15$ bits/s/Hz (MIMO)
+\end{itemize}
+\end{calloutbox}
 
-\subsection{\texorpdfstring{ Bit Error Rate
-(BER)}{ Bit Error Rate (BER)}}\label{bit-error-rate-ber}
+\textbf{See Chapter on Spectral Efficiency \& Bit Rate for detailed analysis.}
 
-See {[}{[}Bit-Error-Rate-(BER){]}{]}
+\section{Bit Error Rate (BER)}
+\label{sec:ber}
 
-\subsubsection{Q-Function}\label{q-function}
+\subsection{Q-Function}
+\label{subsec:q-function}
 
-\[
+The Gaussian Q-function is essential for BER calculations:
+
+\begin{equation}
+\label{eq:q-function}
 Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} dt
-\]
+\end{equation}
 
-Approximation:
-
-\[
+\textbf{Asymptotic approximation for large x:}
+\begin{equation}
+\label{eq:q-approximation}
 Q(x) \approx \frac{1}{x\sqrt{2\pi}} e^{-x^2/2} \quad (x > 3)
-\]
+\end{equation}
 
-\subsubsection{BPSK in AWGN}\label{bpsk-in-awgn}
+\textbf{Relationship to complementary error function:}
+\begin{equation}
+\label{eq:q-erfc}
+Q(x) = \frac{1}{2}\mathrm{erfc}\left(\frac{x}{\sqrt{2}}\right)
+\end{equation}
 
-See {[}{[}Binary-Phase-Shift-Keying-(BPSK){]}{]}
+\subsection{BER for Common Modulation Schemes}
+\label{subsec:ber-formulas}
 
+\subsubsection{BPSK in AWGN}
+
+\begin{equation}
+\label{eq:ber-bpsk}
+\text{BER}_{\text{BPSK}} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
+\end{equation}
+
+\textbf{See \Cref{ch:bpsk} for detailed derivation.}
+
+\subsubsection{QPSK in AWGN}
+
+With Gray coding, QPSK has the same BER as BPSK:
+\begin{equation}
+\label{eq:ber-qpsk}
+\text{BER}_{\text{QPSK}} \approx Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
+\end{equation}
+
+\begin{importantbox}
+Gray coding ensures adjacent symbols differ by only one bit, minimizing the impact of symbol errors on bit errors. This is why QPSK achieves BPSK-like BER while transmitting twice the data rate.
+\end{importantbox}
+
+\textbf{See Chapter on QPSK Modulation for constellation and implementation.}
+
+\subsection{BER Performance Comparison}
+\label{subsec:ber-comparison}
+
+The following diagram shows the relative BER performance of common modulation schemes:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% Axes
+\draw[->] (0,0) -- (10,0) node[right] {\sffamily\small $E_b/N_0$ (dB)};
+\draw[->] (0,0) -- (0,5) node[above] {\sffamily\small $-\log_{10}(\text{BER})$};
+
+% Grid
+\foreach \x in {0,2,4,6,8,10}
+  \draw (\x,0.05) -- (\x,-0.05) node[below, font=\scriptsize] {\x};
+\foreach \y in {1,2,3,4,5}
+  \draw (0.05,\y) -- (-0.05,\y) node[left, font=\scriptsize] {\y};
+
+% Curves (simplified approximations)
+% BPSK: best performance
+\draw[thick, black] (2,0.2) -- (4,1) -- (6,2) -- (8,3.5) -- (10,4.5) node[right, font=\scriptsize] {BPSK/QPSK};
+
+% 16-QAM: moderate performance
+\draw[thick, black!60, dashed] (4,0.2) -- (6,1) -- (8,2) -- (10,3.5) node[right, font=\scriptsize] {16-QAM};
+
+% 64-QAM: requires more SNR
+\draw[thick, black!40, dotted] (6,0.2) -- (8,1) -- (10,2.2) node[right, font=\scriptsize] {64-QAM};
+
+% Reference lines
+\draw[gray, thin, dashed] (0,1) -- (10,1);
+\draw[gray, thin, dashed] (0,3) -- (10,3);
+\node[right, font=\scriptsize, gray] at (10,1) {BER = $10^{-1}$};
+\node[right, font=\scriptsize, gray] at (10,3) {BER = $10^{-3}$};
+
+\end{tikzpicture}
+\end{center}
+
+\textbf{Key observations:}
+\begin{itemize}
+\item Higher-order modulation requires higher $E_b/N_0$ for the same BER
+\item BPSK/QPSK provide best error performance (3~dB advantage over 16-QAM)
+\item Trade-off: spectral efficiency vs error resilience
+\end{itemize}
+
+\subsubsection{M-PSK in AWGN}
+
+General formula for M-ary PSK:
+\begin{equation}
+\label{eq:ber-mpsk}
+\text{BER}_{\text{M-PSK}} \approx \frac{2}{\log_2(M)} Q\left(\sqrt{\frac{2E_b}{N_0}\log_2(M)} \sin\left(\frac{\pi}{M}\right)\right)
+\end{equation}
+
+where $M$ is the number of constellation points ($M = 8$ for 8PSK, etc.).
+
+\subsubsection{M-QAM in AWGN}
+
+For square QAM constellations:
+\begin{equation}
+\label{eq:ber-qam}
+\text{BER}_{\text{M-QAM}} \approx \frac{4}{\log_2(M)}\left(1 - \frac{1}{\sqrt{M}}\right) Q\left(\sqrt{\frac{3\log_2(M)}{M-1} \cdot \frac{E_b}{N_0}}\right)
+\end{equation}
+
+\begin{calloutbox}{Worked Example: Required SNR}
+\textbf{Problem:} What $E_b/N_0$ is needed for BER = $10^{-6}$ with BPSK?
+
+\textbf{Solution:} We need $Q(x) = 10^{-6}$, which gives $x \approx 4.75$.
+
+From \Cref{eq:ber-bpsk}:
 \[
-\text{BER} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
+\sqrt{\frac{2E_b}{N_0}} = 4.75 \implies \frac{E_b}{N_0} = \frac{(4.75)^2}{2} = 11.28 = \textbf{10.5~dB}
 \]
+\end{calloutbox}
 
-\subsubsection{QPSK in AWGN}\label{qpsk-in-awgn}
+\textbf{See Chapter on Quadrature Amplitude Modulation for QAM details.}
 
-See {[}{[}QPSK-Modulation{]}{]}
+\section{Modulation}
+\label{sec:modulation}
 
-\[
-\text{BER} \approx Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
-\]
+\subsection{IQ Representation}
+\label{subsec:iq-representation}
 
-(Same as BPSK for Gray coding)
+The IQ (In-phase/Quadrature) representation decomposes a modulated signal into orthogonal components:
 
-\subsubsection{M-PSK in AWGN}\label{m-psk-in-awgn}
-
-\[
-\text{BER} \approx \frac{2}{\ log_2(M)} Q\left(\sqrt{\frac{2E_b}{N_0}\log_2(M)} \sin\left(\frac{\pi}{M}\right)\right)
-\]
-
-\subsubsection{M-QAM in AWGN}\label{m-qam-in-awgn}
-
-See {[}{[}Quadrature-Amplitude-Modulation-(QAM){]}{]}
-
-\[
-\text{BER} \approx \frac{4}{\log_2(M)}\left(1 - \frac{1}{\sqrt{M}}\right) Q\left(\sqrt{\frac{3\log_2(M)}{M-1} \cdot \frac{E_b}{N_0}}\right)
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Modulation}{ Modulation}}\label{modulation}
-
-\subsubsection{IQ Representation}\label{iq-representation}
-
-See {[}{[}IQ-Representation{]}{]}
-
-\[
+\begin{equation}
+\label{eq:iq-time}
 s(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)
-\]
+\end{equation}
 
-Or:
+where:
+\begin{itemize}
+\item $I(t)$ = in-phase component
+\item $Q(t)$ = quadrature component
+\item $f_c$ = carrier frequency (Hz)
+\end{itemize}
 
-\[
+\textbf{Complex baseband representation:}
+\begin{equation}
+\label{eq:iq-complex}
 s(t) = \text{Re}\{[I(t) + jQ(t)]e^{j2\pi f_c t}\}
-\]
+\end{equation}
 
-\subsubsection{Symbol Rate vs Bit Rate}\label{symbol-rate-vs-bit-rate}
+\begin{keyconcept}
+IQ representation is fundamental to modern software-defined radios (SDR). By separating I and Q components, we can perform all modulation and demodulation in the digital domain, then up/downconvert only once at the RF stage.
+\end{keyconcept}
 
-\[
+\textbf{See \Cref{ch:iq-representation} for detailed explanation and applications.}
+
+\subsection{Symbol Rate vs Bit Rate}
+\label{subsec:symbol-bit-rate}
+
+The relationship between symbol rate and bit rate:
+
+\begin{equation}
+\label{eq:symbol-bit-rate}
 R_b = R_s \log_2(M)
-\]
+\end{equation}
 
-Where: - R\_b = Bit rate (bits/sec) - R\_s = Symbol rate (symbols/sec) -
-M = Constellation size
+where:
+\begin{itemize}
+\item $R_b$ = bit rate (bits/sec)
+\item $R_s$ = symbol rate (symbols/sec)
+\item $M$ = constellation size
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{Example Calculations}
+\begin{itemize}
+\item \textbf{BPSK ($M=2$):} 1 bit per symbol, $R_b = R_s$
+\item \textbf{QPSK ($M=4$):} 2 bits per symbol, $R_b = 2R_s$
+\item \textbf{16-QAM ($M=16$):} 4 bits per symbol, $R_b = 4R_s$
+\item \textbf{64-QAM ($M=64$):} 6 bits per symbol, $R_b = 6R_s$
+\end{itemize}
+\end{calloutbox}
 
-\subsection{\texorpdfstring{ Propagation
-Effects}{ Propagation Effects}}\label{propagation-effects}
+\section{Propagation Effects}
+\label{sec:propagation-effects}
 
-\subsubsection{Doppler Shift}\label{doppler-shift}
+\subsection{Doppler Shift}
+\label{subsec:doppler-shift}
 
-See {[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}
+Doppler shift due to relative motion between transmitter and receiver:
 
-\[
+\begin{equation}
+\label{eq:doppler-shift}
 f_d = \frac{v}{\lambda} \cos(\theta) = \frac{vf_c}{c} \cos(\theta)
-\]
+\end{equation}
 
-\subsubsection{Coherence Bandwidth}\label{coherence-bandwidth}
+where:
+\begin{itemize}
+\item $f_d$ = Doppler shift (Hz)
+\item $v$ = relative velocity (m/s)
+\item $\lambda$ = wavelength (m)
+\item $\theta$ = angle between velocity and signal direction
+\item $f_c$ = carrier frequency (Hz)
+\item $c$ = speed of light (m/s)
+\end{itemize}
 
-\[
+\textbf{See Chapter on Multipath Propagation \& Fading for detailed analysis.}
+
+\subsection{Coherence Bandwidth}
+\label{subsec:coherence-bandwidth}
+
+Coherence bandwidth represents the frequency range over which the channel response is approximately constant:
+
+\begin{equation}
+\label{eq:coherence-bandwidth}
 B_c \approx \frac{1}{5\tau_{\text{rms}}}
-\]
+\end{equation}
 
-Where \$\textbackslash tau\$\_rms = RMS delay spread
+where $\tau_{\text{rms}}$ is the RMS delay spread.
 
-\subsubsection{Coherence Time}\label{coherence-time}
+\begin{importantbox}
+If signal bandwidth $B > B_c$, the channel is \textbf{frequency-selective} and equalization is required. If $B < B_c$, the channel is \textbf{flat-fading}.
+\end{importantbox}
 
-\[
+\subsection{Coherence Time}
+\label{subsec:coherence-time}
+
+Coherence time represents the duration over which the channel remains approximately constant:
+
+\begin{equation}
+\label{eq:coherence-time}
 T_c \approx \frac{0.423}{B_d} = \frac{0.423}{2f_{d,\max}}
-\]
+\end{equation}
 
-Where B\_d = Doppler spread
+where:
+\begin{itemize}
+\item $B_d$ = Doppler spread (Hz)
+\item $f_{d,\max}$ = maximum Doppler shift (Hz)
+\end{itemize}
 
-\subsubsection{Rayleigh Fading PDF}\label{rayleigh-fading-pdf}
+\subsection{Rayleigh Fading PDF}
+\label{subsec:rayleigh-fading}
 
-See {[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}
+Probability density function for Rayleigh fading envelope:
 
-\[
-p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2}{2\sigma^2}\right)
-\]
+\begin{equation}
+\label{eq:rayleigh-pdf}
+p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0
+\end{equation}
 
-\subsubsection{Rician K-Factor}\label{rician-k-factor}
+where $r$ is the envelope amplitude and $\sigma^2$ is the variance.
 
-\[
+\textbf{See Chapter on Multipath Propagation \& Fading for applications.}
+
+\subsection{Rician K-Factor}
+\label{subsec:rician-k-factor}
+
+The Rician K-factor quantifies the ratio of line-of-sight to scattered power:
+
+\begin{equation}
+\label{eq:rician-k-factor}
 K = \frac{A^2}{2\sigma^2} = \frac{\text{LOS power}}{\text{Scattered power}}
-\]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{K-Factor Interpretation}
+\begin{itemize}
+\item $K = 0$: Pure Rayleigh fading (no LOS)
+\item $K = 6$~dB: Typical indoor/suburban
+\item $K = 15$~dB: Strong LOS
+\item $K \to \infty$: AWGN channel (no fading)
+\end{itemize}
+\end{calloutbox}
 
-\subsection{\texorpdfstring{ Antenna \&
-Polarization}{ Antenna \& Polarization}}\label{antenna-polarization}
+\section{Antenna \& Polarization}
+\label{sec:antenna-polarization}
 
-\subsubsection{Antenna Gain (Parabolic
-Dish)}\label{antenna-gain-parabolic-dish}
+\subsection{Antenna Gain (Parabolic Dish)}
+\label{subsec:antenna-gain}
 
-See {[}{[}Antenna-Theory-Basics{]}{]}
+Approximate gain for a parabolic dish antenna:
 
-\[
+\begin{equation}
+\label{eq:antenna-gain}
 G \approx \eta_{\text{ant}} \left(\frac{\pi D}{\lambda}\right)^2
-\]
+\end{equation}
 
-\subsubsection{Effective Aperture}\label{effective-aperture}
+where:
+\begin{itemize}
+\item $G$ = antenna gain (linear)
+\item $\eta_{\text{ant}}$ = antenna efficiency (typically 0.55--0.75)
+\item $D$ = dish diameter (m)
+\item $\lambda$ = wavelength (m)
+\end{itemize}
 
-\[
+\textbf{See \Cref{ch:antenna-theory} for other antenna types and patterns.}
+
+\subsection{Effective Aperture}
+\label{subsec:effective-aperture}
+
+The effective aperture relates gain to physical area:
+
+\begin{equation}
+\label{eq:effective-aperture}
 A_e = \frac{G\lambda^2}{4\pi}
-\]
+\end{equation}
 
-\subsubsection{Polarization Loss Factor}\label{polarization-loss-factor}
+where $A_e$ is the effective collecting area in m².
 
-See {[}{[}Wave-Polarization{]}{]}
+\subsection{Polarization Loss Factor}
+\label{subsec:polarization-loss}
 
-For angle mismatch \$\textbackslash theta\$:
+For polarization mismatch angle $\theta$:
 
-\[
+\begin{equation}
+\label{eq:polarization-loss-linear}
 \text{PLF} = \cos^2(\theta)
-\]
+\end{equation}
 
-In dB:
-
-\[
+\textbf{Logarithmic form:}
+\begin{equation}
+\label{eq:polarization-loss-db}
 L_{\text{pol}}\ (\text{dB}) = -20\log_{10}(\cos\theta)
-\]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{warningbox}
+A 45° polarization mismatch causes 3~dB loss. A 90° mismatch (cross-polarization) causes complete signal loss. Always match antenna polarizations or use circular polarization.
+\end{warningbox}
 
-\subsection{\texorpdfstring{ Atmospheric
-Effects}{ Atmospheric Effects}}\label{atmospheric-effects}
+\textbf{See Chapter on Wave Polarization for circular and elliptical polarization.}
 
-\subsubsection{Rain Attenuation (ITU-R
-Model)}\label{rain-attenuation-itu-r-model}
+\section{Atmospheric Effects}
+\label{sec:atmospheric-effects}
 
-See {[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}
+\subsection{Rain Attenuation (ITU-R Model)}
+\label{subsec:rain-attenuation}
 
-\[
+Rain attenuation using the ITU-R power-law model:
+
+\begin{equation}
+\label{eq:rain-attenuation}
 A = \gamma R^{\beta} \quad (\text{dB/km})
-\]
+\end{equation}
 
-Where: - \$\textbackslash gamma\$, \$\textbackslash beta\$ depend on
-frequency and polarization - R = Rain rate (mm/hr)
+where:
+\begin{itemize}
+\item $A$ = specific attenuation (dB/km)
+\item $R$ = rain rate (mm/hr)
+\item $\gamma$, $\beta$ = frequency and polarization-dependent coefficients
+\end{itemize}
 
-\subsubsection{Faraday Rotation}\label{faraday-rotation}
+\begin{calloutbox}{Example Rain Coefficients at 12~GHz}
+For horizontal polarization at 12~GHz:
+\begin{itemize}
+\item $\gamma \approx 0.0188$
+\item $\beta \approx 1.217$
+\end{itemize}
+For $R = 25$~mm/hr (heavy rain): $A \approx 1.26$~dB/km
+\end{calloutbox}
 
-See {[}{[}Wave-Polarization{]}{]}
+\textbf{See Chapter on Weather Effects for detailed tables and applications.}
 
-\[
+\subsection{Faraday Rotation}
+\label{subsec:faraday-rotation}
+
+Faraday rotation of polarization in the ionosphere:
+
+\begin{equation}
+\label{eq:faraday-rotation}
 \Omega = 2.36 \times 10^4 \frac{B_\parallel \cdot \text{TEC}}{f^2} \quad (\text{radians})
-\]
+\end{equation}
 
-Where: - B\_\$\textbackslash parallel\$ = Magnetic field (Tesla) - TEC =
-Total Electron Content (electrons/m\textbackslash textsuperscript\{2\})
-- f = Frequency (Hz)
+where:
+\begin{itemize}
+\item $\Omega$ = rotation angle (radians)
+\item $B_\parallel$ = magnetic field component parallel to propagation (Tesla)
+\item TEC = Total Electron Content (electrons/m²)
+\item $f$ = frequency (Hz)
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{importantbox}
+Faraday rotation is \textbf{proportional to $1/f^2$}, making it severe at lower frequencies (VHF/UHF) but negligible above 10~GHz. Satellite systems below 2~GHz must use circular polarization.
+\end{importantbox}
 
-\subsection{\texorpdfstring{ Error
-Correction}{ Error Correction}}\label{error-correction}
+\textbf{See Chapter on Wave Polarization for mitigation techniques.}
 
-\subsubsection{Hamming Distance}\label{hamming-distance}
+\section{Error Correction}
+\label{sec:error-correction}
 
-See {[}{[}Hamming-Distance-\&-Error-Detection{]}{]}
+\subsection{Hamming Distance}
+\label{subsec:hamming-distance}
 
-\textbf{Error detection capability}:
+The Hamming distance between two codewords is the number of bit positions in which they differ.
 
-\[
+\textbf{Error detection capability:}
+\begin{equation}
+\label{eq:hamming-detection}
 d_{\min} \geq t + 1
-\]
+\end{equation}
 
-\textbf{Error correction capability}:
-
-\[
+\textbf{Error correction capability:}
+\begin{equation}
+\label{eq:hamming-correction}
 d_{\min} \geq 2t + 1
-\]
+\end{equation}
 
-Where: - d\_min = Minimum Hamming distance - t = Number of errors
+where:
+\begin{itemize}
+\item $d_{\min}$ = minimum Hamming distance between any two codewords
+\item $t$ = number of errors
+\end{itemize}
 
-\subsubsection{Code Rate}\label{code-rate}
+\begin{keyconcept}
+To correct $t$ errors, the code must have $d_{\min} \geq 2t + 1$. This ensures that even with $t$ errors, the received codeword is still closer to the transmitted one than to any other valid codeword.
+\end{keyconcept}
 
-\[
+\textbf{See \Cref{ch:hamming-distance} for detailed examples.}
+
+\subsection{Code Rate}
+\label{subsec:code-rate}
+
+The code rate measures coding efficiency:
+
+\begin{equation}
+\label{eq:code-rate}
 R_c = \frac{k}{n}
-\]
+\end{equation}
 
-Where: - k = Information bits - n = Total bits (information + parity)
+where:
+\begin{itemize}
+\item $k$ = number of information bits
+\item $n$ = total number of bits (information + parity)
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{Common Code Rates}
+\begin{itemize}
+\item \textbf{$R_c = 1/2$:} 1 info bit per 2 transmitted bits (strong coding)
+\item \textbf{$R_c = 2/3$:} 2 info bits per 3 transmitted bits (moderate)
+\item \textbf{$R_c = 5/6$:} 5 info bits per 6 transmitted bits (light)
+\end{itemize}
+Higher code rate = higher throughput but less error protection.
+\end{calloutbox}
 
-\subsection{\texorpdfstring{ System
-Parameters}{ System Parameters}}\label{system-parameters}
+\section{System Parameters}
+\label{sec:system-parameters}
 
-\subsubsection{Noise Figure}\label{noise-figure}
+\subsection{Noise Figure}
+\label{subsec:noise-figure}
 
-See {[}{[}Noise-Sources-\&-Noise-Figure{]}{]}
+Noise figure quantifies how much a component degrades SNR:
 
-\[
+\begin{equation}
+\label{eq:noise-figure-linear}
 F = \frac{\text{SNR}_{\text{in}}}{\text{SNR}_{\text{out}}}
-\]
+\end{equation}
 
-In dB:
-
-\[
+\textbf{Logarithmic form:}
+\begin{equation}
+\label{eq:noise-figure-db}
 NF\ (\text{dB}) = 10\log_{10}(F)
-\]
+\end{equation}
 
-\subsubsection{Cascade Noise Figure}\label{cascade-noise-figure}
+\textbf{See Chapter on Noise Sources \& Noise Figure for measurement techniques.}
+
+\subsection{Cascade Noise Figure (Friis Formula)}
+\label{subsec:cascade-noise-figure}
+
+For cascaded components, the total noise figure is:
+
+\begin{equation}
+\label{eq:friis-noise}
+F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \frac{F_4 - 1}{G_1 G_2 G_3} + \ldots
+\end{equation}
+
+where $F_i$ and $G_i$ are the noise factor and gain (linear) of stage $i$.
+
+\begin{keyconcept}
+The first stage dominates the overall noise figure if it has sufficient gain. This is why low-noise amplifiers (LNA) are placed first in receiver chains, immediately after the antenna.
+\end{keyconcept}
+
+\begin{calloutbox}{Worked Example: Two-Stage Amplifier}
+\textbf{Given:} Stage 1: $NF_1 = 2$~dB, $G_1 = 20$~dB; Stage 2: $NF_2 = 6$~dB
+
+\textbf{Solution:} Convert to linear: $F_1 = 1.585$, $G_1 = 100$, $F_2 = 3.981$
 
 \[
-F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \ldots
+F_{\text{total}} = 1.585 + \frac{3.981 - 1}{100} = 1.585 + 0.0298 = 1.615
 \]
 
-\subsubsection{Processing Gain (Spread
-Spectrum)}\label{processing-gain-spread-spectrum}
+$NF_{\text{total}} = 10\log_{10}(1.615) = \textbf{2.08~dB}$
 
-See {[}{[}Spread-Spectrum-(DSSS-FHSS){]}{]}
+Note: The high gain of stage 1 minimizes the impact of stage 2's noise.
+\end{calloutbox}
 
-\[
+\subsection{Processing Gain (Spread Spectrum)}
+\label{subsec:processing-gain}
+
+Processing gain in spread spectrum systems:
+
+\begin{equation}
+\label{eq:processing-gain-linear}
 G_p = \frac{B_{\text{RF}}}{B_{\text{data}}}
-\]
+\end{equation}
 
-In dB:
-
-\[
+\textbf{Logarithmic form:}
+\begin{equation}
+\label{eq:processing-gain-db}
 G_p\ (\text{dB}) = 10\log_{10}\left(\frac{B_{\text{RF}}}{B_{\text{data}}}\right)
-\]
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+where:
+\begin{itemize}
+\item $B_{\text{RF}}$ = RF bandwidth (Hz)
+\item $B_{\text{data}}$ = data bandwidth (Hz)
+\end{itemize}
 
-\subsection{\texorpdfstring{ MIMO
-Capacity}{ MIMO Capacity}}\label{mimo-capacity}
+\begin{importantbox}
+Processing gain enables communication below the noise floor and provides resistance to jamming. GPS uses $G_p \approx 43$~dB, allowing reception of signals 20~dB below thermal noise.
+\end{importantbox}
 
-See {[}{[}MIMO-\&-Spatial-Multiplexing{]}{]}
+\textbf{See Chapter on Spread Spectrum for DSSS and FHSS implementations.}
 
-\subsubsection{Ergodic Capacity (known CSI at
-RX)}\label{ergodic-capacity-known-csi-at-rx}
+\section{MIMO Capacity}
+\label{sec:mimo-capacity}
 
-\[
+\subsection{Ergodic Capacity (Channel State Information at RX)}
+\label{subsec:mimo-capacity}
+
+MIMO channel capacity with known CSI at receiver:
+
+\begin{equation}
+\label{eq:mimo-capacity}
 C = \log_2 \det\left(\mathbf{I}_{N_r} + \frac{\rho}{N_t} \mathbf{HH}^H\right) \quad (\text{bits/sec/Hz})
-\]
+\end{equation}
 
-Where: - N\_r, N\_t = Number of RX/TX antennas - \$\textbackslash rho\$
-= SNR - H = Channel matrix
+where:
+\begin{itemize}
+\item $C$ = channel capacity (bits/s/Hz)
+\item $N_r$ = number of receive antennas
+\item $N_t$ = number of transmit antennas
+\item $\rho$ = SNR (linear)
+\item $\mathbf{H}$ = $N_r \times N_t$ channel matrix
+\item $\mathbf{I}_{N_r}$ = $N_r \times N_r$ identity matrix
+\item $\mathbf{H}^H$ = conjugate transpose of $\mathbf{H}$
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{keyconcept}
+MIMO capacity scales linearly with $\min(N_t, N_r)$ at high SNR. A $4\times4$ MIMO system can theoretically achieve 4× the capacity of a single-antenna system in the same bandwidth.
+\end{keyconcept}
 
-\subsection{\texorpdfstring{ Useful
-Constants}{ Useful Constants}}\label{useful-constants}
+\textbf{See \Cref{ch:mimo} for spatial multiplexing and beamforming.}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Constant & Symbol & Value \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Speed of light} & c & 3 \$\textbackslash times\$
-10\textbackslash textsuperscript\{8\} m/s \\
-\textbf{Boltzmann\textquotesingle s constant} & k & 1.38
-\$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{2\}\textbackslash textsuperscript\{3\}
-J/K \\
-\textbf{Impedance of free space} & \(\eta_0\) & 377
-\$\textbackslash Omega\$ \\
-\textbf{Thermal noise floor} (290 K, 1 Hz) & - & -174 dBm/Hz \\
-\end{longtable}
-}
+\section{Useful Constants}
+\label{sec:useful-constants}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Constant} & \textbf{Symbol} & \textbf{Value} \\
+\midrule
+Speed of light & $c$ & $3 \times 10^8$ m/s \\
+Boltzmann's constant & $k$ & $1.38 \times 10^{-23}$ J/K \\
+Impedance of free space & $\eta_0$ & $377$ Ω \\
+Thermal noise floor (290 K, 1 Hz) & --- & $-174$ dBm/Hz \\
+Planck constant & $h$ & $6.626 \times 10^{-34}$ J·s \\
+Elementary charge & $e$ & $1.602 \times 10^{-19}$ C \\
+\bottomrule
+\end{tabular}
+\caption{Physical constants used in wireless communications}
+\label{tab:constants}
+\end{table}
 
-\subsection{\texorpdfstring{ Unit
-Conversions}{ Unit Conversions}}\label{unit-conversions}
+\section{Unit Conversions}
+\label{sec:unit-conversions}
 
-\subsubsection{Power}\label{power}
+\subsection{Power Conversions}
+\label{subsec:power-conversions}
 
-\[
+\textbf{Linear to logarithmic:}
+\begin{equation}
+\label{eq:power-dbm}
 P\ (\text{dBm}) = 10\log_{10}(P\ (\text{mW}))
-\]
+\end{equation}
 
-\[
+\textbf{dBm to dBW:}
+\begin{equation}
+\label{eq:power-dbw}
 P\ (\text{dBW}) = P\ (\text{dBm}) - 30
-\]
+\end{equation}
 
-\subsubsection{Wavelength \$\textbackslash leftrightarrow\$
-Frequency}\label{wavelength-frequency}
+\begin{calloutbox}{Common Power Conversions}
+\begin{itemize}
+\item 1~mW = 0~dBm = -30~dBW
+\item 10~mW = 10~dBm = -20~dBW
+\item 100~mW = 20~dBm = -10~dBW
+\item 1~W = 30~dBm = 0~dBW
+\item 100~W = 50~dBm = 20~dBW
+\end{itemize}
+\end{calloutbox}
 
-\[
+\subsection{Wavelength $\leftrightarrow$ Frequency}
+\label{subsec:wavelength-frequency}
+
+\begin{equation}
+\label{eq:wavelength}
 \lambda = \frac{c}{f}
-\]
+\end{equation}
 
-\textbf{Examples}: - 2.4 GHz \$\textbackslash rightarrow\$
-\$\textbackslash lambda\$ = 12.5 cm - 900 MHz
-\$\textbackslash rightarrow\$ \$\textbackslash lambda\$ = 33.3 cm - 28
-GHz \$\textbackslash rightarrow\$ \$\textbackslash lambda\$ = 10.7 mm
+where $c = 3 \times 10^8$~m/s.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Frequency} & \textbf{Wavelength} & \textbf{Band} \\
+\midrule
+900 MHz & 33.3 cm & GSM-900 \\
+2.4 GHz & 12.5 cm & WiFi, Bluetooth \\
+5 GHz & 6 cm & WiFi 5/6 \\
+10 GHz & 3 cm & X-band satellite \\
+28 GHz & 10.7 mm & 5G mmWave \\
+60 GHz & 5 mm & WiGig \\
+\bottomrule
+\end{tabular}
+\caption{Common wireless frequencies and wavelengths}
+\label{tab:freq-wavelength}
+\end{table}
 
-\subsection{\texorpdfstring{ Quick Reference
-Values}{ Quick Reference Values}}\label{quick-reference-values}
+\section{Quick Reference Values}
+\label{sec:quick-reference}
 
-\subsubsection{BER vs Eb/N0 (BPSK)}\label{ber-vs-ebn0-bpsk}
+\subsection{BER vs Eb/N0 (BPSK)}
+\label{subsec:ber-table}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
-\toprule\noalign{}
-Eb/N0 (dB) & BER \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-0 & 0.079 \\
-5 & 5.9 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{4\} \\
-10 & 3.9 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\} \\
-15 & 7.7 \$\textbackslash times\$
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{9\} \\
-\end{longtable}
-}
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Eb/N0 (dB)} & \textbf{BER} \\
+\midrule
+0 & $7.9 \times 10^{-2}$ \\
+5 & $5.9 \times 10^{-4}$ \\
+7 & $3.9 \times 10^{-5}$ \\
+10 & $3.9 \times 10^{-6}$ \\
+13 & $1.1 \times 10^{-8}$ \\
+15 & $7.7 \times 10^{-9}$ \\
+\bottomrule
+\end{tabular}
+\caption{BPSK BER performance in AWGN channel}
+\label{tab:ber-bpsk}
+\end{table}
 
-\subsubsection{Typical Link Budgets}\label{typical-link-budgets}
+\subsection{Typical Link Budgets}
+\label{subsec:typical-link-budgets}
 
-\textbf{WiFi (2.4 GHz, 10 m)}: - TX power: 20 dBm (100 mW) - FSPL: -60
-dB - RX power: -40 dBm
+\begin{calloutbox}{WiFi Link (2.4 GHz, 10 m)}
+\begin{itemize}
+\item TX power: 20 dBm (100 mW)
+\item TX antenna gain: 2 dBi (omnidirectional)
+\item FSPL (10 m, 2.4 GHz): -60 dB
+\item RX antenna gain: 2 dBi
+\item RX power: 20 + 2 - 60 + 2 = \textbf{-36 dBm}
+\end{itemize}
+\end{calloutbox}
 
-\textbf{Satellite (12 GHz, GEO)}: - TX power (EIRP): 50 dBW - FSPL: -206
-dB - RX power: -156 dBW = -126 dBm
+\begin{calloutbox}{Satellite Link (12 GHz, GEO at 36,000 km)}
+\begin{itemize}
+\item TX power (EIRP): 50 dBW = 80 dBm
+\item FSPL (36,000 km, 12 GHz): -206 dB
+\item RX antenna gain: 40 dBi (1.2 m dish)
+\item Atmospheric loss: -2 dB
+\item RX power: 80 - 206 + 40 - 2 = \textbf{-88 dBm}
+\end{itemize}
+\end{calloutbox}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Applications}
+\label{sec:applications}
 
-\subsection{\texorpdfstring{ Common System
-Parameters}{ Common System Parameters}}\label{common-system-parameters}
+\subsection{Complete Link Budget Calculation}
+\label{subsec:link-budget-example}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-System & Frequency & Modulation & Coding \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{WiFi 802.11g} & 2.4 GHz & OFDM (BPSK-64QAM) & Convolutional \\
-\textbf{LTE} & 700 MHz - 2.6 GHz & OFDM (QPSK-256QAM) & Turbo \\
-\textbf{5G NR} & 600 MHz - 40 GHz & OFDM (QPSK-256QAM) & LDPC, Polar \\
-\textbf{GPS} & 1.5 GHz & BPSK & None (spreading) \\
-\textbf{DVB-S2} & 10-12 GHz & 8PSK, 16/32APSK & LDPC + BCH \\
-\end{longtable}
-}
+\begin{calloutbox}{Worked Example: 5G Base Station to Mobile}
+\textbf{Given:}
+\begin{itemize}
+\item Frequency: 3.5 GHz
+\item Distance: 500 m
+\item TX power: 46 dBm (40 W)
+\item TX antenna gain: 18 dBi (sector antenna)
+\item RX antenna gain: 0 dBi (mobile phone)
+\item Required SNR for 64-QAM: 20 dB
+\item System bandwidth: 20 MHz
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Solution:}
 
-\emph{For detailed derivations, see the linked wiki pages.}
+\textbf{Step 1: Calculate FSPL}
+\begin{align*}
+\text{FSPL} &= 20\log_{10}(0.5) + 20\log_{10}(3500) + 32.45 \\
+&= -6.02 + 70.88 + 32.45 = 97.31~\text{dB}
+\end{align*}
 
-\emph{Updated: October 4, 2025}
+\textbf{Step 2: Calculate received power}
+\begin{align*}
+P_r &= P_t + G_t + G_r - \text{FSPL} \\
+&= 46 + 18 + 0 - 97.31 = -33.31~\text{dBm}
+\end{align*}
+
+\textbf{Step 3: Calculate noise floor}
+\begin{align*}
+N &= -174 + 10\log_{10}(20 \times 10^6) = -101~\text{dBm}
+\end{align*}
+
+\textbf{Step 4: Calculate SNR}
+\begin{align*}
+\text{SNR} &= P_r - N = -33.31 - (-101) = 67.69~\text{dB}
+\end{align*}
+
+\textbf{Result:} SNR = 67.69~dB $\gg$ 20~dB required. Link has 47.69~dB margin.
+\end{calloutbox}
+
+\subsection{Common System Parameters}
+\label{subsec:common-systems}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{System} & \textbf{Frequency} & \textbf{Modulation} & \textbf{Coding} \\
+\midrule
+WiFi 802.11g & 2.4 GHz & OFDM (BPSK--64QAM) & Convolutional \\
+WiFi 802.11ax & 2.4/5 GHz & OFDM (BPSK--1024QAM) & LDPC \\
+LTE & 700 MHz--2.6 GHz & OFDM (QPSK--256QAM) & Turbo \\
+5G NR & 600 MHz--40 GHz & OFDM (QPSK--256QAM) & LDPC, Polar \\
+GPS L1 & 1.575 GHz & BPSK & None (DSSS) \\
+DVB-S2 & 10--12 GHz & 8PSK, 16/32APSK & LDPC + BCH \\
+Bluetooth & 2.4 GHz & GFSK & None \\
+LoRa & 433/868/915 MHz & CSS & Hamming \\
+\bottomrule
+\end{tabular}
+\caption{Parameters for common wireless systems}
+\label{tab:systems}
+\end{table}
+
+\section{Summary}
+
+This formula reference card provides quick access to the essential equations for wireless communications analysis and design. Each formula has been presented with:
+
+\begin{itemize}
+\item \textbf{Clear definitions} of all variables with proper units
+\item \textbf{Both linear and logarithmic} forms where applicable
+\item \textbf{Worked examples} demonstrating practical calculations
+\item \textbf{Cross-references} to detailed chapters for derivations
+\item \textbf{Application context} for real-world systems
+\end{itemize}
+
+\begin{keyconcept}
+Master these formulas and you have the foundation for analyzing any wireless communication system---from link budgets to error rates, from modulation schemes to channel effects.
+\end{keyconcept}
+
+For detailed derivations, proofs, and advanced topics, refer to the cross-referenced chapters throughout this book.
