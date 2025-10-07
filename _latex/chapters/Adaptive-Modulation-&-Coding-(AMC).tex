@@ -1,101 +1,258 @@
-\section{Adaptive Modulation \& Coding
-(AMC)}\label{adaptive-modulation-coding-amc}
+\chapter{Adaptive Modulation \& Coding (AMC)}
+\label{ch:amc}
 
-\textbf{Adaptive Modulation and Coding (AMC)} dynamically adjusts
-transmission parameters (modulation order, code rate, bandwidth) based
-on real-time channel conditions to maximize throughput while maintaining
-target error rates. AMC is fundamental to modern wireless standards
-(LTE, 5G NR, WiFi 6/7) and enables systems to track
-{[}{[}Shannon\textquotesingle s-Channel-Capacity-Theorem\textbar Shannon
-capacity{]}{]} in time-varying channels.
+\begin{nontechnical}
+\textbf{AMC is like shifting gears in a car}---when the road is clear (good channel), you shift to high gear for maximum speed. When conditions worsen (poor channel), you shift to lower gears for reliability.
 
-\textbf{Core principle}: Match data rate to instantaneous channel
-quality-\/-\/-use aggressive modulation when channel is good, fall back
-to robust modulation when channel degrades.
+\textbf{Simple idea:}
+\begin{itemize}
+\item Good channel = 256-QAM (fast but fragile) $\rightarrow$ 100 Mbps
+\item Moderate channel = 64-QAM (balanced) $\rightarrow$ 60 Mbps
+\item Poor channel = QPSK (slow but reliable) $\rightarrow$ 10 Mbps
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Real use:} Your phone constantly adapts. Near a cell tower = fast 5G. Far away = slower but reliable connection.
 
-\subsection{\texorpdfstring{ The AMC
-Concept}{ The AMC Concept}}\label{the-amc-concept}
+\textbf{Why adapt?} Without AMC, systems fail in poor conditions or waste capacity in good conditions. AMC maximizes throughput while maintaining quality across all scenarios.
+\end{nontechnical}
 
-\subsubsection{Without AMC (Fixed
-Modulation)}\label{without-amc-fixed-modulation}
+\section{Overview}
 
-\begin{verbatim}
-Fixed 64-QAM, Rate-1/2 FEC:
- Data rate: Constant (e.g., 50 Mbps)
- High SNR: Wasted capacity (could use 256-QAM)
- Low SNR: High BER, retransmissions, failures
+\textbf{Adaptive Modulation and Coding (AMC)} dynamically adjusts transmission parameters---modulation order, code rate, and transmit power---based on real-time channel state information (CSI) to maximize spectral efficiency while maintaining target error rates.
 
-Result: Suboptimal throughput, especially in fading channels
-\end{verbatim}
+\begin{keyconcept}
+AMC enables wireless systems to \textbf{track Shannon capacity} in time-varying channels by matching the instantaneous data rate to channel quality. This provides \textbf{2--5$\times$ throughput gain} compared to fixed modulation in fading environments.
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+AMC is fundamental to all modern wireless standards: LTE (3GPP), 5G NR, WiFi 6/7 (802.11ax/be), and forms the basis for link adaptation in cellular and wireless local area networks.
 
-\subsubsection{With AMC}\label{with-amc}
+\section{Mathematical Description}
 
-\begin{verbatim}
-Adapt modulation + coding to channel:
+\subsection{Shannon Capacity Foundation}
 
-Good channel (SNR = 30 dB):
- 256-QAM, Rate-5/6  100 Mbps, BER = 10 
+AMC is motivated by Shannon's channel capacity theorem, which gives the maximum achievable data rate:
+\begin{equation}
+C = B \log_2(1 + \text{SNR})
+\end{equation}
+where:
+\begin{itemize}
+\item $C$ = channel capacity (bits/second)
+\item $B$ = bandwidth (Hz)
+\item $\text{SNR}$ = signal-to-noise ratio (linear, not dB)
+\end{itemize}
 
-Moderate channel (SNR = 20 dB):
- 64-QAM, Rate-3/4  60 Mbps, BER = 10 
+For time-varying channels, the instantaneous SNR $\gamma(t)$ fluctuates due to fading:
+\begin{equation}
+C(t) = B \log_2(1 + \gamma(t))
+\end{equation}
 
-Poor channel (SNR = 10 dB):
- QPSK, Rate-1/2  10 Mbps, BER = 10 
+\textbf{Fixed modulation problem:} If we select a single modulation/coding scheme (MCS) for average SNR $\bar{\gamma}$, the system experiences:
+\begin{itemize}
+\item \textbf{Outage} when $\gamma(t) < \gamma_{\text{threshold}}$ (data errors)
+\item \textbf{Underutilization} when $\gamma(t) \gg \gamma_{\text{threshold}}$ (wasted capacity)
+\end{itemize}
 
-Faded channel (SNR = 5 dB):
- BPSK, Rate-1/3  3 Mbps, BER = 10 
+\subsection{Adaptive Rate Selection}
 
-Result: Maximize throughput while maintaining quality
-\end{verbatim}
+AMC selects data rate $R(t)$ to match instantaneous capacity:
+\begin{equation}
+R(t) = \eta(\gamma(t)) \cdot B
+\end{equation}
+where:
+\begin{itemize}
+\item $\eta(\gamma)$ = spectral efficiency function (bits/s/Hz)
+\item $\eta(\gamma) \leq \log_2(1 + \gamma)$ (Shannon limit with implementation gap)
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Spectral efficiency} depends on modulation order $M$ and code rate $r$:
+\begin{equation}
+\eta = r \cdot \log_2(M)
+\end{equation}
+where:
+\begin{itemize}
+\item $M \in \{2, 4, 16, 64, 256, 1024\}$ = modulation constellation size (BPSK, QPSK, 16-QAM, 64-QAM, 256-QAM, 1024-QAM)
+\item $r \in [1/3, 7/8]$ = forward error correction code rate
+\end{itemize}
 
-\subsection{\texorpdfstring{ Link Adaptation
-Framework}{ Link Adaptation Framework}}\label{link-adaptation-framework}
+\subsection{The AMC Concept}
 
-\subsubsection{Channel State Information
-(CSI)}\label{channel-state-information-csi}
+AMC operates by maintaining a lookup table mapping SNR to MCS index:
 
-\textbf{CSI acquisition}:
+\begin{center}
+\begin{tikzpicture}[scale=1.1,
+  level/.style={rectangle, draw, minimum width=5cm, minimum height=0.8cm, font=\sffamily\small, fill=black!5},
+  node distance=0.9cm
+]
+% AMC ladder showing modulation schemes
+\node[level, fill=green!20] (mcs5) at (0,4) {256-QAM, Rate-5/6 $\rightarrow$ 7.4 bits/s/Hz};
+\node[right=0.3cm of mcs5, font=\scriptsize] {SNR $>$ 30 dB};
 
-\begin{verbatim}
-Downlink (BS  UE):
-1. BS transmits pilot/reference signals
-2. UE measures channel (amplitude, phase per subcarrier)
-3. UE reports CSI feedback to BS
-4. BS selects MCS (Modulation and Coding Scheme)
+\node[level, fill=green!10] (mcs4) at (0,3) {64-QAM, Rate-3/4 $\rightarrow$ 4.5 bits/s/Hz};
+\node[right=0.3cm of mcs4, font=\scriptsize] {SNR = 20--30 dB};
 
-Uplink (UE  BS):
-1. UE transmits sounding reference signal (SRS)
-2. BS measures channel directly
-3. BS selects MCS (no feedback needed if TDD reciprocity)
-\end{verbatim}
+\node[level, fill=yellow!20] (mcs3) at (0,2) {16-QAM, Rate-1/2 $\rightarrow$ 2.0 bits/s/Hz};
+\node[right=0.3cm of mcs3, font=\scriptsize] {SNR = 12--20 dB};
 
-\textbf{CSI feedback types}:
+\node[level, fill=orange!20] (mcs2) at (0,1) {QPSK, Rate-1/2 $\rightarrow$ 1.0 bits/s/Hz};
+\node[right=0.3cm of mcs2, font=\scriptsize] {SNR = 5--12 dB};
 
-\begin{verbatim}
-Full CSI:
-- H matrix (nT × nR complex gains per subcarrier)
-- High overhead (bits  nT × nR × N_subcarriers)
-- Used: Massive MIMO (TDD reciprocity  no feedback)
+\node[level, fill=red!20] (mcs1) at (0,0) {BPSK, Rate-1/3 $\rightarrow$ 0.33 bits/s/Hz};
+\node[right=0.3cm of mcs1, font=\scriptsize] {SNR $<$ 5 dB};
 
-Quantized CSI:
-- Codebook-based: Index to predefined precoding matrices
-- CQI (Channel Quality Indicator): Scalar metric
-- Low overhead
-- Used: LTE, 5G NR FDD
-\end{verbatim}
+% Arrows indicating adaptation
+\draw[->,thick,dashed] (mcs1.east) to[out=0,in=0] node[right,font=\scriptsize,align=left] {Channel\\improves} (mcs5.east);
+\draw[->,thick,dashed] (mcs5.west) to[out=180,in=180] node[left,font=\scriptsize,align=right] {Channel\\degrades} (mcs1.west);
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\node[above=0.3cm of mcs5, font=\sffamily\bfseries] {AMC Adaptation Ladder};
+\end{tikzpicture}
+\end{center}
 
-\subsubsection{Channel Quality Indicator
-(CQI)}\label{channel-quality-indicator-cqi}
+\textbf{Key insight:} The system continuously monitors SNR and selects the highest-rate MCS that maintains target BER $\leq 10^{-3}$ (or BLER $\leq 10\%$).
 
-\textbf{CQI definition}:
+\subsection{MCS Selection Thresholds}
+
+The MCS selection function maps instantaneous SNR to modulation and code rate:
+\begin{equation}
+\text{MCS}(t) = \arg\max_i \{\eta_i : \gamma(t) \geq \gamma_{\text{threshold},i}\}
+\end{equation}
+where:
+\begin{itemize}
+\item $\text{MCS}(t)$ = selected modulation and coding scheme at time $t$
+\item $\eta_i$ = spectral efficiency of MCS index $i$ (bits/s/Hz)
+\item $\gamma_{\text{threshold},i}$ = minimum SNR required for target BER with MCS $i$
+\end{itemize}
+
+Typical thresholds for BER $= 10^{-3}$ after FEC:
+
+\begin{center}
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{MCS} & \textbf{Modulation} & \textbf{Code Rate} & \textbf{Threshold SNR (dB)} \\
+\midrule
+0 & BPSK & 1/3 & $-2$ \\
+5 & QPSK & 1/2 & 5 \\
+10 & 16-QAM & 1/2 & 12 \\
+15 & 64-QAM & 3/4 & 20 \\
+20 & 256-QAM & 5/6 & 30 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Link Adaptation Framework}
+
+\subsection{Feedback Loop Architecture}
+
+AMC requires a closed-loop feedback system:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, fill=white},
+  node distance=2.5cm,
+  font=\small
+]
+% Transmitter side
+\node[block] (encoder) {Data\\Encoder};
+\node[block, right of=encoder, node distance=3cm] (modulator) {Adaptive\\Modulator};
+\node[block, right of=modulator, node distance=3cm] (channel) {Fading\\Channel};
+
+% Receiver side
+\node[block, below of=channel, node distance=2.5cm] (demod) {Demodulator\\+ Decoder};
+\node[block, left of=demod, node distance=3cm] (cqi) {CQI\\Estimator};
+\node[block, left of=cqi, node distance=3cm] (scheduler) {MCS\\Selector};
+
+% MCS table
+\node[block, below of=modulator, node distance=2.5cm, minimum width=2cm] (mcs) {MCS\\Table};
+
+% Forward path
+\draw[->,thick] (encoder) -- node[above,font=\scriptsize] {bits} (modulator);
+\draw[->,thick] (modulator) -- node[above,font=\scriptsize] {$s(t)$} (channel);
+\draw[->,thick] (channel) -- node[right,font=\scriptsize] {$r(t)$} (demod);
+
+% Feedback path
+\draw[->,thick] (demod) -- (cqi);
+\draw[->,thick] (cqi) -- node[above,font=\scriptsize] {CQI} (scheduler);
+\draw[->,thick,dashed] (scheduler) |- node[left,font=\scriptsize,pos=0.3] {MCS cmd} (mcs);
+\draw[->,thick] (mcs) -- node[right,font=\scriptsize] {$M$, $r$} (modulator);
+
+% Channel estimation
+\node[below of=channel, node distance=1.2cm, font=\scriptsize, align=center] (pilot) {Pilot\\symbols};
+\draw[->,dashed] (channel) -- (pilot);
+\draw[->,dashed] (pilot) -| (cqi);
+
+\node[above=0.2cm of channel, font=\sffamily\bfseries] {AMC Feedback Loop};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Process steps:}
+\begin{enumerate}
+\item \textbf{Receiver measures} channel quality via pilot/reference signals
+\item \textbf{CQI estimation}: Quantize SNR to discrete feedback index
+\item \textbf{Feedback transmission}: Send CQI to transmitter (uplink control channel)
+\item \textbf{MCS selection}: Transmitter maps CQI to optimal MCS
+\item \textbf{Data transmission}: Use selected modulation and code rate
+\end{enumerate}
+
+\subsection{Channel State Information (CSI)}
+
+Channel state information quantifies the instantaneous link quality. For OFDM systems with $N$ subcarriers:
+\begin{equation}
+\text{SNR}_k = \frac{|H_k|^2 P_k}{N_0 B/N}
+\end{equation}
+where:
+\begin{itemize}
+\item $H_k$ = complex channel gain on subcarrier $k$
+\item $P_k$ = transmit power on subcarrier $k$ (Watts)
+\item $N_0$ = noise spectral density (W/Hz)
+\item $B/N$ = subcarrier spacing (Hz)
+\end{itemize}
+
+\textbf{CSI acquisition methods:}
+
+\begin{enumerate}
+\item \textbf{Downlink (Base Station $\rightarrow$ User)}:
+  \begin{itemize}
+  \item BS transmits pilot/reference signals at known locations
+  \item UE measures $H_k$ per subcarrier (amplitude, phase)
+  \item UE computes CQI and sends via uplink control channel
+  \item Feedback delay: typically 4--8 ms (LTE/5G)
+  \end{itemize}
+
+\item \textbf{Uplink (User $\rightarrow$ Base Station)}:
+  \begin{itemize}
+  \item UE transmits sounding reference signal (SRS)
+  \item BS measures channel directly (reciprocity in TDD systems)
+  \item No feedback delay (instantaneous adaptation possible)
+  \end{itemize}
+\end{enumerate}
+
+\subsection{Channel Quality Indicator (CQI)}
+
+CQI is a quantized representation of channel quality, mapping wideband or per-subcarrier SNR to a discrete index:
+\begin{equation}
+\text{CQI} = Q(\gamma_{\text{eff}})
+\end{equation}
+where:
+\begin{itemize}
+\item $Q(\cdot)$ = quantization function (typically 4--5 bits $\rightarrow$ 16--32 CQI levels)
+\item $\gamma_{\text{eff}}$ = effective SNR accounting for frequency-selective fading
+\end{itemize}
+
+\textbf{Effective SNR computation} (Exponential Effective SINR Mapping):
+\begin{equation}
+\gamma_{\text{eff}} = -\beta \ln\left(\frac{1}{N}\sum_{k=1}^{N} e^{-\gamma_k/\beta}\right)
+\end{equation}
+where:
+\begin{itemize}
+\item $\gamma_k$ = SNR on subcarrier $k$ (linear)
+\item $\beta$ = calibration parameter (depends on modulation, typically $\beta \approx 1.5$)
+\item $N$ = number of subcarriers in resource allocation
+\end{itemize}
+
+\begin{calloutbox}{Why Effective SNR?}
+Simple averaging $\bar{\gamma} = \frac{1}{N}\sum \gamma_k$ is inaccurate for coded systems. Deep fades on a few subcarriers cause disproportionate errors. EESM/MIESM methods accurately predict post-FEC performance by accounting for worst subcarriers.
+\end{calloutbox}
+
+\textbf{CQI-to-MCS mapping} (LTE example):
 
 \begin{verbatim}
 CQI = f(SINR, interference, fading statistics)

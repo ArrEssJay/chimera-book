@@ -1,626 +1,648 @@
-\section{Signal Chain (End-to-End
-Processing)}\label{signal-chain-end-to-end-processing}
-
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
-
-\textbf{The signal chain is like a postal system for data-\/-\/-messages
-get packaged (encoded), addressed (modulated), mailed (transmitted),
-delivered (received), sorted (demodulated), and unpacked (decoded)!}
-
-\textbf{The complete journey}:
-
-\textbf{Transmitter Side} ( Sending):
-
-\textbf{1. Raw Data}: - Your message: ``Hello!'' (text, voice, video) -
-Binary: 01001000 01100101 01101100\textbackslash ldots\{\}
-
-\textbf{2. FEC Encoder} ( Add error protection): - Like: Adding packing
-material to fragile package - Adds redundancy so receiver can fix errors
-- Input: 100 data bits \$\textbackslash rightarrow\$ Output: 150 coded
-bits
-
-\textbf{3. Modulator} ( Convert to symbols): - Like: Converting letter
-to semaphore flags - Maps bits to radio signal patterns - QPSK: Every 2
-bits \$\textbackslash rightarrow\$ 1 symbol (4 positions)
-
-\textbf{4. Upconverter} ( Shift to radio frequency): - Like: Loading
-package onto airplane - Shifts signal from baseband (near 0 Hz) to RF
-(GHz) - Baseband 10 MHz \$\textbackslash rightarrow\$ RF 2.4 GHz
-
-\textbf{5. Transmit Antenna} ( Launch!): - Converts electrical signal to
-electromagnetic waves - Radiates into space - Power: mW to kW depending
-on application
-
-\textbf{Channel} ( The dangerous journey):
-
-\textbf{Link Loss} ( Signal weakens): - Distance: Signal spreads out,
-gets weaker - 2\$\textbackslash times\$ distance = 1/4 power (inverse
-square law)
-
-\textbf{Noise} ( Random interference): - Thermal noise (electronics are
-warm) - Interference (other transmitters) - Cosmic background radiation
-- Like: Static on old radio
-
-\textbf{Fading} ( Signal fluctuates): - Multipath: Echoes interfere -
-Obstacles: Buildings, trees block signal - Movement: Doppler shift -
-Like: Sound echoing in canyon
-
-\textbf{Receiver Side} ( Receiving):
-
-\textbf{6. Receive Antenna} ( Catch!): - Collects weak electromagnetic
-waves - Converts to electrical signal - Received power: Often 10\^{}-12
-watts (pW)!
-
-\textbf{7. Downconverter} ( Unload from airplane): - Shifts RF signal
-back to baseband - RF 2.4 GHz \$\textbackslash rightarrow\$ Baseband 10
-MHz - Now can process with DSP
-
-\textbf{8. Synchronizer} ({[}clock{]} Align timing/frequency): - Like:
-Aligning decoder ring - Matches receiver clock to transmitter - Corrects
-frequency/phase/timing offsets
-
-\textbf{9. Equalizer} ( Undo channel distortion): - Like: Uncrumpling
-package - Reverses distortion from multipath/fading - Makes
-constellation clean again
-
-\textbf{10. Demodulator} ( Read symbols): - Like: Reading semaphore
-flags - Converts received symbols back to bits - Makes ``soft
-decisions'' (probabilities)
-
-\textbf{11. FEC Decoder} ( Fix errors): - Like: Piecing together damaged
-package - Uses redundancy to detect and correct errors - Output: Clean
-data bits (hopefully!)
-
-\textbf{12. Recovered Data} ( Success!): - Your message: ``Hello!'' -
-Delivered successfully (if BER low enough)
-
-\textbf{Real-world example - Sending emoji via WiFi}:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  You type (1 byte = 8 bits)
-\item
-  \textbf{FEC}: Encoded to 12 bits (50\% overhead)
-\item
-  \textbf{Modulator}: 12 bits \$\textbackslash rightarrow\$ 6 QPSK
-  symbols
-\item
-  \textbf{Upconverter}: Shifted to 2.4 GHz
-\item
-  \textbf{TX antenna}: Radiated at 100 mW
-\item
-  \textbf{Channel}: Signal travels 10 meters, weakened to 10 µW
-\item
-  \textbf{RX antenna}: Laptop antenna collects 1 µW
-\item
-  \textbf{Downconverter}: Back to baseband
-\item
-  \textbf{Synchronize}: Align timing (4 µs correction)
-\item
-  \textbf{Equalize}: Undo multipath from walls
-\item
-  \textbf{Demodulate}: Recover 12 bits (2 errors!)
-\item
-  \textbf{FEC decode}: Fix 2 errors \$\textbackslash rightarrow\$
-  perfect 8 bits
-\item
-  You see:
-\end{enumerate}
-
-All in 0.00024 seconds!
-
-\textbf{Why understanding the chain matters}: - \textbf{Weak signal?}
-Check: Antenna, link budget, path loss - \textbf{Lots of errors?} Check:
-Noise, FEC, modulation - \textbf{Intermittent?} Check: Fading,
-synchronization - \textbf{Each block} can be optimized independently!
-
-\textbf{Fun fact}: A typical WiFi packet goes through this entire signal
-chain (11+ processing blocks) in under 1 millisecond. Your
-laptop\textquotesingle s WiFi chip performs billions of calculations per
-second to execute these steps in real-time!
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-The \textbf{signal chain} is the complete path data takes from
-transmitter to receiver in Chimera\textquotesingle s DSP simulation.
-
-\subsection{Overview}\label{overview}
-
-\begin{verbatim}
-Transmitter Side                    Channel                Receiver Side
-++++++++++++++++                    +++++++                ++++++++++++
-
-[Data Bits]                                                  [Data Bits]
-                                                                
-[FEC Encoder] -- add redundancy                         [FEC Decoder]
-                                                                
-[Modulator] ---- bits to symbols                       [Demodulator]
-                                                                
-[Upconverter] -- baseband to RF              [Downconverter] +
-                                                        
-[TX Antenna] --- [Link Loss] + [AWGN Noise] --- [RX Antenna]
-\end{verbatim}
-
-\subsection{Detailed Signal Chain}\label{detailed-signal-chain}
-
-\subsubsection{1. Data Source}\label{data-source}
-
-\textbf{Input}: Raw information bits (0s and 1s)
-
-\begin{verbatim}
-Example: "Hello" in binary
-01001000 01100101 01101100 01101100 01101111
-\end{verbatim}
-
-\textbf{In Chimera}: Generated from presets or user input
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. FEC Encoder}\label{fec-encoder}
-
-\textbf{Input}: Information bits\\
-\textbf{Output}: Encoded bits with parity
-
-\textbf{Purpose}: Add
-{[}{[}Forward-Error-Correction-(FEC)\textbar redundancy{]}{]} for error
-correction
-
-\begin{verbatim}
-Information: [1 0 1 0] (4 bits)
-      
-[[LDPC-Codes|LDPC]] Encoder (rate 1/2)
-      
-Codeword: [1 0 1 0 1 1 0 0] (8 bits)
-          +-----+ +-------+
-           data     parity
-\end{verbatim}
-
-\textbf{Parameters}: - Code rate (1/2, 2/3, 3/4, etc.) - Block length -
-LDPC matrix structure
-
-\textbf{Chimera Implementation}: \texttt{chimera-core::encoder}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{3. Modulator}\label{modulator}
-
-\textbf{Input}: Encoded bits\\
-\textbf{Output}: Complex symbols (I+jQ)
-
-\textbf{Purpose}: Map bits to
-{[}{[}QPSK-Modulation\textbar constellation points{]}{]}
-
-\begin{verbatim}
-Bits: [0 0]  Symbol: (-1, -1)  225°
-Bits: [0 1]  Symbol: (-1, +1)  135°
-Bits: [1 0]  Symbol: (+1, -1)  315°
-Bits: [1 1]  Symbol: (+1, +1)   45°
-\end{verbatim}
-
-\textbf{For QPSK}: 2 bits per symbol
-
-\textbf{{[}{[}Constellation-Diagrams\textbar Constellation{]}{]} (TX
-side)}:
-
-\begin{verbatim}
-      Q
-      
-     |       Clean symbols
-------+------ I
-     |   
-\end{verbatim}
-
-\textbf{Chimera Implementation}: \texttt{chimera-core::modulation}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4. Pulse Shaping
-(Optional)}\label{pulse-shaping-optional}
-
-\textbf{Input}: Discrete symbols\\
-\textbf{Output}: Continuous waveform
-
-\textbf{Purpose}: Limit bandwidth, reduce inter-symbol interference
-
-\textbf{Filter Types}: - Raised cosine - Root raised cosine (most
-common) - Gaussian
-
-\textbf{Not simulated in current Chimera version} (focused on baseband)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{5. Upconverter}\label{upconverter}
-
-\textbf{Input}: Baseband I/Q signal\\
-\textbf{Output}: RF signal at carrier frequency
-
-\textbf{Purpose}: Shift signal to transmission frequency
-
-\begin{verbatim}
-Baseband: s(t) = I(t) + jQ(t)
-
-RF Signal: s_RF(t) = I(t)·cos(2f_c·t) - Q(t)·sin(2f_c·t)
-
-where f_c is carrier frequency (e.g., 2.4 GHz)
-\end{verbatim}
-
-\textbf{Chimera}: Simulates baseband only (no carrier)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{6. Channel Effects}\label{channel-effects}
-
-\paragraph{A. Link Loss}\label{a.-link-loss}
-
-\textbf{Input}: Transmitted signal power\\
-\textbf{Output}: Attenuated signal power
-
-\textbf{Purpose}: Models distance, antenna gains, free-space path loss
-
-\begin{verbatim}
-Link Budget:
-P_RX = P_TX + G_TX + G_RX - L_path - L_other
-
-Example:
-  10 dBm TX power
-+ 3 dBi TX antenna gain
-+ 3 dBi RX antenna gain
-- 100 dB path loss
-- 5 dB other losses
----------------------
-= -89 dBm RX power
-\end{verbatim}
-
-See: {[}{[}Link-Loss-vs-Noise{]}{]}
-
-\textbf{Chimera}: Simulated as amplitude scaling
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{B. Additive White Gaussian Noise
-(AWGN)}\label{b.-additive-white-gaussian-noise-awgn}
-
-\textbf{Input}: Attenuated signal\\
-\textbf{Output}: Noisy signal
-
-\textbf{Purpose}: Models thermal noise, interference
-
-\begin{verbatim}
-Received signal:
+\chapter{Signal Chain (End-to-End Processing)}
+\label{ch:signal-chain}
+
+\begin{nontechnical}
+\textbf{The signal chain is like a postal system for data}---messages get packaged (encoded), addressed (modulated), mailed (transmitted), delivered (received), sorted (demodulated), and unpacked (decoded)!
+
+\textbf{The complete journey:}
+\begin{itemize}
+\item \textbf{Sender:} You write a letter, put it in an envelope, add packing material for protection
+\item \textbf{Post office:} Sorts, ships via airplane to destination
+\item \textbf{Journey:} Package may get damaged, wet, or lost along the way
+\item \textbf{Destination:} Arrives at receiver's local post office
+\item \textbf{Receiver:} Opens package, removes packing, reads letter (hopefully intact!)
+\end{itemize}
+
+\textbf{Real example:} Sending an emoji via WiFi takes your 8-bit character through 11 processing stages in microseconds, surviving noise, interference, and multipath fading to arrive intact at your friend's phone.
+\end{nontechnical}
+
+\section{Overview}
+
+The \textbf{signal chain} represents the complete end-to-end path that information takes from source to destination in a digital communication system. Understanding this chain is essential for analyzing system performance, diagnosing problems, and optimizing link budgets.
+
+\begin{keyconcept}
+Every stage in the signal chain introduces \textbf{impairments} (noise, distortion, loss) that degrade signal quality. The receiver's job is to undo these impairments and recover the original data with minimal errors. The signal chain provides a systematic framework for understanding where and how degradation occurs.
+\end{keyconcept}
+
+The signal chain consists of three major domains:
+\begin{itemize}
+\item \textbf{Transmitter:} Encodes, modulates, and radiates the signal
+\item \textbf{Channel:} Attenuates, distorts, and adds noise to the signal
+\item \textbf{Receiver:} Captures, demodulates, and decodes to recover data
+\end{itemize}
+
+\section{System Architecture}
+
+\subsection{Complete Signal Chain Block Diagram}
+
+The following diagram illustrates the complete end-to-end signal processing chain:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=0.9cm, font=\sffamily\small, align=center},
+  node distance=1.8cm,
+  font=\small
+]
+
+% Transmitter chain
+\node[font=\sffamily\bfseries] (txlabel) {Transmitter};
+\node[block, below=0.4cm of txlabel] (data) {Data\\Source};
+\node[block, below of=data] (fec) {FEC\\Encoder};
+\node[block, below of=fec] (mod) {Modulator};
+\node[block, below of=mod] (upconv) {Upconverter};
+\node[block, below of=upconv] (txant) {TX\\Antenna};
+
+% Channel
+\node[block, below of=txant, minimum height=1.5cm, minimum width=2.2cm, fill=black!10!white] (channel) {Channel\\(Loss + Noise)};
+
+% Receiver chain  
+\node[block, below of=channel] (rxant) {RX\\Antenna};
+\node[block, below of=rxant] (downconv) {Downconverter};
+\node[block, below of=downconv] (sync) {Sync \&\\Equalize};
+\node[block, below of=sync] (demod) {Demodulator};
+\node[block, below of=demod] (decoder) {FEC\\Decoder};
+\node[block, below of=decoder] (sink) {Data\\Sink};
+\node[font=\sffamily\bfseries, below=0.4cm of sink] (rxlabel) {Receiver};
+
+% Annotations
+\node[right=0.3cm of data, font=\scriptsize, align=left] {Information bits\\$\{0,1\}$};
+\node[right=0.3cm of fec, font=\scriptsize, align=left] {Coded bits\\(redundancy added)};
+\node[right=0.3cm of mod, font=\scriptsize, align=left] {Complex symbols\\$I + jQ$};
+\node[right=0.3cm of upconv, font=\scriptsize, align=left] {RF signal\\$f_c$ = GHz};
+\node[right=0.3cm of channel, font=\scriptsize, align=left] {AWGN + Fading\\Link loss};
+\node[right=0.3cm of downconv, font=\scriptsize, align=left] {Baseband\\$I + jQ$};
+\node[right=0.3cm of demod, font=\scriptsize, align=left] {Soft bits\\(LLRs)};
+\node[right=0.3cm of decoder, font=\scriptsize, align=left] {Decoded bits\\$\{0,1\}$};
+
+% Arrows
+\draw[->,thick] (data) -- (fec);
+\draw[->,thick] (fec) -- (mod);
+\draw[->,thick] (mod) -- (upconv);
+\draw[->,thick] (upconv) -- (txant);
+\draw[->,thick] (txant) -- (channel);
+\draw[->,thick] (channel) -- (rxant);
+\draw[->,thick] (rxant) -- (downconv);
+\draw[->,thick] (downconv) -- (sync);
+\draw[->,thick] (sync) -- (demod);
+\draw[->,thick] (demod) -- (decoder);
+\draw[->,thick] (decoder) -- (sink);
+
+\end{tikzpicture}
+\end{center}
+
+\subsection{Transmitter Signal Flow}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
+  node distance=3.2cm,
+  font=\small
+]
+\node (input) {\sffamily Data\\Bits};
+\node[block, right of=input, node distance=2.8cm] (fec) {FEC\\Encoder};
+\node[block, right of=fec] (mod) {Modulator};
+\node[block, right of=mod] (upconv) {Upconverter\\$\times$};
+\node[right of=upconv, node distance=2.8cm] (output) {\sffamily RF\\Output};
+
+\node[below of=upconv, node distance=1.5cm, font=\small] (lo) {$\cos(2\pi f_c t)$};
+
+\draw[->,thick] (input) -- (fec) node[midway,above,font=\scriptsize] {$k$ bits};
+\draw[->,thick] (fec) -- (mod) node[midway,above,font=\scriptsize] {$n$ bits};
+\draw[->,thick] (mod) -- (upconv) node[midway,above,font=\scriptsize] {$I+jQ$};
+\draw[->,thick] (lo) -- (upconv);
+\draw[->,thick] (upconv) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\subsection{Receiver Signal Flow}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
+  node distance=3.2cm,
+  font=\small
+]
+\node (input) {\sffamily RX\\Signal};
+\node[block, right of=input, node distance=2.8cm] (downconv) {Downconverter\\$\times$};
+\node[block, right of=downconv] (sync) {Sync \&\\Equalize};
+\node[block, right of=sync] (demod) {Demodulator};
+\node[block, right of=demod] (fec) {FEC\\Decoder};
+\node[right of=fec, node distance=2.8cm] (output) {\sffamily Data\\Bits};
+
+\node[below of=downconv, node distance=1.5cm, font=\small] (lo) {$\cos(2\pi f_c t + \phi)$};
+
+\draw[->,thick] (input) -- (downconv);
+\draw[->,thick] (lo) -- (downconv);
+\draw[->,thick] (downconv) -- (sync) node[midway,above,font=\scriptsize] {$I+jQ$};
+\draw[->,thick] (sync) -- (demod) node[midway,above,font=\scriptsize] {clean};
+\draw[->,thick] (demod) -- (fec) node[midway,above,font=\scriptsize] {soft bits};
+\draw[->,thick] (fec) -- (output) node[midway,above,font=\scriptsize] {$\hat{k}$ bits};
+\end{tikzpicture}
+\end{center}
+
+\section{Mathematical Description}
+
+\subsection{Data Rate Relationships}
+
+The information bit rate $R_b$ relates to symbol rate $R_s$ through:
+\begin{equation}
+R_s = \frac{R_b}{m \cdot r_c}
+\end{equation}
+where:
+\begin{itemize}
+\item $R_b$ = information bit rate (bps)
+\item $R_s$ = symbol rate (symbols/second)
+\item $m = \log_2(M)$ = bits per symbol (e.g., $m=2$ for QPSK)
+\item $r_c$ = code rate (e.g., $r_c = 1/2$ for rate-1/2 FEC)
+\end{itemize}
+
+\textbf{Example:} For $R_b = 1$ Mbps with QPSK ($m=2$) and rate-1/2 FEC ($r_c = 0.5$):
+\begin{equation}
+R_s = \frac{10^6}{2 \times 0.5} = 10^6\ \text{symbols/sec}
+\end{equation}
+
+\subsection{Signal Energy Relationships}
+
+The energy per bit relates to symbol energy:
+\begin{equation}
+E_b = \frac{E_s}{m \cdot r_c}
+\end{equation}
+where:
+\begin{itemize}
+\item $E_b$ = energy per information bit (Joules)
+\item $E_s$ = energy per symbol (Joules)
+\item $m$ = bits per symbol
+\item $r_c$ = code rate
+\end{itemize}
+
+Signal power relates to bit energy:
+\begin{equation}
+P_s = E_b \cdot R_b
+\end{equation}
+where:
+\begin{itemize}
+\item $P_s$ = average signal power (Watts)
+\item $E_b$ = energy per bit (Joules)
+\item $R_b$ = bit rate (bits/second)
+\end{itemize}
+
+\subsection{Channel Signal-to-Noise Ratio}
+
+The channel SNR is defined as:
+\begin{equation}
+\mathrm{SNR} = \frac{P_s}{P_n} = \frac{P_s}{N_0 \cdot B}
+\end{equation}
+where:
+\begin{itemize}
+\item $P_s$ = signal power (Watts)
+\item $P_n$ = noise power (Watts)
+\item $N_0$ = noise power spectral density (W/Hz)
+\item $B$ = signal bandwidth (Hz)
+\end{itemize}
+
+The relationship between SNR and $E_b/N_0$ is:
+\begin{equation}
+\frac{E_b}{N_0} = \mathrm{SNR} \cdot \frac{B}{R_b}
+\end{equation}
+
+\section{Transmitter Components}
+
+\subsection{FEC Encoder}
+
+\textbf{Purpose:} Add redundancy to enable error correction at the receiver.
+
+\textbf{Input:} $k$ information bits\\
+\textbf{Output:} $n$ coded bits ($n > k$)
+
+The code rate is defined as:
+\begin{equation}
+r_c = \frac{k}{n}
+\end{equation}
+where:
+\begin{itemize}
+\item $k$ = number of information bits
+\item $n$ = number of coded bits (including parity)
+\item $r_c$ = code rate (e.g., 1/2, 2/3, 3/4)
+\end{itemize}
+
+\begin{calloutbox}{Common FEC Codes}
+\begin{itemize}
+\item \textbf{LDPC codes:} Excellent performance near Shannon limit
+\item \textbf{Turbo codes:} Good performance, higher complexity
+\item \textbf{Convolutional codes:} Lower complexity, continuous operation
+\item \textbf{Reed-Solomon:} Burst error correction
+\end{itemize}
+\end{calloutbox}
+
+\subsection{Modulator}
+
+\textbf{Purpose:} Map coded bits to complex symbols in the constellation.
+
+\textbf{Input:} $n$ coded bits\\
+\textbf{Output:} $n/(m)$ complex symbols
+
+The modulator groups $m = \log_2(M)$ bits per symbol:
+\begin{equation}
+N_s = \frac{n}{m}
+\end{equation}
+where:
+\begin{itemize}
+\item $N_s$ = number of symbols
+\item $n$ = number of coded bits
+\item $m = \log_2(M)$ = bits per symbol
+\item $M$ = modulation order (e.g., $M=4$ for QPSK)
+\end{itemize}
+
+Each symbol is represented as:
+\begin{equation}
+s_i = I_i + jQ_i
+\end{equation}
+where $I_i$ and $Q_i$ are the in-phase and quadrature components.
+
+\subsection{Upconverter}
+
+\textbf{Purpose:} Shift baseband signal to RF carrier frequency.
+
+The upconverted signal is:
+\begin{equation}
+s_{\mathrm{RF}}(t) = \mathrm{Re}\{s(t) \cdot e^{j2\pi f_c t}\} = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)
+\end{equation}
+where:
+\begin{itemize}
+\item $s(t) = I(t) + jQ(t)$ = complex baseband signal
+\item $f_c$ = carrier frequency (Hz)
+\item $s_{\mathrm{RF}}(t)$ = real-valued RF signal
+\end{itemize}
+
+\section{Channel Impairments}
+
+\subsection{Link Loss}
+
+The received power is attenuated by free-space path loss:
+\begin{equation}
+P_r = P_t + G_t + G_r - L_{\mathrm{path}}
+\end{equation}
+where (in dB):
+\begin{itemize}
+\item $P_r$ = received power (dBm)
+\item $P_t$ = transmitted power (dBm)
+\item $G_t$ = transmit antenna gain (dBi)
+\item $G_r$ = receive antenna gain (dBi)
+\item $L_{\mathrm{path}}$ = path loss (dB)
+\end{itemize}
+
+Free-space path loss is calculated as:
+\begin{equation}
+L_{\mathrm{FSPL}} = 20\log_{10}(d_{\mathrm{km}}) + 20\log_{10}(f_{\mathrm{MHz}}) + 32.45
+\end{equation}
+
+\begin{warningbox}
+Path loss increases with \textbf{distance squared} and \textbf{frequency squared}. Doubling the distance adds 6 dB loss. Doubling the frequency adds 6 dB loss. These combine to make high-frequency long-range links extremely challenging.
+\end{warningbox}
+
+\subsection{Additive White Gaussian Noise (AWGN)}
+
+Thermal noise is added to the signal:
+\begin{equation}
 r(t) = s(t) + n(t)
-
-where n(t) ~ N(0, ²) is Gaussian noise
-\end{verbatim}
-
-\textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}} determines noise power:
-
-\begin{verbatim}
-SNR = P_signal / P_noise
-
-² = P_signal / SNR
-\end{verbatim}
-
-\textbf{Constellation (RX side with noise)}:
-
-\begin{verbatim}
-      Q
-      
-     |      Noisy cloud
-    |  
-------+------ I
-    |  
-     |  
-\end{verbatim}
-
-See: {[}{[}Additive-White-Gaussian-Noise-(AWGN){]}{]}
-
-\textbf{Chimera Implementation}: \texttt{chimera-core::channel}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{7. Downconverter}\label{downconverter}
-
-\textbf{Input}: RF signal at carrier frequency\\
-\textbf{Output}: Baseband I/Q signal
-
-\textbf{Purpose}: Shift signal back to baseband for processing
-
-\begin{verbatim}
-I(t) = s_RF(t) · cos(2f_c·t) · LPF
-Q(t) = s_RF(t) · sin(2f_c·t) · LPF
-
-where LPF is low-pass filter
-\end{verbatim}
-
-\textbf{Chimera}: Not needed (baseband simulation)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{8. Matched Filter
-(Optional)}\label{matched-filter-optional}
-
-\textbf{Input}: Noisy continuous waveform\\
-\textbf{Output}: Discrete symbol samples
-
-\textbf{Purpose}: Maximize
-{[}{[}Signal-to-Noise-Ratio-(SNR)\textbar SNR{]}{]} before sampling
-
-\textbf{Not simulated in current Chimera}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{9. Demodulator}\label{demodulator}
-
-\textbf{Input}: Noisy symbols (I+jQ)\\
-\textbf{Output}: Soft bit estimates (LLRs)
-
-\textbf{Purpose}: Convert symbols back to bits with reliability info
-
-\textbf{Hard Decision}:
-
-\begin{verbatim}
-Symbol: (0.8, 0.7)  Bits: [1 1]  Confidence: High 
-Symbol: (0.1, -0.05)  Bits: [0 0]  Confidence: Low 
-\end{verbatim}
-
-\textbf{Soft Decision (Log-Likelihood Ratios)}:
-
-\begin{verbatim}
-LLR > 0  Likely a '1' bit
-LLR < 0  Likely a '0' bit
-|LLR| = Confidence level
-
-Example:
-LLR = +5.2  Very confident '1'
-LLR = -0.3  Weak '0' (could be wrong)
-\end{verbatim}
-
-\textbf{Soft values help FEC decoder make better decisions!}
-
-\textbf{Chimera Implementation}: \texttt{chimera-core::demodulator}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{10. FEC Decoder}\label{fec-decoder}
-
-\textbf{Input}: Soft bit estimates\\
-\textbf{Output}: Corrected information bits
-
-\textbf{Purpose}: Fix errors using
-{[}{[}Forward-Error-Correction-(FEC)\textbar redundancy{]}{]}
-
-\textbf{{[}{[}LDPC-Codes\textbar LDPC{]}{]} Decoding}: 1. Initialize
-with soft values (LLRs) 2. Iterate belief propagation (typically 50
-iterations) 3. Check parity constraints 4. Converge to corrected bits
-
-\begin{verbatim}
-Pre-FEC:  [1 0 1 0 1 1 0 0]  2 bit errors
-                       
-LDPC Decoder (50 iterations)
-                
-Post-FEC: [1 0 1 0 1 1 0 0]  Errors corrected! 
-\end{verbatim}
-
-\textbf{Chimera Implementation}: \texttt{chimera-core::decoder}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{11. Data Sink}\label{data-sink}
-
-\textbf{Output}: Recovered information bits
-
-\textbf{Quality Metrics}: - {[}{[}Bit-Error-Rate-(BER)\textbar Pre-FEC
-BER{]}{]}: Errors before decoding -
-{[}{[}Bit-Error-Rate-(BER)\textbar Post-FEC BER{]}{]}: Residual errors
-after decoding - Frame Error Rate: Percentage of completely corrupted
-frames
-
-\begin{verbatim}
-Best case:  Post-FEC BER = 0 (perfect!) 
-Acceptable: Post-FEC BER < 10
-Poor:       Post-FEC BER > 10³
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Signal Chain Metrics
-(Chimera)}\label{signal-chain-metrics-chimera}
-
-\subsubsection{Transmitter Metrics}\label{transmitter-metrics}
-
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  Data rate (bits/second)
-\item
-  Symbol rate (symbols/second)
-\item
-  Code rate
-\item
-  Modulation order (bits/symbol)
+\item $r(t)$ = received signal
+\item $s(t)$ = transmitted signal (attenuated)
+\item $n(t) \sim \mathcal{N}(0, \sigma^2)$ = AWGN
 \end{itemize}
 
-\subsubsection{Channel Metrics}\label{channel-metrics}
-
+Noise power is:
+\begin{equation}
+P_n = N_0 \cdot B = kT_s B
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  {[}{[}Link-Loss-vs-Noise\textbar Link loss{]}{]} (dB)
-\item
-  {[}{[}Signal-to-Noise-Ratio-(SNR)\textbar SNR{]}{]} (dB)
-\item
-  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0)\textbar Es/N0{]}{]} (dB per
-  symbol)
-\item
-  {[}{[}Energy-Ratios-(Es-N0-and-Eb-N0)\textbar Eb/N0{]}{]} (dB per bit)
+\item $k = 1.38 \times 10^{-23}$ J/K = Boltzmann constant
+\item $T_s$ = system noise temperature (Kelvin)
+\item $B$ = signal bandwidth (Hz)
 \end{itemize}
 
-\subsubsection{Receiver Metrics}\label{receiver-metrics}
+\subsection{Multipath Fading}
 
+Multiple signal copies arrive with different delays:
+\begin{equation}
+r(t) = \sum_{i=1}^{L} \alpha_i s(t - \tau_i) + n(t)
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  Pre-FEC errors
-\item
-  Post-FEC errors
-\item
-  {[}{[}Bit-Error-Rate-(BER)\textbar BER{]}{]} (pre and post)
-\item
-  Frame Error Rate
-\item
-  LDPC iterations
-\item
-  Coding gain
+\item $L$ = number of paths
+\item $\alpha_i$ = attenuation of path $i$
+\item $\tau_i$ = delay of path $i$
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Receiver Components}
 
-\subsection{Signal Processing Domains}\label{signal-processing-domains}
+\subsection{Downconverter}
 
-Throughout the signal chain, we work in different domains:
+\textbf{Purpose:} Shift RF signal back to baseband for digital processing.
 
-\subsubsection{Time Domain}\label{time-domain}
-
+The downconverted signal is:
+\begin{equation}
+r_b(t) = r_{\mathrm{RF}}(t) \cdot e^{-j2\pi f_c t}
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  \textbf{What}: Signal amplitude vs time
-\item
-  \textbf{Where}: Pulse shaping, waveform generation
-\item
-  \textbf{Tool}: Oscilloscope
+\item $r_b(t)$ = complex baseband signal
+\item $r_{\mathrm{RF}}(t)$ = received RF signal
+\item $f_c$ = local oscillator frequency (Hz)
 \end{itemize}
 
-\subsubsection{Frequency Domain}\label{frequency-domain}
+After filtering, the baseband components are:
+\begin{equation}
+r_b(t) = I(t) + jQ(t)
+\end{equation}
 
+\subsection{Synchronization and Equalization}
+
+\textbf{Synchronization} corrects timing, frequency, and phase offsets:
 \begin{itemize}
-\tightlist
-\item
-  \textbf{What}: Signal power vs frequency
-\item
-  \textbf{Where}: Spectrum analysis, filtering
-\item
-  \textbf{Tool}: Spectrum analyzer
+\item \textbf{Timing synchronization:} Determine optimal sampling instants
+\item \textbf{Carrier frequency offset:} Correct frequency mismatch $\Delta f$
+\item \textbf{Phase offset:} Align carrier phase $\phi$
 \end{itemize}
 
-\subsubsection{Symbol Domain}\label{symbol-domain}
+The timing error causes SNR degradation:
+\begin{equation}
+\mathrm{SNR}_{\mathrm{loss}} = 20\log_{10}\left(\mathrm{sinc}\left(\frac{\Delta t}{T_s}\right)\right)
+\end{equation}
+where $\Delta t$ is the timing error and $T_s$ is the symbol period.
 
+\textbf{Equalization} compensates for channel distortion caused by multipath. The equalizer applies the inverse channel response:
+\begin{equation}
+H_{\mathrm{eq}}(f) \approx \frac{1}{H_{\mathrm{ch}}(f)}
+\end{equation}
+
+\subsection{Demodulator}
+
+\textbf{Purpose:} Convert received symbols to bit estimates.
+
+\textbf{Input:} Complex symbols $r_i = I_i + jQ_i$\\
+\textbf{Output:} Soft bit estimates (log-likelihood ratios)
+
+For hard decisions, the demodulator selects the nearest constellation point:
+\begin{equation}
+\hat{s}_i = \arg\min_{s \in \mathcal{S}} |r_i - s|
+\end{equation}
+
+For soft decisions (better for FEC decoding), compute log-likelihood ratios:
+\begin{equation}
+\mathrm{LLR}(b_k) = \log\frac{P(b_k = 0 | r)}{P(b_k = 1 | r)}
+\end{equation}
+
+\subsection{FEC Decoder}
+
+\textbf{Purpose:} Detect and correct errors using redundancy.
+
+\textbf{Input:} $n$ soft bits (LLRs)\\
+\textbf{Output:} $k$ decoded information bits
+
+The decoder uses iterative algorithms (e.g., belief propagation for LDPC) to converge on the most likely transmitted codeword. 
+
+The coding gain is the SNR improvement:
+\begin{equation}
+G_c = \left(\frac{E_b}{N_0}\right)_{\mathrm{uncoded}} - \left(\frac{E_b}{N_0}\right)_{\mathrm{coded}}
+\end{equation}
+typically 5--10 dB for modern codes at BER $= 10^{-5}$.
+
+\section{Performance Analysis}
+
+\subsection{End-to-End Performance Metrics}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=4cm, minimum height=0.8cm, font=\sffamily\small, align=center},
+  node distance=1.2cm,
+  font=\small
+]
+\node[block, fill=black!5!white] (ber) {Bit Error Rate (BER)\\$P_b = \frac{\text{\# bit errors}}{\text{total bits}}$};
+\node[block, below of=ber, fill=black!5!white] (fer) {Frame Error Rate (FER)\\$P_f = \frac{\text{\# frame errors}}{\text{total frames}}$};
+\node[block, below of=fer, fill=black!5!white] (throughput) {Throughput\\$T = R_b (1 - P_f)$ (effective bps)};
+\node[block, below of=throughput, fill=black!5!white] (latency) {Latency\\$L = T_{\text{proc}} + T_{\text{prop}}$ (seconds)};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Processing Gain}
+
+When spread spectrum techniques are used, processing gain improves the effective SNR:
+\begin{equation}
+G_p = \frac{R_{\mathrm{chip}}}{R_{\mathrm{symbol}}}
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  \textbf{What}: Discrete constellation points
-\item
-  \textbf{Where}: Modulation, demodulation
-\item
-  \textbf{Tool}: {[}{[}Constellation-Diagrams\textbar Constellation
-  diagram{]}{]}
+\item $G_p$ = processing gain (ratio)
+\item $R_{\mathrm{chip}}$ = chip rate (chips/second)
+\item $R_{\mathrm{symbol}}$ = symbol rate (symbols/second)
 \end{itemize}
 
-\subsubsection{Bit Domain}\label{bit-domain}
+In dB:
+\begin{equation}
+G_{p,\mathrm{dB}} = 10\log_{10}(G_p)
+\end{equation}
 
+The effective SNR at the demodulator is:
+\begin{equation}
+\mathrm{SNR}_{\mathrm{eff}} = \mathrm{SNR}_{\mathrm{channel}} + G_{p,\mathrm{dB}}
+\end{equation}
+
+\begin{calloutbox}{Example: Processing Gain Calculation}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{What}: Binary data (0s and 1s)
-\item
-  \textbf{Where}: FEC encoding/decoding
-\item
-  \textbf{Tool}: Error counting
+\item Symbol rate: $R_s = 3{,}200$ symbols/sec
+\item Chip rate: $R_c = 32{,}000$ chips/sec
+\item Spread factor: $G_p = 32{,}000 / 3{,}200 = 10$
+\item Processing gain: $G_{p,\mathrm{dB}} = 10\log_{10}(10) = 10$ dB
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+If channel SNR = $-25$ dB, effective SNR = $-25 + 10 = -15$ dB.
+\end{calloutbox}
 
-\subsection{Processing Gain}\label{processing-gain}
+\section{Worked Example: WiFi Link Budget}
 
-Chimera applies \textbf{processing gain} to improve SNR:
+\textbf{Scenario:} Calculate the link budget for an indoor WiFi system.
 
-\begin{verbatim}
-Processing Gain = 10 · log(Spread Factor)
+\subsection*{Given Parameters}
 
-Example:
-- Symbol rate: 3200 symbols/sec
-- Chip rate: 32000 chips/sec
-- Spread factor: 10
-- Processing gain: 10 dB
+\begin{tabular}{@{}ll@{}}
+TX power & $P_t = 20$ dBm (100 mW) \\
+TX antenna gain & $G_t = 2$ dBi \\
+Frequency & $f = 2.4$ GHz \\
+Distance & $d = 10$ m \\
+RX antenna gain & $G_r = 2$ dBi \\
+System noise temp & $T_s = 290$ K (room temperature) \\
+Bandwidth & $B = 20$ MHz \\
+Modulation & QPSK ($m = 2$) \\
+FEC code rate & $r_c = 1/2$ \\
+Required BER & $10^{-5}$ \\
+\end{tabular}
 
-Effective SNR at demodulator:
-SNR_eff = SNR_channel + Processing_gain
-        = -25 dB + 10 dB
-        = -15 dB
-\end{verbatim}
+\subsection*{Step 1: Calculate Free-Space Path Loss}
 
-This allows operation at much lower channel SNR!
+\begin{equation}
+L_{\mathrm{FSPL}} = 20\log_{10}(0.01) + 20\log_{10}(2400) + 32.45
+\end{equation}
+\begin{equation}
+L_{\mathrm{FSPL}} = -40 + 67.6 + 32.45 = 60.05\ \text{dB}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection*{Step 2: Calculate Received Signal Power}
 
-\subsection{End-to-End Example}\label{end-to-end-example}
+\begin{equation}
+P_r = P_t + G_t + G_r - L_{\mathrm{FSPL}}
+\end{equation}
+\begin{equation}
+P_r = 20 + 2 + 2 - 60.05 = -36.05\ \text{dBm}
+\end{equation}
 
-\begin{verbatim}
-Input: "Hi" = 01001000 01101001 (16 bits)
+\subsection*{Step 3: Calculate Noise Power}
 
-1. FEC Encoder (rate 1/2):
-    32 bits (16 data + 16 parity)
+\begin{equation}
+P_n = 10\log_{10}(kT_s B) = 10\log_{10}(1.38 \times 10^{-23} \times 290 \times 20 \times 10^6)
+\end{equation}
+\begin{equation}
+P_n = 10\log_{10}(8.004 \times 10^{-14}) = -101\ \text{dBm}
+\end{equation}
 
-2. Modulator (QPSK, 2 bits/symbol):
-    16 symbols
+\subsection*{Step 4: Calculate SNR}
 
-3. Channel (SNR = -18 dB):
-    Noisy symbols with errors
+\begin{equation}
+\mathrm{SNR} = P_r - P_n = -36.05 - (-101) = 64.95\ \text{dB}
+\end{equation}
 
-4. Demodulator:
-    32 soft bits (LLRs)
-    Pre-FEC errors: 4 bits
+\subsection*{Step 5: Calculate $E_b/N_0$}
 
-5. LDPC Decoder (50 iterations):
-    16 corrected bits
-    Post-FEC errors: 0 bits 
+Data rate: $R_b = B \cdot m \cdot r_c = 20 \times 10^6 \times 2 \times 0.5 = 20$ Mbps
 
-Output: "Hi" = 01001000 01101001 (recovered!)
-\end{verbatim}
+\begin{equation}
+\frac{E_b}{N_0} = \mathrm{SNR} + 10\log_{10}\left(\frac{B}{R_b}\right)
+\end{equation}
+\begin{equation}
+\frac{E_b}{N_0} = 64.95 + 10\log_{10}\left(\frac{20 \times 10^6}{20 \times 10^6}\right) = 64.95 + 0 = 64.95\ \text{dB}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection*{Step 6: Link Margin}
 
-\subsection{Visualization in Chimera}\label{visualization-in-chimera}
+For QPSK at BER = $10^{-5}$, required $E_b/N_0 \approx 9.6$ dB.
 
-The web interface shows:
+\begin{equation}
+\text{Link margin} = 64.95 - 9.6 = 55.35\ \text{dB}
+\end{equation}
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{TX Constellation}: Clean transmitted symbols
-\item
-  \textbf{RX Constellation}: Noisy received symbols (scatter plot)
-\item
-  \textbf{Error Metrics}: Pre/Post-FEC BER, frame errors
-\item
-  \textbf{SNR Controls}: Adjust noise level in real-time
-\item
-  \textbf{Processing Gain}: Shows effective SNR improvement
-\end{enumerate}
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
+\textbf{Result: Link closes with 55 dB margin}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+This enormous margin accommodates:
+\begin{itemize}
+\item Multipath fading ($\sim$10--20 dB)
+\item Interference from other WiFi networks ($\sim$10 dB)
+\item Body/hand blockage ($\sim$5--10 dB)
+\item Implementation losses ($\sim$3 dB)
+\end{itemize}
 
-\subsection{See Also}\label{see-also}
+\textbf{Conclusion:} Link is highly reliable for 20 Mbps QPSK transmission at 10 meters indoors.
+\end{calloutbox}
+
+\section{Applications}
+
+\subsection{Satellite Communications}
+
+Signal chains in satellite systems must overcome:
+\begin{itemize}
+\item \textbf{Extreme path loss:} 180--210 dB for GEO satellites
+\item \textbf{Doppler shifts:} $\pm$ 5--50 kHz depending on orbit
+\item \textbf{Power constraints:} Limited solar panel capacity
+\item \textbf{Latency:} 250 ms round-trip for GEO
+\end{itemize}
+
+Typical parameters:
+\begin{itemize}
+\item TX power: 50--200 W
+\item Antenna gain: 40--60 dBi (large dishes)
+\item FEC: Concatenated codes (rate 1/2 to 3/4)
+\item Modulation: QPSK to 16-APSK
+\end{itemize}
+
+\subsection{Cellular Networks (5G)}
+
+Modern cellular systems employ:
+\begin{itemize}
+\item \textbf{OFDM:} Orthogonal frequency division multiplexing
+\item \textbf{MIMO:} Multiple antennas for spatial multiplexing
+\item \textbf{Adaptive modulation:} QPSK to 256-QAM based on channel quality
+\item \textbf{Advanced FEC:} LDPC and Polar codes
+\end{itemize}
+
+Typical performance:
+\begin{itemize}
+\item Peak data rate: 1--10 Gbps
+\item Latency: $<$ 10 ms
+\item Cell radius: 100 m (urban) to 10 km (rural)
+\end{itemize}
+
+\subsection{Deep-Space Communications}
+
+The most challenging signal chain scenarios:
+\begin{itemize}
+\item \textbf{Voyager 1 (24 billion km):} Received power $\sim$ $-196$ dBm
+\item \textbf{Mars rovers:} 300--400 million km, $\sim$ $-150$ dBm
+\item \textbf{Link budget:} Every 0.1 dB matters
+\end{itemize}
+
+Techniques:
+\begin{itemize}
+\item Extremely large antennas: 70 m DSN dishes (74 dBi gain)
+\item Powerful FEC: Turbo codes + Reed-Solomon
+\item Low data rates: 10 bps to 100 kbps
+\item Long integration times: Minutes per frame
+\end{itemize}
+
+\section{Summary}
+
+\begin{center}
+\begin{tabular}{@{}lp{9cm}@{}}
+\toprule
+\textbf{Component} & \textbf{Purpose} \\
+\midrule
+FEC Encoder & Add redundancy (rate $r_c$) for error correction \\
+Modulator & Map bits to symbols ($m$ bits/symbol) \\
+Upconverter & Shift baseband to RF carrier ($f_c$) \\
+TX Antenna & Radiate EM wave (gain $G_t$) \\
+Channel & Attenuate, add noise, multipath fading \\
+RX Antenna & Capture EM wave (gain $G_r$) \\
+Downconverter & Shift RF to baseband for DSP \\
+Sync \& Equalize & Correct timing, frequency, phase, multipath \\
+Demodulator & Convert symbols to soft bits (LLRs) \\
+FEC Decoder & Detect and correct errors using redundancy \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{keyconcept}
+The signal chain is a \textbf{lossy} process. Every stage introduces impairments:
+\begin{itemize}
+\item \textbf{Channel:} Path loss, noise, fading
+\item \textbf{Imperfect synchronization:} SNR loss
+\item \textbf{Implementation losses:} Non-ideal components ($\sim$3 dB typical)
+\end{itemize}
+
+The art of system design is \textbf{link budget engineering}: ensuring sufficient margin while minimizing cost, power, and complexity.
+\end{keyconcept}
+
+\section{Further Reading}
 
 \begin{itemize}
-\tightlist
-\item
-  {[}{[}Forward-Error-Correction-(FEC){]}{]} - Encoding/decoding details
-\item
-  {[}{[}QPSK-Modulation{]}{]} - Modulation scheme
-\item
-  {[}{[}Constellation-Diagrams{]}{]} - Symbol visualization
-\item
-  {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]} - Channel quality metric
-\item
-  {[}{[}Link-Loss-vs-Noise{]}{]} - Channel impairments
-\item
-  {[}{[}Bit-Error-Rate-(BER){]}{]} - Performance metric
-\item
-  {[}{[}Reading the Constellation{]}{]} - Practical guide to
-  interpreting plots
+\item \textbf{Chapter 2:} Forward Error Correction (FEC)---LDPC codes and decoding
+\item \textbf{Chapter 4:} QPSK Modulation---most common modulation scheme
+\item \textbf{Chapter 5:} IQ Representation---complex baseband signals
+\item \textbf{Chapter 8:} Signal-to-Noise Ratio (SNR)---fundamental performance metric
+\item \textbf{Chapter 10:} Constellation Diagrams---visualizing symbol quality
+\item \textbf{Chapter 12:} Carrier Recovery---phase and frequency synchronization
+\item \textbf{Chapter 14:} Link Budget Analysis---system design methodology
+\item \textbf{Chapter 18:} Channel Models---Rayleigh and Rician fading
+\item \textbf{Chapter 22:} Bit Error Rate (BER)---performance measurement
 \end{itemize}
