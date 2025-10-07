@@ -691,146 +691,123 @@ P_r = \frac{10^6 \times (31{,}600)^2 \times (0.1)^2 \times 10^{-6}}{(4\pi)^3 (10
 \textbf{Result:} Echo power is $-98$~dBm, weak but detectable with a sensitive receiver (typical noise floor $\sim$$-110$~dBm).
 \end{calloutbox}
 
-\subsection{Electromagnetic Interference
-(EMI)}\label{electromagnetic-interference-emi}
+\subsection{Electromagnetic Interference (EMI)}
 
-\textbf{Field strength limits} for conducted and radiated emissions:
+Field strength limits for conducted and radiated emissions are critical for electromagnetic compatibility (EMC).
 
-\subsubsection{FCC Part 15 Radiated Emission
-Limits}\label{fcc-part-15-radiated-emission-limits}
+\subsubsection{FCC Part 15 Radiated Emission Limits}
 
-\textbf{Class B} (residential):
+Class B limits (residential use):
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Frequency & E-field @ 3 m (\$\textbackslash mu\$V/m) &
-dB\$\textbackslash mu\$V/m \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-30-88 MHz & 100 & 40 \\
-88-216 MHz & 150 & 43.5 \\
-216-960 MHz & 200 & 46 \\
-Above 960 MHz & 500 & 54 \\
-\end{longtable}
-}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Frequency & E-field @ 3~m ($\mu$V/m) & dB$\mu$V/m \\
+\midrule
+30--88~MHz & 100 & 40 \\
+88--216~MHz & 150 & 43.5 \\
+216--960~MHz & 200 & 46 \\
+Above 960~MHz & 500 & 54 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Measurement}: Use calibrated antenna + spectrum analyzer
+\textbf{Measurement method:} Use calibrated antenna + spectrum analyzer at specified distance.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{Example: Spurious Emission Check}
+\textbf{Given:} Digital device @ 300~MHz, measured 180~$\mu$V/m @ 3~m
 
-\subsubsection{Example: Spurious Emission
-Check}\label{example-spurious-emission-check}
+\textbf{Limit @ 300~MHz:} 200~$\mu$V/m
 
-\textbf{Digital device @ 300 MHz, measured 180 \$\textbackslash mu\$V/m
-@ 3 m}
+\textbf{Result:} $180 < 200$ $\rightarrow$ \textbf{Pass}
 
-\textbf{Limit @ 300 MHz}: 200 \$\textbackslash mu\$V/m
+\textbf{Margin:} $20\log_{10}(200/180) = 0.9$~dB (minimal margin)
+\end{calloutbox}
 
-\textbf{Result}: 180 \textless{} 200 \$\textbackslash rightarrow\$
-\textbf{Pass}
+\subsection{Field Strength in Different Media}
 
-\textbf{Margin}: \(20\log_{10}(200/180) = 0.9\) dB
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Field Strength in Different
-Media}\label{field-strength-in-different-media}
-
-\textbf{In dielectric medium} (not free space):
-
-\[
+In a dielectric medium (not free space), the wave impedance changes:
+\begin{equation}
 \eta = \sqrt{\frac{\mu}{\epsilon}} = \frac{\eta_0}{\sqrt{\epsilon_r}}
-\]
+\label{eq:impedance-dielectric}
+\end{equation}
+where:
+\begin{itemize}
+\item $\epsilon_r$ = relative permittivity
+\item $\eta_0 = 377~\Omega$ (free space)
+\end{itemize}
 
-Where: - \(\epsilon_r\) = Relative permittivity - \(\eta_0 = 377\)
-\$\textbackslash Omega\$ (free space)
-
-\textbf{Example}: Water (\(\epsilon_r \approx 80\) @ low freq)
-
+\textbf{Example:} Water ($\epsilon_r \approx 80$ @ low frequencies)
 \[
-\eta_{\text{water}} = \frac{377}{\sqrt{80}} \approx 42\ \Omega
+\eta_{\text{water}} = \frac{377}{\sqrt{80}} \approx 42~\Omega
 \]
 
-\textbf{Power density for same E-field}:
-
+Power density for same E-field:
 \[
 S = \frac{E^2}{42}
 \]
 
-\textbf{9\$\textbackslash times\$ higher power density} than free space
-(for same E-field)
+This is \textbf{9$\times$ higher power density} than free space for the same E-field strength.
 
-\textbf{Implication}: Underwater communications have different impedance
-matching requirements
+\textbf{Implication:} Underwater communications require different impedance matching than air/vacuum systems.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Antenna Gain and Directivity}
 
-\subsection{Antenna Gain and
-Directivity}\label{antenna-gain-and-directivity}
-
-\textbf{Gain} increases power density in preferred direction:
-
-\[
+Antenna gain increases power density in a preferred direction:
+\begin{equation}
 G = \eta_{\text{ant}} \cdot D
-\]
+\label{eq:antenna-gain}
+\end{equation}
+where:
+\begin{itemize}
+\item $\eta_{\text{ant}}$ = antenna efficiency (0--1)
+\item $D$ = directivity (ratio of max to average power density)
+\end{itemize}
 
-Where: - \(\eta_{\text{ant}}\) = Antenna efficiency (0-1) - D =
-Directivity (ratio of max to average power density)
-
-\textbf{Directivity}:
-
-\[
+Directivity is defined as:
+\begin{equation}
 D = \frac{S_{\text{max}}}{S_{\text{avg}}} = \frac{4\pi S_{\text{max}} r^2}{P_t}
-\]
+\label{eq:directivity}
+\end{equation}
 
-\textbf{Example}: Isotropic antenna - \(D = 1\) (0 dBi) - Power
-uniformly distributed
+\textbf{Common antennas:}
+\begin{itemize}
+\item \textbf{Isotropic antenna:} $D = 1$ (0~dBi) --- power uniformly distributed
+\item \textbf{Half-wave dipole:} $D = 1.64$ (2.15~dBi) --- power concentrated in broadside direction
+\item \textbf{Parabolic dish:} For diameter $D_{\text{ant}}$ and wavelength $\lambda$:
+\end{itemize}
+\begin{equation}
+G \approx \eta_{\text{ant}} \left(\frac{\pi D_{\text{ant}}}{\lambda}\right)^2
+\label{eq:parabolic-gain}
+\end{equation}
+with $\eta_{\text{ant}} \approx 0.5$--0.7 (typical).
 
-\textbf{Half-wave dipole}: - \(D = 1.64\) (2.15 dBi) - Power
-concentrated in broadside direction
+\subsection{Skin Depth and Field Penetration}
 
-\textbf{Parabolic dish} (diameter D, wavelength
-\$\textbackslash lambda\$):
-
-\[
-G \approx \eta_{\text{ant}} \left(\frac{\pi D}{\lambda}\right)^2
-\]
-
-With \(\eta_{\text{ant}} \approx 0.5-0.7\) (typical)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Skin Depth and Field
-Penetration}\label{skin-depth-and-field-penetration}
-
-\textbf{In conductors}, field decays exponentially:
-
-\[
+In conductors, the electric field decays exponentially:
+\begin{equation}
 E(z) = E_0 e^{-z/\delta}
-\]
+\label{eq:skin-effect}
+\end{equation}
 
-\textbf{Skin depth} \(\delta\):
-
-\[
+The \textbf{skin depth} $\delta$ is:
+\begin{equation}
 \delta = \sqrt{\frac{2}{\omega \mu \sigma}} = \sqrt{\frac{1}{\pi f \mu \sigma}}
-\]
+\label{eq:skin-depth}
+\end{equation}
+where:
+\begin{itemize}
+\item $\sigma$ = conductivity (S/m)
+\item $f$ = frequency (Hz)
+\item For copper: $\sigma = 5.8 \times 10^7$~S/m
+\end{itemize}
 
-Where: - \(\sigma\) = Conductivity (S/m) - Copper:
-\(\sigma = 5.8 \times 10^7\) S/m
-
-\textbf{Example}: Copper @ 1 GHz
-
+\textbf{Example:} Copper @ 1~GHz
 \[
-\delta = \sqrt{\frac{1}{\pi \times 10^9 \times 4\pi \times 10^{-7} \times 5.8 \times 10^7}} \approx 2.1\ \mu\text{m}
+\delta = \sqrt{\frac{1}{\pi \times 10^9 \times 4\pi \times 10^{-7} \times 5.8 \times 10^7}} \approx 2.1~\mu\text{m}
 \]
 
-\textbf{Implication}: At microwave frequencies, current flows in thin
-surface layer (\textless{} 2 \$\textbackslash mu\$m)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Implication:} At microwave frequencies, current flows in a very thin surface layer ($<$ 2~$\mu$m), which increases conductor resistance and loss.
 
 \section{Summary}
 
