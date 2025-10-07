@@ -1,0 +1,98 @@
+# Chimera Book - Jekyll Configuration
+title: "Chimera: Digital Signal Processing"
+subtitle: "Past, Present & Future"
+description: >-
+  A comprehensive guide to digital signal processing, modulation techniques,
+  and communication systems. From fundamental concepts to advanced applications.
+
+baseurl: "/chimera-book"
+url: "https://arressjay.github.io"
+
+# Author information
+author:
+  name: "The Chimera Project"
+  email: "contact@chimera-project.org"
+
+# Book metadata
+isbn: "978-1-7643427-0-4"
+format: "7″ × 10″ Technical Textbook"
+
+# License
+license:
+  name: "CC0 1.0 Universal"
+  url: "https://creativecommons.org/publicdomain/zero/1.0/"# Build settings
+markdown: kramdown
+theme: null
+permalink: pretty
+
+# Directories
+source: .
+destination: _site
+layouts_dir: _layouts
+includes_dir: _includes
+
+# Collections
+collections:
+  chapters:
+    output: true
+    permalink: /chapters/:name/
+  frontmatter:
+    output: true
+    permalink: /:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "chapters"
+    values:
+      layout: "chapter"
+  - scope:
+      path: ""
+      type: "frontmatter"
+    values:
+      layout: "frontmatter"
+
+# Exclude from processing
+exclude:
+  - _latex/
+  - _build/
+  - node_modules/
+  - vendor/
+  - vendor/bundle/
+  - .bundle/
+  - .git/
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - "*.sh"
+  - "*.tex"
+  - "*.aux"
+  - "*.log"
+  - "*.pdf"
+  - README.md
+  - LICENSE
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Markdown settings
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
+
+# SEO
+twitter:
+  username: impermanent_io
+  card: summary_large_image
+
+social:
+  name: The Chimera Project
+  links:
+    - https://github.com/ArrEssJay/chimera

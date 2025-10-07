@@ -1,0 +1,329 @@
+/* Chimera Book Styles */
+
+:root {
+    /* Colors - inspired by 7"×10" book design */
+    --primary-text: #2c3e50;
+    --secondary-text: #7f8c8d;
+    --link-color: #3498db;
+    --link-hover: #2980b9;
+    --background: #ffffff;
+    --code-background: #f8f9fa;
+    --border-color: #e1e4e8;
+    --header-bg: #34495e;
+    --header-text: #ecf0f1;
+    
+    /* Typography */
+    --font-body: "Georgia", "Times New Roman", serif;
+    --font-heading: "Helvetica Neue", "Arial", sans-serif;
+    --font-mono: "Consolas", "Monaco", monospace;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* Layout */
+    --content-width: 50rem;
+    --line-height: 1.6;
+}
+
+/* Reset & Base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: var(--line-height);
+    color: var(--primary-text);
+    background: var(--background);
+}
+
+.wrapper {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* Header */
+.site-header {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: var(--spacing-md) 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.site-title {
+    color: var(--header-text);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.site-title:hover {
+    color: #fff;
+}
+
+.site-title .subtitle {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: normal;
+    opacity: 0.9;
+}
+
+.site-nav {
+    float: right;
+    margin-top: 0.5rem;
+}
+
+.site-nav a {
+    color: var(--header-text);
+    text-decoration: none;
+    margin-left: var(--spacing-md);
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+}
+
+.site-nav a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Main Content */
+.page-content {
+    padding: var(--spacing-xl) 0;
+    min-height: calc(100vh - 200px);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-text);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin: var(--spacing-md) 0;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Lists */
+ul, ol {
+    margin: var(--spacing-md) 0;
+    padding-left: var(--spacing-lg);
+}
+
+li {
+    margin: var(--spacing-sm) 0;
+}
+
+/* Code */
+code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--code-background);
+    padding: 0.125rem 0.25rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+}
+
+pre {
+    background: var(--code-background);
+    padding: var(--spacing-md);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    overflow-x: auto;
+    line-height: 1.4;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    border: none;
+    font-size: 0.875rem;
+}
+
+/* Chapter Layout */
+.chapter-header {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.chapter-number {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--secondary-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--spacing-xs);
+}
+
+.chapter-title {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.chapter-content {
+    margin: var(--spacing-lg) 0;
+}
+
+/* Chapter Navigation */
+.chapter-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.chapter-nav a {
+    font-family: var(--font-heading);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.chapter-nav a:hover {
+    background: var(--code-background);
+    text-decoration: none;
+    border-color: var(--link-color);
+}
+
+.prev-chapter {
+    text-align: left;
+}
+
+.next-chapter {
+    text-align: right;
+    margin-left: auto;
+}
+
+/* Frontmatter */
+.frontmatter {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+.frontmatter .content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Footer */
+.site-footer {
+    background: var(--code-background);
+    border-top: 1px solid var(--border-color);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--secondary-text);
+}
+
+.license {
+    margin-bottom: var(--spacing-md);
+}
+
+.license img {
+    vertical-align: middle;
+}
+
+.footer-text a {
+    color: var(--secondary-text);
+}
+
+.footer-text a:hover {
+    color: var(--primary-text);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-md) 0;
+}
+
+th, td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    font-weight: 600;
+    background: var(--code-background);
+}
+
+/* Blockquotes */
+blockquote {
+    margin: var(--spacing-md) 0;
+    padding-left: var(--spacing-md);
+    border-left: 4px solid var(--border-color);
+    color: var(--secondary-text);
+    font-style: italic;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: var(--spacing-md) auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .site-nav {
+        float: none;
+        margin-top: var(--spacing-md);
+    }
+    
+    .site-nav a {
+        display: inline-block;
+        margin: var(--spacing-xs);
+    }
+    
+    .chapter-title {
+        font-size: 2rem;
+    }
+    
+    .chapter-nav {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .next-chapter {
+        margin-left: 0;
+    }
+}
