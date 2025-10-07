@@ -873,25 +873,23 @@ Interleaver Size & BER @ 0.7~dB & Error Floor & Assessment \\
 
 \section{Worked Example: Satellite Downlink}
 
-\subsection*{Problem}
+\textbf{Problem:} Design and analyze a turbo-coded satellite downlink from a low Earth orbit (LEO) satellite to a ground station. Verify that the link achieves the required bit error rate of $10^{-6}$ and calculate the link margin.
 
-Design and analyze a turbo-coded satellite downlink from a low Earth orbit (LEO) satellite to a ground station. Verify that the link achieves the required bit error rate of $10^{-6}$ and calculate the link margin.
+\textbf{Given:}
 
-\subsection*{Given Parameters}
+\begin{itemize}
+\item Transmit power: $P_t = 5$~W = 37~dBm
+\item Transmit antenna gain: $G_t = 10$~dBi (patch array)
+\item Orbit altitude: $h = 600$~km (LEO)
+\item Frequency: $f = 2.2$~GHz (S-band)
+\item Receive antenna gain: $G_r = 30$~dBi (3~m dish)
+\item System noise temperature: $T_s = 100$~K
+\item Data rate: $R_b = 1$~Mbps
+\item Turbo code rate: $R_c = 1/2$
+\item Required BER: $10^{-6}$
+\end{itemize}
 
-\begin{tabular}{@{}ll@{}}
-Transmit power & $P_t = 5$~W = 37~dBm \\
-Transmit antenna gain & $G_t = 10$~dBi (patch array) \\
-Orbit altitude & $h = 600$~km (LEO) \\
-Frequency & $f = 2.2$~GHz (S-band) \\
-Receive antenna gain & $G_r = 30$~dBi (3~m dish) \\
-System noise temperature & $T_s = 100$~K \\
-Data rate & $R_b = 1$~Mbps \\
-Turbo code rate & $R_c = 1/2$ \\
-Required BER & $10^{-6}$ \\
-\end{tabular}
-
-\subsection*{Solution}
+\textbf{Solution:}
 
 \textbf{Step 1: Free-Space Path Loss}
 
