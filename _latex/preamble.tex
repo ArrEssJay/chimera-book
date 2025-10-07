@@ -3,6 +3,11 @@
 % ==============================================================================
 
 % --- Font and Encoding ---
+\usepackage{ebgaramond} % EB Garamond - elegant open-source old-style serif for body and headings
+\usepackage[cmintegrals,cmbraces]{newtxmath} % Math support matching EB Garamond
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+% --- Font and Encoding ---
 \usepackage{fontspec} % For OTF font support (requires XeLaTeX or LuaLaTeX)
 
 % Minion Pro with explicit font file names from fc-list
@@ -28,6 +33,7 @@
 \newunicodechar{✓}{\checkmark}
 \newunicodechar{✗}{\texttimes}
 \newunicodechar{°}{\ifmmode^\circ\else\textdegree\fi}  % Degree symbol (math/text mode)
+\newunicodechar{⚠}{\textbf{!}}  % Warning symbol
 
 
 % --- Page Layout ---
@@ -203,16 +209,16 @@
 % Myriad Pro for headings - clean, modern humanist sans-serif
 % Minion Pro for body - refined old-style serif elegance
 \titleformat{\chapter}[display]
-  {\sffamily\bfseries\Large}
-  {\chaptertitlename\ \thechapter}{15pt}{\fontsize{24}{28}\selectfont}
-\titlespacing*{\chapter}{0pt}{-40pt}{30pt}
+  {\sffamily\bfseries\huge}
+  {\chaptertitlename\ \thechapter}{20pt}{\fontsize{36}{42}\selectfont}
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
 
 \titleformat{\section}
-  {\sffamily\bfseries\large}
+  {\sffamily\bfseries\Large}
   {\thesection}{1em}{}
 
 \titleformat{\subsection}
-  {\sffamily\bfseries\normalsize}
+  {\sffamily\bfseries\large}
   {\thesubsection}{1em}{}
 
 \titleformat{\subsubsection}
@@ -231,6 +237,3 @@
 
 % --- CC License Icon ---
 \usepackage{ccicons}
-
-% --- ISBN Barcode ---
-\usepackage{ean13isbn}
