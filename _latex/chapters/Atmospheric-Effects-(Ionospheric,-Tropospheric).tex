@@ -1,102 +1,126 @@
-\section{Atmospheric Effects: Ionospheric \&
-Tropospheric}\label{atmospheric-effects-ionospheric-tropospheric}
+\chapter{Atmospheric Effects: Ionospheric and Tropospheric}
+\label{ch:atmospheric}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{RF Propagation} \textbar{}
-{[}{[}Propagation-Modes-(Ground-Wave,-Sky-Wave,-Line-of-Sight){]}{]}
-\textbar{} {[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}
+\begin{nontechnical}
+\textbf{Think of the atmosphere as a giant, invisible lens and filter for radio waves.}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Imagine you're trying to shine a flashlight across a room:
+\begin{itemize}
+\item \textbf{On a clear day}, the light travels straight and far
+\item \textbf{Through fog}, the light gets scattered and dimmer
+\item \textbf{With a curved mirror}, the light bends and can reach around corners
+\end{itemize}
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+Radio waves behave similarly through Earth's atmosphere:
 
-\textbf{Think of the atmosphere as a giant, invisible lens and filter
-for radio waves.}
+\textbf{The Ionosphere} (60--400~km altitude) is like a \textbf{curved mirror in space}:
+\begin{itemize}
+\item Acts like a reflector for AM radio and shortwave (HF) signals
+\item This is why you can hear distant AM radio stations at night---the signal bounces off this invisible mirror!
+\item Created by the sun's energy ionizing air molecules
+\end{itemize}
 
-Imagine you\textquotesingle re trying to shine a flashlight across a
-room: - \textbf{On a clear day}, the light travels straight and far -
-\textbf{Through fog}, the light gets scattered and dimmer - \textbf{With
-a curved mirror}, the light bends and can reach around corners
+\textbf{The Troposphere} (0--15~km altitude, where weather happens) is like \textbf{fog or water vapor}:
+\begin{itemize}
+\item Bends and absorbs radio waves, especially at high frequencies
+\item This is why 5G signals don't travel as far as 4G---they're more easily absorbed by air humidity
+\item Weather (rain, fog) makes this worse
+\end{itemize}
 
-Radio waves behave similarly through Earth\textquotesingle s atmosphere:
+\textbf{Real-world impact:}
+\begin{itemize}
+\item \textbf{GPS errors:} The ionosphere slows down GPS signals, causing 10--30~m errors (your phone corrects for this)
+\item \textbf{Satellite TV in rain:} Signal drops out because raindrops absorb the microwaves
+\item \textbf{Shortwave radio at night:} Can receive stations from across the globe because the ionosphere reflects signals back to Earth
+\end{itemize}
 
+\textbf{The key insight:} Different radio frequencies interact with the atmosphere in completely different ways---AM radio bounces off the ionosphere, while 5G gets absorbed by humidity.
+\end{nontechnical}
+
+\section{Overview}
+
+\textbf{Earth's atmosphere profoundly affects RF propagation} through two primary mechanisms operating at different altitudes:
+
+\begin{keyconcept}
+The atmosphere creates \textbf{frequency-dependent propagation effects}:
+\begin{itemize}
+\item \textbf{Below $\sim$30~MHz:} Ionosphere dominates (refraction, enables HF sky-wave propagation)
+\item \textbf{Above $\sim$1~GHz:} Troposphere dominates (absorption, rain fade, ducting)
+\end{itemize}
+\end{keyconcept}
+
+\textbf{Two distinct atmospheric regions:}
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{The Ionosphere} (60-400 km up) is like a \textbf{curved mirror
-  in space}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Acts like a reflector for AM radio and shortwave (HF) signals
-  \item
-    This is why you can hear distant AM radio stations at
-    night-\/-\/-the signal bounces off this invisible mirror!
-  \item
-    Created by the sun\textquotesingle s energy ionizing air molecules
-  \end{itemize}
-\item
-  \textbf{The Troposphere} (0-15 km up, where weather happens) is like
-  \textbf{fog or water vapor}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Bends and absorbs radio waves, especially at high frequencies
-  \item
-    This is why 5G signals don\textquotesingle t travel as far as
-    4G-\/-\/-they\textquotesingle re more easily absorbed by air
-    humidity
-  \item
-    Weather (rain, fog) makes this worse
-  \end{itemize}
+\item \textbf{Ionosphere} (60--1000~km altitude): Ionized plasma layer that refracts and reflects HF signals
+\item \textbf{Troposphere} (0--15~km altitude): Lower atmosphere where weather occurs, absorbs and refracts VHF+ signals
 \end{enumerate}
 
-\textbf{Real-world impact}: - \textbf{GPS errors}: The ionosphere slows
-down GPS signals, causing \textasciitilde10-30 meter errors (your phone
-corrects for this) - \textbf{Satellite TV in rain}: Signal drops out
-because raindrops absorb the microwaves - \textbf{Shortwave radio at
-night}: Can receive stations from across the globe because the
-ionosphere reflects signals back to Earth
+Understanding these effects is critical for:
+\begin{itemize}
+\item HF communications system design (leveraging ionospheric propagation)
+\item Satellite link budgets (compensating for atmospheric losses)
+\item GPS accuracy (correcting ionospheric delay)
+\item Frequency band selection (avoiding absorption peaks)
+\end{itemize}
 
-\textbf{The key insight}: Different radio frequencies interact with the
-atmosphere in completely different ways-\/-\/-AM radio bounces off the
-ionosphere, while 5G gets absorbed by humidity.
+\section{Ionospheric Effects}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Structure of the Ionosphere}
 
-\subsection{Overview}\label{overview}
+\textbf{The ionosphere consists of layers of ionized gas} (free electrons and ions) created by solar ultraviolet and X-ray radiation ionizing atmospheric molecules.
 
-\textbf{Earth\textquotesingle s atmosphere profoundly affects RF
-propagation} through:
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% Altitude axis
+\draw[->] (0,0) -- (0,9) node[above] {\sffamily\small Altitude (km)};
+\draw[->] (0,0) -- (11,0) node[right] {\sffamily\small Electron Density $N_e$ (m$^{-3}$)};
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Ionosphere} (60-1000 km altitude): \textbf{Refracts HF},
-  enables sky wave
-\item
-  \textbf{Troposphere} (0-15 km altitude): \textbf{Absorbs/refracts
-  VHF+}, causes ducting
-\end{enumerate}
+% Grid
+\draw[very thin,gray!20] (0,0) grid[step=1] (10,8.5);
 
-\textbf{Key distinction}: - \textbf{Below \textasciitilde30 MHz}:
-Ionosphere dominates (enables long-distance HF comms) - \textbf{Above
-\textasciitilde1 GHz}: Troposphere/weather dominates (absorption, rain
-fade)
+% Altitude labels
+\node[left,font=\scriptsize] at (0,1) {60};
+\node[left,font=\scriptsize] at (0,2) {90};
+\node[left,font=\scriptsize] at (0,3) {150};
+\node[left,font=\scriptsize] at (0,5) {250};
+\node[left,font=\scriptsize] at (0,7.5) {400};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Electron density labels
+\node[below,font=\scriptsize] at (2,0) {10$^8$};
+\node[below,font=\scriptsize] at (4,0) {10$^9$};
+\node[below,font=\scriptsize] at (6,0) {10$^{10}$};
+\node[below,font=\scriptsize] at (8,0) {10$^{11}$};
+\node[below,font=\scriptsize] at (10,0) {10$^{12}$};
 
-\subsection{Ionospheric Effects}\label{ionospheric-effects}
+% D-layer (60-90 km)
+\fill[black!15] (0,1) rectangle (3,2);
+\node[right,font=\sffamily\small\bfseries] at (3.2,1.5) {D-layer};
+\node[right,font=\scriptsize] at (3.2,1.2) {Absorbs MF/HF};
 
-\subsubsection{Structure of the
-Ionosphere}\label{structure-of-the-ionosphere}
+% E-layer (90-150 km)
+\fill[black!25] (0,2) rectangle (5,3);
+\node[right,font=\sffamily\small\bfseries] at (5.2,2.5) {E-layer};
+\node[right,font=\scriptsize] at (5.2,2.2) {Reflects MF, low HF};
 
-\textbf{Ionosphere = layers of ionized gas} (free electrons and ions
-created by solar UV/X-rays)
+% F1-layer (150-250 km) - daytime only
+\fill[black!35] (0,3) rectangle (6,5);
+\node[right,font=\sffamily\small\bfseries] at (6.2,4) {F1-layer};
+\node[right,font=\scriptsize] at (6.2,3.7) {Daytime only};
+
+% F2-layer (250-400 km)
+\fill[black!45] (0,5) rectangle (9,7.5);
+\node[right,font=\sffamily\small\bfseries] at (9.2,6.5) {F2-layer};
+\node[right,font=\scriptsize] at (9.2,6.2) {Primary HF reflector};
+\node[right,font=\scriptsize] at (9.2,5.9) {Highest density};
+
+% Day/Night profile curves (schematic)
+\draw[thick,blue] (2,1.5) .. controls (4,2) and (5,3) .. (6,4) .. controls (7,5) and (8,6.5) .. (8.5,6.8);
+\node[blue,font=\scriptsize] at (9,7) {Day};
+
+\draw[thick,red,dashed] (1.5,1.2) .. controls (3,1.8) and (4,2.5) .. (5,3.5) .. controls (6,4.5) and (6.5,5.5) .. (6.8,6);
+\node[red,font=\scriptsize] at (7.5,6.5) {Night};
+\end{tikzpicture}
+\end{center}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
@@ -137,789 +161,735 @@ e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{3\}
 \end{longtable}
 }
 
-\textbf{Formation}: Solar UV photons ionize
-O\textbackslash textsubscript\{2\}, N\textbackslash textsubscript\{2\}
-\$\textbackslash rightarrow\$
-O\textbackslash textsubscript\{2\}\textbackslash textsuperscript\{+\},
-N\textbackslash textsubscript\{2\}\textbackslash textsuperscript\{+\},
-e\textbackslash textsuperscript\{-\}
+\textbf{Formation mechanism:} Solar UV photons ionize atmospheric molecules:
+\begin{equation}
+\mathrm{O}_2 + h\nu \rightarrow \mathrm{O}_2^+ + e^-
+\end{equation}
+where:
+\begin{itemize}
+\item $h\nu$ = solar UV/X-ray photon energy
+\item $\mathrm{O}_2^+$ = ionized oxygen molecule
+\item $e^-$ = free electron
+\end{itemize}
 
-\textbf{Recombination}: Electrons recombine with ions (faster at lower
-altitudes due to higher density)
+\textbf{Recombination:} Electrons recombine with ions (faster at lower altitudes due to higher atmospheric density). This creates the altitude-dependent layer structure.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Plasma Refractive Index}
 
-\subsubsection{Refractive Index}\label{refractive-index}
-
-\textbf{Plasma refractive index}:
-
-\[
+The refractive index of ionized plasma determines how radio waves propagate:
+\begin{equation}
 n = \sqrt{1 - \frac{f_p^2}{f^2}}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $n$ = refractive index (dimensionless)
+\item $f_p$ = plasma frequency (Hz)
+\item $f$ = signal frequency (Hz)
+\end{itemize}
 
-Where: - \(f_p\) = Plasma frequency = \(9\sqrt{N_e}\) Hz (\(N_e\) in
-electrons/m\textbackslash textsuperscript\{3\}) - \(f\) = Signal
-frequency
+The \textbf{plasma frequency} depends on electron density:
+\begin{equation}
+f_p = 9\sqrt{N_e} \quad \text{(Hz)}
+\end{equation}
+where:
+\begin{itemize}
+\item $N_e$ = electron density (electrons/m$^3$)
+\item Factor of 9 comes from fundamental constants: $\sqrt{e^2/(4\pi^2 \epsilon_0 m_e)}$
+\end{itemize}
 
-\textbf{Key behaviors}:
+\textbf{Physical interpretation:} Three regimes exist:
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{\(f \ll f_p\)}: Wave is \textbf{reflected} (HF sky wave)
-\item
-  \textbf{\(f \approx f_p\)}: Wave \textbf{refracts} (bends back to
-  Earth)
-\item
-  \textbf{\(f \gg f_p\)}: Wave \textbf{penetrates} (VHF+ passes through
-  ionosphere)
+\item \textbf{$f \ll f_p$:} Wave is \textbf{reflected} (refractive index becomes imaginary)---enables HF sky-wave propagation
+\item \textbf{$f \approx f_p$:} Wave \textbf{refracts strongly} (bends back toward Earth)---critical frequency behavior
+\item \textbf{$f \gg f_p$:} Wave \textbf{penetrates} ionosphere (refractive index $\approx$ 1)---VHF and above pass through
 \end{enumerate}
 
-\textbf{Typical \(f_p\) values}: - D-layer: \textasciitilde1 MHz -
-E-layer: \textasciitilde3-5 MHz - F2-layer (day): \textasciitilde10-15
-MHz - F2-layer (night): \textasciitilde5-10 MHz
+\begin{calloutbox}{Typical Plasma Frequency Values}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Layer & Plasma Frequency \\
+\midrule
+D-layer & $\sim$1~MHz \\
+E-layer & $\sim$3--5~MHz \\
+F2-layer (daytime) & $\sim$10--15~MHz \\
+F2-layer (nighttime) & $\sim$5--10~MHz \\
+\bottomrule
+\end{tabular}
+\end{calloutbox}
 
-\textbf{Implication}: \textbf{VHF and above (\textgreater30 MHz) always
-penetrate} ionosphere \$\textbackslash rightarrow\$ No skywave, only
-LOS.
+\begin{keyconcept}
+\textbf{VHF and above ($>$30~MHz) always penetrate} the ionosphere because $f \gg f_p$ for all layers. This means:
+\begin{itemize}
+\item No sky-wave propagation above 30~MHz
+\item Only line-of-sight (LOS) propagation possible
+\item Satellite communications unaffected by ionospheric reflection
+\end{itemize}
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Critical Frequency and Maximum Usable Frequency}
 
-\subsubsection{Critical Frequency \& Skip
-Distance}\label{critical-frequency-skip-distance}
-
-\textbf{Critical frequency} \(f_c\): Maximum frequency reflected at
-\textbf{vertical incidence}
-
-\[
+The \textbf{critical frequency} $f_c$ is the maximum frequency that can be reflected at vertical incidence:
+\begin{equation}
 f_c = 9\sqrt{N_{e,\text{max}}}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $f_c$ = critical frequency (Hz)
+\item $N_{e,\text{max}}$ = peak electron density in layer (electrons/m$^3$)
+\end{itemize}
 
-\textbf{At oblique angles}, higher frequencies can be reflected:
-
-\[
+At oblique angles, higher frequencies can be reflected. The \textbf{Maximum Usable Frequency (MUF)} is:
+\begin{equation}
 \text{MUF} = \frac{f_c}{\sin(\theta)}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item MUF = maximum usable frequency (Hz)
+\item $\theta$ = elevation angle from horizontal
+\end{itemize}
 
-Where \(\theta\) = elevation angle
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Earth surface
+\draw[thick,black] (0,0) -- (12,0);
+\fill[black!10] (0,-0.3) rectangle (12,0);
+\node[below,font=\scriptsize] at (6,-0.3) {Earth's Surface};
 
-\textbf{Example}: If \(f_c = 10\) MHz, and wave launched at
-10\$\^{}\textbackslash circ\$ elevation:
+% Ionosphere layer
+\draw[thick,blue] (0,4.5) .. controls (4,4.8) and (8,4.8) .. (12,4.5);
+\draw[thick,blue] (0,5.5) .. controls (4,5.8) and (8,5.8) .. (12,5.5);
+\fill[blue!15,opacity=0.5] (0,4.5) .. controls (4,4.8) and (8,4.8) .. (12,4.5)
+  -- (12,5.5) .. controls (8,5.8) and (4,5.8) .. (0,5.5) -- cycle;
+\node[blue,font=\sffamily\small] at (10,5) {F2-layer};
 
-\[
-\text{MUF} = \frac{10}{\sin(10°)} = \frac{10}{0.174} = 57\ \text{MHz}
-\]
+% Transmitter
+\fill[red] (2,0) circle (2pt);
+\node[below,red,font=\scriptsize] at (2,0) {TX};
 
-(But practical MUF limited by absorption and other factors to
-\textasciitilde30 MHz)
+% Ray 1: Low frequency (reflected, vertical)
+\draw[->,thick,red] (2,0) -- (2,3.8);
+\draw[->,thick,red,dashed] (2,4.8) -- (2,1.2);
+\node[right,red,font=\scriptsize] at (2,2.5) {$f < f_c$};
+\node[right,red,font=\scriptsize] at (2,1.8) {(reflected)};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Ray 2: Critical frequency (grazes ionosphere)
+\draw[->,thick,orange] (3.5,0) -- (5.5,4.5);
+\draw[orange,dashed] (5.5,4.5) arc (135:45:2.83);
+\node[above,orange,font=\scriptsize] at (6,4) {$f = f_c$};
 
-\subsubsection{Absorption}\label{absorption}
+% Ray 3: Higher frequency (penetrates)
+\draw[->,thick,green!50!black] (5,0) -- (9,4.8);
+\draw[->,thick,green!50!black] (9,5.2) -- (11,7);
+\node[right,green!50!black,font=\scriptsize] at (9.5,6) {$f > \text{MUF}$};
+\node[right,green!50!black,font=\scriptsize] at (9.5,5.5) {(penetrates)};
 
-\textbf{D-layer absorption} (collisional damping):
+% Ray 4: Oblique MUF (just reflected)
+\draw[->,thick,blue] (1,0) -- (5,4.3);
+\draw[->,thick,blue,dashed] (5,4.9) -- (8.5,0.5);
+\node[below,blue,font=\scriptsize] at (4.5,2) {MUF at angle $\theta$};
 
-\[
-A = K \cdot \frac{N_e \cdot \nu}{f^2} \quad (\text{dB})
-\]
+% Angle annotation
+\draw[<->,thin] (1,0) -- (1,1) node[midway,left,font=\scriptsize] {$\theta$};
+\draw (1,0.3) arc (90:70:0.3);
 
-Where: - \(\nu\) = Collision frequency
-(\textasciitilde10\textbackslash textsuperscript\{6\} Hz in D-layer) -
-\(N_e\) = Electron density - \(f\) = Signal frequency
+% Skip distance
+\draw[<->,thick] (2,-0.7) -- (8.5,-0.7) node[midway,below,font=\scriptsize] {Skip Distance};
+\end{tikzpicture}
+\end{center}
 
-\textbf{Key insight}: \textbf{Absorption \$\textbackslash propto\$
-1/f\textbackslash textsuperscript\{2\}} \$\textbackslash rightarrow\$
-Lower frequencies absorbed more
+\textbf{Example calculation:}
 
-\textbf{Impact}: - \textbf{Daytime}: D-layer absorbs 1-5 MHz (MF/LF
-severe absorption) - \textbf{Nighttime}: D-layer disappears
-\$\textbackslash rightarrow\$ Lower frequencies propagate (AM broadcast
-skywave)
+If $f_c = 10$~MHz and a wave is launched at $\theta = 10°$ elevation:
+\begin{equation}
+\text{MUF} = \frac{10\text{~MHz}}{\sin(10°)} = \frac{10}{0.174} = 57.5\text{~MHz}
+\end{equation}
 
-\textbf{Typical absorption} (HF, daytime): - 3 MHz: 10-20 dB - 7 MHz:
-3-6 dB - 14 MHz: 1-2 dB - 28 MHz: \textless1 dB
+In practice, MUF is limited to $\sim$30~MHz by D-layer absorption and other factors.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{D-Layer Absorption}
 
-\subsubsection{Faraday Rotation}\label{faraday-rotation}
+The D-layer causes signal attenuation through collisional damping:
+\begin{equation}
+A = K \cdot \frac{N_e \cdot \nu}{f^2} \quad \text{(dB)}
+\end{equation}
+where:
+\begin{itemize}
+\item $A$ = absorption (dB)
+\item $K$ = constant depending on path geometry
+\item $N_e$ = electron density (electrons/m$^3$)
+\item $\nu$ = collision frequency ($\sim$10$^6$~Hz in D-layer)
+\item $f$ = signal frequency (Hz)
+\end{itemize}
 
-\textbf{Ionosphere is magnetized} (Earth\textquotesingle s magnetic
-field):
+\begin{keyconcept}
+\textbf{Absorption is inversely proportional to frequency squared:} $A \propto 1/f^2$
 
-\textbf{Effect}: \textbf{Polarization rotates} as wave propagates
-through ionosphere
+This means lower frequencies experience much more absorption. A 3~MHz signal absorbs \textbf{100 times more} than a 30~MHz signal in the same ionospheric path.
+\end{keyconcept}
 
-\[
-\Omega = \frac{2.36 \times 10^4}{f^2} \int N_e B_\parallel \, dl \quad (\text{radians})
-\]
+\textbf{Day/Night variation:}
+\begin{itemize}
+\item \textbf{Daytime:} D-layer strongly absorbs MF/LF (1--5~MHz), severe attenuation
+\item \textbf{Nighttime:} D-layer disappears $\rightarrow$ lower frequencies propagate via sky-wave (enables AM broadcast reception)
+\end{itemize}
 
-Where: - \(f\) = Frequency (Hz) - \(N_e\) = Electron density
-(e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{3\})
-- \(B_\parallel\) = Magnetic field component along path (Tesla) -
-Integral over path length
+\begin{calloutbox}{Typical HF Absorption (Daytime)}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Frequency & Typical Absorption \\
+\midrule
+3~MHz & 10--20~dB \\
+7~MHz & 3--6~dB \\
+14~MHz & 1--2~dB \\
+28~MHz & $<$1~dB \\
+\bottomrule
+\end{tabular}
+\end{calloutbox}
 
-\textbf{Impact}: - \textbf{Linear polarized signals} experience rotation
-(can cause \textgreater20 dB loss if RX antenna wrong orientation) -
-\textbf{Circular polarization immune} (GPS, satellite comms use
-RHCP/LHCP to mitigate)
+\subsection{Faraday Rotation}
 
-\textbf{Example}: GPS L1 (1575 MHz) experiences
-\textasciitilde10-50\$\^{}\textbackslash circ\$ rotation (varies with
-solar activity, latitude)
+The ionosphere is embedded in Earth's magnetic field, causing \textbf{polarization rotation} as electromagnetic waves propagate:
+\begin{equation}
+\Omega = \frac{2.36 \times 10^4}{f^2} \int N_e B_\parallel \, dl \quad \text{(radians)}
+\end{equation}
+where:
+\begin{itemize}
+\item $\Omega$ = total polarization rotation angle (radians)
+\item $f$ = signal frequency (Hz)
+\item $N_e$ = electron density along path (electrons/m$^3$)
+\item $B_\parallel$ = magnetic field component parallel to propagation (Tesla)
+\item $dl$ = differential path element (m)
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Physical mechanism:} Left and right circularly polarized components travel at different velocities in magnetized plasma, causing the linear polarization vector to rotate.
 
-\subsubsection{Ionospheric
-Scintillation}\label{ionospheric-scintillation}
+\begin{warningbox}
+\textbf{Linear polarized signals experience severe losses} if the receive antenna is cross-polarized to the rotated signal. Faraday rotation can cause $>$20~dB loss in worst-case misalignment.
 
-\textbf{Irregularities in ionosphere} (plasma turbulence) cause:
+\textbf{Mitigation:} Use circular polarization (RHCP/LHCP), which is immune to Faraday rotation. This is why GPS and satellite communications systems use circular polarization.
+\end{warningbox}
+
+\textbf{Example:} GPS L1 (1575~MHz) experiences $\sim$10--50$°$ rotation depending on:
+\begin{itemize}
+\item Solar activity (higher during solar maximum)
+\item Latitude (stronger near magnetic poles)
+\item Time of day (peak at local noon)
+\end{itemize}
+
+
+
+\subsection{Ionospheric Delay}
+
+Radio signals travel \textbf{slower through ionized plasma} than through free space, causing group delay:
+\begin{equation}
+\Delta t = \frac{40.3}{c f^2} \int N_e \, dl \quad \text{(seconds)}
+\end{equation}
+where:
+\begin{itemize}
+\item $\Delta t$ = group delay (seconds)
+\item $c$ = speed of light (3$\times$10$^8$~m/s)
+\item $f$ = signal frequency (Hz)
+\item $N_e$ = electron density (electrons/m$^3$)
+\item $dl$ = path element (m)
+\end{itemize}
+
+This delay is quantified using \textbf{Total Electron Content (TEC)}:
+\begin{equation}
+\text{TEC} = \int N_e \, dl \quad \text{(electrons/m$^2$)}
+\end{equation}
+
+The ranging error caused by ionospheric delay is:
+\begin{equation}
+\Delta R = c \cdot \Delta t = \frac{40.3 \cdot \text{TEC}}{f^2} \quad \text{(meters)}
+\end{equation}
+where:
+\begin{itemize}
+\item $\Delta R$ = ranging error (m)
+\item TEC = total electron content (electrons/m$^2$)
+\item $f$ = frequency (Hz)
+\end{itemize}
+
+\begin{calloutbox}{Typical TEC Values}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Condition & TEC (electrons/m$^2$) \\
+\midrule
+Nighttime & 10$^{16}$ \\
+Daytime (mid-latitude) & 10$^{17}$ \\
+Solar maximum (equatorial) & 10$^{18}$ \\
+\bottomrule
+\end{tabular}
+\end{calloutbox}
+
+\textbf{GPS error example:} At L1 frequency (1575~MHz) with TEC $= 5 \times 10^{17}$:
+\begin{equation}
+\Delta R = \frac{40.3 \times 5 \times 10^{17}}{(1.575 \times 10^9)^2} \approx 8.1\text{~m}
+\end{equation}
+
+\textbf{Dual-frequency correction:} Measure delay at two frequencies (L1 and L5) to compute TEC and remove error:
+\begin{equation}
+\text{TEC} = \frac{f_1^2 f_2^2}{40.3(f_1^2 - f_2^2)}(\Delta t_1 - \Delta t_2)
+\end{equation}
+
+\section{Tropospheric Effects}
+
+The \textbf{troposphere} is the lower atmosphere (0--15~km altitude) where weather occurs. It affects RF propagation through three primary mechanisms:
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Amplitude scintillation}: Rapid fading (seconds to minutes)
-\item
-  \textbf{Phase scintillation}: Phase jitter (disrupts carrier tracking)
+\item \textbf{Refraction:} Bending of rays due to density gradients
+\item \textbf{Absorption:} Molecular resonances (O$_2$, H$_2$O) attenuate signals
+\item \textbf{Scattering:} Rain, fog, and turbulence scatter energy
 \end{enumerate}
 
-\textbf{Causes}: - Equatorial plasma bubbles (post-sunset) - Auroral
-activity (high latitudes) - Solar flares (sudden ionospheric
-disturbances)
+\subsection{Atmospheric Refraction}
 
-\textbf{Impact}: - GPS errors (meter-level positioning errors) -
-Satellite comms outages (L-band, 1-2 GHz) - Most severe near magnetic
-equator and auroral zones
-
-\textbf{Mitigation}: Dual-frequency GPS (L1 + L5) corrects ionospheric
-delay
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Solar Activity Effects}\label{solar-activity-effects}
-
-\paragraph{Solar Flares}\label{solar-flares}
-
-\textbf{X-ray burst ionizes D-layer}:
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Sudden Ionospheric Disturbance (SID)}: HF absorption increases
-  10-30 dB instantly
-\item
-  Duration: Minutes to hours
-\item
-  Daytime only (needs sunlight)
-\end{itemize}
-
-\textbf{Result}: HF blackout on sunlit side of Earth
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Geomagnetic Storms}\label{geomagnetic-storms}
-
-\textbf{Coronal mass ejection (CME) hits Earth}:
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Auroral electrojet}: Intense ionization at high latitudes
-\item
-  \textbf{Ionospheric storm}: TEC (total electron content) increases
-  globally
-\item
-  Duration: Days
-\end{itemize}
-
-\textbf{Result}: - HF propagation unpredictable - GPS errors increase
-(10-100m) - Satellite operations affected
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{11-Year Solar Cycle}\label{year-solar-cycle}
-
-\textbf{Solar maximum}: - Higher ionization (F2 peak density
-2-3\$\textbackslash times\$ higher) - MUF increases (30+ MHz usable for
-long-distance) - Better long-distance HF propagation
-
-\textbf{Solar minimum}: - Lower MUF (\textasciitilde15-20 MHz) - 10m
-band (28 MHz) often ``dead'' - More reliance on lower HF bands (7, 14
-MHz)
-
-\textbf{Current cycle}: Solar Cycle 25 (2019-2030), peak
-\textasciitilde2025
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Ionospheric Delay}\label{ionospheric-delay}
-
-\textbf{Group delay} (signal travels slower than speed of light):
-
-\[
-\Delta t = \frac{40.3}{c f^2} \int N_e \, dl \quad (\text{seconds})
-\]
-
-\textbf{Impact}: - GPS ranging errors (10-100m if uncorrected) -
-Two-frequency correction: Measure delay at L1 and L5, compute
-ionospheric TEC
-
-\textbf{TEC (Total Electron Content)}:
-
-\[
-\text{TEC} = \int N_e \, dl \quad (\text{electrons/m}^2)
-\]
-
-\textbf{Typical values}: - Nighttime:
-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{6\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{2\}
-- Daytime:
-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{7\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{2\}
-- Solar max:
-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{8\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{2\}
-(equatorial)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Tropospheric Effects}\label{tropospheric-effects}
-
-\textbf{Troposphere} = Lower atmosphere (0-15 km altitude), where
-weather occurs
-
-\textbf{Key effects}: 1. \textbf{Refraction} (bending, ducting) 2.
-\textbf{Absorption} (oxygen, water vapor) 3. \textbf{Scattering} (rain,
-turbulence)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Atmospheric Refraction}\label{atmospheric-refraction}
-
-\textbf{Refractive index} depends on temperature, pressure, humidity:
-
-\[
+The tropospheric refractive index varies with altitude due to changes in temperature, pressure, and humidity:
+\begin{equation}
 n = 1 + N \times 10^{-6}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $n$ = refractive index (dimensionless)
+\item $N$ = refractivity (dimensionless)
+\end{itemize}
 
-Where \textbf{refractivity} \(N\):
-
-\[
+The \textbf{refractivity} is given by:
+\begin{equation}
 N = 77.6 \frac{P}{T} + 3.73 \times 10^5 \frac{e}{T^2}
-\]
-
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  \(P\) = Pressure (hPa)
-\item
-  \(T\) = Temperature (K)
-\item
-  \(e\) = Water vapor partial pressure (hPa)
+\item $P$ = atmospheric pressure (hPa or mbar)
+\item $T$ = temperature (K)
+\item $e$ = water vapor partial pressure (hPa)
 \end{itemize}
 
-\textbf{Typical values}: - Sea level: \(N \approx 300-400\)
-\$\textbackslash rightarrow\$ \(n \approx 1.0003\) - 10 km altitude:
-\(N \approx 100\) \$\textbackslash rightarrow\$ \(n \approx 1.0001\)
+The first term represents the \textbf{dry atmosphere} contribution, while the second term accounts for \textbf{water vapor} (more significant in humid conditions).
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}{Typical Refractivity Values}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Location & Refractivity $N$ \\
+\midrule
+Sea level (standard) & 300--400 $\rightarrow$ $n \approx 1.0003$ \\
+10~km altitude & $\sim$100 $\rightarrow$ $n \approx 1.0001$ \\
+Dry desert & 250--300 \\
+Humid tropics & 350--400 \\
+\bottomrule
+\end{tabular}
+\end{calloutbox}
 
-\subsubsection{Ray Bending}\label{ray-bending}
+\subsection{Ray Bending and Extended Horizon}
 
-\textbf{Gradient in \(N\) bends rays downward}:
+The vertical gradient in refractivity causes radio rays to bend downward, following Earth's curvature more closely than optical rays.
 
-\textbf{Standard atmosphere}: \(dN/dh \approx -40\) N-units/km
+\textbf{Standard atmosphere gradient:}
+\begin{equation}
+\frac{dN}{dh} \approx -40 \text{~N-units/km}
+\end{equation}
+where $h$ is altitude (km).
 
-\textbf{Effect}: \textbf{Radio horizon extended} beyond geometric
-horizon
-
-\textbf{4/3 Earth radius model}:
-
-\[
+This bending \textbf{extends the radio horizon} beyond the geometric horizon. The effect is modeled using the \textbf{4/3 Earth radius model}:
+\begin{equation}
 d_{\text{radio}} = 1.33 \times d_{\text{geometric}}
-\]
-
-\textbf{Example}: Geometric horizon for 30m antenna = 20 km
-\$\textbackslash rightarrow\$ Radio horizon = 26 km
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Tropospheric Ducting}\label{tropospheric-ducting}
-
-\textbf{Temperature inversion} (warm air over cool) creates refractive
-layer:
-
-\textbf{Super-refraction}: Wave bends more than normal
-\$\textbackslash rightarrow\$ Trapped in duct
-
-\textbf{Effect}: \textbf{VHF/UHF signals propagate 500-2000 km} (far
-beyond normal LOS)
-
-\textbf{Conditions}: - Coastal regions (cool ocean, warm land) -
-High-pressure systems (stable, clear weather) - Nighttime (radiative
-cooling)
-
-\textbf{Impact}: - FM/TV interference from distant stations - Cellular
-network interference (distant cells suddenly visible) - Opportunistic
-long-range VHF communications
-
-\textbf{Duct height}: Typically 10-100m (depends on inversion strength)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Atmospheric Absorption}\label{atmospheric-absorption}
-
-\textbf{Gases absorb RF energy}:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Oxygen (O\textbackslash textsubscript\{2\})}: Peak at
-  \textbf{60 GHz}, secondary at 118 GHz
-\item
-  \textbf{Water vapor (H\textbackslash textsubscript\{2\}O)}: Peaks at
-  \textbf{22.2 GHz, 183 GHz, 325 GHz}, plus continuum absorption
-\end{enumerate}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Oxygen Absorption}\label{oxygen-absorption}
-
-\textbf{60 GHz resonance}:
-
-\[
-\alpha_{O_2} \approx 15\ \text{dB/km} \quad \text{(at sea level, 60 GHz)}
-\]
-
-\textbf{Frequency dependence} (0-100 GHz):
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
-\toprule\noalign{}
-Frequency & Attenuation (dB/km) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-10 GHz & 0.01 \\
-30 GHz & 0.05 \\
-50 GHz & 0.3 \\
-\textbf{60 GHz} & \textbf{15} (peak) \\
-70 GHz & 1 \\
-100 GHz & 0.5 \\
-\end{longtable}
-}
-
-\textbf{Application}: 60 GHz used for \textbf{secure short-range comms}
-(signals don\textquotesingle t propagate far)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Water Vapor Absorption}\label{water-vapor-absorption}
-
-\textbf{22.2 GHz resonance}:
-
-\[
-\alpha_{H_2O} = k \cdot \rho \quad (\text{dB/km})
-\]
-
-Where: - \(\rho\) = Water vapor density
-(g/m\textbackslash textsuperscript\{3\}) - \(k\) = Frequency-dependent
-coefficient
-
-\textbf{Typical humidity} (7.5 g/m\textbackslash textsuperscript\{3\} at
-sea level, temperate):
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}ll@{}}
-\toprule\noalign{}
-Frequency & Attenuation (dB/km) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-10 GHz & 0.01 \\
-\textbf{22.2 GHz} & \textbf{0.2} (peak) \\
-30 GHz & 0.08 \\
-50 GHz & 0.15 \\
-100 GHz & 1.0 \\
-300 GHz & 10+ (THz region) \\
-\end{longtable}
-}
-
-\textbf{Implication}: \textbf{THz communications limited to
-indoor/short-range} (water vapor + rain = severe attenuation)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Atmospheric Windows}\label{atmospheric-windows}
-
-\textbf{Frequency ranges with low absorption} (clear air):
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2162}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2973}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3514}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1351}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Window
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Frequency
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Attenuation
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Use
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{HF} & 3-30 MHz & Negligible & Skywave comms \\
-\textbf{VHF/UHF} & 30-3000 MHz & \textless{} 0.01 dB/km & Broadcast,
-cellular \\
-\textbf{L/S-band} & 1-4 GHz & \textless{} 0.01 dB/km & GPS, mobile
-satellite \\
-\textbf{C-band} & 4-8 GHz & 0.01 dB/km & Satellite (robust) \\
-\textbf{X/Ku-band} & 8-18 GHz & 0.05-0.5 dB/km & Satellite, radar \\
-\textbf{Ka-band} & 26.5-40 GHz & 0.1-0.3 dB/km & High-rate satellite \\
-\textbf{V/W-band} & 40-100 GHz & 0.3-15 dB/km & Point-to-point (watch 60
-GHz!) \\
-\end{longtable}
-}
-
-\textbf{Avoid}: 22 GHz (H\textbackslash textsubscript\{2\}O), 60 GHz
-(O\textbackslash textsubscript\{2\}), 183 GHz
-(H\textbackslash textsubscript\{2\}O)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Tropospheric
-Scintillation}\label{tropospheric-scintillation}
-
-\textbf{Turbulence in troposphere} causes refractive index fluctuations:
-
-\textbf{Effect}: Amplitude/phase scintillation (similar to ionospheric,
-but different mechanism)
-
-\textbf{Severity}: Increases with: - Frequency (\textgreater{} 10 GHz) -
-Low elevation angles (longer path through troposphere) - Daytime
-(convective turbulence)
-
-\textbf{Impact}: - Satellite links \textgreater{} 20 GHz: 1-3 dB
-peak-to-peak fading - Typically slower than rain fade (seconds to
-minutes)
-
-\textbf{Mitigation}: Less critical than rain fade (lower magnitude)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Path Loss Models with Atmospheric
-Effects}\label{path-loss-models-with-atmospheric-effects}
-
-\subsubsection{Satellite Link Budget (with
-Atmosphere)}\label{satellite-link-budget-with-atmosphere}
-
-\textbf{Total path loss}:
-
-\[
-L_{\text{total}} = L_{\text{FS}} + L_{\text{atm}} + L_{\text{rain}} + L_{\text{scint}}
-\]
-
-Where: - \(L_{\text{FS}}\) = Free-space path loss (see
-{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}) - \(L_{\text{atm}}\) =
-Clear-air atmospheric absorption (O\textbackslash textsubscript\{2\},
-H\textbackslash textsubscript\{2\}O) - \(L_{\text{rain}}\) = Rain
-attenuation (see
-{[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}) -
-\(L_{\text{scint}}\) = Tropospheric scintillation (margin for fading)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Example: Ku-Band Satellite (12
-GHz)}\label{example-ku-band-satellite-12-ghz}
-
-\textbf{Path}: GEO (36,000 km), 30\$\^{}\textbackslash circ\$ elevation
-
-\textbf{Free-space loss}:
-
-\[
-L_{\text{FS}} = 20\log(36000 \times 10^3) + 20\log(12 \times 10^9) + 92.45 = 205.5\ \text{dB}
-\]
-
-\textbf{Clear-air atmospheric} (O\textbackslash textsubscript\{2\} +
-H\textbackslash textsubscript\{2\}O, zenith):
-
-\[
-L_{\text{atm}} \approx 0.3\ \text{dB}
-\]
-
-\textbf{At 30\$\^{}\textbackslash circ\$ elevation} (longer slant path):
-
-\[
-L_{\text{atm}} = 0.3 / \sin(30°) = 0.6\ \text{dB}
-\]
-
-\textbf{Rain fade} (99.9\% availability, temperate):
-
-\[
-L_{\text{rain}} = 3\ \text{dB} \quad \text{(see weather effects page)}
-\]
-
-\textbf{Scintillation margin}:
-
-\[
-L_{\text{scint}} = 1\ \text{dB}
-\]
-
-\textbf{Total}:
-
-\[
-L_{\text{total}} = 205.5 + 0.6 + 3 + 1 = 210.1\ \text{dB}
-\]
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\paragraph{Example: Ka-Band (30 GHz)}\label{example-ka-band-30-ghz}
-
-\textbf{Same geometry}:
-
-\[
-L_{\text{FS}} = 20\log(36000 \times 10^3) + 20\log(30 \times 10^9) + 92.45 = 213.5\ \text{dB}
-\]
-
-\textbf{Clear-air atmospheric}:
-
-\[
-L_{\text{atm}} = 0.8 / \sin(30°) = 1.6\ \text{dB}
-\]
-
-\textbf{Rain fade} (99.9\%, temperate):
-
-\[
-L_{\text{rain}} = 13\ \text{dB}
-\]
-
-\textbf{Scintillation}:
-
-\[
-L_{\text{scint}} = 2\ \text{dB}
-\]
-
-\textbf{Total}:
-
-\[
-L_{\text{total}} = 213.5 + 1.6 + 13 + 2 = 230.1\ \text{dB}
-\]
-
-\textbf{Comparison}: Ka-band suffers \textbf{20 dB more loss} than
-Ku-band (mostly rain!)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Practical Considerations}\label{practical-considerations}
-
-\subsubsection{Elevation Angle Matters}\label{elevation-angle-matters}
-
-\textbf{Low elevation} (\textless{} 10\$\^{}\textbackslash circ\$): -
-Longer path through troposphere - More atmospheric absorption - Worse
-rain fade (factor of 2-3\$\textbackslash times\$ vs
-30\$\^{}\textbackslash circ\$ elevation) - Higher scintillation
-
-\textbf{Design guideline}: Avoid elevations \textless{}
-10\$\^{}\textbackslash circ\$ if possible (especially for Ka-band+)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Frequency Selection
-Trade-offs}\label{frequency-selection-trade-offs}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1071}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1071}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2321}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1071}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1964}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Band
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-FSPL
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Atmospheric
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Rain
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Antenna Size
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Bandwidth
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{C (4-8 GHz)} & Low & Very low & \textbf{Very low} & Large &
-Moderate \\
-\textbf{Ku (12-18 GHz)} & Moderate & Low & \textbf{Moderate} & Moderate
-& Good \\
-\textbf{Ka (26.5-40 GHz)} & High & Moderate & \textbf{High} & Small &
-Excellent \\
-\textbf{V (40-75 GHz)} & Very high & High & \textbf{Very high} & Very
-small & Huge \\
-\end{longtable}
-}
-
-\textbf{Tropical regions}: C-band preferred (rain-robust, 99.99\%
-availability achievable) \textbf{Temperate regions}: Ku-band good
-compromise (rain manageable with margins) \textbf{Ka-band}: Requires
-ACM, site diversity, or large margins
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Time-of-Day Effects}\label{time-of-day-effects}
-
-\textbf{Ionosphere} (HF): - \textbf{Daytime}: Higher MUF, D-layer
-absorption - \textbf{Nighttime}: Lower MUF, no D-layer, skywave active
-
-\textbf{Troposphere} (VHF+): - \textbf{Daytime}: More turbulence
-(scintillation), convective clouds (rain) - \textbf{Nighttime}: Calmer,
-potential ducting (temperature inversions)
-
-\textbf{GPS errors}: - \textbf{Noon}: Peak TEC, highest ionospheric
-delay (\textasciitilde10-30m error) - \textbf{Midnight}: Minimum TEC,
-lower error (\textasciitilde5-10m)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Regional Variations}\label{regional-variations}
-
-\subsubsection{Equatorial Regions}\label{equatorial-regions}
-
-\textbf{Ionosphere}: - High TEC
-(10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{8\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{2\})
-- Plasma bubbles (scintillation) - GPS errors
-2-3\$\textbackslash times\$ worse than mid-latitudes
-
-\textbf{Troposphere}: - High humidity (water vapor absorption) - Intense
-rain (42-95 mm/hr)
-
-\textbf{Recommendation}: C-band for satellite, robust GPS receivers
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{High Latitudes}\label{high-latitudes}
-
-\textbf{Ionosphere}: - Auroral activity (scintillation, blackouts) -
-Solar proton events (polar cap absorption)
-
-\textbf{Troposphere}: - Low humidity (less absorption) - Moderate rain
-
-\textbf{Recommendation}: HF comms challenging during storms, but low
-rain fade
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Temperate Mid-Latitudes}\label{temperate-mid-latitudes}
-
-\textbf{Ionosphere}: - Moderate TEC - Stable conditions (less
-scintillation)
-
-\textbf{Troposphere}: - Seasonal variations (summer rain, winter
-ducting) - Moderate humidity
-
-\textbf{Recommendation}: Best overall conditions for
-satellite/terrestrial
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Summary Table: Atmospheric Effects by
-Frequency}\label{summary-table-atmospheric-effects-by-frequency}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2075}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2264}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2453}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3208}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Frequency
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Ionosphere
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Troposphere
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Dominant Effect
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{LF/MF} & Absorbed by D-layer (day), reflected (night) &
-Negligible & \textbf{Ionospheric absorption} \\
-\textbf{HF (3-30 MHz)} & Sky wave (F2 reflection) & Negligible &
-\textbf{Ionospheric refraction} \\
-\textbf{VHF (30-300 MHz)} & Penetrates (no reflection) & Refraction,
-ducting & \textbf{Tropospheric refraction} \\
-\textbf{UHF (300-3000 MHz)} & Faraday rotation, delay & Minimal
-absorption & \textbf{Ionospheric delay (GPS)} \\
-\textbf{L/S (1-4 GHz)} & TEC delay (GPS error) & \textless{} 0.01 dB/km
-& \textbf{Ionospheric scintillation} \\
-\textbf{C (4-8 GHz)} & Negligible & 0.01 dB/km & \textbf{Rain fade
-(minor)} \\
-\textbf{Ku (12-18 GHz)} & Negligible & 0.05 dB/km & \textbf{Rain fade
-(moderate)} \\
-\textbf{Ka (26.5-40 GHz)} & Negligible & 0.1-0.3 dB/km & \textbf{Rain
-fade (severe)} \\
-\textbf{V (40-75 GHz)} & Negligible & 0.3-15 dB/km (60 GHz peak) &
-\textbf{O\textbackslash textsubscript\{2\} absorption, rain} \\
-\textbf{W (75-110 GHz)} & Negligible & 1-5 dB/km &
-\textbf{H\textbackslash textsubscript\{2\}O absorption, rain} \\
-\textbf{THz (\textgreater300 GHz)} & Negligible & 10-100+ dB/km &
-\textbf{H\textbackslash textsubscript\{2\}O absorption (severe)} \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Related Topics}\label{related-topics}
-
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}Propagation-Modes-(Ground-Wave,-Sky-Wave,-Line-of-Sight){]}{]}}:
-  How ionosphere enables HF skywave
-\item
-  \textbf{{[}{[}Weather-Effects-(Rain-Fade,-Fog-Attenuation){]}{]}}:
-  Rain dominates at high frequencies
-\item
-  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Baseline loss before
-  atmospheric effects
-\item
-  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Atmospheric loss
-  reduces SNR
-\item
-  \textbf{{[}{[}Electromagnetic-Spectrum{]}{]}}: Frequency-dependent
-  atmospheric behavior
+\item $d_{\text{radio}}$ = radio line-of-sight distance (km)
+\item $d_{\text{geometric}}$ = geometric horizon distance (km)
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+The geometric horizon distance for an antenna at height $h$ (meters) is:
+\begin{equation}
+d_{\text{geometric}} = 3.57\sqrt{h} \quad \text{(km)}
+\end{equation}
 
-\textbf{Key takeaway}: \textbf{Ionosphere enables HF long-distance}
-(refraction), but \textbf{disrupts GPS/satellite L-band} (delay,
-scintillation). \textbf{Troposphere absorbs high frequencies}
-(O\textbackslash textsubscript\{2\} @ 60 GHz,
-H\textbackslash textsubscript\{2\}O @ 22 GHz), and \textbf{weather
-dominates above 10 GHz} (rain fade). Choose frequency based on
-application and climate.
+Therefore, the radio horizon is:
+\begin{equation}
+d_{\text{radio}} = 4.12\sqrt{h} \quad \text{(km)}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Example:} For a 30~m antenna height:
+\begin{equation}
+d_{\text{radio}} = 4.12\sqrt{30} = 22.6\text{~km}
+\end{equation}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+This is approximately 33\% farther than the geometric horizon (17~km).
+
+\subsection{Tropospheric Ducting}
+
+\textbf{Temperature inversion} (warm air over cool air) creates a refractive layer that traps radio waves, enabling \textbf{super-refraction}.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Earth surface
+\draw[thick] (0,0) -- (14,0);
+\fill[black!20] (0,-0.3) rectangle (14,0);
+\node[below,font=\scriptsize] at (7,-0.3) {Ocean/Land Surface};
+
+% Normal atmosphere (dashed line showing normal propagation)
+\draw[thin,gray,dashed] (1,0.3) -- (13,1.5);
+\node[gray,font=\scriptsize,rotate=5] at (8,1) {Normal refraction};
+
+% Temperature inversion layer
+\draw[thick,red] (0,1.5) -- (14,1.5);
+\draw[thick,red] (0,2.2) -- (14,2.2);
+\fill[red!10,opacity=0.5] (0,1.5) rectangle (14,2.2);
+\node[red,font=\sffamily\small,right] at (12,1.85) {Inversion Layer};
+\node[red,font=\scriptsize,right] at (12,1.6) {Warm air};
+
+% Cool air below
+\node[blue,font=\scriptsize,right] at (12,0.5) {Cool air};
+
+% Transmitter
+\fill[black] (1,0) circle (3pt);
+\node[below,font=\scriptsize] at (1,0) {TX};
+\draw[thick] (1,0) -- (1,0.8);
+
+% Ducted ray (bounces within duct)
+\draw[->,thick,blue,line width=1.2pt] (1,0.8) -- (3,1.4);
+\draw[->,thick,blue,line width=1.2pt] (3,2.1) -- (5,1.4);
+\draw[->,thick,blue,line width=1.2pt] (5,2.1) -- (7,1.4);
+\draw[->,thick,blue,line width=1.2pt] (7,2.1) -- (9,1.4);
+\draw[->,thick,blue,line width=1.2pt] (9,2.1) -- (11,1.4);
+\draw[->,thick,blue,line width=1.2pt] (11,2.1) -- (13,1.7);
+
+% Receiver
+\fill[black] (13,0) circle (3pt);
+\node[below,font=\scriptsize] at (13,0) {RX};
+\draw[thick] (13,0) -- (13,1.7);
+
+% Distance annotation
+\draw[<->,thick] (1,-0.8) -- (13,-0.8) node[midway,below,font=\scriptsize] {500--2000 km (far beyond LOS!)};
+
+% Height annotation
+\draw[<->,thin] (0.3,0) -- (0.3,1.5) node[midway,left,font=\scriptsize,rotate=90] {$\sim$10--100 m};
+
+% Ray path annotation
+\node[blue,font=\scriptsize,align=center] at (7,2.7) {Trapped wave\\(ducted propagation)};
+\draw[->,blue] (7,2.5) -- (7,2.1);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Mechanism:} The refractive index gradient is stronger than normal, causing radio waves to bend sharply downward and become \textbf{trapped in a waveguide} between the surface and inversion layer.
+
+\textbf{Conditions favoring ducting:}
+\begin{itemize}
+\item \textbf{Coastal regions:} Cool ocean air beneath warm land air
+\item \textbf{High-pressure systems:} Stable, clear weather with subsidence
+\item \textbf{Nighttime:} Radiative cooling creates surface inversion
+\end{itemize}
+
+\textbf{Effects:}
+\begin{itemize}
+\item \textbf{VHF/UHF signals propagate 500--2000~km} (far beyond normal line-of-sight)
+\item FM/TV interference from distant stations
+\item Cellular network interference (distant cells suddenly become visible)
+\item Opportunistic long-range VHF communications
+\end{itemize}
+
+\textbf{Duct characteristics:}
+\begin{itemize}
+\item Height: Typically 10--100~m (depends on inversion strength)
+\item Duration: Hours to days
+\item Frequency: Most effective for VHF/UHF (30--3000~MHz)
+\end{itemize}
+
+
+
+\subsection{Atmospheric Windows}
+
+Certain frequency ranges experience low atmospheric absorption, creating \textbf{atmospheric windows} suitable for wireless communications.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+% Axes
+\draw[->] (0,0) -- (12,0) node[right,font=\sffamily\small] {Frequency};
+\draw[->] (0,0) -- (0,6) node[above,font=\sffamily\small] {Attenuation (dB/km)};
+
+% Frequency labels (logarithmic spacing)
+\node[below,font=\scriptsize] at (1,0) {1};
+\node[below,font=\scriptsize] at (3,0) {10};
+\node[below,font=\scriptsize] at (5,0) {30};
+\node[below,font=\scriptsize] at (7,0) {60};
+\node[below,font=\scriptsize] at (9,0) {100};
+\node[below,font=\scriptsize] at (11,0) {300};
+\node[below,font=\scriptsize] at (6,-0.5) {Frequency (GHz)};
+
+% Attenuation labels
+\foreach \y in {1,2,3,4,5}
+  \node[left,font=\scriptsize] at (0,\y) {\y};
+\node[left,font=\scriptsize] at (0,5.5) {15};
+
+% Low absorption regions (windows)
+\fill[green!20] (0.5,0) rectangle (6,0.1);
+\node[above,font=\scriptsize] at (3,0.1) {VHF/UHF/L/S/C windows};
+
+% O2 absorption peak at 60 GHz
+\draw[thick,red,domain=6:8,samples=50] plot (\x, {4.5*exp(-(\x-7)^2/0.3)});
+\node[red,font=\scriptsize,align=center] at (7,5.5) {O$_2$\\60 GHz};
+\draw[->,red] (7,5) -- (7,4.8);
+
+% H2O absorption at 22 GHz
+\draw[thick,blue,domain=4.5:5.5,samples=50] plot (\x, {1.5*exp(-(\x-5)^2/0.15)});
+\node[blue,font=\scriptsize,align=center] at (5,2) {H$_2$O\\22 GHz};
+
+% H2O absorption at 183 GHz (schematic, off-scale)
+\draw[thick,blue,domain=10:11,samples=50] plot (\x, {2*exp(-(\x-10.5)^2/0.1)});
+\node[blue,font=\scriptsize,align=center] at (10.5,2.5) {H$_2$O\\183 GHz};
+
+% General trend line (increasing with frequency)
+\draw[thick,gray,dashed] (0.5,0.05) -- (6,0.2) -- (8.5,0.8) -- (12,2);
+
+% Window annotations
+\draw[<->,thick,green!50!black] (6.2,0.3) -- (6.8,0.3);
+\node[right,green!50!black,font=\scriptsize] at (6.9,0.3) {Ka window};
+
+\draw[<->,thick,green!50!black] (8.2,0.5) -- (9.8,0.5);
+\node[above,green!50!black,font=\scriptsize] at (9,0.5) {V-band window};
+\end{tikzpicture}
+\end{center}
+
+\begin{calloutbox}{Atmospheric Windows and Applications}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Band & Frequency & Typical Use \\
+\midrule
+VHF/UHF & 30--3000~MHz & Broadcast, cellular \\
+L/S-band & 1--4~GHz & GPS, mobile satellite \\
+C-band & 4--8~GHz & Satellite (rain-robust) \\
+X/Ku-band & 8--18~GHz & Satellite, radar \\
+Ka-band & 26.5--40~GHz & High-rate satellite \\
+V/W-band & 40--100~GHz & Point-to-point links \\
+\bottomrule
+\end{tabular}
+\end{calloutbox}
+
+\begin{warningbox}
+\textbf{Avoid these absorption peaks:}
+\begin{itemize}
+\item \textbf{22~GHz:} Water vapor (H$_2$O) resonance
+\item \textbf{60~GHz:} Oxygen (O$_2$) resonance---15~dB/km attenuation!
+\item \textbf{183~GHz:} Strong water vapor resonance
+\end{itemize}
+
+The 60~GHz oxygen peak is exploited for \textbf{secure short-range communications} where signals naturally attenuate over distance.
+\end{warningbox}
+
+
+
+\section{Worked Example: Satellite Link with Atmospheric Effects}
+
+\textbf{Scenario:} Design a Ku-band satellite downlink from geostationary orbit
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Satellite altitude & 36,000~km (GEO) \\
+Frequency & 12~GHz (Ku-band) \\
+Elevation angle & 30$°$ \\
+TX power & $P_t = 50$~W (47~dBm) \\
+TX antenna gain & $G_t = 30$~dBi \\
+RX antenna gain & $G_r = 40$~dBi (1~m dish) \\
+System noise temp & $T_s = 150$~K \\
+Bandwidth & $B = 36$~MHz \\
+Required BER & $10^{-6}$ (QPSK) \\
+Location & Temperate climate \\
+\end{tabular}
+
+\subsection*{Step 1: Free-Space Path Loss}
+
+The free-space path loss is:
+\begin{equation}
+\text{FSPL} = 20\log_{10}(d) + 20\log_{10}(f) + 92.45 \quad \text{(dB)}
+\end{equation}
+where $d$ is in km and $f$ is in MHz.
+
+\begin{equation}
+\text{FSPL} = 20\log_{10}(36{,}000) + 20\log_{10}(12{,}000) + 92.45 = 205.5\text{~dB}
+\end{equation}
+
+\subsection*{Step 2: Clear-Air Atmospheric Absorption}
+
+At 12~GHz, clear-air atmospheric absorption (zenith):
+\begin{equation}
+L_{\text{atm,zenith}} \approx 0.3\text{~dB}
+\end{equation}
+
+For elevation angle $\theta = 30°$, the slant path is longer:
+\begin{equation}
+L_{\text{atm}} = \frac{L_{\text{atm,zenith}}}{\sin(\theta)} = \frac{0.3}{\sin(30°)} = 0.6\text{~dB}
+\end{equation}
+
+\subsection*{Step 3: Rain Fade Margin}
+
+For 99.9\% availability in temperate climate at Ku-band:
+\begin{equation}
+L_{\text{rain}} = 3\text{~dB}
+\end{equation}
+
+\subsection*{Step 4: Scintillation Margin}
+
+Tropospheric scintillation at 12~GHz, 30$°$ elevation:
+\begin{equation}
+L_{\text{scint}} = 1\text{~dB}
+\end{equation}
+
+\subsection*{Step 5: Total Path Loss}
+
+The total path loss including all atmospheric effects:
+\begin{equation}
+L_{\text{total}} = \text{FSPL} + L_{\text{atm}} + L_{\text{rain}} + L_{\text{scint}}
+\end{equation}
+\begin{equation}
+L_{\text{total}} = 205.5 + 0.6 + 3 + 1 = 210.1\text{~dB}
+\end{equation}
+
+\subsection*{Step 6: Received Signal Power}
+
+The received power is:
+\begin{equation}
+P_r = P_t + G_t + G_r - L_{\text{total}}
+\end{equation}
+\begin{equation}
+P_r = 47 + 30 + 40 - 210.1 = -93.1\text{~dBm}
+\end{equation}
+
+\subsection*{Step 7: Noise Power}
+
+The noise power is:
+\begin{equation}
+N = 10\log_{10}(kT_sB) = 10\log_{10}(1.38 \times 10^{-23} \times 150 \times 36 \times 10^6)
+\end{equation}
+\begin{equation}
+N = -113.4\text{~dBm}
+\end{equation}
+
+\subsection*{Step 8: Carrier-to-Noise Ratio}
+
+\begin{equation}
+\frac{C}{N} = P_r - N = -93.1 - (-113.4) = 20.3\text{~dB}
+\end{equation}
+
+\subsection*{Step 9: Required C/N for BER $= 10^{-6}$}
+
+For QPSK with BER $= 10^{-6}$:
+\begin{equation}
+\left(\frac{E_b}{N_0}\right)_{\text{req}} = 10.5\text{~dB}
+\end{equation}
+
+For data rate $R_b = 72$~Mbps (2 bits/symbol, 36~MHz bandwidth):
+\begin{equation}
+\left(\frac{C}{N}\right)_{\text{req}} = \left(\frac{E_b}{N_0}\right)_{\text{req}} + 10\log_{10}\left(\frac{R_b}{B}\right) = 10.5 + 3 = 13.5\text{~dB}
+\end{equation}
+
+\subsection*{Step 10: Link Margin}
+
+\begin{equation}
+\text{Margin} = \frac{C}{N} - \left(\frac{C}{N}\right)_{\text{req}} = 20.3 - 13.5 = 6.8\text{~dB}
+\end{equation}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
+\textbf{Result: Link closes with 6.8~dB margin}
+
+This margin provides headroom for:
+\begin{itemize}
+\item Implementation losses (2--3~dB)
+\item Pointing errors (1--2~dB)
+\item Unexpected fading events
+\item Component aging
+\end{itemize}
+
+\textbf{Conclusion:} The link is viable for reliable 72~Mbps QPSK transmission with atmospheric effects accounted for. The atmospheric contributions total 4.6~dB (0.6 + 3 + 1), representing \textbf{2.2\% of the total path loss}.
+\end{calloutbox}
+
+
+
+\section{Applications}
+
+\subsection{HF Long-Distance Communications}
+
+\textbf{System:} Shortwave radio, amateur radio, military HF
+\begin{itemize}
+\item \textbf{Frequency:} 3--30~MHz
+\item \textbf{Ionospheric layer:} F2-layer reflection
+\item \textbf{Range:} Global (multi-hop propagation)
+\item \textbf{Advantage:} No infrastructure required (over-the-horizon)
+\item \textbf{Challenge:} Variable propagation with solar activity
+\end{itemize}
+
+\subsection{GPS and GNSS Navigation}
+
+\textbf{System:} GPS, Galileo, GLONASS
+\begin{itemize}
+\item \textbf{Frequency:} L-band (1--2~GHz)
+\item \textbf{Effect:} Ionospheric delay causes ranging errors
+\item \textbf{Mitigation:} Dual-frequency correction (L1 + L5)
+\item \textbf{Typical error:} 10--30~m (single frequency), $<$1~m (dual frequency)
+\item \textbf{Key parameter:} Total Electron Content (TEC) monitoring
+\end{itemize}
+
+\subsection{Satellite Communications}
+
+\textbf{System:} Ku/Ka-band satellite links
+\begin{itemize}
+\item \textbf{Frequency:} 12--18~GHz (Ku), 26--40~GHz (Ka)
+\item \textbf{Primary effect:} Rain fade, atmospheric absorption
+\item \textbf{Design consideration:} Link margin for 99.9\% availability
+\item \textbf{Tropospheric loss:} 0.5--1~dB (clear air), 3--13~dB (rain)
+\item \textbf{Trade-off:} Higher frequency = smaller antennas but worse weather sensitivity
+\end{itemize}
+
+\subsection{VHF/UHF Terrestrial Broadcasting}
+
+\textbf{System:} FM radio, TV broadcasting, cellular networks
+\begin{itemize}
+\item \textbf{Frequency:} 30--3000~MHz
+\item \textbf{Normal propagation:} Line-of-sight (extended by refraction)
+\item \textbf{Ducting events:} Occasional long-range propagation (500--2000~km)
+\item \textbf{Impact:} Interference from distant stations during atmospheric anomalies
+\end{itemize}
+
+\section{Summary}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Frequency Band} & \textbf{Dominant Effect} & \textbf{Key Impact} \\
+\midrule
+HF (3--30~MHz) & Ionospheric refraction & Sky-wave propagation \\
+VHF (30--300~MHz) & Tropospheric refraction & Extended horizon, ducting \\
+UHF/L-band (0.3--4~GHz) & Ionospheric delay & GPS ranging errors \\
+C-band (4--8~GHz) & Minimal atmospheric & Rain fade (manageable) \\
+Ku-band (12--18~GHz) & Rain fade & Moderate weather impact \\
+Ka-band (26--40~GHz) & Rain + absorption & Severe weather sensitivity \\
+V-band (40--75~GHz) & O$_2$ absorption & 60~GHz peak (15~dB/km) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Key design principles:}
+\begin{itemize}
+\item \textbf{Below 30~MHz:} Exploit ionospheric refraction for long-distance propagation
+\item \textbf{1--4~GHz:} Account for ionospheric delay in precision ranging (GPS)
+\item \textbf{4--18~GHz:} Balance between antenna size and rain fade (satellite communications)
+\item \textbf{Above 20~GHz:} Significant rain and atmospheric absorption (requires large margins)
+\end{itemize}
+
+\textbf{Atmospheric effects summary:}
+\begin{itemize}
+\item \textbf{Ionosphere enables} HF long-distance propagation but \textbf{disrupts} GPS/GNSS timing
+\item \textbf{Troposphere limits} high-frequency satellite links through absorption and rain fade
+\item \textbf{Frequency selection} must balance propagation characteristics with atmospheric constraints
+\end{itemize}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter~\ref{ch:propagation}:} Propagation Modes---ground wave, sky wave, and line-of-sight mechanisms
+\item \textbf{Chapter~\ref{ch:weather}:} Weather Effects---detailed rain fade and fog attenuation models
+\item \textbf{Chapter~\ref{ch:fspl}:} Free-Space Path Loss---baseline propagation model before atmospheric effects
+\item \textbf{Chapter~\ref{ch:linkbudget}:} Complete Link Budget Analysis---incorporating atmospheric losses into system design
+\item \textbf{Chapter~\ref{ch:spectrum}:} Electromagnetic Spectrum---frequency allocation and atmospheric windows
+\end{itemize}
