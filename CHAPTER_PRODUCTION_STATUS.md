@@ -2,9 +2,10 @@
 
 ## 📊 Overview
 - **Total Chapters:** 69
-- **Completed:** 1 (BPSK Exemplar V2)
+- **Completed:** 7 (Exemplar + 6 Wave 2 chapters)
 - **In Progress:** 0
-- **Remaining:** 68
+- **Remaining:** 62
+- **Current Book:** 86 pages, 2.7MB PDF
 
 ## ✅ Completed Chapters
 
@@ -13,16 +14,16 @@
 
 ## 🎯 Production Waves
 
-### Wave 2: Core Modulation Techniques (Priority 1)
+### Wave 2: Core Modulation Techniques (Priority 1) ✅ COMPLETE
 **Goal:** Foundation modulation schemes users learn first
 
-- [ ] `Binary-Phase-Shift-Keying-(BPSK).tex`
-- [ ] `QPSK-Modulation.tex`
-- [ ] `8PSK-&-Higher-Order-PSK.tex`
-- [ ] `Quadrature-Amplitude-Modulation-(QAM).tex`
-- [ ] `Frequency-Shift-Keying-(FSK).tex`
-- [ ] `Amplitude-Shift-Keying-(ASK).tex`
-- [ ] `On-Off-Keying-(OOK).tex`
+- [x] `On-Off-Keying-(OOK).tex` - **PR #10** ✨
+- [x] `Amplitude-Shift-Keying-(ASK).tex` - **PR #11** ✨
+- [x] `Frequency-Shift-Keying-(FSK).tex` - **PR #14** ✨
+- [x] `QPSK-Modulation.tex` - **PR #15** ✨
+- [x] `8PSK-&-Higher-Order-PSK.tex` - **PR #16** ✨
+- [x] `Quadrature-Amplitude-Modulation-(QAM).tex` - **PR #12, #17** ✨
+- [ ] `Binary-Phase-Shift-Keying-(BPSK).tex` - *Needs upgrade (old version exists)*
 
 **Acceptance Criteria per Chapter:**
 - [ ] Professional LaTeX formatting (follow exemplar)
