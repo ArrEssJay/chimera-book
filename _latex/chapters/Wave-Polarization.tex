@@ -620,6 +620,74 @@ For perpendicular incidence on a good conductor:
 \item Report maximum measured level regardless of polarization
 \end{itemize}
 
+\section{Stokes Parameters and Poincaré Sphere}
+
+The \textbf{Stokes parameters} provide a complete mathematical description of polarization state, including both intensity and polarization characteristics:
+\begin{align}
+S_0 &= E_x^2 + E_y^2 \quad \text{(total intensity)} \label{eq:stokes-s0} \\
+S_1 &= E_x^2 - E_y^2 \quad \text{(H vs V preference)} \label{eq:stokes-s1} \\
+S_2 &= 2E_xE_y\cos\Delta\phi \quad \text{($\pm 45°$ preference)} \label{eq:stokes-s2} \\
+S_3 &= 2E_xE_y\sin\Delta\phi \quad \text{(circular preference)} \label{eq:stokes-s3}
+\end{align}
+
+\textbf{Interpretation:}
+\begin{itemize}
+\item $S_3 > 0$: Right-hand (RHCP) dominant
+\item $S_3 < 0$: Left-hand (LHCP) dominant
+\item $S_3 = 0$: Linear polarization
+\end{itemize}
+
+\textbf{Degree of polarization:}
+\begin{equation}
+\mathrm{DOP} = \frac{\sqrt{S_1^2 + S_2^2 + S_3^2}}{S_0}
+\label{eq:dop}
+\end{equation}
+where DOP ranges from 0 (completely unpolarized) to 1 (fully polarized).
+
+\subsection{Poincaré Sphere Representation}
+
+The \textbf{Poincaré sphere} provides an intuitive 3D visualization of all possible polarization states:
+
+\begin{center}
+\begin{tikzpicture}[scale=2]
+% Draw sphere
+\draw (0,0) circle (2cm);
+\draw[dashed] (-2,0) arc (180:360:2cm and 0.6cm);
+\draw (2,0) arc (0:180:2cm and 0.6cm);
+
+% Axes
+\draw[->] (0,0) -- (2.5,0) node[right,font=\small] {$S_1$ (H--V)};
+\draw[->] (0,0) -- (0,2.5) node[above,font=\small] {$S_3$ (RHCP--LHCP)};
+\draw[->] (0,0) -- (-1.2,-0.8) node[below left,font=\small] {$S_2$ ($\pm 45°$)};
+
+% Poles
+\filldraw[NavyBlue] (0,2) circle (2pt) node[above right,font=\small] {LHCP};
+\filldraw[NavyBlue] (0,-2) circle (2pt) node[below right,font=\small] {RHCP};
+
+% Equator points
+\filldraw[red] (2,0) circle (2pt) node[right,font=\small] {H};
+\filldraw[red] (-2,0) circle (2pt) node[left,font=\small] {V};
+\filldraw[red] (0,0) circle (1pt);
+\filldraw[red] (1.41,0) circle (1.5pt) node[above right,font=\scriptsize] {$+45°$};
+\filldraw[red] (-1.41,0) circle (1.5pt) node[above left,font=\scriptsize] {$-45°$};
+
+% Equator line
+\draw[red,thick] (0,0) ellipse (2cm and 0.6cm);
+
+\node[below,font=\small,align=center] at (0,-2.5) {\textbf{Equator:} Linear polarizations\\\textbf{Poles:} Circular polarizations};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Key features:}
+\begin{itemize}
+\item \textbf{North pole ($S_3 = +1$):} LHCP
+\item \textbf{South pole ($S_3 = -1$):} RHCP  
+\item \textbf{Equator ($S_3 = 0$):} All linear polarizations (H, V, $\pm 45°$)
+\item \textbf{Intermediate points:} Elliptical polarizations
+\end{itemize}
+
+\textbf{Applications:} Visualizing polarization transformations (e.g., Faraday rotation appears as rotation around the $S_3$ axis)
+
 \section{Worked Example: Polarization Mismatch Analysis}
 
 \textbf{Scenario:} Calculate the received power loss for a misaligned antenna system
