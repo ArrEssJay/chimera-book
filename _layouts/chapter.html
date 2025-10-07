@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    
+    <!-- MathJax for LaTeX math rendering -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+    
+    <!-- Syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+            <p>{{ site.description }}</p>
+            <nav>
+                <a href="{{ '/' | relative_url }}">Home</a> |
+                <a href="{{ '/chapters/' | relative_url }}">Chapters</a>
+            </nav>
+        </header>
+        
+        <main>
+            <article class="chapter">
+                <h1>{{ page.title }}</h1>
+                
+                {% if page.date %}
+                <p class="meta">Last updated: {{ page.date | date: "%B %d, %Y" }}</p>
+                {% endif %}
+                
+                <div class="content">
+                    {{ content }}
+                </div>
+                
+                {% if page.see_also %}
+                <section class="see-also">
+                    <h2>See Also</h2>
+                    <ul>
+                        {% for item in page.see_also %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+                {% endif %}
+            </article>
+        </main>
+        
+        <footer>
+            <p>&copy; {{ site.time | date: '%Y' }} {{ site.author }} | 
+            <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a> Public Domain</p>
+        </footer>
+    </div>
+    
+    <style>
+        body {
+            font-family: 'Libertinus', 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            border-bottom: 2px solid #003366;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        
+        header h1 {
+            font-family: 'Cabin', 'Arial', sans-serif;
+            color: #003366;
+            margin: 0 0 10px 0;
+        }
+        
+        header h1 a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        nav {
+            margin-top: 10px;
+        }
+        
+        nav a {
+            color: #003366;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .chapter h1 {
+            font-family: 'Cabin', 'Arial', sans-serif;
+            color: #003366;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        .chapter h2 {
+            font-family: 'Cabin', 'Arial', sans-serif;
+            color: #003366;
+            font-size: 1.8em;
+            margin-top: 1.5em;
+        }
+        
+        .chapter h3 {
+            font-family: 'Cabin', 'Arial', sans-serif;
+            color: #003366;
+            font-size: 1.4em;
+        }
+        
+        .meta {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 2em;
+        }
+        
+        .content {
+            text-align: justify;
+        }
+        
+        /* Callout boxes */
+        .keyconcept, .calloutbox, .warningbox {
+            border: 1px solid #ccc;
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0px;
+        }
+        
+        .keyconcept::before {
+            content: "Key Concept";
+            display: block;
+            font-family: 'Cabin', sans-serif;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        /* Equations */
+        .MathJax {
+            font-size: 1.1em;
+        }
+        
+        /* Code blocks */
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        code {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+        }
+        
+        /* Images and diagrams */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        /* Tables */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+            font-family: 'Cabin', sans-serif;
+        }
+        
+        footer {
+            border-top: 2px solid #003366;
+            margin-top: 50px;
+            padding-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</body>
+</html>

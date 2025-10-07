@@ -42,3 +42,15 @@ Thumbs.db
 # Backup files
 *.bak
 *.backup
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+vendor/
+.bundle/
+
+# Ruby
+*.gem
