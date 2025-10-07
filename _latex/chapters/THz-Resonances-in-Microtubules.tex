@@ -120,8 +120,8 @@ consciousness.
 
 \textbf{Ready for the technical details?} Keep reading below.
 \textbf{Want more background first?} Check out
-{[}{[}Microtubule-Structure-and-Function{]}{]} or
-{[}{[}Quantum-Coherence-in-Biological-Systems{]}{]}.
+\textbf{Microtubule Structure and Function:} or
+\textbf{Quantum Coherence in Biological Systems:}.
 
 \section{Vibrational Modes: The Physics Foundation}
 \label{sec:vibrational-modes}
@@ -348,10 +348,20 @@ temperature} if vibronic coupling is strong enough.
 \textbf{Key equations} (from VE-TFCC supporting information):
 
 \textbf{Bogoliubov-transformed operators}:
-\[\hat{a}_i = \frac{1}{\sqrt{1 - e^{-\beta \omega_i}}} \left( \hat{b}_i - e^{-\beta \omega_i/2} \hat{b}_i^\dagger \right)\]
-\[\hat{a}_i^\dagger = \frac{1}{\sqrt{1 - e^{-\beta \omega_i}}} \left( \hat{b}_i^\dagger - e^{-\beta \omega_i/2} \hat{b}_i \right)\]
-where \(\beta = 1/(k_B T)\), \(\omega_i\) is the vibrational frequency,
-and \(\hat{b}_i\) are the original Bosonic operators.
+\begin{equation}
+\label{eq:bogoliubov-a}
+\hat{a}_i = \frac{1}{\sqrt{1 - e^{-\beta \omega_i}}} \left( \hat{b}_i - e^{-\beta \omega_i/2} \hat{b}_i^\dagger \right)
+\end{equation}
+\begin{equation}
+\label{eq:bogoliubov-a-dag}
+\hat{a}_i^\dagger = \frac{1}{\sqrt{1 - e^{-\beta \omega_i}}} \left( \hat{b}_i^\dagger - e^{-\beta \omega_i/2} \hat{b}_i \right)
+\end{equation}
+where:
+\begin{itemize}
+\item $\beta = 1/(k_B T)$ = inverse temperature
+\item $\omega_i$ = vibrational frequency
+\item $\hat{b}_i$ = original Bosonic operators
+\end{itemize}
 
 \textbf{Physical meaning}: At temperature \(T\), the thermal state
 \(|\theta(\beta)\rangle\) is the \emph{vacuum} for the Bogoliubov
@@ -369,7 +379,10 @@ create thermal coherent states if electronic-vibrational coupling is
 strong
 
 \textbf{Position variance} (measure of quantum coherence):
-\[(\Delta q_i)^2 = \langle q_i^2 \rangle - \langle q_i \rangle^2\] For a
+\begin{equation}
+\label{eq:position-variance}
+(\Delta q_i)^2 = \langle q_i^2 \rangle - \langle q_i \rangle^2
+\end{equation} For a
 classical thermal system, \((\Delta q)^2 \propto k_B T\). For a vibronic
 system at thermal equilibrium (from VE-TFCC):
 \[(\Delta q_i)^2 = \frac{1}{2} \left( d_{ii}^{bb} + d_{ii}^{aa} + \frac{1}{2} d_{aa}^{bb} + \frac{1}{2} \delta_{aa} \right)\]
@@ -379,7 +392,7 @@ representation.
 \textbf{Key result}: Quantum coherence manifests as \emph{excess
 variance} beyond classical thermal prediction.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 \section{Experimental Evidence for THz Modes in Microtubules}\label{experimental-evidence-for-thz-modes-in-microtubules}
 
@@ -476,7 +489,7 @@ measure:
 
 Vibronic coupling strength
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 \section{Theoretical Models}\label{theoretical-models}
 
@@ -538,10 +551,16 @@ fluctuations disrupt solitons)
 (thermal coherence)
 
 \textbf{Hamiltonian}:
-\[\hat{H} = \underbrace{\sum_i \epsilon_i | i \rangle \langle i |}_{\text{Electronic}} + \underbrace{\sum_k \hbar \omega_k \hat{b}_k^\dagger \hat{b}_k}_{\text{Vibrational}} + \underbrace{\sum_{ik} g_{ik} | i \rangle \langle i | (\hat{b}_k + \hat{b}_k^\dagger)}_{\text{Vibronic coupling}}\]
-where \(| i \rangle\) are electronic states (localized on tubulin
-dimers), \(\hat{b}_k\) are phonon operators, and \(g_{ik}\) is the
-coupling strength.
+\begin{equation}
+\label{eq:vibronic-hamiltonian}
+\hat{H} = \underbrace{\sum_i \epsilon_i | i \rangle \langle i |}_{\text{Electronic}} + \underbrace{\sum_k \hbar \omega_k \hat{b}_k^\dagger \hat{b}_k}_{\text{Vibrational}} + \underbrace{\sum_{ik} g_{ik} | i \rangle \langle i | (\hat{b}_k + \hat{b}_k^\dagger)}_{\text{Vibronic coupling}}
+\end{equation}
+where:
+\begin{itemize}
+\item $| i \rangle$ = electronic states (localized on tubulin dimers)
+\item $\hat{b}_k$ = phonon operators
+\item $g_{ik}$ = vibronic coupling strength
+\end{itemize}
 
 \textbf{At thermal equilibrium} (VE-TFCC approach):
 \begin{itemize}
@@ -593,7 +612,7 @@ t_{\text{diff}} \approx \frac{L^2}{2D} = \frac{(10^{-5})^2}{2 \times 10^{-10}} =
 \textbf{Conclusion:} Phonon propagation is \textbf{$\sim$75 million times faster} than molecular diffusion over microtubule lengths, suggesting a potential mechanism for rapid long-range signaling.
 \end{calloutbox}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 \section{Potential Biological Functions}\label{potential-biological-functions-speculative}
 
@@ -657,7 +676,7 @@ anesthetic binding? - \textbf{Preliminary data} (in vitro): Anesthetics
 shift THz absorption peaks by $\sim$0.1 THz - \textbf{In vivo
 test}: Not yet performed
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 
 \section{Applications and Experimental Techniques}
@@ -733,10 +752,11 @@ test}: Not yet performed
 0.1-3 THz).
 
 \textbf{Decoherence time estimate}:
-\[\tau_d \sim \frac{\hbar}{\Gamma k_B T}\] where \(\Gamma\) is the
-system-bath coupling. For microtubules in water, \(\Gamma \sim 10^{12}\)
-s\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{1\}
-\(\rightarrow \tau_d \sim 100\) fs.
+\begin{equation}
+\label{eq:decoherence-time}
+\tau_d \sim \frac{\hbar}{\Gamma k_B T}
+\end{equation}
+where $\Gamma$ is the system-bath coupling. For microtubules in water, $\Gamma \sim 10^{12}$~s$^{-1}$ $\rightarrow \tau_d \sim 100$~fs.
 
 \textbf{Counter-argument}: Ordered water layers near microtubule surface
 may have reduced rotational freedom \$\textbackslash rightarrow\$ weaker
@@ -779,7 +799,7 @@ biological computation
 off-diagonal coherences) - Conditional coherence measurements (if
 coherence exists, disrupting it should alter function)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 \section{Future Experiments}\label{future-experiments}
 
@@ -819,7 +839,7 @@ remeasure 3. Compare coherence times and spectral shifts
 Anesthetic should reduce \(\tau_c\) or shift resonance frequencies -
 Reversible upon anesthetic removal
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 
 \section{Summary}
@@ -870,25 +890,25 @@ Critical experiments needed (Section~\ref{sec:future-experiments}):
 \section{Connections to Other Topics}\label{connections-to-other-wiki-pages}
 
 \begin{itemize}
-\tightlist
+
 \item
-  {[}{[}Quantum-Coherence-in-Biological-Systems{]}{]} --- General
+  \textbf{Quantum Coherence in Biological Systems:} --- General
   framework for biological quantum effects
 \item
-  {[}{[}Microtubule-Structure-and-Function{]}{]} --- Structural
+  \textbf{Microtubule Structure and Function:} --- Structural
   basis for THz modes
 \item
-  {[}{[}Orchestrated-Objective-Reduction-(Orch-OR){]}{]} ---
+  \textbf{Orchestrated Objective Reduction (Orch-OR):} ---
   Consciousness theory requiring microtubule coherence
 \item
-  {[}{[}Terahertz-(THz)-Technology{]}{]} --- Experimental tools for
+  \textbf{Terahertz (THz) Technology:} --- Experimental tools for
   probing THz resonances
 \item
-  {[}{[}THz-Propagation-in-Biological-Tissue{]}{]} --- How THz waves
+  \textbf{THz Propagation in Biological Tissue:} --- How THz waves
   interact with tissue
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 \section{References}\label{references}
 
@@ -896,7 +916,7 @@ Critical experiments needed (Section~\ref{sec:future-experiments}):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
+
 \item
   \textbf{Bao et al., \emph{J. Chem. Theory Comput.} 20, 4377 (2024)}
   --- VE-TFCC theory: thermal vibronic coherence
@@ -913,7 +933,7 @@ Critical experiments needed (Section~\ref{sec:future-experiments}):
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{3}
-\tightlist
+
 \item
   \textbf{Preto, \emph{PLoS ONE} 11, e0157267 (2016)} --- THz
   spectroscopy of microtubules
@@ -930,7 +950,7 @@ Critical experiments needed (Section~\ref{sec:future-experiments}):
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{6}
-\tightlist
+
 \item
   \textbf{Tegmark, \emph{Phys. Rev.~E} 61, 4194 (2000)} ---
   Skeptical: decoherence too fast in microtubules
@@ -944,12 +964,12 @@ Critical experiments needed (Section~\ref{sec:future-experiments}):
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{8}
-\tightlist
+
 \item
   \textbf{Turin \& Skoulakis, \emph{Proc. Natl. Acad. Sci.} 115, E3524
   (2018)} --- Anesthetics and quantum effects
 \end{enumerate}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 
 \textbf{Last updated}: October 2025
