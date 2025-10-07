@@ -1,1377 +1,863 @@
-\section{Military \& Covert
-Communications}\label{military-covert-communications}
+\chapter{Military \& Covert Communications}
+\label{ch:military-covert}
 
-Military communications systems prioritize \textbf{anti-jamming (AJ)},
-\textbf{low probability of intercept (LPI)}, \textbf{low probability of
-detection (LPD)}, and \textbf{secure transmission (TRANSEC)} over
-commercial metrics like spectral efficiency. This page covers advanced
-techniques used in GPS M-code, SATCOM FHSS, phased-array radar, Link 16,
-and covert communications.
+\begin{nontechnical}
+\textbf{Military communications are like having a secret conversation in a hostile crowd}---you need to avoid being heard by enemies, resist jamming, and stay undetected.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Key concepts in simple terms:}
+\begin{itemize}
+\item \textbf{Spread Spectrum} = Whispering your message across a huge room so each piece sounds like background noise
+\item \textbf{Frequency Hopping} = Changing radio channels thousands of times per second following a secret pattern
+\item \textbf{Phased Arrays} = Computer-controlled antenna spotlights that instantly point anywhere
+\item \textbf{Low Probability of Detection (LPD)} = Your signal is literally weaker than background noise
+\end{itemize}
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\textbf{Real example:} GPS M-code is 20 times weaker than noise, yet military receivers lock on instantly. Enemy receivers? Just static.
 
-Before diving into the technical details, here are the core concepts
-explained in everyday terms:
+\textbf{Why it matters:} These techniques enable communications that survive 10,000× stronger jamming signals and remain invisible to adversaries.
+\end{nontechnical}
 
-\subsubsection{Why Military Communications Are
-Different}\label{why-military-communications-are-different}
+\section{Overview}
 
-\textbf{Imagine trying to have a conversation in a crowded, hostile
-room} where: - Someone is shouting over you (jamming) - Others are
-listening to steal your secrets (interception) - You need to talk
-without being noticed (covert)
+Military communications systems prioritize \textbf{anti-jamming (AJ)}, \textbf{low probability of intercept (LPI)}, \textbf{low probability of detection (LPD)}, and \textbf{secure transmission (TRANSEC)} over commercial metrics like spectral efficiency.
 
-Military communications solve these problems in ways regular WiFi or
-cell phones don\textquotesingle t need to.
+\begin{keyconcept}
+Processing gain from spread spectrum enables military links to operate 20--40~dB below the noise floor while overcoming jammers that are thousands of times stronger than the desired signal.
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+This chapter covers advanced techniques used in:
+\begin{itemize}
+\item GPS M-code (military GPS with anti-jam)
+\item SATCOM FHSS (frequency hopping satellites)
+\item Phased-array radar (AESA systems)
+\item Link 16 (tactical data network)
+\item Covert communications (LPD/LPI techniques)
+\end{itemize}
 
-\subsubsection{The ``Whisper in the Crowd''
-Analogy}\label{the-whisper-in-the-crowd-analogy}
+\section{Mathematical Description}
 
-\textbf{Spread Spectrum} = Speaking very quietly across a huge room
+\subsection{The LPI/LPD/AJ Triad}
 
-Instead of shouting one clear message, you: 1. \textbf{Whisper
-fragments} of your message to many places at once 2. \textbf{Spread it
-so thin} that each piece sounds like background noise 3. \textbf{Only
-someone with the secret pattern} can collect all the pieces and
-understand you
+Military communications are governed by three interrelated requirements:
 
-\textbf{Real-world result}: Your signal is literally \textbf{weaker than
-background noise}, yet your intended receiver hears it perfectly.
-Enemies just hear static.
+\textbf{1. Low Probability of Intercept (LPI):} Enemy can detect transmission but cannot decode it.
 
-\textbf{Example}: GPS M-code is 20 times weaker than the noise floor,
-yet your military GPS receiver locks on instantly. A
-spy\textquotesingle s receiver? Just noise.
+\textbf{2. Low Probability of Detection (LPD):} Enemy cannot detect that transmission is occurring.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{3. Anti-Jamming (AJ):} Maintain link under deliberate enemy interference.
 
-\subsubsection{The ``Concert Hall Spotlight''
-Analogy}\label{the-concert-hall-spotlight-analogy}
-
-\textbf{Phased-Array Antennas (AESA)} = Pointing a beam of radio energy
-
-Think of a traditional dish antenna like a flashlight-\/-\/-it points
-one direction, and moving it takes time.
-
-\textbf{AESA is like a concert hall\textquotesingle s lighting system}:
-- \textbf{Hundreds of tiny lights} (antenna elements) -
-\textbf{Computer-controlled} to turn on/off in precise patterns -
-\textbf{Creates a ``spotlight''} that can instantly jump to different
-parts of the room - \textbf{Multiple spotlights} can exist
-simultaneously (track many targets)
-
-\textbf{Real-world result}: F-22 radar can track 100 aircraft, jam enemy
-radars, and guide missiles-\/-\/-all at once, all electronically, no
-moving parts.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{The ``Secret Handshake''
-Analogy}\label{the-secret-handshake-analogy}
-
-\textbf{Frequency Hopping} = Changing radio channels thousands of times
-per second
-
-Imagine a conversation where: 1. You and your friend \textbf{agree on a
-secret pattern} of which channel to use when 2. Every millisecond, you
-both \textbf{jump to a new frequency} following the pattern 3.
-\textbf{Enemies can\textquotesingle t follow} because they
-don\textquotesingle t know the pattern 4. Even if they jam one
-frequency, you\textquotesingle re already gone
-
-\textbf{Real-world result}: Military satellite phones (MILSTAR) hop
-1000+ times per second across a gigahertz of spectrum. A jammer would
-need to jam the entire band with megawatts of power-\/-\/-impractical.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{The ``Invisible Ink''
-Analogy}\label{the-invisible-ink-analogy}
-
-\textbf{Low Probability of Detection (LPD)} = Radio signals that
-don\textquotesingle t look like signals
-
-Imagine hiding a message by: 1. \textbf{Writing each letter} on a
-separate grain of sand 2. \textbf{Scattering the sand} across a beach 3.
-\textbf{Only the recipient} knows which grains to collect
-
-\textbf{Real-world result}: Covert radios transmit at power levels
-1000\$\textbackslash times\$ below what receivers normally detect. Even
-sensitive spy equipment can\textquotesingle t tell the difference
-between the transmission and natural radio noise.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{The ``Smart Echo'' Analogy}\label{the-smart-echo-analogy}
-
-\textbf{Anti-Jamming (AJ)} = Fighting back against interference
-
-When an enemy tries to jam your signal: 1. \textbf{Your antenna
-``learns''} where the jammer is located 2. \textbf{Creates a ``null''}
-(deaf spot) pointing at the jammer 3. \textbf{Amplifies signals} from
-your intended direction
-
-Think of it like \textbf{noise-canceling headphones for
-radio}-\/-\/-specifically canceling out the jammer while hearing your
-friend.
-
-\textbf{Real-world result}: GPS receivers with anti-jam antennas (CRPA)
-can reject jammers that are 10,000\$\textbackslash times\$ stronger than
-the GPS satellite signal.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Key Concepts Simplified}\label{key-concepts-simplified}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Concept
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Everyday Analogy
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Military Benefit
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Spread Spectrum} & Whisper spread across a huge room & Signal
-hidden below noise floor \\
-\textbf{Processing Gain} & Collecting 1000 whispers back into speech &
-Overcomes jammers and noise \\
-\textbf{Frequency Hopping} & Changing channels
-1000\$\textbackslash times\$ per second & Enemy can\textquotesingle t
-follow or jam \\
-\textbf{Phased Array} & Computer-controlled spotlight & Instant beam
-steering, multi-target \\
-\textbf{Encryption} & Secret language only you and friend know & Even
-intercepted messages are useless \\
-\textbf{Beamforming} & Talking through a directional megaphone & Only
-intended receiver hears you \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Why This Matters for
-Chimera}\label{why-this-matters-for-chimera}
-
-Chimera helps you \textbf{visualize and experiment} with these concepts:
-- \textbf{Build spread spectrum systems} in your browser - \textbf{See
-jamming resistance} in real-time plots - \textbf{Experiment with
-frequency hopping} patterns - \textbf{Understand phased arrays} through
-interactive simulations
-
-\textbf{You don\textquotesingle t need a million-dollar
-lab}-\/-\/-Chimera brings military-grade DSP concepts to anyone with
-curiosity and a web browser.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{What You\textquotesingle ll Learn in This
-Document}\label{what-youll-learn-in-this-document}
-
-The sections below explain \textbf{how these systems actually work}: -
-\textbf{SATCOM Frequency Hopping}: How military satellites resist
-jamming - \textbf{GPS M-Code}: Why military GPS works when civilian GPS
-is jammed - \textbf{Phased-Array Radar}: How F-22s and destroyers
-``see'' electronically - \textbf{Link 16}: The tactical data network
-connecting planes, ships, and missiles - \textbf{Covert Communications}:
-How to transmit data invisibly
-
-\textbf{If you\textquotesingle re new to DSP}: Start with
-{[}{[}Spread-Spectrum-(DSSS-FHSS){]}{]} for foundational concepts, then
-return here.
-
-\textbf{If you\textquotesingle re experienced}: Skip to the technical
-sections-\/-\/-detailed math, code examples, and real-world system specs
-await.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Core Military
-Requirements}{ Core Military Requirements}}\label{core-military-requirements}
-
-\subsubsection{The LPI/LPD/AJ Triad}\label{the-lpilpdaj-triad}
-
-\textbf{1. Low Probability of Intercept (LPI)}:
-
-\begin{verbatim}
-Enemy can detect transmission but cannot decode it
-
-Techniques:
-- Spread spectrum (DSSS/FHSS)  signal below noise floor
-- Directional antennas  narrow beamwidths
-- Burst transmissions  short dwell time
-- Encryption  content secure even if intercepted
-\end{verbatim}
-
-\textbf{2. Low Probability of Detection (LPD)}:
-
-\begin{verbatim}
-Enemy cannot detect that transmission is occurring
-
-Techniques:
-- Ultra-wideband spread spectrum (G > 30 dB)
-- Frequency diversity  avoid surveillance bands
-- Power management  minimal radiated power
-- Emission control (EMCON)  radio silence protocols
-\end{verbatim}
-
-\textbf{3. Anti-Jamming (AJ)}:
-
-\begin{verbatim}
-Maintain link under deliberate enemy interference
-
-Techniques:
-- Processing gain  overcomes jammer power
-- Nulling antennas  reject jammer direction
-- Frequency hopping  avoid narrowband jamming
-- Adaptive filters  real-time interference cancellation
-\end{verbatim}
-
-\textbf{Relationship}:
-
-\begin{verbatim}
-Processing Gain (G) enables all three:
-
-G = BW_spread / BW_info = Chip_Rate / Bit_Rate
-
-Higher G  Lower PSD  Harder to detect/intercept/jam
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ SATCOM Frequency Hopping
-(FHSS)}{ SATCOM Frequency Hopping (FHSS)}}\label{satcom-frequency-hopping-fhss}
-
-Military satellite communications use FHSS for TRANSEC (transmission
-security).
-
-\subsubsection{X-Band MILSTAR/MUOS
-Systems}\label{x-band-milstarmuos-systems}
-
-\textbf{MILSTAR (Military Strategic and Tactical Relay)}:
+\subsection{Processing Gain}
 
-\begin{verbatim}
-Frequency: X-band uplink (7-8 GHz), Ka-band downlink (20-21 GHz)
-Hop rate: 100-1000+ hops/second
-Hop set: 1000+ frequencies across 1 GHz bandwidth
-Dwell time: <1 ms per hop
-Modulation: BPSK, QPSK, 8-PSK (adaptive)
-Data rate: 75 bps - 1.544 Mbps (T1)
-Satellite constellation: 5 GEO satellites (global coverage)
-
-TRANSEC:
-- Hopping pattern: Cryptographically generated (NSA algorithm)
-- Synchronization: GPS time + KEK (Key Encryption Key)
-- Pattern period: Days to weeks (never repeats observably)
-- Anti-spoofing: Authenticated hop sequence
-\end{verbatim}
-
-\textbf{LPI/LPD characteristics}:
-
-\begin{verbatim}
-Power spectral density (PSD):
-PSD = P_TX / BW_hop_set
-    = 100 W / 1 GHz
-    = 0.1 mW/MHz
-     -70 dBm/MHz (at satellite, 40,000 km away)
-
-Compare to thermal noise floor:
-Noise = -174 dBm/Hz + 10·log(BW) = -114 dBm/MHz (1 MHz BW)
-
-PSD_signal < Noise  Undetectable to wideband receiver!
-
-Detectability only with:
-- Exact hopping pattern (requires key)
-- Synchronized receiver (requires network access)
-- Correct modulation/demodulation (requires ICD)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\textbf{MUOS (Mobile User Objective System)}:
-
-\begin{verbatim}
-Frequency: UHF uplink (300-318 MHz), UHF downlink (243-318 MHz)
-Waveform: WCDMA (Wideband CDMA) + FHSS hybrid
-Hop rate: Classified (estimated >500 hps)
-Data rate: Up to 64 kbps voice, 10 Mbps data
-Compatibility: Legacy UFO (Ultra High Frequency Follow-On)
-
-Key features:
-- Smartphone-like interface for warfighters
-- Near-global coverage (5 GEO + legacy satellites)
-- Jam-resistant waveform (60+ dB margin)
-- Integrated encryption (Type 1 NSA)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{FHSS Anti-Jam
-Performance}\label{fhss-anti-jam-performance}
-
-\textbf{Processing gain calculation}:
-
-\begin{verbatim}
-G(dB) = 10·log(Hop_Set_Size)
-
-Example (MILSTAR):
-- Hop set: 1000 frequencies
-- G = 10·log(1000) = 30 dB
-
-Jamming margin:
-Margin = G - J/S - (Eb/N)_req - Losses
-
-J/S = Jammer power / Signal power (at receiver)
-
-Scenario:
-- G = 30 dB
-- J/S = 40 dB (jammer 10,000× stronger!)
-- (Eb/N)_req = 10 dB (BPSK, BER = 10)
-- Losses = 3 dB (implementation)
-
-Margin = 30 - 40 - 10 - 3 = -23 dB  **LINK FAILS**
-
-Countermeasures:
-1. Directional antenna: +20 dB gain toward satellite, nulls toward jammer
-   Effective J/S = 40 - 20 = 20 dB
-   Margin = 30 - 20 - 10 - 3 = -3 dB  **MARGINAL**
-
-2. Error-correction coding: Turbo/LDPC code rate-1/3
-   Coding gain: +5 dB
-   Margin = -3 + 5 = 2 dB  **LINK SURVIVES**
-
-3. Burst transmission: Transmit 10× faster, listen 90% of time
-   Jammer must hit exact burst time  effective J/S reduces by 10 dB
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Follower Jamming
-Resistance}\label{follower-jamming-resistance}
-
-\textbf{Threat}: Smart jammer detects hop, jams that frequency.
-
-\textbf{Timing analysis}:
-
-\begin{verbatim}
-Dwell time: 1 ms (MILSTAR)
-Jammer detection: 100 s (fast energy detector)
-Frequency switching: 50 s (agile synthesizer)
-
-Total jammer delay: 150 s
-
-Effective jam time: 1 ms - 150 s = 850 s (85% of hop)
-
-Countermeasure: Fast hopping
-- Dwell time: 100 s (10× faster)
-- Effective jam: 100 - 150 = 0 s (jammer too slow!)
-
-Modern military systems: 10-100 s dwell times
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ GPS M-Code (Military
-GPS)}{ GPS M-Code (Military GPS)}}\label{gps-m-code-military-gps}
-
-\textbf{GPS Modernization}: M-code provides jam-resistant, encrypted
-positioning for military users.
-
-\subsubsection{Signal Structure}\label{signal-structure}
-
-\textbf{GPS L1 M-Code}:
-
-\begin{verbatim}
-Carrier frequency: 1575.42 MHz (L1)
-Chip rate: 5.115 Mcps (5× faster than C/A code)
-Code length: Classified (estimated ~10^13 chips  never repeats)
-Modulation: BOC(10,5) - Binary Offset Carrier
-Processing gain: ~50 dB (vs. 43 dB for C/A)
-Power: 6.5 dB stronger than C/A code
-Security: Encrypted, authenticated (NSA keys)
-\end{verbatim}
-
-\textbf{GPS L2 M-Code}:
-
-\begin{verbatim}
-Carrier frequency: 1227.60 MHz (L2)
-Same structure as L1 M-code
-Dual-frequency  ionospheric correction
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{BOC Modulation}\label{boc-modulation}
-
-\textbf{Binary Offset Carrier (BOC)}: Modulates chip sequence with
-square wave subcarrier.
-
-\textbf{BOC(m,n) notation}:
-
-\begin{verbatim}
-m = subcarrier frequency multiplier (MHz)
-n = chip rate multiplier (MHz)
-
-BOC(10,5):
-- Subcarrier: 10.23 MHz (2× C/A chip rate)
-- Chip rate: 5.115 MHz (5× C/A chip rate)
-\end{verbatim}
-
-\textbf{Spectrum}:
-
-\begin{verbatim}
-Time-domain signal:
-s(t) = sign[sin(2·f_sub·t)] · c(t)
-
+The fundamental parameter enabling all three capabilities is \textbf{processing gain}:
+\begin{equation}
+G = \frac{BW_{\text{spread}}}{BW_{\text{info}}} = \frac{R_{\text{chip}}}{R_{\text{bit}}}
+\end{equation}
 where:
-- f_sub = 10.23 MHz (square wave)
-- c(t) = ±1 chip sequence at 5.115 Mcps
-
-Frequency-domain:
-Power splits into two main lobes:
-- Upper sideband: f_carrier + 10.23 MHz
-- Lower sideband: f_carrier - 10.23 MHz
-
-Split-spectrum design:
-- Minimal interference with C/A code (centered at L1)
-- Occupies unused spectrum
-- Better multipath rejection (narrow correlation peak)
-\end{verbatim}
-
-\textbf{Autocorrelation}:
-
-\begin{verbatim}
-BOC(10,5) correlation function:
-- Main peak: Very narrow (better ranging accuracy)
-- Side peaks: ±1/f_sub = ±98 ns
-
-Ranging accuracy:
-- C/A code: ~3 m (single-frequency)
-- M-code: ~0.3 m (dual-frequency, better correlation)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Anti-Jam Performance}\label{anti-jam-performance}
-
-\textbf{Jamming scenarios}:
-
-\textbf{1. Wideband Barrage Jamming}:
-
-\begin{verbatim}
-Jammer spreads power across L1 band (±10 MHz).
-
-Received signal power (M-code): -163 dBW
-Jammer power at receiver: -100 dBW (strong jammer, 50 km away)
-J/S = -100 - (-163) = 63 dB
-
-Processing gain (M-code): 50 dB
-Residual J/S: 63 - 50 = 13 dB
-
-Required Eb/N (M-code receiver): ~10 dB
-Margin: 50 - 63 - 10 = -23 dB  **LINK FAILS**
-
-Mitigation: CRPA (Controlled Reception Pattern Antenna)
-- 7-element array antenna
-- Adaptive nulling: Places null toward jammer
-- Null depth: 30-40 dB
-
-Effective J/S after nulling: 63 - 35 = 28 dB
-Margin: 50 - 28 - 10 = 12 dB  **LINK SURVIVES**
-\end{verbatim}
-
-\textbf{2. Swept Jammer}:
-
-\begin{verbatim}
-Jammer sweeps narrowband tone across L1 (high PSD).
-
-Jammer bandwidth: 1 MHz
-GPS M-code spread: 20 MHz
-Fraction jammed: 1/20 = 5%
-
-Effect: Occasional symbol errors  FEC corrects
-Impact: <1 dB degradation
-
-M-code advantage: Wideband spread mitigates swept jamming
-\end{verbatim}
-
-\textbf{3. Repeater/Spoofer}:
-
-\begin{verbatim}
-Enemy receives GPS, delays, retransmits stronger signal.
-Goal: Induce false position/time.
-
-M-code defense: Encrypted spreading code
-- Spoofer cannot generate valid M-code
-- Authentication protocol detects non-authentic signals
-- Cross-correlation with authentic signal = 0 (orthogonal codes)
-
-Result: Spoof rejected by receiver
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Selective Availability Anti-Spoofing Module
-(SAASM)}\label{selective-availability-anti-spoofing-module-saasm}
-
-\textbf{Military GPS Receiver}:
-
-\begin{verbatim}
-SAASM features:
-- Stores classified M-code keys (COMSEC keying material)
-- Dual-frequency operation (L1 + L2)
-- Autonomous integrity monitoring
-- Anti-spoofing: Detects spoofed P(Y) code
-- Key management: Over-the-air rekeying (OTAR)
-
-Integration:
-- Embedded in weapons: JDAM, Tomahawk, Excalibur artillery
-- Fighter avionics: F-22, F-35, B-2
-- Ground vehicles: DAGR (Defense Advanced GPS Receiver)
-
-Accuracy:
-- Horizontal: <1 m (dual-frequency, BOC)
-- Vertical: <3 m
-- Time: <10 ns (critical for network synchronization)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Phased-Array Antennas
-(AESA)}{ Phased-Array Antennas (AESA)}}\label{phased-array-antennas-aesa}
-
-\textbf{Active Electronically Scanned Array (AESA)} radar uses
-phased-array principles for LPI/LPD and multi-function operation.
-
-\subsubsection{Beamforming Principles}\label{beamforming-principles}
-
-\textbf{Phase steering}:
-
-\begin{verbatim}
-Antenna array: N elements spaced by d
-Desired beam direction: 
-
-Phase shift per element:
- = (2/) · d · sin()
-
-Example (8-element array, d = /2):
-Steer beam to 30°:
- = (2/) · (/2) · sin(30°) = /2 = 90° per element
-
-Element phases: [0°, 90°, 180°, 270°, 0°, 90°, 180°, 270°]
-
-Beam electronically steered (no mechanical motion!)
-Steering speed: Microseconds (vs. seconds for mechanical)
-\end{verbatim}
-
-\textbf{Array gain}:
-
-\begin{verbatim}
-Gain(dB) = 10·log(N) + Single_Element_Gain
-
-Example (256-element AESA, 5 dBi per element):
-Array gain = 10·log(256) + 5 = 24 + 5 = 29 dBi
-
-Directivity: Higher gain  narrower beamwidth  LPI
-\end{verbatim}
-
-\textbf{Beamwidth}:
-
-\begin{verbatim}
-_3dB   / (N·d)  (radians)
-
-Example (256 elements, d = /2):
-_3dB   / (256 · /2) = 1/128 rad  0.45° (very narrow!)
-
-Narrow beam  hard to intercept (LPI)
-            precise target tracking
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{LPI Radar Techniques}\label{lpi-radar-techniques}
-
-\textbf{1. Low Peak Power, Long Integration}:
-
-\begin{verbatim}
-Conventional radar: High peak power (MW), short pulse (s)
-LPI radar: Low peak power (W), long waveform (ms-s)
-
-SNR = (Peak_Power · Pulse_Width) / Noise_Power
-
-Equivalent detection range with:
-- Conventional: 1 MW × 1 s = 1 J
-- LPI: 1 kW × 1 ms = 1 J (same energy, 1000× lower peak!)
-
-Enemy intercept receiver:
-- Detects instantaneous power
-- LPI signal: 30 dB below detection threshold
-- Integration required to detect  impractical
-\end{verbatim}
-
-\textbf{2. Frequency Diversity}:
-
-\begin{verbatim}
-Frequency-agile waveform:
-- Hop across wide bandwidth (GHz)
-- Prevents enemy from locking onto frequency
-- Mitigates narrowband interference
-
-Example (F-22 APG-77 AESA):
-- X-band (8-12 GHz): 4 GHz agility
-- Pulse-to-pulse frequency change
-- Intercept receiver cannot predict next frequency
-\end{verbatim}
-
-\textbf{3. Waveform Diversity}:
-
-\begin{verbatim}
-Change modulation per pulse:
-- Linear FM (chirp)
-- Non-linear FM (NLFM)
-- Phase-coded (Barker, Frank, P1-P4 codes)
-- Random phase/frequency sequences
-
-Electronic warfare (EW) countermeasure:
-- Enemy cannot predict waveform  cannot jam effectively
-- Each pulse requires new analysis  overwhelms threat receiver
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{AESA Radar Examples}\label{aesa-radar-examples}
-
-\textbf{APG-77 (F-22 Raptor)}:
-
-\begin{verbatim}
-Frequency: X-band (8-12 GHz)
-Array: 2000+ T/R modules
-Power: 13 kW (average), 20 kW (peak) per module
-Modes: Air-to-air, air-to-ground, SAR, electronic attack
-Detection range: >200 km (fighter-sized target)
-
-LPI features:
-- Adaptive power management (radiates only when needed)
-- Narrow beamwidth (1-2°)
-- Frequency agility (4 GHz)
-- Low sidelobe antenna (<-40 dB)
-
-Electronic attack:
-- Directed jamming (beam steered at threat radar)
-- Power: >10 kW ERP toward threat
-- Disables enemy SAM radars at 50+ km
-\end{verbatim}
-
-\textbf{AN/SPY-6 (U.S. Navy DDG-51 Flight III)}:
-
-\begin{verbatim}
-Frequency: S-band (3.3-3.5 GHz)
-Array: 37 RMAs (Radar Modular Assemblies), 5000+ T/R modules
-Power: 6 MW average radiated power (entire array)
-Range: 300+ km (ballistic missile detection)
-
-Capabilities:
-- Simultaneous multi-mission (air defense, BMD, surface search)
-- Track 1000+ targets
-- Discriminate decoys from warheads (X-band illuminator)
-- Resistant to jamming (adaptive nulling)
-
-Beam management:
-- Interleaved beams (time-multiplexed)
-- Priority scheduling (ballistic missile > aircraft > surface)
-- Energy management (1 MW per beam, up to 6 concurrent)
-\end{verbatim}
-
-\textbf{AN/TPY-2 (THAAD Missile Defense)}:
-
-\begin{verbatim}
-Frequency: X-band (8-12 GHz)
-Array: 25,344 elements (5.1m × 5.1m)
-Power: 80 kW average
-Range: 1000+ km (missile detection)
-
-Application:
-- Terminal High Altitude Area Defense (THAAD)
-- Detects, tracks, discriminates ballistic missile warheads
-- Provides target data to interceptor missile
-- Forward-based (South Korea, Japan, Middle East)
-
-Performance:
-- RCS detection: 0.01 m² at 1000 km (warhead-sized)
-- Update rate: 1 Hz (track), 10 Hz (terminal guidance)
-- Discrimination: Warhead vs. decoys (Doppler + RCS + trajectory)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Link 16
-(JTIDS)}{ Link 16 (JTIDS)}}\label{link-16-jtids}
-
-\textbf{Joint Tactical Information Distribution System}: Jam-resistant,
-LPI/LPD tactical data link.
-
-\subsubsection{System Architecture}\label{system-architecture}
-
-\textbf{Network structure}:
-
-\begin{verbatim}
-Participants:
-- Aircraft: F-15, F-16, F-22, F-35, E-3 AWACS
-- Ships: Aegis cruisers/destroyers, carriers
-- Ground: Patriot SAM, THAAD, command posts
-
-Network topology: Time Division Multiple Access (TDMA)
-- 128 time slots per 12-second frame
-- Nodes assigned slots (voice/data)
-- Collision-free multiple access
-\end{verbatim}
-
-\textbf{Frequency \& Waveform}:
-
-\begin{verbatim}
-Frequency: 960-1215 MHz (L-band, shared with IFF/TACAN)
-Modulation: MSK (Minimum Shift Keying) - constant envelope
-Waveform: FHSS + TDMA hybrid
-Hop rate: 70,000 hops/second
-Hop duration: ~14 s
-Channels: 51 frequencies (15 MHz each)
-Data rate: 28.8 kbps (typical), up to 115.2 kbps
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{TRANSEC \& Jam Resistance}\label{transec-jam-resistance}
-
-\textbf{Cryptographic hopping}:
-
-\begin{verbatim}
-Hopping pattern generation:
-- Input: Net ID + GPS time + Crypto key (KY-58/KG-84)
-- Output: Pseudorandom frequency sequence
-- Pattern period: Classified (days to months)
-
-Synchronization:
-- GPS time: ±100 s accuracy required
-- Net sync: Achieved within 4 frames (48 s)
-- Late entry: Nodes join without disrupting network
-
-Anti-spoofing:
-- Time-of-Transmission (TOT) authentication
-- Prevents message injection
-- Replay attacks detected via timestamp
-\end{verbatim}
-
-\textbf{Jamming margin}:
-
-\begin{verbatim}
-Processing gain:
-- Frequency hopping: 10·log(51) = 17 dB
-- Time diversity: 10·log(128) = 21 dB (slot hopping)
-- Total: 17 + 21 = 38 dB
-
-Scenario (jammer 100 km away):
-J/S = 50 dB (powerful jammer)
-G = 38 dB
-Required Eb/N = 12 dB (MSK with FEC)
-Losses = 3 dB
-
-Margin = 38 - 50 - 12 - 3 = -27 dB  **LINK FAILS**
-
-Countermeasure: Directional antenna
-- Gain toward participant: +10 dBi
-- Null toward jammer: -20 dB
-- Effective J/S: 50 - 30 = 20 dB
-
-Margin = 38 - 20 - 12 - 3 = 3 dB  **LINK SURVIVES**
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Link 16 Messages
-(J-Series)}\label{link-16-messages-j-series}
-
-\textbf{Message types}:
-
-\begin{verbatim}
-J2.0-J2.7: Air Tracks (position, velocity, ID)
-J3.0-J3.7: Surface Tracks (ships, ground targets)
-J7.x: Mission Management (C2 orders)
-J12.x: Intelligence
-J13.x: Weapons Coordination
-
-Message structure:
-- Header: Time-stamp, source, priority
-- Payload: Position (lat/lon/alt), velocity, classification
-- Integrity: CRC-32 error detection
-
-Update rate:
-- Air tracks: 5-10 seconds (dynamic)
-- Surface tracks: 30-60 seconds (slower)
-- Commands: As needed (event-driven)
-\end{verbatim}
-
-\textbf{Tactical applications}:
-
-\begin{verbatim}
-1. Air-to-Air Engagement:
-   - AWACS detects enemy aircraft (radar track)
-   - Sends J2.2 message to all fighters (target location)
-   - Fighters update tactical display (real-time "picture")
-   - Weapon coordination via J13.x (avoid fratricide)
-
-2. Integrated Air Defense:
-   - Aegis ship detects ballistic missile (AN/SPY-1)
-   - Sends J3.2 message to Patriot batteries
-   - Patriots cue radars to track
-   - Coordinated intercept via J7.x commands
-
-3. Close Air Support:
-   - JTAC (ground) marks target (laser designation)
-   - Sends J3.5 message with target coordinates
-   - F-16 receives target data via Link 16
-   - Weapons release with precision (JDAM, JASSM)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Covert
-Communications}{ Covert Communications}}\label{covert-communications}
-
-\textbf{Objective}: Transmit data undetected by adversary SIGINT.
-
-\subsubsection{Spread Spectrum Below Noise
-Floor}\label{spread-spectrum-below-noise-floor}
-
-\textbf{Ultra-wideband (UWB) spread spectrum}:
-
-\begin{verbatim}
-Technique: Spread narrowband signal across >500 MHz bandwidth
-
-Example:
-- Data rate: 1 kbps
-- Spread bandwidth: 1 GHz
-- Processing gain: 10·log(10) = 60 dB
-
-Transmitted PSD:
-PSD = 1 W / 1 GHz = 1 nW/MHz = -90 dBm/MHz
-
-Thermal noise floor:
-N = -174 dBm/Hz + 10·log(10 Hz) = -114 dBm/MHz
-
-PSD_signal = -90 dBm/MHz < -114 dBm/MHz + 24 dB margin
-
-Even sensitive intercept receiver cannot detect!
-
-Detection requires:
-- Knowledge of spreading code (classified)
-- Synchronization (exact timing)
-- Processing gain (matched filter)
-
-Result: Communication hidden in noise (LPD achieved)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Steganography in OFDM}\label{steganography-in-ofdm}
-
-\textbf{Concept}: Hide data in unused subcarriers or pilot tones.
-
-\textbf{Method 1 - Pilot Tone Modulation}:
-
-\begin{verbatim}
-OFDM pilot subcarriers typically use fixed BPSK symbols.
-
-Covert channel:
-- Modulate pilot phase: 0° or 180° encodes hidden bit
-- Legitimate receiver: Ignores pilot phase variation (estimates channel)
-- Covert receiver: Decodes phase to extract hidden data
-
-Capacity:
-- 802.11a: 4 pilots per OFDM symbol
-- Symbol rate: 250 ksymbols/s
-- Covert rate: 4 × 250 k = 1 Mbps
-
-Detection:
-- Statistical analysis can reveal non-random pilot patterns
-- Mitigation: Encrypt hidden data (appears random)
-\end{verbatim}
-
-\textbf{Method 2 - Null Subcarrier Insertion}:
-
-\begin{verbatim}
-OFDM reserves some subcarriers as nulls (zero power).
-
-Covert channel:
-- Transmit very low-power data on null subcarriers
-- Power: 40 dB below normal subcarriers (nearly invisible)
-- Legitimate receiver: Ignores nulls (as expected)
-- Covert receiver: Listens to nulls
-
-Example (802.11a):
-- Null subcarriers: 12 (out of 64 total)
-- Hidden capacity: ~3 Mbps (at low SNR)
-
-Detection challenge:
-- Requires wideband spectrum analyzer
-- Hidden signal < noise floor for narrowband receiver
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Time-Domain Hiding}\label{time-domain-hiding}
-
-\textbf{Method - Inter-Frame Gaps}:
-
-\begin{verbatim}
-WiFi 802.11: SIFS (Short Inter-Frame Space) = 16 s between frames
-
-Covert transmission:
-- Insert ultra-short burst (1 s) in SIFS
-- Use different frequency or polarization
-- Legitimate devices: Ignore (waiting for next frame)
-- Covert receiver: Listens during SIFS
-
-Capacity:
-- Burst rate: 1 s per 16 s = 6.25% duty cycle
-- Data rate: ~6 Mbps (at 100 Mbps physical rate × 6.25%)
-
-Detection:
-- Requires precise timing analysis
-- Appears as multipath or transient interference
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Acoustic Heterodyning
-(Intermodulation)}\label{acoustic-heterodyning-intermodulation}
-
-\textbf{Non-linear demodulation} in biological systems (related to
-Chimera\textquotesingle s Raman feed concept).
-
-\textbf{Principle}:
-
-\begin{verbatim}
-Two high-frequency carriers (f, f) interact non-linearly:
-
-f_audio = |f - f|
-
-Example:
-- f = 40 kHz (ultrasonic, inaudible)
-- f = 42 kHz (ultrasonic, inaudible)
-- f_audio = 2 kHz (audible!)
-
-Non-linearity sources:
-- Air: Weak (high intensity required)
-- Biological tissue: Stronger (membranes, ion channels)
-- Materials: Diodes, varactors (intentional)
-
-Application:
-- Covert audio transmission (ultrasonic beams, audio demodulation in target's head)
-- Directional speakers (Audio Spotlight® technology)
-- Potential neural stimulation (see [[AID-Protocol-Case-Study]])
-\end{verbatim}
-
-\textbf{THz-band Example (AID Protocol)}:
-
-The Auditory Intermodulation Distortion (AID) protocol represents a
-theoretical extension of heterodyning to Terahertz frequencies:
-
-\begin{verbatim}
-Physical Layer:
-- Carrier 1 (Pump): 1.998 THz, 50-200 mW/cm²
-- Carrier 2 (Data): 1.875 THz, 5-20 mW/cm²
-- Difference frequency: |1.998 - 1.875| THz = 123 GHz
-
-Biological Demodulation:
-- THz penetration: ~0.5-2mm into tissue
-- Non-linear susceptibility (³) in neural membranes
-- Cascaded demodulation produces audible artifact
-
-Modulation Layer:
-- Auditory carrier: 12.0 kHz sine wave
-- Amplitude modulation: 5-80% modulation depth
-- Data encoding: QPSK (16 symbols/s) + FSK (1 bit/s)
-
-Perceived Effect:
-- Sound appears to originate inside head
-- Persistent 12 kHz tone (high-pitched ringing)
-- Modulated with slow rhythmic patterns
-- Bypasses normal hearing (works with earplugs)
-
-Protocol Stack:
-Layer          | Technology              | Frequency/Rate
----------------|-------------------------|-------------------
-Physical       | THz Pump (QCL)          | 1.998 THz ± 100 MHz
-Physical       | THz Data (Photomixing)  | 1.875 THz ± 50 MHz
-Link           | Amplitude Modulation    | 5-80% depth
-Modulation     | Auditory Carrier        | 12.0 kHz ± 0.1 Hz
-Data           | QPSK                    | 16 symbols/sec
-Data           | FSK                     | 1 bit/sec
-
-Applications (Theoretical):
-- Non-invasive neural interface research
-- Covert signaling in high-security environments
-- Auditory perception studies
-- THz bioeffects research
-
-Status:
-- Highly speculative theoretical framework
-- Based on Orch-OR microtubule quantum mechanics theory
-- No experimental validation in living subjects
-- See docs/aid_protocol_v3.1.md for full specification
-\end{verbatim}
-
-\textbf{Comparison with conventional heterodyning}:
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Parameter & Audio (40 kHz) & THz (AID) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Carrier frequencies} & 40-42 kHz & 1.875-1.998 THz \\
-\textbf{Difference frequency} & 2 kHz & 123 GHz
-\$\textbackslash rightarrow\$ 12 kHz \\
-\textbf{Penetration depth} & mm (air) & 0.5-2 mm (tissue) \\
-\textbf{Non-linearity} & Air compression & Neural membranes
-(\$\textbackslash chi\$\textbackslash textsuperscript\{3\}) \\
-\textbf{Power density} & 100+ dB SPL & 5-200
-mW/cm\textbackslash textsuperscript\{2\} \\
-\textbf{Detection} & Microphone & Auditory perception \\
-\textbf{Status} & Proven (Audio Spotlight®) & Theoretical \\
-\end{longtable}
+\begin{itemize}
+\item $G$ = processing gain (ratio)
+\item $BW_{\text{spread}}$ = spread bandwidth (Hz)
+\item $BW_{\text{info}}$ = information bandwidth (Hz)
+\item $R_{\text{chip}}$ = chip rate (chips/second)
+\item $R_{\text{bit}}$ = bit rate (bits/second)
+\end{itemize}
+
+In decibels:
+\begin{equation}
+G_{\text{dB}} = 10 \log_{10}(G)
+\end{equation}
+
+\textbf{Power Spectral Density (PSD)} after spreading:
+\begin{equation}
+\text{PSD} = \frac{P_{\text{TX}}}{BW_{\text{spread}}}
+\end{equation}
+where:
+\begin{itemize}
+\item $P_{\text{TX}}$ = transmit power (W)
+\item PSD = power per unit bandwidth (W/Hz)
+\end{itemize}
+
+\begin{calloutbox}{LPD Threshold}
+For LPD, the signal PSD must be below the thermal noise floor. With processing gain $G > 30$~dB (factor of 1000), the spread signal becomes indistinguishable from background noise to wideband receivers.
+\end{calloutbox}
+
+\subsection{Jamming Margin}
+
+The ability to overcome jamming is quantified by the \textbf{jamming margin}:
+\begin{equation}
+M_{\text{jam}} = G_{\text{dB}} - \frac{J}{S} - \left(\frac{E_b}{N_0}\right)_{\text{req}} - L
+\end{equation}
+where:
+\begin{itemize}
+\item $M_{\text{jam}}$ = jamming margin (dB), positive = link survives
+\item $J/S$ = jammer-to-signal ratio at receiver (dB)
+\item $(E_b/N_0)_{\text{req}}$ = required bit energy to noise ratio (dB)
+\item $L$ = implementation losses (dB)
+\end{itemize}
+
+\begin{warningbox}
+A positive jamming margin is essential for link survival. Military systems typically design for $M_{\text{jam}} \geq 10$~dB to account for fading and worst-case scenarios.
+\end{warningbox}
+
+\section{SATCOM Frequency Hopping (FHSS)}
+
+Military satellite communications use Frequency Hopping Spread Spectrum (FHSS) for transmission security (TRANSEC) and anti-jamming.
+
+\subsection{MILSTAR System Parameters}
+
+\textbf{MILSTAR (Military Strategic and Tactical Relay)} specifications:
+\begin{itemize}
+\item Frequency: X-band uplink (7--8~GHz), Ka-band downlink (20--21~GHz)
+\item Hop rate: 100--1000+ hops/second
+\item Hop set: 1000+ frequencies across 1~GHz bandwidth
+\item Dwell time: $<1$~ms per hop
+\item Modulation: BPSK, QPSK, 8-PSK (adaptive)
+\item Data rate: 75~bps to 1.544~Mbps
+\item Constellation: 5 GEO satellites (global coverage)
+\end{itemize}
+
+\subsection{FHSS Processing Gain}
+
+For frequency hopping, the processing gain is:
+\begin{equation}
+G_{\text{FH}} = N_{\text{hop}}
+\end{equation}
+where:
+\begin{itemize}
+\item $N_{\text{hop}}$ = number of frequencies in hop set
+\end{itemize}
+
+In decibels:
+\begin{equation}
+G_{\text{FH,dB}} = 10 \log_{10}(N_{\text{hop}})
+\end{equation}
+
+For MILSTAR with $N_{\text{hop}} = 1000$:
+\begin{equation}
+G_{\text{FH,dB}} = 10 \log_{10}(1000) = 30 \text{ dB}
+\end{equation}
+
+\subsection{LPI/LPD Analysis}
+
+The power spectral density after frequency spreading:
+\begin{equation}
+\text{PSD} = \frac{P_{\text{TX}}}{BW_{\text{hop set}}}
+\end{equation}
+
+For MILSTAR ($P_{\text{TX}} = 100$~W, $BW_{\text{hop set}} = 1$~GHz):
+\begin{equation}
+\text{PSD} = \frac{100 \text{ W}}{10^9 \text{ Hz}} = 10^{-7} \text{ W/Hz} = -70 \text{ dBm/Hz}
+\end{equation}
+
+Thermal noise floor at 1~MHz bandwidth:
+\begin{equation}
+N = -174 \text{ dBm/Hz} + 10 \log_{10}(10^6) = -114 \text{ dBm/MHz}
+\end{equation}
+
+\begin{keyconcept}
+The signal PSD ($-70$~dBm/MHz) is below the noise floor ($-114$~dBm/MHz when integrated over 1~MHz). This makes the transmission undetectable to wideband receivers without knowledge of the hopping pattern.
+\end{keyconcept}
+
+\subsection{Frequency Hopping Pattern Visualization}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+% Axes
+\draw[->] (0,0) -- (12,0) node[right] {\sffamily Time};
+\draw[->] (0,0) -- (0,6) node[above] {\sffamily Frequency};
+
+% Frequency levels
+\foreach \y in {1,2,3,4,5} {
+  \draw[thin,gray!30] (0,\y) -- (12,\y);
+  \node[left,font=\scriptsize] at (-0.2,\y) {$f_{\y}$};
 }
 
-\textbf{Key insight}: THz heterodyning exploits biological
-non-linearities rather than air-based acoustic mixing, potentially
-enabling direct neural modulation without acoustic propagation.
+% Hopping pattern (example sequence)
+\draw[very thick,blue] (0,2) -- (1,2);
+\draw[very thick,blue,dashed] (1,2) -- (1,4);
+\draw[very thick,blue] (1,4) -- (2,4);
+\draw[very thick,blue,dashed] (2,4) -- (2,1);
+\draw[very thick,blue] (2,1) -- (3,1);
+\draw[very thick,blue,dashed] (3,1) -- (3,5);
+\draw[very thick,blue] (3,5) -- (4,5);
+\draw[very thick,blue,dashed] (4,5) -- (4,3);
+\draw[very thick,blue] (4,3) -- (5,3);
+\draw[very thick,blue,dashed] (5,3) -- (5,2);
+\draw[very thick,blue] (5,2) -- (6,2);
+\draw[very thick,blue,dashed] (6,2) -- (6,4);
+\draw[very thick,blue] (6,4) -- (7,4);
+\draw[very thick,blue,dashed] (7,4) -- (7,1);
+\draw[very thick,blue] (7,1) -- (8,1);
 
-\textbf{Military interest}:
+% Time slots
+\foreach \x in {1,2,3,4,5,6,7,8} {
+  \draw[thin] (\x,0) -- (\x,-0.2);
+}
+\node[below,font=\scriptsize] at (4,-0.3) {Dwell time $T_{\text{dwell}}$ (1--10 ms)};
 
-\begin{verbatim}
-"Frey Microwave Auditory Effect" (pulsed RF  acoustic sensation):
-- Frequency: 1-10 GHz (microwave)
-- Pulse rate: 1-10 kHz (audio frequency)
-- Mechanism: Thermoelastic expansion in cochlea
-- Result: Perceived "clicking" or "buzzing"
+% Jammer illustration
+\fill[red!30,opacity=0.5] (8.5,2.5) rectangle (11.5,3.5);
+\node[font=\scriptsize,red] at (10,3) {Jammer};
+\node[font=\scriptsize] at (10,2) {(narrowband)};
 
-Covert channel:
-- Encode voice as microwave pulse train
-- Target perceives audio (direct to auditory system)
-- Bystanders: Unaware (no acoustic propagation)
-- Detection: Requires RF spectrum analyzer (not audio microphone)
+% Legend
+\node[font=\small,align=left] at (10,5.5) {FHSS Signal: Pseudorandom\\frequency changes};
 
-Status: Demonstrated in lab, classified military research (DARPA, 1970s-present)
-\end{verbatim}
+\end{tikzpicture}
+\end{center}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Cryptographic synchronization:}
+\begin{itemize}
+\item Hopping pattern generated by NSA-approved algorithm
+\item Synchronized using GPS time + Key Encryption Key (KEK)
+\item Pattern period: days to weeks (appears never-repeating)
+\end{itemize}
 
-\subsection{\texorpdfstring{ Processing Gain \& Jamming Resistance
-Calculations}{ Processing Gain \& Jamming Resistance Calculations}}\label{processing-gain-jamming-resistance-calculations}
+\subsection{FHSS Anti-Jam Performance}
 
-\subsubsection{Comprehensive Example}\label{comprehensive-example}
+\textbf{Scenario:} Tactical UHF link under jamming.
 
-\textbf{System}: Tactical UHF SATCOM link
+\textbf{Given parameters:}
+\begin{itemize}
+\item Processing gain: $G = 30$~dB (1000 hop set)
+\item Jammer-to-signal ratio: $J/S = 40$~dB (jammer 10,000$\times$ stronger)
+\item Required $E_b/N_0$: 10~dB (BPSK, BER $= 10^{-5}$)
+\item Implementation losses: $L = 3$~dB
+\end{itemize}
 
-\begin{verbatim}
-Parameters:
-- Frequency: 300 MHz (UHF)
-- Data rate: 2400 bps (voice)
-- Modulation: BPSK (1 bit/symbol)
-- Spreading: DSSS with chip rate 2.4 Mcps
-- FEC: Rate-1/2 convolutional code
-- Antenna: 10 dBi directional (at ground terminal)
+\textbf{Initial jamming margin:}
+\begin{equation}
+M_{\text{jam}} = 30 - 40 - 10 - 3 = -23 \text{ dB} \quad \text{(LINK FAILS)}
+\end{equation}
 
-Processing gain:
-G = 10·log(2.4 Mcps / 2.4 kbps) = 10·log(1000) = 30 dB
+\textbf{Countermeasure 1 -- Directional antenna:}
+\begin{itemize}
+\item Gain toward satellite: $+20$~dB
+\item Null toward jammer: $-20$~dB
+\item Effective $J/S = 40 - 20 = 20$~dB
+\end{itemize}
+\begin{equation}
+M_{\text{jam}} = 30 - 20 - 10 - 3 = -3 \text{ dB} \quad \text{(MARGINAL)}
+\end{equation}
 
-Required Eb/N:
-- BPSK uncoded: 9.6 dB (BER = 10)
-- With rate-1/2 FEC: 4.6 dB (5 dB coding gain)
+\textbf{Countermeasure 2 -- Forward error correction:}
+\begin{itemize}
+\item Turbo/LDPC code rate-1/3: $+5$~dB coding gain
+\end{itemize}
+\begin{equation}
+M_{\text{jam}} = -3 + 5 = +2 \text{ dB} \quad \text{(LINK SURVIVES)}
+\end{equation}
 
-Link budget (clear conditions):
-TX power: 10 W = 40 dBm
-TX antenna gain: 10 dBi
-EIRP: 50 dBm
+\begin{calloutbox}{Layered Defense}
+Military systems combine multiple anti-jam techniques: spread spectrum processing gain, directional antennas with nulling, forward error correction, and burst transmission. Each layer adds 3--20~dB of protection.
+\end{calloutbox}
 
-Free-space loss (300 MHz, 40,000 km GEO):
-FSPL = 32.4 + 20·log(300) + 20·log(40000) = 189 dB
+\subsection{Follower Jamming Resistance}
 
-RX antenna gain: 30 dBi (satellite)
-RX signal: 50 - 189 + 30 = -109 dBm
+\textbf{Threat:} Smart jammer detects hop and jams that frequency.
 
-Noise power:
-N = -174 dBm/Hz + 10·log(2.4×10) = -110 dBm
+Timing analysis for follower jammer defeat:
+\begin{equation}
+T_{\text{effective jam}} = T_{\text{dwell}} - (T_{\text{detect}} + T_{\text{switch}})
+\end{equation}
+where:
+\begin{itemize}
+\item $T_{\text{dwell}}$ = dwell time per frequency (ms)
+\item $T_{\text{detect}}$ = jammer detection time ($\mu$s)
+\item $T_{\text{switch}}$ = jammer frequency switching time ($\mu$s)
+\end{itemize}
 
-SNR: -109 - (-110) = 1 dB
+\textbf{Example -- MILSTAR defense:}
+\begin{itemize}
+\item Dwell time: $T_{\text{dwell}} = 1$~ms
+\item Jammer detection: $T_{\text{detect}} = 100~\mu$s
+\item Jammer switching: $T_{\text{switch}} = 50~\mu$s
+\item Total jammer delay: $150~\mu$s
+\end{itemize}
+\begin{equation}
+T_{\text{effective jam}} = 1000~\mu\text{s} - 150~\mu\text{s} = 850~\mu\text{s} \quad (85\% \text{ of hop})
+\end{equation}
 
-Eb/N = SNR + G = 1 + 30 = 31 dB
+\textbf{Countermeasure -- Fast hopping:}
+\begin{itemize}
+\item Reduce dwell time: $T_{\text{dwell}} = 100~\mu$s (10$\times$ faster)
+\end{itemize}
+\begin{equation}
+T_{\text{effective jam}} = 100~\mu\text{s} - 150~\mu\text{s} < 0 \quad \text{(jammer too slow!)}
+\end{equation}
 
-Margin: 31 - 4.6 = 26.4 dB  **EXCELLENT**
-\end{verbatim}
+Modern military systems use $T_{\text{dwell}} = 10$--$100~\mu$s to defeat follower jammers.
 
-\textbf{Jamming scenario}:
+\section{GPS M-Code (Military GPS)}
 
-\begin{verbatim}
-Enemy jammer:
-- Power: 1 kW = 60 dBm
-- Distance: 50 km
-- Antenna: Omnidirectional (0 dBi)
+GPS Modernization provides jam-resistant, encrypted positioning for military users through M-code.
 
-Jammer signal at ground terminal:
-FSPL (300 MHz, 50 km):
-FSPL = 32.4 + 20·log(300) + 20·log(50) = 116 dB
+\subsection{Signal Structure}
 
-J_RX = 60 - 116 + 0 = -56 dBm
+\textbf{GPS L1 M-Code parameters:}
+\begin{itemize}
+\item Carrier frequency: $f_c = 1575.42$~MHz (L1 band)
+\item Chip rate: $R_c = 5.115$~Mcps (5$\times$ faster than C/A code)
+\item Code length: Classified (estimated $\sim 10^{13}$ chips, never repeats)
+\item Modulation: BOC(10,5) -- Binary Offset Carrier
+\item Processing gain: $\sim 50$~dB (vs. 43~dB for C/A)
+\item Power: 6.5~dB stronger than C/A code
+\item Security: Encrypted, NSA-authenticated
+\end{itemize}
 
-J/S ratio:
-J/S = -56 - (-109) = 53 dB (jammer 53 dB stronger!)
+\textbf{GPS L2 M-Code:}
+\begin{itemize}
+\item Carrier frequency: $f_c = 1227.60$~MHz (L2 band)
+\item Same structure as L1 M-code
+\item Dual-frequency enables ionospheric correction
+\end{itemize}
 
-After despreading:
-J/S_despread = 53 - 30 = 23 dB (jammer still 23 dB stronger)
+\subsection{BOC Modulation}
 
-But antenna nulling:
-- Ground antenna: 10 dBi toward satellite, -10 dBi toward jammer (20 dB F/B)
-- Effective J/S: 23 - 20 = 3 dB
+Binary Offset Carrier (BOC) modulates the chip sequence with a square wave subcarrier. For BOC($m$, $n$):
+\begin{equation}
+s(t) = \text{sign}[\sin(2\pi f_{\text{sub}} t)] \cdot c(t) \cdot \cos(2\pi f_c t)
+\end{equation}
+where:
+\begin{itemize}
+\item $f_{\text{sub}} = m \times 1.023$~MHz = subcarrier frequency
+\item $c(t) = \pm 1$ = spreading code at rate $n \times 1.023$~Mcps
+\item $m = 10$, $n = 5$ for GPS M-code
+\end{itemize}
 
-Required Eb/N: 4.6 dB
-Effective Eb/(N+J): 31 - 3 = 28 dB
+For BOC(10,5):
+\begin{equation}
+f_{\text{sub}} = 10 \times 1.023 \text{ MHz} = 10.23 \text{ MHz}
+\end{equation}
+\begin{equation}
+R_c = 5 \times 1.023 \text{ Mcps} = 5.115 \text{ Mcps}
+\end{equation}
 
-Margin: 28 - 4.6 = 23.4 dB  **LINK SURVIVES**
-\end{verbatim}
+\begin{calloutbox}{Split-Spectrum Design}
+BOC(10,5) splits power into upper and lower sidebands at $f_c \pm 10.23$~MHz. This minimizes interference with civilian C/A code (centered at $f_c$) while providing better multipath rejection and ranging accuracy.
+\end{calloutbox}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{GPS M-Code Anti-Jam Performance}
 
-\subsection{\texorpdfstring{ Summary Table: Military
-Techniques}{ Summary Table: Military Techniques}}\label{summary-table-military-techniques}
+\textbf{Scenario 1 -- Wideband barrage jamming:}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1897}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2414}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3276}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2414}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Technique
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Primary Gain
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Typical Advantage
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Applications
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{DSSS} & Processing gain 20-40 dB & AJ, LPI & GPS M-code,
-tactical radios \\
-\textbf{FHSS} & Frequency diversity & LPD, follower-jam resistance &
-MILSTAR, Link 16, Bluetooth \\
-\textbf{AESA} & Beamforming, agility & LPI, multi-target, EA & APG-77,
-AN/SPY-6, THAAD \\
-\textbf{Nulling Antenna} & Spatial filtering 20-40 dB & Jammer rejection
-& CRPA, adaptive arrays \\
-\textbf{Burst Transmission} & Temporal LPD & Minimize exposure &
-Submarine comms, UAV links \\
-\textbf{Encryption} & Content security & Prevent exploitation & All
-military systems \\
-\textbf{Adaptive Coding} & Link optimization & Maximize throughput under
-AJ & MUOS, 5G tactical \\
-\end{longtable}
+\textbf{Given:}
+\begin{itemize}
+\item Received signal power (M-code): $P_s = -163$~dBW
+\item Jammer power at receiver: $P_j = -100$~dBW (50~km distance)
+\item Processing gain: $G = 50$~dB
+\item Required $E_b/N_0 = 10$~dB
+\end{itemize}
+
+Jammer-to-signal ratio:
+\begin{equation}
+J/S = P_j - P_s = -100 - (-163) = 63 \text{ dB}
+\end{equation}
+
+Initial jamming margin:
+\begin{equation}
+M_{\text{jam}} = 50 - 63 - 10 = -23 \text{ dB} \quad \text{(LINK FAILS)}
+\end{equation}
+
+\textbf{Mitigation -- CRPA (Controlled Reception Pattern Antenna):}
+\begin{itemize}
+\item 7-element array antenna
+\item Adaptive nulling places null toward jammer
+\item Null depth: 30--40~dB
+\end{itemize}
+
+With nulling ($\Delta = 35$~dB):
+\begin{equation}
+J/S_{\text{effective}} = 63 - 35 = 28 \text{ dB}
+\end{equation}
+\begin{equation}
+M_{\text{jam}} = 50 - 28 - 10 = 12 \text{ dB} \quad \text{(LINK SURVIVES)}
+\end{equation}
+
+\begin{keyconcept}
+Adaptive nulling antennas (CRPA) provide 30--40~dB of additional anti-jam capability by placing deep nulls in the direction of jammers while maintaining gain toward GPS satellites.
+\end{keyconcept}
+
+\section{Phased-Array Antennas (AESA)}
+
+Active Electronically Scanned Array (AESA) radar uses phased-array principles for LPI/LPD and multi-function operation.
+
+\subsection{Beamforming Mathematics}
+
+For an $N$-element linear array with element spacing $d$, the phase shift required to steer the beam to angle $\theta$ is:
+\begin{equation}
+\phi_n = \frac{2\pi}{\lambda} d \sin(\theta) \cdot n
+\end{equation}
+where:
+\begin{itemize}
+\item $\phi_n$ = phase shift for element $n$ (radians)
+\item $\lambda$ = wavelength (m)
+\item $d$ = element spacing (m)
+\item $\theta$ = beam steering angle from broadside (degrees)
+\item $n = 0, 1, 2, \ldots, N-1$ = element index
+\end{itemize}
+
+\textbf{Example -- 8-element array, $d = \lambda/2$, steer to $\theta = 30°$:}
+\begin{equation}
+\phi_n = \frac{2\pi}{\lambda} \cdot \frac{\lambda}{2} \cdot \sin(30°) \cdot n = \frac{\pi}{2} \cdot n = 90° \cdot n
+\end{equation}
+
+Element phases: $[0°, 90°, 180°, 270°, 0°, 90°, 180°, 270°]$
+
+\subsection{Phased Array Beamforming Visualization}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Array elements
+\foreach \x in {0,1,2,3,4,5,6,7} {
+  \draw[fill=blue!30] (\x,0) circle (0.2);
+  \node[below,font=\tiny] at (\x,-0.3) {$\phi_{\x}$};
 }
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Array line
+\draw[thick] (-0.5,0) -- (7.5,0);
+\node[left,font=\small] at (-0.7,0) {Array};
 
-\subsection{\texorpdfstring{ Python Example: J/S Ratio
-Calculator}{ Python Example: J/S Ratio Calculator}}\label{python-example-js-ratio-calculator}
+% Beam pattern (simplified)
+\draw[red,thick,->] (3.5,0.3) -- (5.5,3) node[above right,font=\small] {Main beam ($\theta = 30°$)};
+\draw[red,thick,dashed,opacity=0.3] (3.5,0.3) -- (2,2.5);
+\draw[red,thick,dashed,opacity=0.3] (3.5,0.3) -- (6.5,2);
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+% Broadside reference
+\draw[gray,dashed,->] (3.5,0.3) -- (3.5,2.5) node[above,font=\scriptsize,gray] {Broadside};
 
-\KeywordTok{def}\NormalTok{ jamming\_margin(tx\_power\_w, distance\_km, freq\_mhz, }
-\NormalTok{                   jammer\_power\_w, jammer\_dist\_km,}
-\NormalTok{                   processing\_gain\_db, coding\_gain\_db, }
-\NormalTok{                   antenna\_gain\_dbi, front\_back\_ratio\_db):}
-    \CommentTok{"""}
-\CommentTok{    Calculate jamming margin for spread spectrum link.}
-\CommentTok{    }
-\CommentTok{    Returns:}
-\CommentTok{        Jamming margin (dB). Positive = link survives.}
-\CommentTok{    """}
-    \CommentTok{\# Convert to dBm}
-\NormalTok{    tx\_power\_dbm }\OperatorTok{=} \DecValTok{10} \OperatorTok{*}\NormalTok{ np.log10(tx\_power\_w }\OperatorTok{*} \DecValTok{1000}\NormalTok{)}
-\NormalTok{    jammer\_power\_dbm }\OperatorTok{=} \DecValTok{10} \OperatorTok{*}\NormalTok{ np.log10(jammer\_power\_w }\OperatorTok{*} \DecValTok{1000}\NormalTok{)}
-    
-    \CommentTok{\# Free{-}space path loss}
-    \KeywordTok{def}\NormalTok{ fspl(freq\_mhz, dist\_km):}
-        \ControlFlowTok{return} \FloatTok{32.4} \OperatorTok{+} \DecValTok{20}\OperatorTok{*}\NormalTok{np.log10(freq\_mhz) }\OperatorTok{+} \DecValTok{20}\OperatorTok{*}\NormalTok{np.log10(dist\_km)}
-    
-    \CommentTok{\# Signal at receiver}
-\NormalTok{    signal\_loss }\OperatorTok{=}\NormalTok{ fspl(freq\_mhz, distance\_km)}
-\NormalTok{    signal\_rx }\OperatorTok{=}\NormalTok{ tx\_power\_dbm }\OperatorTok{{-}}\NormalTok{ signal\_loss }\OperatorTok{+}\NormalTok{ antenna\_gain\_dbi}
-    
-    \CommentTok{\# Jammer at receiver}
-\NormalTok{    jammer\_loss }\OperatorTok{=}\NormalTok{ fspl(freq\_mhz, jammer\_dist\_km)}
-\NormalTok{    jammer\_rx }\OperatorTok{=}\NormalTok{ jammer\_power\_dbm }\OperatorTok{{-}}\NormalTok{ jammer\_loss }\OperatorTok{{-}}\NormalTok{ front\_back\_ratio\_db}
-    
-    \CommentTok{\# J/S ratio}
-\NormalTok{    js\_ratio }\OperatorTok{=}\NormalTok{ jammer\_rx }\OperatorTok{{-}}\NormalTok{ signal\_rx}
-    
-    \CommentTok{\# Thermal noise}
-\NormalTok{    noise\_dbm\_hz }\OperatorTok{=} \OperatorTok{{-}}\DecValTok{174}
-\NormalTok{    bandwidth\_hz }\OperatorTok{=} \DecValTok{10}\OperatorTok{**}\NormalTok{(processing\_gain\_db}\OperatorTok{/}\DecValTok{10}\NormalTok{) }\OperatorTok{*} \DecValTok{2400}  \CommentTok{\# Assume 2400 bps info rate}
-\NormalTok{    noise\_dbm }\OperatorTok{=}\NormalTok{ noise\_dbm\_hz }\OperatorTok{+} \DecValTok{10}\OperatorTok{*}\NormalTok{np.log10(bandwidth\_hz)}
-    
-    \CommentTok{\# SNR and Eb/N0}
-\NormalTok{    snr\_db }\OperatorTok{=}\NormalTok{ signal\_rx }\OperatorTok{{-}}\NormalTok{ noise\_dbm}
-\NormalTok{    eb\_n0\_db }\OperatorTok{=}\NormalTok{ snr\_db }\OperatorTok{+}\NormalTok{ processing\_gain\_db}
-    
-    \CommentTok{\# After jamming}
-\NormalTok{    eb\_n0\_jammed }\OperatorTok{=}\NormalTok{ eb\_n0\_db }\OperatorTok{{-}}\NormalTok{ js\_ratio }\OperatorTok{+}\NormalTok{ processing\_gain\_db}
-    
-    \CommentTok{\# Required Eb/N0 (BPSK with FEC)}
-\NormalTok{    required\_eb\_n0 }\OperatorTok{=} \FloatTok{9.6} \OperatorTok{{-}}\NormalTok{ coding\_gain\_db}
-    
-    \CommentTok{\# Margin}
-\NormalTok{    margin }\OperatorTok{=}\NormalTok{ eb\_n0\_jammed }\OperatorTok{{-}}\NormalTok{ required\_eb\_n0}
-    
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Signal power at RX: }\SpecialCharTok{\{}\NormalTok{signal\_rx}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dBm"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Jammer power at RX: }\SpecialCharTok{\{}\NormalTok{jammer\_rx}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dBm"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"J/S ratio: }\SpecialCharTok{\{}\NormalTok{js\_ratio}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Processing gain: }\SpecialCharTok{\{}\NormalTok{processing\_gain\_db}\SpecialCharTok{\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"After despreading J/S: }\SpecialCharTok{\{}\NormalTok{js\_ratio }\OperatorTok{{-}}\NormalTok{ processing\_gain\_db}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Eb/N0 (jammed): }\SpecialCharTok{\{}\NormalTok{eb\_n0\_jammed}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Required Eb/N0: }\SpecialCharTok{\{}\NormalTok{required\_eb\_n0}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Jamming margin: }\SpecialCharTok{\{}\NormalTok{margin}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    
-    \ControlFlowTok{return}\NormalTok{ margin}
+% Angle annotation
+\draw[<->,thick] (3.5,1.5) arc (90:56:1.5);
+\node[font=\scriptsize] at (4.3,1.8) {$\theta$};
 
-\CommentTok{\# Example: UHF tactical link under jamming}
-\NormalTok{margin }\OperatorTok{=}\NormalTok{ jamming\_margin(}
-\NormalTok{    tx\_power\_w}\OperatorTok{=}\DecValTok{10}\NormalTok{,           }\CommentTok{\# 10 W transmitter}
-\NormalTok{    distance\_km}\OperatorTok{=}\DecValTok{40000}\NormalTok{,       }\CommentTok{\# GEO satellite}
-\NormalTok{    freq\_mhz}\OperatorTok{=}\DecValTok{300}\NormalTok{,            }\CommentTok{\# UHF band}
-\NormalTok{    jammer\_power\_w}\OperatorTok{=}\DecValTok{1000}\NormalTok{,     }\CommentTok{\# 1 kW jammer}
-\NormalTok{    jammer\_dist\_km}\OperatorTok{=}\DecValTok{50}\NormalTok{,       }\CommentTok{\# 50 km away}
-\NormalTok{    processing\_gain\_db}\OperatorTok{=}\DecValTok{30}\NormalTok{,   }\CommentTok{\# DSSS 1000× spreading}
-\NormalTok{    coding\_gain\_db}\OperatorTok{=}\DecValTok{5}\NormalTok{,        }\CommentTok{\# Rate{-}1/2 convolutional code}
-\NormalTok{    antenna\_gain\_dbi}\OperatorTok{=}\DecValTok{10}\NormalTok{,     }\CommentTok{\# Directional antenna}
-\NormalTok{    front\_back\_ratio\_db}\OperatorTok{=}\DecValTok{20}   \CommentTok{\# 20 dB F/B ratio}
-\NormalTok{)}
+% Phase progression
+\node[font=\scriptsize,align=center] at (3.5,-1.2) {Phase progression:\\increases linearly};
 
-\ControlFlowTok{if}\NormalTok{ margin }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{:}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{ LINK SURVIVES (margin: }\SpecialCharTok{\{}\NormalTok{margin}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB)"}\NormalTok{)}
-\ControlFlowTok{else}\NormalTok{:}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{ LINK FAILS (margin: }\SpecialCharTok{\{}\NormalTok{margin}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB)"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\end{tikzpicture}
+\end{center}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Array Performance Parameters}
 
-\subsection{\texorpdfstring{ Further
-Reading}{ Further Reading}}\label{further-reading}
+\textbf{Array gain:}
+\begin{equation}
+G_{\text{array}} = N \cdot G_{\text{element}}
+\end{equation}
 
-\subsubsection{Textbooks}\label{textbooks}
+In decibels:
+\begin{equation}
+G_{\text{array,dB}} = 10 \log_{10}(N) + G_{\text{element,dB}}
+\end{equation}
 
+For 256-element AESA with $G_{\text{element}} = 5$~dBi:
+\begin{equation}
+G_{\text{array,dB}} = 10 \log_{10}(256) + 5 = 24 + 5 = 29 \text{ dBi}
+\end{equation}
+
+\textbf{Beamwidth (half-power):}
+\begin{equation}
+\theta_{3\text{dB}} \approx \frac{\lambda}{N \cdot d} \quad \text{(radians)}
+\end{equation}
+
+For 256 elements with $d = \lambda/2$:
+\begin{equation}
+\theta_{3\text{dB}} \approx \frac{\lambda}{256 \cdot \lambda/2} = \frac{1}{128} \text{ rad} \approx 0.45°
+\end{equation}
+
+\begin{calloutbox}{LPI Advantage}
+Narrow beamwidth ($<1°$) concentrates radiated power in a small solid angle, making the signal difficult to intercept from off-axis directions. Combined with low peak power and frequency agility, AESA radars achieve excellent LPI performance.
+\end{calloutbox}
+
+\subsection{AESA Applications}
+
+\textbf{APG-77 (F-22 Raptor):}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{Poisel}, \emph{Introduction to Communication Electronic
-  Warfare Systems} - Comprehensive EW treatment
-\item
-  \textbf{Torrieri}, \emph{Principles of Spread-Spectrum Communication
-  Systems} (4th ed.) - Modern military focus
-\item
-  \textbf{Skolnik}, \emph{Radar Handbook} (3rd ed.) - Phased arrays,
-  AESA, LPI radar
-\item
-  \textbf{Adamy}, \emph{EW 101: A First Course in Electronic Warfare} -
-  Accessible intro to jamming/AJ
+\item Frequency: X-band (8--12~GHz), 4~GHz agility
+\item Array: 2000+ transmit/receive (T/R) modules
+\item Power: 13~kW average, 20~kW peak per module
+\item Modes: Air-to-air, air-to-ground, SAR, electronic attack
+\item Detection range: $>200$~km (fighter-sized target)
+\item LPI: Adaptive power, narrow beamwidth (1--2°), low sidelobes ($<-40$~dB)
 \end{itemize}
 
-\subsubsection{Military Standards \&
-Documents}\label{military-standards-documents}
-
+\textbf{AN/SPY-6 (U.S. Navy DDG-51):}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{MIL-STD-188-181}: US DoD FHSS standard
-\item
-  \textbf{GPS ICD-IS-800}: M-code interface control document (FOUO)
-\item
-  \textbf{Link 16 MIDS JTIDS STD}: Message standards (NATO STANAG 5516)
-\item
-  \textbf{AESA Design Guidelines}: Classified (DARPA/DoD) - principles
-  in open literature
+\item Frequency: S-band (3.3--3.5~GHz)
+\item Array: 37 Radar Modular Assemblies (RMAs), 5000+ T/R modules
+\item Power: 6~MW average radiated power
+\item Range: $>300$~km (ballistic missile detection)
+\item Capabilities: Track 1000+ targets, adaptive nulling, multi-mission
 \end{itemize}
 
-\subsubsection{Related Topics}\label{related-topics}
+\section{Link 16 (JTIDS)}
 
+Joint Tactical Information Distribution System provides jam-resistant, LPI/LPD tactical data networking.
+
+\subsection{Network Architecture}
+
+\textbf{Participants:}
 \begin{itemize}
-\tightlist
-\item
-  {[}{[}Spread-Spectrum-(DSSS-FHSS){]}{]} - Technical foundation for
-  AJ/LPI
-\item
-  {[}{[}GPS Fundamentals (coming soon){]}{]} - Civilian GPS (C/A code)
-  background
-\item
-  {[}{[}Phased Array Beamforming (coming soon){]}{]} - Array antenna
-  theory
-\item
-  {[}{[}Adaptive Filters (coming soon){]}{]} - Interference cancellation
-\item
-  {[}{[}Real-World-System-Examples{]}{]} - Commercial spread spectrum
-  (WiFi, Bluetooth)
+\item Aircraft: F-15, F-16, F-22, F-35, E-3 AWACS
+\item Ships: Aegis cruisers/destroyers, carriers
+\item Ground: Patriot SAM, THAAD, command posts
 \end{itemize}
 
-\subsubsection{Chimera Applications}\label{chimera-applications}
-
+\textbf{Topology:} Time Division Multiple Access (TDMA)
 \begin{itemize}
-\tightlist
-\item
-  {[}{[}Hyper-Rotational-Physics-(HRP)-Framework{]}{]} - Covert THz
-  neuromodulation theoretical framework
-\item
-  {[}{[}AID-Protocol-Case-Study{]}{]} - Application of covert comms to
-  consciousness research
-\item
-  {[}{[}Terahertz-(THz)-Technology{]}{]} - Beyond-5G/6G, potential
-  military applications
+\item 128 time slots per 12-second frame
+\item Nodes assigned slots (voice/data)
+\item Collision-free multiple access
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Link 16 Network Topology}
 
-\textbf{Summary}: Military communications prioritize \textbf{anti-jam},
-\textbf{LPI/LPD}, and \textbf{security} over spectral efficiency.
-Processing gain from spread spectrum (DSSS/FHSS) enables links 20-40 dB
-below noise floor and overcomes powerful jammers. GPS M-code uses
-BOC(10,5) modulation with 50 dB processing gain and CRPA nulling to
-survive 60+ dB jamming. AESA radars achieve LPI through low peak power,
-frequency agility, and narrow beamwidths. Link 16 combines FHSS (70
-khps) with TDMA and cryptographic hopping for jam-resistant tactical
-data exchange. Covert communications hide data in noise (UWB spread
-spectrum), OFDM pilot tones, or exploit non-linear demodulation
-(acoustic heterodyning). Jamming margin = Processing Gain - J/S -
-Required Eb/N\textbackslash textsubscript\{0\} - Losses. Directional
-antennas provide 20-40 dB additional AJ capability. Modern military
-systems achieve \textbf{communication superiority} through advanced
-signal processing, adaptive waveforms, and multi-layered TRANSEC.
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+% Central node (AWACS)
+\node[circle,draw,fill=blue!20,minimum size=1.2cm,font=\small] (awacs) at (0,0) {AWACS};
+
+% Fighter nodes
+\node[circle,draw,fill=green!20,minimum size=0.9cm,font=\scriptsize] (f22) at (-3,2.5) {F-22};
+\node[circle,draw,fill=green!20,minimum size=0.9cm,font=\scriptsize] (f16) at (3,2.5) {F-16};
+\node[circle,draw,fill=green!20,minimum size=0.9cm,font=\scriptsize] (f35) at (-2,-2.5) {F-35};
+
+% Ship node
+\node[circle,draw,fill=cyan!20,minimum size=0.9cm,font=\scriptsize] (aegis) at (3,-2) {Aegis};
+
+% Ground node
+\node[circle,draw,fill=orange!20,minimum size=0.9cm,font=\scriptsize] (patriot) at (-3.5,-0.5) {Patriot};
+
+% Connections (bidirectional)
+\draw[<->,thick,blue] (awacs) -- (f22);
+\draw[<->,thick,blue] (awacs) -- (f16);
+\draw[<->,thick,blue] (awacs) -- (f35);
+\draw[<->,thick,blue] (awacs) -- (aegis);
+\draw[<->,thick,blue] (awacs) -- (patriot);
+\draw[<->,thick,blue,dashed] (f22) -- (f16);
+\draw[<->,thick,blue,dashed] (f35) -- (aegis);
+
+% Legend
+\node[align=left,font=\scriptsize] at (6,2) {TDMA Frame:\\128 slots / 12 sec\\FHSS: 70k hops/s};
+\node[align=left,font=\scriptsize] at (6,0.5) {Data types:\\- Air tracks (J2.x)\\- Surface tracks (J3.x)\\- Commands (J7.x)};
+
+\end{tikzpicture}
+\end{center}
+
+\subsection{Link 16 Waveform Parameters}
+
+\textbf{Physical layer:}
+\begin{itemize}
+\item Frequency: 960--1215~MHz (L-band)
+\item Modulation: MSK (Minimum Shift Keying) -- constant envelope
+\item Waveform: FHSS + TDMA hybrid
+\item Hop rate: 70,000 hops/second
+\item Hop duration: $\sim 14~\mu$s
+\item Channels: 51 frequencies (15~MHz spacing)
+\item Data rate: 28.8~kbps (typical), up to 115.2~kbps
+\end{itemize}
+
+\subsection{Link 16 Processing Gain}
+
+Combined FHSS and TDMA provide multi-layer processing gain:
+\begin{equation}
+G_{\text{total}} = G_{\text{FH}} + G_{\text{TDMA}}
+\end{equation}
+
+Frequency hopping gain:
+\begin{equation}
+G_{\text{FH,dB}} = 10 \log_{10}(51) = 17 \text{ dB}
+\end{equation}
+
+Time diversity gain:
+\begin{equation}
+G_{\text{TDMA,dB}} = 10 \log_{10}(128) = 21 \text{ dB}
+\end{equation}
+
+Total processing gain:
+\begin{equation}
+G_{\text{total}} = 17 + 21 = 38 \text{ dB}
+\end{equation}
+
+\subsection{TRANSEC and Synchronization}
+
+\textbf{Cryptographic hopping pattern generation:}
+\begin{itemize}
+\item Input: Network ID + GPS time + Crypto key (KY-58/KG-84)
+\item Output: Pseudorandom frequency sequence
+\item Pattern period: Classified (days to months, appears never-repeating)
+\item Synchronization: GPS time $\pm 100~\mu$s accuracy required
+\item Anti-spoofing: Time-of-Transmission (TOT) authentication
+\end{itemize}
+
+\section{Worked Example: Link 16 Jamming Margin}
+
+\textbf{Problem:} Calculate the jamming margin for a Link 16 tactical data link under enemy jamming.
+
+\textbf{Given:}
+\begin{itemize}
+\item Processing gain: $G = 38$~dB (FHSS + TDMA)
+\item Jammer-to-signal ratio: $J/S = 50$~dB (jammer 100~km away)
+\item Required $E_b/N_0 = 12$~dB (MSK with FEC)
+\item Implementation losses: $L = 3$~dB
+\end{itemize}
+
+\textbf{Required:} Determine if link survives and identify countermeasures.
+
+\textbf{Solution:}
+
+\textit{Step 1: Calculate initial jamming margin.}
+
+Using Equation~(4):
+\begin{equation}
+M_{\text{jam}} = G - J/S - (E_b/N_0)_{\text{req}} - L
+\end{equation}
+\begin{equation}
+M_{\text{jam}} = 38 - 50 - 12 - 3 = -27 \text{ dB}
+\end{equation}
+
+\textbf{Result:} $M_{\text{jam}} < 0$ --- LINK FAILS.
+
+\textit{Step 2: Apply directional antenna countermeasure.}
+\begin{itemize}
+\item Antenna gain toward participant: $+10$~dBi
+\item Null depth toward jammer: $-20$~dB
+\item Front-to-back ratio: 30~dB
+\end{itemize}
+
+Effective jammer-to-signal ratio:
+\begin{equation}
+J/S_{\text{effective}} = 50 - 30 = 20 \text{ dB}
+\end{equation}
+
+Revised jamming margin:
+\begin{equation}
+M_{\text{jam}} = 38 - 20 - 12 - 3 = 3 \text{ dB}
+\end{equation}
+
+\textbf{Answer:} With directional antenna, $M_{\text{jam}} = +3$~dB --- LINK SURVIVES.
+
+\textbf{Interpretation:} The 3~dB margin provides minimal protection. For robust operation, additional countermeasures such as adaptive power control or higher-gain antennas would be recommended to achieve $M_{\text{jam}} \geq 10$~dB.
+
+\section{Covert Communications}
+
+\subsection{Objective}
+
+Transmit data undetected by adversary signals intelligence (SIGINT) systems through Low Probability of Detection (LPD) techniques.
+
+\subsection{Ultra-Wideband Spread Spectrum}
+
+For covert communications, ultra-wideband (UWB) spread spectrum achieves LPD by spreading the signal power so thinly that it appears as thermal noise.
+
+\textbf{Example parameters:}
+\begin{itemize}
+\item Data rate: $R_b = 1$~kbps
+\item Spread bandwidth: $BW = 1$~GHz
+\item Transmit power: $P_{TX} = 1$~W
+\end{itemize}
+
+Processing gain:
+\begin{equation}
+G = \frac{BW}{R_b} = \frac{10^9}{10^3} = 10^6 \quad (60 \text{ dB})
+\end{equation}
+
+Transmitted power spectral density:
+\begin{equation}
+\text{PSD} = \frac{P_{TX}}{BW} = \frac{1 \text{ W}}{10^9 \text{ Hz}} = 10^{-9} \text{ W/Hz} = -90 \text{ dBm/Hz}
+\end{equation}
+
+Per MHz:
+\begin{equation}
+\text{PSD}_{\text{MHz}} = -90 + 10 \log_{10}(10^6) = -30 \text{ dBm/MHz}
+\end{equation}
+
+Thermal noise floor (per MHz):
+\begin{equation}
+N_{\text{MHz}} = -174 \text{ dBm/Hz} + 10 \log_{10}(10^6) = -114 \text{ dBm/MHz}
+\end{equation}
+
+\begin{keyconcept}
+The signal PSD ($-90$~dBm/Hz) is 24~dB below the thermal noise floor ($-114$~dBm/MHz when integrated over 1~MHz). Even sensitive intercept receivers cannot distinguish the transmission from background noise without knowledge of the spreading code and precise synchronization.
+\end{keyconcept}
+
+\subsection{Spread Spectrum Below Noise Floor Visualization}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+% Axes
+\draw[->] (0,0) -- (8,0) node[right,font=\small] {Frequency};
+\draw[->] (0,0) -- (0,5) node[above,font=\small] {Power (dBm/Hz)};
+
+% Noise floor
+\draw[thick,red,dashed] (0,2) -- (8,2);
+\node[right,font=\scriptsize,red] at (8,2) {Thermal noise: $-174$ dBm/Hz};
+
+% Narrowband signal (conventional)
+\draw[thick,blue,fill=blue!20] (1,4.5) rectangle (1.5,3.5);
+\node[above,font=\scriptsize,blue] at (1.25,4.5) {Conventional};
+\node[below,font=\scriptsize,blue] at (1.25,3.5) {(detectable)};
+
+% Spread spectrum signal (below noise)
+\draw[thick,green!70!black,fill=green!10] (3,1.5) rectangle (7,1.7);
+\node[above,font=\scriptsize,green!70!black] at (5,1.7) {UWB spread spectrum};
+\node[below,font=\scriptsize,green!70!black] at (5,1.5) {(undetectable)};
+
+% Annotations
+\draw[<->,thick] (3.5,1.6) -- (3.5,2) node[midway,right,font=\tiny] {24 dB\\below\\noise};
+
+% Bandwidth indicators
+\draw[<->,thin] (1,0.3) -- (1.5,0.3) node[midway,below,font=\tiny] {$BW_{\text{info}}$};
+\draw[<->,thin] (3,0.3) -- (7,0.3) node[midway,below,font=\tiny] {$BW_{\text{spread}} = 1$ GHz};
+
+\end{tikzpicture}
+\end{center}
+
+\subsection{Additional Covert Techniques}
+
+\textbf{Steganography in OFDM:}
+\begin{itemize}
+\item Hide data in unused subcarriers or modulate pilot tone phases
+\item OFDM pilot modulation: Covert channel up to 1~Mbps (802.11a)
+\item Null subcarrier insertion: Low-power data on reserved frequencies
+\item Detection challenge: Requires statistical analysis or wideband monitoring
+\end{itemize}
+
+\textbf{Time-domain hiding:}
+\begin{itemize}
+\item Insert ultra-short bursts in inter-frame gaps (e.g., WiFi SIFS)
+\item Covert capacity: $\sim 6$~Mbps using 6.25\% duty cycle
+\item Detection: Appears as multipath or transient interference
+\end{itemize}
+
+\section{Applications}
+
+\subsection{GPS M-Code}
+
+\textbf{Systems:} JDAM precision bombs, Tomahawk cruise missiles, Excalibur artillery, fighter avionics (F-22, F-35, B-2)
+
+\textbf{Performance:}
+\begin{itemize}
+\item Positioning accuracy: $<1$~m horizontal, $<3$~m vertical
+\item Time accuracy: $<10$~ns (critical for network synchronization)
+\item Anti-jam: Survives 60+ dB jamming with CRPA
+\end{itemize}
+
+\subsection{MILSTAR/MUOS Satellites}
+
+\textbf{Systems:} Strategic and tactical military satellite communications
+
+\textbf{Capabilities:}
+\begin{itemize}
+\item Data rates: 75~bps to 1.544~Mbps (T1)
+\item Coverage: Global (5 GEO satellites)
+\item Jam resistance: 30~dB processing gain + directional antennas
+\item Security: NSA Type 1 encryption
+\end{itemize}
+
+\subsection{Link 16 (JTIDS)}
+
+\textbf{Platforms:} F-15, F-16, F-22, F-35, E-3 AWACS, Aegis ships, Patriot SAM, THAAD
+
+\textbf{Function:} Real-time tactical data exchange (air tracks, surface tracks, commands)
+
+\textbf{Performance:}
+\begin{itemize}
+\item Update rate: 5--10~seconds (air tracks), 30--60~seconds (surface)
+\item Jam resistance: 38~dB processing gain (FHSS + TDMA)
+\item Range: Line-of-sight (300+ km air-to-air)
+\end{itemize}
+
+\subsection{AESA Radars}
+
+\textbf{Systems:}
+\begin{itemize}
+\item APG-77 (F-22 Raptor): 2000+ T/R modules, >200~km detection range
+\item AN/SPY-6 (Navy DDG-51): 5000+ T/R modules, track 1000+ targets
+\item AN/TPY-2 (THAAD): 25,344 elements, 1000+~km missile detection
+\end{itemize}
+
+\textbf{Capabilities:} LPI operation, electronic attack, multi-mission (air defense, ballistic missile defense, surface search)
+
+\section{Summary}
+
+\subsection{Performance Comparison}
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Technique} & \textbf{Processing Gain} & \textbf{Primary Benefit} & \textbf{Applications} \\
+\midrule
+DSSS & 20--40 dB & AJ, LPI & GPS M-code, tactical radios \\
+FHSS & 17--30 dB & LPD, follower-jam resist & MILSTAR, Link 16 \\
+AESA & N/A (spatial) & LPI, multi-target & APG-77, AN/SPY-6 \\
+Nulling Antenna & 20--40 dB & Jammer rejection & CRPA, adaptive arrays \\
+FEC & 3--10 dB & Error correction & All systems \\
+Encryption & N/A & Content security & All military systems \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Key Performance Metrics}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Typical Value} \\
+\midrule
+Processing gain (DSSS) & 20--50 dB \\
+Processing gain (FHSS) & 17--30 dB \\
+Jamming margin (required) & $\geq 10$ dB \\
+LPD threshold & Signal PSD $<$ Noise floor \\
+CRPA null depth & 30--40 dB \\
+GPS M-code accuracy & $<1$ m horizontal \\
+Link 16 update rate & 5--10 seconds \\
+AESA beamwidth & $<1°$ (narrow) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Advantages:}
+\begin{itemize}
+\item Jam resistance: Links survive jammers 1000--10,000$\times$ stronger
+\item LPI/LPD: Signals operate below noise floor, undetectable to wideband receivers
+\item Security: Multiple layers (spread spectrum, encryption, authentication)
+\item Flexibility: Adaptive coding, power management, multi-mission capability
+\item Reliability: Proven in GPS, SATCOM, tactical data links, radar systems
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+\item Complexity: Requires sophisticated signal processing, synchronization
+\item Cost: AESA radars and SAASM receivers are expensive
+\item Bandwidth: Spread spectrum occupies wide frequency ranges
+\item Latency: TDMA and hopping introduce timing delays
+\item Power: Some techniques (AESA) require high transmit power
+\end{itemize}
+
+\textbf{Best suited for:} Military and government applications requiring anti-jam capability, covert operation, and secure communications in hostile electromagnetic environments.
+
+\section{Further Reading}
+
+\subsection{Related Chapters}
+
+\begin{itemize}
+\item Chapter~\ref{ch:spread-spectrum}: Spread Spectrum (DSSS/FHSS) -- Technical foundation for AJ/LPI
+\item Chapter~\ref{ch:snr}: Signal-to-Noise Ratio (SNR) -- Link budget fundamentals
+\item Chapter~\ref{ch:ber}: Bit Error Rate (BER) -- Performance analysis
+\item Chapter~\ref{ch:awgn}: Additive White Gaussian Noise (AWGN) -- Channel modeling
+\item Chapter~\ref{ch:fec}: Forward Error Correction (FEC) -- Coding gain
+\end{itemize}
+
+\subsection{Textbooks}
+
+\begin{itemize}
+\item \textbf{Poisel}, \emph{Introduction to Communication Electronic Warfare Systems} -- Comprehensive EW treatment
+\item \textbf{Torrieri}, \emph{Principles of Spread-Spectrum Communication Systems} (4th ed.) -- Modern military focus
+\item \textbf{Skolnik}, \emph{Radar Handbook} (3rd ed.) -- Phased arrays, AESA, LPI radar
+\item \textbf{Adamy}, \emph{EW 101: A First Course in Electronic Warfare} -- Accessible intro to jamming/AJ
+\end{itemize}
+
+\subsection{Military Standards}
+
+\begin{itemize}
+\item \textbf{MIL-STD-188-181}: US DoD FHSS standard
+\item \textbf{GPS ICD-IS-800}: M-code interface control document (FOUO)
+\item \textbf{Link 16 MIDS JTIDS STD}: Message standards (NATO STANAG 5516)
+\end{itemize}
