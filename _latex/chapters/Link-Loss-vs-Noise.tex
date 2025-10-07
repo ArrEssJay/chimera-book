@@ -47,462 +47,600 @@
 \item Weak signal (loss) + high noise = low SNR = errors everywhere
 \end{itemize}
 
-\textbf{When you see it}: Your phone shows ``5 bars'' (link loss is low) but internet is slow (noise is high from interference).
+\textbf{Real-world example}: Your phone shows ``5 bars'' (link loss is low) but internet is slow (noise is high from interference).
 \end{nontechnical}
 
 \section{Overview}
 
-In a real communication system, the received signal is degraded by \textbf{two distinct mechanisms}: link loss and additive noise.
+In a real communication system, the received signal is degraded by \textbf{two distinct mechanisms}: link loss and additive noise. Understanding the difference is crucial for link budget analysis and system design.
 
 \begin{keyconcept}
-Link loss and noise are \textbf{fundamentally different} phenomena. Link loss deterministically \textbf{attenuates} the signal power, while noise \textbf{adds} random fluctuations. Both must be understood separately to design reliable communication systems, as they require different mitigation strategies.
+\textbf{Link loss} is deterministic and multiplicative---it reduces signal power predictably. \textbf{Noise} is random and additive---it adds unpredictable interference. Both degrade performance, but in fundamentally different ways requiring different mitigation strategies.
 \end{keyconcept}
+
+The relationship between link loss, noise, and system performance is captured by the signal-to-noise ratio (SNR), which determines the achievable bit error rate (BER) for a given modulation scheme.
 
 \section{Mathematical Description}
 
-\subsection{Link Loss (Path Loss)}\label{link-loss-path-loss}
+\subsection{System Model}
 
-\textbf{Link Loss} represents the reduction in signal power as it
-travels from transmitter to receiver.
+The complete channel can be modeled as a cascade of deterministic attenuation followed by additive noise:
 
-\subsubsection{Characteristics}\label{characteristics}
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1.2cm, font=\sffamily\small, align=center},
+  node distance=3cm,
+  font=\small
+]
+\node (input) {\sffamily Transmitted\\Signal\\$s(t)$};
+\node[block, right of=input, node distance=3.5cm, fill=black!10] (loss) {Link Loss\\$L$ (dB)};
+\node[block, right of=loss, node distance=4cm] (adder) {$\Sigma$\\Add\\Noise};
+\node[right of=adder, node distance=3.5cm] (output) {\sffamily Received\\Signal\\$r(t)$};
 
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Deterministic}: Same loss every time (for a given scenario)
-\item
-  \textbf{Multiplicative}: Scales the entire signal uniformly
-\item
-  \textbf{Predictable}: Can be calculated from path distance, frequency,
-  antenna gains
-\end{itemize}
+\node[below of=adder, node distance=1.8cm, font=\scriptsize, align=center] (noise) {$n(t)$\\AWGN};
 
-\subsubsection{Sources}\label{sources}
+\draw[->,thick] (input) -- node[above,font=\scriptsize] {$P_t$} (loss);
+\draw[->,thick] (loss) -- node[above,font=\scriptsize] {$P_t/L$} (adder);
+\draw[->,thick] (noise) -- (adder);
+\draw[->,thick] (adder) -- node[above,font=\scriptsize] {$r(t) = s(t)/L + n(t)$} (output);
 
-\begin{itemize}
-\tightlist
-\item
-  Free-space path loss
-\item
-  Antenna gains (TX and RX)
-\item
-  Cable losses
-\item
-  Atmospheric absorption
-\item
-  Rain attenuation
-\end{itemize}
+% Power annotations
+\node[below of=loss, node distance=1.2cm, font=\tiny, align=center] {Deterministic\\Attenuation};
+\node[below of=noise, node distance=0.8cm, font=\tiny, align=center] {Random\\Addition};
+\end{tikzpicture}
+\end{center}
 
-\subsubsection{Mathematical Model}\label{mathematical-model}
-
-In linear scale, link loss is a multiplicative attenuation:
+The received signal is expressed as:
 \begin{equation}
-P_{\text{received}} = \frac{P_{\text{transmitted}}}{L}
+r(t) = \frac{s(t)}{\sqrt{L}} + n(t)
 \end{equation}
 where:
 \begin{itemize}
-\item $P_{\text{received}}$ = received signal power (watts)
-\item $P_{\text{transmitted}}$ = transmitted signal power (watts)
-\item $L$ = link loss factor (dimensionless, $L \geq 1$)
+\item $s(t)$ = transmitted signal (watts)
+\item $L$ = link loss factor (dimensionless, $> 1$)
+\item $n(t)$ = additive white Gaussian noise (watts)
+\item $r(t)$ = received signal (watts)
 \end{itemize}
 
-In logarithmic (dB) scale, link loss becomes a subtraction:
+\subsection{Link Loss (Path Loss)}
+
+\textbf{Link Loss} represents the deterministic reduction in signal power as it travels from transmitter to receiver.
+
+\subsubsection{Characteristics}
+
+\begin{itemize}
+\item \textbf{Deterministic}: Same loss every time (for a given scenario)
+\item \textbf{Multiplicative}: Scales the entire signal uniformly
+\item \textbf{Predictable}: Can be calculated from path distance, frequency, antenna gains
+\item \textbf{Independent of signal content}: Affects all signals equally
+\end{itemize}
+
+\subsubsection{Sources of Link Loss}
+
+Link loss arises from multiple contributors in the propagation path:
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=1.5cm and 2cm,
+  block/.style={rectangle, draw, minimum width=3.5cm, minimum height=0.8cm, font=\sffamily\small, align=center},
+  font=\small
+]
+% Central node
+\node[circle, draw, minimum size=2cm, font=\bfseries\sffamily, align=center] (center) {Total\\Link\\Loss};
+
+% Surrounding nodes
+\node[block, above left of=center, node distance=3cm] (fspl) {Free-Space\\Path Loss};
+\node[block, above right of=center, node distance=3cm] (antenna) {Antenna\\Gains};
+\node[block, below left of=center, node distance=3cm] (atmos) {Atmospheric\\Absorption};
+\node[block, below right of=center, node distance=3cm] (cable) {Cable/\\Implementation};
+\node[block, right of=center, node distance=3.5cm] (rain) {Rain\\Fade};
+
+% Arrows
+\draw[->,thick] (fspl) -- (center);
+\draw[->,thick] (antenna) -- (center);
+\draw[->,thick] (atmos) -- (center);
+\draw[->,thick] (cable) -- (center);
+\draw[->,thick] (rain) -- (center);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Primary contributors}:
+\begin{itemize}
+\item \textbf{Free-space path loss}: Geometric spreading of energy ($\propto d^2$)
+\item \textbf{Antenna gains}: TX and RX antenna directivity (can be gain or loss)
+\item \textbf{Cable losses}: Attenuation in feedlines and connectors
+\item \textbf{Atmospheric absorption}: Molecular absorption (O$_2$, H$_2$O)
+\item \textbf{Rain attenuation}: Scattering and absorption by hydrometeors
+\end{itemize}
+
+\subsubsection{Mathematical Model}
+
+In linear scale, link loss is multiplicative:
 \begin{equation}
-P_{\text{received}} [\text{dBm}] = P_{\text{transmitted}} [\text{dBm}] - L_{\text{dB}}
+P_{\text{rx}} = \frac{P_{\text{tx}}}{L}
+\end{equation}
+where:
+\begin{itemize}
+\item $P_{\text{rx}}$ = received power (watts)
+\item $P_{\text{tx}}$ = transmitted power (watts)
+\item $L$ = total link loss factor (dimensionless, $L > 1$)
+\end{itemize}
+
+In logarithmic (dB) scale, link loss is subtractive:
+\begin{equation}
+P_{\text{rx}}\ [\text{dBm}] = P_{\text{tx}}\ [\text{dBm}] - L_{\text{dB}}\ [\text{dB}]
 \end{equation}
 where:
 \begin{itemize}
 \item $L_{\text{dB}} = 10\log_{10}(L)$ = link loss in decibels
 \end{itemize}
 
-\subsubsection{Link Budget Components}
+\textbf{Free-space path loss (FSPL)} is the dominant component:
+\begin{equation}
+L_{\text{FSPL}}\ [\text{dB}] = 20\log_{10}(d) + 20\log_{10}(f) + 20\log_{10}\left(\frac{4\pi}{c}\right)
+\end{equation}
+where:
+\begin{itemize}
+\item $d$ = distance (meters)
+\item $f$ = frequency (Hz)
+\item $c = 3 \times 10^8$ m/s (speed of light)
+\end{itemize}
 
-A complete link budget accounts for all gains and losses in the signal path:
+Simplified form:
+\begin{equation}
+L_{\text{FSPL}}\ [\text{dB}] = 20\log_{10}(d_{\text{km}}) + 20\log_{10}(f_{\text{MHz}}) + 32.45
+\end{equation}
 
-\begin{center}
-\begin{tikzpicture}[
-  node distance=1.8cm,
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
-  gain/.style={rectangle, draw=green!60!black, fill=green!10, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
-  loss/.style={rectangle, draw=red!60!black, fill=red!10, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center}
-]
+\subsubsection{Link Budget Example}
 
-\node[block] (tx) {TX Power\\$+30$ dBm};
-\node[gain, right of=tx, node distance=3cm] (txant) {TX Antenna\\$+10$ dB};
-\node[loss, right of=txant, node distance=3cm] (fspl) {Free-Space\\$-120$ dB};
-\node[gain, right of=fspl, node distance=3cm] (rxant) {RX Antenna\\$+5$ dB};
-\node[loss, right of=rxant, node distance=3cm] (impl) {Cable/Impl\\$-5$ dB};
-\node[block, right of=impl, node distance=3cm] (rx) {RX Power\\$-80$ dBm};
-
-\draw[->,thick] (tx) -- (txant);
-\draw[->,thick] (txant) -- (fspl);
-\draw[->,thick] (fspl) -- (rxant);
-\draw[->,thick] (rxant) -- (impl);
-\draw[->,thick] (impl) -- (rx);
-
-\node[below of=fspl, node distance=2.5cm, font=\small] (note) {Total Link Loss: $10 + 120 - 5 + 5 = 100$ dB};
-\end{tikzpicture}
-\end{center}
-
-\begin{calloutbox}{Link Budget Example}
+\begin{calloutbox}{Example: Simple Link Budget}
 \begin{tabular}{@{}lr@{}}
 \toprule
-\textbf{Component} & \textbf{Value (dB)} \\
+\textbf{Parameter} & \textbf{Value (dB/dBm)} \\
 \midrule
-Transmit Power & $+30$ dBm \\
-Antenna Gain (TX) & $+10$ dB \\
-Free-Space Loss & $-120$ dB \\
-Antenna Gain (RX) & $+5$ dB \\
-Cable/Implementation & $-5$ dB \\
+Transmit Power & +30 dBm \\
+TX Antenna Gain & +10 dB \\
+Free-Space Path Loss & $-120$ dB \\
+RX Antenna Gain & +5 dB \\
+Cable/Implementation Loss & $-5$ dB \\
 \midrule
 \textbf{Received Signal Power} & \textbf{$-80$ dBm} \\
-\textbf{Total Link Loss} & \textbf{$100$ dB} \\
+\textbf{Total Link Loss} & \textbf{100 dB} \\
 \bottomrule
 \end{tabular}
+
+\vspace{0.3cm}
+\textbf{Calculation:}
+\[
+P_{\text{rx}} = 30 + 10 - 120 + 5 - 5 = -80\ \text{dBm}
+\]
 \end{calloutbox}
 
-\subsection{Additive Noise}\label{additive-noise}
+\subsection{Additive Noise}
 
-\textbf{Noise} adds random fluctuations on top of the received signal.
+\textbf{Noise} adds random fluctuations on top of the received signal, fundamentally limiting the ability to detect the transmitted information.
 
-\subsubsection{Characteristics}\label{characteristics-1}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Random}: Different every time, unpredictable
-\item
-  \textbf{Additive}: Added to the signal (not multiplicative)
-\item
-  \textbf{Stochastic}: Described by statistical properties (power,
-  distribution)
-\end{itemize}
-
-\subsubsection{Sources}\label{sources-1}
+\subsubsection{Characteristics}
 
 \begin{itemize}
-\item Thermal noise ($kTB$)
-\item Amplifier noise
-\item Cosmic background
-\item Interference from other signals
+\item \textbf{Random}: Different every time, unpredictable instantaneous values
+\item \textbf{Additive}: Added to the signal (not multiplicative)
+\item \textbf{Stochastic}: Described by statistical properties (power, distribution)
+\item \textbf{Unavoidable}: Present in all physical systems (thermal, quantum limits)
 \end{itemize}
 
-\textbf{Noise contributions diagram:}
+\subsubsection{Sources of Noise}
 
 \begin{center}
 \begin{tikzpicture}[
-  node distance=2cm,
-  source/.style={rectangle, draw, minimum width=2.8cm, minimum height=1cm, font=\sffamily\small, align=center}
+  block/.style={rectangle, draw, minimum width=3cm, minimum height=0.9cm, font=\sffamily\small, align=center},
+  node distance=1.2cm,
+  font=\small
 ]
+\node[block, fill=black!10] (thermal) {Thermal Noise\\$(kTB)$};
+\node[block, below of=thermal, fill=black!10] (amp) {Amplifier Noise\\(LNA, Mixer)};
+\node[block, below of=amp, fill=black!10] (cosmic) {Cosmic\\Background};
+\node[block, below of=cosmic, fill=black!10] (interference) {External\\Interference};
 
-\node[source] (thermal) {Thermal Noise\\$kTB$\\($-174$ dBm/Hz)};
-\node[source, right of=thermal, node distance=3.5cm] (amp) {Amplifier\\Noise Figure\\$F$ (1--3 dB)};
-\node[source, right of=amp, node distance=3.5cm] (cosmic) {Cosmic\\Background\\($\sim 3$ K)};
-\node[source, below of=amp, node distance=2cm] (interf) {Interference\\Adjacent\\Channels};
-
-\node[draw, circle, below of=thermal, node distance=3.5cm, minimum size=1.5cm] (sum) {$\Sigma$};
+\node[right of=thermal, node distance=5cm, circle, draw, minimum size=1.8cm, font=\bfseries\sffamily, align=center] (sum) {Total\\Noise\\$N_0$};
 
 \draw[->,thick] (thermal) -- (sum);
 \draw[->,thick] (amp) -- (sum);
 \draw[->,thick] (cosmic) -- (sum);
-\draw[->,thick] (interf) -- (sum);
+\draw[->,thick] (interference) -- (sum);
 
-\node[below of=sum, node distance=1.5cm, font=\small] (total) {Total System Noise: $N_{\text{total}} = kT_{\text{sys}}B$};
-
+% Annotations
+\node[right of=thermal, node distance=3cm, font=\tiny, align=left] {Dominant\\source};
+\node[right of=amp, node distance=3cm, font=\tiny, align=left] {Amplifier\\noise figure};
+\node[right of=cosmic, node distance=3cm, font=\tiny, align=left] {2.7 K\\background};
+\node[right of=interference, node distance=3cm, font=\tiny, align=left] {Man-made\\or natural};
 \end{tikzpicture}
 \end{center}
 
-The total system noise temperature combines all sources:
-\begin{equation}
-T_{\text{sys}} = T_{\text{antenna}} + T_{\text{LNA}}(F-1) + T_{\text{cosmic}} + T_{\text{interference}}
-\end{equation}
-where:
+\textbf{Primary noise sources}:
 \begin{itemize}
-\item $T_{\text{antenna}}$ = antenna noise temperature (K)
-\item $T_{\text{LNA}}$ = LNA physical temperature (K)
-\item $F$ = LNA noise figure (linear)
-\item $T_{\text{cosmic}}$ = cosmic background (typically 3 K)
-\item $T_{\text{interference}}$ = equivalent temperature from interference (K)
+\item \textbf{Thermal noise (Johnson-Nyquist)}: Random electron motion in resistors
+\item \textbf{Amplifier noise}: LNA and receiver front-end noise figure
+\item \textbf{Cosmic background radiation}: 2.7~K microwave background
+\item \textbf{External interference}: Man-made or natural (lightning, solar)
 \end{itemize}
 
-\subsubsection{Mathematical Model}\label{mathematical-model-1}
+\subsubsection{Mathematical Model}
 
-The received signal in an AWGN channel is:
+The total received signal with noise:
 \begin{equation}
-r(t) = \frac{s(t)}{L} + n(t)
+r(t) = \frac{s(t)}{\sqrt{L}} + n(t)
 \end{equation}
-where:
+where $n(t)$ is modeled as \textbf{Additive White Gaussian Noise (AWGN)}:
 \begin{itemize}
-\item $r(t)$ = received signal (volts)
-\item $s(t)$ = transmitted signal (volts)
-\item $L$ = link loss factor (dimensionless)
-\item $n(t)$ = additive white Gaussian noise (volts)
+\item \textbf{Gaussian}: Amplitude follows normal distribution $\mathcal{N}(0, \sigma^2)$
+\item \textbf{White}: Flat power spectral density across all frequencies
+\item \textbf{Zero mean}: $\mathbb{E}[n(t)] = 0$
 \end{itemize}
 
-The noise power is independent of signal power:
+\textbf{Thermal noise power}:
 \begin{equation}
 N = kTB
 \end{equation}
 where:
 \begin{itemize}
-\item $k = 1.38 \times 10^{-23}$ J/K = Boltzmann constant
-\item $T$ = system noise temperature (kelvin)
+\item $k = 1.38 \times 10^{-23}$ J/K (Boltzmann's constant)
+\item $T$ = system noise temperature (Kelvin)
 \item $B$ = bandwidth (Hz)
-\item $N$ = noise power (watts)
 \end{itemize}
 
-\subsection{Combined Channel Model}\label{combined-channel-model}
+In dBm:
+\begin{equation}
+N\ [\text{dBm}] = -174 + 10\log_{10}(B) + 10\log_{10}\left(\frac{T}{290}\right)
+\end{equation}
+where $-174$ dBm/Hz is the thermal noise floor at room temperature (290~K).
 
-The complete channel model applies both link loss and noise sequentially:
+\subsection{Combined Channel Model}
+
+The complete channel model combines both effects in sequence:
 
 \begin{center}
 \begin{tikzpicture}[
   node distance=2.5cm,
-  block/.style={rectangle, draw, minimum width=3cm, minimum height=1.2cm, font=\sffamily\small, align=center}
+  block/.style={rectangle, draw, minimum width=2.8cm, minimum height=1.2cm, font=\sffamily\small, align=center, fill=black!5},
+  font=\small
 ]
+\node[block] (tx) {1. Transmit\\$P_{\text{tx}}$};
+\node[block, right of=tx, node distance=3.5cm] (loss) {2. Apply\\Link Loss\\$P_{\text{tx}}/L$};
+\node[block, right of=loss, node distance=3.8cm] (noise) {3. Add\\AWGN\\$+n(t)$};
+\node[block, right of=noise, node distance=3.5cm] (rx) {4. Receive\\$r(t)$};
 
-\node[block] (tx) {Transmitter\\$P_{\text{tx}}$};
-\node[block, right of=tx] (loss) {Link Loss\\$\div L$};
-\node[block, right of=loss] (noise) {Add Noise\\$+ n(t)$};
-\node[block, right of=noise] (rx) {Receiver\\$P_{\text{rx}} = P_{\text{tx}}/L$};
+\draw[->,ultra thick] (tx) -- (loss);
+\draw[->,ultra thick] (loss) -- (noise);
+\draw[->,ultra thick] (noise) -- (rx);
 
-\draw[->,thick] (tx) -- node[above,font=\scriptsize] {$s(t)$} (loss);
-\draw[->,thick] (loss) -- node[above,font=\scriptsize] {$s(t)/L$} (noise);
-\draw[->,thick] (noise) -- node[above,font=\scriptsize] {$r(t)$} (rx);
-
-\draw[->,dashed] (noise.south) ++ (0,-0.8) node[below,font=\scriptsize] {AWGN: $n(t)$} -- (noise.south);
-
+% Power annotations
+\node[below of=tx, node distance=1.3cm, font=\tiny] {Clean signal};
+\node[below of=loss, node distance=1.3cm, font=\tiny] {Attenuated signal};
+\node[below of=noise, node distance=1.3cm, font=\tiny] {Noisy signal};
+\node[below of=rx, node distance=1.3cm, font=\tiny] {Detection};
 \end{tikzpicture}
 \end{center}
 
-\textbf{Processing steps:}
+\textbf{Step-by-step process}:
 \begin{enumerate}
-\item \textbf{Transmit Signal}: Power $= P_{\text{tx}}$
-\item \textbf{Apply Link Loss}: Power reduced to $P_{\text{tx}} / L$ or $P_{\text{tx}} - L_{\text{dB}}$ in dB
-\item \textbf{Add AWGN}: Noise power $N = kTB$ (independent of signal)
-\item \textbf{Received Signal}: Attenuated signal plus noise: $r(t) = s(t)/L + n(t)$
+\item \textbf{Transmit}: Signal with power $P_{\text{tx}}$ is transmitted
+\item \textbf{Attenuate}: Link loss reduces power to $P_{\text{tx}}/L$ where $L = 10^{L_{\text{dB}}/10}$
+\item \textbf{Add noise}: AWGN with power $N = kTB$ is added
+\item \textbf{Receive}: Final signal has power $P_{\text{rx}} = P_{\text{tx}}/L$ plus noise
 \end{enumerate}
 
-The signal-to-noise ratio at the receiver is:
+The resulting signal-to-noise ratio at the receiver:
 \begin{equation}
-\text{SNR} = \frac{P_{\text{tx}}/L}{N} = \frac{P_{\text{tx}}}{LN}
+\text{SNR} = \frac{P_{\text{rx}}}{N} = \frac{P_{\text{tx}}}{L \cdot kTB}
 \end{equation}
-where:
-\begin{itemize}
-\item SNR = signal-to-noise ratio (dimensionless)
-\item $P_{\text{tx}}/L$ = received signal power after link loss
-\item $N$ = noise power
-\end{itemize}
 
-\subsection{Why Both Matter}\label{why-both-matter}
+In logarithmic form:
+\begin{equation}
+\text{SNR}_{\text{dB}} = P_{\text{tx}}\ [\text{dBm}] - L_{\text{dB}}\ [\text{dB}] - N\ [\text{dBm}]
+\end{equation}
 
-\subsubsection{Link Loss Affects Signal Power}\label{link-loss-affects-signal-power}
+\section{Why Both Matter}
+
+\subsection{Link Loss Affects Signal Power}
 
 \begin{itemize}
 \item High link loss (100+ dB) is typical in many systems
 \item Reduces signal level but doesn't add randomness
 \item Can be compensated with amplification (but amplifies noise too!)
+\item Primarily determines required transmit power
 \end{itemize}
 
-\subsubsection{Noise Affects Signal Quality (SNR)}\label{noise-affects-signal-quality-snr}
+\begin{warningbox}
+\textbf{Amplification cannot overcome poor SNR.} Amplifying a weak signal also amplifies the noise proportionally. Link loss must be addressed at the system level through antenna gains, lower frequencies, or reduced distance---not just by amplification.
+\end{warningbox}
+
+\subsection{Noise Affects Signal Quality (SNR)}
 
 \begin{itemize}
-\item Adds random errors that can't be predicted
+\item Adds random errors that can't be predicted or removed
 \item Sets the fundamental limit on achievable BER
-\item Can be improved with processing gain, error correction
+\item Can be improved with processing gain, error correction, or increased signal power
+\item Determines required $E_b/N_0$ for target BER
 \end{itemize}
 
-\begin{calloutbox}{Physical Interpretation}
-\textbf{Link loss} is like speaking into a megaphone facing away---your voice reaches far but is very quiet. \textbf{Noise} is like the background chatter in a crowded room---it doesn't affect your voice volume, but makes it harder to hear.
+\section{Link Budget and SNR Analysis}
 
-In communication systems:
+The combination of link loss and noise determines receiver performance:
+\begin{equation}
+P_{\text{rx}}\ [\text{dBm}] = P_{\text{tx}}\ [\text{dBm}] - L_{\text{dB}}\ [\text{dB}]
+\end{equation}
+\begin{equation}
+N\ [\text{dBm}] = -174 + 10\log_{10}(B) + NF
+\end{equation}
+\begin{equation}
+\text{SNR}_{\text{dB}} = P_{\text{rx}}\ [\text{dBm}] - N\ [\text{dBm}]
+\end{equation}
+where $NF$ is the receiver noise figure in dB.
+
+\subsection{Comparative Examples}
+
+\begin{calloutbox}{Example 1: Good Link Budget}
 \begin{itemize}
-\item \textbf{Link loss} scales the signal: $s(t) \rightarrow s(t)/L$
-\item \textbf{Noise} adds interference: $s(t)/L \rightarrow s(t)/L + n(t)$
-\item \textbf{SNR combines both}: $\text{SNR} = \frac{P_{\text{signal}}/L}{N}$
+\item Transmit power: +30 dBm
+\item Link loss: 100 dB
+\item Received signal: \textbf{$-70$ dBm}
+\item Noise floor: $-90$ dBm (1 MHz BW, 3 dB NF)
+\item \textbf{Resulting SNR: 20 dB} ✓ \textbf{Excellent!}
+\end{itemize}
+
+\textbf{Analysis}: High SNR enables high-order modulation (16-QAM, 64-QAM) and achieves BER $< 10^{-6}$ easily.
+\end{calloutbox}
+
+\begin{calloutbox}{Example 2: Marginal Link Budget}
+\begin{itemize}
+\item Transmit power: +30 dBm
+\item Link loss: 120 dB
+\item Received signal: \textbf{$-90$ dBm}
+\item Noise floor: $-90$ dBm
+\item \textbf{Resulting SNR: 0 dB} ⚠ \textbf{Very challenging!}
+\end{itemize}
+
+\textbf{Analysis}: Only simple modulation (BPSK) viable. Requires FEC to achieve acceptable BER. Link margin is zero---no room for fading or interference.
+\end{calloutbox}
+
+\section{Worked Example: Complete Link Budget Analysis}
+
+\textbf{Scenario}: Design a 2.4~GHz WiFi link over 100 meters with required BER $= 10^{-5}$ using BPSK modulation.
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Frequency & $f = 2.4$ GHz \\
+Distance & $d = 100$ m \\
+Data rate & $R_b = 1$ Mbps \\
+Modulation & BPSK \\
+Required BER & $10^{-5}$ \\
+TX antenna gain & $G_t = 2$ dBi (omnidirectional) \\
+RX antenna gain & $G_r = 2$ dBi (omnidirectional) \\
+Cable losses & $L_c = 1$ dB (each side) \\
+Implementation loss & $L_i = 2$ dB \\
+Noise figure & $NF = 5$ dB \\
+Temperature & $T = 290$ K (room temperature) \\
+\end{tabular}
+
+\subsection*{Step 1: Determine Required $E_b/N_0$}
+
+For BPSK with BER $= 10^{-5}$:
+\begin{equation}
+\text{BER} = \frac{1}{2}\text{erfc}\left(\sqrt{\frac{E_b}{N_0}}\right) = 10^{-5}
+\end{equation}
+
+From tables or calculation: $(E_b/N_0)_{\text{required}} = 9.6$ dB
+
+\textbf{Add implementation margin}: $3$ dB
+\[
+(E_b/N_0)_{\text{design}} = 9.6 + 3 = 12.6\ \text{dB}
+\]
+
+\subsection*{Step 2: Calculate Free-Space Path Loss}
+
+Using the Friis equation:
+\begin{equation}
+L_{\text{FSPL}}\ [\text{dB}] = 20\log_{10}\left(\frac{4\pi d f}{c}\right)
+\end{equation}
+\begin{equation}
+L_{\text{FSPL}} = 20\log_{10}\left(\frac{4\pi \times 100 \times 2.4 \times 10^9}{3 \times 10^8}\right) = 80.05\ \text{dB}
+\end{equation}
+
+\subsection*{Step 3: Calculate Total Link Loss}
+
+\begin{align}
+L_{\text{total}} &= L_{\text{FSPL}} - G_t - G_r + L_c + L_i \\
+&= 80.05 - 2 - 2 + (1 + 1) + 2 \\
+&= 80.05\ \text{dB}
+\end{align}
+
+\subsection*{Step 4: Calculate Noise Power}
+
+Bandwidth for BPSK with $\alpha = 0.35$ roll-off:
+\begin{equation}
+B = R_b(1 + \alpha) = 1 \times 1.35 = 1.35\ \text{MHz}
+\end{equation}
+
+Thermal noise power:
+\begin{equation}
+N = kTB = (1.38 \times 10^{-23})(290)(1.35 \times 10^6) = 5.41 \times 10^{-15}\ \text{W}
+\end{equation}
+
+In dBm:
+\begin{equation}
+N\ [\text{dBm}] = 10\log_{10}(5.41 \times 10^{-15} / 10^{-3}) = -112.7\ \text{dBm}
+\end{equation}
+
+With noise figure:
+\begin{equation}
+N_{\text{total}} = -112.7 + 5 = -107.7\ \text{dBm}
+\end{equation}
+
+\subsection*{Step 5: Calculate Required Transmit Power}
+
+From the $E_b/N_0$ requirement:
+\begin{align}
+\frac{E_b}{N_0} &= \text{SNR} \times \frac{B}{R_b} \\
+\text{SNR}_{\text{dB}} &= (E_b/N_0)_{\text{dB}} - 10\log_{10}(B/R_b) \\
+&= 12.6 - 10\log_{10}(1.35) = 12.6 - 1.3 = 11.3\ \text{dB}
+\end{align}
+
+Required received power:
+\begin{equation}
+P_{\text{rx}}\ [\text{dBm}] = N_{\text{total}} + \text{SNR}_{\text{dB}} = -107.7 + 11.3 = -96.4\ \text{dBm}
+\end{equation}
+
+Required transmit power:
+\begin{equation}
+P_{\text{tx}}\ [\text{dBm}] = P_{\text{rx}} + L_{\text{total}} = -96.4 + 80.05 = -16.4\ \text{dBm}
+\end{equation}
+
+Converting to linear scale:
+\begin{equation}
+P_{\text{tx}} = 10^{-16.4/10} \times 10^{-3} = 23\ \text{mW}
+\end{equation}
+
+\subsection*{Step 6: Link Margin Calculation}
+
+Typical WiFi transmit power: $P_{\text{tx}} = +20$ dBm (100 mW)
+
+\begin{equation}
+\text{Link Margin} = P_{\text{tx,available}} - P_{\text{tx,required}} = 20 - (-16.4) = 36.4\ \text{dB}
+\end{equation}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
+\textbf{Result: Link closes with 36.4~dB margin}
+
+This substantial margin accommodates:
+\begin{itemize}
+\item Multipath fading ($\sim$10--20 dB)
+\item Interference and co-channel interference ($\sim$5--10 dB)
+\item Obstacles (walls, furniture) ($\sim$5--15 dB)
+\item Component aging and temperature variations ($\sim$2--3 dB)
+\end{itemize}
+
+\textbf{Conclusion:} Link is viable with significant margin for real-world impairments. 1~Mbps BPSK transmission at 100~m is easily achievable.
+\end{calloutbox}
+
+\section{Practical Applications}
+
+\subsection{Satellite Communications}
+
+Extreme link loss ($\sim$200 dB for GEO) dominates system design:
+
+\begin{calloutbox}{GEO Satellite Downlink}
+\begin{itemize}
+\item \textbf{Challenge}: 36,000 km path loss = 205~dB at Ku-band
+\item \textbf{Solution}: Large antennas (70~m DSN dishes), high TX power (200~W)
+\item \textbf{Noise}: Deep space is quiet---cosmic background only
+\item \textbf{Result}: Link closes with careful power budget management
 \end{itemize}
 \end{calloutbox}
 
-\section{Performance Analysis}
+\subsection{Cellular Networks}
 
-\subsection{Link Budget and SNR}\label{link-budget-and-snr}
+Balanced link loss and noise considerations:
 
-The combination of link loss and noise determines receiver performance. The received signal power is:
-\begin{equation}
-P_{\text{rx}} [\text{dBm}] = P_{\text{tx}} [\text{dBm}] - L_{\text{dB}}
-\end{equation}
-
-The thermal noise power is:
-\begin{equation}
-N [\text{dBm}] = 10\log_{10}(kTB) + 30
-\end{equation}
-where the $+30$ converts watts to dBm.
-
-The signal-to-noise ratio in dB is:
-\begin{equation}
-\text{SNR} [\text{dB}] = P_{\text{rx}} [\text{dBm}] - N [\text{dBm}]
-\end{equation}
-\begin{equation}
-\text{SNR} [\text{dB}] = P_{\text{tx}} [\text{dBm}] - L_{\text{dB}} - 10\log_{10}(kTB) - 30
-\end{equation}
-
-\subsection{Link Performance Examples}
-
-\subsubsection{Example 1: Good Link}\label{example-1-good-link}
-
+\begin{calloutbox}{LTE Cell Tower at 2~km}
 \begin{itemize}
-\item Transmit power: $P_{\text{tx}} = +30$ dBm
-\item Link loss: $L_{\text{dB}} = 100$ dB
-\item Received signal: $P_{\text{rx}} = +30 - 100 = \textbf{-70}$ \textbf{dBm}
-\item Noise floor: $N = -90$ dBm
-\item \textbf{Resulting SNR: $-70 - (-90) = 20$ dB} --- Excellent!
+\item \textbf{Link loss}: $\sim$120 dB (including shadowing, building penetration)
+\item \textbf{Noise}: Urban interference + thermal noise
+\item \textbf{Strategy}: Dynamic power control, adaptive modulation (QPSK to 256-QAM)
+\item \textbf{Trade-off}: High SNR near tower = high throughput; low SNR at edge = robust low-rate modes
 \end{itemize}
+\end{calloutbox}
 
-\subsubsection{Example 2: Challenging Link}\label{example-2-challenging-link}
+\subsection{Deep-Space Probes}
 
+Ultimate challenge---both extreme link loss and low power:
+
+\begin{calloutbox}{Voyager 1 at 24 Billion km}
 \begin{itemize}
-\item Transmit power: $P_{\text{tx}} = +30$ dBm
-\item Link loss: $L_{\text{dB}} = 120$ dB
-\item Received signal: $P_{\text{rx}} = +30 - 120 = \textbf{-90}$ \textbf{dBm}
-\item Noise floor: $N = -90$ dBm
-\item \textbf{Resulting SNR: $-90 - (-90) = 0$ dB} --- Very challenging!
+\item \textbf{Link loss}: $\sim$310 dB (interstellar distance)
+\item \textbf{TX power}: 23~W (RTG power source, degrading over time)
+\item \textbf{Data rate}: 160 bps (originally 115 kbps in 1980s)
+\item \textbf{FEC}: Concatenated coding (gain $\sim$10 dB) essential
+\item \textbf{Key insight}: Every 0.1~dB matters at this extreme
 \end{itemize}
+\end{calloutbox}
+
+\subsection{WiFi and WLAN}
+
+Moderate link loss, variable noise environment:
+
+\begin{calloutbox}{WiFi in Office Building}
+\begin{itemize}
+\item \textbf{Link loss}: 60--100 dB (depending on walls, floors)
+\item \textbf{Noise}: High interference (2.4 GHz ISM band is crowded)
+\item \textbf{Strategy}: Rate adaptation algorithms (adjust modulation/coding based on SNR)
+\item \textbf{Challenge}: Noise often dominates over path loss in dense deployments
+\end{itemize}
+\end{calloutbox}
+
+\section{Key Insights and Trade-offs}
+
+\begin{keyconcept}
+\textbf{The fundamental relationship}:
+\[
+\text{More TX Power} \rightarrow \text{Overcomes Link Loss} \rightarrow \text{Higher RX Power} \rightarrow \text{Better SNR} \rightarrow \text{Lower BER}
+\]
+
+However, practical limits exist:
+\begin{itemize}
+\item \textbf{TX power}: Battery life, regulatory limits, PA efficiency
+\item \textbf{RX sensitivity}: Thermal noise floor, amplifier noise figure
+\item \textbf{System cost}: Larger antennas, better LNAs increase cost
+\item \textbf{Interference}: More TX power creates interference for others
+\end{itemize}
+\end{keyconcept}
+
+\subsection{Design Trade-offs}
 
 \begin{center}
-\begin{tabular}{@{}lrrr@{}}
+\begin{tabular}{@{}lll@{}}
 \toprule
-\textbf{Parameter} & \textbf{Example 1} & \textbf{Example 2} & \textbf{Units} \\
+\textbf{Parameter} & \textbf{Improves} & \textbf{Cost/Limitation} \\
 \midrule
-TX Power & $+30$ & $+30$ & dBm \\
-Link Loss & $100$ & $120$ & dB \\
-RX Signal & $-70$ & $-90$ & dBm \\
-Noise Floor & $-90$ & $-90$ & dBm \\
-\textbf{SNR} & \textbf{$20$} & \textbf{$0$} & \textbf{dB} \\
-\textbf{Link Quality} & \textbf{Good} & \textbf{Marginal} & --- \\
+Increase TX power & Link budget & Battery, regulations, interference \\
+Larger antennas & Link budget & Size, weight, cost, pointing \\
+Lower frequency & Path loss & Spectrum availability, antenna size \\
+Narrower bandwidth & Noise power & Data rate reduced \\
+Better LNA & Noise figure & Cost, power consumption \\
+FEC coding & Effective SNR & Latency, bandwidth overhead \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\section{Worked Example: Satellite Downlink}
-
-\textbf{Problem:} Calculate the received signal power and SNR for a geostationary satellite downlink.
-
-\textbf{Given Parameters:}
-
-\begin{tabular}{@{}ll@{}}
-Satellite TX power & $P_{\text{tx}} = 50$ W = $+47$ dBm \\
-TX antenna gain & $G_{\text{tx}} = 30$ dBi \\
-Distance & $d = 36{,}000$ km (GEO orbit) \\
-Frequency & $f = 12$ GHz (Ku-band) \\
-RX antenna gain & $G_{\text{rx}} = 45$ dBi (1.2 m dish) \\
-System noise temp & $T_s = 100$ K \\
-Bandwidth & $B = 10$ MHz \\
-\end{tabular}
-
-\textbf{Solution:}
-
-\textbf{Step 1:} Calculate free-space path loss using the Friis equation:
-\begin{equation}
-\text{FSPL} [\text{dB}] = 20\log_{10}(d_{\text{km}}) + 20\log_{10}(f_{\text{MHz}}) + 32.45
-\end{equation}
-\begin{equation}
-\text{FSPL} = 20\log_{10}(36{,}000) + 20\log_{10}(12{,}000) + 32.45 = 205.5\ \text{dB}
-\end{equation}
-
-\textbf{Step 2:} Calculate received signal power:
-\begin{equation}
-P_{\text{rx}} [\text{dBm}] = P_{\text{tx}} + G_{\text{tx}} + G_{\text{rx}} - \text{FSPL}
-\end{equation}
-\begin{equation}
-P_{\text{rx}} = 47 + 30 + 45 - 205.5 = -83.5\ \text{dBm}
-\end{equation}
-
-\textbf{Step 3:} Calculate thermal noise power:
-\begin{equation}
-N [\text{W}] = kTB = (1.38 \times 10^{-23})(100)(10 \times 10^6) = 1.38 \times 10^{-14}\ \text{W}
-\end{equation}
-\begin{equation}
-N [\text{dBm}] = 10\log_{10}(1.38 \times 10^{-14} / 10^{-3}) = -108.6\ \text{dBm}
-\end{equation}
-
-\textbf{Step 4:} Calculate SNR:
-\begin{equation}
-\text{SNR} [\text{dB}] = P_{\text{rx}} - N = -83.5 - (-108.6) = 25.1\ \text{dB}
-\end{equation}
-
-\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
-\begin{tabular}{@{}lr@{}}
-\toprule
-\textbf{Parameter} & \textbf{Value} \\
-\midrule
-TX Power & $+47$ dBm \\
-TX Antenna Gain & $+30$ dBi \\
-Free-Space Path Loss & $-205.5$ dB \\
-RX Antenna Gain & $+45$ dBi \\
-\midrule
-\textbf{Received Signal Power} & \textbf{$-83.5$ dBm} \\
-Noise Power & $-108.6$ dBm \\
-\midrule
-\textbf{SNR} & \textbf{$25.1$ dB} \\
-\textbf{Total Link Loss} & \textbf{$130.5$ dB} \\
-\bottomrule
-\end{tabular}
-
-\textbf{Result:} Link closes with 25.1 dB SNR. This comfortable margin accommodates rain fade (5--10 dB at Ku-band), implementation losses (2--3 dB), and pointing errors (1--2 dB).
-\end{calloutbox}
-
-\section{Applications}
-
-\subsection{Satellite Communications}
-
-Satellite links face extreme path loss (150--210 dB) due to long distances:
-\begin{itemize}
-\item \textbf{Challenge}: Signal arrives incredibly weak at receiver
-\item \textbf{Solution}: High-gain antennas (30--50 dBi) and low-noise amplifiers
-\item \textbf{Example}: GPS satellites transmit 50 W, receive $-130$ dBm on Earth
-\item \textbf{Trade-off}: Larger antennas increase gain but reduce portability
-\end{itemize}
-
-\subsection{Cellular Networks}
-
-Mobile phones must overcome variable path loss and interference:
-\begin{itemize}
-\item \textbf{Challenge}: Path loss varies with distance, buildings, weather
-\item \textbf{Solution}: Adaptive power control, cell handover, frequency reuse
-\item \textbf{Example}: Urban cell tower covers 500 m (80--100 dB path loss)
-\item \textbf{Trade-off}: More transmit power increases range but drains battery
-\end{itemize}
-
-\subsection{Deep-Space Missions}
-
-Voyager probes face record path loss (310+ dB at 24 billion km):
-\begin{itemize}
-\item \textbf{Challenge}: Weakest signals ever detected by human receivers
-\item \textbf{Solution}: 70 m Deep Space Network dishes (74 dBi), FEC coding
-\item \textbf{Example}: Voyager 1 transmits 23 W, received at $-196$ dBm
-\item \textbf{Trade-off}: Massive ground infrastructure required (cost, complexity)
-\end{itemize}
-
-\subsection{Wireless LANs (WiFi)}
-
-WiFi operates in crowded spectrum with moderate path loss:
-\begin{itemize}
-\item \textbf{Challenge}: High noise from interference (microwaves, Bluetooth)
-\item \textbf{Solution}: Spread spectrum, adaptive rate control, multiple antennas
-\item \textbf{Example}: 100 mW router at 50 m has 70 dB path loss
-\item \textbf{Trade-off}: Higher data rates require better SNR (shorter range)
-\end{itemize}
-
-\subsection{Key Design Insight}
+\section{Summary}
 
 \begin{center}
-\begin{tikzpicture}[node distance=2cm]
-\node (tx) [draw, rectangle, minimum width=2.5cm, minimum height=1cm] {More TX Power};
-\node (loss) [draw, rectangle, right of=tx, node distance=3.5cm, minimum width=2.5cm, minimum height=1cm] {Overcomes\\Link Loss};
-\node (rx) [draw, rectangle, right of=loss, node distance=3.5cm, minimum width=2.5cm, minimum height=1cm] {Higher RX\\Power};
-\node (snr) [draw, rectangle, right of=rx, node distance=3.5cm, minimum width=2.5cm, minimum height=1cm] {Better SNR};
-\node (ber) [draw, rectangle, below of=snr, node distance=1.5cm, minimum width=2.5cm, minimum height=1cm] {Lower BER};
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Aspect} & \textbf{Link Loss} & \textbf{Noise} \\
+\midrule
+Nature & Deterministic & Random (stochastic) \\
+Effect & Multiplicative & Additive \\
+Predictability & Calculable & Statistical \\
+Mitigation & Antenna gain, TX power & Reduce bandwidth, FEC \\
+Amplification & Helps if before RX & Amplified with signal \\
+Typical range & 60--310 dB & $-174$ dBm/Hz (thermal) \\
+Primary impact & Power budget & BER performance \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Key relationships}:
+\begin{itemize}
+\item $\text{SNR} = (P_{\text{tx}} - L_{\text{dB}}) - N$
+\item Both link loss and noise must be managed for reliable communication
+\item High link loss requires high TX power or high antenna gains
+\item High noise requires wide margins (higher SNR) or robust modulation/coding
+\item The product $L \times N$ determines required transmit power for given BER
+\end{itemize}
+
+\section{Further Reading}
 
 \draw[->,thick] (tx) -- (loss);
 \draw[->,thick] (loss) -- (rx);
@@ -513,45 +651,11 @@ WiFi operates in crowded spectrum with moderate path loss:
 
 \textbf{Practical limits:}
 \begin{itemize}
-\item \textbf{Transmitter power}: Battery life, regulatory limits, heat dissipation
-\item \textbf{Receiver sensitivity}: Thermal noise floor ($kTB$), amplifier noise figure
-\item \textbf{Cost and complexity}: High-gain antennas, low-noise amplifiers
-\end{itemize}
-
-\section{Summary}
-
-\begin{center}
-\begin{tabular}{@{}lll@{}}
-\toprule
-\textbf{Aspect} & \textbf{Link Loss} & \textbf{Noise} \\
-\midrule
-Nature & Deterministic & Random \\
-Effect & Attenuates signal & Adds interference \\
-Scaling & Multiplicative ($\div L$) & Additive ($+ n(t)$) \\
-Predictable? & Yes & No \\
-Time-varying? & No (fixed path) & Yes (stochastic) \\
-dB calculation & Subtraction & N/A (separate) \\
-Mitigation & Higher TX power, gain & FEC, filtering, gain \\
-Typical value & 60--210 dB & $-90$ to $-110$ dBm \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{keyconcept}
-\textbf{Link loss weakens the signal deterministically.} \textbf{Noise adds random interference.} Both combine to determine the SNR, which governs the bit error rate and system reliability. Understanding this distinction is essential for link budget analysis and system design.
-\end{keyconcept}
-
-\begin{warningbox}
-\textbf{Common Misconception:} Amplifying a weak signal does NOT improve SNR if done after noise is added. The amplifier boosts both signal and noise equally. Low-noise amplifiers (LNAs) must be placed \textbf{immediately after the antenna} to minimize noise figure.
-\end{warningbox}
-
-\section{Further Reading}
-
-\begin{itemize}
-\item \textbf{Chapter \ref{ch:snr}:} Signal-to-Noise Ratio (SNR) --- The quality metric
-\item \textbf{Chapter \ref{ch:awgn}:} Additive White Gaussian Noise (AWGN) --- The noise model
-\item \textbf{Chapter \ref{ch:link-budget}:} Complete Link Budget Analysis --- Calculating system performance
-\item \textbf{Chapter \ref{ch:energy-ratios}:} Energy Ratios ($E_s/N_0$ and $E_b/N_0$) --- Energy-based metrics
-\item \textbf{Chapter \ref{ch:fspl}:} Free-Space Path Loss (FSPL) --- Distance-dependent attenuation
-\item \textbf{Chapter \ref{ch:channel-models}:} Channel Models (Rayleigh \& Rician) --- Fading channels
+\item \textbf{Chapter 4:} Signal-to-Noise Ratio (SNR)---detailed SNR analysis
+\item \textbf{Chapter 5:} Additive White Gaussian Noise (AWGN)---noise modeling
+\item \textbf{Chapter 11:} Free-Space Path Loss---propagation fundamentals
+\item \textbf{Chapter 15:} Bit Error Rate (BER) Performance---error analysis
+\item \textbf{Chapter 18:} Link Budget Analysis---complete system design
+\item \textbf{Chapter 22:} Forward Error Correction---coding for noise mitigation
+\item \textbf{Chapter 25:} Antenna Fundamentals---antenna gains and patterns
 \end{itemize}
