@@ -770,6 +770,50 @@ Point-to-point links use adaptive QAM:
 
 \section{Comparison: QAM vs PSK}
 
+\subsection{Evolution from PSK to QAM}
+
+QPSK (4-QAM) uses only phase modulation with constant amplitude. QAM extends this by adding amplitude variation:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% QPSK (4-QAM)
+\begin{scope}[shift={(0,0)}]
+\node[above,font=\sffamily\bfseries] at (0,2.5) {QPSK (4-QAM)};
+\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2) -- (0,2) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-1.5,-1.5) grid[step=0.5] (1.5,1.5);
+% Constant amplitude circle
+\draw[dashed,gray] (0,0) circle (1.06);
+\fill[black] (1.06,1.06) circle (2.5pt);
+\fill[black] (-1.06,1.06) circle (2.5pt);
+\fill[black] (-1.06,-1.06) circle (2.5pt);
+\fill[black] (1.06,-1.06) circle (2.5pt);
+\node[below=12pt,font=\small] at (0,-2) {4 points, 2 bits/symbol};
+\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Constant amplitude};
+\end{scope}
+
+% 16-QAM
+\begin{scope}[shift={(6,0)}]
+\node[above,font=\sffamily\bfseries] at (0,2.5) {16-QAM};
+\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2) -- (0,2) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-1.5,-1.5) grid[step=0.5] (1.5,1.5);
+% Multiple amplitude levels
+\foreach \i in {-1.5,-0.5,0.5,1.5} {
+  \foreach \q in {-1.5,-0.5,0.5,1.5} {
+    \fill[black] (\i,\q) circle (2pt);
+  }
+}
+\node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
+\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Variable amplitude};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\textbf{Key difference:} QAM uses both phase and amplitude, creating a rectangular grid that achieves higher spectral efficiency than PSK's circular constellation.
+
+\subsection{Performance Comparison}
+
 For $M > 8$, QAM consistently outperforms M-PSK:
 
 \begin{center}
@@ -786,7 +830,47 @@ Bits/Symbol & PSK & QAM Performance \\
 \end{tabular}
 \end{center}
 
-\textbf{Why QAM wins:} The rectangular grid uses 2D signal space more efficiently than a circle. Symbol spacing is maximized for a given average power, increasing minimum distance and reducing BER.
+\subsection{Constellation Efficiency: 16-PSK vs 16-QAM}
+
+Visual comparison showing why QAM outperforms PSK for the same number of symbols:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% 16-PSK
+\begin{scope}[shift={(0,0)}]
+\node[above,font=\sffamily\bfseries] at (0,2.8) {16-PSK};
+\draw[->] (-2.2,0) -- (2.2,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2.2) -- (0,2.2) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-2,-2) grid[step=0.5] (2,2);
+% Circle showing constant amplitude
+\draw[thick,gray!50] (0,0) circle (1.5);
+% 16 points on circle
+\foreach \angle in {0,22.5,...,337.5} {
+  \fill[black] ({1.5*cos(\angle)},{1.5*sin(\angle)}) circle (1.8pt);
+}
+\node[below=8pt,font=\small] at (0,-2.2) {Circular constellation};
+\node[below=20pt,font=\scriptsize,align=center] at (0,-2.2) {Min distance: $d_{\min} = 0.39$};
+\end{scope}
+
+% 16-QAM
+\begin{scope}[shift={(6,0)}]
+\node[above,font=\sffamily\bfseries] at (0,2.8) {16-QAM};
+\draw[->] (-2.2,0) -- (2.2,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2.2) -- (0,2.2) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-2,-2) grid[step=0.5] (2,2);
+% 16-QAM grid
+\foreach \i in {-1.5,-0.5,0.5,1.5} {
+  \foreach \q in {-1.5,-0.5,0.5,1.5} {
+    \fill[black] (\i,\q) circle (2pt);
+  }
+}
+\node[below=8pt,font=\small] at (0,-2.2) {Rectangular grid};
+\node[below=20pt,font=\scriptsize,align=center] at (0,-2.2) {Min distance: $d_{\min} = 0.63$};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\textbf{Why QAM wins:} The rectangular grid uses 2D signal space more efficiently than a circle. Symbol spacing is maximized for a given average power, increasing minimum distance ($d_{\min}$) by $\sim$60\% and reducing BER by approximately 4~dB for the same transmitted power.
 
 \section{Summary}
 
