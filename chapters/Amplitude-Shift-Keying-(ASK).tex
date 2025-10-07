@@ -72,6 +72,19 @@ where:
 \text{Bits/symbol} = \log_2(M)
 \end{equation}
 
+\section{IQ Representation}
+
+The baseband complex representation of ASK is:
+\begin{equation}
+s(t) = \mathrm{Re}\{A_m \cdot e^{j2\pi f_c t}\}
+\end{equation}
+
+\textbf{IQ components:}
+\begin{itemize}
+\item \textbf{I (In-phase):} $I_m = A_m$ (varies with symbol)
+\item \textbf{Q (Quadrature):} $Q_m = 0$ (ASK uses only the I axis)
+\end{itemize}
+
 \subsection{Constellation Diagram}
 
 ASK constellation points lie on a single dimension (the real/I axis) since only amplitude varies:
@@ -254,6 +267,42 @@ For binary ASK (OOK), a simpler non-coherent receiver can be used:
 \item[\texttimes] Only practical for binary ASK (OOK)
 \item[\texttimes] More sensitive to noise
 \end{itemize}
+
+\section{Carrier Recovery}
+
+Coherent ASK detection requires the receiver to generate a local oscillator that is frequency and phase synchronized with the transmitter carrier.
+
+\subsection{Carrier Recovery Techniques}
+
+\subsubsection{1. Pilot Tone}
+\begin{itemize}
+\item[\checkmark] Simple implementation
+\item[\checkmark] Accurate phase reference
+\item[\texttimes] Wastes power (typically 10--20\% of total)
+\item[\texttimes] Reduces data throughput
+\end{itemize}
+
+\subsubsection{2. Costas Loop}
+PLL-based carrier recovery using I/Q demodulation:
+\begin{itemize}
+\item[\checkmark] No pilot tone required
+\item[\checkmark] Works for amplitude modulation with modifications
+\item[\texttimes] Complex analog circuitry
+\item[\texttimes] Acquisition time required
+\end{itemize}
+
+\subsubsection{3. Squaring Loop}
+Exploits the periodicity of the modulated signal:
+\begin{itemize}
+\item[\checkmark] Removes data modulation
+\item[\checkmark] Robust in low SNR
+\item[\texttimes] Phase ambiguity issues
+\item[\texttimes] Requires post-processing
+\end{itemize}
+
+\subsection{Non-Coherent Alternative}
+
+For binary ASK (OOK), non-coherent envelope detection avoids carrier recovery complexity at the cost of approximately 3~dB performance penalty. This trade-off makes envelope detection attractive for simple, low-cost applications like RFID tags and IR remotes.
 
 \section{Signal Space Representation}
 
@@ -487,19 +536,6 @@ LED-based VLC systems use intensity modulation (OOK or M-ASK):
 
 
 \section{Implementation Challenges}
-
-\subsection{Carrier Recovery}
-
-Coherent ASK detection requires precise carrier synchronization:
-
-\textbf{Common techniques:}
-\begin{itemize}
-\item \textbf{Squaring loop:} Square signal to remove modulation, extract carrier at $2f_c$, then divide by 2
-\item \textbf{Costas loop:} PLL-based feedback with I/Q arms for phase tracking
-\item \textbf{Pilot tone:} Transmit unmodulated carrier (wastes 10--20\% power)
-\end{itemize}
-
-For binary ASK (OOK), non-coherent envelope detection avoids this complexity at the cost of 3~dB performance penalty.
 
 \subsection{Automatic Gain Control (AGC)}
 
