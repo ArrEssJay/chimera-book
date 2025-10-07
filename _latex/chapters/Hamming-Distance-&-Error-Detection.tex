@@ -492,22 +492,24 @@ c(x) = m(x) \cdot x^r + \text{CRC}(m)
 \item \textbf{CRC-CCITT} (16 bits): Bluetooth, X.25, HDLC
 \end{itemize}
 
-\subsubsection{4. Checksum}\label{checksum}
+\subsection{Checksum}
 
-\textbf{Simple sum} of data bytes (with wraparound)
+Simple sum of data bytes with wraparound, commonly used in network protocols.
 
-\textbf{Example (16-bit)}:
-
-\[
+\textbf{16-bit checksum computation:}
+\begin{equation}
 \text{Checksum} = \left(-\sum_{i} \text{data}_i\right) \bmod 2^{16}
-\]
+\label{eq:checksum}
+\end{equation}
 
-\textbf{Properties}: - Fast to compute - Weaker than CRC
-(doesn\textquotesingle t catch all bit reorderings)
+\textbf{Properties:}
+\begin{itemize}
+\item Very fast to compute (simple addition)
+\item Weaker than CRC (doesn't catch all bit reorderings)
+\item Commonly used when computational simplicity is critical
+\end{itemize}
 
-\textbf{Use case}: TCP, UDP, IP headers
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Use cases:} TCP, UDP, IP headers (IPv4 header checksum)
 
 \subsection{Error Correction
 Principles}\label{error-correction-principles}
