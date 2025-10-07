@@ -1,63 +1,147 @@
-\section{Real-World System Examples}\label{real-world-system-examples}
+\chapter{Real-World System Examples}
+\label{ch:real-world-systems}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{System Implementation} \textbar{}
-{[}{[}Channel-Equalization{]}{]} \textbar{}
-{[}{[}Signal-Chain-(End-to-End-Processing){]}{]}
+\begin{nontechnical}
+\textbf{Real systems are like complete orchestras}---not just one instrument, but all concepts working together in harmony.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Simple idea:}
+\begin{itemize}
+\item WiFi = OFDM + MIMO + smart antenna switching (fast, short range)
+\item LTE = cellular towers + adaptive modulation (medium speed, wide area)
+\item GPS = weak satellite signals + spread spectrum (navigation, global)
+\item Bluetooth = frequency hopping + low power (personal devices)
+\item LoRa = chirp signals + ultra-long range (IoT sensors, years on battery)
+\end{itemize}
 
-\subsection{Overview}\label{overview}
+\textbf{Real use:} These are the systems in your phone, car, home. Each optimizes different trade-offs: speed vs range vs power.
 
-This page provides \textbf{end-to-end analysis} of real communication
-systems, showing how all concepts integrate.
+\textbf{Why study complete systems?} Theory is one thing, but real implementations face constraints: regulations, cost, battery life, interference. Understanding complete systems shows how theory becomes practice.
+\end{nontechnical}
 
-\textbf{Systems covered}: 1. \textbf{WiFi 802.11n/ac} (Wireless LAN) 2.
-\textbf{LTE} (4G Cellular) 3. \textbf{DVB-S2X} (Satellite TV) 4.
-\textbf{GPS L1 C/A} (Navigation) 5. \textbf{Bluetooth 5.0} (Personal
-Area Network) 6. \textbf{LoRaWAN} (IoT Long Range)
+\section{Overview}
 
-Each example includes: modulation, coding, link budget, sync,
-equalization, and performance.
+This chapter provides \textbf{end-to-end analysis} of deployed communication systems, demonstrating how fundamental concepts---modulation, coding, synchronization, equalization, and link budgets---integrate into practical implementations.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{keyconcept}
+Real-world systems make fundamental \textbf{trade-offs between competing requirements}: data rate, range, power consumption, latency, and cost. No single system optimizes all parameters; each is engineered for specific use cases and regulatory constraints.
+\end{keyconcept}
 
-\subsection{1. WiFi 802.11n (300 Mbps)}\label{wifi-802.11n-300-mbps}
+\textbf{Systems analyzed in this chapter:}
+\begin{enumerate}
+\item \textbf{WiFi 802.11n} (Wireless LAN)---high throughput, indoor coverage
+\item \textbf{LTE} (4G Cellular)---wide-area mobility with adaptive coding
+\item \textbf{DVB-S2X} (Satellite TV)---long-distance broadcast from GEO
+\item \textbf{GPS L1 C/A} (Navigation)---sub-noise signal acquisition
+\item \textbf{Bluetooth 5.0} (Personal Area Network)---low power, frequency hopping
+\item \textbf{LoRaWAN} (IoT)---ultra-long range with minimal power
+\end{enumerate}
 
-\subsubsection{System Parameters}\label{system-parameters}
+Each analysis includes: physical layer parameters, modulation and coding schemes, link budget calculations, synchronization methods, equalization techniques, and measured performance.
 
-\textbf{Standard}: IEEE 802.11n (2009)
+\section{WiFi 802.11n: High-Throughput WLAN}
+\label{sec:wifi}
 
-\textbf{Frequency}: 2.4 GHz or 5 GHz
+\subsection{System Parameters}
 
-\textbf{Bandwidth}: 20 MHz or 40 MHz
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Standard & IEEE 802.11n (2009) \\
+Frequency bands & 2.4~GHz, 5~GHz \\
+Channel bandwidth & 20~MHz, 40~MHz \\
+MIMO configuration & $2 \times 2$, $3 \times 3$, $4 \times 4$ \\
+Modulation & BPSK to 64-QAM (per subcarrier) \\
+Multiple access & OFDMA + CSMA/CA \\
+FEC coding & Convolutional ($K = 7$, rates: $\frac{1}{2}, \frac{2}{3}, \frac{3}{4}, \frac{5}{6}$) \\
+Peak data rate & 150~Mbps (1 stream), 600~Mbps (4 streams) \\
+\bottomrule
+\end{tabular}
 
-\textbf{MIMO}: 2\$\textbackslash times\$2, 3\$\textbackslash times\$3,
-or 4\$\textbackslash times\$4
+\subsection{OFDM Physical Layer}
 
-\textbf{Modulation}: BPSK to 64-QAM (per subcarrier)
+WiFi 802.11n employs \textbf{Orthogonal Frequency Division Multiplexing (OFDM)} to combat multipath fading in indoor environments.
 
-\textbf{Coding}: Convolutional (K=7, rate 1/2, 2/3, 3/4, 5/6)
+\textbf{OFDM parameters (20~MHz channel):}
+\begin{itemize}
+\item FFT size: $N_{\text{FFT}} = 64$
+\item Total subcarriers: 64 (52 data + 4 pilots + 8 guard/DC)
+\item Subcarrier spacing: $\Delta f = 312.5$~kHz
+\item Symbol duration: $T_{\text{sym}} = 3.2~\mu$s (data) + $0.8~\mu$s (guard interval) = $4~\mu$s
+\item Guard interval: $T_g = 0.8~\mu$s ($\frac{1}{4}$ symbol, handles up to 240~m delay spread)
+\end{itemize}
 
-\textbf{Multiple access}: CSMA/CA (carrier sense)
+The OFDM symbol duration is calculated as:
+\begin{equation}
+T_{\text{sym}} = \frac{1}{\Delta f} = \frac{1}{312.5 \times 10^3} = 3.2~\mu\text{s}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{40~MHz channel} doubles capacity:
+\begin{itemize}
+\item FFT size: $N_{\text{FFT}} = 128$
+\item Data subcarriers: 108 (2.08$\times$ increase)
+\end{itemize}
 
-\subsubsection{PHY Layer (OFDM)}\label{phy-layer-ofdm}
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+% OFDM Symbol Structure
+\draw[thick] (0,0) rectangle (10,1.5);
+\fill[blue!20] (0,0) rectangle (8,1.5);
+\fill[green!30] (8,0) rectangle (10,1.5);
 
-\textbf{Subcarriers}: - \textbf{20 MHz}: 64 total (52 data, 4 pilots, 8
-guard) - \textbf{40 MHz}: 128 total (108 data, 6 pilots, 14 guard)
+\node at (4,0.75) {\sffamily\small Data Symbol ($3.2~\mu$s)};
+\node at (9,0.75) {\sffamily\scriptsize GI};
 
-\textbf{FFT size}: 64 (20 MHz), 128 (40 MHz)
+% Dimensions
+\draw[<->] (0,-0.5) -- (8,-0.5) node[midway,below] {\small $T_{\text{sym}} = 3.2~\mu$s};
+\draw[<->] (8,-0.5) -- (10,-0.5) node[midway,below] {\scriptsize $0.8~\mu$s};
+\draw[<->] (0,-1.2) -- (10,-1.2) node[midway,below] {\small Total: $4~\mu$s};
 
-\textbf{Subcarrier spacing}: 312.5 kHz
+% Frequency domain representation
+\begin{scope}[shift={(0,-4)}]
+\node[above] at (5,3) {\sffamily\bfseries 20~MHz OFDM Spectrum};
+\draw[->] (0,0) -- (11,0) node[right] {\sffamily\small Frequency};
+\draw[->] (0,0) -- (0,2.5) node[above] {\sffamily\small Power};
 
-\textbf{Symbol duration}: 3.2 \$\textbackslash mu\$s (data) + 0.8
-\$\textbackslash mu\$s (guard) = 4 \$\textbackslash mu\$s
+% Subcarriers
+\foreach \x in {1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5} {
+  \draw[thick,blue!60] (\x,0) -- (\x,2);
+}
+% Pilot subcarriers (highlighted)
+\draw[thick,red!70,line width=1.5pt] (3,0) -- (3,2);
+\draw[thick,red!70,line width=1.5pt] (5,0) -- (5,2);
+\draw[thick,red!70,line width=1.5pt] (7,0) -- (7,2);
+\draw[thick,red!70,line width=1.5pt] (8,0) -- (8,2);
 
-\textbf{Guard interval}: 0.8 \$\textbackslash mu\$s (1/4 symbol)
-\$\textbackslash rightarrow\$ Handles 200 ns delay spread
+% Guard bands
+\draw[thick,gray,dashed] (1,0) -- (1,1.2);
+\draw[thick,gray,dashed] (9.5,0) -- (9.5,1.2);
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Labels
+\node[below,font=\scriptsize] at (1,-0.2) {Guard};
+\node[below,font=\scriptsize] at (5.25,-0.2) {52 Data + 4 Pilots};
+\node[below,font=\scriptsize] at (9.5,-0.2) {Guard};
+\node[right,font=\scriptsize,red] at (9.8,1.5) {Pilots};
+\node[right,font=\scriptsize,blue] at (9.8,1) {Data};
+
+\draw[<->] (1,2.8) -- (9.5,2.8) node[midway,above,font=\small] {20~MHz};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{calloutbox}[colback=blue!5!white,colframe=blue!75!black]{Why OFDM for WiFi?}
+Indoor wireless channels exhibit severe \textbf{multipath propagation}---signals reflect off walls, furniture, and people, creating multiple delayed copies. In a traditional single-carrier system, these reflections cause intersymbol interference (ISI).
+
+OFDM solves this by:
+\begin{itemize}
+\item Dividing the channel into narrow subcarriers (312.5~kHz each)
+\item Each subcarrier experiences flat fading (no ISI within narrow band)
+\item Guard interval absorbs multipath delays up to $0.8~\mu$s (240~m)
+\item Simple per-subcarrier equalization (single complex division)
+\end{itemize}
+
+Trade-off: Guard interval reduces efficiency by 20\%, but eliminates complex time-domain equalization.
+\end{calloutbox}
 
 \subsubsection{Frame Structure}\label{frame-structure}
 
@@ -110,28 +194,89 @@ MCS & Modulation & Code Rate & Data Rate (Mbps) & Usage \\
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Link Budget (Indoor, 20
-MHz)}\label{link-budget-indoor-20-mhz}
+\subsection{Link Budget Analysis: Indoor WiFi}
 
-\textbf{Transmitter}: - TX power: +20 dBm (100 mW) - Antenna gain: +2
-dBi (omnidirectional) - EIRP: +22 dBm
+\textbf{Scenario:} 10~m indoor link at 2.4~GHz, 20~MHz bandwidth
 
-\textbf{Path Loss} (10 m indoor, 2.4 GHz): - Free space: 40 dB - Wall
-penetration: 5 dB (1 wall) - \textbf{Total path loss}: 45 dB
+\subsubsection*{Given Parameters}
 
-\textbf{Receiver}: - RX antenna gain: +2 dBi - Noise figure: 6 dB -
-Noise floor: -174 + 73 + 6 = -95 dBm (20 MHz)
+\begin{tabular}{@{}ll@{}}
+TX power & $P_t = 20$~dBm (100~mW) \\
+TX antenna gain & $G_t = 2$~dBi (omnidirectional) \\
+RX antenna gain & $G_r = 2$~dBi \\
+Distance & $d = 10$~m \\
+Frequency & $f = 2.4$~GHz \\
+Bandwidth & $B = 20$~MHz \\
+Noise figure & $NF = 6$~dB \\
+Wall penetration loss & $L_{\text{wall}} = 5$~dB (single interior wall) \\
+\end{tabular}
 
-\textbf{Received signal}: - P\_r = 22 - 45 + 2 = \textbf{-21 dBm}
+\subsubsection*{Step 1: Free-Space Path Loss}
 
-\textbf{SNR}: -21 - (-95) = \textbf{74 dB} (excellent!)
+\begin{equation}
+\text{FSPL\,[dB]} = 20\log_{10}(d_{\text{m}}) + 20\log_{10}(f_{\text{MHz}}) + 32.45
+\end{equation}
+\begin{equation}
+\text{FSPL} = 20\log_{10}(10) + 20\log_{10}(2400) + 32.45 = 20 + 67.6 + 32.45 = 40.05~\text{dB}
+\end{equation}
 
-\textbf{MCS}: Can use MCS 7 (64-QAM 5/6, requires \textasciitilde25 dB
-SNR)
+\subsubsection*{Step 2: Total Path Loss}
 
-\textbf{Data rate}: 65 Mbps
+Including wall penetration:
+\begin{equation}
+L_{\text{total}} = \text{FSPL} + L_{\text{wall}} = 40.05 + 5 = 45.05~\text{dB}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsubsection*{Step 3: Received Signal Power}
+
+\begin{equation}
+P_r = P_t + G_t + G_r - L_{\text{total}}
+\end{equation}
+\begin{equation}
+P_r = 20 + 2 + 2 - 45.05 = -21.05~\text{dBm}
+\end{equation}
+
+\subsubsection*{Step 4: Noise Power}
+
+The noise floor for a 20~MHz bandwidth is:
+\begin{equation}
+N = -174 + 10\log_{10}(B) + NF
+\end{equation}
+\begin{equation}
+N = -174 + 10\log_{10}(20 \times 10^6) + 6 = -174 + 73.0 + 6 = -95.0~\text{dBm}
+\end{equation}
+
+where $-174$~dBm/Hz is the thermal noise floor at 290~K.
+
+\subsubsection*{Step 5: Signal-to-Noise Ratio}
+
+\begin{equation}
+\text{SNR} = P_r - N = -21.05 - (-95.0) = 73.95~\text{dB}
+\end{equation}
+
+\subsubsection*{Step 6: MCS Selection and Data Rate}
+
+With 74~dB SNR, the link can support the highest MCS:
+\begin{itemize}
+\item \textbf{MCS 7:} 64-QAM, code rate $\frac{5}{6}$
+\item \textbf{Required SNR:} $\sim$25~dB
+\item \textbf{Link margin:} $74 - 25 = 49$~dB (excellent!)
+\item \textbf{Data rate:} 65~Mbps (20~MHz, 1 spatial stream)
+\end{itemize}
+
+\begin{calloutbox}{Link Budget Summary}
+\textbf{Result: Link closes with 49~dB margin}
+
+This enormous margin provides:
+\begin{itemize}
+\item Robustness against fading (Rayleigh/Rician)
+\item Additional wall penetration capability
+\item Support for maximum data rate (MCS 7)
+\item Tolerance for multipath and interference
+\end{itemize}
+
+\textbf{Practical outcome:} At 10~m indoor range, WiFi operates in a power-rich regime. Range is typically limited by collision domain (CSMA/CA) and AP density, not SNR.
+\end{calloutbox}
 
 \subsubsection{Synchronization}\label{synchronization}
 
@@ -148,29 +293,98 @@ accuracy) 3. \textbf{Tracking}: Pilot subcarriers (every OFDM symbol)
 
 \textbf{Channel estimation}: Long preamble (2 known OFDM symbols)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Channel Equalization}
 
-\subsubsection{Equalization}\label{equalization}
+\subsubsection*{Single-Antenna (SISO) Equalization}
 
-\textbf{Per-subcarrier} (flat fading assumption):
-
-\[
+Each OFDM subcarrier experiences flat fading and can be equalized independently:
+\begin{equation}
 \hat{S}_k = \frac{R_k}{H_k}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $R_k$ = received symbol on subcarrier $k$
+\item $H_k$ = complex channel coefficient (from pilot estimation)
+\item $\hat{S}_k$ = equalized symbol estimate
+\end{itemize}
 
-\textbf{Pilot tracking}: 4 pilots per 52 subcarriers - Linear
-interpolation (frequency) - Common phase error (CPE) correction
+\textbf{Channel estimation:} Long training symbols (LTS) in preamble provide known reference:
+\begin{equation}
+\hat{H}_k = \frac{R_k^{\text{LTS}}}{S_k^{\text{LTS}}}
+\end{equation}
 
-\textbf{MIMO} (2\$\textbackslash times\$2): MMSE equalizer
+\textbf{Pilot tracking:} Four pilot subcarriers per OFDM symbol enable:
+\begin{itemize}
+\item Phase tracking (common phase error correction)
+\item Frequency offset compensation
+\item Linear interpolation for data subcarrier channel estimates
+\end{itemize}
 
-\[
-\hat{\mathbf{S}} = (\mathbf{H}^H \mathbf{H} + \sigma^2 \mathbf{I})^{-1} \mathbf{H}^H \mathbf{R}
-\]
+\subsubsection*{MIMO Equalization ($2 \times 2$)}
 
-\textbf{Complexity}: 2\$\textbackslash times\$2 matrix inversion per
-subcarrier (52 times per symbol)
+For spatial multiplexing, the received signal model per subcarrier is:
+\begin{equation}
+\mathbf{R} = \mathbf{H} \mathbf{S} + \mathbf{N}
+\end{equation}
+where $\mathbf{H}$ is the $2 \times 2$ channel matrix.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+The \textbf{MMSE equalizer} balances noise amplification:
+\begin{equation}
+\hat{\mathbf{S}} = \left(\mathbf{H}^H \mathbf{H} + \sigma^2 \mathbf{I}\right)^{-1} \mathbf{H}^H \mathbf{R}
+\end{equation}
+where $\sigma^2$ is the noise variance.
+
+\textbf{Computational complexity:}
+\begin{itemize}
+\item $2 \times 2$ matrix inversion per subcarrier
+\item 52 subcarriers (20~MHz) $\rightarrow$ 52 inversions per symbol
+\item Symbol rate: 250,000 symbols/second
+\item Total: $\sim$13 million matrix operations/second
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.8cm, font=\sffamily\scriptsize},
+  node distance=1.5cm,
+  font=\small
+]
+% Transmit chain
+\node (bits) {\scriptsize Binary data};
+\node[block, below of=bits, node distance=1cm] (fec) {FEC Encoder};
+\node[block, below of=fec, node distance=1cm] (qam) {QAM Mapper};
+\node[block, below of=qam, node distance=1cm] (mimo) {MIMO\\Encoder};
+\node[block, below of=mimo, node distance=1cm] (ifft) {IFFT + GI};
+\node[below of=ifft, node distance=1cm] (rf) {\scriptsize RF Front-End};
+
+% Channel
+\node[right of=ifft, node distance=5cm] (channel) {\sffamily\bfseries Channel\\(Multipath)};
+\draw[->,thick] (rf) -- ++(-1.5,0) |- (channel);
+
+% Receive chain
+\node[below of=channel, node distance=3cm] (rf2) {\scriptsize RF Front-End};
+\node[block, above of=rf2, node distance=1cm] (fft) {Remove GI\\+ FFT};
+\node[block, above of=fft, node distance=1cm] (eq) {MIMO\\Equalizer};
+\node[block, above of=eq, node distance=1cm] (deqam) {QAM\\Demapper};
+\node[block, above of=deqam, node distance=1cm] (dec) {FEC Decoder};
+\node[above of=dec, node distance=1cm] (outbits) {\scriptsize Recovered data};
+
+\draw[->,thick] (channel) -- ++(1.5,0) |- (rf2);
+\draw[->,thick] (bits) -- (fec);
+\draw[->,thick] (fec) -- (qam);
+\draw[->,thick] (qam) -- (mimo);
+\draw[->,thick] (mimo) -- (ifft);
+\draw[->,thick] (ifft) -- (rf);
+\draw[->,thick] (rf2) -- (fft);
+\draw[->,thick] (fft) -- (eq);
+\draw[->,thick] (eq) -- (deqam);
+\draw[->,thick] (deqam) -- (dec);
+\draw[->,thick] (dec) -- (outbits);
+
+% Labels
+\node[left of=fec, node distance=2.5cm, font=\sffamily\bfseries\footnotesize] {Transmitter};
+\node[right of=eq, node distance=2.5cm, font=\sffamily\bfseries\footnotesize] {Receiver};
+\end{tikzpicture}
+\end{center}
 
 \subsubsection{Performance}\label{performance}
 
