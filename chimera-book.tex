@@ -1,38 +1,98 @@
-\documentclass[12pt, a4paper, oneside]{book}
+\documentclass[11pt,oneside]{book}
 
+% Load preamble (fonts, packages, styling)
 \input{preamble}
+
+% Book metadata
+\title{Chimera: Signals Processing, Past, Present \& Future}
+\author{Edited by Rowan Jones}
+\date{First Edition, \today}
 
 \begin{document}
 
-% --- Front Matter ---
+% Front Matter
 \frontmatter
+
+% Cover Art (full page - absolute no margins)
+\begin{titlepage}
+\thispagestyle{empty}
+\tikz[remember picture,overlay] \node[inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{graphics/cover_art.png}};
+\end{titlepage}
+
+% Title page
 \input{titlepage}
-\cleardoublepage
-\input{license}
-\cleardoublepage
+
+% Cataloging in Publication (CIP) Data
+\input{cataloging}
+
+% Dedication
+\input{dedication}
+
+% Foreword
+\input{foreword}
+
+% Table of Contents
 \tableofcontents
-\cleardoublepage
+\newpage
 
-% --- Introduction ---
+% Introduction
 \input{introduction}
-\cleardoublepage
 
-% --- Main Matter (Chapters) ---
+% Main Content
 \mainmatter
 
-% Include all chapters dynamically from chapters.list
-\newread\chapterfile
-\openin\chapterfile=chapters.list
-\loop\unless\ifeof\chapterfile
-    \read\chapterfile to \chaptername
-    \ifx\chaptername\empty\else
-        \input{chapters/\chaptername}
-    \fi
-\repeat
-\closein\chapterfile
+% Include all chapters (alphabetically)
+% Wave 1: Exemplar (complete)
+\input{chapters/Binary-Phase-Shift-Keying-(BPSK)-EXEMPLAR-V2}
 
-% --- Back Matter ---
+% Wave 2-12: Production chapters (add as completed)
+% \input{chapters/8PSK-&-Higher-Order-PSK}
+% \input{chapters/Quadrature-Phase-Shift-Keying-(QPSK)}
+% \input{chapters/Frequency-Shift-Keying-(FSK)}
+% ... (add more as chapters are completed)
+
+% Back Matter
 \backmatter
-\printbibliography
+
+% Bibliography
+\printbibliography[heading=bibintoc,title={Bibliography}]
+
+% Index
+\printindex
+
+% Colophon (production notes)
+\chapter*{Colophon}
+\addcontentsline{toc}{chapter}{Colophon}
+
+This book was typeset using \LaTeX{}, the document preparation system created by Leslie Lamport based on Donald Knuth's \TeX{} typesetting system.
+
+\textbf{Typography:}
+\begin{itemize}
+\item Body text: Minion Pro (12pt)
+\item Headings: Myriad Pro
+\item Mathematics: Latin Modern Math
+\item Code: Latin Modern Mono
+\end{itemize}
+
+\textbf{Diagrams:} TikZ/PGF graphics system
+
+\textbf{Technical tools:}
+\begin{itemize}
+\item \LaTeX{} engine: Xe\LaTeX{} with fontspec
+\item Bibliography: Biber with biblatex
+\item Build automation: Bash shell scripts
+\item Version control: Git
+\end{itemize}
+
+\textbf{Production:}
+\begin{itemize}
+\item First Edition: October 2025
+\item Edited by: Rowan Jones
+\item Published by: The Chimera Project
+\item License: CC0 1.0 Universal (Public Domain)
+\end{itemize}
+
+This is a living document. Updates and corrections can be found at:\\
+\url{https://github.com/ArrEssJay/chimera-book}
 
 \end{document}

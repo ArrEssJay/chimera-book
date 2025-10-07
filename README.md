@@ -6,7 +6,7 @@
 
 Professional DSP textbook with 69 chapters covering fundamentals through advanced topics. Written to Proakis & Manolakis standards with TikZ diagrams and worked examples.
 
-**License:** CC0 (Public Domain) | **Author:** Rowan Jones
+**License:** CC0 (Public Domain) | **Author:** The Chimera Project (chimera@impermanent.io)
 
 ## 🚀 Quick Start
 
