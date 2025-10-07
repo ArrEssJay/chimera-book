@@ -1,118 +1,383 @@
-\section{Channel Models: Rayleigh \& Rician
-Implementation}\label{channel-models-rayleigh-rician-implementation}
+\chapter{Channel Models: Rayleigh and Rician Fading}
+\label{ch:channel-models-rayleigh-rician}
 
-{[}{[}Home{]}{]} \textbar{} \textbf{Link Budget \& System Performance}
-\textbar{}
-{[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}
-\textbar{} {[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}
+\begin{nontechnical}
+\textbf{Channel models are like flight simulators for radio engineers}---they let you test communication systems in virtual cities, tunnels, and open fields before building real hardware.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{The problem:}
+\begin{itemize}
+\item Can't test every scenario (urban, suburban, highway, indoor)
+\item Real-world testing is expensive (hardware, locations, permits)
+\item Need to test extreme conditions (rain, crowds, interference)
+\item Can't test satellites or Mars missions easily!
+\end{itemize}
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\textbf{The solution---mathematical simulation:}
+\begin{itemize}
+\item Create computer models of radio environments
+\item Run communication system in simulation
+\item Measure performance before building hardware
+\end{itemize}
 
-\textbf{Channel models are like flight simulators for radio
-engineers-\/-\/-they let you test communication systems in virtual
-cities, tunnels, and open fields before building real hardware!}
+\textbf{The two main models:}
 
-\textbf{The problem}: - Can\textquotesingle t test every scenario:
-urban, suburban, highway, indoor, etc. - Real-world testing is expensive
-(need hardware, locations, permits) - Need to test in bad conditions
-(rain, crowds, interference) - Can\textquotesingle t test satellites or
-Mars missions easily!
+\textbf{1. Rayleigh fading} (no line-of-sight):
+\begin{itemize}
+\item \textbf{Environment:} Dense urban, indoors, tunnels
+\item \textbf{Characteristic:} Signal bounces everywhere, no direct path
+\item \textbf{Result:} Wild signal fluctuations (30+ dB swings!)
+\item \textbf{Example:} Walking through downtown, WiFi in building with walls
+\end{itemize}
 
-\textbf{The solution - Mathematical simulation}: - Create computer
-models of radio environments - Run communication system in simulation -
-See how well it performs - Fix problems BEFORE building hardware!
+\textbf{2. Rician fading} (strong line-of-sight + scatter):
+\begin{itemize}
+\item \textbf{Environment:} Suburban, rural, highways, open areas
+\item \textbf{Characteristic:} One strong direct path + weaker echoes
+\item \textbf{Result:} More stable signal, less severe fading
+\item \textbf{Example:} Highway cell tower, rural WiFi
+\end{itemize}
 
-\textbf{The two main models}:
+\textbf{Why simulation matters:} When engineers designed the LTE standard (4G), they ran over 1 million simulations using standardized channel models. This is why 4G ``just worked'' globally from day one---they'd already tested every conceivable environment virtually.
+\end{nontechnical}
 
-\textbf{1. Rayleigh Fading} (no line-of-sight): - \textbf{Environment}:
-Dense urban (downtown), indoors, tunnels - \textbf{Characteristic}:
-Signal bounces everywhere, no direct path - \textbf{Result}: Wild signal
-fluctuations (30+ dB swings!) - \textbf{Example}: Walking through city,
-WiFi in building with walls
+\section{Overview}
 
-\textbf{2. Rician Fading} (strong line-of-sight): -
-\textbf{Environment}: Suburban, rural, highways, open areas -
-\textbf{Characteristic}: One strong direct path + weaker echoes -
-\textbf{Result}: More stable signal, less severe fading -
-\textbf{Example}: Highway cell tower, rural WiFi
+\textbf{Channel models} mathematically simulate wireless propagation effects, enabling system design and performance prediction without hardware deployment.
 
-\textbf{How engineers use models}:
+\begin{keyconcept}
+Channel models bridge theory and practice: they capture real-world multipath, fading, and Doppler effects in computational form, allowing engineers to test millions of scenarios before committing to hardware.
+\end{keyconcept}
 
-\textbf{Step 1}: Pick scenario - ``Designing WiFi for dense apartment
-building'' \$\textbackslash rightarrow\$ use Rayleigh - ``Designing
-highway cell system'' \$\textbackslash rightarrow\$ use Rician
+\textbf{Primary applications:}
+\begin{itemize}
+\item \textbf{System simulation:} Test modulation/coding schemes under realistic conditions
+\item \textbf{Performance prediction:} Estimate BER vs SNR for different environments
+\item \textbf{Algorithm development:} Design equalizers and synchronizers
+\item \textbf{Standards compliance:} 3GPP and ITU specify reference channel models
+\end{itemize}
 
-\textbf{Step 2}: Run simulation - Send 1 million test bits through model
-- Model adds realistic fading, multipath, noise
+\textbf{Model hierarchy:}
+\begin{enumerate}
+\item \textbf{AWGN:} Ideal baseline (additive white Gaussian noise only)
+\item \textbf{Flat fading:} Narrowband channels with single complex gain
+\item \textbf{Frequency-selective fading:} Wideband channels with delay spread (ISI)
+\end{enumerate}
 
-\textbf{Step 3}: Measure performance - How many errors? (Bit Error Rate)
-- How fast can it go? (Data rate) - Does it meet requirements?
+\section{Mathematical Description}
 
-\textbf{Step 4}: Iterate - Try different modulations (QPSK vs 64-QAM) -
-Add error correction (FEC) - Optimize until it works!
+\subsection{AWGN Channel (Baseline)}
 
-\textbf{Real-world impact}: - \textbf{5G standard}: Tested in
-standardized channel models before deployment - \textbf{Your WiFi}:
-Manufacturers test with Rayleigh/Rician models - \textbf{Satellite
-systems}: Simulated before launching \$500M satellite! -
-\textbf{Military radios}: Tested in tactical channel models
-
-\textbf{Why simulation beats real testing}: - \textbf{Reproducible}:
-Same conditions every test - \textbf{Extreme scenarios}: Test 99.9th
-percentile bad cases - \textbf{Fast}: Test 10,000 scenarios in hours -
-\textbf{Cheap}: No hardware, no permits, no travel - \textbf{Safe}: Can
-test failure modes without consequences
-
-\textbf{Standards bodies define models}: - \textbf{3GPP}: Defines
-channel models for 4G/5G (TDL-A, TDL-B, TDL-C) - \textbf{ITU}: Defines
-models for satellite, fixed wireless - \textbf{WiFi}: IEEE 802.11
-working groups define indoor/outdoor models
-
-\textbf{Fun fact}: When engineers designed the LTE standard (4G), they
-ran over 1 million simulations using standardized channel models. This
-is why 4G ``just worked'' globally from day
-one-\/-\/-they\textquotesingle d already tested every conceivable
-environment virtually!
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Overview}\label{overview}
-
-\textbf{Channel models} simulate propagation effects for communication
-system design and testing.
-
-\textbf{Purpose}: - \textbf{System simulation}: Test modulation/coding
-without real-world deployment - \textbf{Performance prediction}:
-Estimate BER vs SNR for different environments - \textbf{Algorithm
-development}: Design equalizers, synchronizers without hardware -
-\textbf{Standards compliance}: 3GPP, ITU specify reference channel
-models
-
-\textbf{Key models}: 1. \textbf{AWGN}: Ideal (additive white Gaussian
-noise only) 2. \textbf{Rayleigh fading}: NLOS multipath (no dominant
-path) 3. \textbf{Rician fading}: LOS + multipath (K-factor parameterizes
-LOS strength) 4. \textbf{Frequency-selective}: Wideband channels with
-delay spread (ISI)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{AWGN Channel}\label{awgn-channel}
-
-\textbf{Simplest model}: Received signal = transmitted signal + Gaussian
-noise
-
-\[
+The simplest channel model adds only white Gaussian noise to the transmitted signal:
+\begin{equation}
 r(t) = s(t) + n(t)
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $r(t)$ = received signal
+\item $s(t)$ = transmitted signal
+\item $n(t)$ = additive white Gaussian noise with variance $\sigma^2 = N_0 B$
+\end{itemize}
 
-Where: - \(s(t)\) = Transmitted signal - \(n(t)\) = White Gaussian
-noise, variance \(\sigma^2 = N_0 B\)
+The noise power spectral density $N_0$ and bandwidth $B$ determine the total noise power:
+\begin{equation}
+P_n = N_0 \cdot B
+\end{equation}
 
-\subsubsection{Implementation
-(MATLAB/Python)}\label{implementation-matlabpython}
+\subsection{Flat Fading Channel Model}
+
+For narrowband systems where signal bandwidth $B \ll B_c$ (coherence bandwidth), the channel introduces a single complex gain:
+\begin{equation}
+r(t) = h(t) \cdot s(t) + n(t)
+\end{equation}
+where:
+\begin{itemize}
+\item $h(t)$ = complex channel gain (time-varying)
+\item $|h(t)|$ = amplitude (Rayleigh or Rician distributed)
+\item $\angle h(t)$ = phase (uniformly distributed)
+\end{itemize}
+
+The flat fading approximation is valid when:
+\begin{equation}
+T_s \gg \tau_{\text{rms}}
+\end{equation}
+where $T_s$ is symbol duration and $\tau_{\text{rms}}$ is RMS delay spread.
+
+\subsection{Rayleigh Fading Model}
+
+\subsubsection{Physical Basis}
+
+Rayleigh fading occurs in non-line-of-sight (NLOS) environments where many scattered paths arrive with equal power. The central limit theorem dictates that the received signal is a complex Gaussian random variable.
+
+\textbf{Statistical properties:}
+
+The envelope $r = |h(t)|$ follows the \textbf{Rayleigh distribution}:
+\begin{equation}
+p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0
+\end{equation}
+where:
+\begin{itemize}
+\item $\sigma^2$ = average power per dimension (I and Q)
+\item For normalized power: $\sigma^2 = 1/2$ so that $E[|h|^2] = 1$
+\end{itemize}
+
+\textbf{Mean and variance:}
+\begin{equation}
+E[r] = \sigma\sqrt{\frac{\pi}{2}}, \quad \mathrm{Var}(r) = \sigma^2\left(2 - \frac{\pi}{2}\right)
+\end{equation}
+
+\subsubsection{Clarke's Doppler Spectrum}
+
+For isotropic scattering (scatterers uniformly distributed in azimuth), the Doppler spectrum has a characteristic U-shape:
+\begin{equation}
+S(f) = \frac{1}{\pi f_d \sqrt{1 - (f/f_d)^2}}, \quad |f| < f_d
+\end{equation}
+where:
+\begin{itemize}
+\item $f_d = v/\lambda$ = maximum Doppler frequency (Hz)
+\item $v$ = mobile velocity (m/s)
+\item $\lambda$ = wavelength (m)
+\end{itemize}
+
+The autocorrelation function is:
+\begin{equation}
+R(\tau) = J_0(2\pi f_d \tau)
+\end{equation}
+where $J_0$ is the Bessel function of the first kind, order 0.
+
+\subsubsection{Jakes' Model Implementation}
+
+Jakes' model efficiently generates Rayleigh fading using a sum of sinusoids:
+
+\textbf{In-phase component:}
+\begin{equation}
+h_I(t) = \frac{1}{\sqrt{M}} \sum_{m=1}^{M} \cos(2\pi f_d t \cos\theta_m + \phi_m)
+\end{equation}
+
+\textbf{Quadrature component:}
+\begin{equation}
+h_Q(t) = \frac{1}{\sqrt{M}} \sum_{m=1}^{M} \sin(2\pi f_d t \cos\theta_m + \phi_m)
+\end{equation}
+where:
+\begin{itemize}
+\item $M$ = number of scatterers (typically 8--16)
+\item $\theta_m = \frac{2\pi m}{M}$ = equally spaced angles
+\item $\phi_m$ = random phases, uniform on $[0, 2\pi]$
+\end{itemize}
+
+The complex channel gain is:
+\begin{equation}
+h(t) = \frac{1}{\sqrt{2}}\left[h_I(t) + jh_Q(t)\right]
+\end{equation}
+
+The $1/\sqrt{2}$ normalization ensures $E[|h(t)|^2] = 1$.
+
+\subsection{Rician Fading Model}
+
+\subsubsection{Physical Basis}
+
+Rician fading occurs when a dominant line-of-sight (LOS) path exists alongside scattered multipath components. This is typical in suburban, rural, and highway environments.
+
+\textbf{Statistical properties:}
+
+The envelope follows the \textbf{Rician distribution}:
+\begin{equation}
+p(r) = \frac{r}{\sigma^2} \exp\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0\left(\frac{Ar}{\sigma^2}\right)
+\end{equation}
+where:
+\begin{itemize}
+\item $A$ = amplitude of LOS component
+\item $\sigma^2$ = power per dimension of scattered component
+\item $I_0(\cdot)$ = modified Bessel function of the first kind, order 0
+\end{itemize}
+
+\subsubsection{K-Factor}
+
+The \textbf{K-factor} quantifies the ratio of LOS power to scattered power:
+\begin{equation}
+K = \frac{A^2}{2\sigma^2} = \frac{P_{\text{LOS}}}{P_{\text{scatter}}}
+\end{equation}
+
+In decibels:
+\begin{equation}
+K_{\text{dB}} = 10\log_{10}(K)
+\end{equation}
+
+\textbf{Special cases:}
+\begin{itemize}
+\item $K = 0$ ($K = -\infty$~dB): Pure Rayleigh fading (no LOS)
+\item $K = 10$ ($K = 10$~dB): Strong LOS (typical suburban)
+\item $K \to \infty$: Pure LOS (AWGN-like channel)
+\end{itemize}
+
+\textbf{Normalized Rician channel:}
+
+For unit average power $E[|h|^2] = 1$:
+\begin{equation}
+h_{\text{LOS}} = \sqrt{\frac{K}{K+1}}, \quad \sigma^2_{\text{scatter}} = \frac{1}{2(K+1)}
+\end{equation}
+
+The channel gain becomes:
+\begin{equation}
+h(t) = \sqrt{\frac{K}{K+1}} + \sqrt{\frac{1}{K+1}} \cdot h_{\text{Rayleigh}}(t)
+\end{equation}
+
+\subsection{Visual Comparison: Rayleigh vs Rician Distributions}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% Axes
+\draw[->] (0,0) -- (9,0) node[right,font=\sffamily\small] {Envelope $r = |h|$};
+\draw[->] (0,0) -- (0,3.5) node[above,font=\sffamily\small] {PDF $p(r)$};
+
+% Grid
+\draw[very thin,gray!20] (0,0) grid[step=0.5] (9,3.5);
+
+% Rayleigh PDF (K=0, pure NLOS)
+\draw[NavyBlue, very thick, smooth, domain=0:8, samples=100] 
+  plot (\x, {2*\x*exp(-\x*\x)});
+\node[NavyBlue,font=\sffamily\small,anchor=west] at (1.5,2.2) {Rayleigh ($K=0$ dB)};
+\node[NavyBlue,font=\sffamily\footnotesize,anchor=west] at (1.5,1.9) {Pure NLOS};
+
+% Rician PDF K=6 dB (K=4 linear)
+\draw[red!70!black, very thick, smooth, domain=0:8, samples=100] 
+  plot (\x, {0.45*\x*exp(-(\x*\x + 4)/2)*
+    (1 + 4*(\x/2) + 8*(\x/2)*(\x/2)/2 + 32*(\x/2)*(\x/2)*(\x/2)/6)});
+\node[red!70!black,font=\sffamily\small,anchor=west] at (4.5,2.8) {Rician ($K=6$ dB)};
+\node[red!70!black,font=\sffamily\footnotesize,anchor=west] at (4.5,2.5) {Moderate LOS};
+
+% Rician PDF K=15 dB (K=31.6 linear)
+\draw[ForestGreen, very thick, smooth, domain=2:8, samples=100] 
+  plot (\x, {1.8*exp(-(\x-5.5)*(\x-5.5)/0.4)});
+\node[ForestGreen,font=\sffamily\small,anchor=west] at (6.2,3.0) {Rician ($K=15$ dB)};
+\node[ForestGreen,font=\sffamily\footnotesize,anchor=west] at (6.2,2.7) {Strong LOS};
+
+% Mean markers
+\draw[NavyBlue,dashed] (1.25,0) -- (1.25,0.3);
+\node[NavyBlue,below,font=\scriptsize] at (1.25,-0.1) {$\bar{r}$};
+
+\draw[red!70!black,dashed] (2.3,0) -- (2.3,0.3);
+\node[red!70!black,below,font=\scriptsize] at (2.3,-0.1) {$\bar{r}$};
+
+\draw[ForestGreen,dashed] (5.5,0) -- (5.5,0.3);
+\node[ForestGreen,below,font=\scriptsize] at (5.5,-0.1) {$\bar{r}$};
+
+% Annotations
+\node[font=\sffamily\footnotesize,align=center] at (4.5,0.5) {
+  \textbf{Increasing K-factor} \\
+  Less fading, more stable signal
+};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{calloutbox}{Physical Interpretation}
+\begin{itemize}
+\item \textbf{Rayleigh (blue):} Broad distribution, high probability of deep fades near $r=0$
+\item \textbf{Rician K=6~dB (red):} Narrower, reduced deep fade probability
+\item \textbf{Rician K=15~dB (green):} Concentrated around mean, approaches constant channel
+\end{itemize}
+As $K$ increases, the channel transitions from severe fading (Rayleigh) to nearly constant (AWGN).
+\end{calloutbox}
+
+\subsection{Block Diagram: Fading Channel Simulator}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
+  node distance=2.5cm,
+  font=\small
+]
+\node (input) {\sffamily Baseband\\Signal\\$s(t)$};
+\node[block, right of=input] (fading) {Rayleigh/Rician\\Fading\\Generator};
+\node[block, right of=fading] (multiply) {Complex\\Multiply};
+\node[block, right of=multiply] (awgn) {AWGN};
+\node[right of=awgn] (output) {\sffamily Received\\Signal\\$r(t)$};
+
+% Signal flow
+\draw[->,thick] (input) -- (multiply);
+\draw[->,thick] (fading) -- node[above,font=\scriptsize] {$h(t)$} (multiply);
+\draw[->,thick] (multiply) -- node[above,font=\scriptsize] {$h(t) \cdot s(t)$} (awgn);
+\draw[->,thick] (awgn) -- (output);
+
+% Parameters
+\node[block, below=1.5cm of fading, minimum width=3cm] (params) {Parameters:\\$f_d$, $K$-factor\\(Doppler, LOS)};
+\draw[->,thick] (params) -- (fading);
+
+% Noise source
+\node[block, below=1.5cm of awgn, minimum width=2cm] (noise) {Noise\\Generator\\$n(t)$};
+\draw[->,thick] (noise) -- (awgn);
+
+\end{tikzpicture}
+\end{center}
+
+\section{Channel Impulse Response}
+
+\subsection{Time-Varying Channel Visualization}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Time axis (horizontal)
+\draw[->] (0,0) -- (10,0) node[right,font=\sffamily\small] {Time (ms)};
+
+% Amplitude axis (vertical)
+\draw[->] (0,0) -- (0,3.5) node[above,font=\sffamily\small] {$|h(t)|$ (linear)};
+
+% Grid
+\draw[very thin,gray!20] (0,0) grid[step=0.5] (10,3.5);
+
+% Reference line at |h|=1 (average power)
+\draw[dashed,gray] (0,1.5) -- (10,1.5);
+\node[gray,font=\scriptsize,left] at (0,1.5) {$E[|h|]=1$};
+
+% Rayleigh fading envelope (simulated with random-looking curve)
+\draw[NavyBlue, very thick, smooth] 
+  plot coordinates {
+    (0,1.2) (0.5,0.8) (1.0,0.4) (1.5,1.1) (2.0,2.3) 
+    (2.5,1.8) (3.0,0.7) (3.5,0.3) (4.0,1.4) (4.5,2.1)
+    (5.0,1.5) (5.5,0.9) (6.0,0.5) (6.5,1.7) (7.0,2.5)
+    (7.5,1.9) (8.0,1.0) (8.5,0.6) (9.0,1.3) (9.5,1.6)
+  };
+
+% Deep fade markers
+\fill[red] (1.0,0.4) circle (2pt);
+\fill[red] (3.5,0.3) circle (2pt);
+\fill[red] (6.0,0.5) circle (2pt);
+\node[red,font=\scriptsize,above] at (3.5,0.3) {Deep fades};
+
+% Peak markers
+\fill[ForestGreen] (2.0,2.3) circle (2pt);
+\fill[ForestGreen] (7.0,2.5) circle (2pt);
+\node[ForestGreen,font=\scriptsize,below] at (7.0,2.8) {Peaks};
+
+% Coherence time annotation
+\draw[<->,thick,red!70!black] (4.2,3.0) -- (5.8,3.0);
+\node[red!70!black,font=\scriptsize,above] at (5.0,3.0) {$T_c \approx 1/(2f_d)$};
+
+% Time scale labels
+\foreach \x in {0,2,4,6,8,10}
+  \node[below,font=\scriptsize] at (\x,-0.1) {\x};
+
+% Amplitude scale labels
+\foreach \y in {0,0.5,1.0,1.5,2.0,2.5,3.0}
+  \node[left,font=\scriptsize] at (-0.1,\y/2*3) {\y};
+
+% Title
+\node[font=\sffamily\small,above] at (5,3.7) {\textbf{Rayleigh Fading: Time-Varying Envelope}};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{calloutbox}{Coherence Time}
+The \textbf{coherence time} $T_c \approx 1/(2f_d)$ is the period over which the channel remains approximately constant. For mobile systems:
+\begin{itemize}
+\item \textbf{Fast fading:} $T_c < T_s$ (channel changes within symbol) $\rightarrow$ severe performance degradation
+\item \textbf{Slow fading:} $T_c \gg T_s$ (channel constant over many symbols) $\rightarrow$ interleaving/coding effective
+\end{itemize}
+\end{calloutbox}
+
+\section{Implementation and Code Examples}
+
+\subsection{Python Implementation: AWGN Channel}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -811,108 +1076,261 @@ Fading}\label{ber-simulation-with-fading}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Performance Analysis}
 
-\subsection{Summary of Channel Models}\label{summary-of-channel-models}
+\subsection{BER Performance in Fading Channels}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1842}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2632}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3158}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2368}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Use Case
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Complexity
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Realism
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{AWGN} & Satellite LOS, benchmarking & Low & Idealized \\
-\textbf{Rayleigh (Jakes)} & Urban NLOS, mobile & Medium & Good for
-NLOS \\
-\textbf{Rician} & Suburban LOS+scatter & Medium & Good for partial
-LOS \\
-\textbf{Tapped delay line} & Wideband, frequency-selective & High &
-Excellent \\
-\textbf{3GPP CDL} & LTE/5G NR & Very high & Industry standard \\
-\end{longtable}
-}
+The bit error rate (BER) in fading channels depends on the instantaneous SNR, which varies with $|h(t)|^2$.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Practical Implementation
-Tips}\label{practical-implementation-tips}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  \textbf{Sampling rate}: Choose \(f_s \gg 2f_d\) to avoid aliasing
-  Doppler spectrum (typically \(f_s > 50 f_d\))
-\item
-  \textbf{Number of scatterers}: M = 8-16 sufficient for
-  Jakes\textquotesingle{} model (higher M = smoother statistics but
-  slower)
-\item
-  \textbf{Normalization}: Always verify average channel power = 1 (so
-  SNR definition consistent)
-\item
-  \textbf{CSI assumption}: Perfect CSI (known h)
-  \$\textbackslash rightarrow\$ Upper bound. Pilot-based estimation
-  \$\textbackslash rightarrow\$ Practical performance
-\item
-  \textbf{Long simulations}: Need many fade cycles for accurate BER
-  (typically \(> 100/\text{BER}\) bits)
-\item
-  \textbf{Tap spacing}: For frequency-selective, ensure tap delays match
-  expected delay spread (\(\tau_{\text{rms}}\))
-\end{enumerate}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Related Topics}\label{related-topics}
-
+For coherent BPSK in flat Rayleigh fading with perfect channel state information (CSI):
+\begin{equation}
+\mathrm{BER}_{\text{Ray}} = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right)
+\end{equation}
+where:
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}Multipath-Propagation-\&-Fading-(Rayleigh,-Rician){]}{]}}:
-  Theory behind channel models
-\item
-  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: SNR definition for
-  fading channels
-\item
-  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Performance metric vs
-  fading
-\item
-  \textbf{{[}{[}Complete-Link-Budget-Analysis{]}{]}}: Using fading
-  margin in link budget
-\item
-  \textbf{{[}{[}OFDM-\&-Multicarrier-Modulation{]}{]}}: Combats
-  frequency-selective fading
-\item
-  \textbf{{[}{[}Channel-Equalization{]}{]}}: Compensates for ISI in
-  frequency-selective channels
+\item $\bar{\gamma} = E_b/N_0$ = average SNR per bit
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+For Rician fading with K-factor $K$:
+\begin{equation}
+\mathrm{BER}_{\text{Rice}} = Q\left(\sqrt{\frac{2K\bar{\gamma}}{1+K}}\right) \exp\left(-\frac{K\bar{\gamma}}{1+K}\right) \cdot I_0\left(\frac{K\bar{\gamma}}{1+K}\right)
+\end{equation}
 
-\textbf{Key takeaway}: \textbf{Channel models enable realistic system
-simulation without hardware.} AWGN is baseline, Rayleigh for NLOS
-mobile, Rician for partial LOS, tapped delay line for wideband ISI.
-Jakes\textquotesingle{} model efficiently generates Rayleigh fading with
-correct Doppler spectrum. 3GPP CDL models are industry-standard for
-LTE/5G. Pilot-based channel estimation is practical approach. Always
-verify statistics (envelope PDF, average power, Doppler spectrum) match
-theory.
+\begin{keyconcept}
+\textbf{Fading penalty:} Rayleigh fading requires approximately \textbf{20--30~dB more} average SNR than AWGN to achieve the same BER. This is why diversity techniques (spatial, temporal, frequency) are critical in mobile systems.
+\end{keyconcept}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Outage Probability}
 
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
+The probability that instantaneous SNR falls below a threshold $\gamma_{\text{th}}$:
+
+For Rayleigh fading:
+\begin{equation}
+P_{\text{out}} = 1 - \exp\left(-\frac{\gamma_{\text{th}}}{\bar{\gamma}}\right)
+\end{equation}
+
+For Rician fading:
+\begin{equation}
+P_{\text{out}} = 1 - Q_1\left(\sqrt{2K}, \sqrt{2(K+1)\frac{\gamma_{\text{th}}}{\bar{\gamma}}}\right)
+\end{equation}
+where $Q_1$ is the first-order Marcum Q-function.
+
+\section{Worked Example: 4G LTE Urban Channel Simulation}
+
+\textbf{Scenario:} Design and simulate a 4G LTE downlink in a dense urban environment
+
+\subsection*{Given Parameters}
+
+\begin{tabular}{@{}ll@{}}
+Carrier frequency & $f_c = 2.6$~GHz (LTE Band 7) \\
+Channel bandwidth & $B = 20$~MHz \\
+Mobile velocity & $v = 30$~km/h (8.33~m/s) \\
+Channel model & Rayleigh fading (urban NLOS) \\
+Modulation & QPSK \\
+Required BER & $10^{-3}$ \\
+Target SNR (AWGN) & 7~dB (for QPSK BER $= 10^{-3}$) \\
+\end{tabular}
+
+\subsection*{Step 1: Calculate Maximum Doppler Frequency}
+
+\begin{equation}
+f_d = \frac{v \cdot f_c}{c} = \frac{8.33 \times 2.6 \times 10^9}{3 \times 10^8}
+\end{equation}
+\begin{equation}
+f_d = 72.2~\text{Hz}
+\end{equation}
+
+\subsection*{Step 2: Determine Coherence Time}
+
+\begin{equation}
+T_c \approx \frac{1}{2f_d} = \frac{1}{2 \times 72.2} = 6.9~\text{ms}
+\end{equation}
+
+LTE uses 1~ms subframes, so $T_c \approx 7$ subframes---channel is slowly varying.
+
+\subsection*{Step 3: Estimate Required Average SNR}
+
+For Rayleigh fading, to achieve BER $= 10^{-3}$:
+\begin{equation}
+\bar{\gamma}_{\text{required}} \approx 20~\text{dB}
+\end{equation}
+
+This is the \textbf{fading penalty}:
+\begin{equation}
+\text{Fading margin} = 20 - 7 = 13~\text{dB}
+\end{equation}
+
+\subsection*{Step 4: Calculate Outage Probability}
+
+If link budget provides $\bar{\gamma} = 18$~dB and we need instantaneous SNR $> 10$~dB:
+\begin{equation}
+\gamma_{\text{th}} = 10~\text{dB} = 10~\text{(linear)}
+\end{equation}
+\begin{equation}
+\bar{\gamma} = 18~\text{dB} = 63.1~\text{(linear)}
+\end{equation}
+\begin{equation}
+P_{\text{out}} = 1 - \exp\left(-\frac{10}{63.1}\right) = 1 - \exp(-0.158) = 0.146 = 14.6\%
+\end{equation}
+
+\subsection*{Step 5: Mitigation Strategies}
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
+\textbf{Result: 14.6\% outage probability is too high for reliable service}
+
+LTE employs multiple techniques to combat fading:
+\begin{enumerate}
+\item \textbf{OFDM:} Converts frequency-selective fading to flat fading per subcarrier
+\item \textbf{Turbo coding:} Forward error correction with $R = 1/3$ code rate adds 4.8~dB coding gain
+\item \textbf{HARQ:} Automatic retransmission with soft combining
+\item \textbf{Link adaptation:} Dynamic modulation/coding scheme (MCS) selection
+\item \textbf{Diversity:} Multiple antennas (MIMO) provide spatial diversity
+\end{enumerate}
+
+\textbf{With these techniques,} the effective outage probability drops below 1\%, enabling reliable 100+~Mbps throughput.
+\end{calloutbox}
+
+\subsection*{Step 6: Python Simulation Snippet}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+
+\CommentTok{\# Parameters}
+\NormalTok{fc }\OperatorTok{=} \FloatTok{2.6e9}  \CommentTok{\# 2.6 GHz}
+\NormalTok{v }\OperatorTok{=} \FloatTok{8.33}    \CommentTok{\# 8.33 m/s (30 km/h)}
+\NormalTok{c }\OperatorTok{=} \FloatTok{3e8}     \CommentTok{\# Speed of light}
+\NormalTok{fd }\OperatorTok{=}\NormalTok{ v }\OperatorTok{*}\NormalTok{ fc }\OperatorTok{/}\NormalTok{ c  }\CommentTok{\# Doppler frequency}
+
+\CommentTok{\# Generate Rayleigh channel (10,000 samples @ 10 kHz)}
+\NormalTok{h }\OperatorTok{=}\NormalTok{ rayleigh\_channel\_jakes(N\_samples}\OperatorTok{=}\DecValTok{10000}\NormalTok{, fd}\OperatorTok{=}\NormalTok{fd, fs}\OperatorTok{=}\DecValTok{10000}\NormalTok{)}
+
+\CommentTok{\# Transmit QPSK symbols}
+\NormalTok{symbols }\OperatorTok{=}\NormalTok{ np.random.choice([}\DecValTok{1}\OperatorTok{+}\OtherTok{1j}\NormalTok{, }\DecValTok{1}\OperatorTok{{-}}\OtherTok{1j}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\OperatorTok{+}\OtherTok{1j}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\OperatorTok{{-}}\OtherTok{1j}\NormalTok{], }\DecValTok{10000}\NormalTok{)}
+
+\CommentTok{\# Apply fading}
+\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ h }\OperatorTok{*}\NormalTok{ symbols}
+
+\CommentTok{\# Add AWGN (SNR = 18 dB)}
+\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ awgn\_channel(rx\_signal, snr\_db}\OperatorTok{=}\DecValTok{18}\NormalTok{)}
+
+\CommentTok{\# Coherent detection (assumes perfect CSI)}
+\NormalTok{rx\_equalized }\OperatorTok{=}\NormalTok{ rx\_signal }\OperatorTok{/}\NormalTok{ h  }\CommentTok{\# Zero{-}forcing equalization}
+
+\CommentTok{\# Decision and BER calculation}
+\NormalTok{detected }\OperatorTok{=}\NormalTok{ np.sign(np.real(rx\_equalized)) }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{np.sign(np.imag(rx\_equalized))}
+\NormalTok{errors }\OperatorTok{=}\NormalTok{ np.sum(detected }\OperatorTok{!=}\NormalTok{ symbols)}
+\NormalTok{BER }\OperatorTok{=}\NormalTok{ errors }\OperatorTok{/}\NormalTok{ (}\DecValTok{2} \OperatorTok{*} \BuiltInTok{len}\NormalTok{(symbols))  }\CommentTok{\# 2 bits per QPSK symbol}
+
+\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Simulated BER: }\SpecialCharTok{\{}\NormalTok{BER}\SpecialCharTok{:.2e\}}\SpecialStringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Applications}
+
+\subsection{Cellular Networks (4G/5G)}
+
+\textbf{3GPP standardized channel models} are used for LTE and 5G NR system design:
+\begin{itemize}
+\item \textbf{TDL-A:} Low delay spread, NLOS (Rayleigh-like)
+\item \textbf{TDL-B:} Moderate delay spread, NLOS
+\item \textbf{TDL-C:} High delay spread, NLOS
+\item \textbf{TDL-D:} Low delay spread, LOS (Rician K = 13.3~dB)
+\item \textbf{TDL-E:} Moderate delay spread, LOS (Rician K = 22~dB)
+\end{itemize}
+
+Every 5G base station and mobile device is tested against these models before certification.
+
+\subsection{Wi-Fi (IEEE 802.11)}
+
+IEEE 802.11n/ac/ax use \textbf{channel models A--F} for indoor environments:
+\begin{itemize}
+\item \textbf{Model A:} Flat fading, residential/small office
+\item \textbf{Model D:} Large open space (airport, warehouse)
+\item \textbf{Model F:} Large open space with Rician LOS
+\end{itemize}
+
+\subsection{Satellite Communications}
+
+\textbf{Rician fading} is dominant in satellite-to-ground links:
+\begin{itemize}
+\item \textbf{LEO satellites:} K = 10--20~dB (strong LOS at high elevation)
+\item \textbf{GEO satellites:} K = 15--25~dB (near-constant channel)
+\item \textbf{Mobile satellite:} K = 3--10~dB (trees, buildings block LOS)
+\end{itemize}
+
+\subsection{Vehicle-to-Everything (V2X) Communications}
+
+\textbf{Dynamic channel models} for 5G-V2X (3GPP Release 14+):
+\begin{itemize}
+\item \textbf{Highway:} High Doppler ($f_d = 500$--1000~Hz), Rician K = 9~dB
+\item \textbf{Urban intersection:} Rayleigh fading, moderate Doppler
+\item \textbf{Rural:} Strong Rician K = 12~dB, low Doppler
+\end{itemize}
+
+\subsection{Deep-Space Communications}
+
+NASA Deep Space Network uses \textbf{nearly AWGN channels}:
+\begin{itemize}
+\item Pure LOS (no multipath in space)
+\item Doppler due to spacecraft velocity
+\item Extremely low received power ($-190$~dBm typical)
+\end{itemize}
+
+\section{Summary}
+
+\begin{center}
+\begin{tabular}{@{}p{3cm}p{4cm}p{3cm}p{3cm}@{}}
+\toprule
+\textbf{Model} & \textbf{Use Case} & \textbf{Complexity} & \textbf{Realism} \\
+\midrule
+AWGN & Satellite LOS, benchmarking & Low & Idealized \\
+Rayleigh (Jakes) & Urban NLOS, mobile & Medium & Good for NLOS \\
+Rician & Suburban LOS+scatter & Medium & Good for partial LOS \\
+Tapped delay line & Wideband, frequency-selective & High & Excellent \\
+3GPP TDL & LTE/5G NR & Very high & Industry standard \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Key Characteristics}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Rayleigh} & \textbf{Rician} \\
+\midrule
+LOS component & None & Present \\
+K-factor & 0 dB ($-\infty$ dB) & 3--25 dB \\
+Deep fade probability & High ($\sim$10\%) & Low ($<$1\%) \\
+Typical environment & Urban, indoor & Suburban, rural \\
+Fading margin & 20--30 dB & 10--15 dB \\
+Implementation & Jakes' model & LOS + Rayleigh \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Practical Implementation Guidelines}
+
+\begin{enumerate}
+\item \textbf{Sampling rate:} Choose $f_s \gg 2f_d$ to avoid aliasing Doppler spectrum (typically $f_s > 50 f_d$)
+\item \textbf{Number of scatterers:} $M = 8$--16 sufficient for Jakes' model
+\item \textbf{Normalization:} Always verify average channel power $= 1$ (consistent SNR definition)
+\item \textbf{CSI assumption:} Perfect CSI gives upper bound; pilot-based estimation is more realistic
+\item \textbf{Long simulations:} Need many fade cycles for accurate BER (typically $> 100/\mathrm{BER}$ bits)
+\item \textbf{Frequency-selective channels:} Ensure tap delays match expected RMS delay spread
+\end{enumerate}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter 8:} Multipath Propagation and Fading---physical theory behind channel models
+\item \textbf{Chapter 10:} Link Budget Analysis---incorporating fading margin
+\item \textbf{Chapter 14:} OFDM and Multicarrier Modulation---combating frequency-selective fading
+\item \textbf{Chapter 16:} Channel Equalization---compensating for ISI
+\item \textbf{Chapter 19:} Diversity Techniques---spatial, temporal, and frequency diversity
+\item \textbf{Chapter 22:} Bit Error Rate Analysis---performance metrics in fading
+\item \textbf{Chapter 24:} MIMO Systems---multi-antenna channels
+\item \textbf{Reference:} Proakis \& Salehi, \textit{Digital Communications}, 5th ed., Chapter 14
+\item \textbf{Standard:} 3GPP TR 38.901---Channel models for 5G NR
+\end{itemize}
