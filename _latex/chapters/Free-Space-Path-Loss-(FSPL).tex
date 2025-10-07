@@ -1,285 +1,303 @@
-\section{Free-Space Path Loss (FSPL)}\label{free-space-path-loss-fspl}
+\chapter{Free-Space Path Loss (FSPL)}
+\label{ch:fspl}
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+\begin{nontechnical}
+\textbf{Like shouting across a field---the farther away, the quieter. Radio waves spread out and weaken with distance.}
 
-\textbf{Like shouting across a field-\/-\/-the farther away, the
-quieter. Radio waves spread out and weaken with distance.}
+\textbf{Simple idea:}
+\begin{itemize}
+\item \textbf{Double the distance} = signal becomes \textbf{4$\times$ weaker}
+\item \textbf{Higher frequency} (5G) = weaker than lower frequency (4G) over same distance
+\item \textbf{Satellites 36,000~km away}: Signal weakens by 10 trillion trillion times! (That's why dishes are big)
+\end{itemize}
 
-\textbf{Key insights}: - \textbf{Double the distance} = signal becomes
-\textbf{4\$\textbackslash times\$ weaker} - \textbf{Higher frequency}
-(5G) = weaker than lower frequency (4G) over same distance -
-\textbf{Satellites 36,000 km away}: Signal weakens by 10 trillion
-trillion times! (That\textquotesingle s why dishes are big)
+\textbf{Real examples:} WiFi weakens 10,000$\times$ over 50~meters. Cell towers need to be closer for 5G than 4G.
 
-\textbf{Real examples}: WiFi weakens 10,000\$\textbackslash times\$ over
-50 meters. Cell towers need to be closer for 5G than 4G.
+\textbf{Why does this matter?} It tells engineers how much power to use and how big to make antennas. It's the starting point for designing any wireless link.
+\end{nontechnical}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Overview}
 
-\textbf{Free-Space Path Loss (FSPL)} quantifies how much signal power is
-lost as an electromagnetic wave propagates through free space.
+\textbf{Free-Space Path Loss (FSPL)} quantifies the reduction in signal power as an electromagnetic wave propagates through free space.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{keyconcept}
+FSPL is \textbf{not energy dissipation}---it's geometric spreading. The total radiated power remains constant, but power density decreases as the wave expands over a spherical surface of area $4\pi d^2$. This fundamental relationship drives all wireless link budget calculations.
+\end{keyconcept}
 
-\subsection{\texorpdfstring{ The Friis Transmission
-Equation}{ The Friis Transmission Equation}}\label{the-friis-transmission-equation}
+FSPL provides the baseline loss for any wireless communication link. In practice, additional losses from atmosphere, multipath, obstacles, and hardware imperfections add to this fundamental limit.
 
-\textbf{Fundamental equation} linking transmitter and receiver:
+\section{The Friis Transmission Equation}
 
-\begin{verbatim}
-P_R = P_T · G_T · G_R · (/4d)²
+The fundamental relationship linking transmit and receive power in free space:
 
+\begin{equation}
+P_R = P_T \cdot G_T \cdot G_R \cdot \left(\frac{\lambda}{4\pi d}\right)^2
+\end{equation}
 where:
-- P_R = received power (W)
-- P_T = transmitted power (W)
-- G_T = transmit antenna gain (linear, dimensionless)
-- G_R = receive antenna gain (linear, dimensionless)
--  = wavelength (m)
-- d = distance between antennas (m)
-\end{verbatim}
+\begin{itemize}
+\item $P_R$ = received power (W)
+\item $P_T$ = transmitted power (W)
+\item $G_T$ = transmit antenna gain (linear, dimensionless)
+\item $G_R$ = receive antenna gain (linear, dimensionless)
+\item $\lambda$ = wavelength (m) = $c/f$ where $c = 3 \times 10^8$~m/s
+\item $d$ = distance between antennas (m)
+\end{itemize}
 
-\textbf{Assumptions}: - Free space (no obstacles, no atmosphere) -
-Far-field (d \textgreater\textgreater{} antenna dimensions) -
-Polarization matched - Antennas aligned
+\textbf{Assumptions:}
+\begin{itemize}
+\item Free space (no obstacles, no atmosphere)
+\item Far-field region: $d \gg$ antenna dimensions and $d \gg \lambda$
+\item Polarization matched between transmitter and receiver
+\item Antennas properly aligned
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Physical Interpretation}
 
-\subsection{\texorpdfstring{ Path Loss
-Definition}{ Path Loss Definition}}\label{path-loss-definition}
+The term $(\lambda/4\pi d)^2$ captures two fundamental concepts:
 
-\textbf{Path Loss (L)} is the ratio of transmitted to received power:
+\textbf{1. Geometric spreading:} Power radiates spherically from an isotropic antenna. At distance $d$, the power is distributed over surface area $A_{\text{sphere}} = 4\pi d^2$, causing power density to drop as $1/d^2$.
 
-\begin{verbatim}
-L = P_T/P_R
+\textbf{2. Effective aperture:} The receiving antenna captures power proportional to its effective area $A_{\text{eff}} = G_R \lambda^2 / 4\pi$. Higher frequencies (smaller $\lambda$) have smaller effective apertures, leading to greater loss.
 
-In dB:
-L_dB = 10 log(L) = 10 log(P_T/P_R)
-\end{verbatim}
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% Transmitter
+\node[draw, rectangle, minimum width=1cm, minimum height=0.8cm, fill=black!10] (tx) at (0,0) {\sffamily\small TX};
+\draw[->,thick] (tx) -- (1,0);
 
-From Friis equation (assuming isotropic antennas, G\_T = G\_R = 1):
+% Spherical wavefront at distance d1
+\draw[thick, blue] (3,0) arc[start angle=0, end angle=90, radius=3cm];
+\draw[thick, blue] (3,0) arc[start angle=0, end angle=-90, radius=3cm];
+\node[blue, right] at (3.2,0) {\scriptsize $d_1$};
 
-\begin{verbatim}
-L = (4d/)²
+% Spherical wavefront at distance d2
+\draw[thick, red] (5,0) arc[start angle=0, end angle=90, radius=5cm];
+\draw[thick, red] (5,0) arc[start angle=0, end angle=-90, radius=5cm];
+\node[red, right] at (5.2,0) {\scriptsize $d_2 = 2d_1$};
 
-In dB:
-FSPL_dB = 20 log(4d/)
-        = 20 log(d) + 20 log(f) + 20 log(4/c)
-        = 20 log(d) + 20 log(f) - 147.55
-\end{verbatim}
+% Power density annotations
+\node[blue] at (3,-3.5) {\scriptsize Power density: $P_T/(4\pi d_1^2)$};
+\node[red] at (5,-5.5) {\scriptsize Power density: $P_T/(4\pi d_2^2) = P_T/(16\pi d_1^2)$};
 
-\textbf{More practical form} (f in Hz, d in m):
+% Title
+\node[above] at (2.5,3.5) {\sffamily\bfseries Geometric Spreading of EM Waves};
 
-\begin{verbatim}
-FSPL_dB = 20 log(d) + 20 log(f) + 92.45
-\end{verbatim}
+% Distance markers
+\draw[<->, thick, gray] (0,-0.5) -- (3,-0.5) node[midway, below] {\scriptsize $d_1$};
+\draw[<->, thick, gray] (0,-1) -- (5,-1) node[midway, below] {\scriptsize $d_2 = 2d_1$};
+\end{tikzpicture}
+\end{center}
 
-\textbf{Or} (f in MHz, d in km):
+\begin{calloutbox}{Doubling Distance}
+When distance doubles from $d_1$ to $2d_1$:
+\begin{itemize}
+\item Spherical surface area increases $4\times$: $(4\pi d_1^2) \rightarrow (4\pi [2d_1]^2) = 16\pi d_1^2$
+\item Power density decreases to $1/4$ of original
+\item In dB: $10\log_{10}(1/4) = -6$~dB loss
+\end{itemize}
+\end{calloutbox}
 
-\begin{verbatim}
-FSPL_dB = 20 log(d_km) + 20 log(f_MHz) + 32.45
-\end{verbatim}
+\section{FSPL Formulation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Path Loss Definition}
 
-\subsection{\texorpdfstring{ Example
-Calculations}{ Example Calculations}}\label{example-calculations}
+\textbf{Path Loss (L)} is defined as the ratio of transmitted to received power:
 
-\subsubsection{Example 1: WiFi (2.4 GHz, 10
-m)}\label{example-1-wifi-2.4-ghz-10-m}
+\begin{equation}
+L = \frac{P_T}{P_R}
+\end{equation}
 
-\begin{verbatim}
-f = 2.4 GHz = 2.4×10 Hz
-d = 10 m
+In decibels:
+\begin{equation}
+L_{\text{dB}} = 10\log_{10}(L) = 10\log_{10}\left(\frac{P_T}{P_R}\right) = P_T[\text{dBm}] - P_R[\text{dBm}]
+\end{equation}
 
-FSPL = 20 log(10) + 20 log(2.4×10) + 92.45
-     = 20 + 187.6 + 92.45
-     = 100 dB
-\end{verbatim}
+\subsection{Derivation from Friis Equation}
 
-\textbf{Interpretation}: Signal power drops by factor of
-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\}
-(10 billion) over 10 m!
+Assuming isotropic antennas ($G_T = G_R = 1$), the Friis equation becomes:
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{equation}
+P_R = P_T \left(\frac{\lambda}{4\pi d}\right)^2
+\end{equation}
 
-\subsubsection{Example 2: Cell Phone (900 MHz, 1
-km)}\label{example-2-cell-phone-900-mhz-1-km}
+Therefore, the free-space path loss is:
 
-\begin{verbatim}
-f = 900 MHz
-d = 1 km = 1000 m
+\begin{equation}
+L = \frac{P_T}{P_R} = \left(\frac{4\pi d}{\lambda}\right)^2
+\end{equation}
 
-FSPL = 20 log(1000) + 20 log(900×10) + 92.45
-     = 60 + 179 + 92.45
-     = 131.5 dB
-\end{verbatim}
+Substituting $\lambda = c/f$ where $c = 3 \times 10^8$~m/s:
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{equation}
+L = \left(\frac{4\pi f d}{c}\right)^2
+\end{equation}
 
-\subsubsection{Example 3: Satellite (12 GHz, 36,000 km -
-GEO)}\label{example-3-satellite-12-ghz-36000-km---geo}
+\subsection{FSPL in Decibels}
 
-\begin{verbatim}
-f = 12 GHz
-d = 36,000 km = 3.6×10 m
+Converting to logarithmic form:
 
-FSPL = 20 log(3.6×10) + 20 log(12×10) + 92.45
-     = 151 + 201.6 + 92.45
-     = 205 dB
-\end{verbatim}
+\begin{equation}
+\text{FSPL}_{\text{dB}} = 10\log_{10}(L) = 20\log_{10}\left(\frac{4\pi d}{\lambda}\right)
+\end{equation}
 
-\textbf{Massive loss!} Requires high TX power + high-gain antennas.
+Expanding:
+\begin{equation}
+\text{FSPL}_{\text{dB}} = 20\log_{10}(d) + 20\log_{10}(f) + 20\log_{10}\left(\frac{4\pi}{c}\right)
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Practical form} (frequency in Hz, distance in meters):
 
-\subsubsection{Example 4: THz Link (1 THz, 10 m) - For
-{[}{[}AID-Protocol-Case-Study{]}{]}}\label{example-4-thz-link-1-thz-10-m---for-aid-protocol-case-study}
+\begin{equation}
+\text{FSPL}_{\text{dB}} = 20\log_{10}(d_{\text{m}}) + 20\log_{10}(f_{\text{Hz}}) + 92.45
+\end{equation}
 
-\begin{verbatim}
-f = 1 THz = 1×10¹² Hz
-d = 10 m
+\textbf{Alternative form} (frequency in MHz, distance in km):
 
-FSPL = 20 log(10) + 20 log(1×10¹²) + 92.45
-     = 20 + 240 + 92.45
-     = 352.5 dB
-\end{verbatim}
+\begin{equation}
+\text{FSPL}_{\text{dB}} = 20\log_{10}(d_{\text{km}}) + 20\log_{10}(f_{\text{MHz}}) + 32.45
+\end{equation}
 
-\textbf{Extreme loss!} This is why
-{[}{[}Terahertz-(THz)-Technology\textbar THz communications{]}{]} are
-short-range only.
+\begin{warningbox}
+The constant term (92.45 or 32.45) depends on the units used. Always verify your units match the formula. Mixing units (e.g., using GHz with the MHz formula) introduces a $\pm 60$~dB error---enough to make a working link appear impossible or vice versa.
+\end{warningbox}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Scaling Laws}
 
-\subsection{\texorpdfstring{ Scaling
-Laws}{ Scaling Laws}}\label{scaling-laws}
+\subsection{Distance Dependence}
 
-\subsubsection{Distance Dependence}\label{distance-dependence}
+From equation (9), FSPL increases with distance:
 
-\begin{verbatim}
-FSPL  d²  (power law)
+\begin{equation}
+\text{FSPL} \propto d^2 \quad \text{(power law)}
+\end{equation}
 
-In dB: FSPL_dB increases by 20 dB per decade of distance
+In decibels: FSPL increases by \textbf{20~dB per decade} of distance.
 
-Examples:
-- 1 m  10 m: +20 dB loss
-- 10 m  100 m: +20 dB loss
-- 100 m  1 km: +20 dB loss
-\end{verbatim}
+\textbf{Examples:}
+\begin{itemize}
+\item $1$~m $\rightarrow$ $10$~m: +20~dB loss
+\item $10$~m $\rightarrow$ $100$~m: +20~dB loss
+\item $100$~m $\rightarrow$ $1$~km: +20~dB loss
+\end{itemize}
 
-\textbf{Doubling distance}: +6 dB loss (power drops to 1/4)
+\textbf{Doubling distance:} +6~dB loss (power drops to 1/4)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Axes
+\draw[->] (0,0) -- (10,0) node[right] {\sffamily\small Distance (log scale)};
+\draw[->] (0,0) -- (0,6) node[above] {\sffamily\small FSPL (dB)};
 
-\subsubsection{Frequency Dependence}\label{frequency-dependence}
+% Grid
+\draw[very thin,gray!30] (0,0) grid[step=1] (10,6);
 
-\begin{verbatim}
-FSPL  f²  (power law)
+% Log scale labels
+\foreach \x/\label in {0/1m, 2/10m, 4/100m, 6/1km, 8/10km}
+    \node[below, font=\scriptsize] at (\x,-0.1) {\label};
 
-In dB: FSPL_dB increases by 20 dB per decade of frequency
+% Path loss line (20 dB/decade slope)
+\draw[thick, blue] (0,0.5) -- (10,5.5);
 
-Examples:
-- 100 MHz  1 GHz: +20 dB loss
-- 1 GHz  10 GHz: +20 dB loss
-- 10 GHz  100 GHz: +20 dB loss
-\end{verbatim}
+% Annotations
+\draw[<->, thick, red] (2,1.5) -- (4,1.5) node[midway, above, font=\scriptsize] {+20 dB};
+\draw[dashed, red] (2,1.5) -- (2,2.5);
+\draw[dashed, red] (4,1.5) -- (4,3.5);
 
-\textbf{Doubling frequency}: +6 dB loss (higher frequencies lose more
-power!)
+% Title
+\node[above, font=\sffamily\bfseries] at (5,6.3) {FSPL vs Distance (2.4 GHz)};
 
-\textbf{Why?} Effective aperture of receiving antenna
-\$\textbackslash propto\$
-\$\textbackslash lambda\$\textbackslash textsuperscript\{2\} (smaller at
-higher f)
+% Sample points
+\foreach \x/\y in {0/0.5, 2/2.5, 4/3.5, 6/4.5, 8/5.5}
+    \fill[blue] (\x,\y) circle (2pt);
+\end{tikzpicture}
+\end{center}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Frequency Dependence}
 
-\subsection{\texorpdfstring{ Physical
-Interpretation}{ Physical Interpretation}}\label{physical-interpretation}
+From equation (9), FSPL increases with frequency:
 
-\subsubsection{Not True ``Loss''}\label{not-true-loss}
+\begin{equation}
+\text{FSPL} \propto f^2 \quad \text{(power law)}
+\end{equation}
 
-FSPL is \textbf{NOT} energy dissipation (free space is lossless!).
-It\textquotesingle s \textbf{geometric spreading}:
+In decibels: FSPL increases by \textbf{20~dB per decade} of frequency.
 
-\begin{verbatim}
-Transmit antenna radiates P_T into sphere
-Surface area: A = 4d²
-Power density at distance d:
+\textbf{Examples:}
+\begin{itemize}
+\item $100$~MHz $\rightarrow$ $1$~GHz: +20~dB loss
+\item $1$~GHz $\rightarrow$ $10$~GHz: +20~dB loss
+\item $10$~GHz $\rightarrow$ $100$~GHz: +20~dB loss
+\end{itemize}
 
-S = P_T/(4d²)  (W/m²)
+\textbf{Doubling frequency:} +6~dB loss (higher frequencies experience more path loss)
 
-Received power:
-P_R = S · A_eff
+\textbf{Why?} Effective aperture of receiving antenna $A_{\text{eff}} \propto \lambda^2 \propto 1/f^2$ (smaller at higher frequencies).
 
-where A_eff = G_R ²/4 (effective area of RX antenna)
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% Axes
+\draw[->] (0,0) -- (10,0) node[right] {\sffamily\small Frequency (log scale)};
+\draw[->] (0,0) -- (0,6) node[above] {\sffamily\small FSPL (dB)};
 
-Result:
-P_R = P_T · G_T · G_R · (/4d)²  (Friis equation!)
-\end{verbatim}
+% Grid
+\draw[very thin,gray!30] (0,0) grid[step=1] (10,6);
 
-\textbf{Analogy}: Flashlight beam spreads out
-\$\textbackslash rightarrow\$ same total power, but lower intensity at
-greater distance.
+% Log scale labels
+\foreach \x/\label in {0/100MHz, 2/1GHz, 4/10GHz, 6/100GHz, 8/1THz}
+    \node[below, font=\scriptsize] at (\x,-0.1) {\label};
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+% Path loss line (20 dB/decade slope)
+\draw[thick, red] (0,0.8) -- (10,5.8);
 
-\subsection{\texorpdfstring{ Link Budget
-Analysis}{ Link Budget Analysis}}\label{link-budget-analysis}
+% Annotations
+\draw[<->, thick, blue] (2,1.8) -- (4,1.8) node[midway, above, font=\scriptsize] {+20 dB};
+\draw[dashed, blue] (2,1.8) -- (2,2.8);
+\draw[dashed, blue] (4,1.8) -- (4,3.8);
 
-\textbf{Link Budget} accounts for all gains and losses:
+% Title
+\node[above, font=\sffamily\bfseries] at (5,6.3) {FSPL vs Frequency (100m distance)};
 
-\begin{verbatim}
-P_R [dBm] = P_T [dBm] + G_T [dBi] + G_R [dBi] - FSPL [dB] - L_other [dB]
+% Sample points
+\foreach \x/\y in {0/0.8, 2/2.8, 4/3.8, 6/4.8, 8/5.8}
+    \fill[red] (\x,\y) circle (2pt);
+\end{tikzpicture}
+\end{center}
 
+\begin{keyconcept}
+The $d^2 f^2$ relationship explains why:
+\begin{itemize}
+\item \textbf{Satellite links} at 36,000~km have enormous path loss (205~dB at 12~GHz)
+\item \textbf{5G mmWave} (28~GHz) has 10~dB more loss than 4G LTE (2~GHz) at the same distance
+\item \textbf{THz communications} are limited to very short ranges despite high bandwidth
+\end{itemize}
+\end{keyconcept}
+
+\section{Link Budget Fundamentals}
+
+The link budget equation combines transmitter power, antenna gains, and path loss:
+
+\begin{equation}
+P_R[\text{dBm}] = P_T[\text{dBm}] + G_T[\text{dBi}] + G_R[\text{dBi}] - \text{FSPL}[\text{dB}] - L_{\text{other}}[\text{dB}]
+\end{equation}
 where:
-- P_T = transmit power (dBm, referenced to 1 mW)
-- G_T, G_R = antenna gains (dBi, referenced to isotropic)
-- FSPL = free-space path loss (dB)
-- L_other = other losses (cables, connectors, atmosphere, etc.)
-\end{verbatim}
+\begin{itemize}
+\item $P_T$ = transmit power (dBm, referenced to 1~mW)
+\item $G_T$, $G_R$ = antenna gains (dBi, referenced to isotropic)
+\item FSPL = free-space path loss (dB)
+\item $L_{\text{other}}$ = additional losses (cables, connectors, atmosphere, etc.)
+\end{itemize}
 
-\textbf{Goal}: Ensure P\_R \textgreater\textgreater{} P\_noise (receiver
-noise floor) for reliable communication.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Example: WiFi Link Budget (2.4 GHz, 50
-m)}\label{example-wifi-link-budget-2.4-ghz-50-m}
-
-\begin{verbatim}
-Transmitter:
-- TX power: +20 dBm (100 mW, typical WiFi)
-- TX antenna gain: +2 dBi (dipole)
-- EIRP: 22 dBm
-
-Channel:
-- Distance: 50 m
-- FSPL: 20log(50) + 20log(2400) + 32.45 = 34 + 67.6 + 32.45 = 134 dB
-- Indoor losses (walls, furniture): ~15 dB
-- Total loss: 149 dB
-
-Receiver:
-- RX antenna gain: +2 dBi
-- Cable loss: -1 dB
-- Net RX gain: +1 dB
-
-Received power:
-P_R = 22 + 1 - 149 = -126 dBm
-
-Noise floor (10 MHz bandwidth, 300K):
-N = -174 + 10log(10^7) = -174 + 70 = -104 dBm
-
-SNR = P_R - N = -126 - (-104) = -22 dB
-\end{verbatim}
-
-\textbf{Too low!} WiFi needs \textasciitilde-65 dBm minimum. This link
-would fail.
-
-\textbf{Solution}: Reduce distance, add amplifiers, or use directional
-antennas.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Design criterion:} For reliable communication, the received power must exceed the receiver sensitivity:
+\begin{equation}
+P_R \geq P_{\text{sens}} = N_0 + 10\log_{10}(B) + \text{SNR}_{\text{req}} + N_F
+\end{equation}
+where:
+\begin{itemize}
+\item $N_0 = -174$~dBm/Hz (thermal noise floor at 290~K)
+\item $B$ = bandwidth (Hz)
+\item $\text{SNR}_{\text{req}}$ = required SNR for target BER
+\item $N_F$ = receiver noise figure (dB)
+\end{itemize}
 
 \subsection{\texorpdfstring{ Real-World
 Deviations}{ Real-World Deviations}}\label{real-world-deviations}
