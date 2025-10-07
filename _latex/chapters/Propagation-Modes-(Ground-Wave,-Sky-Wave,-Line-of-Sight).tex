@@ -163,82 +163,56 @@ Ground wave attenuation depends on four key factors:
 Ground wave propagation \textbf{requires vertical polarization}. Horizontally polarized waves induce currents parallel to the ground surface and are rapidly attenuated. This is why AM broadcast antennas are always vertically oriented.
 \end{warningbox}
 
-\paragraph{Ground Conductivity}\label{ground-conductivity}
+\subsubsection{Ground Conductivity}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1728}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2346}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4321}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1605}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Surface Type
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Conductivity (S/m)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Relative Permittivity \(\epsilon_r\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Attenuation
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
+Table~\ref{tab:ground-conductivity} shows how different surface types affect ground wave attenuation.
+
+\begin{table}[htbp]
+\centering
+\caption{Ground conductivity and attenuation for different surface types}
+\label{tab:ground-conductivity}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Surface Type} & \textbf{Conductivity (S/m)} & \textbf{Relative Permittivity $\epsilon_r$} & \textbf{Attenuation} \\
+\midrule
 Seawater & 5 & 80 & \textbf{Very low} (best) \\
 Freshwater & 0.01 & 80 & Low \\
-Wet soil & 0.01-0.001 & 20-30 & Moderate \\
-Dry soil & 0.001 & 3-10 & High \\
+Wet soil & 0.01--0.001 & 20--30 & Moderate \\
+Dry soil & 0.001 & 3--10 & High \\
 Urban/concrete & 0.001 & 5 & High \\
 Ice/snow & 0.0001 & 3 & Very high \\
-\end{longtable}
-}
+\bottomrule
+\end{tabular}
+\end{table}
 
-\textbf{Maritime advantage}: Ships can communicate over 1000+ km at
-LF/MF (AM broadcast)
+\textbf{Maritime advantage:} Ships can communicate over 1000+~km at LF/MF (AM broadcast)
 
-\textbf{Desert disadvantage}: Dry sand severely limits ground wave (100s
-of meters)
+\textbf{Desert disadvantage:} Dry sand severely limits ground wave (100s of meters)
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Range vs Frequency}
 
-\subsubsection{Range vs Frequency}\label{range-vs-frequency}
+Empirical range over average soil with vertical polarization is shown in Table~\ref{tab:ground-wave-range}.
 
-\textbf{Empirical range} (over average soil, vertical polarization):
+\begin{table}[htbp]
+\centering
+\caption{Ground wave range vs frequency over average soil}
+\label{tab:ground-wave-range}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Frequency} & \textbf{Wavelength} & \textbf{Typical Range} & \textbf{Applications} \\
+\midrule
+50~kHz (VLF) & 6000~m & 500--1000~km & Navigation (LORAN) \\
+150~kHz (LF) & 2000~m & 300--800~km & Longwave broadcast \\
+500~kHz (MF) & 600~m & 200--500~km & Marine distress (SOS) \\
+1~MHz (AM) & 300~m & 100--300~km & AM radio (nighttime skywave extends this) \\
+3~MHz (HF) & 100~m & 10--50~km & Limited ground wave, skywave dominant \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2115}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2885}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2692}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Frequency
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Wavelength
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Typical Range
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Applications
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-50 kHz (VLF) & 6000 m & 500-1000 km & Navigation (LORAN) \\
-150 kHz (LF) & 2000 m & 300-800 km & Longwave broadcast \\
-500 kHz (MF) & 600 m & 200-500 km & Marine distress (SOS) \\
-1 MHz (AM) & 300 m & 100-300 km & AM radio (nighttime skywave extends
-this) \\
-3 MHz (HF) & 100 m & 10-50 km & Limited ground wave, skywave dominant \\
-\end{longtable}
-}
-
-\textbf{Key insight}: \textbf{Ground wave range decreases rapidly with
-frequency}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{importantbox}{Key Insight}
+Ground wave range \textbf{decreases rapidly with frequency}. This is why low-frequency bands (LF/MF) are preferred for long-range ground wave communication.
+\end{importantbox}
 
 \subsection{Path Loss Model}
 
@@ -329,43 +303,26 @@ A \textbf{sky wave} is an electromagnetic wave refracted by the ionosphere, retu
 Sky waves are effective primarily in the \textbf{HF band (3--30~MHz)}, with some \textbf{MF propagation at night} when the D-layer disappears.
 \end{calloutbox}
 
-\subsubsection{Ionospheric Layers}\label{ionospheric-layers}
+\subsection{Ionospheric Layers}
 
-\textbf{Ionosphere = ionized by solar UV/X-rays}
+The ionosphere is ionized by solar UV and X-rays, creating distinct layers with different properties shown in Table~\ref{tab:ionospheric-layers}.
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1061}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1515}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1818}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2727}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2879}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Layer
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Altitude
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Ionization
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Daytime Behavior
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Nighttime Behavior
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{D} & 60-90 km & Low & \textbf{Absorbs HF} (attenuates MF/HF) &
-\textbf{Disappears} (recombination fast) \\
-\textbf{E} & 90-150 km & Moderate & Reflects some HF (\textless{} 10
-MHz) & Weakens \\
-\textbf{F1} & 150-250 km & Moderate & Reflects MF/HF & \textbf{Merges
-with F2} \\
-\textbf{F2} & 250-400 km & High & \textbf{Primary reflector} for HF &
-Descends, remains strong \\
-\end{longtable}
-}
+\begin{table}[htbp]
+\centering
+\caption{Ionospheric layers and their characteristics}
+\label{tab:ionospheric-layers}
+\small
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Layer} & \textbf{Altitude} & \textbf{Ionization} & \textbf{Daytime Behavior} & \textbf{Nighttime Behavior} \\
+\midrule
+\textbf{D} & 60--90~km & Low & \textbf{Absorbs HF} (attenuates MF/HF) & \textbf{Disappears} (recombination fast) \\
+\textbf{E} & 90--150~km & Moderate & Reflects some HF ($<$10~MHz) & Weakens \\
+\textbf{F1} & 150--250~km & Moderate & Reflects MF/HF & \textbf{Merges with F2} \\
+\textbf{F2} & 250--400~km & High & \textbf{Primary reflector} for HF & Descends, remains strong \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{keyconcept}
 The \textbf{critical frequency} $f_c$ is the maximum frequency reflected at vertical incidence, given by:
