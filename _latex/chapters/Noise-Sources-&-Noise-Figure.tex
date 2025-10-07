@@ -412,6 +412,40 @@ F_{\text{total}} = 1.2 + 0.013 + 0.0028 = 1.216
 
 \textbf{Analysis}: Excellent performance! The high-gain first-stage LNA effectively isolates the system from later stage noise contributions.
 
+\subsection{Performance Comparison}
+
+The following diagram compares the total noise figure for the three receiver configurations:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.3]
+% Axes
+\draw[->] (0,0) -- (0,4) node[above] {\sffamily\small NF (dB)};
+\draw[->] (-0.5,0) -- (9,0) node[right] {\sffamily\small Configuration};
+
+% Grid
+\draw[very thin,gray!30] (0,0) grid[step=0.5] (8.5,3.5);
+
+% Bars
+\fill[red!70] (0.5,0) rectangle (2,3.3) node[midway, white, font=\bfseries] {3.3};
+\fill[orange!70] (3,0) rectangle (4.5,1.5) node[midway, white, font=\bfseries] {1.5};
+\fill[green!70] (5.5,0) rectangle (7,0.85) node[midway, white, font=\bfseries] {0.85};
+
+% Labels
+\node[font=\scriptsize, align=center, text width=1.5cm] at (1.25,-0.5) {Cable\\Before LNA};
+\node[font=\scriptsize, align=center, text width=1.5cm] at (3.75,-0.5) {LNA\\Before Cable};
+\node[font=\scriptsize, align=center, text width=1.5cm] at (6.25,-0.5) {Two-Stage\\LNA};
+
+% Y-axis labels
+\foreach \y in {0,1,2,3}
+    \draw (-0.1,\y) -- (0,\y) node[left, font=\scriptsize] {\y};
+
+% Annotations
+\node[font=\scriptsize, text=red] at (1.25,3.7) {Poor};
+\node[font=\scriptsize, text=orange] at (3.75,3.7) {Good};
+\node[font=\scriptsize, text=green!60!black] at (6.25,3.7) {Excellent};
+\end{tikzpicture}
+\end{center}
+
 \subsection{Cascaded System Architecture}
 
 The following diagram illustrates a typical receiver chain showing how noise accumulates through cascaded stages:
@@ -449,18 +483,19 @@ Friis Formula: $F_{\text{tot}} = F_1 + \frac{F_2-1}{G_1} + \frac{F_3-1}{G_1G_2} 
 \end{tikzpicture}
 \end{center}
 
-\subsection{System Noise Temperature}
+\section{System Noise Temperature}
 
 \textbf{Total noise temperature} of cascaded system:
 
-\[
+\begin{equation}
 T_{\text{sys}} = T_{\text{ant}} + T_e
-\]
-
-Where: - \(T_{\text{ant}}\) = Antenna noise temperature (K) - \(T_e\) =
-Receiver equivalent noise temperature (K)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\end{equation}
+where:
+\begin{itemize}
+\item $T_{\text{sys}}$ = total system noise temperature (K)
+\item $T_{\text{ant}}$ = antenna noise temperature (K)
+\item $T_e$ = receiver equivalent noise temperature (K)
+\end{itemize}
 
 \subsubsection{Antenna Noise
 Temperature}\label{antenna-noise-temperature}
@@ -491,137 +526,188 @@ Scenario & Frequency & Elevation & \(T_{\text{ant}}\) (K) \\
 \end{longtable}
 }
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{G/T Ratio (Figure of
-Merit)}\label{gt-ratio-figure-of-merit}
+\subsection{G/T Ratio (Figure of Merit)}
 
 \textbf{System performance metric} for satellite ground stations:
 
-\[
-\frac{G}{T} = G_r - 10\log_{10}(T_{\text{sys}}) \quad (\text{dB/K})
-\]
+\begin{equation}
+\frac{G}{T} = G_r - 10\log_{10}(T_{\text{sys}})
+\end{equation}
+where:
+\begin{itemize}
+\item $G/T$ = system figure of merit (dB/K)
+\item $G_r$ = receive antenna gain (dBi)
+\item $T_{\text{sys}}$ = system noise temperature (K)
+\end{itemize}
 
-Where: - \(G_r\) = RX antenna gain (dBi) - \(T_{\text{sys}}\) = System
-noise temperature (K)
+\textbf{Interpretation}: Higher $G/T$ = Better sensitivity
 
-\textbf{Interpretation}: Higher G/T = Better sensitivity
+\textbf{Example}: 3 m Ku-band dish with LNA at feed
+\begin{itemize}
+\item Antenna gain: 48 dBi
+\item Antenna temp: 30 K (clear sky, $30°$ elevation)
+\item LNA NF: 0.8 dB $\rightarrow$ $T_e = 55$ K
+\item $T_{\text{sys}} = 30 + 55 = 85$ K
+\end{itemize}
 
-\textbf{Example}: 3 m Ku-band dish, LNA at feed - Antenna gain: 48 dBi -
-Antenna temp: 30 K (clear sky, 30\$\^{}\textbackslash circ\$ elevation)
-- LNA NF: 0.8 dB \$\textbackslash rightarrow\$ \(T_e = 55\) K -
-\(T_{\text{sys}} = 30 + 55 = 85\) K
+\begin{equation}
+\frac{G}{T} = 48 - 10\log_{10}(85) = 48 - 19.3 = 28.7~\text{dB/K}
+\end{equation}
 
-\[
-\frac{G}{T} = 48 - 10\log_{10}(85) = 48 - 19.3 = 28.7\ \text{dB/K}
-\]
+\textbf{Typical G/T values}:
+\begin{itemize}
+\item \textbf{VSAT terminals} (0.6-1.2 m): 10-20 dB/K
+\item \textbf{Professional earth stations} (3-9 m): 25-35 dB/K
+\item \textbf{Large observatories} (25+ m): 40-60 dB/K
+\end{itemize}
 
-\textbf{Typical G/T}: - \textbf{VSAT terminals} (0.6-1.2 m): 10-20 dB/K
-- \textbf{Professional earth stations} (3-9 m): 25-35 dB/K -
-\textbf{Large observatories} (25+ m): 40-60 dB/K
+\section{Other Noise Sources}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Noise Source Categories}
 
-\subsection{Other Noise Sources}\label{other-noise-sources}
+The following diagram illustrates different noise sources and their frequency dependencies:
 
-\subsubsection{1. Shot Noise}\label{shot-noise}
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+% Axes
+\draw[->] (0,0) -- (10,0) node[right] {\sffamily\small Frequency};
+\draw[->] (0,0) -- (0,5) node[above] {\sffamily\small Noise Power};
+
+% Flicker noise (1/f)
+\draw[thick, red, domain=0.5:3] plot (\x, {3/\x + 1.5});
+\node[red, font=\scriptsize] at (1.5,3.5) {Flicker $(1/f)$};
+
+% Thermal noise (flat)
+\draw[thick, blue] (0.5,1.5) -- (9.5,1.5);
+\node[blue, font=\scriptsize] at (7,2) {Thermal (white)};
+
+% Shot noise (flat)
+\draw[thick, green!60!black, dashed] (0.5,2.2) -- (9.5,2.2);
+\node[green!60!black, font=\scriptsize] at (7,2.7) {Shot (white)};
+
+% Phase noise (near carrier)
+\draw[thick, orange, domain=4:6] plot (\x, {0.8/(\x-4.5)^2 + 1.5});
+\node[orange, font=\scriptsize] at (5,3.8) {Phase};
+\draw[dashed, gray] (5,0) -- (5,1.5) node[below, font=\scriptsize] {$f_c$};
+
+% Frequency bands
+\node[font=\scriptsize] at (1.5,-0.5) {Audio};
+\node[font=\scriptsize] at (5,-0.5) {RF/IF};
+\node[font=\scriptsize] at (8.5,-0.5) {Broadband};
+
+% Grid
+\draw[very thin,gray!30] (0,0) grid[step=0.5] (10,5);
+\end{tikzpicture}
+\end{center}
+
+\subsection{Shot Noise}
 
 \textbf{Due to discrete nature of charge carriers}:
 
-\[
+\begin{equation}
 i_n^2 = 2 q I_{\text{DC}} B
-\]
-
-Where: - \(q = 1.6 \times 10^{-19}\) C (electron charge) -
-\(I_{\text{DC}}\) = DC current (A) - \(B\) = Bandwidth (Hz)
+\end{equation}
+where:
+\begin{itemize}
+\item $i_n$ = RMS noise current (A)
+\item $q = 1.6 \times 10^{-19}$ C (electron charge)
+\item $I_{\text{DC}}$ = DC current (A)
+\item $B$ = bandwidth (Hz)
+\end{itemize}
 
 \textbf{Significant in}: Photodetectors, diodes, low-current circuits
 
-\textbf{Example}: Photodiode @ 1 mA DC, 1 MHz BW
+\textbf{Example}: Photodiode with 1 mA DC current, 1 MHz BW
 
-\[
-i_n = \sqrt{2 \times 1.6 \times 10^{-19} \times 10^{-3} \times 10^6} = 5.7 \times 10^{-10}\ \text{A}_{\text{rms}}
-\]
+\begin{equation}
+i_n = \sqrt{2 \times 1.6 \times 10^{-19} \times 10^{-3} \times 10^6} = 5.7 \times 10^{-10}~\text{A}_{\text{rms}}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{2. Flicker Noise (1/f
-Noise)}\label{flicker-noise-1f-noise}
+\subsection{Flicker Noise (1/f Noise)}
 
 \textbf{Low-frequency noise}, power inversely proportional to frequency:
 
-\[
+\begin{equation}
 S(f) \propto \frac{1}{f}
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $S(f)$ = noise power spectral density
+\item $f$ = frequency (Hz)
+\end{itemize}
 
-\textbf{Significant}: \textless{} 1 kHz (audio, low-IF systems)
+\textbf{Significant below}: $< 1$ kHz (audio, low-IF systems)
 
-\textbf{Mitigation}: Use higher IF, differential circuits, chopper
-stabilization
+\textbf{Mitigation}: Use higher IF, differential circuits, chopper stabilization
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Phase Noise}
 
-\subsubsection{3. Phase Noise}\label{phase-noise}
+\textbf{Oscillator noise} causes frequency jitter, specified as $\mathcal{L}(f_m)$ (dBc/Hz at offset $f_m$ from carrier).
 
-\textbf{Oscillator noise} causes frequency jitter:
+\textbf{Example}: Satellite LO @ 10 GHz
+\begin{itemize}
+\item Phase noise: $-90$ dBc/Hz @ 10 kHz offset
+\item Degrades SNR in adjacent channels
+\item Critical for coherent demodulation
+\end{itemize}
 
-\textbf{Specified as} \(\mathcal{L}(f_m)\) (dBc/Hz at offset \(f_m\)
-from carrier)
-
-\textbf{Example}: Satellite LO @ 10 GHz - Phase noise: -90 dBc/Hz @ 10
-kHz offset - Degrades SNR in adjacent channels
-
-\textbf{See}: {[}{[}Synchronization-(Carrier,-Timing,-Frame){]}{]} for
-impact on coherent demodulation
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{4. Quantization Noise}\label{quantization-noise}
+\subsection{Quantization Noise}
 
 \textbf{Analog-to-digital conversion} introduces rounding error:
 
-\[
-\text{SNR}_{\text{quant}} = 6.02n + 1.76 \quad (\text{dB})
-\]
+\begin{equation}
+\text{SNR}_{\text{quant}} = 6.02n + 1.76
+\end{equation}
+where:
+\begin{itemize}
+\item $\text{SNR}_{\text{quant}}$ = quantization SNR (dB)
+\item $n$ = number of ADC bits
+\end{itemize}
 
-Where \(n\) = Number of bits
+\textbf{Example}: 12-bit ADC
 
-\textbf{Example}: 12-bit ADC - SNR = 6.02 \$\textbackslash times\$ 12 +
-1.76 = 74 dB
+\begin{equation}
+\text{SNR}_{\text{quant}} = 6.02 \times 12 + 1.76 = 74~\text{dB}
+\end{equation}
 
-\textbf{Implication}: Need enough ADC bits to avoid degrading RF SNR
+\textbf{Implication}: Need enough ADC bits to avoid degrading RF SNR.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Intermodulation Distortion (IMD)}
 
-\subsubsection{5. Intermodulation Distortion
-(IMD)}\label{intermodulation-distortion-imd}
+\textbf{Non-linear components} create spurious products.
 
-\textbf{Non-linear components} create spurious products:
-
-\textbf{Two-tone test}: Inputs at \(f_1\) and \(f_2\)
-\$\textbackslash rightarrow\$ Products at \(2f_1 - f_2\), \(2f_2 - f_1\)
-(3rd order)
+\textbf{Two-tone test}: Inputs at $f_1$ and $f_2$ produce third-order products at $2f_1 - f_2$ and $2f_2 - f_1$.
 
 \textbf{IP3} (Third-order intercept point):
 
-\[
+\begin{equation}
 \text{IMD3}_{\text{dBc}} = 2(P_{\text{IP3}} - P_{\text{in}})
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $\text{IMD3}_{\text{dBc}}$ = third-order IMD level relative to carrier (dBc)
+\item $P_{\text{IP3}}$ = third-order intercept point (dBm)
+\item $P_{\text{in}}$ = input power (dBm)
+\end{itemize}
 
-\textbf{Example}: Mixer with IP3 = +10 dBm, input = -20 dBm - IMD3 =
-2(10 - (-20)) = 60 dBc below carrier
+\textbf{Example}: Mixer with IP3 = $+10$ dBm, input = $-20$ dBm
 
-\textbf{Implication}: Strong interferers create in-band noise
+\begin{equation}
+\text{IMD3} = 2(10 - (-20)) = 60~\text{dBc}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Implication}: Strong interferers create in-band noise.
 
-\subsubsection{6. Atmospheric Noise}\label{atmospheric-noise}
+\subsection{Atmospheric Noise}
 
-\textbf{Natural sources}: - \textbf{Lightning}: Dominates \textless{} 30
-MHz (HF, VHF) - \textbf{Cosmic noise}: Galactic background (0.1-3 GHz) -
-\textbf{Solar noise}: Sun radiation (all frequencies)
+\textbf{Natural sources}:
+\begin{itemize}
+\item \textbf{Lightning}: Dominates $< 30$ MHz (HF, VHF)
+\item \textbf{Cosmic noise}: Galactic background (0.1-3 GHz)
+\item \textbf{Solar noise}: Sun radiation (all frequencies)
+\end{itemize}
 
-\textbf{External noise temperature} \(T_{\text{ext}}\):
+\textbf{External noise temperature} $T_{\text{ext}}$:
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
@@ -639,194 +725,244 @@ Frequency & \(T_{\text{ext}}\) (K) & Dominant Source \\
 \end{longtable}
 }
 
-\textbf{Antenna noise temp}:
+\textbf{Antenna noise temperature}:
 
-\[
+\begin{equation}
 T_{\text{ant}} = T_{\text{ext}} \eta + T_0 (1 - \eta)
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $T_{\text{ant}}$ = antenna noise temperature (K)
+\item $T_{\text{ext}}$ = external noise temperature (K)
+\item $\eta$ = antenna efficiency (0 to 1)
+\item $T_0 = 290$ K (reference temperature)
+\end{itemize}
 
-Where \(\eta\) = Antenna efficiency
+\subsection{Man-Made Noise}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Interference from}: Power lines, electric motors, computers, switching power supplies
 
-\subsubsection{7. Man-Made Noise}\label{man-made-noise}
+\textbf{Impulsive noise}: Short bursts (microseconds) with high peak power
 
-\textbf{Interference from}: Power lines, electric motors, computers,
-switching power supplies
+\textbf{Mitigation}: Filtering, shielding, time diversity (retransmission)
 
-\textbf{Impulsive noise}: Short bursts (microseconds)
-\$\textbackslash rightarrow\$ High peak power
+\section{Receiver Sensitivity and Performance}
 
-\textbf{Mitigation}: Filtering, shielding, time diversity
-(retransmission)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Receiver Sensitivity
-Calculation}\label{receiver-sensitivity-calculation}
+\subsection{Receiver Sensitivity Calculation}
 
 \textbf{Minimum detectable signal} for target SNR:
 
-\[
+\begin{equation}
 P_{\text{min}} = N + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}}
-\]
+\end{equation}
+where (all in dB):
+\begin{itemize}
+\item $P_{\text{min}}$ = minimum detectable signal (dBm)
+\item $N = -174 + 10\log_{10}(B)$ = thermal noise in bandwidth $B$ (dBm)
+\item $\text{NF}$ = receiver noise figure (dB)
+\item $\text{SNR}_{\text{req}}$ = required SNR for demodulation (dB)
+\item $L_{\text{impl}}$ = implementation loss (1-3 dB typical)
+\end{itemize}
 
-Where (all in dB): - \(N = -174 + 10\log_{10}(B)\) (thermal noise in
-bandwidth B) - NF = Receiver noise figure (dB) - SNR\_req = Required SNR
-for demodulation (dB) - \(L_{\text{impl}}\) = Implementation loss (1-3
-dB typical)
+\subsection{Worked Example: GPS Receiver}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Given Parameters}:
+\begin{itemize}
+\item Bandwidth: 2 MHz (C/A code)
+\item NF: 3 dB (typical GPS front-end)
+\item $\text{SNR}_{\text{req}}$: $-20$ dB (spread spectrum processing gain 43 dB)
+\item Implementation loss: 2 dB
+\item C/N$_0$ requirement: 33 dB-Hz (acquisition), 28 dB-Hz (tracking)
+\end{itemize}
 
-\subsubsection{Example: GPS Receiver}\label{example-gps-receiver}
+\textbf{Step 1: Calculate thermal noise}:
 
-\textbf{Specs}: - Bandwidth: 2 MHz (C/A code) - NF: 3 dB (typical GPS
-front-end) - SNR\_req: -20 dB (spread spectrum processing gain 43 dB,
-need C/N\textbackslash textsubscript\{0\} = 33 dB-Hz) - Impl loss: 2 dB
+\begin{equation}
+N = -174 + 10\log_{10}(2 \times 10^6) = -174 + 63 = -111~\text{dBm}
+\end{equation}
 
-\textbf{Thermal noise}:
+\textbf{Step 2: Calculate sensitivity (method 1)}:
 
-\[
-N = -174 + 10\log_{10}(2 \times 10^6) = -174 + 63 = -111\ \text{dBm}
-\]
+\begin{equation}
+P_{\text{min}} = N + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}}
+\end{equation}
 
-\textbf{Sensitivity}:
+\begin{equation}
+P_{\text{min}} = -111 + 3 + (-20) + 2 = -126~\text{dBm}
+\end{equation}
 
-\[
-P_{\text{min}} = -111 + 3 + (-20) + 2 = -126\ \text{dBm}
-\]
+\textbf{Step 3: Alternate method using C/N$_0$ metric}:
 
-\textbf{But wait!} GPS uses C/N\textbackslash textsubscript\{0\} metric
-(per Hz):
+\begin{equation}
+P_{\text{min}} = -174 + \text{C/N}_0 + \text{NF} + L_{\text{impl}}
+\end{equation}
 
-\textbf{C/N\textbackslash textsubscript\{0\}} requirement: 33 dB-Hz
-(acquisition), 28 dB-Hz (tracking)
+\begin{equation}
+P_{\text{min}} = -174 + 33 + 3 + 2 = -136~\text{dBm}
+\end{equation}
 
-\textbf{Sensitivity} (alternate method):
+\begin{calloutbox}{GPS Link Margin}
+\textbf{Typical GPS signal}: $-130$ dBm (open sky) $\rightarrow$ 6 dB margin for acquisition. This margin allows GPS to work indoors near windows and in light foliage.
+\end{calloutbox}
 
-\[
-P_{\text{min}} = -174 + 33 + 3 + 2 = -136\ \text{dBm}
-\]
+\subsection{Worked Example: Satellite DVB-S2 Receiver}
 
-\textbf{Typical GPS signal}: -130 dBm (open sky)
-\$\textbackslash rightarrow\$ 6 dB margin
+\textbf{Given Parameters}:
+\begin{itemize}
+\item Bandwidth: 36 MHz
+\item NF: 1.5 dB (LNA at feed)
+\item Modulation: QPSK 3/4 with LDPC coding
+\item $\text{SNR}_{\text{req}}$: 6.5 dB (for BER $< 10^{-7}$ post-FEC)
+\item Implementation loss: 1.5 dB
+\end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Step 1: Calculate thermal noise}:
 
-\subsubsection{Example: Satellite DVB-S2
-Receiver}\label{example-satellite-dvb-s2-receiver}
+\begin{equation}
+N = -174 + 10\log_{10}(36 \times 10^6) = -174 + 75.6 = -98.4~\text{dBm}
+\end{equation}
 
-\textbf{Specs}: - Bandwidth: 36 MHz - NF: 1.5 dB (LNA at feed) -
-Modulation: QPSK 3/4 (LDPC) - SNR\_req: 6.5 dB (for BER \textless{}
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{7\}
-post-FEC) - Impl loss: 1.5 dB
+\textbf{Step 2: Calculate sensitivity}:
 
-\textbf{Thermal noise}:
+\begin{equation}
+P_{\text{min}} = N + \text{NF} + \text{SNR}_{\text{req}} + L_{\text{impl}}
+\end{equation}
 
-\[
-N = -174 + 10\log_{10}(36 \times 10^6) = -174 + 75.6 = -98.4\ \text{dBm}
-\]
+\begin{equation}
+P_{\text{min}} = -98.4 + 1.5 + 6.5 + 1.5 = -88.9~\text{dBm}
+\end{equation}
 
-\textbf{Sensitivity}:
+\textbf{Result}: Link budget must deliver $> -88.9$ dBm at LNB output for proper operation.
 
-\[
-P_{\text{min}} = -98.4 + 1.5 + 6.5 + 1.5 = -88.9\ \text{dBm}
-\]
+\section{Noise Figure Measurement}
 
-\textbf{Link budget must deliver} \textgreater{} -88.9 dBm at LNB output
-for proper operation
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{Noise Figure Measurement}\label{noise-figure-measurement}
-
-\subsubsection{Y-Factor Method}\label{y-factor-method}
+\subsection{Y-Factor Method}
 
 \textbf{Standard technique} using hot/cold loads:
 
+\textbf{Procedure}:
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Measure noise power with \textbf{hot load} (\(T_h = 290\) K): \(P_h\)
-\item
-  Measure noise power with \textbf{cold load} (\(T_c = 77\) K, liquid
-  N\textbackslash textsubscript\{2\}): \(P_c\)
-\item
-  Calculate \textbf{Y-factor}:
+\item Measure noise power with \textbf{hot load} ($T_h = 290$ K): $P_h$
+\item Measure noise power with \textbf{cold load} ($T_c = 77$ K, liquid N$_2$): $P_c$
+\item Calculate \textbf{Y-factor}:
 \end{enumerate}
 
-\[
+\begin{equation}
 Y = \frac{P_h}{P_c}
-\]
+\end{equation}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{3}
-\tightlist
-\item
-  \textbf{Noise figure}:
+\item Calculate \textbf{noise figure}:
 \end{enumerate}
 
-\[
+\begin{equation}
 \text{NF} = 10\log_{10}\left(\frac{T_h - YT_c}{290(Y-1)}\right)
-\]
+\end{equation}
 
-\textbf{Example}: \(P_h = 100\) units, \(P_c = 80\) units - Y = 100/80 =
-1.25 - NF = \(10\log_{10}[(290 - 1.25 \times 77)/(290 \times 0.25)]\) =
-1.8 dB
+\textbf{Example}: $P_h = 100$ units, $P_c = 80$ units
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{equation}
+Y = \frac{100}{80} = 1.25
+\end{equation}
 
-\subsubsection{Noise Source Method}\label{noise-source-method}
+\begin{equation}
+\text{NF} = 10\log_{10}\left(\frac{290 - 1.25 \times 77}{290 \times 0.25}\right) = 1.8~\text{dB}
+\end{equation}
+
+\subsection{Noise Source Method}
 
 \textbf{Use calibrated noise source} (ENR = Excess Noise Ratio in dB):
 
-\[
+\begin{equation}
 \text{NF} = \text{ENR} - 10\log_{10}(Y - 1)
-\]
+\end{equation}
+where:
+\begin{itemize}
+\item $\text{ENR}$ = excess noise ratio of calibrated source (dB)
+\item $Y$ = ratio of power with noise source ON/OFF
+\end{itemize}
 
-Where Y = ratio of power with noise source ON/OFF
+\textbf{Example}: ENR = 15 dB noise source, $Y = 10$
 
-\textbf{Example}: ENR = 15 dB noise source, Y = 10 - NF = 15 - 10log(9)
-= 15 - 9.54 = 5.46 dB
+\begin{equation}
+\text{NF} = 15 - 10\log_{10}(9) = 15 - 9.54 = 5.46~\text{dB}
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Design Guidelines}
 
-\subsection{Design Guidelines}\label{design-guidelines}
-
-\subsubsection{Optimize Noise Figure}\label{optimize-noise-figure}
+\subsection{Optimizing Noise Figure}
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{LNA at antenna}: Minimize cable loss before LNA
-\item
-  \textbf{High LNA gain}: 15-20 dB isolates from later stages
-\item
-  \textbf{Low-loss transmission}: Use low-loss cable (LMR-400, hardline)
-\item
-  \textbf{Cool LNA}: Cryogenic cooling for satellite ground stations
-\item
-  \textbf{Avoid passive loss}: No attenuators, splitters before LNA
+\item \textbf{LNA at antenna}: Minimize cable loss before LNA
+\item \textbf{High LNA gain}: 15-20 dB isolates from later stages
+\item \textbf{Low-loss transmission}: Use low-loss cable (LMR-400, hardline)
+\item \textbf{Cool LNA}: Cryogenic cooling for satellite ground stations
+\item \textbf{Avoid passive loss}: No attenuators or splitters before LNA
 \end{enumerate}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Performance vs. Cost Trade-offs}
 
-\subsubsection{Trade-offs}\label{trade-offs}
+\textbf{Lower NF $\rightarrow$ Higher cost}:
+\begin{itemize}
+\item Premium LNA: 0.8 dB NF = \$500+
+\item Standard LNA: 2 dB NF = \$50
+\item Difference: 1.2 dB sensitivity = $1.3\times$ range improvement
+\end{itemize}
 
-\textbf{Lower NF \$\textbackslash rightarrow\$ Higher cost}: - Premium
-LNA: 0.8 dB NF = \$500+ - Standard LNA: 2 dB NF = \$50 - Difference: 1.2
-dB sensitivity = 1.3\$\textbackslash times\$ range improvement
+\textbf{Cryogenic cooling}:
+\begin{itemize}
+\item Cooled LNA: 0.3 dB NF @ 20 K
+\item Room temp LNA: 1.5 dB NF @ 290 K
+\item Difference: 1.2 dB (worth it for deep space, not for WiFi!)
+\end{itemize}
 
-\textbf{Cryogenic cooling}: - Cooled LNA: 0.3 dB NF @ 20 K - Room temp
-LNA: 1.5 dB NF @ 290 K - Difference: 1.2 dB (worth it for deep space,
-not for WiFi!)
+\section{Applications}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{GPS Navigation}
 
-\subsection{Summary Table}\label{summary-table}
+GPS receivers require extreme sensitivity to detect weak signals from satellites:
+\begin{itemize}
+\item \textbf{System}: Global Navigation Satellite System
+\item \textbf{Signal level}: $-130$ to $-160$ dBm
+\item \textbf{LNA NF}: 2-3 dB typical
+\item \textbf{Key challenge}: Indoor reception requires $<3$ dB NF
+\item \textbf{Solution}: High-gain LNA at antenna, spread spectrum processing gain
+\end{itemize}
+
+\subsection{Satellite Communication Ground Stations}
+
+Professional earth stations demand ultra-low noise performance:
+\begin{itemize}
+\item \textbf{System}: DVB-S2, VSAT terminals
+\item \textbf{LNA NF}: 0.5-1.5 dB at feed
+\item \textbf{Operating frequency}: C-band (4-8 GHz), Ku-band (10-18 GHz)
+\item \textbf{Key challenge}: Rain fade requires link margin
+\item \textbf{Solution}: Cryogenic or premium GaAs HEMT LNAs
+\end{itemize}
+
+\subsection{Radio Astronomy}
+
+Radio telescopes detect extremely weak cosmic signals:
+\begin{itemize}
+\item \textbf{System}: Very Large Array (VLA), Arecibo
+\item \textbf{LNA NF}: 0.1-0.5 dB (cryogenically cooled to 15-20 K)
+\item \textbf{Key challenge}: Cosmic signals are $10^{-20}$ W level
+\item \textbf{Solution}: Cryogenic cooling, large collecting area, long integration times
+\end{itemize}
+
+\subsection{Deep Space Communications}
+
+NASA deep space missions push the limits of sensitivity:
+\begin{itemize}
+\item \textbf{System}: Voyager, Mars rovers, New Horizons
+\item \textbf{Ground station}: 70 m DSN dishes with $0.1$ dB NF
+\item \textbf{Distance}: Billions of kilometers
+\item \textbf{Key challenge}: Path loss exceeds 300 dB
+\item \textbf{Solution}: Maximum antenna gain, cryogenic LNAs, FEC coding
+\end{itemize}
+
+\section{Summary}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
@@ -867,40 +1003,42 @@ Shielding, filtering \\
 \end{longtable}
 }
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Key Performance Metrics}
 
-\subsection{Related Topics}\label{related-topics}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value/Description} \\
+\midrule
+Thermal noise floor & $-174$ dBm/Hz @ 290 K \\
+Typical LNA NF & 0.5-3 dB (depending on application) \\
+Cryogenic LNA NF & 0.1-0.5 dB @ 15-20 K \\
+Cable loss impact & Adds directly to system NF \\
+First-stage dominance & Per Friis formula \\
+G/T figure of merit & 10-60 dB/K (VSAT to observatory) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Critical Design Rules}
+
+\textbf{Golden rules for low-noise receiver design}:
+\begin{enumerate}
+\item \textbf{LNA location}: Place as close to antenna as possible
+\item \textbf{First-stage quality}: Invest in lowest NF LNA affordable
+\item \textbf{High gain}: 15-20 dB gain suppresses later stages
+\item \textbf{Avoid pre-LNA loss}: Every dB of loss before LNA adds directly to system NF
+\item \textbf{Temperature}: Cool LNA for critical applications (deep space, radio astronomy)
+\end{enumerate}
+
+\section{Further Reading}
 
 \begin{itemize}
-\tightlist
-\item
-  \textbf{{[}{[}Signal-to-Noise-Ratio-(SNR){]}{]}}: Determines BER
-  performance
-\item
-  \textbf{{[}{[}Complete-Link-Budget-Analysis{]}{]}}: Uses NF for
-  sensitivity
-\item
-  \textbf{{[}{[}Bit-Error-Rate-(BER){]}{]}}: Degrades with noise
-\item
-  \textbf{{[}{[}Energy-Ratios-(Es-N0-and-Eb-N0){]}{]}}: Normalized SNR
-  metrics
-\item
-  \textbf{{[}{[}Antenna-Theory-Basics{]}{]}}: Antenna noise temperature
-\item
-  \textbf{{[}{[}Free-Space-Path-Loss-(FSPL){]}{]}}: Path loss + noise
-  \$\textbackslash rightarrow\$ Link budget
+\item \textbf{Chapter \ref{ch:snr}}: Signal-to-Noise Ratio---relationship between noise and signal quality
+\item \textbf{Chapter \ref{ch:link-budget}}: Complete Link Budget Analysis---uses NF for sensitivity calculations
+\item \textbf{Chapter \ref{ch:ber}}: Bit Error Rate---how noise affects demodulation performance
+\item \textbf{Chapter \ref{ch:energy-ratios}}: Energy Ratios ($E_s/N_0$ and $E_b/N_0$)---normalized SNR metrics
+\item \textbf{Chapter \ref{ch:antenna}}: Antenna Theory---antenna noise temperature contributions
+\item \textbf{Chapter \ref{ch:fspl}}: Free-Space Path Loss---combining path loss and noise in link analysis
+\item \textbf{Chapter \ref{ch:awgn}}: AWGN Channel---theoretical noise model for performance analysis
 \end{itemize}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\textbf{Key takeaway}: \textbf{Noise limits receiver sensitivity.}
-Thermal noise floor = -174 dBm/Hz @ 290 K. Noise figure (NF) quantifies
-SNR degradation through receiver. Friis formula shows first stage (LNA)
-dominates total NF. Low-NF LNA at antenna, high gain, and minimal
-pre-LNA loss are critical. Sensitivity = Noise floor + NF + Required
-SNR. Lower noise = longer range, higher data rate, better reliability.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\emph{This wiki is part of the {[}{[}Home\textbar Chimera Project{]}{]}
-documentation.}
