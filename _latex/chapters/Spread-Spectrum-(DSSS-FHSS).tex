@@ -1,1167 +1,976 @@
-\section{Spread Spectrum (DSSS/FHSS)}\label{spread-spectrum-dsssfhss}
-
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
-
-\textbf{Spread spectrum is like whispering your secret across 100
-different frequencies at once-\/-\/-eavesdroppers hear random noise, but
-your friend with the right ``key'' combines all pieces to hear your
-message perfectly!}
-
-\textbf{The counterintuitive idea}: - \textbf{Normal radio}: Use narrow
-frequency band \$\textbackslash rightarrow\$ Efficient but vulnerable -
-\textbf{Spread spectrum}: Spread signal across WIDE band
-\$\textbackslash rightarrow\$ ``Wastes'' bandwidth but gains
-superpowers!
-
-\textbf{Three magic superpowers}:
-
-\textbf{1. Stealth} (Military origin): - Signal spread so thin it looks
-like background noise - Enemy can\textquotesingle t detect
-you\textquotesingle re transmitting - Can\textquotesingle t jam what you
-can\textquotesingle t find!
-
-\textbf{2. Anti-jamming} : - Jammer tries to block you
-\$\textbackslash rightarrow\$ You\textquotesingle re on 100 frequencies
-- They can only jam a few \$\textbackslash rightarrow\$ Other 95 get
-through! - Your receiver combines the survivors
-\$\textbackslash rightarrow\$ Message intact
-
-\textbf{3. Many users share spectrum} (CDMA): - Everyone transmits at
-same time, same band - Each person has unique spreading code - Your
-phone filters out everyone else\textquotesingle s signal - Like 20
-conversations in one room, different languages!
-
-\textbf{Two main flavors}:
-
-\textbf{DSSS (Direct Sequence Spread Spectrum)} - Used in GPS, CDMA:
-
-\textbf{Simple analogy - Speaking in code}: - Want to send: ``HI'' (2
-letters) - DSSS: Replace each letter with 100-letter code word - ``H''
-\$\textbackslash rightarrow\$ ``AJFKELQPZMVBX\textbackslash ldots\{\}''
-(100 random letters) - ``I'' \$\textbackslash rightarrow\$
-``QZMVPLAJFKEBX\textbackslash ldots\{\}'' (different 100 letters) -
-Transmit: 200 letters instead of 2! - \textbf{Your friend knows the
-code} \$\textbackslash rightarrow\$ decodes back to ``HI'' -
-\textbf{Eavesdropper hears}: Random gibberish
-
-\textbf{Real GPS example}: - GPS sends 1 bit - DSSS multiplies by
-1023-chip code (C/A code) - 1 bit \$\textbackslash rightarrow\$ 1023
-chips = 1000\$\textbackslash times\$ wider bandwidth! - Your GPS
-receiver knows the code \$\textbackslash rightarrow\$ extracts bit -
-Jammer tries to interfere \$\textbackslash rightarrow\$ Processing gain
-overcomes it
-
-\textbf{FHSS (Frequency Hopping Spread Spectrum)} - Used in Bluetooth,
-military:
-
-\textbf{Simple analogy - Hopscotch communication}: - Instead of one
-frequency, hop between 100 frequencies - Pattern: Freq 23
-\$\textbackslash rightarrow\$ 67 \$\textbackslash rightarrow\$ 12
-\$\textbackslash rightarrow\$ 89 \$\textbackslash rightarrow\$
-45\textbackslash ldots\{\} (changes 1000\$\textbackslash times\$ per
-second!) - \textbf{Your friend knows hop pattern}
-\$\textbackslash rightarrow\$ follows you, receives message -
-\textbf{Eavesdropper}: By time they tune to Freq 23,
-you\textquotesingle re on 89! - \textbf{Jammer}: Can\textquotesingle t
-jam all frequencies at once
-
-\textbf{Real Bluetooth example}: - 79 channels between 2.4-2.48 GHz -
-Hops 1600 times per second (every 625 \$\textbackslash mu\$s) -
-Pseudorandom sequence (appears random, but deterministic) - Paired
-devices know hop pattern \$\textbackslash rightarrow\$ stay synchronized
-- Interference on one channel? Just skip it!
-
-\textbf{Real-world examples you use daily}:
-
-\textbf{GPS} (DSSS): - Satellites transmit at 1575 MHz - Spread across 2
-MHz bandwidth (1000\$\textbackslash times\$ wider than data rate!) -
-\textbf{Processing gain}: 30 dB \$\textbackslash rightarrow\$ Works even
-below noise floor! - This is why GPS works indoors (barely) and
-everywhere
-
-\textbf{WiFi} (DSSS for 802.11b): - 11 Mbps data rate - Spread across 22
-MHz (Barker code or CCK) - Older WiFi standard, mostly replaced by OFDM
-
-\textbf{Bluetooth} (FHSS): - Hops 1600 times/second across 79 channels -
-\textbf{Interference avoidance}: Microwave oven blocks some channels?
-Skip them! - \textbf{Multiple devices}: Different hop patterns, no
-collision - This is why Bluetooth ``pairs'' (exchanges hop sequence)
-
-\textbf{CDMA cell phones} (DSSS): - All users transmit simultaneously,
-same band - Each user: unique spreading code (Walsh codes) - Tower
-separates users by code (not frequency/time!) - Retired in US (Verizon),
-still used in some countries
-
-\textbf{Military radios} (Both DSSS \& FHSS): - Can\textquotesingle t be
-jammed (spread too wide) - Can\textquotesingle t be detected (looks like
-noise) - Can\textquotesingle t be intercepted (need secret code) - Some
-systems hop 10,000+ times per second!
-
-\textbf{The math magic - Processing gain}:
-
-\textbf{Shannon says}: Can trade bandwidth for SNR
-
-\begin{verbatim}
-More bandwidth  Can work at lower SNR
-\end{verbatim}
-
-\textbf{Example}: - Narrowband needs: 10 dB SNR - Spread
-100\$\textbackslash times\$ wider \$\textbackslash rightarrow\$ Only
-need: -20 dB SNR! - \textbf{Can receive signals weaker than noise!}
-
-\textbf{Processing gain} = 10 \$\textbackslash times\$
-log\textbackslash textsubscript\{1\}\textbackslash textsubscript\{0\}(Spread
-factor) - Spread 100\$\textbackslash times\$
-\$\textbackslash rightarrow\$ 20 dB gain - Spread
-1000\$\textbackslash times\$ \$\textbackslash rightarrow\$ 30 dB gain
-(GPS) - This is why GPS works indoors!
-
-\textbf{Why ``spread'' helps against jamming}:
-
-\textbf{Scenario}: Enemy jammer - Jammer power: 100 W across 1 MHz -
-Your signal: 1 W spread across 100 MHz - At each 1 MHz slice: Your
-signal = 0.01 W - \textbf{Looks like}: Jammer
-100\$\textbackslash times\$ stronger! - \textbf{But}: Your receiver
-de-spreads \$\textbackslash rightarrow\$ combines 100 slices -
-\textbf{Result}: Your signal = 1 W, Jammer still 100 W in 1 slice -
-\textbf{Effective}: 10:1 ratio \$\textbackslash rightarrow\$ You win!
-
-\textbf{The coding requirement}:
-
-\textbf{Both sides must know}: - \textbf{DSSS}: The spreading code
-(sequence of chips) - \textbf{FHSS}: The hopping pattern (sequence of
-frequencies)
-
-\textbf{Synchronization critical}: - Receiver must align perfectly with
-transmitter - GPS: Searches for code phase (expensive!) - Bluetooth:
-Pairing exchanges hop pattern + timing
-
-\textbf{Trade-offs}:
-
-\textbf{Advantages}: - Interference resistance - Anti-jamming -
-Privacy/security - Multiple access (CDMA) - Multipath resistance - Works
-below noise floor
-
-\textbf{Disadvantages}: - ``Wastes'' bandwidth
-(100-1000\$\textbackslash times\$ more!) - Complex processing (high
-power consumption) - Synchronization required (acquisition time) -
-Near-far problem (CDMA)
-
-\textbf{Historical origin - WWII innovation}:
-
-\textbf{Hedy Lamarr} (yes, the Hollywood actress!): - Co-invented
-frequency hopping (1942) - \textbf{Purpose}: Torpedo control immune to
-jamming - Patent ignored until 1960s - \textbf{Now}: Foundation of
-Bluetooth, WiFi, military comms - She was brilliant engineer + movie
-star!
-
-\textbf{Fun fact}: GPS signals arriving at Earth are about \textbf{-130
-dBm} (10\^{}-16 watts), which is \textbf{20 dB below the noise
-floor}-\/-\/-weaker than the background noise! Only because of DSSS
-spread spectrum with 30 dB processing gain can your phone extract the
-signal. It\textquotesingle s like hearing a whisper in a crowded stadium
-by having 1000 microphones and combining them perfectly!
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\textbf{Spread spectrum} techniques intentionally spread a narrowband
-signal across a much wider bandwidth. Originally developed for military
-anti-jamming communications, spread spectrum now powers GPS, Bluetooth,
-WiFi, CDMA cellular, and countless other systems.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Core
-Philosophy}{ Core Philosophy}}\label{core-philosophy}
-
-\textbf{Conventional wisdom}: Use minimal bandwidth to maximize spectral
-efficiency.
-
-\textbf{Spread spectrum approach}: \textbf{Deliberately waste bandwidth}
-to gain: - \textbf{Low Probability of Intercept (LPI)}: Signal appears
-as noise to unintended receivers - \textbf{Low Probability of Detection
-(LPD)}: Hard to detect presence of transmission - \textbf{Anti-jamming
-(AJ)}: Processing gain overcomes interference - \textbf{Multiple
-access}: Many users share same band (CDMA) - \textbf{Multipath
-resistance}: Wideband signals resolve path delays
-
-\textbf{Shannon\textquotesingle s insight}: Trading bandwidth for SNR is
-mathematically sound:
-
-\begin{verbatim}
-C = B · log(1 + SNR)
-
-Increase B by 100×  can tolerate SNR 100× lower (20 dB worse!)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Processing
-Gain}{ Processing Gain}}\label{processing-gain}
-
-The fundamental metric for spread spectrum performance.
-
-\subsubsection{Definition}\label{definition}
-
-\begin{verbatim}
-Processing Gain (G) = Spread Bandwidth / Information Bandwidth
-                      = BW_spread / BW_info
-                      = Chip Rate / Bit Rate
-
-In dB:
-G(dB) = 10 · log(BW_spread / BW_info)
-\end{verbatim}
-
-\subsubsection{Physical Meaning}\label{physical-meaning}
-
-\textbf{Processing gain = SNR improvement after despreading}:
-
-\begin{verbatim}
-SNR_output = SNR_input + G(dB)
-
-Example:
-- Input SNR: -10 dB (signal 10× weaker than noise!)
-- Processing gain: 30 dB (spread by 1000×)
-- Output SNR: 20 dB (clean signal)
-\end{verbatim}
-
-\textbf{At receiver}: - Desired signal: Despread
-\$\textbackslash rightarrow\$ collapses to narrowband
-\$\textbackslash rightarrow\$ \textbf{gains
-G\textbackslash textsubscript\{p\}} - Noise/interference: Remains spread
-\$\textbackslash rightarrow\$ filtered out \$\textbackslash rightarrow\$
-\textbf{loses G\textbackslash textsubscript\{p\}}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Direct Sequence Spread Spectrum
-(DSSS)}{ Direct Sequence Spread Spectrum (DSSS)}}\label{direct-sequence-spread-spectrum-dsss}
-
-\subsubsection{How DSSS Works}\label{how-dsss-works}
-
-\textbf{Transmitter}: 1. Data bit (slow): \$\textbackslash pm\$1 at rate
-R_{b} 2. Multiply by \textbf{spreading code} (fast): \$\textbackslash pm\$1
-sequence at rate R \textgreater\textgreater{} R_{b} 3. Result: Wideband
-``chips'' transmitted
-
-\begin{verbatim}
-Data bit:         1        0        1
-                +----+   +----+   +----+
-                |    |___|    |___|    |
-                
-Spreading code: 1 0 1 1 0 1 0 0 1 1 1 0 ...
-                ++ ++++ ++ ++++++++ ++  (fast chips)
-                
-TX signal:      Product of data × code
-\end{verbatim}
-
-\textbf{Key parameters}:
-
-\begin{verbatim}
-- Chip rate (R): e.g., 10 Mcps (chips/second)
-- Bit rate (R_{b}): e.g., 10 kbps
-- Spreading factor (SF): R/R_{b} = 1000
-- Processing gain: 10·log(1000) = 30 dB
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Spreading Codes (PN
-Sequences)}\label{spreading-codes-pn-sequences}
-
-\textbf{Requirements}: - \textbf{Pseudorandom}: Appears random but
-deterministic (generated from seed) - \textbf{Autocorrelation}: Sharp
-peak at zero lag, low elsewhere - \textbf{Cross-correlation}: Low
-correlation between different codes (for CDMA) - \textbf{Balance}: Equal
-number of 1s and 0s
-
-\textbf{Common codes}:
-
-\textbf{1. Maximal-Length Sequences (m-sequences)}:
-
-\begin{verbatim}
-Generated by Linear Feedback Shift Register (LFSR):
-
-   +-----+  +-----+  +-----+
-   | D  || D  || D  | Output
-   +----+  +-----+  +----+
-      |                  |
-      +-----------------+
-         (XOR feedback)
-
-Properties:
-- Period: 2 - 1 (for n-stage LFSR)
-- Example: 7-stage  period = 127 chips
-- Good autocorrelation, poor cross-correlation
-\end{verbatim}
-
-\textbf{2. Gold Codes}:
-
-\begin{verbatim}
-XOR two m-sequences with specific phase shifts
-
-Gold Code = m-seq  m-seq
-
-Properties:
-- Set of 2 + 1 codes (from n-stage LFSR)
-- Good autocorrelation AND cross-correlation
-- Used in GPS C/A code (1023-chip Gold codes)
-\end{verbatim}
-
-\textbf{3. Walsh-Hadamard Codes}:
-
-\begin{verbatim}
-Orthogonal codes (zero cross-correlation):
-
-H = [1]
-
-H = [1  1]     H = [1  1  1  1]
-     [1 -1]          [1 -1  1 -1]
-                     [1  1 -1 -1]
-                     [1 -1 -1  1]
-
-Properties:
-- Perfectly orthogonal (theoretical CDMA)
-- Length = powers of 2
-- Used in IS-95 CDMA (64-chip Walsh)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{DSSS Receiver (Matched
-Filter)}\label{dsss-receiver-matched-filter}
-
-\textbf{Despreading}:
-
-\begin{verbatim}
-RX signal = (Data × Code) + Noise
-          Multiply by same code
-         = Data × Code × Code + Noise × Code
-         = Data × 1 + Noise × Code
-         = Data + (Noise spread across bandwidth)
-          Integrate over chip period
-         = Data (narrowband) + Filtered noise (reduced by G)
-\end{verbatim}
-
-\textbf{Correlation receiver}:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ dsss\_receiver(rx\_signal, spreading\_code):}
-    \CommentTok{"""}
-\CommentTok{    Despread DSSS signal.}
-\CommentTok{    }
-\CommentTok{    Args:}
-\CommentTok{        rx\_signal: Received wideband signal (sampled at chip rate)}
-\CommentTok{        spreading\_code: Known spreading code (±1)}
-\CommentTok{    }
-\CommentTok{    Returns:}
-\CommentTok{        Despread data bits}
-\CommentTok{    """}
-    \CommentTok{\# Multiply by local replica of code}
-\NormalTok{    despread }\OperatorTok{=}\NormalTok{ rx\_signal }\OperatorTok{*}\NormalTok{ spreading\_code}
-    
-    \CommentTok{\# Integrate over spreading period (matched filter)}
-\NormalTok{    N\_chips }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(spreading\_code)}
-\NormalTok{    data\_bits }\OperatorTok{=}\NormalTok{ []}
-    
-    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{0}\NormalTok{, }\BuiltInTok{len}\NormalTok{(despread), N\_chips):}
-\NormalTok{        bit\_energy }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(despread[i:i}\OperatorTok{+}\NormalTok{N\_chips])}
-\NormalTok{        data\_bits.append(}\DecValTok{1} \ControlFlowTok{if}\NormalTok{ bit\_energy }\OperatorTok{\textgreater{}} \DecValTok{0} \ControlFlowTok{else} \DecValTok{0}\NormalTok{)}
-    
-    \ControlFlowTok{return}\NormalTok{ np.array(data\_bits)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{DSSS Example: GPS C/A
-Code}\label{dsss-example-gps-ca-code}
-
-\textbf{GPS L1 C/A (Coarse/Acquisition)}:
-
-\begin{verbatim}
-Carrier: 1575.42 MHz
-Chip rate: 1.023 Mcps
-Code: 1023-chip Gold code (repeats every 1 ms)
-Bit rate: 50 bps (navigation message)
-Processing gain: 10·log(1.023 MHz / 50 Hz) = 43 dB
-
-Each satellite: Unique Gold code
-- SV 1: PRN 1 (specific Gold code)
-- SV 2: PRN 2 (different Gold code)
-- ... 32 satellites
-
-Reception:
-- Signal at antenna: -130 dBm (20 dB below noise floor!)
-- After despreading: -87 dBm (above noise)
-- C/N (carrier-to-noise density): 45 dB-Hz (typical)
-\end{verbatim}
-
-\textbf{Code generation} (PRN 1 example):
-
-\begin{verbatim}
-G1 LFSR: taps [3, 10] (1-indexed)
-G2 LFSR: taps [2, 3, 6, 8, 9, 10]
-PRN 1 = G1  (G2 delayed by specific phase)
-
-Result: 1023-chip sequence, e.g.:
-1 1 0 1 0 1 1 0 0 0 1 0 1 0 1 ... (repeats)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{CDMA (Code Division Multiple
-Access)}\label{cdma-code-division-multiple-access}
-
-\textbf{Concept}: Multiple users transmit simultaneously on same
-frequency, distinguished by spreading codes.
-
-\begin{verbatim}
-User 1: Data × Code ----+
-User 2: Data × Code ----+   Channel  Receiver
-User 3: Data × Code ----+
-
-Receiver (for User 1):
-RX × Code  Integrates  Extracts Data
-           (Code, Code appear as noise due to low cross-correlation)
-\end{verbatim}
-
-\textbf{Capacity (IS-95 CDMA)}:
-
-\begin{verbatim}
-N_users  (G / (Eb/N)_required) · (1 + F)
-
+\chapter{Spread Spectrum (DSSS \& FHSS)}
+\label{ch:spread-spectrum}
+
+\begin{nontechnical}
+\textbf{Spread spectrum is like whispering your secret across 100 different frequencies at once}---eavesdroppers hear random noise, but your friend with the right ``key'' combines all pieces to hear your message perfectly!
+
+\textbf{The counterintuitive idea:}
+\begin{itemize}
+\item \textbf{Normal radio:} Use narrow frequency band $\rightarrow$ Efficient but vulnerable
+\item \textbf{Spread spectrum:} Spread signal across WIDE band $\rightarrow$ ``Wastes'' bandwidth but gains superpowers!
+\end{itemize}
+
+\textbf{Three magic superpowers:}
+
+\textbf{1. Stealth} (Military origin):
+\begin{itemize}
+\item Signal spread so thin it looks like background noise
+\item Enemy can't detect you're transmitting
+\item Can't jam what you can't find!
+\end{itemize}
+
+\textbf{2. Anti-jamming:}
+\begin{itemize}
+\item Jammer tries to block you $\rightarrow$ You're on 100 frequencies
+\item They can only jam a few $\rightarrow$ Other 95 get through!
+\item Your receiver combines the survivors $\rightarrow$ Message intact
+\end{itemize}
+
+\textbf{3. Many users share spectrum} (CDMA):
+\begin{itemize}
+\item Everyone transmits at same time, same band
+\item Each person has unique spreading code
+\item Your phone filters out everyone else's signal
+\item Like 20 conversations in one room, different languages!
+\end{itemize}
+
+\textbf{Real examples:}
+
+\textbf{GPS} sends signals at $-130$~dBm---20~dB \textbf{below the noise floor}! Only 30~dB processing gain makes this possible.
+
+\textbf{Bluetooth} hops 1600 times/second across 79 channels. Microwave oven blocks some? Skip them!
+
+\textbf{Military radios} hop 10,000+ times/second, making them impossible to jam or detect.
+
+\textbf{Fun fact:} Hollywood actress Hedy Lamarr co-invented frequency hopping in 1942 for torpedo control. Her patent now powers Bluetooth and WiFi!
+\end{nontechnical}
+
+\section{Overview}
+
+\textbf{Spread spectrum} techniques intentionally spread a narrowband signal across a much wider bandwidth than required for data transmission. Originally developed for military anti-jamming communications in the 1940s, spread spectrum now powers GPS, Bluetooth, WiFi, CDMA cellular, and countless other modern wireless systems.
+
+\begin{keyconcept}
+Spread spectrum trades \textbf{bandwidth for robustness}. By spreading a signal across 100--1000$\times$ more bandwidth than necessary, systems gain \textbf{processing gain} ($G_p$) that enables:
+\begin{itemize}
+\item Anti-jamming (AJ) capability
+\item Low probability of intercept (LPI)
+\item Operation below the noise floor
+\item Multiple access (CDMA)
+\item Multipath resistance
+\end{itemize}
+\end{keyconcept}
+
+\textbf{Core philosophy:}
+\begin{itemize}
+\item \textbf{Conventional approach:} Minimize bandwidth for spectral efficiency
+\item \textbf{Spread spectrum:} Deliberately ``waste'' bandwidth for robustness
+\end{itemize}
+
+Shannon's capacity formula justifies this tradeoff:
+\begin{equation}
+C = B \log_2(1 + \mathrm{SNR})
+\end{equation}
 where:
-- G = processing gain
-- (Eb/N)_required = SNR needed for target BER
-- F = frequency reuse factor (typically 0.6-0.85)
+\begin{itemize}
+\item $C$ = channel capacity (bits/second)
+\item $B$ = bandwidth (Hz)
+\item $\mathrm{SNR}$ = signal-to-noise ratio (linear)
+\end{itemize}
 
-Example:
-- G = 21 dB (126)
-- (Eb/N)_required = 7 dB (5) for 1% BER
-- F = 0.67
-- N_users  126 / 5 × 1.67  42 users per cell
-\end{verbatim}
+Increasing bandwidth $B$ allows operation at proportionally lower SNR while maintaining data rate $C$.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Processing Gain}
 
-\subsection{\texorpdfstring{ Frequency Hopping Spread Spectrum
-(FHSS)}{ Frequency Hopping Spread Spectrum (FHSS)}}\label{frequency-hopping-spread-spectrum-fhss}
+The fundamental metric for spread spectrum performance is \textbf{processing gain} ($G_p$).
 
-\subsubsection{How FHSS Works}\label{how-fhss-works}
+\subsection{Definition}
 
-\textbf{Transmitter}: Rapidly switches carrier frequency according to a
-pseudorandom pattern.
-
-\begin{verbatim}
-Time 
-Frequency
-    
-f  |                
-f  |            
-f  |                   
-f  |               
-f  |                      
-    +-------------------------
-
-Each block = "hop" (dwell time)
-Pattern known only to TX/RX
-\end{verbatim}
-
-\textbf{Key parameters}:
-
-\begin{verbatim}
-- Hop rate: e.g., 1600 hops/second (Bluetooth)
-- Dwell time: Time per frequency (e.g., 625 s)
-- Hop set: Available frequencies (e.g., 79 channels)
-- Hop sequence: Pseudorandom pattern
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{FHSS Variants}\label{fhss-variants}
-
-\textbf{1. Fast Hopping (FH)}:
-
-\begin{verbatim}
-Multiple hops per data symbol
-
-Example:
-Symbol duration: 10 ms
-Hop duration: 1 ms
- 10 hops per symbol
-
-Advantage: Diversity against narrowband interference
-\end{verbatim}
-
-\textbf{2. Slow Hopping (SH)}:
-
-\begin{verbatim}
-Multiple symbols per hop
-
-Example:
-Hop duration: 10 ms
-Symbol duration: 1 ms
- 10 symbols per hop
-
-Advantage: Simpler synchronization
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{FHSS Example: Bluetooth}\label{fhss-example-bluetooth}
-
-\textbf{Bluetooth Classic (BR/EDR)}:
-
-\begin{verbatim}
-Frequency: 2.4 GHz ISM band
-Hop set: 79 channels (1 MHz spacing, 2.402-2.480 GHz)
-Hop rate: 1600 hops/second
-Dwell time: 625 s
-Modulation: GFSK (Gaussian FSK)
-Data rate: 1 Mbps (BR), 2-3 Mbps (EDR)
-
-Hopping pattern:
-- Derived from master device address + clock
-- Pseudorandom over all 79 channels
-- Adaptive Frequency Hopping (AFH): Avoids WiFi channels
-
-Multi-user:
-- Piconet: Master + up to 7 slaves
-- Each piconet: Unique hopping pattern
-- Scatternets: Overlapping piconets
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{FHSS vs.~DSSS}\label{fhss-vs.-dsss}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3000}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Aspect
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-DSSS
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-FHSS
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Spreading Method} & Multiply by fast code & Hop carrier
-frequency \\
-\textbf{Bandwidth} & Continuous wide & Instantaneous narrow, wide over
-time \\
-\textbf{Processing Gain} & Chip rate / Bit rate & Hop set size \\
-\textbf{Anti-Jam} & High (averages interference) & Moderate (avoids
-interference) \\
-\textbf{Multipath} & Good (path resolution) & Poor (frequency-flat per
-hop) \\
-\textbf{Complexity} & Moderate (correlator) & Low (frequency
-synthesizer) \\
-\textbf{Multiple Access} & CDMA (code separation) & FDMA/TDMA (time/freq
-separation) \\
-\textbf{Near-Far Problem} & Severe (power control needed) & Minimal \\
-\textbf{Standards} & GPS, CDMA, WiFi DSSS (legacy) & Bluetooth, military
-TRANSEC \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Military
-Applications}{ Military Applications}}\label{military-applications}
-
-Spread spectrum was \textbf{born for military use} (1940s-1950s).
-
-\subsubsection{Low Probability of Intercept
-(LPI)}\label{low-probability-of-intercept-lpi}
-
-\textbf{Goal}: Enemy cannot detect transmission.
-
-\begin{verbatim}
-Signal power spread across wide bandwidth:
-Power Spectral Density (PSD)  Power / Bandwidth
-
-Example:
-- Narrowband: 1 W / 10 kHz = 100 mW/kHz (easily detected)
-- DSSS spread: 1 W / 10 MHz = 0.1 mW/kHz (below noise floor!)
-
-Detection threshold:
-PSD_signal < PSD_noise  undetectable to wideband receiver
-\end{verbatim}
-
-\textbf{Processing gain provides concealment}:
-
-\begin{verbatim}
-If G = 30 dB, signal can be 30 dB below noise and still decoded.
-Enemy without spreading code sees only noise.
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Low Probability of Detection
-(LPD)}\label{low-probability-of-detection-lpd}
-
-\textbf{Goal}: Enemy cannot tell if transmission is occurring.
-
-\textbf{Techniques}: 1. \textbf{Below noise floor}: PSD \textless{}
-thermal noise (-174 dBm/Hz) 2. \textbf{Randomized patterns}: Avoid
-periodic structures 3. \textbf{Frequency diversity}: FHSS over wide
-bands 4. \textbf{Short bursts}: Minimize dwell time
-
-\textbf{Example: MILSTAR FHSS}:
-
-\begin{verbatim}
-- X-band (7-8 GHz) satellite uplink
-- Hops across 1 GHz bandwidth
-- Dwell time: <1 ms
-- Total detection probability: <1% for enemy wideband receiver
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Anti-Jamming (AJ)}\label{anti-jamming-aj}
-
-\textbf{Jamming scenarios}:
-
-\textbf{1. Barrage Jamming} (wideband noise):
-
-\begin{verbatim}
-Jammer spreads power across entire band  processing gain helps:
-
-J/S = Jammer Power / Signal Power (at antenna)
-J/S_despread = (J/S) / G (after despreading)
-
-Example:
-- J/S = 20 dB (jammer 100× stronger)
-- G = 30 dB
-- J/S_despread = 20 - 30 = -10 dB (signal 10× stronger than jammer!)
-
-Margin = G - J/S - (Eb/N)_required
-        = 30 - 20 - 7 = 3 dB (link survives)
-\end{verbatim}
-
-\textbf{2. Partial-Band Jamming}:
-
-\begin{verbatim}
-Jammer concentrates on fraction  of bandwidth:
-PSD_jammer increases by 1/  FHSS excels (hops to unjammed frequencies)
-
-DSSS: Averages jammer over full bandwidth  degradation proportional to 
-FHSS: Hops avoid jammer (1-) fraction of time  better performance
-\end{verbatim}
-
-\textbf{3. Follower Jamming} (FHSS target):
-
-\begin{verbatim}
-Jammer tries to detect hop and jam that frequency.
-Countermeasure: Fast hopping (enemy can't track) + adaptive hopping
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{GPS M-Code (Military)}\label{gps-m-code-military}
-
-\textbf{GPS L1/L2 M-Code} (post-2005):
-
-\begin{verbatim}
-Modulation: BOC(10,5) - Binary Offset Carrier
-Chip rate: 5.115 Mcps (vs. 1.023 Mcps for C/A)
-Processing gain: ~50 dB (vs. 43 dB for C/A)
-Security: Encrypted, authenticated (NSA-controlled keys)
-
-BOC modulation:
-- Square wave subcarrier at 10.23 MHz (double-sideband)
-- Spread by 5.115 Mcps code
-- Split-spectrum: Power at ±10.23 MHz from carrier
-- Advantage: Minimal interference with C/A code (different spectrum)
-
-Anti-jam margin:
-- Jammer-to-signal ratio (J/S): Up to 60 dB tolerated
-- Allows GPS reception even under strong jamming
-- Critical for precision-guided weapons, military aviation
-\end{verbatim}
-
-\textbf{Example}:
-
-\begin{verbatim}
-Received signal power: -163 dBW (M-code)
-Jammer power at receiver: -100 dBW (stronger!)
-J/S = -100 - (-163) = 63 dB
-
-Processing gain: 50 dB
-Residual J/S after despreading: 63 - 50 = 13 dB
-Required (Eb/N): 10 dB (M-code robust modulation)
-
-Margin: 50 - 63 - 10 = -23 dB  **LINK FAILS**
-
-Countermeasure: Directional antenna (20 dB gain toward sky, null toward jammer)
-Effective J/S: 63 - 20 = 43 dB
-Margin: 50 - 43 - 10 = -3 dB  **MARGINAL**
-
-Additional: Adaptive antenna array (CRPA)  30-40 dB jamming suppression
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Link 16 (JTIDS - Joint Tactical Information Distribution
-System)}\label{link-16-jtids---joint-tactical-information-distribution-system}
-
-\textbf{NATO/US military data link} for coordinated operations.
-
-\textbf{Architecture}:
-
-\begin{verbatim}
-Frequency: 960-1215 MHz (L-band)
-Modulation: MSK (Minimum Shift Keying) - constant envelope
-Waveform: 51 frequency channels, FHSS + TDMA
-Hop rate: 70,000 hops/second (14.3 s per hop)
-Security: Time-varying encryption (KG-40 key generator)
-Data rate: 31.6 kbps (voice), 57.6-115.2 kbps (data)
-
-Network:
-- TDMA: 128 time slots per 12 seconds
-- Each participant assigned slots
-- Collision-free multiple access
-- Nodes: Aircraft, ships, ground stations
-\end{verbatim}
-
-\textbf{TRANSEC (Transmission Security)}:
-
-\begin{verbatim}
-Hopping pattern: Cryptographically secured
-- Changes every 12 seconds (epoch)
-- Synchronized via GPS time
-- Enemy cannot predict next hop
-
-Result:
-- LPI/LPD: Signal appears as brief noise burst
-- AJ: Hops faster than jammer can follow
-- Covertness: No fixed frequency to monitor
-\end{verbatim}
-
-\textbf{Applications}:
-
-\begin{verbatim}
-- Fighter jets: Share target tracks (Link 16 "picture")
-- AWACS: Distribute surveillance data
-- Aegis ships: Coordinate air defense
-- Ground units: Tactical situational awareness
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Commercial
-Applications}{ Commercial Applications}}\label{commercial-applications}
-
-\subsubsection{WiFi 802.11b (DSSS
-Legacy)}\label{wifi-802.11b-dsss-legacy}
-
-\textbf{1999-era WiFi}:
-
-\begin{verbatim}
-Frequency: 2.4 GHz ISM
-Chip rate: 11 Mcps (Barker code)
-Bit rate: 1-11 Mbps
-Spreading: 11-chip Barker sequence (for 1-2 Mbps)
-Processing gain: 10.4 dB (11 Mcps / 1 Mbps)
-
-Barker Code (length 11):
-+1 -1 +1 +1 -1 +1 +1 +1 -1 -1 -1
-
-Autocorrelation:
-Peak: 11 (at zero lag)
-Sidelobes: 1 (excellent!)
-
-Higher rates (5.5, 11 Mbps):
-- CCK (Complementary Code Keying) - not true DSSS
-- Phase modulation with 8-chip codes
-\end{verbatim}
-
-\textbf{Obsolescence}:
-
-\begin{verbatim}
-802.11g (2003): OFDM replaces DSSS (higher spectral efficiency)
-Legacy DSSS: Still supported for backward compatibility
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{LoRa (Long Range)}\label{lora-long-range}
-
-\textbf{IoT spread spectrum} for low-power wide-area networks.
-
-\begin{verbatim}
-Modulation: Chirp Spread Spectrum (CSS) - not DSSS or FHSS!
-Frequencies: 902-928 MHz (US), 863-870 MHz (EU)
-Bandwidth: 125, 250, 500 kHz
-Spreading Factor: 7-12 (SF7 = 128 chips/symbol, SF12 = 4096)
-
-Processing gain:
-G = 10·log(SF) = 8.5-10.8 dB (SF7-SF12)
-
-Range: Up to 15 km rural, 2-5 km urban
-Data rate: 0.3-50 kbps (inversely proportional to SF)
-Power: <100 mW TX, <50 mA RX
-Battery life: Years on coin cell
-\end{verbatim}
-
-\textbf{Chirp modulation}:
-
-\begin{verbatim}
-Frequency sweeps linearly over bandwidth:
-
-f(t) = f + (BW/T)·t
-
-Up-chirp:    (frequency increases)
-Down-chirp:  (frequency decreases)
-
-Data encoded by initial frequency offset:
-Symbol value = starting frequency of chirp
-
-Advantage: Robust to Doppler, multipath, noise (like DSSS benefits)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Performance
-Analysis}{ Performance Analysis}}\label{performance-analysis}
-
-\subsubsection{BER in AWGN Channel
-(DSSS-BPSK)}\label{ber-in-awgn-channel-dsss-bpsk}
-
-\begin{verbatim}
-BER = Q((2·Eb/N))
-
+Processing gain is the ratio of spread bandwidth to information bandwidth:
+\begin{equation}
+G_p = \frac{B_{\mathrm{spread}}}{B_{\mathrm{info}}} = \frac{R_c}{R_b}
+\end{equation}
 where:
-Eb/N = (Signal Power / Bit Rate) / (Noise Power / Bandwidth)
-      = (S/N) · (BW / Bit Rate)
-      = (S/N) · G
+\begin{itemize}
+\item $B_{\mathrm{spread}}$ = spread bandwidth (Hz)
+\item $B_{\mathrm{info}}$ = information bandwidth (Hz)
+\item $R_c$ = chip rate (chips/second)
+\item $R_b$ = bit rate (bits/second)
+\end{itemize}
 
-Example:
-- S/N = -10 dB (0.1 linear) - signal below noise!
-- G = 30 dB (1000 linear)
-- Eb/N = 0.1 × 1000 = 100 (20 dB)
-- BER = Q(40)  Q(6.3)  10¹ (excellent!)
-\end{verbatim}
+In decibels:
+\begin{equation}
+G_p\,[\mathrm{dB}] = 10\log_{10}\left(\frac{B_{\mathrm{spread}}}{B_{\mathrm{info}}}\right)
+\end{equation}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Physical Meaning}
 
-\subsubsection{Jamming Margin}\label{jamming-margin}
+Processing gain represents the \textbf{SNR improvement} after despreading at the receiver:
+\begin{equation}
+\mathrm{SNR}_{\mathrm{out}} = \mathrm{SNR}_{\mathrm{in}} + G_p\,[\mathrm{dB}]
+\end{equation}
 
-\begin{verbatim}
-Jamming Margin (dB) = G - (J/S) - (Eb/N)_req - Losses
+\textbf{At the receiver:}
+\begin{itemize}
+\item \textbf{Desired signal:} Despreads $\rightarrow$ collapses to narrowband $\rightarrow$ \textbf{gains} $G_p$
+\item \textbf{Noise/interference:} Remains spread $\rightarrow$ filtered out $\rightarrow$ \textbf{loses} $G_p$
+\end{itemize}
 
+\begin{calloutbox}{Example: GPS Processing Gain}
+GPS C/A code parameters:
+\begin{itemize}
+\item Chip rate: $R_c = 1.023$ Mcps
+\item Bit rate: $R_b = 50$ bps (navigation message)
+\item Processing gain: $G_p = 10\log_{10}(1.023 \times 10^6 / 50) = 43$ dB
+\end{itemize}
+
+A GPS signal at $-130$~dBm (20~dB below noise floor at $-110$~dBm) becomes:
+$$\mathrm{SNR}_{\mathrm{out}} = -20\,\mathrm{dB} + 43\,\mathrm{dB} = 23\,\mathrm{dB}$$
+This is sufficient for reliable detection with BER $< 10^{-6}$.
+\end{calloutbox}
+
+\section{Direct Sequence Spread Spectrum (DSSS)}
+
+DSSS spreads the signal by multiplying the data by a high-rate pseudorandom sequence called a \textbf{spreading code} or \textbf{PN sequence}.
+
+\subsection{Transmitter Operation}
+
+The DSSS transmitter consists of three stages:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.5cm,
+  font=\small
+]
+\node (input) {\sffamily Data\\$d_n \in \{0,1\}$};
+\node[block, right of=input, node distance=3cm] (nrz) {NRZ\\Encoder};
+\node[block, right of=nrz, node distance=3.5cm] (mult) {Multiplier\\$\times$};
+\node[block, right of=mult, node distance=3.5cm] (mod) {BPSK\\Modulator};
+\node[right of=mod, node distance=3cm] (output) {\sffamily TX\\Signal};
+
+\node[below of=mult, node distance=1.5cm, font=\small, align=center] (code) {PN Code\\$c(t) \in \{\pm 1\}$};
+
+\draw[->,thick] (input) -- (nrz);
+\draw[->,thick] (nrz) -- node[above,font=\scriptsize] {$b_n \in \{\pm 1\}$} (mult);
+\draw[->,thick] (code) -- (mult);
+\draw[->,thick] (mult) -- node[above,font=\scriptsize] {$s_b(t)$} (mod);
+\draw[->,thick] (mod) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Mathematical description:}
+\begin{equation}
+s(t) = A b_n c(t) \cos(2\pi f_c t)
+\end{equation}
 where:
-- G = processing gain
-- J/S = jammer-to-signal ratio
-- (Eb/N)_req = required SNR for target BER
-- Losses = implementation losses (typically 2-3 dB)
-
-Positive margin  link survives jamming
-Negative margin  link fails
-
-Example (GPS C/A):
-- G = 43 dB
-- J/S = 40 dB (jammer at receiver)
-- (Eb/N)_req = 10 dB (for BER = 10)
-- Losses = 2 dB
-- Margin = 43 - 40 - 10 - 2 = -9 dB  **LINK FAILS**
-
-Mitigation: Directional antenna (+20 dB toward satellite)
-Effective J/S = 40 - 20 = 20 dB
-Margin = 43 - 20 - 10 - 2 = 11 dB  **LINK SURVIVES**
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Python Implementation
-Examples}{ Python Implementation Examples}}\label{python-implementation-examples}
-
-\subsubsection{DSSS Transmitter \&
-Receiver}\label{dsss-transmitter-receiver}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-
-\KeywordTok{def}\NormalTok{ generate\_pn\_sequence(n, seed}\OperatorTok{=}\DecValTok{1}\NormalTok{):}
-    \CommentTok{"""}
-\CommentTok{    Generate pseudorandom sequence using LFSR (m{-}sequence).}
-\CommentTok{    }
-\CommentTok{    Args:}
-\CommentTok{        n: Length of sequence (must be 2\^{}k {-} 1)}
-\CommentTok{        seed: Initial LFSR state}
-\CommentTok{    }
-\CommentTok{    Returns:}
-\CommentTok{        PN sequence (±1)}
-\CommentTok{    """}
-    \CommentTok{\# Simple LFSR for demonstration (taps depend on length)}
-\NormalTok{    k }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(np.log2(n }\OperatorTok{+} \DecValTok{1}\NormalTok{))}
-\NormalTok{    lfsr }\OperatorTok{=}\NormalTok{ [}\DecValTok{1}\NormalTok{] }\OperatorTok{*}\NormalTok{ k}
-\NormalTok{    sequence }\OperatorTok{=}\NormalTok{ []}
-    
-    \ControlFlowTok{for}\NormalTok{ \_ }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(n):}
-\NormalTok{        feedback }\OperatorTok{=}\NormalTok{ lfsr[}\DecValTok{0}\NormalTok{] }\OperatorTok{\^{}}\NormalTok{ lfsr[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]  }\CommentTok{\# XOR tap}
-\NormalTok{        sequence.append(}\DecValTok{2} \OperatorTok{*}\NormalTok{ lfsr[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{] }\OperatorTok{{-}} \DecValTok{1}\NormalTok{)  }\CommentTok{\# Convert 0/1 to {-}1/+1}
-\NormalTok{        lfsr }\OperatorTok{=}\NormalTok{ [feedback] }\OperatorTok{+}\NormalTok{ lfsr[:}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}
-    
-    \ControlFlowTok{return}\NormalTok{ np.array(sequence)}
-
-\KeywordTok{def}\NormalTok{ dsss\_transmit(data\_bits, spreading\_code):}
-    \CommentTok{"""}
-\CommentTok{    DSSS transmit: spread data bits.}
-\CommentTok{    """}
-\NormalTok{    chips }\OperatorTok{=}\NormalTok{ []}
-    \ControlFlowTok{for}\NormalTok{ bit }\KeywordTok{in}\NormalTok{ data\_bits:}
-        \CommentTok{\# Convert bit (0/1) to ({-}1/+1)}
-\NormalTok{        bit\_value }\OperatorTok{=} \DecValTok{2} \OperatorTok{*}\NormalTok{ bit }\OperatorTok{{-}} \DecValTok{1}
-        \CommentTok{\# Multiply by spreading code}
-\NormalTok{        chips.extend(bit\_value }\OperatorTok{*}\NormalTok{ spreading\_code)}
-    \ControlFlowTok{return}\NormalTok{ np.array(chips)}
-
-\KeywordTok{def}\NormalTok{ dsss\_receive(rx\_signal, spreading\_code, num\_bits):}
-    \CommentTok{"""}
-\CommentTok{    DSSS receive: despread to recover data bits.}
-\CommentTok{    """}
-\NormalTok{    chips\_per\_bit }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(spreading\_code)}
-\NormalTok{    data\_bits }\OperatorTok{=}\NormalTok{ []}
-    
-    \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(num\_bits):}
-\NormalTok{        start }\OperatorTok{=}\NormalTok{ i }\OperatorTok{*}\NormalTok{ chips\_per\_bit}
-\NormalTok{        end }\OperatorTok{=}\NormalTok{ start }\OperatorTok{+}\NormalTok{ chips\_per\_bit}
-        
-        \CommentTok{\# Correlate with spreading code}
-\NormalTok{        correlation }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(rx\_signal[start:end] }\OperatorTok{*}\NormalTok{ spreading\_code)}
-        
-        \CommentTok{\# Decide bit}
-\NormalTok{        bit }\OperatorTok{=} \DecValTok{1} \ControlFlowTok{if}\NormalTok{ correlation }\OperatorTok{\textgreater{}} \DecValTok{0} \ControlFlowTok{else} \DecValTok{0}
-\NormalTok{        data\_bits.append(bit)}
-    
-    \ControlFlowTok{return}\NormalTok{ np.array(data\_bits)}
-
-\CommentTok{\# Example usage}
-\NormalTok{spreading\_code }\OperatorTok{=}\NormalTok{ generate\_pn\_sequence(}\DecValTok{127}\NormalTok{)  }\CommentTok{\# 127{-}chip m{-}sequence}
-\NormalTok{data\_bits }\OperatorTok{=}\NormalTok{ np.random.randint(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{10}\NormalTok{)}
-
-\CommentTok{\# Transmit}
-\NormalTok{tx\_signal }\OperatorTok{=}\NormalTok{ dsss\_transmit(data\_bits, spreading\_code)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Data: }\SpecialCharTok{\{}\NormalTok{data\_bits}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Spreading factor: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(spreading\_code)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"TX signal: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(tx\_signal)}\SpecialCharTok{\}}\SpecialStringTok{ chips"}\NormalTok{)}
-
-\CommentTok{\# Add noise (SNR = {-}10 dB)}
-\NormalTok{signal\_power }\OperatorTok{=}\NormalTok{ np.mean(tx\_signal}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
-\NormalTok{noise\_power }\OperatorTok{=}\NormalTok{ signal\_power }\OperatorTok{*} \DecValTok{10}  \CommentTok{\# 10× more noise than signal}
-\NormalTok{noise }\OperatorTok{=}\NormalTok{ np.sqrt(noise\_power) }\OperatorTok{*}\NormalTok{ np.random.randn(}\BuiltInTok{len}\NormalTok{(tx\_signal))}
-\NormalTok{rx\_signal }\OperatorTok{=}\NormalTok{ tx\_signal }\OperatorTok{+}\NormalTok{ noise}
-
-\NormalTok{snr\_db }\OperatorTok{=} \DecValTok{10} \OperatorTok{*}\NormalTok{ np.log10(signal\_power }\OperatorTok{/}\NormalTok{ noise\_power)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"SNR: }\SpecialCharTok{\{}\NormalTok{snr\_db}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-
-\CommentTok{\# Receive}
-\NormalTok{rx\_bits }\OperatorTok{=}\NormalTok{ dsss\_receive(rx\_signal, spreading\_code, }\BuiltInTok{len}\NormalTok{(data\_bits))}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Recovered: }\SpecialCharTok{\{}\NormalTok{rx\_bits}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"BER: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\BuiltInTok{sum}\NormalTok{(data\_bits }\OperatorTok{!=}\NormalTok{ rx\_bits) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(data\_bits)}\SpecialCharTok{:.2\%\}}\SpecialStringTok{"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{FHSS Simulator}\label{fhss-simulator}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ fhss\_transmit(data\_symbols, hop\_sequence, carrier\_freqs, sample\_rate):}
-    \CommentTok{"""}
-\CommentTok{    FHSS transmit with frequency hopping.}
-\CommentTok{    }
-\CommentTok{    Args:}
-\CommentTok{        data\_symbols: QAM/PSK symbols}
-\CommentTok{        hop\_sequence: Sequence of frequency indices}
-\CommentTok{        carrier\_freqs: Available carrier frequencies (Hz)}
-\CommentTok{        sample\_rate: Sampling rate (Hz)}
-\CommentTok{    }
-\CommentTok{    Returns:}
-\CommentTok{        Transmitted signal}
-\CommentTok{    """}
-\NormalTok{    samples\_per\_hop }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(data\_symbols) }\OperatorTok{//} \BuiltInTok{len}\NormalTok{(hop\_sequence)}
-\NormalTok{    t }\OperatorTok{=}\NormalTok{ np.arange(samples\_per\_hop) }\OperatorTok{/}\NormalTok{ sample\_rate}
-\NormalTok{    tx\_signal }\OperatorTok{=}\NormalTok{ []}
-    
-    \ControlFlowTok{for}\NormalTok{ hop\_idx, freq\_idx }\KeywordTok{in} \BuiltInTok{enumerate}\NormalTok{(hop\_sequence):}
-        \CommentTok{\# Get symbols for this hop}
-\NormalTok{        start }\OperatorTok{=}\NormalTok{ hop\_idx }\OperatorTok{*}\NormalTok{ samples\_per\_hop}
-\NormalTok{        end }\OperatorTok{=}\NormalTok{ start }\OperatorTok{+}\NormalTok{ samples\_per\_hop}
-\NormalTok{        symbols }\OperatorTok{=}\NormalTok{ data\_symbols[start:end]}
-        
-        \CommentTok{\# Modulate on carrier}
-\NormalTok{        carrier\_freq }\OperatorTok{=}\NormalTok{ carrier\_freqs[freq\_idx]}
-\NormalTok{        carrier }\OperatorTok{=}\NormalTok{ np.exp(}\OtherTok{2j} \OperatorTok{*}\NormalTok{ np.pi }\OperatorTok{*}\NormalTok{ carrier\_freq }\OperatorTok{*}\NormalTok{ t)}
-        
-        \CommentTok{\# Transmit (upconvert baseband to carrier)}
-\NormalTok{        hopped\_signal }\OperatorTok{=}\NormalTok{ symbols }\OperatorTok{*}\NormalTok{ carrier[:}\BuiltInTok{len}\NormalTok{(symbols)]}
-\NormalTok{        tx\_signal.extend(hopped\_signal)}
-    
-    \ControlFlowTok{return}\NormalTok{ np.array(tx\_signal)}
-
-\CommentTok{\# Example}
-\NormalTok{carrier\_freqs }\OperatorTok{=}\NormalTok{ np.arange(}\FloatTok{2.4e9}\NormalTok{, }\FloatTok{2.48e9}\NormalTok{, }\FloatTok{1e6}\NormalTok{)  }\CommentTok{\# 2.4 GHz band, 1 MHz spacing}
-\NormalTok{hop\_sequence }\OperatorTok{=}\NormalTok{ np.random.randint(}\DecValTok{0}\NormalTok{, }\BuiltInTok{len}\NormalTok{(carrier\_freqs), }\DecValTok{100}\NormalTok{)  }\CommentTok{\# 100 hops}
-\NormalTok{data\_symbols }\OperatorTok{=}\NormalTok{ (}\DecValTok{2}\OperatorTok{*}\NormalTok{np.random.randint(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1000}\NormalTok{) }\OperatorTok{{-}} \DecValTok{1}\NormalTok{) }\OperatorTok{+} \OperatorTok{\textbackslash{}}
-               \OtherTok{1j}\OperatorTok{*}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{np.random.randint(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1000}\NormalTok{) }\OperatorTok{{-}} \DecValTok{1}\NormalTok{)  }\CommentTok{\# QPSK}
-
-\NormalTok{sample\_rate }\OperatorTok{=} \FloatTok{10e6}  \CommentTok{\# 10 MHz}
-\NormalTok{tx\_signal }\OperatorTok{=}\NormalTok{ fhss\_transmit(data\_symbols, hop\_sequence, carrier\_freqs, sample\_rate)}
-
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Hopping over }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(carrier\_freqs)}\SpecialCharTok{\}}\SpecialStringTok{ frequencies"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Hops: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(hop\_sequence)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Total samples: }\SpecialCharTok{\{}\BuiltInTok{len}\NormalTok{(tx\_signal)}\SpecialCharTok{\}}\SpecialStringTok{"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Theoretical
-Foundations}{ Theoretical Foundations}}\label{theoretical-foundations}
-
-\subsubsection{Shannon Capacity with Spread
-Spectrum}\label{shannon-capacity-with-spread-spectrum}
-
-For spread bandwidth B\_spread and information bandwidth B\_info:
-
-\begin{verbatim}
-C_spread = B_spread · log(1 + S/(N·B_spread))
-C_info = B_info · log(1 + S/(N·B_info))
-
-Ratio:
-C_spread / C_info = (B_spread/B_info) · log(1 + S/(N·B_spread)) 
-                                        / log(1 + S/(N·B_info))
-
-For low SNR (S << N·B_spread):
-log(1 + x)  x/ln(2)  for small x
-
-C_spread  C_info (capacity preserved!)
-
-Interpretation: Spreading doesn't reduce capacity if SNR is low.
-Military sweet spot: Spread to go below noise floor while maintaining data rate.
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Advantages \&
-Disadvantages}{ Advantages \& Disadvantages}}\label{advantages-disadvantages}
-
-\subsubsection{Advantages}\label{advantages}
-
-\textbf{Anti-jamming}: Processing gain overcomes interference\\
-\textbf{LPI/LPD}: Signal hidden in noise\\
-\textbf{Multiple access}: CDMA allows many users\\
-\textbf{Multipath resistance} (DSSS): Resolves path delays\\
-\textbf{Privacy}: Eavesdropping requires spreading code\\
-\textbf{Coexistence}: Graceful degradation with other systems
-
-\subsubsection{Disadvantages}\label{disadvantages}
-
-\textbf{Bandwidth inefficient}: Uses far more spectrum than narrowband\\
-\textbf{Complex synchronization}: Receiver must align code/frequency\\
-\textbf{Near-far problem} (DSSS CDMA): Strong users drown weak ones\\
-\textbf{Processing overhead}: Correlators, frequency synthesizers\\
-\textbf{Power control critical}: Especially for CDMA
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Further
-Reading}{ Further Reading}}\label{further-reading}
-
-\subsubsection{Textbooks}\label{textbooks}
-
 \begin{itemize}
-\tightlist
-\item
-  \textbf{Simon et al.}, \emph{Spread Spectrum Communications Handbook}
-  - Comprehensive reference (military focus)
-\item
-  \textbf{Peterson, Ziemer, Borth}, \emph{Introduction to Spread
-  Spectrum Communications} - Accessible introduction
-\item
-  \textbf{Viterbi}, \emph{CDMA: Principles of Spread Spectrum
-  Communication} - From inventor of CDMA
+\item $A$ = carrier amplitude
+\item $b_n \in \{\pm 1\}$ = data bit (NRZ encoded)
+\item $c(t) \in \{\pm 1\}$ = spreading code (chip sequence)
+\item $f_c$ = carrier frequency
 \end{itemize}
 
-\subsubsection{Standards \& External
-Resources}\label{standards-external-resources}
+\textbf{Process:}
+\begin{enumerate}
+\item \textbf{NRZ encoding:} Map bits to bipolar symbols
+  \begin{itemize}
+  \item Bit 0 $\rightarrow$ $b_n = +1$
+  \item Bit 1 $\rightarrow$ $b_n = -1$
+  \end{itemize}
+\item \textbf{Spreading:} Multiply data by fast PN code
+  \begin{itemize}
+  \item Each bit $b_n$ multiplied by $N$ chips: $c_1, c_2, \ldots, c_N$
+  \item Result: Wideband chip sequence
+  \end{itemize}
+\item \textbf{Modulation:} Upconvert to carrier frequency $f_c$
+\end{enumerate}
 
+\subsection{Receiver Operation}
+
+The DSSS receiver performs coherent detection with despreading:
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
+  font=\small
+]
+\node (input) {\sffamily RX\\Signal};
+\node[block, right of=input, node distance=2.5cm] (demod) {BPSK\\Demod};
+\node[block, right of=demod, node distance=3cm] (mult) {Multiplier\\$\times$};
+\node[block, right of=mult, node distance=3cm] (int) {Integrate\\$\int_T$};
+\node[block, right of=int, node distance=2.8cm] (thresh) {Threshold\\$>0?$};
+\node[right of=thresh, node distance=2.8cm] (output) {\sffamily Data\\$\{0,1\}$};
+
+\node[below of=mult, node distance=1.5cm, font=\scriptsize, align=center] (lo) {PN Code\\$c(t)$};
+
+\draw[->,thick] (input) -- (demod);
+\draw[->,thick] (demod) -- (mult);
+\draw[->,thick] (lo) -- (mult);
+\draw[->,thick] (mult) -- (int);
+\draw[->,thick] (int) -- (thresh);
+\draw[->,thick] (thresh) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Despreading process:}
+
+Received signal (with noise):
+\begin{equation}
+r(t) = A b_n c(t) \cos(2\pi f_c t) + n(t)
+\end{equation}
+
+After demodulation and despreading (multiply by $c(t)$):
+\begin{equation}
+y(t) = r(t) \cdot c(t) = A b_n c^2(t) + n(t) c(t) = A b_n + n'(t)
+\end{equation}
+
+Since $c^2(t) = 1$ (PN code is $\pm 1$), the data is recovered and noise remains spread.
+
+Integration over bit period $T_b$:
+\begin{equation}
+z = \int_0^{T_b} y(t)\, dt = A b_n T_b + \int_0^{T_b} n'(t)\, dt
+\end{equation}
+
+The integrated noise has reduced power by factor $G_p$:
+\begin{equation}
+\sigma_{n'}^2 = \frac{\sigma_n^2}{G_p}
+\end{equation}
+
+\begin{warningbox}
+\textbf{Code synchronization is critical.} The receiver PN code must be \textbf{perfectly aligned} with the transmitter code. Phase offset by even one chip destroys correlation and prevents signal recovery. Acquisition can take 1--10 seconds for GPS.
+\end{warningbox}
+
+\subsection{Spreading Codes}
+
+\textbf{Requirements for good spreading codes:}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{IS-95}: CDMA cellular (Qualcomm standard)
-\item
-  \textbf{\href{https://www.gps.gov/technical/icwg/IS-GPS-200M.pdf}{IS-GPS-200M}}:
-  GPS signal specifications (C/A, P(Y), M codes) - Official U.S.
-  specification
-\item
-  \textbf{\href{https://gssc.esa.int/navipedia/index.php?title=GPS_Signal_Plan}{Navipedia
-  GPS Signals}}: ESA technical reference for GPS/GNSS
-\item
-  \textbf{MIL-STD-188-181}: US military FHSS standard
-\item
-  \textbf{IEEE 802.15.1}: Bluetooth FHSS specifications
-\item
-  \textbf{\href{https://www.sigidwiki.com/wiki/Category:Spread_Spectrum}{sigidwiki
-  Spread Spectrum}}: Real-world spread spectrum signal examples
+\item \textbf{Pseudorandom:} Appears random but deterministic (reproducible)
+\item \textbf{Sharp autocorrelation:} Peak at zero lag, low elsewhere
+\item \textbf{Low cross-correlation:} Different codes have low correlation (for CDMA)
+\item \textbf{Balance:} Equal number of +1 and $-1$ chips
 \end{itemize}
 
-\subsubsection{Military Resources}\label{military-resources}
+\subsubsection{Maximal-Length Sequences (m-sequences)}
 
+Generated by Linear Feedback Shift Registers (LFSR):
+
+\begin{center}
+\begin{tikzpicture}[
+  reg/.style={rectangle, draw, minimum width=0.8cm, minimum height=0.8cm, font=\small},
+  node distance=1.2cm
+]
+% Registers
+\node[reg] (r1) {$D_1$};
+\node[reg, right of=r1] (r2) {$D_2$};
+\node[reg, right of=r2] (r3) {$D_3$};
+\node[reg, right of=r3] (r4) {$D_4$};
+\node[reg, right of=r4] (r5) {$D_5$};
+\node[reg, right of=r5] (r6) {$D_6$};
+\node[reg, right of=r6] (r7) {$D_7$};
+
+% Output
+\node[right of=r7, node distance=1.5cm] (out) {\sffamily Output};
+\draw[->,thick] (r7) -- (out);
+
+% Feedback path
+\coordinate (tap3) at (r3.south);
+\coordinate (tap7) at (r7.south);
+\node[circle, draw, inner sep=1pt, font=\scriptsize] (xor) at ($(r1)+(0,-1.2)$) {$\oplus$};
+
+\draw (tap3) -- ++(0,-0.5) -| (xor);
+\draw (tap7) -- ++(0,-0.8) -| (xor);
+\draw[->,thick] (xor) -| (r1);
+
+\node[below=0.3cm of xor, font=\scriptsize] {Feedback (XOR)};
+\node[above=0.3cm of r4, font=\small] {7-stage LFSR (taps: 3, 7)};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Properties:}
 \begin{itemize}
-\tightlist
-\item
-  \textbf{Poisel}, \emph{Introduction to Communication Electronic
-  Warfare Systems} - EW perspective
-\item
-  \textbf{Torrieri}, \emph{Principles of Spread-Spectrum Communication
-  Systems} - Modern military focus
-\item
-  \textbf{COMSEC manuals}: Classified (NSA) - operational TRANSEC
+\item Period: $2^n - 1$ (for $n$-stage LFSR)
+\item Example: 7-stage LFSR $\rightarrow$ period = 127 chips
+\item Good autocorrelation (sharp peak)
+\item Poor cross-correlation (not ideal for CDMA)
 \end{itemize}
 
-\subsubsection{Related Topics}\label{related-topics}
+\subsubsection{Gold Codes}
 
+XOR of two m-sequences with specific phase shifts:
+\begin{equation}
+c_{\mathrm{Gold}}(t) = m_1(t) \oplus m_2(t + \tau)
+\end{equation}
+
+\textbf{Properties:}
 \begin{itemize}
-\tightlist
-\item
-  {[}{[}Shannon\textquotesingle s-Channel-Capacity-Theorem{]}{]} -
-  Theoretical foundation
-\item
-  {[}{[}Military-\&-Covert-Communications{]}{]} - LPI/LPD systems, GPS
-  M-code
-\item
-  {[}{[}CDMA (coming soon){]}{]} - Code Division Multiple Access
-\item
-  {[}{[}Synchronization-(Carrier,-Timing,-Frame){]}{]} - Code
-  acquisition and tracking
-\item
-  {[}{[}Real-World-System-Examples{]}{]} - GPS, Bluetooth, WiFi,
-  military systems
+\item Set of $2^n + 1$ codes (from $n$-stage LFSR)
+\item Good autocorrelation \textbf{and} cross-correlation
+\item \textbf{Used in GPS:} Each satellite has unique 1023-chip Gold code
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{calloutbox}[colback=black!5!white,colframe=black]{GPS C/A Code Generation}
+GPS uses 1023-chip Gold codes derived from two 10-stage LFSRs:
 
-\textbf{Summary}: Spread spectrum trades bandwidth for robustness. DSSS
-multiplies data by fast pseudorandom codes to spread across wide
-bandwidths, gaining processing gain that enables anti-jamming and covert
-communications. FHSS rapidly hops between frequencies to avoid
-interference. Originally military technologies (GPS, Link 16), spread
-spectrum now underpins consumer wireless (WiFi, Bluetooth) and IoT
-(LoRa). Processing gain = SNR improvement = anti-jam capability. The
-lower the PSD, the harder to detect-\/-\/-spread spectrum is the
-foundation of stealth communications.
+\textbf{G1 LFSR taps:} [3, 10] (generates $m_1$ sequence)
+
+\textbf{G2 LFSR taps:} [2, 3, 6, 8, 9, 10] (generates $m_2$ sequence)
+
+Each satellite PRN is formed by XORing G1 with phase-shifted G2:
+\begin{itemize}
+\item PRN 1: G1 $\oplus$ G2[phase $= 5 \oplus 9$]
+\item PRN 2: G1 $\oplus$ G2[phase $= 6 \oplus 10$]
+\item \ldots (32 satellites total)
+\end{itemize}
+
+Period: $2^{10} - 1 = 1023$ chips, repeated every 1~ms.
+\end{calloutbox}
+
+\subsubsection{Walsh-Hadamard Codes}
+
+Orthogonal codes with \textbf{zero cross-correlation:}
+\begin{equation}
+H_1 = [1], \quad H_2 = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, \quad H_4 = \begin{bmatrix} 1 & 1 & 1 & 1 \\ 1 & -1 & 1 & -1 \\ 1 & 1 & -1 & -1 \\ 1 & -1 & -1 & 1 \end{bmatrix}
+\end{equation}
+
+\textbf{Properties:}
+\begin{itemize}
+\item Perfectly orthogonal (ideal for CDMA)
+\item Length must be power of 2
+\item \textbf{Used in IS-95 CDMA:} 64-chip Walsh codes separate users
+\end{itemize}
+
+\subsection{CDMA (Code Division Multiple Access)}
+
+CDMA allows multiple users to transmit simultaneously on the same frequency, distinguished by spreading codes.
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.8cm, font=\small},
+  node distance=1.2cm
+]
+% Transmitters
+\node[block] (tx1) {User 1\\$d_1 \cdot c_1$};
+\node[block, below=0.5cm of tx1] (tx2) {User 2\\$d_2 \cdot c_2$};
+\node[block, below=0.5cm of tx2] (tx3) {User 3\\$d_3 \cdot c_3$};
+\node[below=0.3cm of tx3, font=\small] (txn) {$\vdots$};
+
+% Summing junction
+\node[circle, draw, right=2cm of tx2, minimum size=1cm] (sum) {$\Sigma$};
+
+% Channel
+\node[block, right=1.5cm of sum, minimum width=2.5cm] (channel) {Channel\\$+ n(t)$};
+
+% Receiver
+\node[block, right=1.5cm of channel, minimum width=2.5cm] (rx) {RX (User 1)\\$\times c_1$, integrate};
+
+% Output
+\node[right=1.2cm of rx] (out) {$\hat{d}_1$};
+
+% Connections
+\draw[->,thick] (tx1) -| (sum);
+\draw[->,thick] (tx2) -- (sum);
+\draw[->,thick] (tx3) -| (sum);
+\draw[->,thick] (sum) -- (channel);
+\draw[->,thick] (channel) -- (rx);
+\draw[->,thick] (rx) -- (out);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Received signal:}
+\begin{equation}
+r(t) = d_1 c_1(t) + d_2 c_2(t) + d_3 c_3(t) + \cdots + n(t)
+\end{equation}
+
+\textbf{User 1 receiver multiplies by $c_1(t)$ and integrates:}
+\begin{equation}
+\int_T r(t) c_1(t)\, dt = d_1 \underbrace{\int_T c_1^2(t)\, dt}_{=T} + d_2 \underbrace{\int_T c_2(t) c_1(t)\, dt}_{\approx 0} + \cdots + \text{noise}
+\end{equation}
+
+Due to low cross-correlation, only User 1's signal integrates to large value; other users appear as noise.
+
+\textbf{CDMA capacity (IS-95):}
+\begin{equation}
+N_{\mathrm{users}} \approx \frac{G_p}{(E_b/N_0)_{\mathrm{req}}} \cdot (1 + F)^{-1}
+\end{equation}
+where:
+\begin{itemize}
+\item $G_p$ = processing gain
+\item $(E_b/N_0)_{\mathrm{req}}$ = required SNR for target BER (typically 7~dB)
+\item $F$ = frequency reuse factor (0.6--0.85)
+\end{itemize}
+
+\begin{calloutbox}{Example: IS-95 CDMA Capacity}
+\textbf{Given:}
+\begin{itemize}
+\item $G_p = 21$ dB (spreading factor 126)
+\item $(E_b/N_0)_{\mathrm{req}} = 7$ dB (1\% BER)
+\item $F = 0.67$
+\end{itemize}
+
+\textbf{Solution:}
+$$N_{\mathrm{users}} \approx \frac{126}{5} \times \frac{1}{1.67} \approx 15 \text{ users/sector}$$
+
+With 3 sectors/cell: $\sim$45 users/cell.
+\end{calloutbox}
+
+\begin{warningbox}
+\textbf{Near-far problem:} In CDMA, users close to the base station overpower distant users. Requires tight \textbf{power control} ($\pm 0.5$ dB accuracy) to maintain equal received power from all users.
+\end{warningbox}
+
+\section{Frequency Hopping Spread Spectrum (FHSS)}
+
+FHSS spreads the signal by rapidly switching the carrier frequency according to a pseudorandom pattern.
+
+\subsection{Transmitter Operation}
+
+\begin{center}
+\begin{tikzpicture}[
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.5cm,
+  font=\small
+]
+\node (input) {\sffamily Data\\$d_n$};
+\node[block, right of=input, node distance=2.8cm] (mod) {Modulator\\(FSK/PSK)};
+\node[block, right of=mod, node distance=3.5cm] (mixer) {Frequency\\Synthesizer};
+\node[right of=mixer, node distance=3.5cm] (output) {\sffamily TX\\Signal};
+
+\node[below of=mixer, node distance=1.5cm, font=\small, align=center] (hop) {Hop\\Pattern};
+
+\draw[->,thick] (input) -- (mod);
+\draw[->,thick] (mod) -- node[above,font=\scriptsize] {Baseband} (mixer);
+\draw[->,thick] (hop) -- (mixer);
+\draw[->,thick] (mixer) -- (output);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Time-frequency representation:}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+\draw[->] (0,0) -- (10,0) node[right] {\sffamily Time};
+\draw[->] (0,0) -- (0,6) node[above] {\sffamily Frequency};
+
+% Draw hop pattern
+\draw[thick, fill=blue!20] (0.5,1) rectangle (1.5,1.8);
+\draw[thick, fill=blue!20] (1.5,4.2) rectangle (2.5,5);
+\draw[thick, fill=blue!20] (2.5,2.5) rectangle (3.5,3.3);
+\draw[thick, fill=blue!20] (3.5,5.2) rectangle (4.5,6);
+\draw[thick, fill=blue!20] (4.5,0.5) rectangle (5.5,1.3);
+\draw[thick, fill=blue!20] (5.5,3.5) rectangle (6.5,4.3);
+\draw[thick, fill=blue!20] (6.5,1.8) rectangle (7.5,2.6);
+\draw[thick, fill=blue!20] (7.5,4.8) rectangle (8.5,5.6);
+
+% Labels
+\node[left, font=\scriptsize] at (0,1.4) {$f_1$};
+\node[left, font=\scriptsize] at (0,2.9) {$f_2$};
+\node[left, font=\scriptsize] at (0,3.9) {$f_3$};
+\node[left, font=\scriptsize] at (0,4.6) {$f_4$};
+\node[left, font=\scriptsize] at (0,5.6) {$f_5$};
+
+\node[below, font=\scriptsize] at (1,0) {$t_1$};
+\node[below, font=\scriptsize] at (2,0) {$t_2$};
+\node[below, font=\scriptsize] at (3,0) {$t_3$};
+\node[below, font=\scriptsize] at (4,0) {$t_4$};
+\node[below, font=\scriptsize] at (5,0) {$t_5$};
+\node[below, font=\scriptsize] at (6,0) {$t_6$};
+
+\node[above right, font=\small] at (8.5,5.6) {Hop sequence};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Key parameters:}
+\begin{itemize}
+\item \textbf{Hop rate:} Number of hops per second (e.g., 1600 hops/s for Bluetooth)
+\item \textbf{Dwell time ($T_h$):} Time spent on each frequency
+\item \textbf{Hop set:} Available frequencies $\{f_1, f_2, \ldots, f_M\}$
+\item \textbf{Hop sequence:} Pseudorandom pattern $h[n] \in \{1, 2, \ldots, M\}$
+\end{itemize}
+
+Processing gain for FHSS:
+\begin{equation}
+G_p = M = \text{number of hop frequencies}
+\end{equation}
+
+or in dB:
+\begin{equation}
+G_p\,[\mathrm{dB}] = 10\log_{10}(M)
+\end{equation}
+
+\subsection{FHSS Variants}
+
+\textbf{1. Fast Frequency Hopping (FFH):}
+\begin{itemize}
+\item Multiple hops per data symbol
+\item Example: Symbol duration = 10~ms, Hop duration = 1~ms $\rightarrow$ 10 hops/symbol
+\item \textbf{Advantage:} Diversity against narrowband interference
+\end{itemize}
+
+\textbf{2. Slow Frequency Hopping (SFH):}
+\begin{itemize}
+\item Multiple symbols per hop
+\item Example: Hop duration = 10~ms, Symbol duration = 1~ms $\rightarrow$ 10 symbols/hop
+\item \textbf{Advantage:} Simpler synchronization
+\end{itemize}
+
+\subsection{Receiver Operation}
+
+The FHSS receiver must:
+\begin{enumerate}
+\item Know the hop pattern (synchronized with transmitter)
+\item Track the hop sequence (frequency synthesizer)
+\item Demodulate each hop
+\end{enumerate}
+
+\textbf{Synchronization requirements:}
+\begin{itemize}
+\item \textbf{Coarse sync:} Determine which hop in sequence ($\pm 1$ hop)
+\item \textbf{Fine sync:} Align within hop duration ($\pm T_h/2$)
+\end{itemize}
+
+\begin{calloutbox}{Example: Bluetooth FHSS}
+\textbf{Bluetooth Classic (BR/EDR) parameters:}
+\begin{itemize}
+\item Frequency: 2.4~GHz ISM band
+\item Hop set: 79 channels, 1~MHz spacing (2.402--2.480~GHz)
+\item Hop rate: 1600 hops/second
+\item Dwell time: $T_h = 625~\mu$s
+\item Modulation: GFSK (Gaussian FSK)
+\item Data rate: 1~Mbps (BR), 2--3~Mbps (EDR)
+\end{itemize}
+
+\textbf{Hopping pattern:}
+Derived from master device address + clock:
+$$h[n] = f(n, \text{BD\_ADDR}, \text{CLK}) \bmod 79$$
+
+\textbf{Adaptive Frequency Hopping (AFH):}
+Avoids WiFi-occupied channels by blacklisting them from hop set.
+\end{calloutbox}
+
+\subsection{FHSS vs DSSS Comparison}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Aspect} & \textbf{DSSS} & \textbf{FHSS} \\
+\midrule
+Spreading method & Fast code & Frequency hopping \\
+Bandwidth & Continuous wide & Narrow per hop \\
+Processing gain & $R_c/R_b$ & $M$ (hop count) \\
+Anti-jamming & High (averages) & Moderate (avoids) \\
+Multipath & Good (resolves) & Poor (flat fading) \\
+Complexity & Correlator & Freq synthesizer \\
+Multiple access & CDMA (codes) & FDMA/TDMA \\
+Near-far problem & Severe & Minimal \\
+Standards & GPS, CDMA & Bluetooth, military \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Performance Analysis}
+
+\subsection{BER in AWGN Channel}
+
+For DSSS with BPSK modulation in AWGN:
+\begin{equation}
+\mathrm{BER} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
+\end{equation}
+where:
+\begin{itemize}
+\item $E_b/N_0$ = energy per bit to noise spectral density ratio
+\item $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^\infty e^{-t^2/2}\, dt$ (Gaussian Q-function)
+\end{itemize}
+
+The key is that processing gain allows operation at low SNR:
+\begin{equation}
+\frac{E_b}{N_0} = \mathrm{SNR} \cdot G_p = \frac{S}{N} \cdot \frac{B_{\mathrm{spread}}}{R_b}
+\end{equation}
+
+\begin{calloutbox}{Example: Below-Noise-Floor Reception}
+\textbf{Given:}
+\begin{itemize}
+\item SNR = $-10$ dB (signal 10$\times$ weaker than noise!)
+\item Processing gain: $G_p = 30$ dB (GPS-like)
+\end{itemize}
+
+\textbf{Solution:}
+$$\frac{E_b}{N_0} = -10 + 30 = 20\text{ dB}$$
+
+From BER equation: $\mathrm{BER} = Q(\sqrt{100}) \approx 7.8 \times 10^{-24}$ (excellent!)
+
+This explains how GPS works at $-130$~dBm (20~dB below noise).
+\end{calloutbox}
+
+\subsection{Jamming Margin}
+
+The \textbf{jamming margin} determines the maximum jammer power that can be tolerated:
+\begin{equation}
+M_J = G_p - \left(\frac{J}{S}\right) - \left(\frac{E_b}{N_0}\right)_{\mathrm{req}} - L_{\mathrm{impl}}
+\end{equation}
+where:
+\begin{itemize}
+\item $M_J$ = jamming margin (dB)
+\item $G_p$ = processing gain (dB)
+\item $J/S$ = jammer-to-signal ratio at receiver (dB)
+\item $(E_b/N_0)_{\mathrm{req}}$ = required SNR for target BER (dB)
+\item $L_{\mathrm{impl}}$ = implementation losses (typically 2--3~dB)
+\end{itemize}
+
+\textbf{Positive margin ($M_J > 0$):} Link survives jamming
+
+\textbf{Negative margin ($M_J < 0$):} Link fails
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+\begin{axis}[
+  width=12cm,
+  height=7cm,
+  xlabel={Jammer-to-Signal Ratio, $J/S$ (dB)},
+  ylabel={Jamming Margin, $M_J$ (dB)},
+  xmin=0, xmax=50,
+  ymin=-20, ymax=40,
+  grid=major,
+  legend pos=north east,
+  legend style={font=\footnotesize}
+]
+
+% GPS C/A (G_p = 43 dB, (E_b/N_0)_req = 10 dB)
+\addplot[blue, thick, domain=0:50] {43 - x - 10 - 2};
+\addlegendentry{GPS C/A ($G_p = 43$ dB)}
+
+% IS-95 CDMA (G_p = 21 dB, (E_b/N_0)_req = 7 dB)
+\addplot[red, thick, domain=0:50] {21 - x - 7 - 2};
+\addlegendentry{IS-95 CDMA ($G_p = 21$ dB)}
+
+% 802.11b DSSS (G_p = 10.4 dB, (E_b/N_0)_req = 10 dB)
+\addplot[green!60!black, thick, domain=0:50] {10.4 - x - 10 - 2};
+\addlegendentry{802.11b DSSS ($G_p = 10.4$ dB)}
+
+% Zero line
+\addplot[black, dashed, domain=0:50] {0};
+
+% Link failure region
+\node[align=center, font=\small] at (axis cs:35,-10) {Link Fails\\($M_J < 0$)};
+\node[align=center, font=\small] at (axis cs:15,15) {Link Survives\\($M_J > 0$)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Jamming Scenarios}
+
+\textbf{1. Barrage Jamming (wideband noise):}
+
+Jammer spreads power across entire band. Processing gain provides protection:
+\begin{equation}
+\left(\frac{J}{S}\right)_{\mathrm{despread}} = \left(\frac{J}{S}\right)_{\mathrm{antenna}} - G_p\,[\mathrm{dB}]
+\end{equation}
+
+\textbf{2. Partial-Band Jamming:}
+
+Jammer concentrates on fraction $\rho$ of bandwidth:
+\begin{itemize}
+\item \textbf{DSSS:} Averages jammer over full bandwidth $\rightarrow$ degradation $\propto \rho$
+\item \textbf{FHSS:} Hops avoid jammer $(1-\rho)$ fraction of time $\rightarrow$ better performance
+\end{itemize}
+
+\textbf{3. Follower Jamming (FHSS target):}
+
+Jammer detects hop and jams that frequency. Countermeasures:
+\begin{itemize}
+\item Fast hopping (jammer can't track)
+\item Adaptive hopping (avoid jammed frequencies)
+\end{itemize}
+
+\section{Applications}
+
+\subsection{GPS (Global Positioning System)}
+
+\textbf{Architecture:}
+\begin{itemize}
+\item 31 satellites in MEO (20,200~km altitude)
+\item Each transmits unique Gold code (PRN 1--32)
+\item Carrier: L1 = 1575.42~MHz, L2 = 1227.60~MHz
+\end{itemize}
+
+\textbf{C/A Code (Civilian):}
+\begin{itemize}
+\item Modulation: BPSK
+\item Chip rate: 1.023~Mcps
+\item Code length: 1023 chips (1~ms period)
+\item Data rate: 50~bps (navigation message)
+\item Processing gain: 43~dB
+\end{itemize}
+
+\textbf{Link budget:}
+\begin{itemize}
+\item TX power: 27~W (44~dBm)
+\item TX antenna gain: 13~dBi (toward Earth)
+\item Free-space path loss (20,200~km @ 1.5~GHz): 184~dB
+\item RX antenna gain: 3~dBi (patch antenna)
+\item Received power: $44 + 13 - 184 + 3 = -124$~dBm
+\item Noise floor ($B = 2$~MHz): $-114$~dBm
+\item SNR: $-124 - (-114) = -10$~dB (below noise!)
+\item After despreading: $-10 + 43 = 33$~dB (excellent SNR)
+\end{itemize}
+
+\textbf{M-Code (Military):}
+\begin{itemize}
+\item Chip rate: 5.115~Mcps (5$\times$ faster than C/A)
+\item Processing gain: $\sim$50~dB
+\item Modulation: BOC(10,5) --- Binary Offset Carrier
+\item Security: Encrypted, authenticated (NSA keys)
+\item Anti-jam margin: 60~dB (tolerates strong jamming)
+\end{itemize}
+
+\subsection{Bluetooth}
+
+\textbf{Bluetooth Classic (BR/EDR):}
+\begin{itemize}
+\item Frequency: 2.4~GHz ISM band
+\item Hop set: 79 channels (1~MHz spacing)
+\item Hop rate: 1600 hops/second
+\item Modulation: GFSK (Gaussian FSK)
+\item Data rate: 1--3~Mbps
+\item Range: 10~m (Class 2), 100~m (Class 1)
+\end{itemize}
+
+\textbf{Network topology:}
+\begin{itemize}
+\item \textbf{Piconet:} Master + up to 7 slaves
+\item \textbf{Scatternet:} Overlapping piconets
+\item Each piconet: Unique hopping pattern
+\end{itemize}
+
+\textbf{Adaptive Frequency Hopping (AFH):}
+
+Avoids WiFi-occupied channels:
+\begin{enumerate}
+\item Monitor channel quality (BER, RSSI)
+\item Blacklist poor channels (typically 20--30 channels)
+\item Hop only among good channels (49--59 channels)
+\item Update blacklist periodically
+\end{enumerate}
+
+\subsection{IEEE 802.11b WiFi (Legacy DSSS)}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item Frequency: 2.4~GHz ISM band
+\item Chip rate: 11~Mcps
+\item Data rate: 1--11~Mbps
+\item Spreading: 11-chip Barker sequence (1--2~Mbps)
+\item CCK codes (5.5, 11~Mbps)
+\item Processing gain: 10.4~dB (1~Mbps mode)
+\end{itemize}
+
+\textbf{11-chip Barker code:}
+$$[+1, -1, +1, +1, -1, +1, +1, +1, -1, -1, -1]$$
+
+\textbf{Properties:}
+\begin{itemize}
+\item Autocorrelation: Peak = 11, sidelobes = 1 (excellent!)
+\item Provides interference rejection
+\end{itemize}
+
+\textbf{Obsolescence:} Replaced by OFDM in 802.11g (2003) for higher spectral efficiency.
+
+\subsection{IS-95 CDMA Cellular}
+
+\textbf{Architecture:}
+\begin{itemize}
+\item Frequency: 800~MHz, 1900~MHz (US)
+\item Bandwidth: 1.25~MHz per carrier
+\item Chip rate: 1.2288~Mcps
+\item Spreading factor: 64--256 (variable rate)
+\item Walsh codes: 64 orthogonal channels
+\end{itemize}
+
+\textbf{Capacity:}
+\begin{itemize}
+\item Processing gain: 21~dB (SF = 128)
+\item Users/sector: 15--20 (voice)
+\item Soft handoff: Multiple cells serve one user
+\end{itemize}
+
+\textbf{Power control:}
+\begin{itemize}
+\item Rate: 800~Hz (every 1.25~ms)
+\item Accuracy: $\pm 0.5$~dB
+\item Range: 80~dB (to combat near-far problem)
+\end{itemize}
+
+\textbf{Status:} Retired in US (Verizon, Sprint) around 2020, replaced by LTE/5G.
+
+\subsection{Military Link 16 (JTIDS)}
+
+\textbf{Purpose:} NATO/US tactical data link for coordinated operations.
+
+\textbf{Parameters:}
+\begin{itemize}
+\item Frequency: 960--1215~MHz (L-band)
+\item Modulation: MSK (Minimum Shift Keying)
+\item Waveform: 51 frequency channels
+\item Hop rate: 70,000 hops/second ($\sim$14~$\mu$s per hop)
+\item Security: Time-varying encryption (TRANSEC)
+\item Data rate: 31.6--115.2~kbps
+\end{itemize}
+
+\textbf{Network:}
+\begin{itemize}
+\item TDMA: 128 time slots per 12~seconds
+\item Nodes: Aircraft, ships, ground stations
+\item Collision-free multiple access
+\end{itemize}
+
+\textbf{TRANSEC (Transmission Security):}
+\begin{itemize}
+\item Hopping pattern: Cryptographically secured
+\item Changes every 12~seconds (epoch)
+\item Synchronized via GPS time
+\item Enemy cannot predict next hop
+\end{itemize}
+
+\textbf{Result:}
+\begin{itemize}
+\item LPI/LPD: Signal appears as brief noise burst
+\item AJ: Hops faster than jammer can follow
+\item Covertness: No fixed frequency to monitor
+\end{itemize}
+
+\section{Worked Example: GPS Link Budget with Jamming}
+
+\textbf{Problem:} A GPS receiver experiences jamming. Determine if the link survives.
+
+\subsection*{Given}
+
+\textbf{GPS parameters:}
+\begin{itemize}
+\item Received signal power: $P_s = -130$~dBm
+\item Processing gain: $G_p = 43$~dB (C/A code)
+\item Required $(E_b/N_0)_{\mathrm{req}} = 10$~dB (for BER $= 10^{-6}$)
+\item Implementation losses: $L_{\mathrm{impl}} = 2$~dB
+\end{itemize}
+
+\textbf{Jammer:}
+\begin{itemize}
+\item Jammer power at receiver: $P_J = -90$~dBm (barrage noise)
+\end{itemize}
+
+\textbf{Noise:}
+\begin{itemize}
+\item Thermal noise: $N_0 = -174$~dBm/Hz
+\item Bandwidth: $B = 2$~MHz = 63~dBHz
+\item Noise power: $N = N_0 + 10\log_{10}(B) = -174 + 63 = -111$~dBm
+\end{itemize}
+
+\subsection*{Solution}
+
+\textbf{Step 1: Calculate J/S ratio}
+\begin{equation}
+\frac{J}{S} = P_J - P_s = -90 - (-130) = 40\text{ dB}
+\end{equation}
+
+The jammer is 10,000$\times$ stronger than the GPS signal!
+
+\textbf{Step 2: Calculate jamming margin}
+\begin{equation}
+M_J = G_p - \frac{J}{S} - \left(\frac{E_b}{N_0}\right)_{\mathrm{req}} - L_{\mathrm{impl}}
+\end{equation}
+\begin{equation}
+M_J = 43 - 40 - 10 - 2 = -9\text{ dB}
+\end{equation}
+
+\textbf{Result:} Negative margin $\rightarrow$ \textbf{Link fails!}
+
+\textbf{Step 3: Mitigation --- Directional antenna}
+
+Use directional antenna with:
+\begin{itemize}
+\item Gain toward satellites: $+20$~dBi
+\item Null toward jammer (ground-based): $-20$~dB attenuation
+\end{itemize}
+
+Effective J/S after antenna:
+\begin{equation}
+\left(\frac{J}{S}\right)_{\mathrm{eff}} = 40 - 20 - 20 = 0\text{ dB}
+\end{equation}
+
+New jamming margin:
+\begin{equation}
+M_J = 43 - 0 - 10 - 2 = 31\text{ dB}
+\end{equation}
+
+\textbf{Result:} \textbf{Link survives} with 31~dB margin!
+
+\begin{calloutbox}[colback=black!8!white,colframe=black]{Summary}
+\textbf{Without directional antenna:} Jammer overpowers GPS by 9~dB $\rightarrow$ Link fails
+
+\textbf{With directional antenna:} 40~dB total suppression (20~dB gain + 20~dB null) $\rightarrow$ Link survives with comfortable margin
+
+\textbf{Lesson:} Spread spectrum alone is insufficient against strong jamming. Spatial filtering (directional antennas, adaptive arrays) is essential for military GPS receivers.
+\end{calloutbox}
+
+\section{Advantages and Disadvantages}
+
+\subsection*{Advantages}
+
+\begin{enumerate}
+\item \textbf{Anti-jamming:} Processing gain overcomes interference
+\item \textbf{LPI/LPD:} Signal hidden in noise (military stealth)
+\item \textbf{Below-noise-floor operation:} GPS works at SNR $= -10$~dB
+\item \textbf{Multiple access:} CDMA allows many users simultaneously
+\item \textbf{Multipath resistance (DSSS):} Wideband signals resolve path delays
+\item \textbf{Privacy:} Eavesdropping requires spreading code
+\item \textbf{Coexistence:} Graceful degradation with other systems
+\end{enumerate}
+
+\subsection*{Disadvantages}
+
+\begin{enumerate}
+\item \textbf{Bandwidth inefficient:} Uses 100--1000$\times$ more spectrum than narrowband
+\item \textbf{Complex synchronization:} Code/frequency alignment required (acquisition time 1--10~s)
+\item \textbf{Near-far problem (DSSS CDMA):} Strong users drown weak ones $\rightarrow$ tight power control needed
+\item \textbf{Processing overhead:} Correlators, frequency synthesizers (high power consumption)
+\item \textbf{Acquisition time:} GPS cold start can take 30--60~seconds
+\end{enumerate}
+
+\section{Summary}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Parameter} & \textbf{DSSS} & \textbf{FHSS} \\
+\midrule
+Spreading method & Fast PN code & Frequency hopping \\
+Processing gain & $R_c/R_b$ & $M$ (hop count) \\
+Bandwidth & Continuous wide & Narrow per hop \\
+Anti-jamming & Excellent & Good \\
+Multipath resistance & Good & Poor \\
+Synchronization & Code alignment & Hop tracking \\
+Complexity & Correlator & Freq synthesizer \\
+Multiple access & CDMA & FDMA/TDMA \\
+Examples & GPS, CDMA & Bluetooth, military \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Key equations:}
+\begin{itemize}
+\item Processing gain: $G_p = B_{\mathrm{spread}}/B_{\mathrm{info}} = R_c/R_b$
+\item SNR improvement: $\mathrm{SNR}_{\mathrm{out}} = \mathrm{SNR}_{\mathrm{in}} + G_p$
+\item Jamming margin: $M_J = G_p - J/S - (E_b/N_0)_{\mathrm{req}} - L_{\mathrm{impl}}$
+\end{itemize}
+
+\section{Further Reading}
+
+\begin{itemize}
+\item \textbf{Chapter 2:} Binary Phase-Shift Keying (BPSK)---underlying modulation for DSSS
+\item \textbf{Chapter 6:} Frequency-Shift Keying (FSK)---modulation for FHSS
+\item \textbf{Chapter 12:} Constellation Diagrams---visualization of spread signals
+\item \textbf{Chapter 18:} Bit Error Rate Analysis---BER performance with processing gain
+\item \textbf{Chapter 20:} Shannon's Channel Capacity Theorem---theoretical foundation
+\item \textbf{Chapter 22:} Forward Error Correction---coding with spread spectrum
+\item \textbf{Chapter 25:} Synchronization---code acquisition and tracking
+\item \textbf{Chapter 28:} Military \& Covert Communications---LPI/LPD systems, GPS M-code
+\item \textbf{Chapter 35:} Real-World System Examples---GPS, Bluetooth, WiFi, Link 16
+\end{itemize}
