@@ -1,59 +1,44 @@
-\section{Acoustic Heterodyning}\label{acoustic-heterodyning}
+\chapter{Acoustic Heterodyning}
+\label{ch:acoustic-heterodyning}
 
-{[}{[}Home{]}{]} \textbar{}
-{[}{[}Intermodulation-Distortion-in-Biology{]}{]} \textbar{}
-{[}{[}Frey-Microwave-Auditory-Effect{]}{]} \textbar{}
-{[}{[}Non-Linear-Biological-Demodulation{]}{]}
+\begin{nontechnical}
+\textbf{Imagine mixing colors}---when you mix blue and yellow paint, you get green. Acoustic heterodyning is similar, but with sound waves.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{The basic idea:}
+\begin{itemize}
+\item Take two ultrasound beams (too high-pitched for humans to hear, like dog whistles)
+\item Aim them at the same spot
+\item When they overlap, they ``mix'' together in a nonlinear way
+\item This creates a new, audible sound at the \emph{difference} between their frequencies
+\end{itemize}
 
-\subsection{Overview}\label{overview}
+\textbf{Real-world example:} If you send 40,000~Hz and 42,000~Hz ultrasound beams (both inaudible), they can create a 2,000~Hz tone (clearly audible) where they meet.
 
-\textbf{Acoustic heterodyning} (parametric acoustic arrays) exploits
-\textbf{nonlinear acoustics}: two ultrasound beams at \(f_1\), \(f_2\)
-mix to produce audible difference frequency \(f_\Delta = |f_1 - f_2|\).
+\textbf{Why this matters:} Museums use directional speakers that beam sound to just one person. Doctors use it for clearer ultrasound images. Scientists are exploring brain stimulation applications.
 
-\textbf{Established }: Parametric loudspeakers, underwater sonar,
-medical harmonic imaging\\
-\textbf{Speculative }: Neural stimulation via focused ultrasound
-heterodyning
+\textbf{The catch:} Only about 0.1--1\% of the ultrasound energy converts to audible sound, so you need powerful sources.
+\end{nontechnical}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Overview}
 
-\subsection{\texorpdfstring{Simple Explanation
-}{Simple Explanation }}\label{simple-explanation}
+\textbf{Acoustic heterodyning} (also called parametric acoustic arrays) exploits \textbf{nonlinear acoustics} to generate new frequencies through wave mixing. When two ultrasound beams at frequencies $f_1$ and $f_2$ interact in a nonlinear medium, they produce a difference frequency $f_\Delta = |f_1 - f_2|$ that can be in the audible range.
 
-\textbf{Imagine mixing colors}: When you mix blue and yellow paint, you
-get green. Acoustic heterodyning is similar, but with sound waves
-instead of colors.
+\begin{keyconcept}
+The key principle: \textbf{Nonlinear wave propagation} causes high-frequency ultrasound beams to interact and generate lower-frequency components. This enables highly directional low-frequency sound without requiring large transducer arrays.
+\end{keyconcept}
 
-\textbf{The basic idea}: 1. Take two ultrasound beams (too high-pitched
-for humans to hear, like dog whistles) 2. Aim them at the same spot 3.
-When they overlap, they ``mix'' together in a nonlinear way 4. This
-creates a new, audible sound at the \emph{difference} between their
-frequencies
+\textbf{Established applications:}
+\begin{itemize}
+\item Parametric loudspeakers for directional audio
+\item Underwater sonar systems
+\item Medical harmonic imaging
+\end{itemize}
 
-\textbf{Real-world example}: If you send 40,000 Hz and 42,000 Hz
-ultrasound beams (both inaudible), they can create a 2,000 Hz tone
-(clearly audible) where they meet.
-
-\textbf{Why this matters}: - \textbf{Directional sound}: The audible
-sound appears only where the beams cross, not everywhere -
-\textbf{Medical imaging}: Doctors use this to get clearer ultrasound
-pictures - \textbf{Targeted audio}: Museums use it to create sound that
-only one person can hear - \textbf{Research frontier}: Scientists are
-exploring whether this could stimulate specific brain regions
-
-\textbf{The catch}: This process is inefficient-\/-\/-only about 0.1-1\%
-of the ultrasound energy converts to audible sound. It\textquotesingle s
-like trying to light a room with a flashlight; it works, but you need a
-powerful source.
-
-\textbf{Safety note}: The ultrasound intensities used are generally safe
-(similar to medical ultrasounds), though higher powers for brain
-stimulation remain experimental.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Emerging research:}
+\begin{itemize}
+\item Neural stimulation via focused ultrasound heterodyning
+\item Targeted drug delivery using acoustic pressure modulation
+\end{itemize}
 
 \subsection{\texorpdfstring{1. Physical Mechanism
 }{1. Physical Mechanism }}\label{physical-mechanism}
