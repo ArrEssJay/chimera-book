@@ -227,10 +227,9 @@ where $\hat{\mathbf{k}}$ is the unit vector in the propagation direction.
 \draw[thin,dashed,gray] (1.5,0,0) -- (1.5,{2*sin(1.5*180/1.5)},0);
 \draw[thin,dashed,gray] (1.5,0,0) -- (1.5,0,{2*sin(1.5*180/1.5)});
 
-% Labels for specific points
-\node[above right,font=\scriptsize] at (5,1.5,0) {$\mathbf{E} \perp \mathbf{B}$};
-\node[below right,font=\scriptsize] at (5,0,1.5) {$\mathbf{E} \perp \hat{\mathbf{k}}$};
-\node[right,font=\scriptsize] at (7.5,0,0) {$\mathbf{B} \perp \hat{\mathbf{k}}$};
+% Labels for specific points - adjusted positioning to avoid overlap
+\node[above,font=\scriptsize] at (4.5,2.2,0) {$\mathbf{E} \perp \mathbf{B}$};
+\node[below,font=\scriptsize] at (6.5,-0.8,0) {$\mathbf{E} \perp \hat{\mathbf{k}}$, $\mathbf{B} \perp \hat{\mathbf{k}}$};
 \end{tikzpicture}
 \end{center}
 
@@ -508,14 +507,14 @@ Maxwell's equations apply to \textbf{all frequencies}---from extremely low frequ
 \draw[fill=black!35] (10,1) rectangle (12,2.5) node[pos=0.5,align=center,font=\scriptsize] {X-ray\\EHz};
 \draw[fill=black!40] (12,1) rectangle (14,2.5) node[pos=0.5,align=center,font=\scriptsize] {Gamma\\>EHz};
 
-% Wavelength labels
-\node[below,font=\scriptsize] at (1,1) {km};
-\node[below,font=\scriptsize] at (3,1) {cm};
-\node[below,font=\scriptsize] at (5,1) {$\mu$m};
-\node[below,font=\scriptsize] at (7,1) {700~nm};
-\node[below,font=\scriptsize] at (9,1) {100~nm};
-\node[below,font=\scriptsize] at (11,1) {1~nm};
-\node[below,font=\scriptsize] at (13,1) {pm};
+% Wavelength labels - positioned below rectangles to avoid overlap
+\node[below,font=\scriptsize] at (1,0.85) {km};
+\node[below,font=\scriptsize] at (3,0.85) {cm};
+\node[below,font=\scriptsize] at (5,0.85) {$\mu$m};
+\node[below,font=\scriptsize] at (7,0.85) {700~nm};
+\node[below,font=\scriptsize] at (9,0.85) {100~nm};
+\node[below,font=\scriptsize] at (11,0.85) {1~nm};
+\node[below,font=\scriptsize] at (13,0.85) {pm};
 
 % Applications
 \node[above,font=\scriptsize,align=center] at (1,2.5) {AM/FM\\WiFi\\5G};
@@ -562,8 +561,7 @@ Band & Frequency & Wavelength & Applications \\
 \textbf{Visible} & 430-750 THz & 400-700 nm & Human vision \\
 \textbf{UV} & 750 THz-30 PHz & 10-400 nm & Sterilization \\
 \textbf{X-ray} & 30 PHz-30 EHz & 0.01-10 nm & Medical imaging \\
-\textbf{Gamma} & \textgreater{} 30 EHz & \textless{} 0.01 nm & Nuclear
-medicine \\
+\textbf{Gamma} & \textgreater{} 30 EHz & \textless{} 0.01 nm & Nuclear medicine \\
 \end{longtable}
 }
 
@@ -575,7 +573,7 @@ The four Maxwell's equations interconnect to predict electromagnetic waves:
 
 \begin{center}
 \begin{tikzpicture}[
-  box/.style={rectangle, draw, minimum width=3.5cm, minimum height=1.2cm, font=\sffamily\small, align=center, thick},
+  box/.style={rectangle, draw, minimum width=3.5cm, minimum height=1.4cm, font=\sffamily\small, align=center, thick},
   node distance=2.5cm
 ]
 
@@ -583,10 +581,10 @@ The four Maxwell's equations interconnect to predict electromagnetic waves:
 \node[box] (gauss-e) at (0,3) {Gauss's Law (E)\\$\nabla \cdot \mathbf{E} = \rho/\epsilon_0$};
 \node[box] (gauss-b) at (6,3) {Gauss's Law (B)\\$\nabla \cdot \mathbf{B} = 0$};
 \node[box] (faraday) at (0,0) {Faraday's Law\\$\nabla \times \mathbf{E} = -\partial \mathbf{B}/\partial t$};
-\node[box] (ampere) at (6,0) {Ampère-Maxwell\\$\nabla \times \mathbf{B} = \mu_0\mathbf{J} + \mu_0\epsilon_0 \partial \mathbf{E}/\partial t$};
+\node[box, minimum width=4.2cm, text width=4cm] (ampere) at (6,0) {Ampère-Maxwell\\$\nabla \times \mathbf{B} = \mu_0\mathbf{J} +$\\$\mu_0\epsilon_0 \partial \mathbf{E}/\partial t$};
 
-% Central result
-\node[box, fill=black!10, minimum width=4cm] (waves) at (3,-2.5) {\textbf{EM Waves}\\$\nabla^2 \mathbf{E} = \mu_0\epsilon_0 \partial^2 \mathbf{E}/\partial t^2$\\$v = c = 1/\sqrt{\mu_0\epsilon_0}$};
+% Central result - adjusted size for better readability
+\node[box, fill=black!10, minimum width=4.5cm, minimum height=1.8cm, text width=4.3cm] (waves) at (3,-2.5) {\textbf{EM Waves}\\$\nabla^2 \mathbf{E} = \mu_0\epsilon_0 \partial^2 \mathbf{E}/\partial t^2$\\$v = c = 1/\sqrt{\mu_0\epsilon_0}$};
 
 % Arrows showing relationships
 \draw[->,very thick] (faraday) -- (gauss-e) node[midway,left,font=\scriptsize] {creates E};
