@@ -21,6 +21,9 @@ _minted*/
 # Test files
 test_*.tex
 !test_exemplar_v2.tex
+test-*.png
+page-*.png
+final-*.png
 
 # Validation logs
 validation_logs/
