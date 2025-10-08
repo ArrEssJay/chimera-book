@@ -234,41 +234,16 @@ Urban environment with $\tau_{\text{rms}} = 1~\mu$s:
 B_c \approx \frac{1}{5 \times 10^{-6}} = 200~\text{kHz}
 \end{equation*}
 
-\textbf{Typical $\tau_{\text{rms}}$ values:}
-\begin{itemize}
-\item \textbf{Rural/suburban}: 0.1--1~$\mu$s
-\item \textbf{Urban}: 1--5~$\mu$s
-\item \textbf{Indoor}: 10--100~ns
-\end{itemize}
-\end{calloutbox}
-
-\subsection{Coherence Bandwidth}
-
-The \textbf{coherence bandwidth} $B_c$ defines the frequency range over which the channel response is approximately flat (constant amplitude and linear phase):
-
-\begin{equation}
-B_c \approx \frac{1}{5\tau_{\text{rms}}}
-\end{equation}
-where:
-\begin{itemize}
-\item $B_c$ = coherence bandwidth (Hz)
-\item $\tau_{\text{rms}}$ = RMS delay spread (seconds)
-\end{itemize}
-
-\begin{warningbox}
-If signal bandwidth $B > B_c$, the channel exhibits \textbf{frequency-selective fading}---different frequency components fade independently, causing \textbf{intersymbol interference (ISI)}. Equalization or OFDM is required.
-\end{warningbox}
-
-\textbf{Example:} Urban environment with $\tau_{\text{rms}} = 1~\mu$s:
-\begin{equation}
-B_c \approx \frac{1}{5 \times 10^{-6}} = 200~\text{kHz}
-\end{equation}
-
 \textbf{Classification:}
 \begin{itemize}
 \item \textbf{Narrowband signal} ($B < 200$~kHz): Flat fading (all frequencies fade together)
 \item \textbf{Wideband signal} ($B > 200$~kHz): Frequency-selective fading (ISI present)
 \end{itemize}
+\end{calloutbox}
+
+\begin{warningbox}
+If signal bandwidth $B > B_c$, the channel exhibits \textbf{frequency-selective fading}---different frequency components fade independently, causing \textbf{intersymbol interference (ISI)}. Equalization or OFDM is required.
+\end{warningbox}
 
 \subsection{Intersymbol Interference (ISI)}
 
@@ -345,35 +320,18 @@ T_c = \frac{0.423}{370} = 1.14~\text{ms}
 
 \subsection{Fading Classifications}\label{fading-classifications}
 
-\subsubsection{Flat vs
-Frequency-Selective}\label{flat-vs-frequency-selective}
+\subsubsection{Flat vs Frequency-Selective}\label{flat-vs-frequency-selective}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1622}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2973}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2162}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3243}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Type
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Condition
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Effect
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Mitigation
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Flat} & \(B \ll B_c\) & All frequencies fade together &
-Diversity, FEC \\
-\textbf{Frequency-selective} & \(B \gg B_c\) & Different frequencies
-fade independently & Equalization, OFDM \\
-\end{longtable}
-}
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Type} & \textbf{Condition} & \textbf{Effect} & \textbf{Mitigation} \\
+\midrule
+\textbf{Flat} & $B \ll B_c$ & All frequencies fade together & Diversity, FEC \\
+\textbf{Frequency-selective} & $B \gg B_c$ & Different frequencies fade independently & Equalization, OFDM \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \begin{calloutbox}{Example: Channel Coherence Time}
 100~km/h at 2~GHz:
