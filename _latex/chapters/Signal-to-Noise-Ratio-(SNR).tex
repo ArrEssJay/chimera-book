@@ -124,7 +124,7 @@ SNR quantifies the separation between desired signal and unwanted noise:
 \begin{tikzpicture}[scale=1.0]
 % Axes
 \draw[->] (-0.5,0) -- (8.5,0) node[right,font=\sffamily\small] {Time};
-\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {Amplitude};
+\draw[->] (0,-2.5) -- (0,3.2) node[above,font=\sffamily\small] {Amplitude};
 
 % Clean signal
 \draw[thick,blue] plot[domain=0:8,samples=100] (\x,{1.5*sin(4*\x r)});
@@ -143,7 +143,7 @@ SNR quantifies the separation between desired signal and unwanted noise:
 \node[right,font=\sffamily\scriptsize] at (7.5,0) {1};
 
 % Title
-\node[font=\sffamily\bfseries] at (4,2.8) {High SNR: Signal >> Noise};
+\node[font=\sffamily\bfseries] at (4,2.9) {High SNR: Signal >> Noise};
 \end{tikzpicture}
 \end{center}
 
@@ -151,7 +151,7 @@ SNR quantifies the separation between desired signal and unwanted noise:
 \begin{tikzpicture}[scale=1.0]
 % Axes
 \draw[->] (-0.5,0) -- (8.5,0) node[right,font=\sffamily\small] {Time};
-\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {Amplitude};
+\draw[->] (0,-2.5) -- (0,3.2) node[above,font=\sffamily\small] {Amplitude};
 
 % Signal with heavy noise
 \draw[blue,opacity=0.5] plot[domain=0:8,samples=100] (\x,{0.6*sin(4*\x r)});
@@ -171,7 +171,7 @@ SNR quantifies the separation between desired signal and unwanted noise:
 \node[right,font=\sffamily\scriptsize] at (7.5,0) {SNR $\approx$ 1};
 
 % Title
-\node[font=\sffamily\bfseries] at (4,2.8) {Low SNR: Signal $\approx$ Noise};
+\node[font=\sffamily\bfseries] at (4,2.9) {Low SNR: Signal $\approx$ Noise};
 \end{tikzpicture}
 \end{center}
 
@@ -180,7 +180,7 @@ SNR quantifies the separation between desired signal and unwanted noise:
 \begin{center}
 \begin{tikzpicture}[
   block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.5cm,
+  node distance=2.8cm,
   font=\small
 ]
 % Transmitter
@@ -209,17 +209,17 @@ SNR quantifies the separation between desired signal and unwanted noise:
 };
 
 % Antenna symbols
-\draw[thick] (tx.east) ++(0.8,0.3) -- ++(0.3,0.3) -- ++(-0.3,0.3);
-\draw[thick] (tx.east) ++(0.8,-0.3) -- ++(0.3,-0.3) -- ++(-0.3,-0.3);
-\draw[thick] (channel.west) ++(-0.8,0.3) -- ++(-0.3,0.3) -- ++(0.3,0.3);
-\draw[thick] (channel.west) ++(-0.8,-0.3) -- ++(-0.3,-0.3) -- ++(0.3,-0.3);
+\draw[thick] (tx.east) ++(0.5,0.3) -- ++(0.25,0.25) -- ++(-0.25,0.25);
+\draw[thick] (tx.east) ++(0.5,-0.3) -- ++(0.25,-0.25) -- ++(-0.25,-0.25);
+\draw[thick] (channel.west) ++(-0.5,0.3) -- ++(-0.25,0.25) -- ++(0.25,0.25);
+\draw[thick] (channel.west) ++(-0.5,-0.3) -- ++(-0.25,-0.25) -- ++(0.25,-0.25);
 \end{tikzpicture}
 \end{center}
 
 \subsection{SNR Impact on Constellation}
 
 \begin{center}
-\begin{tikzpicture}[scale=0.9]
+\begin{tikzpicture}[scale=0.7]
 % High SNR constellation
 \begin{scope}[shift={(0,0)}]
 \node[above,font=\sffamily\bfseries] at (0,3.2) {High SNR (20 dB)};
@@ -234,11 +234,11 @@ SNR quantifies the separation between desired signal and unwanted noise:
     \fill[black,opacity=0.3] (\x+0.05*rand,\y+0.05*rand) circle (0.5pt);
   }
 }
-\node[below,font=\scriptsize] at (0,-2.5) {Tight clusters, clear separation};
+\node[below,font=\scriptsize] at (0,-2.7) {Tight clusters, clear separation};
 \end{scope}
 
 % Medium SNR constellation
-\begin{scope}[shift={(6,0)}]
+\begin{scope}[shift={(5.5,0)}]
 \node[above,font=\sffamily\bfseries] at (0,3.2) {Medium SNR (10 dB)};
 \draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
 \draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
@@ -251,11 +251,11 @@ SNR quantifies the separation between desired signal and unwanted noise:
     \fill[black,opacity=0.2] (\x+0.2*rand,\y+0.2*rand) circle (0.5pt);
   }
 }
-\node[below,font=\scriptsize] at (0,-2.5) {Visible scatter, some overlap};
+\node[below,font=\scriptsize] at (0,-2.7) {Visible scatter, some overlap};
 \end{scope}
 
 % Low SNR constellation
-\begin{scope}[shift={(12,0)}]
+\begin{scope}[shift={(11,0)}]
 \node[above,font=\sffamily\bfseries] at (0,3.2) {Low SNR (3 dB)};
 \draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
 \draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
@@ -268,7 +268,7 @@ SNR quantifies the separation between desired signal and unwanted noise:
     \fill[black,opacity=0.15] (\x+0.5*rand,\y+0.5*rand) circle (0.5pt);
   }
 }
-\node[below,font=\scriptsize] at (0,-2.5) {Heavy scatter, decision errors};
+\node[below,font=\scriptsize] at (0,-2.7) {Heavy scatter, decision errors};
 \end{scope}
 \end{tikzpicture}
 \end{center}
