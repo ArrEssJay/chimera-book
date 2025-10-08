@@ -47,7 +47,7 @@ Signals combine \textbf{constructively} or \textbf{destructively}, causing \text
 \subsection{Multipath Propagation Visualization}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2,
+\begin{tikzpicture}[scale=1.0,
   node distance=1.5cm,
   block/.style={rectangle, draw, minimum width=1.2cm, minimum height=0.8cm, font=\sffamily\small},
   path/.style={->, thick}
@@ -78,9 +78,9 @@ Signals combine \textbf{constructively} or \textbf{destructively}, causing \text
 \draw[path, orange, dotted] (tx) .. controls (4,-1.5) and (6,-1) .. node[below,font=\scriptsize,pos=0.5] {Scatter} (rx);
 
 % Time annotations
-\node[font=\scriptsize,align=left] at (11,0) {$\tau_0$ (direct)};
-\node[font=\scriptsize,align=left] at (11,1.5) {$\tau_1 > \tau_0$};
-\node[font=\scriptsize,align=left] at (11,-1.5) {$\tau_2 > \tau_0$};
+\node[font=\scriptsize,align=left] at (10,0) {$\tau_0$ (direct)};
+\node[font=\scriptsize,align=left] at (10,1.5) {$\tau_1 > \tau_0$};
+\node[font=\scriptsize,align=left] at (10,-1.5) {$\tau_2 > \tau_0$};
 
 \end{tikzpicture}
 \end{center}
@@ -215,35 +215,6 @@ Environment & $\tau_{\text{rms}}$ \\
 
 \subsection{Coherence Bandwidth}
 
-\textbf{Frequency range over which channel response is flat:}
-\begin{equation}
-B_c \approx \frac{1}{5\tau_{\text{rms}}}
-\label{eq:coherence-bandwidth}
-\end{equation}
-where:
-\begin{itemize}
-\item $B_c$ = coherence bandwidth (Hz)
-\item $\tau_{\text{rms}}$ = RMS delay spread (s)
-\end{itemize}
-
-\textbf{Implication:} If signal bandwidth $B > B_c$ $\rightarrow$ \textbf{frequency-selective fading} (different frequencies fade independently).
-
-\begin{calloutbox}{Example: Urban Channel}
-Urban environment with $\tau_{\text{rms}} = 1~\mu$s:
-\begin{equation*}
-B_c \approx \frac{1}{5 \times 10^{-6}} = 200~\text{kHz}
-\end{equation*}
-
-\textbf{Typical $\tau_{\text{rms}}$ values:}
-\begin{itemize}
-\item \textbf{Rural/suburban}: 0.1--1~$\mu$s
-\item \textbf{Urban}: 1--5~$\mu$s
-\item \textbf{Indoor}: 10--100~ns
-\end{itemize}
-\end{calloutbox}
-
-\subsection{Coherence Bandwidth}
-
 The \textbf{coherence bandwidth} $B_c$ defines the frequency range over which the channel response is approximately flat (constant amplitude and linear phase):
 
 \begin{equation}
@@ -345,8 +316,7 @@ T_c = \frac{0.423}{370} = 1.14~\text{ms}
 
 \subsection{Fading Classifications}\label{fading-classifications}
 
-\subsubsection{Flat vs
-Frequency-Selective}\label{flat-vs-frequency-selective}
+\subsubsection{Flat vs Frequency-Selective}\label{flat-vs-frequency-selective}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
