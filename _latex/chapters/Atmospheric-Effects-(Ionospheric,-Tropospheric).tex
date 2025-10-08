@@ -115,10 +115,10 @@ Understanding these effects is critical for:
 
 % Day/Night profile curves (schematic)
 \draw[thick,blue] (2,1.5) .. controls (4,2) and (5,3) .. (6,4) .. controls (7,5) and (8,6.5) .. (8.5,6.8);
-\node[blue,font=\scriptsize] at (9,7) {Day};
+\node[blue,font=\scriptsize] at (8.7,7.2) {Day};
 
 \draw[thick,red,dashed] (1.5,1.2) .. controls (3,1.8) and (4,2.5) .. (5,3.5) .. controls (6,4.5) and (6.5,5.5) .. (6.8,6);
-\node[red,font=\scriptsize] at (7.5,6.5) {Night};
+\node[red,font=\scriptsize] at (7.2,6.2) {Night};
 \end{tikzpicture}
 \end{center}
 
@@ -143,20 +143,16 @@ Characteristics
 \bottomrule\noalign{}
 \endlastfoot
 \textbf{D} & 60-90 km &
-10\textbackslash textsuperscript\{8\}-10\textbackslash textsuperscript\{9\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{3\}
+$10^8$--$10^9$ e$^-$/m$^3$
 & \textbf{Absorbs MF/HF} (daytime only) \\
 \textbf{E} & 90-150 km &
-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{0\}-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{1\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{3\}
+$10^{10}$--$10^{11}$ e$^-$/m$^3$
 & Reflects MF, low HF \\
 \textbf{F1} & 150-250 km &
-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{1\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{3\}
+$10^{11}$ e$^-$/m$^3$
 & Daytime only, merges with F2 at night \\
 \textbf{F2} & 250-400 km &
-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{1\}-10\textbackslash textsuperscript\{1\}\textbackslash textsuperscript\{2\}
-e\textbackslash textsuperscript\{-\}/m\textbackslash textsuperscript\{3\}
+$10^{11}$--$10^{12}$ e$^-$/m$^3$
 & \textbf{Primary HF reflector}, highest density \\
 \end{longtable}
 }
@@ -522,7 +518,7 @@ This is approximately 33\% farther than the geometric horizon (17~km).
 \textbf{Temperature inversion} (warm air over cool air) creates a refractive layer that traps radio waves, enabling \textbf{super-refraction}.
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.85]
 % Earth surface
 \draw[thick] (0,0) -- (14,0);
 \fill[black!20] (0,-0.3) rectangle (14,0);
@@ -603,7 +599,7 @@ This is approximately 33\% farther than the geometric horizon (17~km).
 Certain frequency ranges experience low atmospheric absorption, creating \textbf{atmospheric windows} suitable for wireless communications.
 
 \begin{center}
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}[scale=0.95]
 % Axes
 \draw[->] (0,0) -- (12,0) node[right,font=\sffamily\small] {Frequency};
 \draw[->] (0,0) -- (0,6) node[above,font=\sffamily\small] {Attenuation (dB/km)};
