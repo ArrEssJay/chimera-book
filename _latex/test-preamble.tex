@@ -1,0 +1,90 @@
+% ==============================================================================
+% Test Preamble for mmWave Chapter
+% ==============================================================================
+
+% --- Font and Encoding ---
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+
+\usepackage{textcomp}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\checkmark}
+\newunicodechar{✗}{\texttimes}
+\newunicodechar{°}{\ifmmode^\circ\else\textdegree\fi}
+\newunicodechar{⚠}{\textbf{!}}
+
+% --- Page Layout ---
+\usepackage[paperwidth=7in, paperheight=10in, top=0.75in, bottom=0.75in, left=0.875in, right=0.875in, headheight=14.5pt]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\nouppercase{\leftmark}}
+\fancyhead[LO]{\nouppercase{\rightmark}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% --- Language and Typography ---
+\usepackage[english]{babel}
+\usepackage{microtype}
+
+% --- Math and Symbols ---
+\usepackage{amsmath, amssymb, amsfonts}
+
+% --- Graphics and Colors ---
+\usepackage{graphicx}
+\usepackage[dvipsnames, svgnames]{xcolor}
+\setkeys{Gin}{width=\linewidth,height=0.8\textheight,keepaspectratio}
+
+% TikZ for diagrams
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, patterns}
+
+% --- Hyperlinks and Referencing ---
+\usepackage[colorlinks=true, linkcolor=NavyBlue, citecolor=NavyBlue, urlcolor=NavyBlue, bookmarks=true]{hyperref}
+
+% --- Tables ---
+\usepackage{longtable, booktabs, array}
+
+% --- Code Highlighting ---
+\usepackage{minted}
+\usemintedstyle{friendly}
+\setminted{
+  frame=lines,
+  framesep=2mm,
+  baselinestretch=1,
+  fontsize=\small,
+  linenos
+}
+
+% --- Lists ---
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=5pt}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% --- Chapter and Section Styling ---
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\Large}
+  {\chaptertitlename\ \thechapter}{12pt}{\fontsize{24}{28}\selectfont}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+\titleformat{\section}
+  {\sffamily\bfseries\large}
+  {\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\small}
+  {\thesubsubsection}{1em}{}
+
+% --- Shaded environment for code ---
+\usepackage{framed}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\definecolor{shadecolor}{RGB}{248,248,248}
