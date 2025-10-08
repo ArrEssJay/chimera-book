@@ -24,7 +24,7 @@ command -v pandoc >/dev/null 2>&1 || { echo "❌ pandoc required but not install
 command -v bundle >/dev/null 2>&1 || { echo "❌ bundle required but not installed"; exit 1; }
 
 # Directories
-LATEX_DIR="_latex"
+LATEX_DIR="latex"
 CHAPTERS_DIR="chapters"
 FRONTMATTER_DIR="frontmatter"
 BUILD_DIR="_build"

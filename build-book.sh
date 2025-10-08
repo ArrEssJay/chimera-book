@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 # build-book.sh - Compile the complete Chimera book
 
 set -e  # Exit on error
@@ -13,7 +13,7 @@ command -v xelatex >/dev/null 2>&1 || { echo "Error: xelatex not found"; exit 1;
 command -v biber >/dev/null 2>&1 || { echo "Error: biber not found"; exit 1; }
 
 # Directories
-LATEX_DIR="_latex"
+LATEX_DIR="latex"
 BUILD_DIR="_build"
 
 # Main document
