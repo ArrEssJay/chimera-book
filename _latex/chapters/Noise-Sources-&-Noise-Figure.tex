@@ -417,10 +417,10 @@ F_{\text{total}} = 1.2 + 0.013 + 0.0028 = 1.216
 The following diagram compares the total noise figure for the three receiver configurations:
 
 \begin{center}
-\begin{tikzpicture}[scale=1.3]
+\begin{tikzpicture}[scale=1.1]
 % Axes
 \draw[->] (0,0) -- (0,4) node[above] {\sffamily\small NF (dB)};
-\draw[->] (-0.5,0) -- (9,0) node[right] {\sffamily\small Configuration};
+\draw[->] (-0.5,0) -- (8.5,0) node[right] {\sffamily\small Configuration};
 
 % Grid
 \draw[very thin,gray!30] (0,0) grid[step=0.5] (8.5,3.5);
@@ -477,7 +477,7 @@ The following diagram illustrates a typical receiver chain showing how noise acc
 \node[below=0.3cm of if, font=\scriptsize, text=gray] {$\frac{F_4-1}{G_1G_2G_3}$};
 
 % Friis formula annotation
-\node[below=1.5cm of cable, font=\scriptsize, align=center, text width=10cm] {
+\node[below=1.5cm of cable, font=\scriptsize, align=center] {
 Friis Formula: $F_{\text{tot}} = F_1 + \frac{F_2-1}{G_1} + \frac{F_3-1}{G_1G_2} + \cdots$
 };
 \end{tikzpicture}
@@ -568,7 +568,7 @@ where:
 The following diagram illustrates different noise sources and their frequency dependencies:
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=1.0]
 % Axes
 \draw[->] (0,0) -- (10,0) node[right] {\sffamily\small Frequency};
 \draw[->] (0,0) -- (0,5) node[above] {\sffamily\small Noise Power};
@@ -967,10 +967,10 @@ NASA deep space missions push the limits of sensitivity:
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.18}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.20}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.26}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.27}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.27}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.28}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.27}}@{}}
 \toprule\noalign{}
 Noise Source & Spectral Density & When Significant & Mitigation \\
 \midrule\noalign{}
