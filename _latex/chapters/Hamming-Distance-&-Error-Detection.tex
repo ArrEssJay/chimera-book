@@ -441,9 +441,12 @@ d31  d32  d33  | p3
  c1   c2   c3  | pc  (col parity, overall)
 \end{verbatim}
 
-\textbf{Properties}: - Detect all 1, 2, 3-bit errors - Correct
-single-bit error (row \$\textbackslash cap\$ column identifies position)
-- Some 4+ bit error patterns undetected
+\textbf{Properties}:
+\begin{itemize}
+\item Detect all 1, 2, 3-bit errors
+\item Correct single-bit error (row $\cap$ column identifies position)
+\item Some 4+ bit error patterns undetected
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -621,8 +624,7 @@ d_{\min} \leq n - k + 1
 \sum_{i=0}^{d-2} \binom{n-1}{i} < 2^{n-k}
 \]
 
-\textbf{Interpretation}: ``Good'' codes exist, even if we
-don\textquotesingle t know how to construct them
+\textbf{Interpretation}: ``Good'' codes exist, even if we don't know how to construct them
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -634,9 +636,12 @@ don\textquotesingle t know how to construct them
 Hamming code with extra parity bit - \(d_{\min} = 4\) - Correct 1 bit,
 detect 2 bits
 
-\textbf{Example}: 64-bit data - Hamming: 7 parity bits (for 1-bit
-correction) - +1 bit for double detection \$\textbackslash rightarrow\$
-8 bits total - (64, 72) SECDED code
+\textbf{Example}: 64-bit data
+\begin{itemize}
+\item Hamming: 7 parity bits (for 1-bit correction)
+\item +1 bit for double detection $\rightarrow$ 8 bits total
+\item (64, 72) SECDED code
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -653,11 +658,17 @@ correct 2 symbol errors (16 bits)
 
 \subsubsection{Networking}\label{networking}
 
-\textbf{CRC-32} (Ethernet): - Detects all burst errors
-\$\textbackslash leq\$32 bits - Detects 99.9999\% of longer bursts
+\textbf{CRC-32} (Ethernet):
+\begin{itemize}
+\item Detects all burst errors $\leq$ 32 bits
+\item Detects 99.9999\% of longer bursts
+\end{itemize}
 
-\textbf{TCP checksum}: - 16-bit sum (weak) - Mainly detects random
-errors, not malicious
+\textbf{TCP checksum}:
+\begin{itemize}
+\item 16-bit sum (weak)
+\item Mainly detects random errors, not malicious
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -683,10 +694,9 @@ frequent errors) - Outer: Reed-Solomon (correct burst errors)
 
 \textbf{Designed for burst errors}
 
-\textbf{Parameters}: \((n, k)\) code detecting bursts
-\$\textbackslash leq\$ \(b\)
+\textbf{Parameters}: $(n, k)$ code detecting bursts $\leq b$
 
-\textbf{Requirement}: \(n - k \geq b\)
+\textbf{Requirement}: $n - k \geq b$
 
 \textbf{Generator polynomial}: Special structure
 
@@ -746,8 +756,7 @@ P_e \leq \sum_{i=d_{\min}}^{n} A_i \cdot P(\text{decode } c_i \text{ as another 
 
 \subsection{Soft-Decision Metrics}\label{soft-decision-metrics}
 
-\textbf{Hard decision}: Received bit \$\textbackslash rightarrow\$ 0 or
-1 (threshold)
+\textbf{Hard decision}: Received bit $\rightarrow$ 0 or 1 (threshold)
 
 \textbf{Soft decision}: Keep analog value (confidence)
 
@@ -775,8 +784,7 @@ Error Type & Detection Method & Overhead & Capability \\
 \endlastfoot
 \textbf{Single bit} & Parity & 1 bit & Detect only \\
 \textbf{1-2 bits} & Hamming(7,4) & 43\% & Correct 1, detect 2 \\
-\textbf{Burst \$\textbackslash leq\$32 bits} & CRC-32 & 32 bits & Detect
-only \\
+\textbf{Burst $\leq$32 bits} & CRC-32 & 32 bits & Detect only \\
 \textbf{Random errors} & Reed-Solomon & 10-20\% & Correct + detect \\
 \textbf{Deep space} & Concatenated & 50\%+ & Very robust \\
 \end{longtable}
