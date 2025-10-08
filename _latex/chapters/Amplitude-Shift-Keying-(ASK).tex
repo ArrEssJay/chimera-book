@@ -154,7 +154,7 @@ The ASK modulator generates amplitude-modulated carrier signals:
 \node[block, right of=mult, node distance=3cm] (filter) {Bandpass\\Filter};
 \node[right of=filter, node distance=2.8cm] (output) {\sffamily ASK\\Output};
 
-\node[below of=mult, node distance=1.5cm, font=\small] (carrier) {$\cos(2\pi f_c t)$};
+\node[below of=mult, node distance=1.5cm, font=\scriptsize] (carrier) {$\cos(2\pi f_c t)$};
 
 \draw[->,thick] (input) -- (s2p);
 \draw[->,thick] (s2p) -- node[above,font=\scriptsize] {$\log_2(M)$ bits} (map);
