@@ -370,17 +370,17 @@ where $d$ is the unit spacing (normalized distance between adjacent symbols).
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
-Modulation & Bits/symbol & Spectral Efficiency & Practical Limit \\
+Modulation & Bits/sym & Spectral Eff. & SNR Requirement \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\textbf{QPSK} & 2 & 1.48 & Good SNR (10 dB) \\
-\textbf{16-QAM} & 4 & 2.96 & Moderate SNR (15 dB) \\
-\textbf{64-QAM} & 6 & 4.44 & High SNR (20 dB) \\
-\textbf{256-QAM} & 8 & 5.93 & Very high SNR (25 dB) \\
-\textbf{1024-QAM} & 10 & 7.41 & Excellent SNR (30 dB), wired only \\
-\textbf{4096-QAM} & 12 & 8.89 & Exceptional SNR (35 dB), cable/DSL \\
+\textbf{QPSK} & 2 & 1.48 & Good (10 dB) \\
+\textbf{16-QAM} & 4 & 2.96 & Moderate (15 dB) \\
+\textbf{64-QAM} & 6 & 4.44 & High (20 dB) \\
+\textbf{256-QAM} & 8 & 5.93 & Very high (25 dB) \\
+\textbf{1024-QAM} & 10 & 7.41 & Excellent (30 dB) \\
+\textbf{4096-QAM} & 12 & 8.89 & Exceptional (35 dB) \\
 \end{longtable}
 }
 
@@ -761,12 +761,10 @@ Standard & Max QAM & Max Rate & Notes \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\textbf{802.11a} & 64-QAM & 54 Mbps & 20 MHz channel \\
-\textbf{802.11n} & 64-QAM & 600 Mbps & 4\$\textbackslash times\$4 MIMO,
-40 MHz \\
-\textbf{802.11ac} & 256-QAM & 6.9 Gbps & 8\$\textbackslash times\$8
-MIMO, 160 MHz \\
-\textbf{802.11ax} (WiFi 6) & 1024-QAM & 9.6 Gbps & OFDMA, MU-MIMO \\
+\textbf{802.11a} & 64-QAM & 54 Mbps & 20 MHz \\
+\textbf{802.11n} & 64-QAM & 600 Mbps & 4$\times$4 MIMO, 40 MHz \\
+\textbf{802.11ac} & 256-QAM & 6.9 Gbps & 8$\times$8 MIMO, 160 MHz \\
+\textbf{802.11ax} & 1024-QAM & 9.6 Gbps & OFDMA, MU-MIMO \\
 \end{longtable}
 }
 
@@ -1066,18 +1064,18 @@ where:
 \toprule
 \textbf{Parameter} & \textbf{Value/Description} \\
 \midrule
-Basic principle & Modulate both amplitude \emph{and} phase \\
-Constellation & Rectangular grid in I/Q plane \\
-Common orders & 16-QAM (4 bits), 64-QAM (6 bits), 256-QAM (8 bits) \\
-Spectral efficiency & $\eta = \log_2(M)/(1+\alpha)$ bps/Hz \\
+Principle & Modulate amplitude \emph{and} phase \\
+Constellation & Rectangular I/Q grid \\
+Common orders & 16-QAM (4b), 64-QAM (6b), 256-QAM (8b) \\
+Spectral eff. & $\eta = \log_2(M)/(1+\alpha)$ bps/Hz \\
 Gray coding & Adjacent symbols differ by 1 bit \\
-BER (64-QAM @ 10$^{-6}$) & Requires $E_b/N_0 \approx 18.5$~dB \\
-Detection & Coherent I/Q demodulation, nearest neighbor \\
-PAPR & Increases with QAM order (non-constant envelope) \\
-Key advantage & Optimal use of 2D signal space \\
-Key disadvantage & Requires high SNR, sensitive to impairments \\
-Primary applications & WiFi, LTE/5G, cable modems, microwave links \\
-Adaptive modulation & Switch QAM order based on channel SNR \\
+BER (64-QAM) & Requires $E_b/N_0 \approx 18.5$~dB @ $10^{-6}$ \\
+Detection & Coherent I/Q, nearest neighbor \\
+PAPR & Increases with order \\
+Advantage & Optimal 2D signal space use \\
+Disadvantage & High SNR, sensitive to impairments \\
+Applications & WiFi, LTE/5G, cable, microwave \\
+Adaptive & Switch order based on SNR \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1087,16 +1085,17 @@ Adaptive modulation & Switch QAM order based on channel SNR \\
 \textbf{Performance comparison:}
 
 \begin{center}
+\small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{QAM Order} & \textbf{Bits/Symbol} & \textbf{$d_{\min}$} & \textbf{$E_b/N_0$ @ BER=$10^{-6}$} & \textbf{Typical Use} \\
+\textbf{Order} & \textbf{Bits/sym} & \textbf{$d_{\min}$} & \textbf{$E_b/N_0$ @ $10^{-6}$} & \textbf{Use Case} \\
 \midrule
-4-QAM (QPSK) & 2 & 1.41 & 10.5~dB & Satellite, long-range \\
-16-QAM & 4 & 0.63 & 14.5~dB & WiFi, LTE baseline \\
-64-QAM & 6 & 0.31 & 18.5~dB & WiFi, LTE good SNR \\
-256-QAM & 8 & 0.15 & 23~dB & WiFi 5/6, LTE-A \\
-1024-QAM & 10 & 0.098 & 27.5~dB & WiFi 6 (short range) \\
-4096-QAM & 12 & 0.049 & 32~dB & Cable/DSL only \\
+QPSK & 2 & 1.41 & 10.5~dB & Satellite \\
+16-QAM & 4 & 0.63 & 14.5~dB & WiFi/LTE \\
+64-QAM & 6 & 0.31 & 18.5~dB & Good SNR \\
+256-QAM & 8 & 0.15 & 23~dB & WiFi 5/6 \\
+1024-QAM & 10 & 0.098 & 27.5~dB & Short range \\
+4096-QAM & 12 & 0.049 & 32~dB & Cable/DSL \\
 \bottomrule
 \end{tabular}
 \end{center}
