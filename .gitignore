@@ -28,6 +28,9 @@ validation_logs/
 # Chapter tests
 chapter_tests/
 
+# Screenshots
+.github/screenshots/
+
 # OS files
 .DS_Store
 Thumbs.db
