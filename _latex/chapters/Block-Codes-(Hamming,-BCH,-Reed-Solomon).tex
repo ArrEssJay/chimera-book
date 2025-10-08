@@ -142,21 +142,21 @@ Since $\mathbf{c} \cdot H^T = \mathbf{0}$:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
-  node distance=2.5cm,
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small, align=center},
+  node distance=2.2cm,
   font=\small
 ]
 % Encoder section
 \node (input) {\sffamily Data\\$\mathbf{d}$\\$(k$ bits$)$};
-\node[block, right of=input, node distance=3cm] (encoder) {Encoder\\$\mathbf{c}=\mathbf{d}G$};
-\node[block, right of=encoder, node distance=3.2cm] (channel) {Noisy\\Channel};
-\node[right of=channel, node distance=3cm] (received) {\sffamily Received\\$\mathbf{r}$};
+\node[block, right of=input, node distance=2.6cm] (encoder) {Encoder\\$\mathbf{c}=\mathbf{d}G$};
+\node[block, right of=encoder, node distance=2.8cm] (channel) {Noisy\\Channel};
+\node[right of=channel, node distance=2.6cm] (received) {\sffamily Received\\$\mathbf{r}$};
 
 % Decoder section
 \node[block, below of=received, node distance=2cm] (syndrome) {Syndrome\\$\mathbf{s}=\mathbf{r}H^T$};
-\node[block, left of=syndrome, node distance=3.5cm] (lookup) {Error\\Lookup};
-\node[block, left of=lookup, node distance=3.5cm] (correct) {Correct\\$\hat{\mathbf{c}}=\mathbf{r}-\mathbf{e}$};
-\node[left of=correct, node distance=3.2cm] (output) {\sffamily Data\\$\hat{\mathbf{d}}$\\$(k$ bits$)$};
+\node[block, left of=syndrome, node distance=3cm] (lookup) {Error\\Lookup};
+\node[block, left of=lookup, node distance=3cm] (correct) {Correct\\$\hat{\mathbf{c}}=\mathbf{r}-\mathbf{e}$};
+\node[left of=correct, node distance=2.8cm] (output) {\sffamily Data\\$\hat{\mathbf{d}}$\\$(k$ bits$)$};
 
 % Arrows - Encoder path
 \draw[->,thick] (input) -- (encoder);
@@ -490,12 +490,12 @@ Codes}\label{common-reed-solomon-codes}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2653}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1224}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1020}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2041}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1020}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2041}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.22}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.16}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.08}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.24}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.08}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.12}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Application
@@ -516,8 +516,7 @@ Overhead
 \endlastfoot
 \textbf{CD/DVD} & RS(32,28) & 8 & (255,251) shortened & 2 & 14\% \\
 \textbf{QR Code} & RS(255,223) & 8 & (255,223) & 16 & 14\% \\
-\textbf{DVB (satellite)} & RS(204,188) & 8 & (255,239) shortened & 8 &
-8.5\% \\
+\textbf{DVB (satellite)} & RS(204,188) & 8 & (255,239) shortened & 8 & 8.5\% \\
 \textbf{RAID-6} & RS(n, n-2) & 8 & Variable & 2 & 2 disks \\
 \textbf{Voyager} & RS(255,223) & 8 & (255,223) & 16 & 14\% \\
 \textbf{DSL (ADSL2+)} & RS(255,239) & 8 & (255,239) & 8 & 6.7\% \\
@@ -704,9 +703,9 @@ The Hamming(7,4) code reduces BER from $10^{-3}$ to $1.4 \times 10^{-5}$---a \te
 \subsection{TikZ Diagram: BER Performance Comparison}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=1.0]
 % Axes
-\draw[->] (0,0) -- (7,0) node[right,font=\sffamily\small] {$E_b/N_0$ (dB)};
+\draw[->] (0,0) -- (8,0) node[right,font=\sffamily\small] {$E_b/N_0$ (dB)};
 \draw[->] (0,0) -- (0,5) node[above,font=\sffamily\small] {BER};
 
 % Grid
@@ -726,19 +725,19 @@ The Hamming(7,4) code reduces BER from $10^{-3}$ to $1.4 \times 10^{-5}$---a \te
 
 % Uncoded curve (steeper)
 \draw[thick,red,dashed] (0,4.5) .. controls (2,3) and (4,1.5) .. (6,0.5);
-\node[red,font=\small,right] at (6.5,0.5) {Uncoded};
+\node[red,font=\scriptsize] at (5.5,0.9) {Uncoded};
 
 % Hamming(7,4) curve
 \draw[thick,blue] (1,4.5) .. controls (3,2.5) and (5,1) .. (7,0.2);
-\node[blue,font=\small,right] at (7.2,0.2) {Hamming(7,4)};
+\node[blue,font=\scriptsize] at (6.2,0.5) {Hamming(7,4)};
 
 % BCH(31,16) curve
 \draw[thick,green!60!black] (2,4.5) .. controls (4,2) and (6,0.5) .. (7,0.1);
-\node[green!60!black,font=\small,above right] at (7,0.1) {BCH(31,16)};
+\node[green!60!black,font=\scriptsize] at (6.0,0.15) {BCH(31,16)};
 
 % RS(255,223) curve
 \draw[thick,orange!80!black] (2.5,4.5) .. controls (4.5,1.8) and (6.2,0.3) .. (7,0.05);
-\node[orange!80!black,font=\small,below right] at (6.8,0.05) {RS(255,223)};
+\node[orange!80!black,font=\scriptsize] at (5.2,0.6) {RS(255,223)};
 
 % Annotation: Coding Gain
 \draw[<->,thick,purple] (3.5,2.5) -- (5.5,2.5);
