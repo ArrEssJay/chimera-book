@@ -152,16 +152,16 @@ OOK is almost always demodulated using \textbf{non-coherent detection} (envelope
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=1.9cm, minimum height=1cm, font=\sffamily\small},
+  block/.style={rectangle, draw, minimum width=1.8cm, minimum height=1cm, font=\sffamily\small},
   node distance=2cm,
   font=\small
 ]
 \node (input) {\sffamily RX\\Signal};
-\node[block, right of=input, node distance=2.4cm] (bpf) {Bandpass\\Filter};
-\node[block, right of=bpf, node distance=2.6cm] (env) {Envelope\\Detector};
-\node[block, right of=env, node distance=2.6cm] (lpf) {Lowpass\\Filter};
-\node[block, right of=lpf, node distance=2.6cm] (thresh) {Threshold\\$>V_{th}?$};
-\node[right of=thresh, node distance=2.6cm] (output) {\sffamily Data\\$\{0,1\}$};
+\node[block, right of=input, node distance=2.3cm] (bpf) {Bandpass\\Filter};
+\node[block, right of=bpf, node distance=2.3cm] (env) {Envelope\\Detector};
+\node[block, right of=env, node distance=2.3cm] (lpf) {Lowpass\\Filter};
+\node[block, right of=lpf, node distance=2.3cm] (thresh) {Threshold\\$>V_{th}?$};
+\node[right of=thresh, node distance=2.3cm] (output) {\sffamily Data\\$\{0,1\}$};
 
 \draw[->,thick] (input) -- (bpf);
 \draw[->,thick] (bpf) -- (env);
