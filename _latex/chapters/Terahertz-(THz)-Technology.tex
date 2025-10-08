@@ -97,7 +97,7 @@ This gap exists because:
 The THz region bridges electronics and photonics:
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.8]
 % Frequency axis
 \draw[->] (0,0) -- (14,0) node[right] {\sffamily\small Frequency};
 
@@ -148,8 +148,8 @@ The THz region bridges electronics and photonics:
 \fill[blue] (0.75,1) circle (2pt);
 
 % THz photon emissions
-\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (0.45,2) -- (3,2) node[right,font=\scriptsize] {THz photon};
-\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (0.75,1) -- (3,1) node[right,font=\scriptsize] {THz photon};
+\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (0.45,2) -- (2.5,2) node[right,font=\scriptsize] {THz photon};
+\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (0.75,1) -- (2.5,1) node[right,font=\scriptsize] {THz photon};
 
 % Arrows showing cascade
 \draw[->,thick,blue] (0.15,2.8) -- (0.45,2.2);
@@ -194,9 +194,9 @@ A complete THz imaging system:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.2cm,
-  font=\small
+  block/.style={rectangle, draw, minimum width=1.8cm, minimum height=0.9cm, font=\sffamily\scriptsize},
+  node distance=1.8cm,
+  font=\scriptsize
 ]
 % Transmitter chain
 \node[block] (qcl) {QCL\\Source};
@@ -204,20 +204,20 @@ A complete THz imaging system:
 \node[block, right of=modulator] (txant) {TX\\Antenna};
 
 % Free space
-\node[right of=txant, node distance=2.5cm] (space) {\sffamily Target};
+\node[right of=txant, node distance=2.0cm] (space) {\sffamily\scriptsize Target};
 
 % Receiver chain
-\node[block, right of=space, node distance=2.5cm] (rxant) {RX\\Antenna};
+\node[block, right of=space, node distance=2.0cm] (rxant) {RX\\Antenna};
 \node[block, right of=rxant] (mixer) {Detector\\(Bolometer)};
 \node[block, right of=mixer] (proc) {Signal\\Processing};
 
 % Arrows
-\draw[->,thick] (qcl) -- node[above] {\scriptsize CW THz} (modulator);
-\draw[->,thick] (modulator) -- node[above] {\scriptsize modulated} (txant);
+\draw[->,thick] (qcl) -- node[above,font=\tiny] {CW THz} (modulator);
+\draw[->,thick] (modulator) -- node[above,font=\tiny] {modulated} (txant);
 \draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (txant) -- (space);
-\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (space) -- node[above] {\scriptsize reflected} (rxant);
+\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (space) -- node[above,font=\tiny] {reflected} (rxant);
 \draw[->,thick] (rxant) -- (mixer);
-\draw[->,thick] (mixer) -- node[above] {\scriptsize baseband} (proc);
+\draw[->,thick] (mixer) -- node[above,font=\tiny] {baseband} (proc);
 
 % Control signal
 \node[block, below=1.5cm of modulator] (drive) {Drive\\Electronics};
@@ -225,11 +225,11 @@ A complete THz imaging system:
 \draw[->,thick] (drive) -- (qcl);
 
 % Lock-in reference
-\draw[->,thick,dashed] (drive.east) -| (proc.south) node[pos=0.25,right,font=\scriptsize] {ref};
+\draw[->,thick,dashed] (drive.east) -| (proc.south) node[pos=0.25,right,font=\tiny] {ref};
 
 % Labels
-\node[above,font=\sffamily\small] at (modulator.north) [yshift=0.8cm] {Transmitter};
-\node[above,font=\sffamily\small] at (mixer.north) [yshift=0.8cm] {Receiver};
+\node[above,font=\sffamily\scriptsize] at (modulator.north) [yshift=0.7cm] {Transmitter};
+\node[above,font=\sffamily\scriptsize] at (mixer.north) [yshift=0.7cm] {Receiver};
 \end{tikzpicture}
 \end{center}
 
