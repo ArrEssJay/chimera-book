@@ -184,18 +184,18 @@ Coherent detection requires a phase-synchronized local oscillator:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2cm,
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
   font=\small
 ]
 \node (input) {\sffamily RX\\Signal};
-\node[block, right of=input, node distance=2.5cm] (mult) {Mixer\\$\times$};
-\node[block, right of=mult, node distance=2.8cm] (lpf) {Lowpass\\Filter};
-\node[block, right of=lpf, node distance=2.8cm] (sample) {Sample\\$@T_s$};
-\node[block, right of=sample, node distance=2.8cm] (thresh) {Threshold\\Detector};
-\node[right of=thresh, node distance=2.8cm] (output) {\sffamily Data\\Bits};
+\node[block, right of=input, node distance=2.8cm] (mult) {Mixer\\$\times$};
+\node[block, right of=mult, node distance=3cm] (lpf) {Lowpass\\Filter};
+\node[block, right of=lpf, node distance=3cm] (sample) {Sample\\$@T_s$};
+\node[block, right of=sample, node distance=3cm] (thresh) {Threshold\\Detector};
+\node[right of=thresh, node distance=3cm] (output) {\sffamily Data\\Bits};
 
-\node[below of=mult, node distance=1.5cm, font=\scriptsize, align=center] (lo) {$2\cos(2\pi f_c t)$\\Local Oscillator};
+\node[below of=mult, node distance=1.6cm, font=\scriptsize, align=center] (lo) {Local Oscillator\\$2\cos(2\pi f_c t)$};
 
 \draw[->,thick] (input) -- (mult);
 \draw[->,thick] (lo) -- (mult);
