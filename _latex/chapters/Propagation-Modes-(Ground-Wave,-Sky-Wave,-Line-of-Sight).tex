@@ -79,50 +79,52 @@ Figure~\ref{fig:propagation-modes} illustrates the three primary propagation mod
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[scale=1.2, font=\small]
+\begin{tikzpicture}[scale=1.0, font=\small]
 % Earth surface (curved)
 \draw[very thick, brown!60!black] (-6,0) .. controls (-3,-0.3) and (3,-0.3) .. (6,0);
 \fill[brown!20] (-6,0) .. controls (-3,-0.3) and (3,-0.3) .. (6,0) -- (6,-1) -- (-6,-1) -- cycle;
 
 % Ground Wave
 \draw[->, thick, red!70!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
-  (-5,0.1) .. controls (-3,0.2) and (-1,0.15) .. (1,0.1);
-\node[red!70!black, font=\sffamily\small] at (-2,0.7) {\textbf{Ground Wave}};
-\node[red!70!black, font=\scriptsize] at (-2,0.3) {LF/MF (30 kHz--3 MHz)};
+  (-5,0.1) .. controls (-3,0.2) and (-1,0.15) .. (0.8,0.1);
+\node[red!70!black, font=\sffamily\small] at (-2.5,0.9) {\textbf{Ground Wave}};
+\node[red!70!black, font=\scriptsize] at (-2.5,0.4) {LF/MF (30 kHz--3 MHz)};
 
 % Sky Wave - Ionosphere layer
-\draw[blue!30, thick] (-6,4) -- (6,4);
-\fill[blue!10, opacity=0.5] (-6,4) rectangle (6,4.3);
-\node[blue!50!black, font=\scriptsize] at (0,4.5) {Ionosphere (60--400 km)};
+\draw[blue!30, thick] (-6,4.2) -- (6,4.2);
+\fill[blue!10, opacity=0.5] (-6,4.2) rectangle (6,4.5);
+\node[blue!50!black, font=\scriptsize] at (0,4.8) {Ionosphere (60--400 km)};
 
 % Sky Wave path
 \draw[->, thick, blue!70!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
-  (-4,0.1) -- (-2,3.8);
+  (-4,0.1) -- (-2.2,4.0);
 \draw[->, thick, blue!70!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
-  (-1.8,3.8) -- (0.5,0.1);
-\node[blue!70!black, font=\sffamily\small] at (-1,2.5) {\textbf{Sky Wave}};
-\node[blue!70!black, font=\scriptsize] at (-1,2) {HF (3--30 MHz)};
+  (-1.8,4.0) -- (0.3,0.1);
+\node[blue!70!black, font=\sffamily\small] at (-0.8,2.8) {\textbf{Sky Wave}};
+\node[blue!70!black, font=\scriptsize] at (-0.8,2.3) {HF (3--30 MHz)};
 
 % Line-of-Sight
 \draw[->, thick, green!50!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
   (2,1.5) -- (5,1.5);
-\node[green!50!black, font=\sffamily\small] at (3.5,2) {\textbf{Line-of-Sight}};
-\node[green!50!black, font=\scriptsize] at (3.5,1) {VHF+ ($>$30 MHz)};
+\node[green!50!black, font=\sffamily\small] at (3.5,2.2) {\textbf{Line-of-Sight}};
+\node[green!50!black, font=\scriptsize] at (3.5,0.9) {VHF+ ($>$30 MHz)};
 
-% Antennas
+% Antennas - Ground Wave
 \draw[thick] (-5,0) -- (-5,0.5);
-\draw[thick] (-4,0) -- (-4,0.5);
-\draw[thick] (1,0) -- (1,0.5);
-\draw[thick] (0.5,0) -- (0.5,0.5);
-\draw[thick] (2,0) -- (2,1.5);
-\draw[thick] (5,0) -- (5,1.5);
-
-% Tower symbols
 \filldraw[black] (-5,0.5) circle (2pt);
+\draw[thick] (-4,0) -- (-4,0.5);
 \filldraw[black] (-4,0.5) circle (2pt);
-\filldraw[black] (1,0.5) circle (2pt);
-\filldraw[black] (0.5,0.5) circle (2pt);
+\draw[thick] (0.8,0) -- (0.8,0.5);
+\filldraw[black] (0.8,0.5) circle (2pt);
+
+% Antennas - Sky Wave
+\draw[thick] (0.3,0) -- (0.3,0.5);
+\filldraw[black] (0.3,0.5) circle (2pt);
+
+% Antennas - Line-of-Sight
+\draw[thick] (2,0) -- (2,1.5);
 \filldraw[black] (2,1.5) circle (2pt);
+\draw[thick] (5,0) -- (5,1.5);
 \filldraw[black] (5,1.5) circle (2pt);
 
 \end{tikzpicture}
