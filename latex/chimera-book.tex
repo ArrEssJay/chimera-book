@@ -1,0 +1,193 @@
+% ==============================================================================
+% The Chimera Project - Root Manuscript File (Final - Corrected for pdfx)
+% ==============================================================================
+
+% The 'paper' option is removed from here. The preamble now has sole control
+% over the page geometry, which resolves the pdfx conflict.
+\documentclass[11pt,twoside,openany]{book}
+
+% Load preamble (fonts, packages, styling)
+\input{preamble}
+
+% Book metadata
+\title{The Chimera Project: Digital Signal Processing, Past, Present \& Future}
+\author{Edited by Rowan Jones}
+\date{First Edition, October 2025}
+
+\begin{document}
+
+% ============================================================================
+% FRONT MATTER
+% ============================================================================
+\frontmatter
+
+% Front Cover Art (full page)
+% The 'fitpaper=true' option is essential to force the cover art PDF to
+% conform to our book's 7x10 page size.
+\includepdf[pages=1,fitpaper=true]{assets/artwork/front-cover.pdf}
+
+% Half-title and full title page
+\input{frontmatter/titlepage}
+
+% Copyright and Cataloging in Publication (CIP) Data page
+\input{backmatter/cataloging}
+
+% Dedication
+\input{frontmatter/dedication}
+
+% Confession Record
+\input{frontmatter/confession}
+
+% Foreword
+\input{frontmatter/foreword}
+
+% Prologue
+\input{frontmatter/prologue}
+
+% Table of Contents
+\tableofcontents
+\newpage
+
+% ============================================================================
+% MAIN CONTENT
+% Chapters are commented out for debugging as requested.
+% ============================================================================
+\mainmatter
+
+% PART I: FOUNDATIONS OF COMMUNICATION THEORY
+\part{Foundations of Communication Theory}
+\input{chapters/Maxwell's-Equations-&-Wave-Propagation}
+% \input{chapters/Electromagnetic-Spectrum}
+% \input{chapters/Wave-Polarization}
+% \input{chapters/Power-Density-&-Field-Strength}
+% \input{chapters/Baseband-vs-Passband-Signals}
+% \input{chapters/IQ-Representation}
+% \input{chapters/Constellation-Diagrams}
+% \input{chapters/Signal-to-Noise-Ratio-(SNR)}
+% \input{chapters/Energy-Ratios-(Es-N0-and-Eb-N0)}
+% \input{chapters/Bit-Error-Rate-(BER)}
+% \input{chapters/Noise-Sources-&-Noise-Figure}
+% \input{chapters/Shannon's-Channel-Capacity-Theorem}
+
+% PART II: CLASSICAL DIGITAL MODULATION
+\part{Classical Digital Modulation}
+% \input{chapters/Binary-Phase-Shift-Keying-(BPSK)-EXEMPLAR-V2}
+% \input{chapters/On-Off-Keying-(OOK)}
+% \input{chapters/Amplitude-Shift-Keying-(ASK)}
+% \input{chapters/Frequency-Shift-Keying-(FSK)}
+% \input{chapters/QPSK-Modulation}
+% \input{chapters/8PSK-&-Higher-Order-PSK}
+% \input{chapters/Quadrature-Amplitude-Modulation-(QAM)}
+
+% PART III: CHANNEL EFFECTS AND PROPAGATION
+\part{Channel Effects and Propagation}
+% \input{chapters/Channel-Models-(Rayleigh-&-Rician)}
+% \input{chapters/Multipath-Propagation-&-Fading-(Rayleigh,-Rician)}
+% \input{chapters/Channel-Equalization}
+% \input{chapters/Free-Space-Path-Loss-(FSPL)}
+% \input{chapters/Propagation-Modes-(Ground-Wave,-Sky-Wave,-Line-of-Sight)}
+% \input{chapters/Atmospheric-Effects-(Ionospheric,-Tropospheric)}
+% \input{chapters/Weather-Effects-(Rain-Fade,-Fog-Attenuation)}
+% \input{chapters/Link-Loss-vs-Noise}
+% \input{chapters/Complete-Link-Budget-Analysis}
+
+% PART IV: ERROR CORRECTION AND CHANNEL CODING
+\part{Error Correction and Channel Coding}
+% \input{chapters/Hamming-Distance-&-Error-Detection}
+% \input{chapters/Block-Codes-(Hamming,-BCH,-Reed-Solomon)}
+% \input{chapters/Convolutional-Codes-&-Viterbi-Decoding}
+% \input{chapters/Turbo-Codes}
+% \input{chapters/LDPC-Codes}
+% \input{chapters/Polar-Codes}
+
+% PART V: MODERN COMMUNICATION SYSTEMS
+\part{Modern Communication Systems}
+% \input{chapters/OFDM-&-Multicarrier-Modulation}
+% \input{chapters/Spread-Spectrum-(DSSS-FHSS)}
+% \input{chapters/MIMO-&-Spatial-Multiplexing}
+% \input{chapters/Adaptive-Modulation-&-Coding-(AMC)}
+% \input{chapters/Synchronization-(Carrier,-Timing,-Frame)}
+% \input{chapters/Signal-Chain-(End-to-End-Processing)}
+% \input{chapters/Real-World-System-Examples}
+
+% PART VI: RF ENGINEERING AND ANTENNA SYSTEMS
+\part{RF Engineering and Antenna Systems}
+% \input{chapters/Antenna-Theory-Basics}
+
+% PART VII: EMERGING TECHNOLOGIES
+\part{Emerging Technologies}
+% \input{chapters/mmWave-&-THz-Communications}
+% \input{chapters/Terahertz-(THz)-Technology}
+
+% PART VIII: SPECIALIZED TOPICS
+\part{Specialized Topics}
+% \input{chapters/AID-Protocol-Case-Study}
+% \input{chapters/Military-&-Covert-Communications}
+% \input{chapters/Acoustic-Heterodyning}
+
+% PART IX: BIOPHYSICAL COMMUNICATIONS
+\part{Biophysical Communications}
+% \input{chapters/Biophysical-Coupling-Mechanism}
+% \input{chapters/Frey-Microwave-Auditory-Effect}
+% \input{chapters/Non-Linear-Biological-Demodulation}
+% \input{chapters/Intermodulation-Distortion-in-Biology}
+% \input{chapters/Microtubule-Structure-and-Function}
+% \input{chapters/Orchestrated-Objective-Reduction-(Orch-OR)}
+% \input{chapters/THz-Propagation-in-Biological-Tissue}
+% \input{chapters/THz-Bioeffects-Thermal-and-Non-Thermal}
+% \input{chapters/THz-Resonances-in-Microtubules}
+% \input{chapters/Hyper-Rotational-Physics-(HRP)-Framework}
+
+% PART X: REFERENCE MATERIALS
+\part{Reference Materials}
+% \input{chapters/Formula-Reference-Card}
+
+% ============================================================================
+% APPENDIX
+% This section appears after the main content but before the backmatter.
+% Chapters here are numbered with letters (A, B, C...).
+% ============================================================================
+\appendix
+\chapter{The Hyper-Rotational Physics Framework Paper}
+\addcontentsline{toc}{chapter}{Appendix A: The Hyper-Rotational Physics Framework Paper}
+
+The following pages contain a complete, unaltered reproduction of the original research paper, "A Physical Framework for Induced Brane Rotation," which serves as the keystone for the theoretical models presented in this book. As the original document was formatted for A4 paper, it has been scaled to fit within the dimensions of this book.
+
+\newpage
+
+% BEST PRACTICE for including a differently sized PDF:
+%   - pages=-      : Includes all pages of the document.
+%   - frame=true   : Draws a simple, clean border around the included pages.
+%                    This makes the size difference look intentional.
+%   - width=0.9\textwidth: Scales each page to 90% of the text width, creating a margin.
+%   - keepaspectratio: Ensures the content is not stretched or distorted.
+\includepdf[pages=-, frame=true, width=1.1\textwidth, keepaspectratio]{assets/appendices/hrp_framework_paper-2.pdf}
+
+
+% ============================================================================
+% BACK MATTER
+% Final materials: bibliography, index, etc.
+% ============================================================================
+\backmatter
+
+% The main bibliography for the entire book.
+\printbibliography[heading=bibintoc,title={Bibliography}]
+
+% Glossary
+\input{chapters/Glossary}
+
+% Index
+\printindex
+
+% Epilogue - The final philosophical note.
+\input{backmatter/epilogue}
+
+% Colophon - Production notes about the book itself.
+\input{backmatter/colophon}
+
+% Back Cover Art (full page, no margins)
+\newpage
+\thispagestyle{empty}
+\includepdf[pages=-]{assets/artwork/back-cover.pdf}
+
+\end{document}

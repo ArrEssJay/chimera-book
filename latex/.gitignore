@@ -1,0 +1,18 @@
+# LaTeX build artifacts
+*.aux
+*.bcf
+*.log
+*.idx
+*.toc
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# PDF output
+*.pdf
+
+# Other artifacts
+*.xmpdata
+*.xmpi
+.DS_Store

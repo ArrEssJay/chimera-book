@@ -1,53 +1,91 @@
-# Chimera: Signal Processing Book
+# The Chimera Project: A Production-Ready LaTeX Book Template
 
-**A comprehensive open-source textbook on digital signal processing, modulation techniques, and communication systems.**
+![License: CC0](https://licensebuttons.net/p/zero/1.0/88x31.png)
+[![Made with: LaTeX](https://img.shields.io/badge/Made%20with-LaTeX-008080.svg)](https://www.latex-project.org/)
 
-## 📚 About
+This repository contains the complete, press-ready source code for the book **Digital Signal Processing: The Chimera Project**.
 
-Professional DSP textbook with 69 chapters covering fundamentals through advanced topics. Written to Proakis & Manolakis standards with TikZ diagrams and worked examples.
+Beyond the content itself, this project is designed to serve as an advanced, comprehensive exemplar for creating professional, narrative-driven books using a modern LaTeX toolchain. It addresses a common gap in the community by providing a complete, working example of a book that is ready for a professional print-on-demand service, from the cover art to the final PDF/X-1a compliant interior.
 
-**License:** CC0 (Public Domain) | **Author:** The Chimera Project (chimera@impermanent.io)
+## 📚 The Philosophy
 
-## 🚀 Quick Start
+The decision to release the entire project—the book's content, the typesetting engine, and the build scripts—into the public domain via **CC0** is a deliberate act aligned with the book's core themes. It is a challenge to closed systems and an effort to provide open, unencumbered tools for others to build upon and share their own knowledge freely.
 
-```bash
-# Test exemplar chapter
-pdflatex test_exemplar_v2.tex
+This repository is the very resource I was looking for when I began: a complete, high-quality example to learn from. My hope is that it will serve that purpose for others.
 
-# Work on a chapter
-./produce_chapter.sh QPSK-Modulation
+## 🚀 Features
 
-# Build full book
-pdflatex chimera-book.tex
+This template is built with professional production in mind and includes a host of advanced features out of the box:
+
+*   **Professional Typography:** A classic pairing of Minion Pro for body text and Myriad Pro for headings, with the perfectly matched Minion Math font for all equations.
+*   **Modern LaTeX Toolchain:** Built on `XeLaTeX` for native OpenType font support, `biblatex` and `biber` for bibliography management, and `unicode-math` for modern math typesetting.
+*   **Press-Ready Output:** Generates a **PDF/X-1a:2003 compliant** file, the industry standard for "blind exchange" with printers.
+*   **Professional Color Management:** Configured for the **FOGRA39** color profile, the standard for Australian and European printing.
+*   **Dynamic Output Modes:** A single switch in the preamble toggles the entire book between a full-color digital version and a cost-effective, optimized grayscale version for print.
+*   **Sophisticated Design System:**
+    *   A complete, narrative-driven front matter including a dedication, prelude, multi-part foreword, and introduction.
+    *   Custom-designed callout boxes (`tcolorbox`) for notes, key concepts, and warnings.
+    *   Elegant chapter and section styling using `titlesec`.
+*   **Reproducible Build Process:** A simple shell script (`build-book.sh`) automates the entire compilation process, including all necessary LaTeX and Biber passes.
+*   **Advanced Tooling:** Includes `minted` for high-quality syntax highlighting and `cleveref` for intelligent cross-referencing.
+
+## 🔧 How to Build
+
+### Prerequisites
+
+Before you begin, ensure you have the following software installed:
+
+1.  **A Full TeX Live Installation (2025 or later):** A minimal installation will likely fail. This project relies on `xelatex`, `biber`, and a number of standard packages.
+2.  **Python and Pygments:** The `minted` package requires Pygments for syntax highlighting.
+    ```bash
+    pip install Pygments
+    ```
+3.  **Required Fonts:**
+    *   **Minion Pro & Myriad Pro:** These are commercial Adobe fonts and must be installed on your system.
+    *   **Minion Math:** This can be installed using the `getnonfreefonts` script provided by TeX Live. See the [TeX Live documentation](https://www.tug.org/fonts/getnonfreefonts/) for instructions. (Typically `sudo getnonfreefonts-sys -a`).
+    *   **Latin Modern:** The standard `lmodern` package should be installed via `tlmgr`.
+
+### Build Steps
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repository-name.git
+    cd your-repository-name
+    ```
+2.  **Ensure Prerequisites are Met:** Verify that all required fonts and software are installed on your system. The build will fail if fonts are missing.
+3.  **Run the Build Script:** The script handles all the complexities of the LaTeX build process.
+    ```bash
+    ./build-book.sh
+    ```
+4.  **Find the Output:** The final, press-ready PDF will be located in the `_build` directory.
+
+### Customizing the Output (Color vs. Grayscale)
+
+To switch between the full-color digital version and the grayscale print version, open the `latex/preamble.tex` file and change the following line at the top:
+
+*   For **full color**: `\printversionfalse`
+*   For **grayscale**: `\printversiontrue`
+
+Then, simply re-run the build script.
+
+## 📂 Project Structure
+
+```
+.
+├── _build/                # Final PDF output appears here
+├── latex/                 # All LaTeX source files
+│   ├── FOGRA39.icc          # Color profile for the printer
+│   ├── preamble.tex         # The main stylesheet/preamble
+│   ├── chimera-book.tex     # The root document file
+│   ├── chimera-book.xmpdata # Metadata for the PDF/X file
+│   ├── bibliography.bib     # Bibliography entries
+│   └── chapters/            # Directory for book content
+├── assets/                # Source assets (cover art, diagrams, etc.)
+└── build-book.sh          # The automated build script
 ```
 
-## 📊 Production Status
+## 📜 License
 
-- ✅ **Exemplar complete:** BPSK (professional template)
-- ✅ **Typography finalized:** Libertinus + Cabin
-- ✅ **69 chapters converted** from markdown to LaTeX
-- 🔄 **68 chapters** awaiting professional upgrade
+The entirety of this project—including the book's content, the LaTeX source code, the typesetting stylesheets, the build scripts, and all associated files—is dedicated to the public domain under the **[CC0 1.0 Universal Public Domain Dedication](LICENSE)**.
 
-See `CHAPTER_PRODUCTION_STATUS.md` for wave organization and tracking.
-
-## 🎯 Contributing
-
-Ready for parallel production! See `READY_TO_PRODUCE.md` for workflow.
-
-**Wave 2 (Priority 1):** Core Modulation - 7 chapters
-- QPSK, 8PSK, QAM, FSK, ASK, OOK
-
-## 🎨 Standards
-
-- **Fonts:** Libertinus (body) + Cabin (headings)  
-- **Reference:** Proakis & Manolakis DSP textbook
-- **Style Guide:** `STYLE_GUIDE.md`
-- **Workflow:** `PRODUCTION_WORKFLOW.md`
-
-## 📖 Topics Covered
-
-Modulation Techniques • Error Correction • Channel Models • MIMO • OFDM • Spread Spectrum • Link Budgets • RF Theory • Signal Analysis • And more...
-
-## 🔗 Related
-
-[Chimera DSP Tool](https://github.com/ArrEssJay/chimera) - Browser-based signal processing experimentation tool
+You are free to copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission.
