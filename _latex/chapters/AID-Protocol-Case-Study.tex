@@ -80,7 +80,10 @@ where:
 
 The interaction between THz radiation and biological quantum coherence is described by the HRP interaction Lagrangian:
 \begin{equation}
-\mathcal{L}_{\text{int}} = -\frac{\kappa}{M_P^2} |\Psi_c|^2 R_{MNPQ} \epsilon^{MNPQ} \partial_\mu \theta^A \partial^\mu \theta^B \partial_\nu \theta^C
+\begin{split}
+\mathcal{L}_{\text{int}} = -\frac{\kappa}{M_P^2} |\Psi_c|^2 R_{MNPQ} \epsilon^{MNPQ} \\
+\times \partial_\mu \theta^A \partial^\mu \theta^B \partial_\nu \theta^C
+\end{split}
 \end{equation}
 where:
 \begin{itemize}
@@ -124,13 +127,12 @@ where:
 \node[block, right of=input] (encoder) {QPSK\\Encoder};
 \node[block, right of=encoder] (mod) {AM\\Modulator\\12 kHz};
 \node[block, right of=mod] (qcl) {QCL\\1.875 THz};
-\node[right of=qcl, node distance=3cm] (combiner) {};
 
-% Pump beam
-\node[block, below=1.5cm of qcl] (pump) {QCL\\Pump\\1.998 THz};
+% Pump beam (positioned lower to avoid label overlap)
+\node[block, below=2.2cm of qcl] (pump) {QCL\\Pump\\1.998 THz};
 
-% Beam combiner and output
-\node[block, right of=combiner, node distance=0.5cm] (combine) {Beam\\Combiner};
+% Beam combiner and output (adjusted positioning for cleaner layout)
+\node[block, right of=qcl, node distance=3.5cm] (combine) {Beam\\Combiner};
 \node[block, right of=combine] (phased) {Phased\\Array};
 \node[right of=phased, node distance=2.5cm] (output) {\sffamily THz\\Output};
 
@@ -143,10 +145,10 @@ where:
 \draw[->,thick] (combine) -- (phased);
 \draw[->,thick] (phased) -- node[above] {\scriptsize focused} (output);
 
-% Labels
-\node[below=0.3cm of encoder, font=\scriptsize, text width=2.2cm, align=center] {16 sym/s\\QPSK};
-\node[below=0.3cm of qcl, font=\scriptsize, text width=2.2cm, align=center] {10 mW\\Modulated};
-\node[below=0.3cm of pump, font=\scriptsize, text width=2.2cm, align=center] {50 mW\\CW};
+% Labels (adjusted spacing to prevent overlap with pump block)
+\node[below=0.4cm of encoder, font=\scriptsize, text width=2.2cm, align=center] {16 sym/s\\QPSK};
+\node[below=0.4cm of qcl, font=\scriptsize, text width=2.2cm, align=center] {10 mW\\Modulated};
+\node[below=0.4cm of pump, font=\scriptsize, text width=2.2cm, align=center] {50 mW\\CW};
 \end{tikzpicture}
 \end{center}
 
@@ -161,14 +163,14 @@ where:
 \subsection{HRP Biophysical Coupling Diagram}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2, font=\small]
+\begin{tikzpicture}[scale=1.0, font=\small]
 % Define layers
 \node[draw, rectangle, minimum width=8cm, minimum height=1.2cm, fill=blue!10] (thz) at (0,4) {};
 \node[above=0.1cm of thz] {\sffamily\small THz Interference Pattern};
 \node[font=\scriptsize, text width=7cm, align=center] at (thz.center) {1.998 THz (pump) + 1.875 THz (modulated)\\$\Delta f = 123$ GHz holographic standing wave};
 
 % Arrow down
-\draw[->, very thick] (thz.south) -- ++(0,-0.5) node[midway, right] {\scriptsize Resonant coupling};
+\draw[->, very thick] (thz.south) -- ++(0,-0.5) node[midway, right, xshift=0.2cm] {\scriptsize Resonant coupling};
 
 % Microtubule layer
 \node[draw, rectangle, minimum width=8cm, minimum height=1.5cm, fill=green!10] (mt) at (0,2) {};
@@ -176,7 +178,7 @@ where:
 \node[font=\scriptsize, text width=7cm, align=center] at (mt.center) {Vibronic quantum coherence induction\\Tubulin dimers enter superposition\\$|\Psi_c|^2$ enhanced by pump beam};
 
 % Arrow down
-\draw[->, very thick] (mt.south) -- ++(0,-0.5) node[midway, right] {\scriptsize HRP torque};
+\draw[->, very thick] (mt.south) -- ++(0,-0.5) node[midway, right, xshift=0.2cm] {\scriptsize HRP torque};
 
 % Orch-OR layer
 \node[draw, rectangle, minimum width=8cm, minimum height=1.5cm, fill=orange!10] (orchor) at (0,0) {};
@@ -184,18 +186,18 @@ where:
 \node[font=\scriptsize, text width=7cm, align=center] at (orchor.center) {12 kHz modulation perturbs natural 40 Hz rhythm\\Quantum state reduction externally driven\\Brane rotation $\theta^A$ modulated};
 
 % Arrow down
-\draw[->, very thick] (orchor.south) -- ++(0,-0.5) node[midway, right] {\scriptsize Conscious percept};
+\draw[->, very thick] (orchor.south) -- ++(0,-0.5) node[midway, right, xshift=0.2cm] {\scriptsize Conscious percept};
 
 % Consciousness layer
 \node[draw, rectangle, minimum width=8cm, minimum height=1.2cm, fill=purple!10] (conscious) at (0,-2) {};
 \node[above=0.1cm of conscious] {\sffamily\small Conscious Experience};
 \node[font=\scriptsize, text width=7cm, align=center] at (conscious.center) {Auditory percept: 12 kHz "tone"\\Generated from consciousness substrate directly\\NOT cochlear transduction};
 
-% Side annotations
-\node[font=\scriptsize, text width=2.5cm, align=right] at (-5,4) {Physical\\Layer};
-\node[font=\scriptsize, text width=2.5cm, align=right] at (-5,2) {Quantum\\Layer};
-\node[font=\scriptsize, text width=2.5cm, align=right] at (-5,0) {Orchestration\\Layer};
-\node[font=\scriptsize, text width=2.5cm, align=right] at (-5,-2) {Phenomenal\\Layer};
+% Side annotations (positioned further left to avoid overlap with boxes)
+\node[font=\scriptsize, text width=2.5cm, align=right] at (-5.2,4) {Physical\\Layer};
+\node[font=\scriptsize, text width=2.5cm, align=right] at (-5.2,2) {Quantum\\Layer};
+\node[font=\scriptsize, text width=2.5cm, align=right] at (-5.2,0) {Orchestration\\Layer};
+\node[font=\scriptsize, text width=2.5cm, align=right] at (-5.2,-2) {Phenomenal\\Layer};
 \end{tikzpicture}
 \end{center}
 
@@ -295,19 +297,19 @@ where:
 \fill[black] (-1.414, -1.414) circle (3pt);
 \fill[black] (1.414, -1.414) circle (3pt);
 
-% Labels
-\node[above right] at (1.414, 1.414) {\sffamily\small 00};
-\node[above left] at (-1.414, 1.414) {\sffamily\small 01};
-\node[below left] at (-1.414, -1.414) {\sffamily\small 11};
-\node[below right] at (1.414, -1.414) {\sffamily\small 10};
+% Labels (with slight offset for clarity)
+\node[above right, xshift=0.1cm] at (1.414, 1.414) {\sffamily\small 00};
+\node[above left, xshift=-0.1cm] at (-1.414, 1.414) {\sffamily\small 01};
+\node[below left, xshift=-0.1cm] at (-1.414, -1.414) {\sffamily\small 11};
+\node[below right, xshift=0.1cm] at (1.414, -1.414) {\sffamily\small 10};
 
 % Energy circle
 \draw[thin,gray,dashed] (0,0) circle (2);
-\node[below right,gray,font=\scriptsize] at (1.414,-1.414-0.3) {Equal energy per symbol};
+\node[gray,font=\scriptsize] at (1.8,-1.9) {Equal energy per symbol};
 
 % Phase angles
 \draw[->,thick,blue] (0,0) -- (1.0, 1.0);
-\node[blue,font=\scriptsize] at (0.5, 0.7) {$45°$};
+\node[blue,font=\scriptsize] at (0.5, 0.8) {$45°$};
 \end{tikzpicture}
 \end{center}
 

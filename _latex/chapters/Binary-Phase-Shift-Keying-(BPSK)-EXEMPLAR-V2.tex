@@ -111,15 +111,15 @@ The BPSK modulator consists of three stages:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small, align=center},
   node distance=2.2cm,
   font=\small
 ]
-\node (input) {\sffamily Binary\\$\{0, 1\}$};
+\node[align=center] (input) {\sffamily Binary\\$\{0, 1\}$};
 \node[block, right of=input, node distance=2.8cm] (nrz) {NRZ\\Encoder};
 \node[block, right of=nrz, node distance=3.2cm] (mult) {Mixer\\$\times$};
 \node[block, right of=mult, node distance=3cm] (filter) {Bandpass\\Filter};
-\node[right of=filter, node distance=2.8cm] (output) {\sffamily BPSK\\Output};
+\node[align=center, right of=filter, node distance=2.8cm] (output) {\sffamily BPSK\\Output};
 
 \node[below of=mult, node distance=1.5cm, font=\small] (carrier) {$\cos(2\pi f_c t)$};
 
@@ -151,16 +151,16 @@ The BPSK modulator consists of three stages:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small, align=center},
   node distance=2cm,
   font=\small
 ]
-\node (input) {\sffamily RX\\Signal};
-\node[block, right of=input, node distance=2.5cm] (mult) {Mixer\\$\times$};
-\node[block, right of=mult, node distance=2.8cm] (lpf) {Lowpass\\Filter};
-\node[block, right of=lpf, node distance=2.8cm] (sample) {Sample\\$@T_s$};
-\node[block, right of=sample, node distance=2.8cm] (thresh) {Threshold\\$>0?$};
-\node[right of=thresh, node distance=2.8cm] (output) {\sffamily Data\\$\{0,1\}$};
+\node[align=center] (input) {\sffamily RX\\Signal};
+\node[block, right of=input, node distance=2.2cm] (mult) {Mixer\\$\times$};
+\node[block, right of=mult, node distance=2.4cm] (lpf) {Lowpass\\Filter};
+\node[block, right of=lpf, node distance=2.4cm] (sample) {Sample\\$@T_s$};
+\node[block, right of=sample, node distance=2.4cm] (thresh) {Threshold\\$>0?$};
+\node[align=center, right of=thresh, node distance=2.4cm] (output) {\sffamily Data\\$\{0,1\}$};
 
 \node[below of=mult, node distance=1.5cm, font=\scriptsize, align=center] (lo) {$2\cos(2\pi f_c t + \phi)$\\Local Oscillator};
 

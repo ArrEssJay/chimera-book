@@ -165,14 +165,14 @@ The complete EM spectrum spans from ELF radio waves at a few Hz to gamma rays ab
 \fill[black!25] (6,0.3) rectangle (8,1.5) node[midway,align=center,font=\scriptsize\sffamily] {SHF/EHF\\Satellite/5G};
 \fill[black!30] (8,0.3) rectangle (9,1.5) node[midway,align=center,font=\scriptsize\sffamily] {THz};
 \fill[black!35] (9,0.3) rectangle (10,1.5) node[midway,align=center,font=\scriptsize\sffamily] {Infrared};
-\fill[black!40] (10,0.3) rectangle (10.5,1.5) node[midway,align=center,font=\tiny\sffamily] {Vis};
-\fill[black!45] (10.5,0.3) rectangle (11.5,1.5) node[midway,align=center,font=\scriptsize\sffamily] {UV};
+\fill[black!40] (10,0.3) rectangle (10.8,1.5) node[midway,align=center,font=\scriptsize\sffamily] {Vis};
+\fill[black!45] (10.8,0.3) rectangle (11.5,1.5) node[midway,align=center,font=\scriptsize\sffamily] {UV};
 \fill[black!50] (11.5,0.3) rectangle (12.5,1.5) node[midway,align=center,font=\scriptsize\sffamily] {X-ray};
 \fill[black!60] (12.5,0.3) rectangle (14,1.5) node[midway,align=center,font=\scriptsize\sffamily] {Gamma};
 
 % Ionizing radiation marker
-\draw[thick,dashed] (10.5,0) -- (10.5,1.5);
-\node[above,font=\scriptsize] at (10.5,1.5) {Ionizing $\rightarrow$};
+\draw[thick,dashed] (10.8,0) -- (10.8,1.5);
+\node[above=2pt,font=\scriptsize] at (10.8,1.5) {Ionizing $\rightarrow$};
 
 % Wavelength scale (bottom)
 \draw[->,thick] (0,-1) -- (14,-1) node[right,font=\sffamily\bfseries] {Wavelength (m)};
@@ -402,11 +402,11 @@ Earth's atmosphere is opaque to most of the EM spectrum. Only certain ``windows'
 \fill[black!80] (11.5,0.5) rectangle (14,0.8) node[midway,font=\tiny] {Blocked};
 
 % Absorber annotations
-\node[above,font=\tiny,align=center] at (3.25,1.5) {H$_2$O, O$_2$};
-\node[above,font=\tiny,align=center] at (5,0.8) {H$_2$O};
-\node[above,font=\tiny,align=center] at (7,3.5) {H$_2$O, CO$_2$};
-\node[above,font=\tiny,align=center] at (10.75,0.8) {O$_3$};
-\node[above,font=\tiny,align=center] at (12.75,0.8) {O$_2$, N$_2$};
+\node[above=1pt,font=\tiny,align=center] at (3.25,1.5) {H$_2$O, O$_2$};
+\node[above=1pt,font=\tiny,align=center] at (5,0.8) {H$_2$O};
+\node[above=1pt,font=\tiny,align=center] at (7,3.5) {H$_2$O, CO$_2$};
+\node[above=1pt,font=\tiny,align=center] at (10.75,0.8) {O$_3$};
+\node[above=1pt,font=\tiny,align=center] at (12.75,0.8) {O$_2$, N$_2$};
 
 % Axis labels
 \node[left,font=\sffamily\small] at (0,2.25) {Transmission};
@@ -539,7 +539,7 @@ Trade-off: Higher interference potential, no guaranteed quality of service.
 \draw[->,thick] (0,0) -- (14,0) node[right,font=\sffamily\bfseries] {Frequency};
 
 % Frequency markers
-\foreach \x/\label in {2/100 kHz, 4/1 MHz, 6/10 MHz, 8/100 MHz, 10/1 GHz, 12/10 GHz, 14/100 GHz} {
+\foreach \x/\label in {2/100\\kHz, 4/1\\MHz, 6/10\\MHz, 8/100\\MHz, 10/1\\GHz, 12/10\\GHz, 14/100\\GHz} {
     \draw (\x,0.1) -- (\x,-0.1) node[below,font=\tiny,align=center] {\label};
 }
 
@@ -563,8 +563,8 @@ Trade-off: Higher interference potential, no guaranteed quality of service.
 \fill[black!45] (11.5,0.5) rectangle (12.5,1.6);
 \node[rotate=90,font=\tiny] at (12,1.05) {1.5 cm};
 
-\fill[black!50] (13.5,0.5) rectangle (14,1);
-\node[rotate=90,font=\tiny] at (13.75,0.75) {1.5 mm};
+\fill[black!50] (13,0.5) rectangle (14,1);
+\node[rotate=90,font=\tiny] at (13.5,0.75) {1.5 mm};
 
 % Vertical axis
 \draw[->,thick] (0,0.5) -- (0,5) node[above,font=\sffamily\bfseries,align=center] {Antenna\\Size};

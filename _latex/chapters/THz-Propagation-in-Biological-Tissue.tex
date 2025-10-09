@@ -96,7 +96,7 @@ f_0 = \frac{1}{2\pi \tau} \approx 20~\text{GHz}
 \end{equation}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=1.1]
 % Axes
 \draw[->] (0,0) -- (8,0) node[right,font=\small] {Frequency (THz)};
 \draw[->] (0,0) -- (0,4.5) node[above,font=\small] {Permittivity};
@@ -503,9 +503,9 @@ At 100~$\mu$m depth in muscle tissue:
 \item Spectral features $\rightarrow$ molecular composition
 \end{itemize}
 
-\begin{center}
+\noindent
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.8cm, font=\sffamily\scriptsize},
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.8cm, font=\sffamily\scriptsize, align=center},
   node distance=1.8cm,
   font=\scriptsize
 ]
@@ -522,18 +522,17 @@ At 100~$\mu$m depth in muscle tissue:
 \draw[->,thick,dashed] (laser) |- ++(0,-1) -| (det);
 \node[font=\tiny] at (4,-1.3) {Optical gating};
 \end{tikzpicture}
-\end{center}
 
 \textbf{Clinical applications:}
 
 \begin{center}
-\begin{tabular}{@{}lp{6cm}@{}}
+\begin{tabular}{@{}lp{7cm}@{}}
 \toprule
 Application & Diagnostic Principle \\
 \midrule
 Skin cancer detection & Basal cell carcinoma has altered water content $\rightarrow$ contrast \\
 Burn depth assessment & Damaged tissue has different THz signature \\
-Dental imaging & Caries detection (demineralized enamel has higher water) \\
+Dental imaging & Caries detection (de\-min\-er\-al\-ized enamel has higher water) \\
 Corneal hydration & Non-contact measurement of corneal water content \\
 \bottomrule
 \end{tabular}
@@ -580,7 +579,7 @@ THz scanners can image body contours, raising ``virtual strip search'' concerns.
 
 \textbf{Proposed mechanisms:}
 \begin{enumerate}
-\item \textbf{Thermal:} Localized heating triggers temperature-sensitive ion channels (TRPV1)
+\item \textbf{Thermal:} Local heating triggers temperature-sensitive ion channels (TRPV1)
 \item \textbf{Non-thermal:} THz resonates with protein vibrational modes $\rightarrow$ conformational changes
 \item \textbf{Quantum:} Vibronic coupling in microtubules (see Chapter on THz Resonances in Microtubules)
 \end{enumerate}

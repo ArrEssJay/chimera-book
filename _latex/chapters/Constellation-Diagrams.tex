@@ -397,7 +397,7 @@ Cellular base stations continuously measure downlink channel quality and select 
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=3cm, minimum height=0.8cm, font=\sffamily\small},
+  block/.style={rectangle, draw, minimum width=3cm, minimum height=0.8cm, font=\sffamily\small, align=center},
   node distance=1.2cm
 ]
 % Channel quality blocks
@@ -498,9 +498,10 @@ N_{\text{dBm}} = 10\log_{10}(3.95 \times 10^{-14} / 10^{-3}) = -104.0~\text{dBm}
 \begin{equation}
 \frac{E_s}{N_0} = \mathrm{CNR} - 10\log_{10}(R_s) + 10\log_{10}(B)
 \end{equation}
-\begin{equation}
-\frac{E_s}{N_0} = 54.0 - 10\log_{10}(2.5 \times 10^6) + 10\log_{10}(3.125 \times 10^6) = 54.0 - 64.0 + 65.0 = 55.0~\text{dB}
-\end{equation}
+\begin{align}
+\frac{E_s}{N_0} &= 54.0 - 10\log_{10}(2.5 \times 10^6) + 10\log_{10}(3.125 \times 10^6) \nonumber\\
+&= 54.0 - 64.0 + 65.0 = 55.0~\text{dB}
+\end{align}
 
 Wait, let me recalculate more carefully:
 \begin{equation}
