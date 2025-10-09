@@ -105,9 +105,9 @@ The QPSK constellation consists of four points arranged symmetrically at the cor
 \node[below left=4pt,align=center,font=\sffamily\small] at (-1.06,-1.06) {11\\225°};
 \node[below right=4pt,align=center,font=\sffamily\small] at (1.06,-1.06) {10\\315°};
 
-% Distance annotation
-\draw[<->,thick] (1.06,1.06) -- (-1.06,1.06) node[midway,above,font=\scriptsize] {$d = \sqrt{2}A$};
-\draw[<->,thick,dashed] (1.06,1.06) -- (-1.06,-1.06) node[midway,above left,font=\scriptsize] {$d_{diag} = 2A$};
+% Distance annotation - positioned below to avoid overlap with labels
+\draw[<->,thick] (1.06,-1.5) -- (-1.06,-1.5) node[midway,below,font=\scriptsize] {$d = \sqrt{2}A$};
+\draw[<->,thick,dashed] (1.06,1.06) -- (-1.06,-1.06) node[midway,below right,font=\scriptsize] {$d_{diag} = 2A$};
 \end{tikzpicture}
 \end{center}
 
@@ -183,21 +183,21 @@ The QPSK modulator splits the input bit stream into two parallel paths (I and Q)
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2cm,
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2.2cm,
   font=\small
 ]
 \node (input) {\sffamily RX\\Signal};
-\node[block, above right of=input, node distance=2.5cm, yshift=0.8cm] (multi) {Mixer\\$\times$};
-\node[block, below right of=input, node distance=2.5cm, yshift=-0.8cm] (multq) {Mixer\\$\times$};
-\node[block, right of=multi, node distance=2.5cm] (lpfi) {Lowpass\\Filter};
-\node[block, right of=multq, node distance=2.5cm] (lpfq) {Lowpass\\Filter};
-\node[block, right of=lpfi, node distance=2.5cm] (sampi) {Sample\\$@T_s$};
-\node[block, right of=lpfq, node distance=2.5cm] (sampq) {Sample\\$@T_s$};
-\node[block, right of=sampi, node distance=2.5cm] (threshi) {Threshold\\$>0?$};
-\node[block, right of=sampq, node distance=2.5cm] (threshq) {Threshold\\$>0?$};
-\node[block, right of=threshi, node distance=2.5cm, yshift=-1.6cm] (mux) {Parallel to\\Serial};
-\node[right of=mux, node distance=2.8cm] (output) {\sffamily Data\\$\{0,1\}$};
+\node[block, above right of=input, node distance=2.3cm, yshift=0.8cm] (multi) {Mixer\\$\times$};
+\node[block, below right of=input, node distance=2.3cm, yshift=-0.8cm] (multq) {Mixer\\$\times$};
+\node[block, right of=multi, node distance=2.3cm] (lpfi) {Lowpass\\Filter};
+\node[block, right of=multq, node distance=2.3cm] (lpfq) {Lowpass\\Filter};
+\node[block, right of=lpfi, node distance=2.3cm] (sampi) {Sample\\$@T_s$};
+\node[block, right of=lpfq, node distance=2.3cm] (sampq) {Sample\\$@T_s$};
+\node[block, right of=sampi, node distance=2.3cm] (threshi) {Threshold\\$>0?$};
+\node[block, right of=sampq, node distance=2.3cm] (threshq) {Threshold\\$>0?$};
+\node[block, right of=threshi, node distance=2.3cm, yshift=-1.6cm] (mux) {Parallel to\\Serial};
+\node[right of=mux, node distance=2.5cm] (output) {\sffamily Data\\$\{0,1\}$};
 
 \node[above of=multi, node distance=1.3cm, font=\scriptsize, align=center] (cos) {$2\cos(2\pi f_c t)$\\I LO};
 \node[below of=multq, node distance=1.3cm, font=\scriptsize, align=center] (sin) {$-2\sin(2\pi f_c t)$\\Q LO};
@@ -381,7 +381,7 @@ Long-Term Evolution uses adaptive modulation including QPSK:
 \item \textbf{Rationale:} Robustness at low SNR ($<$10~dB $E_b/N_0$)
 \end{itemize}
 
-\begin{calloutbox}[colback=black!5!white,colframe=black]{Example: DVB-S2 Link Budget for Europe}
+\begin{calloutbox}{Example: DVB-S2 Link Budget for Europe}
 \begin{tabular}{@{}ll@{}}
 Satellite TX power & 100~W EIRP = 80~dBW \\
 Frequency & 11.5~GHz (Ku-band) \\
@@ -505,7 +505,7 @@ N = kT_sB = (1.38 \times 10^{-23})(300)(461{,}000) = 1.91 \times 10^{-15}~\text{
 \item \textbf{Link margin:} $49.7 - 5.5 = 44.2$~dB
 \end{itemize}
 
-\begin{calloutbox}[colback=black!8!white,colframe=black]{Design Summary}
+\begin{calloutbox}{Design Summary}
 \textbf{Result: Link closes with massive 44~dB margin}
 
 This comfortable margin provides:

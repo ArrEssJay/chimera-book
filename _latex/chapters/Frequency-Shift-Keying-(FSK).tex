@@ -163,15 +163,15 @@ The FSK modulator can be implemented using frequency synthesis:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.2cm,
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
+  node distance=2cm,
   font=\small
 ]
 \node (input) {\sffamily Binary\\$\{0, 1\}$};
-\node[block, right of=input, node distance=2.8cm] (switch) {Frequency\\Selector};
-\node[block, right of=switch, node distance=3.5cm] (vco) {VCO or\\Synthesizer};
-\node[block, right of=vco, node distance=3.2cm] (filter) {Bandpass\\Filter};
-\node[right of=filter, node distance=2.8cm] (output) {\sffamily FSK\\Output};
+\node[block, right of=input, node distance=2.3cm] (switch) {Frequency\\Selector};
+\node[block, right of=switch, node distance=2.8cm] (vco) {VCO or\\Synthesizer};
+\node[block, right of=vco, node distance=2.5cm] (filter) {Bandpass\\Filter};
+\node[right of=filter, node distance=2.3cm] (output) {\sffamily FSK\\Output};
 
 \node[below of=switch, node distance=1.5cm, font=\scriptsize, align=center] (freq) {$f_0$ or $f_1$};
 
@@ -196,20 +196,20 @@ The most common FSK demodulation uses \textbf{non-coherent detection}, which doe
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2cm,
+  block/.style={rectangle, draw, minimum width=1.8cm, minimum height=0.9cm, font=\sffamily\small},
+  node distance=1.8cm,
   font=\small
 ]
 \node (input) {\sffamily RX\\Signal};
-\node[block, above right of=input, node distance=2.8cm] (bpf0) {BPF\\$@f_0$};
-\node[block, right of=bpf0, node distance=2.8cm] (env0) {Envelope\\Detector};
-\node[block, below right of=input, node distance=2.8cm] (bpf1) {BPF\\$@f_1$};
-\node[block, right of=bpf1, node distance=2.8cm] (env1) {Envelope\\Detector};
-\node[block, right of=env0, node distance=2.8cm, yshift=-1.4cm] (comp) {Compare\\$>$};
-\node[block, right of=comp, node distance=2.5cm] (sample) {Sample\\$@T_b$};
-\node[right of=sample, node distance=2.5cm] (output) {\sffamily Data\\$\{0,1\}$};
+\node[block, above right of=input, node distance=2.3cm] (bpf0) {BPF\\$@f_0$};
+\node[block, right of=bpf0, node distance=2.2cm] (env0) {Envelope\\Detector};
+\node[block, below right of=input, node distance=2.3cm] (bpf1) {BPF\\$@f_1$};
+\node[block, right of=bpf1, node distance=2.2cm] (env1) {Envelope\\Detector};
+\node[block, right of=env0, node distance=2.2cm, yshift=-1.15cm] (comp) {Compare\\$>$};
+\node[block, right of=comp, node distance=2cm] (sample) {Sample\\$@T_b$};
+\node[right of=sample, node distance=2cm] (output) {\sffamily Data\\$\{0,1\}$};
 
-\draw[->,thick] (input) -- ++(0.8,0) coordinate (split);
+\draw[->,thick] (input) -- ++(0.6,0) coordinate (split);
 \draw[->,thick] (split) |- (bpf0);
 \draw[->,thick] (split) |- (bpf1);
 \draw[->,thick] (bpf0) -- (env0);
@@ -239,22 +239,22 @@ For maximum performance, coherent detection uses correlation receivers:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2cm,
+  block/.style={rectangle, draw, minimum width=1.8cm, minimum height=0.9cm, font=\sffamily\small},
+  node distance=1.8cm,
   font=\small
 ]
 \node (input) {\sffamily RX\\Signal};
-\node[block, above right of=input, node distance=2.8cm] (mult0) {Mixer\\$\times$};
-\node[block, right of=mult0, node distance=2.8cm] (int0) {Integrate\\$0$ to $T_b$};
-\node[block, below right of=input, node distance=2.8cm] (mult1) {Mixer\\$\times$};
-\node[block, right of=mult1, node distance=2.8cm] (int1) {Integrate\\$0$ to $T_b$};
-\node[block, right of=int0, node distance=2.8cm, yshift=-1.4cm] (comp) {Compare\\$>$};
-\node[right of=comp, node distance=2.5cm] (output) {\sffamily Data\\$\{0,1\}$};
+\node[block, above right of=input, node distance=2.3cm] (mult0) {Mixer\\$\times$};
+\node[block, right of=mult0, node distance=2.2cm] (int0) {Integrate\\$0$ to $T_b$};
+\node[block, below right of=input, node distance=2.3cm] (mult1) {Mixer\\$\times$};
+\node[block, right of=mult1, node distance=2.2cm] (int1) {Integrate\\$0$ to $T_b$};
+\node[block, right of=int0, node distance=2.2cm, yshift=-1.15cm] (comp) {Compare\\$>$};
+\node[right of=comp, node distance=2cm] (output) {\sffamily Data\\$\{0,1\}$};
 
 \node[below of=mult0, node distance=1.3cm, font=\scriptsize, align=center] (lo0) {$\cos(2\pi f_0 t)$};
 \node[below of=mult1, node distance=1.3cm, font=\scriptsize, align=center] (lo1) {$\cos(2\pi f_1 t)$};
 
-\draw[->,thick] (input) -- ++(0.8,0) coordinate (split);
+\draw[->,thick] (input) -- ++(0.6,0) coordinate (split);
 \draw[->,thick] (split) |- (mult0);
 \draw[->,thick] (split) |- (mult1);
 \draw[->,thick] (lo0) -- (mult0);
@@ -270,7 +270,7 @@ For maximum performance, coherent detection uses correlation receivers:
 \textbf{Coherent detection provides optimal performance but requires:}
 \begin{itemize}
 \item Precise local oscillators at both $f_0$ and $f_1$
-\item Phase synchronization (approximately 1~dB improvement over non-coherent)
+\item Phase synchronization (approx.\ 1~dB improvement over non-coherent)
 \item More complex receiver circuitry
 \end{itemize}
 
@@ -319,16 +319,18 @@ $E_b/N_0$ (dB) & \multicolumn{1}{c}{BER (Non-coh)} & \multicolumn{1}{c}{BER (Coh
 \subsection{Comparison with Other Modulation Schemes}
 
 \begin{center}
+\small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Scheme} & \textbf{Spectral Efficiency} & \textbf{$E_b/N_0$ @ BER $10^{-6}$} & \textbf{Complexity} & \textbf{Detection} \\
+\textbf{Scheme} & \textbf{Spectral Eff.} & \textbf{$E_b/N_0$} & \textbf{Complex.} & \textbf{Detection} \\
+ & \textbf{(bps/Hz)} & \textbf{@ BER $10^{-6}$} & & \\
 \midrule
-OOK & $\sim$0.5~bps/Hz & 13.5~dB & Low & Non-coherent \\
-\textbf{FSK (non-coh)} & $\sim$0.5~bps/Hz & 12.5~dB & Low & Non-coherent \\
-\textbf{FSK (coherent)} & $\sim$0.5~bps/Hz & 10.5~dB & Medium & Coherent \\
-MSK & $\sim$0.67~bps/Hz & 10.5~dB & Medium & Coherent \\
-BPSK & $\sim$1.0~bps/Hz & 10.5~dB & Medium & Coherent \\
-QPSK & $\sim$2.0~bps/Hz & 10.5~dB & Medium & Coherent \\
+OOK & $\sim$0.5 & 13.5~dB & Low & Non-coh. \\
+\textbf{FSK (non-coh)} & $\sim$0.5 & 12.5~dB & Low & Non-coh. \\
+\textbf{FSK (coherent)} & $\sim$0.5 & 10.5~dB & Medium & Coherent \\
+MSK & $\sim$0.67 & 10.5~dB & Medium & Coherent \\
+BPSK & $\sim$1.0 & 10.5~dB & Medium & Coherent \\
+QPSK & $\sim$2.0 & 10.5~dB & Medium & Coherent \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -465,7 +467,7 @@ Link margin: $46.4 - 8 = 38.4$~dB (excellent!)
 \begin{itemize}
 \item \textbf{RFID systems:} Passive tags use FSK backscatter
 \item \textbf{Weather balloons:} Radiosondes transmit meteorological data via FSK (400~MHz)
-\item \textbf{Wireless sensor networks:} Low-power nodes with simple FSK transceivers
+\item \textbf{Wireless sensor networks:} Low-power nodes with simple FSK trans\-ceiv\-ers
 \item \textbf{Submarine communication:} VLF/ELF FSK for underwater links
 \end{itemize}
 
@@ -565,7 +567,7 @@ Typical uses & LoRa, Bluetooth (GFSK), caller ID, pagers \\
 \item \textbf{Chapter~5:} On-Off Keying (OOK)---simpler amplitude modulation
 \item \textbf{Chapter~7:} Quadrature Phase-Shift Keying (QPSK)---2 bits/symbol extension
 \item \textbf{Chapter~10:} Minimum Shift Keying (MSK)---optimal continuous-phase FSK
-\item \textbf{Chapter~12:} Constellation Diagrams---visualization of modulation schemes
+\item \textbf{Chapter~12:} Constellation Diagrams---modulation scheme visualization
 \item \textbf{Chapter~13:} IQ Representation---complex baseband mathematics
 \item \textbf{Chapter~18:} Bit Error Rate Analysis---performance measurement
 \item \textbf{Chapter~22:} Forward Error Correction---coding for BER improvement

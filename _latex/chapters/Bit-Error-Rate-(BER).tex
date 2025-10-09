@@ -598,18 +598,18 @@ Transmit known test pattern and count mismatches:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.2cm,
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small, align=center},
+  node distance=2cm,
   font=\small
 ]
 % Transmitter side
 \node (prbs) [block] {PRBS\\Generator};
-\node (tx) [block, right of=prbs, node distance=2.8cm] {Transmitter\\(Modulator)};
-\node (channel) [block, right of=tx, node distance=3cm] {Channel\\Under Test};
+\node (tx) [block, right of=prbs, node distance=2.4cm] {Transmitter\\(Modulator)};
+\node (channel) [block, right of=tx, node distance=2.6cm] {Channel\\Under Test};
 
 % Receiver side
-\node (rx) [block, right of=channel, node distance=3cm] {Receiver\\(Demodulator)};
-\node (comp) [block, right of=rx, node distance=2.8cm] {Error\\Comparator};
+\node (rx) [block, right of=channel, node distance=2.6cm] {Receiver\\(Demodulator)};
+\node (comp) [block, right of=rx, node distance=2.4cm] {Error\\Comparator};
 \node (counter) [block, below of=comp, node distance=1.8cm] {Error\\Counter};
 
 % Reference path

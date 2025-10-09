@@ -171,18 +171,18 @@ The acoustic heterodyning process can be visualized as follows:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small},
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
   node distance=2.5cm,
   font=\small
 ]
-\node (source1) {\sffamily $f_1$\\Source 1};
+\node[align=center] (source1) {\sffamily $f_1$\\Source 1};
 \node[block, right of=source1, node distance=3cm] (trans1) {Ultrasound\\Transducer 1};
-\node[below of=source1, node distance=1.8cm] (source2) {\sffamily $f_2$\\Source 2};
+\node[below of=source1, node distance=1.8cm, align=center] (source2) {\sffamily $f_2$\\Source 2};
 \node[block, right of=source2, node distance=3cm] (trans2) {Ultrasound\\Transducer 2};
 
 \node[block, right of=trans1, node distance=4.5cm, yshift=-0.9cm, minimum width=3cm, minimum height=2.5cm] (medium) {Nonlinear\\Medium\\$\beta \neq 0$};
 
-\node[right of=medium, node distance=4cm] (output) {\sffamily $f_\Delta = |f_1 - f_2|$\\Audible Sound};
+\node[right of=medium, node distance=4cm, align=center] (output) {\sffamily $f_\Delta = |f_1 - f_2|$\\Audible Sound};
 
 % Arrows
 \draw[->,thick] (source1) -- node[above,font=\scriptsize] {40~kHz} (trans1);
@@ -210,14 +210,14 @@ The nonlinear interaction generates multiple frequency components:
 \draw[very thin,gray!20] (0,0) grid[step=1] (9,3);
 
 % Primary frequencies (40 kHz, 42 kHz scaled down for display)
-\draw[thick,blue] (4,3) -- (4,0) node[below,font=\scriptsize,blue] {$f_1$\\40};
-\draw[thick,blue] (4.2,3) -- (4.2,0) node[below,font=\scriptsize,blue] {$f_2$\\42};
+\draw[thick,blue] (4,3) -- (4,0) node[below,font=\scriptsize,blue,align=center] {$f_1$\\40};
+\draw[thick,blue] (4.2,3) -- (4.2,0) node[below,font=\scriptsize,blue,align=center] {$f_2$\\42};
 
 % Difference frequency (2 kHz)
-\draw[thick,red,line width=1.5pt] (0.2,1.5) -- (0.2,0) node[below,font=\scriptsize,red] {$f_\Delta$\\2};
+\draw[thick,red,line width=1.5pt] (0.2,1.5) -- (0.2,0) node[below,font=\scriptsize,red,align=center] {$f_\Delta$\\2};
 
 % Sum frequency (82 kHz - off scale)
-\draw[thick,gray,dashed] (8.2,0.5) -- (8.2,0) node[below,font=\scriptsize,gray] {$f_\Sigma$\\82};
+\draw[thick,gray,dashed] (8.2,0.5) -- (8.2,0) node[below,font=\scriptsize,gray,align=center] {$f_\Sigma$\\82};
 
 % Labels
 \node[above,font=\scriptsize,blue] at (4.1,3.2) {Primaries (ultrasound)};
@@ -235,15 +235,15 @@ The difference frequency $f_\Delta = 2$~kHz falls within the audible range, whil
 
 \subsection{Parametric Loudspeakers}
 
-\textbf{Principle:} Ultrasound beams (e.g., 40~kHz carrier) are highly directional ($\sim$5° beamwidth). The audible difference frequency inherits this directionality, creating a ``beam of sound.''
+\textbf{Principle:} Ultrasound beams (e.g., 40~kHz carrier) are highly direc\-tion\-al ($\sim$5\textdegree{} beamwidth). The audible difference frequency inherits this directionality, creating a ``beam of sound.''
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small, align=center},
   node distance=2.2cm,
   font=\small
 ]
-\node (input) {\sffamily Audio\\Signal};
+\node[align=center] (input) {\sffamily Audio\\Signal};
 \node[block, right of=input, node distance=2.8cm] (mod) {Amplitude\\Modulator};
 \node[block, right of=mod, node distance=3cm] (carrier) {Ultrasonic\\Carrier};
 \node[block, right of=carrier, node distance=3cm] (array) {Transducer\\Array};
@@ -306,7 +306,7 @@ where:
 \begin{itemize}
 \item \textbf{Echocardiography:} Enhanced contrast, reduced artifacts
 \item \textbf{Liver imaging:} Better lesion detection
-\item \textbf{Contrast-enhanced ultrasound:} Microbubble agents enhance harmonic response
+\item \textbf{Contrast-enhanced ultrasound:} Microbubble agents enhance har\-mon\-ic response
 \end{itemize}
 
 \textbf{Advantages:}
@@ -318,7 +318,7 @@ where:
 
 \subsection{Underwater Parametric Sonar}
 
-\textbf{Parametric sonar} transmits high-frequency beams that generate directional low-frequency sound through ocean nonlinearity.
+\textbf{Parametric sonar} transmits high-frequency beams that generate direc\-tion\-al low-frequency sound through ocean nonlinearity.
 
 The parametric array gain is:
 \begin{equation}
@@ -495,7 +495,7 @@ f_1 = f_c = 40{,}000~\text{Hz}
 f_2 = f_c + f_a = 40{,}000 + 2{,}000 = 42{,}000~\text{Hz}
 \end{equation}
 
-Difference frequency: $f_\Delta = f_2 - f_1 = 2{,}000$~Hz ✓
+Difference frequency: $f_\Delta = f_2 - f_1 = 2{,}000$~Hz \checkmark
 
 \subsection*{Step 2: Calculate Beamwidth}
 

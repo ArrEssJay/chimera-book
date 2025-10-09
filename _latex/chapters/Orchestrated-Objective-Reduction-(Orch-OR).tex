@@ -115,18 +115,6 @@ Sir Roger Penrose received the 2020 Nobel Prize in Physics for groundbreaking wo
 \textbf{Orchestrated Objective Reduction (Orch-OR)} is a controversial theory of consciousness proposed by physicist \textbf{Sir Roger Penrose} and anesthesiologist \textbf{Stuart Hameroff} in the mid-1990s.
 
 \begin{keyconcept}
-Orch-OR proposes that \textbf{consciousness arises from quantum computations in neuronal microtubules}, with orchestrated collapse of quantum superpositions (objective reduction) generating moments of conscious awareness at approximately 40~Hz (gamma rhythm).
-\end{keyconcept}
-
-This theory bridges quantum mechanics, neuroscience, and philosophy of mind, suggesting that consciousness is fundamentally quantum-mechanical rather than purely classical computational.
-
-
-
-\section{Overview}
-
-\textbf{Orchestrated Objective Reduction (Orch-OR)} is a controversial theory of consciousness proposed by physicist \textbf{Sir Roger Penrose} and anesthesiologist \textbf{Stuart Hameroff} in the mid-1990s.
-
-\begin{keyconcept}
 Orch-OR proposes that \textbf{consciousness emerges from quantum computations in neuronal microtubules}, with orchestrated collapse of quantum superpositions (objective reduction) generating discrete moments of conscious awareness at approximately 40~Hz.
 \end{keyconcept}
 
@@ -278,13 +266,29 @@ where:
 
 \subsection{The Decoherence Problem}
 
+\textbf{Central objection:} ``Warm, wet brain environment $\rightarrow$ quantum decoherence occurs too rapidly''
+
+\textbf{Standard decoherence theory} predicts collapse time in biological conditions:
+\begin{equation}
+\label{eq:decoherence-time}
+\tau_{\text{dec}} \approx 10^{-13}~\text{s (femtoseconds)}
+\end{equation}
+
+\textbf{Orch-OR requirement} for conscious moment formation:
+\begin{equation}
+\label{eq:orchor-time}
+\tau_{\text{Orch-OR}} \approx 10^{-2}~\text{s} = 10~\text{ms}
+\end{equation}
+
+\textbf{Gap magnitude:} Orch-OR requires coherence $10^{11}$ times longer than predicted!
+
 \begin{warningbox}
 \textbf{Primary objection to Orch-OR:} The warm, wet brain environment should cause rapid quantum decoherence, destroying quantum coherence far too quickly for consciousness-related processes.
 \end{warningbox}
 
 \textbf{Decoherence time estimate} (Tegmark, 2000):
 \begin{equation}
-\label{eq:decoherence-time}
+\label{eq:decoherence-time-tegmark}
 \tau_D \sim \frac{\hbar}{k_B T} \approx 10^{-13}~\text{s}
 \end{equation}
 where:
@@ -579,7 +583,23 @@ Using Penrose's criterion (Eq.~\ref{eq:or-criterion}):
 \tau \approx 940~\text{s} \approx 16~\text{minutes}
 \end{equation}
 
-\subsection*{Result and Interpretation}
+\textbf{General anesthetics} cause loss of consciousness at specific doses:
+\begin{itemize}
+\item Diverse molecules (noble gases, halogenated ethers, etc.)
+\item \textbf{No common receptor} (unlike opioids $\rightarrow$ $\mu$-opioid receptor)
+\item \textbf{Meyer-Overton rule}: Potency $\propto$ lipid solubility (1899!)
+\end{itemize}
+
+\textbf{Meyer-Overton correlation:}
+\begin{equation}
+\label{eq:meyer-overton-mac}
+\log(\text{MAC}) \propto -\log(K_{\text{lipid}})
+\end{equation}
+where:
+\begin{itemize}
+\item MAC = Minimum Alveolar Concentration (anesthetic potency)
+\item $K_{\text{lipid}}$ = lipid solubility coefficient
+\end{itemize}
 
 \begin{calloutbox}[colback=blue!5!white,colframe=blue!75!black]{Result Analysis}
 \textbf{Calculated OR time: 16 minutes} --- far too long for conscious moments!
