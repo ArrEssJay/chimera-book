@@ -120,10 +120,10 @@ B_c \approx \frac{1}{5 \tau_{\text{RMS}}}
 \textbf{Frequency-selective fading:} $B_{\text{signal}} > B_c$ (ISI present, equalization required)
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.95]
 % Frequency axis
 \draw[->] (0,0) -- (10,0) node[right] {\sffamily\small Frequency (MHz)};
-\draw[->] (0,0) -- (0,4) node[above] {\sffamily\small $|H(f)|$};
+\draw[->] (0,0) -- (0,4.3) node[above] {\sffamily\small $|H(f)|$};
 
 % Channel frequency response (frequency-selective)
 \draw[thick, blue!70!black, domain=0:9.5, samples=100, smooth] 
@@ -140,7 +140,7 @@ B_c \approx \frac{1}{5 \tau_{\text{RMS}}}
   node[midway, below, font=\scriptsize, align=center] {Frequency-\\selective};
 
 % Title
-\node[above, font=\sffamily\small] at (5,4.2) {Channel Frequency Response};
+\node[font=\sffamily\small] at (5,4.5) {Channel Frequency Response};
 \end{tikzpicture}
 \end{center}
 
@@ -171,7 +171,7 @@ H(f) \cdot W(f) = H(f) \cdot \frac{1}{H(f)} = 1
 This achieves perfect equalization in the absence of noise.
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.7]
 % First subplot: Channel response
 \begin{scope}[shift={(0,0)}]
 \draw[->] (0,0) -- (4,0) node[right, font=\scriptsize] {$f$};
@@ -184,18 +184,18 @@ This achieves perfect equalization in the absence of noise.
 \end{scope}
 
 % Second subplot: ZF equalizer
-\begin{scope}[shift={(5,0)}]
+\begin{scope}[shift={(4.8,0)}]
 \draw[->] (0,0) -- (4,0) node[right, font=\scriptsize] {$f$};
 \draw[->] (0,0) -- (0,3) node[above, font=\scriptsize] {$|W(f)|$};
 \draw[thick, green!60!black] (0.3,0.8) .. controls (1,1) and (1.5,2.5) .. (2,2.8) 
                                         .. controls (2.5,2.7) and (3,1.3) .. (3.7,1);
 \node[below, font=\sffamily\small] at (2,-0.3) {ZF Equalizer};
 \draw[->, red, thick] (2,2.5) -- (2,3.2) node[above, font=\scriptsize] {$\infty$};
-\node[right, font=\scriptsize, text=red] at (2,2.8) {Noise boost};
+\node[above left, font=\scriptsize, text=red] at (1.8,2.8) {Noise boost};
 \end{scope}
 
 % Third subplot: Combined response
-\begin{scope}[shift={(10,0)}]
+\begin{scope}[shift={(9.6,0)}]
 \draw[->] (0,0) -- (4,0) node[right, font=\scriptsize] {$f$};
 \draw[->] (0,0) -- (0,3) node[above, font=\scriptsize] {$|H \cdot W|$};
 \draw[thick, purple] (0.3,2) -- (3.7,2);
@@ -287,10 +287,10 @@ The key difference between ZF and MMSE:
 \end{keyconcept}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=1.1]
 % Axes
 \draw[->] (0,0) -- (7,0) node[right] {\sffamily\small Frequency};
-\draw[->] (0,0) -- (0,4) node[above] {\sffamily\small Magnitude};
+\draw[->] (0,0) -- (0,4.5) node[above] {\sffamily\small Magnitude};
 
 % Channel response (with deep fade)
 \draw[thick, blue, domain=0:6.5, samples=50, smooth] 
@@ -304,13 +304,13 @@ The key difference between ZF and MMSE:
 \draw[thick, green!60!black, domain=0:6.5, samples=50, smooth] 
   plot (\x, {2.5*((1.5 + 1.2*sin(\x r) - 0.8*cos(1.5*\x r)))/(pow((1.5 + 1.2*sin(\x r) - 0.8*cos(1.5*\x r)),2) + 0.5)});
 
-% Legend
-\node[right, font=\scriptsize, blue] at (0.2,3.5) {$\blacksquare$ Channel $H(f)$};
-\node[right, font=\scriptsize, red] at (0.2,3.2) {$\blacksquare$ ZF: $1/H(f)$};
-\node[right, font=\scriptsize, green!60!black] at (0.2,2.9) {$\blacksquare$ MMSE: $H^*/(|H|^2+\sigma^2)$};
+% Legend (moved higher with better spacing)
+\node[right, font=\scriptsize, blue] at (0.2,4.2) {$\blacksquare$ Channel $H(f)$};
+\node[right, font=\scriptsize, red] at (0.2,3.85) {$\blacksquare$ ZF: $1/H(f)$};
+\node[right, font=\scriptsize, green!60!black] at (0.2,3.5) {$\blacksquare$ MMSE: $H^*/(|H|^2+\sigma^2)$};
 
 % Annotation for deep fade
-\draw[->, thick] (3.5,3.7) -- (3.5,1.5) node[below, font=\scriptsize, align=center] {MMSE stays\\bounded};
+\draw[->, thick] (3.5,4.2) -- (3.5,1.5) node[below, font=\scriptsize, align=center] {MMSE stays\\bounded};
 \end{tikzpicture}
 \end{center}
 
@@ -340,24 +340,24 @@ SNR (dB) & ZF BER & MMSE BER & Improvement \\
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
-  sum/.style={circle, draw, minimum size=0.8cm, font=\Large},
-  node distance=2.5cm,
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=0.9cm, font=\sffamily\scriptsize, align=center},
+  sum/.style={circle, draw, minimum size=0.7cm, font=\large},
+  node distance=2.2cm,
   font=\small
 ]
 % Feedforward filter
 \node[block] (ff) {Feedforward\\Filter\\$N_f$ taps};
-\node[left of=ff, node distance=3cm] (input) {$r[n]$};
+\node[left of=ff, node distance=2.5cm] (input) {$r[n]$};
 
 % Summing junction
-\node[sum, right of=ff, node distance=3cm] (sum) {$+$};
+\node[sum, right of=ff, node distance=2.5cm] (sum) {$+$};
 
 % Slicer
-\node[block, right of=sum, node distance=3cm] (slicer) {Slicer};
-\node[right of=slicer, node distance=2.5cm] (output) {$\hat{s}[n]$};
+\node[block, right of=sum, node distance=2.5cm] (slicer) {Slicer};
+\node[right of=slicer, node distance=2.2cm] (output) {$\hat{s}[n]$};
 
 % Feedback filter
-\node[block, below of=sum, node distance=2.5cm] (fb) {Feedback\\Filter\\$N_b$ taps};
+\node[block, below of=sum, node distance=2.2cm] (fb) {Feedback\\Filter\\$N_b$ taps};
 
 % Connections
 \draw[->, thick] (input) -- node[above, font=\scriptsize] {Received} (ff);
@@ -370,7 +370,7 @@ SNR (dB) & ZF BER & MMSE BER & Improvement \\
 \draw[->, thick] (fb) -- (sum) node[pos=0.5, right, font=\scriptsize] {$-$};
 
 % Labels
-\node[below of=fb, node distance=1.3cm, font=\scriptsize, align=center] {Past decisions\\$\hat{s}[n-1], \hat{s}[n-2], \ldots$};
+\node[below of=fb, node distance=1.2cm, font=\scriptsize, align=center] {Past decisions\\$\hat{s}[n-1], \hat{s}[n-2], \ldots$};
 \end{tikzpicture}
 \end{center}
 
@@ -523,7 +523,7 @@ Aspect & LMS & RLS \\
 \subsection{Convergence Behavior}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.9]
 % Axes
 \draw[->] (0,0) -- (10,0) node[right] {\sffamily\small Symbol Index ($n$)};
 \draw[->] (0,0) -- (0,5) node[above] {\sffamily\small MSE (dB)};
@@ -534,16 +534,16 @@ Aspect & LMS & RLS \\
 % RLS convergence (fast)
 \draw[thick, blue, domain=0:9.5, samples=50, smooth] 
   plot (\x, {0.5 + 4*exp(-0.8*\x)});
-\node[right, font=\scriptsize, blue] at (2,4) {RLS};
+\node[right, font=\scriptsize, blue] at (2.2,4) {RLS};
 
 % LMS convergence (slow)
 \draw[thick, red, dashed, domain=0:9.5, samples=50, smooth] 
   plot (\x, {0.5 + 4*exp(-0.15*\x)});
-\node[right, font=\scriptsize, red] at (5,2.5) {LMS};
+\node[right, font=\scriptsize, red] at (5.2,2.5) {LMS};
 
 % Steady-state MSE line
 \draw[dotted, thick] (0,0.5) -- (10,0.5);
-\node[left, font=\scriptsize] at (0,0.5) {MMSE};
+\node[left, font=\scriptsize] at (-0.2,0.5) {MMSE};
 
 % Annotations
 \draw[<->, thick] (0.5,4.5) -- (1.5,4.5) node[midway, above, font=\scriptsize] {Fast (RLS)};

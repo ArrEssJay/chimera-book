@@ -79,50 +79,52 @@ Figure~\ref{fig:propagation-modes} illustrates the three primary propagation mod
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[scale=1.2, font=\small]
+\begin{tikzpicture}[scale=1.0, font=\small]
 % Earth surface (curved)
 \draw[very thick, brown!60!black] (-6,0) .. controls (-3,-0.3) and (3,-0.3) .. (6,0);
 \fill[brown!20] (-6,0) .. controls (-3,-0.3) and (3,-0.3) .. (6,0) -- (6,-1) -- (-6,-1) -- cycle;
 
 % Ground Wave
 \draw[->, thick, red!70!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
-  (-5,0.1) .. controls (-3,0.2) and (-1,0.15) .. (1,0.1);
-\node[red!70!black, font=\sffamily\small] at (-2,0.7) {\textbf{Ground Wave}};
-\node[red!70!black, font=\scriptsize] at (-2,0.3) {LF/MF (30 kHz--3 MHz)};
+  (-5,0.1) .. controls (-3,0.2) and (-1,0.15) .. (0.8,0.1);
+\node[red!70!black, font=\sffamily\small] at (-2.5,0.9) {\textbf{Ground Wave}};
+\node[red!70!black, font=\scriptsize] at (-2.5,0.4) {LF/MF (30 kHz--3 MHz)};
 
 % Sky Wave - Ionosphere layer
-\draw[blue!30, thick] (-6,4) -- (6,4);
-\fill[blue!10, opacity=0.5] (-6,4) rectangle (6,4.3);
-\node[blue!50!black, font=\scriptsize] at (0,4.5) {Ionosphere (60--400 km)};
+\draw[blue!30, thick] (-6,4.2) -- (6,4.2);
+\fill[blue!10, opacity=0.5] (-6,4.2) rectangle (6,4.5);
+\node[blue!50!black, font=\scriptsize] at (0,4.8) {Ionosphere (60--400 km)};
 
 % Sky Wave path
 \draw[->, thick, blue!70!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
-  (-4,0.1) -- (-2,3.8);
+  (-4,0.1) -- (-2.2,4.0);
 \draw[->, thick, blue!70!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
-  (-1.8,3.8) -- (0.5,0.1);
-\node[blue!70!black, font=\sffamily\small] at (-1,2.5) {\textbf{Sky Wave}};
-\node[blue!70!black, font=\scriptsize] at (-1,2) {HF (3--30 MHz)};
+  (-1.8,4.0) -- (0.3,0.1);
+\node[blue!70!black, font=\sffamily\small] at (-0.8,2.8) {\textbf{Sky Wave}};
+\node[blue!70!black, font=\scriptsize] at (-0.8,2.3) {HF (3--30 MHz)};
 
 % Line-of-Sight
 \draw[->, thick, green!50!black, decorate, decoration={snake, amplitude=0.8mm, segment length=3mm}] 
   (2,1.5) -- (5,1.5);
-\node[green!50!black, font=\sffamily\small] at (3.5,2) {\textbf{Line-of-Sight}};
-\node[green!50!black, font=\scriptsize] at (3.5,1) {VHF+ ($>$30 MHz)};
+\node[green!50!black, font=\sffamily\small] at (3.5,2.2) {\textbf{Line-of-Sight}};
+\node[green!50!black, font=\scriptsize] at (3.5,0.9) {VHF+ ($>$30 MHz)};
 
-% Antennas
+% Antennas - Ground Wave
 \draw[thick] (-5,0) -- (-5,0.5);
-\draw[thick] (-4,0) -- (-4,0.5);
-\draw[thick] (1,0) -- (1,0.5);
-\draw[thick] (0.5,0) -- (0.5,0.5);
-\draw[thick] (2,0) -- (2,1.5);
-\draw[thick] (5,0) -- (5,1.5);
-
-% Tower symbols
 \filldraw[black] (-5,0.5) circle (2pt);
+\draw[thick] (-4,0) -- (-4,0.5);
 \filldraw[black] (-4,0.5) circle (2pt);
-\filldraw[black] (1,0.5) circle (2pt);
-\filldraw[black] (0.5,0.5) circle (2pt);
+\draw[thick] (0.8,0) -- (0.8,0.5);
+\filldraw[black] (0.8,0.5) circle (2pt);
+
+% Antennas - Sky Wave
+\draw[thick] (0.3,0) -- (0.3,0.5);
+\filldraw[black] (0.3,0.5) circle (2pt);
+
+% Antennas - Line-of-Sight
+\draw[thick] (2,0) -- (2,1.5);
 \filldraw[black] (2,1.5) circle (2pt);
+\draw[thick] (5,0) -- (5,1.5);
 \filldraw[black] (5,1.5) circle (2pt);
 
 \end{tikzpicture}
@@ -171,7 +173,7 @@ Table~\ref{tab:ground-conductivity} shows how different surface types affect gro
 \centering
 \caption{Ground conductivity and attenuation for different surface types}
 \label{tab:ground-conductivity}
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lp{2.5cm}p{2.5cm}p{2.5cm}@{}}
 \toprule
 \textbf{Surface Type} & \textbf{Conductivity (S/m)} & \textbf{Relative Permittivity $\epsilon_r$} & \textbf{Attenuation} \\
 \midrule
@@ -197,7 +199,7 @@ Empirical range over average soil with vertical polarization is shown in Table~\
 \centering
 \caption{Ground wave range vs frequency over average soil}
 \label{tab:ground-wave-range}
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lllp{4.5cm}@{}}
 \toprule
 \textbf{Frequency} & \textbf{Wavelength} & \textbf{Typical Range} & \textbf{Applications} \\
 \midrule
@@ -312,14 +314,14 @@ The ionosphere is ionized by solar UV and X-rays, creating distinct layers with 
 \caption{Ionospheric layers and their characteristics}
 \label{tab:ionospheric-layers}
 \small
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llp{3.5cm}p{3.5cm}@{}}
 \toprule
-\textbf{Layer} & \textbf{Altitude} & \textbf{Ionization} & \textbf{Daytime Behavior} & \textbf{Nighttime Behavior} \\
+\textbf{Layer} & \textbf{Altitude} & \textbf{Daytime Behavior} & \textbf{Nighttime Behavior} \\
 \midrule
-\textbf{D} & 60--90~km & Low & \textbf{Absorbs HF} (attenuates MF/HF) & \textbf{Disappears} (recombination fast) \\
-\textbf{E} & 90--150~km & Moderate & Reflects some HF ($<$10~MHz) & Weakens \\
-\textbf{F1} & 150--250~km & Moderate & Reflects MF/HF & \textbf{Merges with F2} \\
-\textbf{F2} & 250--400~km & High & \textbf{Primary reflector} for HF & Descends, remains strong \\
+\textbf{D} & 60--90~km & \textbf{Absorbs HF} (attenuates MF/HF) & \textbf{Disappears} (recombination fast) \\
+\textbf{E} & 90--150~km & Reflects some HF ($<$10~MHz) & Weakens \\
+\textbf{F1} & 150--250~km & Reflects MF/HF & \textbf{Merges with F2} \\
+\textbf{F2} & 250--400~km & \textbf{Primary reflector} for HF & Descends, remains strong \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -602,15 +604,16 @@ Table~\ref{tab:propagation-comparison} summarizes the key characteristics of eac
 \centering
 \caption{Comparison of electromagnetic wave propagation modes}
 \label{tab:propagation-comparison}
-\begin{tabular}{@{}lllll@{}}
+\small
+\begin{tabular}{@{}llp{3.2cm}p{3.2cm}@{}}
 \toprule
-\textbf{Mode} & \textbf{Frequency} & \textbf{Range} & \textbf{Characteristics} & \textbf{Applications} \\
+\textbf{Mode} & \textbf{Frequency} & \textbf{Characteristics} & \textbf{Applications} \\
 \midrule
-Ground Wave & LF/MF & 50--500~km & Follows curvature, stable, vertical pol & AM radio, maritime, NDB \\
-Sky Wave & HF & 500--10,000+~km & Ionospheric reflection, variable & Shortwave, amateur, OTH radar \\
-LOS & VHF+ & 10--100~km & Direct path, terrain-limited & FM, TV, cellular, microwave \\
-Satellite LOS & VHF--Ka & Global & Space path, rain fade ($>$10~GHz) & GPS, satellite TV/internet \\
-Troposcatter & UHF/SHF & 100--500~km & Beyond-horizon scatter & Military long-haul \\
+Ground Wave & LF/MF & Follows curvature, stable, vertical pol, 50--500~km & AM radio, maritime, NDB \\
+Sky Wave & HF & Ionospheric reflection, variable, 500--10,000+~km & Shortwave, amateur, OTH radar \\
+LOS & VHF+ & Direct path, terrain-limited, 10--100~km & FM, TV, cellular, microwave \\
+Satellite LOS & VHF--Ka & Space path, rain fade ($>$10~GHz), global & GPS, satellite TV/internet \\
+Troposcatter & UHF/SHF & Beyond-horizon scatter, 100--500~km & Military long-haul \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -737,7 +740,7 @@ Table~\ref{tab:propagation-models} summarizes common propagation models and thei
 \centering
 \caption{Common propagation models and their typical accuracy}
 \label{tab:propagation-models}
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lp{3.5cm}p{2.5cm}l@{}}
 \toprule
 \textbf{Model} & \textbf{Use Case} & \textbf{Frequency} & \textbf{Accuracy} \\
 \midrule
