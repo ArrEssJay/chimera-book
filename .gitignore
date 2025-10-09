@@ -47,3 +47,6 @@ test_*.tex
 test_*.pdf
 test_*.aux
 test_*.log
+_latex/*.png
+_latex/test-*.tex
+_latex/test-*.idx
