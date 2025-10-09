@@ -161,7 +161,7 @@ The relationship between bit energy, symbol energy, and modulation order is visu
 \begin{center}
 \begin{tikzpicture}[scale=1.0]
 % Time axis
-\draw[->] (0,0) -- (11,0) node[right,font=\sffamily\small] {Time};
+\draw[->] (0,0) -- (12,0) node[right,font=\sffamily\small] {Time};
 
 % BPSK example (1 bit per symbol)
 \node[left,font=\sffamily\small] at (0,2.5) {BPSK};
@@ -186,7 +186,7 @@ The relationship between bit energy, symbol energy, and modulation order is visu
 \fill[green!60!black] (4.5,-0.1) circle (2pt) node[above,font=\scriptsize,yshift=3pt] {b4};
 
 % Legend
-\node[font=\sffamily\footnotesize,align=left] at (8.5,1.2) {
+\node[font=\sffamily\footnotesize,align=left] at (8.5,1.5) {
   Each symbol carries\\
   multiple bits\\[2pt]
   $E_s = k \cdot E_b$\\
@@ -203,13 +203,13 @@ The noise spectral density $N_0$ represents the noise power distributed across f
 \begin{center}
 \begin{tikzpicture}[scale=1.0]
 % Frequency axis
-\draw[->] (0,0) -- (10,0) node[right,font=\sffamily\small] {Frequency (Hz)};
+\draw[->] (0,0) -- (11.5,0) node[right,font=\sffamily\small] {Frequency (Hz)};
 \draw[->] (0,0) -- (0,3.5) node[above,font=\sffamily\small] {Power};
 
 % Noise floor
-\fill[gray!20] (0,0) rectangle (9.5,1.5);
-\draw[thick,gray] (0,1.5) -- (9.5,1.5);
-\node[right,font=\sffamily\small] at (9.5,1.5) {$N_0$ (W/Hz)};
+\fill[gray!20] (0,0) rectangle (9,1.5);
+\draw[thick,gray] (0,1.5) -- (9,1.5);
+\node[font=\sffamily\small] at (9.7,1.5) {$N_0$ (W/Hz)};
 
 % Signal bandwidth
 \draw[<->,thick,blue] (2,2.8) -- (7,2.8) node[midway,above,font=\sffamily\small] {Signal bandwidth $B$};
@@ -223,7 +223,7 @@ The noise spectral density $N_0$ represents the noise power distributed across f
 \node[font=\sffamily\small,red] at (4.5,0.7) {$P_n = N_0 \cdot B$};
 
 % Annotations
-\draw[<->,thick] (8.2,0) -- (8.2,1.5) node[midway,right,font=\scriptsize,align=left] {Noise\\power\\per Hz};
+\draw[<->,thick] (9.7,0) -- (9.7,1.5) node[midway,right,font=\scriptsize,align=left] {Noise\\power\\per Hz};
 
 \end{tikzpicture}
 \end{center}
@@ -281,25 +281,25 @@ $E_b/N_0$ (dB) & BER & Practical Meaning \\
 \subsection{BER vs $E_b/N_0$ Visualization}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.90]
 % Axes
-\draw[->] (0,0) -- (0,5.5) node[above,font=\sffamily\small] {BER (log scale)};
-\draw[->] (0,0) -- (10,0) node[right,font=\sffamily\small] {$E_b/N_0$ (dB)};
+\draw[->] (-1.2,0) -- (-1.2,5.5) node[above,font=\sffamily\small] {BER (log scale)};
+\draw[->] (-1.2,0) -- (11,0) node[right,font=\sffamily\small] {$E_b/N_0$ (dB)};
 
 % Grid
 \foreach \x in {0,2,...,10} {
   \draw[very thin,gray!30] (\x,0) -- (\x,5);
 }
 \foreach \y in {0,1,...,5} {
-  \draw[very thin,gray!30] (0,\y) -- (10,\y);
+  \draw[very thin,gray!30] (-1.2,\y) -- (10,\y);
 }
 
 % Y-axis labels (log scale BER)
-\node[left,font=\scriptsize] at (0,5) {$10^{-1}$};
-\node[left,font=\scriptsize] at (0,4) {$10^{-3}$};
-\node[left,font=\scriptsize] at (0,3) {$10^{-5}$};
-\node[left,font=\scriptsize] at (0,2) {$10^{-7}$};
-\node[left,font=\scriptsize] at (0,1) {$10^{-9}$};
+\node[left,font=\scriptsize] at (-1.2,5) {$10^{-1}$};
+\node[left,font=\scriptsize] at (-1.2,4) {$10^{-3}$};
+\node[left,font=\scriptsize] at (-1.2,3) {$10^{-5}$};
+\node[left,font=\scriptsize] at (-1.2,2) {$10^{-7}$};
+\node[left,font=\scriptsize] at (-1.2,1) {$10^{-9}$};
 
 % BPSK curve (approximately)
 \draw[very thick,blue] (0,4.8) .. controls (2,4.5) and (4,3.8) .. (6,2.5) .. controls (8,1.2) .. (10,0.3);
@@ -311,15 +311,15 @@ $E_b/N_0$ (dB) & BER & Practical Meaning \\
 
 % 16-QAM curve (shifted right ~4 dB)
 \draw[very thick,green!60!black,dotted] (4,4.8) .. controls (6,4.5) and (8,3.8) .. (10,2.5);
-\node[green!60!black,font=\sffamily\small] at (9.5,3.5) {16-QAM};
+\node[green!60!black,font=\sffamily\small] at (8.8,3.5) {16-QAM};
 
 % Shannon limit line
-\draw[thick,dashed,black] (-0.5,0) -- (-0.5,5.5);
-\node[font=\scriptsize,align=center] at (-0.5,5.8) {Shannon\\Limit\\$-1.59$~dB};
+\draw[thick,dashed,black] (-0.5,0) -- (-0.5,5);
+\node[font=\scriptsize,align=center,anchor=south] at (-0.5,5.1) {Shannon\\Limit\\$-1.59$~dB};
 
 % Operating points
 \fill[black] (10,2.5) circle (2pt);
-\node[font=\scriptsize,align=left] at (10,2.9) {Typical\\operating\\point};
+\node[font=\scriptsize,align=center,anchor=west] at (10.2,2.5) {Typical\\operating\\point};
 
 \end{tikzpicture}
 \end{center}
