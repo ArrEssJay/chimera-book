@@ -97,7 +97,7 @@ where:
 The 8PSK constellation places 8 symbols at equal angular spacing of $45°$ around the unit circle:
 
 \begin{center}
-\begin{tikzpicture}[scale=2.2]
+\begin{tikzpicture}[scale=2.0]
 % Axes
 \draw[->] (-1.8,0) -- (1.8,0) node[right] {\sffamily\small $I$ (Real)};
 \draw[->] (0,-1.8) -- (0,1.8) node[above] {\sffamily\small $Q$ (Imaginary)};
@@ -109,17 +109,17 @@ The 8PSK constellation places 8 symbols at equal angular spacing of $45°$ aroun
 \draw[dashed,gray] (0,0) circle (1.4142);
 
 % Constellation points with Gray coding
-\fill[black] (1.4142,0) circle (2.5pt) node[right=4pt,font=\small] {000 (0°)};
-\fill[black] (1,1) circle (2.5pt) node[above right=2pt,font=\small] {001 (45°)};
-\fill[black] (0,1.4142) circle (2.5pt) node[above=4pt,font=\small] {011 (90°)};
-\fill[black] (-1,1) circle (2.5pt) node[above left=2pt,font=\small] {010 (135°)};
-\fill[black] (-1.4142,0) circle (2.5pt) node[left=4pt,font=\small] {110 (180°)};
-\fill[black] (-1,-1) circle (2.5pt) node[below left=2pt,font=\small] {111 (225°)};
-\fill[black] (0,-1.4142) circle (2.5pt) node[below=4pt,font=\small] {101 (270°)};
-\fill[black] (1,-1) circle (2.5pt) node[below right=2pt,font=\small] {100 (315°)};
+\fill[black] (1.4142,0) circle (2.5pt) node[right=5pt,font=\small] {000 (0°)};
+\fill[black] (1,1) circle (2.5pt) node[above right=3pt,font=\small] {001 (45°)};
+\fill[black] (0,1.4142) circle (2.5pt) node[above=5pt,font=\small] {011 (90°)};
+\fill[black] (-1,1) circle (2.5pt) node[above left=3pt,font=\small] {010 (135°)};
+\fill[black] (-1.4142,0) circle (2.5pt) node[left=5pt,font=\small] {110 (180°)};
+\fill[black] (-1,-1) circle (2.5pt) node[below left=3pt,font=\small] {111 (225°)};
+\fill[black] (0,-1.4142) circle (2.5pt) node[below=5pt,font=\small] {101 (270°)};
+\fill[black] (1,-1) circle (2.5pt) node[below right=3pt,font=\small] {100 (315°)};
 
 % Angular spacing annotation
-\draw[<->,thick,gray] (1.4142,0) arc (0:45:1.4142) node[midway,right=2pt,font=\scriptsize] {45°};
+\draw[<->,thick,gray] (1.4142,0) arc (0:45:1.4142) node[midway,right=4pt,font=\scriptsize] {45°};
 \end{tikzpicture}
 \end{center}
 
@@ -208,21 +208,21 @@ The 8PSK modulator generates I and Q baseband components, then mixes with carrie
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.2cm,
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.9cm, font=\sffamily\small},
+  node distance=2cm,
   font=\small
 ]
 \node (input) {\sffamily Data\\3~bits};
-\node[block, right of=input, node distance=2.8cm] (mapper) {Symbol\\Mapper};
-\node[block, above right of=mapper, node distance=2.8cm, yshift=0.5cm] (i_filter) {RRC\\Filter};
-\node[block, below right of=mapper, node distance=2.8cm, yshift=-0.5cm] (q_filter) {RRC\\Filter};
-\node[block, right of=i_filter, node distance=3cm] (i_mult) {Mixer\\$\times$};
-\node[block, right of=q_filter, node distance=3cm] (q_mult) {Mixer\\$\times$};
-\node[circle, draw, right of=i_mult, node distance=2.5cm, minimum size=0.8cm] (sum) {$+$};
-\node[right of=sum, node distance=2.2cm] (output) {\sffamily 8PSK\\Output};
+\node[block, right of=input, node distance=2.5cm] (mapper) {Symbol\\Mapper};
+\node[block, above right of=mapper, node distance=2.5cm, yshift=0.5cm] (i_filter) {RRC\\Filter};
+\node[block, below right of=mapper, node distance=2.5cm, yshift=-0.5cm] (q_filter) {RRC\\Filter};
+\node[block, right of=i_filter, node distance=2.7cm] (i_mult) {Mixer\\$\times$};
+\node[block, right of=q_filter, node distance=2.7cm] (q_mult) {Mixer\\$\times$};
+\node[circle, draw, right of=i_mult, node distance=2.3cm, minimum size=0.8cm] (sum) {$+$};
+\node[right of=sum, node distance=2cm] (output) {\sffamily 8PSK\\Output};
 
-\node[below of=i_mult, node distance=1.5cm, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
-\node[below of=q_mult, node distance=1.5cm, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
+\node[below of=i_mult, node distance=1.4cm, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
+\node[below of=q_mult, node distance=1.4cm, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
 
 \draw[->,thick] (input) -- (mapper);
 \draw[->,thick] (mapper) -- node[above left,font=\scriptsize] {$I_m$} (i_filter);
@@ -255,25 +255,25 @@ where $I_m(t)$ and $Q_m(t)$ are the pulse-shaped baseband waveforms.
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2cm,
+  block/.style={rectangle, draw, minimum width=1.9cm, minimum height=0.9cm, font=\sffamily\small},
+  node distance=1.9cm,
   font=\small
 ]
 \node (input) {\sffamily RX\\Signal};
-\node[block, above right of=input, node distance=2.8cm, yshift=0.6cm] (i_mult) {Mixer\\$\times$};
-\node[block, below right of=input, node distance=2.8cm, yshift=-0.6cm] (q_mult) {Mixer\\$\times$};
-\node[block, right of=i_mult, node distance=2.8cm] (i_lpf) {Lowpass\\Filter};
-\node[block, right of=q_mult, node distance=2.8cm] (q_lpf) {Lowpass\\Filter};
-\node[block, right of=i_lpf, node distance=2.8cm] (i_sample) {Sample\\$@T_s$};
-\node[block, right of=q_lpf, node distance=2.8cm] (q_sample) {Sample\\$@T_s$};
-\node[block, below right of=i_sample, node distance=2.8cm, yshift=-0.5cm] (decision) {Symbol\\Decision};
-\node[right of=decision, node distance=2.8cm] (output) {\sffamily Data\\3~bits};
+\node[block, above right of=input, node distance=2.5cm, yshift=0.6cm] (i_mult) {Mixer\\$\times$};
+\node[block, below right of=input, node distance=2.5cm, yshift=-0.6cm] (q_mult) {Mixer\\$\times$};
+\node[block, right of=i_mult, node distance=2.5cm] (i_lpf) {Lowpass\\Filter};
+\node[block, right of=q_mult, node distance=2.5cm] (q_lpf) {Lowpass\\Filter};
+\node[block, right of=i_lpf, node distance=2.5cm] (i_sample) {Sample\\$@T_s$};
+\node[block, right of=q_lpf, node distance=2.5cm] (q_sample) {Sample\\$@T_s$};
+\node[block, below right of=i_sample, node distance=2.5cm, yshift=-0.5cm] (decision) {Symbol\\Decision};
+\node[right of=decision, node distance=2.5cm] (output) {\sffamily Data\\3~bits};
 
 \node[below of=i_mult, node distance=1.3cm, font=\scriptsize, align=center] (lo_i) {$2\cos(2\pi f_c t)$\\LO};
 \node[below of=q_mult, node distance=1.3cm, font=\scriptsize, align=center] (lo_q) {$-2\sin(2\pi f_c t)$\\LO};
 
-\draw[->,thick] (input) -- ++(1,0) |- (i_mult);
-\draw[->,thick] (input) -- ++(1,0) |- (q_mult);
+\draw[->,thick] (input) -- ++(0.9,0) |- (i_mult);
+\draw[->,thick] (input) -- ++(0.9,0) |- (q_mult);
 \draw[->,thick] (lo_i) -- (i_mult);
 \draw[->,thick] (lo_q) -- (q_mult);
 \draw[->,thick] (i_mult) -- (i_lpf);
@@ -436,7 +436,7 @@ QPSK & 2 & 1.48 & 10.5~dB & 0~dB \\
 \end{tabular}
 \end{center}
 
-\begin{calloutbox}{Spectral Efficiency vs Power Efficiency Trade-off}
+\begin{calloutbox}{Efficiency Trade-off}
 8PSK provides 50\% higher spectral efficiency than QPSK (2.22 vs 1.48~bps/Hz) but requires 3.5~dB more SNR to achieve the same BER. This makes 8PSK ideal for bandwidth-limited systems with adequate link margin, such as:
 \begin{itemize}
 \item Satellite broadcasting (DVB-S2)
@@ -699,6 +699,7 @@ r(t) = s(t) e^{j2\pi \Delta f t}
 
 \subsection*{Given Parameters}
 
+\begin{center}
 \begin{tabular}{@{}ll@{}}
 TX power & $P_t = 100$~W = 50~dBm \\
 TX antenna gain & $G_t = 30$~dBi \\
@@ -710,6 +711,7 @@ Bandwidth & $B = 27$~MHz \\
 Symbol rate & $R_s = 20$~Msps \\
 Modulation & 8PSK, code rate 3/4 \\
 \end{tabular}
+\end{center}
 
 \subsection*{Step 1: Free-Space Path Loss}
 

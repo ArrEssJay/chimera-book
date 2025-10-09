@@ -20,13 +20,20 @@ _minted*/
 
 # Test files
 test_*.tex
+test_*.png
 !test_exemplar_v2.tex
+test-*.png
+page-*.png
+final-*.png
 
 # Validation logs
 validation_logs/
 
 # Chapter tests
 chapter_tests/
+
+# Screenshots
+.github/screenshots/
 
 # OS files
 .DS_Store
@@ -42,14 +49,11 @@ Thumbs.db
 # Backup files
 *.bak
 *.backup
-
-# Test artifacts
-*.idx
-*.png
-*.html
-_latex/test_*.tex
-_latex/test_*.pdf
-_latex/test_*.aux
-_latex/test_*.log
-_latex/test_*.idx
-_latex/test_preamble.tex
+preamble.tex
+test_*.tex
+test_*.pdf
+test_*.aux
+test_*.log
+_latex/*.png
+_latex/test-*.tex
+_latex/test-*.idx

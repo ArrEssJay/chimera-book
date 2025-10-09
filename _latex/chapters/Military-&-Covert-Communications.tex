@@ -147,9 +147,9 @@ the GPS satellite signal.
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.25}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.40}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.35}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Concept
@@ -408,15 +408,15 @@ All three capabilities are enabled by processing gain $G$. Higher $G$ results in
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.5cm,
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.9cm, font=\sffamily\small},
+  node distance=2.2cm,
   font=\small
 ]
 \node (input) {\sffamily Data\\$d(t)$};
-\node[block, right of=input, node distance=2.8cm] (mult1) {Mixer\\$\times$};
-\node[block, right of=mult1, node distance=2.8cm] (mult2) {Mixer\\$\times$};
-\node[block, right of=mult2, node distance=2.8cm] (bpf) {Bandpass\\Filter};
-\node[right of=bpf, node distance=2.8cm] (output) {\sffamily RF\\Output};
+\node[block, right of=input, node distance=2.5cm] (mult1) {Mixer\\$\times$};
+\node[block, right of=mult1, node distance=2.5cm] (mult2) {Mixer\\$\times$};
+\node[block, right of=mult2, node distance=2.5cm] (bpf) {Bandpass\\Filter};
+\node[right of=bpf, node distance=2.5cm] (output) {\sffamily RF\\Output};
 
 \node[below of=mult1, node distance=1.5cm, font=\scriptsize, align=center] (code) {$c(t)$\\PN Code};
 \node[below of=mult2, node distance=1.5cm, font=\scriptsize, align=center] (carrier) {$\cos(2\pi f_c t)$\\Carrier};
@@ -441,16 +441,16 @@ All three capabilities are enabled by processing gain $G$. Higher $G$ results in
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.5cm,
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=0.9cm, font=\sffamily\small},
+  node distance=2.2cm,
   font=\small
 ]
 \node (input) {\sffamily RF\\Input};
-\node[block, right of=input, node distance=2.8cm] (mult1) {Mixer\\$\times$};
-\node[block, right of=mult1, node distance=2.8cm] (mult2) {Mixer\\$\times$};
-\node[block, right of=mult2, node distance=2.8cm] (lpf) {Lowpass\\Filter};
-\node[block, right of=lpf, node distance=2.8cm] (decide) {Decision\\$>0?$};
-\node[right of=decide, node distance=2.8cm] (output) {\sffamily Data\\$\hat{d}(t)$};
+\node[block, right of=input, node distance=2.5cm] (mult1) {Mixer\\$\times$};
+\node[block, right of=mult1, node distance=2.5cm] (mult2) {Mixer\\$\times$};
+\node[block, right of=mult2, node distance=2.5cm] (lpf) {Lowpass\\Filter};
+\node[block, right of=lpf, node distance=2.5cm] (decide) {Decision\\$>0?$};
+\node[right of=decide, node distance=2.5cm] (output) {\sffamily Data\\$\hat{d}(t)$};
 
 \node[below of=mult1, node distance=1.5cm, font=\scriptsize, align=center] (carrier2) {$2\cos(2\pi f_c t)$\\Local Osc};
 \node[below of=mult2, node distance=1.5cm, font=\scriptsize, align=center] (code2) {$c(t)$\\Sync'd Code};
@@ -525,7 +525,7 @@ All three capabilities are enabled by processing gain $G$. Higher $G$ results in
 \textbf{Electronic Beamforming Principle:}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=1.0]
 % Array elements
 \foreach \x in {0,1,2,3,4} {
   \draw[fill=black!20] (\x,0) rectangle (\x+0.3,0.5);
@@ -540,12 +540,12 @@ All three capabilities are enabled by processing gain $G$. Higher $G$ results in
 }
 
 % Beam pattern (main lobe)
-\draw[thick,NavyBlue,->] (2.15,2) -- (4,5) node[right,font=\small] {Main beam};
-\draw[dashed,NavyBlue] (2.15,2) -- (2.15,5.5);
+\draw[thick,NavyBlue,->] (2.15,2) -- (3.5,4.5) node[right,font=\small] {Main beam};
+\draw[dashed,NavyBlue] (2.15,2) -- (2.15,4.8);
 
 % Angle annotation
-\draw[<->,dashed] (2.15,4.5) arc (90:56:2.5);
-\node[font=\scriptsize] at (2.6,4.2) {$\theta$};
+\draw[<->,dashed] (2.15,3.8) arc (90:56:2.0);
+\node[font=\scriptsize] at (2.5,3.6) {$\theta$};
 
 % Element spacing
 \draw[<->,thick] (0.15,-0.8) -- (1.15,-0.8) node[midway,below,font=\scriptsize] {$d = \lambda/2$};
@@ -666,14 +666,14 @@ The signal PSD ($-70$~dBm/MHz) is below the noise floor ($-114$~dBm/MHz when int
 \subsection{Frequency Hopping Pattern Visualization}
 
 \begin{center}
-\begin{tikzpicture}[scale=0.9]
+\begin{tikzpicture}[scale=0.85]
 % Axes
-\draw[->] (0,0) -- (12,0) node[right] {\sffamily Time};
+\draw[->] (0,0) -- (10,0) node[right] {\sffamily Time};
 \draw[->] (0,0) -- (0,6) node[above] {\sffamily Frequency};
 
 % Frequency levels
 \foreach \y in {1,2,3,4,5} {
-  \draw[thin,gray!30] (0,\y) -- (12,\y);
+  \draw[thin,gray!30] (0,\y) -- (10,\y);
   \node[left,font=\scriptsize] at (-0.2,\y) {$f_{\y}$};
 }
 
@@ -691,22 +691,20 @@ The signal PSD ($-70$~dBm/MHz) is below the noise floor ($-114$~dBm/MHz when int
 \draw[very thick,blue] (5,2) -- (6,2);
 \draw[very thick,blue,dashed] (6,2) -- (6,4);
 \draw[very thick,blue] (6,4) -- (7,4);
-\draw[very thick,blue,dashed] (7,4) -- (7,1);
-\draw[very thick,blue] (7,1) -- (8,1);
 
 % Time slots
-\foreach \x in {1,2,3,4,5,6,7,8} {
+\foreach \x in {1,2,3,4,5,6,7} {
   \draw[thin] (\x,0) -- (\x,-0.2);
 }
-\node[below,font=\scriptsize] at (4,-0.3) {Dwell time $T_{\text{dwell}}$ (1--10 ms)};
+\node[below,font=\scriptsize] at (3.5,-0.3) {Dwell time $T_{\text{dwell}}$ (1--10 ms)};
 
 % Jammer illustration
-\fill[red!30,opacity=0.5] (8.5,2.5) rectangle (11.5,3.5);
-\node[font=\scriptsize,red] at (10,3) {Jammer};
-\node[font=\scriptsize] at (10,2) {(narrowband)};
+\fill[red!30,opacity=0.5] (7.5,2.5) rectangle (9.5,3.5);
+\node[font=\scriptsize,red] at (8.5,3) {Jammer};
+\node[font=\scriptsize] at (8.5,2) {(narrowband)};
 
 % Legend
-\node[font=\small,align=left] at (10,5.5) {FHSS Signal: Pseudorandom\\frequency changes};
+\node[font=\small,align=left] at (8.5,5.5) {FHSS Signal:\\Pseudorandom hops};
 
 \end{tikzpicture}
 \end{center}
@@ -883,39 +881,39 @@ R_{\text{chip}} = 5.115 \text{ Mcps} \quad \text{(5$\times$ C/A chip rate)}
 \textbf{BOC Modulation Spectrum:}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.95]
 % Axes
 \draw[->] (-4,0) -- (4,0) node[right,font=\sffamily\small] {Frequency};
-\draw[->] (0,0) -- (0,3.5) node[above,font=\sffamily\small] {PSD};
+\draw[->] (0,0) -- (0,3.2) node[above,font=\sffamily\small] {PSD};
 
 % Center frequency marker
-\draw[dashed,gray] (0,0) -- (0,3);
+\draw[dashed,gray] (0,0) -- (0,2.8);
 \node[below,font=\scriptsize] at (0,-0.2) {$f_c$};
 
 % BOC split spectrum (two main lobes)
-\draw[thick,NavyBlue] (-3.5,0) .. controls (-3,0.3) and (-2.5,1.5) .. (-1.5,2.5) 
-  .. controls (-1.2,2.8) and (-0.8,2.8) .. (-0.5,2.5)
-  .. controls (-0.3,2.2) and (-0.1,0.5) .. (0,0);
-\draw[thick,NavyBlue] (0,0) .. controls (0.1,0.5) and (0.3,2.2) .. (0.5,2.5)
-  .. controls (0.8,2.8) and (1.2,2.8) .. (1.5,2.5)
+\draw[thick,NavyBlue] (-3.5,0) .. controls (-3,0.3) and (-2.5,1.5) .. (-1.5,2.3) 
+  .. controls (-1.2,2.5) and (-0.8,2.5) .. (-0.5,2.3)
+  .. controls (-0.3,2.0) and (-0.1,0.5) .. (0,0);
+\draw[thick,NavyBlue] (0,0) .. controls (0.1,0.5) and (0.3,2.0) .. (0.5,2.3)
+  .. controls (0.8,2.5) and (1.2,2.5) .. (1.5,2.3)
   .. controls (2.5,1.5) and (3,0.3) .. (3.5,0);
 
 % Peak labels
-\node[above,font=\scriptsize,NavyBlue] at (-1.5,2.5) {Upper lobe};
-\node[above,font=\scriptsize,NavyBlue] at (1.5,2.5) {Lower lobe};
+\node[above,font=\scriptsize,NavyBlue] at (-1.5,2.3) {Upper};
+\node[above,font=\scriptsize,NavyBlue] at (1.5,2.3) {Lower};
 
 % Frequency offset annotation
-\draw[<->,thick,dashed] (0,2.8) -- (1.5,2.8) node[midway,above,font=\scriptsize] {$\pm f_{\text{sub}}$};
+\draw[<->,thick,dashed] (0,2.6) -- (1.5,2.6) node[midway,above,font=\scriptsize] {$\pm f_{\text{sub}}$};
 
 % C/A code spectrum (for comparison)
-\draw[thick,red,dashed] (-2.5,0) .. controls (-1.5,1.2) and (-0.5,1.8) .. (0,2)
-  .. controls (0.5,1.8) and (1.5,1.2) .. (2.5,0);
-\node[red,font=\scriptsize] at (-2.5,1.5) {C/A code\\(single lobe)};
+\draw[thick,red,dashed] (-2.5,0) .. controls (-1.5,1.1) and (-0.5,1.6) .. (0,1.8)
+  .. controls (0.5,1.6) and (1.5,1.1) .. (2.5,0);
+\node[red,font=\scriptsize] at (-2.8,1.3) {C/A};
 
 % Null at center
-\node[below,font=\scriptsize,NavyBlue] at (0,0.5) {Null};
+\node[below,font=\scriptsize,NavyBlue] at (0,0.4) {Null};
 
-\node[below,font=\sffamily\small] at (0,-1) {GPS M-code BOC(10,5) Split Spectrum};
+\node[below,font=\sffamily\small] at (0,-0.8) {GPS M-code BOC(10,5) Split Spectrum};
 \end{tikzpicture}
 \end{center}
 
@@ -1077,20 +1075,20 @@ Joint Tactical Information Distribution System provides jam-resistant, LPI/LPD t
 \subsection{Link 16 Network Topology}
 
 \begin{center}
-\begin{tikzpicture}[scale=0.85]
+\begin{tikzpicture}[scale=0.9]
 % Central node (AWACS)
-\node[circle,draw,fill=blue!20,minimum size=1.2cm,font=\small] (awacs) at (0,0) {AWACS};
+\node[circle,draw,fill=blue!20,minimum size=1.1cm,font=\small] (awacs) at (0,0) {AWACS};
 
 % Fighter nodes
-\node[circle,draw,fill=green!20,minimum size=0.9cm,font=\scriptsize] (f22) at (-3,2.5) {F-22};
-\node[circle,draw,fill=green!20,minimum size=0.9cm,font=\scriptsize] (f16) at (3,2.5) {F-16};
-\node[circle,draw,fill=green!20,minimum size=0.9cm,font=\scriptsize] (f35) at (-2,-2.5) {F-35};
+\node[circle,draw,fill=green!20,minimum size=0.85cm,font=\scriptsize] (f22) at (-2.8,2.3) {F-22};
+\node[circle,draw,fill=green!20,minimum size=0.85cm,font=\scriptsize] (f16) at (2.8,2.3) {F-16};
+\node[circle,draw,fill=green!20,minimum size=0.85cm,font=\scriptsize] (f35) at (-2,-2.3) {F-35};
 
 % Ship node
-\node[circle,draw,fill=cyan!20,minimum size=0.9cm,font=\scriptsize] (aegis) at (3,-2) {Aegis};
+\node[circle,draw,fill=cyan!20,minimum size=0.85cm,font=\scriptsize] (aegis) at (2.8,-1.8) {Aegis};
 
 % Ground node
-\node[circle,draw,fill=orange!20,minimum size=0.9cm,font=\scriptsize] (patriot) at (-3.5,-0.5) {Patriot};
+\node[circle,draw,fill=orange!20,minimum size=0.85cm,font=\scriptsize] (patriot) at (-3.2,-0.4) {Patriot};
 
 % Connections (bidirectional)
 \draw[<->,thick,blue] (awacs) -- (f22);
@@ -1102,8 +1100,8 @@ Joint Tactical Information Distribution System provides jam-resistant, LPI/LPD t
 \draw[<->,thick,blue,dashed] (f35) -- (aegis);
 
 % Legend
-\node[align=left,font=\scriptsize] at (6,2) {TDMA Frame:\\128 slots / 12 sec\\FHSS: 70k hops/s};
-\node[align=left,font=\scriptsize] at (6,0.5) {Data types:\\- Air tracks (J2.x)\\- Surface tracks (J3.x)\\- Commands (J7.x)};
+\node[align=left,font=\tiny] at (5.5,1.8) {TDMA Frame:\\128 slots/12 sec\\FHSS: 70k hops/s};
+\node[align=left,font=\tiny] at (5.5,0.2) {Data types:\\Air tracks (J2.x)\\Surface tracks (J3.x)\\Commands (J7.x)};
 
 \end{tikzpicture}
 \end{center}
@@ -1247,31 +1245,32 @@ The signal PSD ($-90$~dBm/Hz) is 24~dB below the thermal noise floor ($-114$~dBm
 \subsection{Spread Spectrum Below Noise Floor Visualization}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}[scale=1.0]
 % Axes
 \draw[->] (0,0) -- (8,0) node[right,font=\small] {Frequency};
-\draw[->] (0,0) -- (0,5) node[above,font=\small] {Power (dBm/Hz)};
+\draw[->] (0,0) -- (0,4.8) node[above,font=\small] {Power (dBm/Hz)};
 
 % Noise floor
 \draw[thick,red,dashed] (0,2) -- (8,2);
-\node[right,font=\scriptsize,red] at (8,2) {Thermal noise: $-174$ dBm/Hz};
+\node[right,font=\scriptsize,red] at (6.5,2.2) {Thermal noise};
+\node[right,font=\scriptsize,red] at (6.5,1.8) {$-174$ dBm/Hz};
 
 % Narrowband signal (conventional)
-\draw[thick,blue,fill=blue!20] (1,4.5) rectangle (1.5,3.5);
-\node[above,font=\scriptsize,blue] at (1.25,4.5) {Conventional};
-\node[below,font=\scriptsize,blue] at (1.25,3.5) {(detectable)};
+\draw[thick,blue,fill=blue!20] (1,4.2) rectangle (1.5,3.3);
+\node[above,font=\scriptsize,blue] at (1.25,4.2) {Conventional};
+\node[below,font=\scriptsize,blue] at (1.25,3.3) {(detectable)};
 
 % Spread spectrum signal (below noise)
-\draw[thick,green!70!black,fill=green!10] (3,1.5) rectangle (7,1.7);
-\node[above,font=\scriptsize,green!70!black] at (5,1.7) {UWB spread spectrum};
+\draw[thick,green!70!black,fill=green!10] (3,1.5) rectangle (7,1.65);
+\node[above,font=\scriptsize,green!70!black] at (5,1.65) {UWB spread spectrum};
 \node[below,font=\scriptsize,green!70!black] at (5,1.5) {(undetectable)};
 
 % Annotations
-\draw[<->,thick] (3.5,1.6) -- (3.5,2) node[midway,right,font=\tiny] {24 dB\\below\\noise};
+\draw[<->,thick] (2.5,1.58) -- (2.5,2) node[midway,left,font=\tiny] {24 dB\\below};
 
 % Bandwidth indicators
 \draw[<->,thin] (1,0.3) -- (1.5,0.3) node[midway,below,font=\tiny] {$BW_{\text{info}}$};
-\draw[<->,thin] (3,0.3) -- (7,0.3) node[midway,below,font=\tiny] {$BW_{\text{spread}} = 1$ GHz};
+\draw[<->,thin] (3,0.3) -- (7,0.3) node[midway,below,font=\tiny] {$BW_{\text{spread}}$};
 
 \end{tikzpicture}
 \end{center}
@@ -1521,11 +1520,10 @@ Adaptive Coding & Link optimization & Maximize throughput & MUOS, 5G tactical \\
 \item Link 16: 70,000 hops/second with cryptographic hopping for jam-resistant tactical networking
 \end{itemize}
 
-\section{Further Reading}
+\section{System Trade-offs}
 
-\subsubsection{Textbooks}\label{textbooks}
+\subsection{Disadvantages}
 
-\textbf{Disadvantages:}
 \begin{itemize}
 \item Complexity: Requires sophisticated signal processing, synchronization
 \item Cost: AESA radars and SAASM receivers are expensive

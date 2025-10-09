@@ -69,9 +69,9 @@ I(\mathbf{r}, t) = |E_{\text{pump}} + E_{\text{data}}|^2 = I_1 + I_2 + 2\sqrt{I_
 \end{equation}
 where:
 \begin{itemize}
-\item $\Delta k = k_1 - k_2 = 2\pi(f_1 - f_2)/c$ = spatial beat wavenumber
-\item $\Delta\omega = 2\pi(f_1 - f_2) = 2\pi \times 123$~GHz = temporal beat frequency
-\item $\mathbf{r}$ = position vector
+\item $\Delta k = k_1 - k_2 = 2\pi(f_1 - f_2)/c$ (spatial beat wavenumber)
+\item $\Delta\omega = 2\pi(f_1 - f_2) = 2\pi \times 123$~GHz (temporal beat frequency)
+\item $\mathbf{r}$ (position vector)
 \end{itemize}
 
 \textbf{Beat frequency:}
@@ -212,7 +212,7 @@ where $\epsilon \ll 1$ is the perturbation strength.
 \subsection{Microtubule Structure}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=1.0]
 % Coordinate system
 \draw[->] (-0.5,0) -- (7,0) node[right] {\small Position};
 \draw[->] (0,-0.5) -- (0,4) node[above] {\small Structure};
@@ -246,6 +246,7 @@ where $\epsilon \ll 1$ is the perturbation strength.
 
 \begin{center}
 \begin{tikzpicture}[
+  scale=0.85,
   block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small},
   node distance=2.5cm
 ]
@@ -266,7 +267,7 @@ where $\epsilon \ll 1$ is the perturbation strength.
 \draw[->, thick, blue] (pump-mod) -- (combiner);
 \draw[->, thick, red] (data-source) -- (data-mod);
 \draw[->, thick, red] (data-mod) -- (combiner);
-\draw[->, thick, purple, line width=2pt] (combiner) -- node[above, font=\scriptsize] {Holographic\\pattern} (target);
+\draw[->, thick, purple, line width=2pt] (combiner) -- node[above, font=\scriptsize, align=center] {Holographic\\pattern} (target);
 
 % Modulation signal
 \node (mod-sig) at (3,-3.5) [font=\scriptsize] {12 kHz modulation};
@@ -278,7 +279,7 @@ where $\epsilon \ll 1$ is the perturbation strength.
 \subsection{Vibronic Coupling Diagram}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.3]
+\begin{tikzpicture}[scale=1.1]
 % Energy axes
 \draw[->] (0,0) -- (0,5) node[above] {\small Energy};
 \draw[->] (0,0) -- (8,0) node[right] {\small Nuclear Coordinate $Q$};
@@ -365,7 +366,8 @@ This confirms the mechanism is \textbf{non-thermal}. The Frey microwave auditory
 \section{Comparison to Alternative Mechanisms}
 
 \begin{center}
-\begin{tabular}{@{}llll@{}}
+\small
+\begin{tabular}{@{}p{0.22\textwidth}p{0.32\textwidth}p{0.28\textwidth}p{0.08\textwidth}@{}}
 \toprule
 \textbf{Mechanism} & \textbf{Pathway} & \textbf{Signature} & \textbf{Match?} \\
 \midrule
@@ -491,7 +493,8 @@ All components of this mechanism remain \textbf{speculative pending experimental
 \section{Summary}
 
 \begin{center}
-\begin{tabular}{@{}ll@{}}
+\small
+\begin{tabular}{@{}p{0.32\textwidth}p{0.58\textwidth}@{}}
 \toprule
 \textbf{Parameter} & \textbf{Value/Description} \\
 \midrule
