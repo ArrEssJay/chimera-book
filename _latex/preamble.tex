@@ -11,17 +11,26 @@
 \usepackage{fontspec} % For OTF font support (requires XeLaTeX or LuaLaTeX)
 
 % Minion Pro with explicit font file names from fc-list
-\setmainfont{MinionPro}[
-  Extension = .otf,
-  Path = /Users/rowan/Library/Fonts/,
-  UprightFont = *-Regular,
-  ItalicFont = *-It,
-  BoldFont = *-Bold,
-  BoldItalicFont = *-BoldIt
-]
+% Fallback to Latin Modern Roman if Minion Pro is not available
+\IfFontExistsTF{MinionPro-Regular.otf}{
+  \setmainfont{MinionPro}[
+    Extension = .otf,
+    Path = /Users/rowan/Library/Fonts/,
+    UprightFont = *-Regular,
+    ItalicFont = *-It,
+    BoldFont = *-Bold,
+    BoldItalicFont = *-BoldIt
+  ]
+}{
+  \setmainfont{Latin Modern Roman}
+}
 
-% Myriad Pro for headings
-\setsansfont{Myriad Pro}
+% Myriad Pro for headings - fallback to Latin Modern Sans
+\IfFontExistsTF{Myriad Pro}{
+  \setsansfont{Myriad Pro}
+}{
+  \setsansfont{Latin Modern Sans}
+}
 
 % Monospace for code
 \setmonofont{Latin Modern Mono}
@@ -63,7 +72,7 @@
 
 % TikZ for diagrams
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, patterns}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, patterns, decorations.pathmorphing}
 
 % --- Index ---
 \usepackage{makeidx}

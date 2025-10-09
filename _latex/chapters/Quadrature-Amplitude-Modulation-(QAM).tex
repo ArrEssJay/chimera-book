@@ -162,6 +162,31 @@ where $d$ = unit spacing (normalized distance)
 
 For square QAM, the constellation forms a $\sqrt{M} \times \sqrt{M}$ grid in the I/Q plane.
 
+\section{Constellation Diagrams}
+
+QAM constellations are visualized as grids in the I/Q plane, with symbol positions determined by discrete amplitude levels on both axes.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+% 16-QAM
+\begin{scope}[shift={(0,0)}]
+\node[above,font=\sffamily\bfseries] at (0,3) {16-QAM ($4 \times 4$ grid)};
+\draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
+\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
+\draw[very thin,gray!30] (-2,-2) grid[step=0.5] (2,2);
+
+% 16-QAM constellation points
+\foreach \i in {-1.5,-0.5,0.5,1.5} {
+  \foreach \q in {-1.5,-0.5,0.5,1.5} {
+    \fill[black] (\i,\q) circle (2pt);
+  }
+}
+
+\node[below,font=\small] at (0,-3) {$k = 4$ bits/symbol};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
 \textbf{Gray coding}: Adjacent symbols differ by exactly 1 bit, minimizing bit errors when symbol errors occur.
 
 \subsubsection{Signal Characteristics}
@@ -343,17 +368,17 @@ The spectral efficiency is:
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
-Modulation & Bits/symbol & Spectral Efficiency & Practical Limit \\
+Modulation & Bits/sym & Spectral Eff. & SNR Requirement \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\textbf{QPSK} & 2 & 1.48 & Good SNR (10 dB) \\
-\textbf{16-QAM} & 4 & 2.96 & Moderate SNR (15 dB) \\
-\textbf{64-QAM} & 6 & 4.44 & High SNR (20 dB) \\
-\textbf{256-QAM} & 8 & 5.93 & Very high SNR (25 dB) \\
-\textbf{1024-QAM} & 10 & 7.41 & Excellent SNR (30 dB), wired only \\
-\textbf{4096-QAM} & 12 & 8.89 & Exceptional SNR (35 dB), cable/DSL \\
+\textbf{QPSK} & 2 & 1.48 & Good (10 dB) \\
+\textbf{16-QAM} & 4 & 2.96 & Moderate (15 dB) \\
+\textbf{64-QAM} & 6 & 4.44 & High (20 dB) \\
+\textbf{256-QAM} & 8 & 5.93 & Very high (25 dB) \\
+\textbf{1024-QAM} & 10 & 7.41 & Excellent (30 dB) \\
+\textbf{4096-QAM} & 12 & 8.89 & Exceptional (35 dB) \\
 \end{longtable}
 }
 
@@ -607,7 +632,7 @@ Modulation & PAPR (linear) & PAPR (dB) & Notes \\
 \bottomrule\noalign{}
 \endlastfoot
 \textbf{QPSK} & 1 & 0 dB & Constant envelope \\
-\textbf{16-QAM} & 2.55 & 4.1 dB & Corner points $2.55\times$ average \\
+\textbf{16-QAM} & 2.55 & 4.1 dB & Corner points 2.55$\times$ average \\
 \textbf{64-QAM} & 3.68 & 5.7 dB & \\
 \textbf{256-QAM} & 4.80 & 6.8 dB & \\
 \textbf{1024-QAM} & 5.93 & 7.7 dB & \\
@@ -616,7 +641,9 @@ Modulation & PAPR (linear) & PAPR (dB) & Notes \\
 
 \textbf{Impact}: High PAPR requires PA backoff (reduces efficiency)
 
-\textbf{Example}: 64-QAM with 5.7 dB PAPR - PA must back off 5.7 dB from saturation - Efficiency drops from 50\% to $\sim$13\% ($4\times$ penalty)
+\textbf{Example}: 64-QAM with 5.7 dB PAPR requires PA backoff of 5.7 dB from saturation. Efficiency drops from 50\% to $\sim$13\% (4$\times$ penalty).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{Practical Impairments}
 
@@ -626,7 +653,7 @@ Hardware imperfections in the I/Q modulator/demodulator cause:
 
 \textbf{Gain mismatch:} $G_I \neq G_Q$
 
-\textbf{Phase error:} Quadrature hybrid not exactly $90°$ (e.g., $88°$ or $92°$)
+\textbf{Phase error:} Quadrature hybrid not exactly $90^\circ$ (e.g., $88^\circ$ or $92^\circ$)
 
 The received signal model with I/Q imbalance is:
 \begin{equation}
@@ -640,7 +667,7 @@ where:
 \item $n$ = AWGN
 \end{itemize}
 
-\textbf{Typical values:} $\pm 0.5$~dB gain, $\pm 2°$ phase
+\textbf{Typical values:} $\pm 0.5$~dB gain, $\pm 2^\circ$ phase
 
 \textbf{Effect:} Constellation distortion, image frequency leakage, significant degradation for 256-QAM and higher.
 
@@ -695,7 +722,7 @@ where $\phi_n(t)$ is the random phase noise process.
 
 \textbf{Example (256-QAM):}
 \begin{itemize}
-\item Tolerable phase noise: $\sim 1°$ RMS
+\item Tolerable phase noise: $\sim 1^\circ$ RMS
 \item Requires high-quality oscillator (PLL with TCXO or OCXO reference)
 \item Phase noise spectral density: $< -100$~dBc/Hz at 1~kHz offset
 \end{itemize}
@@ -732,10 +759,10 @@ Standard & Max QAM & Max Rate & Notes \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\textbf{802.11a} & 64-QAM & 54 Mbps & 20 MHz channel \\
-\textbf{802.11n} & 64-QAM & 600 Mbps & $4\times4$ MIMO, 40 MHz \\
-\textbf{802.11ac} & 256-QAM & 6.9 Gbps & $8\times8$ MIMO, 160 MHz \\
-\textbf{802.11ax} (WiFi 6) & 1024-QAM & 9.6 Gbps & OFDMA, MU-MIMO \\
+\textbf{802.11a} & 64-QAM & 54 Mbps & 20 MHz \\
+\textbf{802.11n} & 64-QAM & 600 Mbps & 4$\times$4 MIMO, 40 MHz \\
+\textbf{802.11ac} & 256-QAM & 6.9 Gbps & 8$\times$8 MIMO, 160 MHz \\
+\textbf{802.11ax} & 1024-QAM & 9.6 Gbps & OFDMA, MU-MIMO \\
 \end{longtable}
 }
 
@@ -821,6 +848,12 @@ QPSK (4-QAM) uses only phase modulation with constant amplitude. QAM extends thi
 }
 \node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
 \node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Variable amplitude};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
+\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Multiple amplitudes};
 \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -989,18 +1022,18 @@ where:
 \toprule
 \textbf{Parameter} & \textbf{Value/Description} \\
 \midrule
-Basic principle & Modulate both amplitude \emph{and} phase \\
-Constellation & Rectangular grid in I/Q plane \\
-Common orders & 16-QAM (4 bits), 64-QAM (6 bits), 256-QAM (8 bits) \\
-Spectral efficiency & $\eta = \log_2(M)/(1+\alpha)$ bps/Hz \\
+Principle & Modulate amplitude \emph{and} phase \\
+Constellation & Rectangular I/Q grid \\
+Common orders & 16-QAM (4b), 64-QAM (6b), 256-QAM (8b) \\
+Spectral eff. & $\eta = \log_2(M)/(1+\alpha)$ bps/Hz \\
 Gray coding & Adjacent symbols differ by 1 bit \\
-BER (64-QAM @ 10$^{-6}$) & Requires $E_b/N_0 \approx 18.5$~dB \\
-Detection & Coherent I/Q demodulation, nearest neighbor \\
-PAPR & Increases with QAM order (non-constant envelope) \\
-Key advantage & Optimal use of 2D signal space \\
-Key disadvantage & Requires high SNR, sensitive to impairments \\
-Primary applications & WiFi, LTE/5G, cable modems, microwave links \\
-Adaptive modulation & Switch QAM order based on channel SNR \\
+BER (64-QAM) & Requires $E_b/N_0 \approx 18.5$~dB @ $10^{-6}$ \\
+Detection & Coherent I/Q, nearest neighbor \\
+PAPR & Increases with order \\
+Advantage & Optimal 2D signal space use \\
+Disadvantage & High SNR, sensitive to impairments \\
+Applications & WiFi, LTE/5G, cable, microwave \\
+Adaptive & Switch order based on SNR \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1010,16 +1043,17 @@ Adaptive modulation & Switch QAM order based on channel SNR \\
 \textbf{Performance comparison:}
 
 \begin{center}
+\small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{QAM Order} & \textbf{Bits/Symbol} & \textbf{$d_{\min}$} & \textbf{$E_b/N_0$ @ BER=$10^{-6}$} & \textbf{Typical Use} \\
+\textbf{Order} & \textbf{Bits/sym} & \textbf{$d_{\min}$} & \textbf{$E_b/N_0$ @ $10^{-6}$} & \textbf{Use Case} \\
 \midrule
-4-QAM (QPSK) & 2 & 1.41 & 10.5~dB & Satellite, long-range \\
-16-QAM & 4 & 0.63 & 14.5~dB & WiFi, LTE baseline \\
-64-QAM & 6 & 0.31 & 18.5~dB & WiFi, LTE good SNR \\
-256-QAM & 8 & 0.15 & 23~dB & WiFi 5/6, LTE-A \\
-1024-QAM & 10 & 0.098 & 27.5~dB & WiFi 6 (short range) \\
-4096-QAM & 12 & 0.049 & 32~dB & Cable/DSL only \\
+QPSK & 2 & 1.41 & 10.5~dB & Satellite \\
+16-QAM & 4 & 0.63 & 14.5~dB & WiFi/LTE \\
+64-QAM & 6 & 0.31 & 18.5~dB & Good SNR \\
+256-QAM & 8 & 0.15 & 23~dB & WiFi 5/6 \\
+1024-QAM & 10 & 0.098 & 27.5~dB & Short range \\
+4096-QAM & 12 & 0.049 & 32~dB & Cable/DSL \\
 \bottomrule
 \end{tabular}
 \end{center}
