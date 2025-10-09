@@ -3,57 +3,57 @@
 
 \begin{nontechnical}
 
-\textbf{QAM is like having a grid of mailboxes-\/-\/-the more boxes, the
-more messages you can send at once. Your WiFi/phone picks bigger grids
-when signal is strong!}
+\textbf{QAM is like having a grid of mailboxes---the more boxes, the more messages you can send at once. Your WiFi/phone picks bigger grids when signal is strong!}
 
-\textbf{The idea - Vary BOTH brightness and angle}: - \textbf{PSK} (like
-QPSK): Only varies angle (4 or 8 positions) - \textbf{QAM}: Varies
-\textbf{both} angle AND distance from center! - Result: Many more
-possible positions = much faster data!
+\textbf{The idea - Vary BOTH brightness and angle}:
+\begin{itemize}
+\item \textbf{PSK} (like QPSK): Only varies angle (4 or 8 positions)
+\item \textbf{QAM}: Varies \textbf{both} angle AND distance from center!
+\item Result: Many more possible positions = much faster data!
+\end{itemize}
 
-\textbf{Real QAM sizes}: - \textbf{16-QAM}: 4\$\textbackslash times\$4
-grid = 16 positions = 4 bits/symbol - \textbf{64-QAM}:
-8\$\textbackslash times\$8 grid = 64 positions = 6 bits/symbol -
-\textbf{256-QAM}: 16\$\textbackslash times\$16 grid = 256 positions = 8
-bits/symbol - \textbf{1024-QAM} (WiFi 6): 32\$\textbackslash times\$32
-grid = 1024 positions = 10 bits/symbol!
+\textbf{Real QAM sizes}:
+\begin{itemize}
+\item \textbf{16-QAM}: $4 \times 4$ grid = 16 positions = 4 bits/symbol
+\item \textbf{64-QAM}: $8 \times 8$ grid = 64 positions = 6 bits/symbol
+\item \textbf{256-QAM}: $16 \times 16$ grid = 256 positions = 8 bits/symbol
+\item \textbf{1024-QAM} (WiFi 6): $32 \times 32$ grid = 1024 positions = 10 bits/symbol!
+\end{itemize}
 
-\textbf{Why you care - Speed differences}: - \textbf{QPSK}: 2
-bits/symbol (baseline) - \textbf{16-QAM}: 4 bits/symbol =
-\textbf{2\$\textbackslash times\$ faster} - \textbf{64-QAM}: 6
-bits/symbol = \textbf{3\$\textbackslash times\$ faster}\\
-- \textbf{256-QAM}: 8 bits/symbol = \textbf{4\$\textbackslash times\$
-faster} - \textbf{1024-QAM}: 10 bits/symbol =
-\textbf{5\$\textbackslash times\$ faster}!
+\textbf{Why you care - Speed differences}:
+\begin{itemize}
+\item \textbf{QPSK}: 2 bits/symbol (baseline)
+\item \textbf{16-QAM}: 4 bits/symbol = \textbf{$2\times$ faster}
+\item \textbf{64-QAM}: 6 bits/symbol = \textbf{$3\times$ faster}
+\item \textbf{256-QAM}: 8 bits/symbol = \textbf{$4\times$ faster}
+\item \textbf{1024-QAM}: 10 bits/symbol = \textbf{$5\times$ faster}!
+\end{itemize}
 
-\textbf{The trade-off}: - \textbf{More positions} = faster BUT positions
-are closer together - \textbf{Closer positions} = easier to confuse when
-signal is noisy - Strong signal (close to router): Use 1024-QAM =
-blazing fast! - Weak signal (far from router): Use QPSK = slower but
-reliable
+\textbf{The trade-off}:
+\begin{itemize}
+\item \textbf{More positions} = faster BUT positions are closer together
+\item \textbf{Closer positions} = easier to confuse when signal is noisy
+\item Strong signal (close to router): Use 1024-QAM = blazing fast!
+\item Weak signal (far from router): Use QPSK = slower but reliable
+\end{itemize}
 
-\textbf{Where you see it}: - \textbf{Your WiFi stats}: ``MCS 9,
-256-QAM'' = using 256-position grid - \textbf{4G/5G}: ``Modulation:
-64-QAM'' = using 64-position grid - \textbf{Cable modem}: DOCSIS 3.1
-uses 4096-QAM (12 bits/symbol!) - \textbf{Phone signal bars}: Full bars
-= can use high QAM, low bars = must use simple modulation
+\textbf{Where you see it}:
+\begin{itemize}
+\item \textbf{Your WiFi stats}: ``MCS 9, 256-QAM'' = using 256-position grid
+\item \textbf{4G/5G}: ``Modulation: 64-QAM'' = using 64-position grid
+\item \textbf{Cable modem}: DOCSIS 3.1 uses 4096-QAM (12 bits/symbol!)
+\item \textbf{Phone signal bars}: Full bars = can use high QAM, low bars = must use simple modulation
+\end{itemize}
 
-\textbf{Real experience}: - Walk toward router: Speed increases as phone
-switches QPSK \$\textbackslash rightarrow\$ 16-QAM
-\$\textbackslash rightarrow\$ 64-QAM \$\textbackslash rightarrow\$
-256-QAM - Walk away: Speed decreases as phone steps back down - This
-happens automatically hundreds of times per second!
+\textbf{Real experience}:
+\begin{itemize}
+\item Walk toward router: Speed increases as phone switches QPSK $\rightarrow$ 16-QAM $\rightarrow$ 64-QAM $\rightarrow$ 256-QAM
+\item Walk away: Speed decreases as phone steps back down
+\item This happens automatically hundreds of times per second!
+\end{itemize}
 
 \textbf{Fun fact}: Modern WiFi 6E can use 1024-QAM, but ONLY at close
 range with zero interference---it's like threading a needle with radio waves!
-\end{nontechnical}
-
-\section{Overview}
-
-\textbf{The trade-off:} More positions = faster, BUT positions are closer together and easier to confuse when signal is noisy. Strong signal (close to router): use 1024-QAM. Weak signal (far from router): use QPSK.
-
-\textbf{Fun fact:} Modern WiFi 6E can use 1024-QAM, but ONLY at close range with zero interference---it's like threading a needle with radio waves!
 \end{nontechnical}
 
 \section{Overview}
@@ -364,8 +364,6 @@ The spectral efficiency is:
 \eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad \text{(bits/sec/Hz)}
 \label{eq:qam-spectral-efficiency}
 \end{equation}
-
-where $d$ is the unit spacing (normalized distance between adjacent symbols).
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
@@ -770,30 +768,17 @@ Standard & Max QAM & Max Rate & Notes \\
 
 \textbf{Adaptive modulation:} Systems dynamically switch between QPSK $\rightarrow$ 16/64/256/1024-QAM based on measured SNR.
 
-\subsection{LTE/5G NR}
+\subsection{Cellular: LTE and 5G NR}
 
-\textbf{LTE downlink}: Up to 256-QAM (Cat 9+)
+\textbf{LTE downlink}: Up to 256-QAM (Category 9+) with carrier aggregation
 
-\textbf{5G NR}: Up to 256-QAM (mmWave can use 1024-QAM in some
-scenarios)
-
-\subsection{WiFi (IEEE 802.11)}
+\textbf{5G NR}: Up to 256-QAM (mmWave can use 1024-QAM in some scenarios)
 
 \textbf{Adaptive MCS} (Modulation \& Coding Scheme):
 \begin{itemize}
 \item Poor channel: QPSK 1/4 (0.5 bits/symbol effective)
 \item Good channel: 256-QAM 3/4 (6 bits/symbol effective)
 \end{itemize}
-
-\subsection{Cable Modems (DOCSIS)}
-
-\subsection{Cellular: LTE and 5G NR}
-
-\textbf{LTE:} Up to 256-QAM (Category 9+) with carrier aggregation
-
-\textbf{Key advantage:} Wired channel has no fading, enabling high SNR and thus very high-order QAM.
-
-\subsection{Digital TV}
 
 \subsection{Cable Modems (DOCSIS)}
 
@@ -824,38 +809,6 @@ Point-to-point microwave links use adaptive QAM:
 \item 4096-QAM: 12 bits/symbol $\rightarrow$ 672~Mbps (uncoded)
 \item With FEC rate 3/4: 504~Mbps net throughput
 \end{itemize}
-
-\section{Comparison and Tradeoffs}
-
-\subsection{QAM vs PSK}
-
-\textbf{Typical link:} 28~GHz, 56~MHz channel
-\begin{itemize}
-\item 4096-QAM: 12 bits/symbol $\rightarrow$ 672~Mbps raw
-\item With FEC (rate 3/4): 504~Mbps net throughput
-\end{itemize}
-
-\section{Advantages and Disadvantages}
-
-\subsection*{Advantages}
-
-\begin{enumerate}
-\item \textbf{Highest spectral efficiency:} Optimal use of 2D signal space (rectangular grid more efficient than circular PSK constellation)
-\item \textbf{Scalable data rates:} Easily extend from 4-QAM (QPSK) to 16/64/256/1024/4096-QAM
-\item \textbf{Adaptive modulation:} Dynamic switching based on channel SNR maximizes throughput
-\item \textbf{Standard support:} Used in virtually all modern broadband systems (WiFi, LTE, 5G, cable, DSL)
-\item \textbf{Mature technology:} Well-understood theory, established hardware implementations
-\end{enumerate}
-
-\subsection*{Disadvantages}
-
-\begin{enumerate}
-\item \textbf{High SNR requirement:} Higher-order QAM needs excellent signal quality (256-QAM requires $\sim$23~dB $E_b/N_0$)
-\item \textbf{Varying envelope (PAPR):} Requires linear PA with backoff, reducing power efficiency
-\item \textbf{Sensitivity to impairments:} I/Q imbalance, phase noise, and nonlinearity severely degrade high-order QAM
-\item \textbf{Coherent detection required:} Must maintain precise carrier phase synchronization
-\item \textbf{Not constant envelope:} Cannot use nonlinear Class-C/D/E amplifiers (unlike QPSK/FSK)
-\end{enumerate}
 
 \section{Comparison: QAM vs PSK}
 
@@ -893,6 +846,11 @@ QPSK (4-QAM) uses only phase modulation with constant amplitude. QAM extends thi
     \fill[black] (\i,\q) circle (2pt);
   }
 }
+\node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
+\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Variable amplitude};
+\end{scope}
+\end{tikzpicture}
+\end{center}
 
 \node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
 \node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Multiple amplitudes};
