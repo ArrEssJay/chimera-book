@@ -223,23 +223,27 @@ B_c \approx \frac{1}{5\tau_{\text{rms}}}
 where:
 \begin{itemize}
 \item $B_c$ = coherence bandwidth (Hz)
-\item $\tau_{\text{rms}}$ = RMS delay spread (seconds)
+\item $\tau_{\text{rms}}$ = RMS delay spread (s)
 \end{itemize}
 
-\begin{warningbox}
-If signal bandwidth $B > B_c$, the channel exhibits \textbf{frequency-selective fading}---different frequency components fade independently, causing \textbf{intersymbol interference (ISI)}. Equalization or OFDM is required.
-\end{warningbox}
+\textbf{Implication:} If signal bandwidth $B > B_c$ $\rightarrow$ \textbf{frequency-selective fading} (different frequencies fade independently).
 
-\textbf{Example:} Urban environment with $\tau_{\text{rms}} = 1~\mu$s:
-\begin{equation}
+\begin{calloutbox}{Example: Urban Channel}
+Urban environment with $\tau_{\text{rms}} = 1~\mu$s:
+\begin{equation*}
 B_c \approx \frac{1}{5 \times 10^{-6}} = 200~\text{kHz}
-\end{equation}
+\end{equation*}
 
 \textbf{Classification:}
 \begin{itemize}
 \item \textbf{Narrowband signal} ($B < 200$~kHz): Flat fading (all frequencies fade together)
 \item \textbf{Wideband signal} ($B > 200$~kHz): Frequency-selective fading (ISI present)
 \end{itemize}
+\end{calloutbox}
+
+\begin{warningbox}
+If signal bandwidth $B > B_c$, the channel exhibits \textbf{frequency-selective fading}---different frequency components fade independently, causing \textbf{intersymbol interference (ISI)}. Equalization or OFDM is required.
+\end{warningbox}
 
 \subsection{Intersymbol Interference (ISI)}
 
