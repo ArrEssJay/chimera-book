@@ -47,7 +47,7 @@ Signals combine \textbf{constructively} or \textbf{destructively}, causing \text
 \subsection{Multipath Propagation Visualization}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2,
+\begin{tikzpicture}[scale=1.0,
   node distance=1.5cm,
   block/.style={rectangle, draw, minimum width=1.2cm, minimum height=0.8cm, font=\sffamily\small},
   path/.style={->, thick}
@@ -78,9 +78,9 @@ Signals combine \textbf{constructively} or \textbf{destructively}, causing \text
 \draw[path, orange, dotted] (tx) .. controls (4,-1.5) and (6,-1) .. node[below,font=\scriptsize,pos=0.5] {Scatter} (rx);
 
 % Time annotations
-\node[font=\scriptsize,align=left] at (11,0) {$\tau_0$ (direct)};
-\node[font=\scriptsize,align=left] at (11,1.5) {$\tau_1 > \tau_0$};
-\node[font=\scriptsize,align=left] at (11,-1.5) {$\tau_2 > \tau_0$};
+\node[font=\scriptsize,align=left] at (10,0) {$\tau_0$ (direct)};
+\node[font=\scriptsize,align=left] at (10,1.5) {$\tau_1 > \tau_0$};
+\node[font=\scriptsize,align=left] at (10,-1.5) {$\tau_2 > \tau_0$};
 
 \end{tikzpicture}
 \end{center}
@@ -215,10 +215,10 @@ Environment & $\tau_{\text{rms}}$ \\
 
 \subsection{Coherence Bandwidth}
 
-\textbf{Frequency range over which channel response is flat:}
+The \textbf{coherence bandwidth} $B_c$ defines the frequency range over which the channel response is approximately flat (constant amplitude and linear phase):
+
 \begin{equation}
 B_c \approx \frac{1}{5\tau_{\text{rms}}}
-\label{eq:coherence-bandwidth}
 \end{equation}
 where:
 \begin{itemize}
@@ -322,16 +322,32 @@ T_c = \frac{0.423}{370} = 1.14~\text{ms}
 
 \subsubsection{Flat vs Frequency-Selective}\label{flat-vs-frequency-selective}
 
-\begin{center}
-\begin{tabular}{@{}llll@{}}
-\toprule
-\textbf{Type} & \textbf{Condition} & \textbf{Effect} & \textbf{Mitigation} \\
-\midrule
-\textbf{Flat} & $B \ll B_c$ & All frequencies fade together & Diversity, FEC \\
-\textbf{Frequency-selective} & $B \gg B_c$ & Different frequencies fade independently & Equalization, OFDM \\
-\bottomrule
-\end{tabular}
-\end{center}
+{\def\LTcaptype{} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1622}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2973}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2162}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3243}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Effect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mitigation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Flat} & \(B \ll B_c\) & All frequencies fade together &
+Diversity, FEC \\
+\textbf{Frequency-selective} & \(B \gg B_c\) & Different frequencies
+fade independently & Equalization, OFDM \\
+\end{longtable}
+}
 
 \begin{calloutbox}{Example: Channel Coherence Time}
 100~km/h at 2~GHz:

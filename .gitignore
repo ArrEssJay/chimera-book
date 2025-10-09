@@ -21,12 +21,18 @@ _minted*/
 # Test files
 test_*.tex
 !test_exemplar_v2.tex
+test-*.png
+page-*.png
+final-*.png
 
 # Validation logs
 validation_logs/
 
 # Chapter tests
 chapter_tests/
+
+# Screenshots
+.github/screenshots/
 
 # OS files
 .DS_Store

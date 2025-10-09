@@ -195,16 +195,16 @@ The transformation from baseband to passband is a frequency shift operation. Con
 \draw[dashed] (2,0) -- (2,2);
 
 % Labels
-\node[below,font=\scriptsize] at (0,0) {0};
-\node[below,font=\scriptsize] at (0.5,0) {$-B/2$};
-\node[below,font=\scriptsize] at (2,0) {$B/2$};
-\node[above,font=\small,blue] at (1.25,2.2) {Baseband};
+\node[below,font=\scriptsize] at (0,-0.1) {0};
+\node[below,font=\scriptsize] at (0.5,-0.1) {$-B/2$};
+\node[below,font=\scriptsize] at (2,-0.1) {$B/2$};
+\node[above,font=\small,blue] at (1.25,2.3) {Baseband};
 
 % Arrow indicating upconversion
-\node[right,font=\large] at (5,1) {$\xrightarrow{\text{Upconvert to } f_c}$};
+\node[font=\large] at (5.2,1) {$\xrightarrow{\text{Upconvert to } f_c}$};
 
 % Passband spectrum
-\begin{scope}[xshift=9cm]
+\begin{scope}[xshift=9.5cm]
 \draw[->] (-0.5,0) -- (8.5,0) node[right,font=\small] {$f$ (Hz)};
 \draw[->] (0,-0.3) -- (0,2.5) node[above,font=\small] {$|S_{\text{RF}}(f)|$};
 
@@ -214,13 +214,13 @@ The transformation from baseband to passband is a frequency shift operation. Con
 \draw[dashed] (5.5,0) -- (5.5,2);
 
 % Labels
-\node[below,font=\scriptsize] at (0,0) {0};
-\node[below,font=\scriptsize] at (4,0) {$f_c - B/2$};
-\node[below,font=\scriptsize] at (4.75,0) {$f_c$};
-\node[below,font=\scriptsize] at (5.5,0) {$f_c + B/2$};
-\node[above,font=\small,red] at (4.75,2.2) {Passband};
+\node[below,font=\scriptsize] at (0,-0.1) {0};
+\node[below,font=\scriptsize] at (4,-0.1) {$f_c - B/2$};
+\node[below,font=\scriptsize] at (4.75,-0.1) {$f_c$};
+\node[below,font=\scriptsize] at (5.5,-0.1) {$f_c + B/2$};
+\node[above,font=\small,red] at (4.75,2.3) {Passband};
 
-\draw[<->,thick] (4,-0.8) -- (5.5,-0.8) node[midway,below,font=\scriptsize] {Bandwidth $B$};
+\draw[<->,thick] (4,-0.9) -- (5.5,-0.9) node[midway,below,font=\scriptsize] {Bandwidth $B$};
 \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -241,31 +241,31 @@ The \textbf{quadrature modulator} (IQ modulator) performs the frequency translat
 ]
 % Input signals
 \node (input_i) {\sffamily $s_I(t)$};
-\node[below=1.5cm of input_i] (input_q) {\sffamily $s_Q(t)$};
+\node[below=1.8cm of input_i] (input_q) {\sffamily $s_Q(t)$};
 
 % Mixers
-\node[block, right of=input_i, node distance=2.5cm] (mix_i) {$\times$};
-\node[block, right of=input_q, node distance=2.5cm] (mix_q) {$\times$};
+\node[block, right of=input_i, node distance=2.8cm] (mix_i) {$\times$};
+\node[block, right of=input_q, node distance=2.8cm] (mix_q) {$\times$};
 
 % Local oscillator
-\node[below=2.8cm of mix_i, font=\scriptsize] (lo) {Local\\Oscillator\\$f_c$};
-\node[above=0.3cm of mix_i, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
-\node[above=0.3cm of mix_q, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
+\node[below=3.2cm of mix_i, font=\scriptsize] (lo) {Local\\Oscillator\\$f_c$};
+\node[above=0.4cm of mix_i, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
+\node[above=0.4cm of mix_q, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
 
 % Summer
-\node[block, right of=mix_i, node distance=3.5cm, yshift=-0.75cm] (sum) {$\Sigma$};
+\node[block, right of=mix_i, node distance=3.8cm, yshift=-0.9cm] (sum) {$\Sigma$};
 
 % Bandpass filter
-\node[block, right of=sum, node distance=3cm] (bpf) {Bandpass\\Filter};
+\node[block, right of=sum, node distance=3.2cm] (bpf) {Bandpass\\Filter};
 
 % Output
-\node[right of=bpf, node distance=3cm] (output) {\sffamily $s_{\text{RF}}(t)$};
+\node[right of=bpf, node distance=3.2cm] (output) {\sffamily $s_{\text{RF}}(t)$};
 
 % Connections
 \draw[->,thick] (input_i) -- (mix_i);
 \draw[->,thick] (input_q) -- (mix_q);
-\draw[->,thick] (lo) -- ($(lo)+(0,1.2)$) -| (mix_i);
-\draw[->,thick] (lo) -- ($(lo)+(0,0.5)$) -| (mix_q);
+\draw[->,thick] (lo) -- ($(lo)+(0,1.4)$) -| (mix_i);
+\draw[->,thick] (lo) -- ($(lo)+(0,0.6)$) -| (mix_q);
 \draw[->,thick] (mix_i) -| (sum);
 \draw[->,thick] (mix_q) -| (sum);
 \draw[->,thick] (sum) -- (bpf);
@@ -334,31 +334,31 @@ The \textbf{quadrature demodulator} (IQ demodulator) performs the reverse operat
 \node (input) {\sffamily $s_{\text{RF}}(t)$};
 
 % Splitter
-\node[right of=input, node distance=2cm] (split) {};
+\node[right of=input, node distance=2.2cm] (split) {};
 
 % Mixers
-\node[block, above right=0.5cm and 2cm of split] (mix_i) {$\times$};
-\node[block, below right=0.5cm and 2cm of split] (mix_q) {$\times$};
+\node[block, above right=0.6cm and 2.2cm of split] (mix_i) {$\times$};
+\node[block, below right=0.6cm and 2.2cm of split] (mix_q) {$\times$};
 
 % Local oscillator
-\node[below=3cm of split, font=\scriptsize] (lo) {Local\\Oscillator\\$f_c$};
-\node[above=0.3cm of mix_i, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
-\node[above=0.3cm of mix_q, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
+\node[below=3.4cm of split, font=\scriptsize] (lo) {Local\\Oscillator\\$f_c$};
+\node[above=0.4cm of mix_i, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
+\node[above=0.4cm of mix_q, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
 
 % Lowpass filters
-\node[block, right of=mix_i, node distance=3cm] (lpf_i) {Lowpass\\Filter};
-\node[block, right of=mix_q, node distance=3cm] (lpf_q) {Lowpass\\Filter};
+\node[block, right of=mix_i, node distance=3.2cm] (lpf_i) {Lowpass\\Filter};
+\node[block, right of=mix_q, node distance=3.2cm] (lpf_q) {Lowpass\\Filter};
 
 % Outputs
-\node[right of=lpf_i, node distance=2.8cm] (output_i) {\sffamily $s_I(t)$};
-\node[right of=lpf_q, node distance=2.8cm] (output_q) {\sffamily $s_Q(t)$};
+\node[right of=lpf_i, node distance=3cm] (output_i) {\sffamily $s_I(t)$};
+\node[right of=lpf_q, node distance=3cm] (output_q) {\sffamily $s_Q(t)$};
 
 % Connections
 \draw[->,thick] (input) -- (split);
 \draw[->,thick] (split) |- (mix_i);
 \draw[->,thick] (split) |- (mix_q);
-\draw[->,thick] (lo) -- ($(lo)+(0,1.8)$) -| (mix_i);
-\draw[->,thick] (lo) -- ($(lo)+(0,1)$) -| (mix_q);
+\draw[->,thick] (lo) -- ($(lo)+(0,2)$) -| (mix_i);
+\draw[->,thick] (lo) -- ($(lo)+(0,1.1)$) -| (mix_q);
 \draw[->,thick] (mix_i) -- (lpf_i);
 \draw[->,thick] (mix_q) -- (lpf_q);
 \draw[->,thick] (lpf_i) -- (output_i);
@@ -511,7 +511,7 @@ A modern wireless transceiver integrates both baseband processing and passband R
 \node[right of=tx_pa, node distance=2.2cm] (tx_ant) {\sffamily Antenna};
 
 % Receive path (bottom)
-\node[below=3cm of tx_data, align=center] (rx_data) {\sffamily Baseband\\Data};
+\node[below=3.2cm of tx_data, align=center] (rx_data) {\sffamily Baseband\\Data};
 \node[block, right of=rx_data, node distance=2.5cm] (rx_dsp) {DSP\\Demod};
 \node[block, right of=rx_dsp, node distance=2.5cm] (rx_adc) {ADC};
 \node[block, right of=rx_adc, node distance=2.5cm] (rx_iq) {IQ\\Downconvert};
@@ -519,7 +519,7 @@ A modern wireless transceiver integrates both baseband processing and passband R
 \node[right of=rx_lna, node distance=2.2cm] (rx_ant) {\sffamily Antenna};
 
 % Local oscillator (shared)
-\node[block, below=1.5cm of tx_iq] (lo) {LO\\$f_c$};
+\node[block, below=1.6cm of tx_iq] (lo) {LO\\$f_c$};
 
 % Transmit path connections
 \draw[->,thick] (tx_data) -- (tx_dsp);
@@ -540,8 +540,8 @@ A modern wireless transceiver integrates both baseband processing and passband R
 \draw[->,thick] (lo) -- (rx_iq);
 
 % Baseband/Passband labels
-\draw[dashed,gray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(-0.3,1.5) -- ++(-0.3,-5) node[midway,left,align=center,font=\tiny] {Baseband\\Domain};
-\draw[dashed,gray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(0.3,1.5) -- ++(0.3,-5) node[midway,right,align=center,font=\tiny] {Passband\\Domain};
+\draw[dashed,gray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(-0.4,1.6) -- ++(-0.4,-5.2) node[midway,left,align=center,font=\tiny] {Baseband\\Domain};
+\draw[dashed,gray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(0.4,1.6) -- ++(0.4,-5.2) node[midway,right,align=center,font=\tiny] {Passband\\Domain};
 \end{tikzpicture}
 \end{center}
 
@@ -755,7 +755,7 @@ IEEE 802.11 devices use zero-IF transceivers for compact integration:
 \section{Summary}
 
 \begin{center}
-\begin{tabular}{@{}lll@{}}
+\begin{tabular}{@{}lp{5cm}p{6cm}@{}}
 \toprule
 \textbf{Aspect} & \textbf{Baseband} & \textbf{Passband} \\
 \midrule
