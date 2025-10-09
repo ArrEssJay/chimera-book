@@ -51,13 +51,6 @@ range with zero interference---it's like threading a needle with radio waves!
 
 \section{Overview}
 
-\textbf{The trade-off:} More positions = faster, BUT positions are closer together and easier to confuse when signal is noisy. Strong signal (close to router): use 1024-QAM. Weak signal (far from router): use QPSK.
-
-\textbf{Fun fact:} Modern WiFi 6E can use 1024-QAM, but ONLY at close range with zero interference---it's like threading a needle with radio waves!
-\end{nontechnical}
-
-\section{Overview}
-
 \textbf{Quadrature Amplitude Modulation (QAM)} is a digital modulation scheme that encodes data by modulating \textbf{both the amplitude and phase} of a carrier wave, achieving optimal use of the two-dimensional signal space.
 
 \begin{keyconcept}
@@ -161,26 +154,6 @@ The 16-QAM constellation forms a $4 \times 4$ square grid in the I/Q plane:
 where $d$ = unit spacing (normalized distance)
 
 For square QAM, the constellation forms a $\sqrt{M} \times \sqrt{M}$ grid in the I/Q plane.
-
-\section{Constellation Diagrams}
-
-QAM constellations are visualized as grids in the I/Q plane, with symbol positions determined by discrete amplitude levels on both axes.
-
-\begin{center}
-\begin{tikzpicture}[scale=1.0]
-% 16-QAM
-\begin{scope}[shift={(0,0)}]
-\node[above,font=\sffamily\bfseries] at (0,3) {16-QAM ($4 \times 4$ grid)};
-\draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
-\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
-\draw[very thin,gray!30] (-2,-2) grid[step=0.5] (2,2);
-
-% 16-QAM constellation points
-\foreach \i in {-1.5,-0.5,0.5,1.5} {
-  \foreach \q in {-1.5,-0.5,0.5,1.5} {
-    \fill[black] (\i,\q) circle (2pt);
-  }
-}
 
 \textbf{Gray coding}: Adjacent symbols differ by exactly 1 bit, minimizing bit errors when symbol errors occur.
 
@@ -321,8 +294,7 @@ Expressed in terms of $E_b/N_0$:
 \end{equation}
 where $E_b/N_0 = (E_s/N_0) / \log_2(M)$ is the energy per bit to noise ratio.
 
-\subsubsection{Required Eb/N0 for BER =
-10\textbackslash textsuperscript\{-\}\textbackslash textsuperscript\{6\}}\label{required-ebn0-for-ber-10ux2076}
+\subsubsection{Required $E_b/N_0$ for BER = $10^{-6}$}
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
@@ -340,25 +312,6 @@ Modulation & Bits/symbol & Required Eb/N0 (dB) & SNR Penalty vs QPSK \\
 \textbf{4096-QAM} & 12 & 32 & +21.5 dB \\
 \end{longtable}
 }
-
-\node[below,font=\small] at (0,-3) {$k = 6$ bits/symbol};
-\end{scope}
-
-% 256-QAM
-\begin{scope}[shift={(14,0)}]
-\node[above,font=\sffamily\bfseries] at (0,3) {256-QAM ($16 \times 16$ grid)};
-\draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
-\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
-\draw[very thin,gray!30] (-2.25,-2.25) grid[step=0.15] (2.25,2.25);
-
-% 256-QAM constellation points (16x16 grid - subset for clarity)
-\foreach \i in {-2.175,-1.875,...,2.175} {
-  \foreach \q in {-2.175,-1.875,...,2.175} {
-    \fill[black] (\i,\q) circle (1pt);
-  }
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{Bandwidth Efficiency}
 
@@ -379,8 +332,6 @@ The spectral efficiency is:
 \eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad \text{(bits/sec/Hz)}
 \label{eq:qam-spectral-efficiency}
 \end{equation}
-
-where $d$ is the unit spacing (normalized distance between adjacent symbols).
 
 {\def\LTcaptype{} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
@@ -649,8 +600,7 @@ Modulation & PAPR (linear) & PAPR (dB) & Notes \\
 \bottomrule\noalign{}
 \endlastfoot
 \textbf{QPSK} & 1 & 0 dB & Constant envelope \\
-\textbf{16-QAM} & 2.55 & 4.1 dB & Corner points
-2.55\$\textbackslash times\$ average \\
+\textbf{16-QAM} & 2.55 & 4.1 dB & Corner points $2.55\times$ average \\
 \textbf{64-QAM} & 3.68 & 5.7 dB & \\
 \textbf{256-QAM} & 4.80 & 6.8 dB & \\
 \textbf{1024-QAM} & 5.93 & 7.7 dB & \\
@@ -659,11 +609,7 @@ Modulation & PAPR (linear) & PAPR (dB) & Notes \\
 
 \textbf{Impact}: High PAPR requires PA backoff (reduces efficiency)
 
-\textbf{Example}: 64-QAM with 5.7 dB PAPR - PA must back off 5.7 dB from
-saturation - Efficiency drops from 50\% to \textasciitilde13\%
-(4\$\textbackslash times\$ penalty)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Example}: 64-QAM with 5.7 dB PAPR - PA must back off 5.7 dB from saturation - Efficiency drops from 50\% to $\sim$13\% ($4\times$ penalty)
 
 \section{Practical Impairments}
 
@@ -780,40 +726,25 @@ Standard & Max QAM & Max Rate & Notes \\
 \bottomrule\noalign{}
 \endlastfoot
 \textbf{802.11a} & 64-QAM & 54 Mbps & 20 MHz channel \\
-\textbf{802.11n} & 64-QAM & 600 Mbps & 4\$\textbackslash times\$4 MIMO,
-40 MHz \\
-\textbf{802.11ac} & 256-QAM & 6.9 Gbps & 8\$\textbackslash times\$8
-MIMO, 160 MHz \\
+\textbf{802.11n} & 64-QAM & 600 Mbps & $4\times4$ MIMO, 40 MHz \\
+\textbf{802.11ac} & 256-QAM & 6.9 Gbps & $8\times8$ MIMO, 160 MHz \\
 \textbf{802.11ax} (WiFi 6) & 1024-QAM & 9.6 Gbps & OFDMA, MU-MIMO \\
 \end{longtable}
 }
 
 \textbf{Adaptive modulation:} Systems dynamically switch between QPSK $\rightarrow$ 16/64/256/1024-QAM based on measured SNR.
 
-\subsection{LTE/5G NR}
+\subsection{Cellular: LTE and 5G NR}
 
-\textbf{LTE downlink}: Up to 256-QAM (Cat 9+)
+\textbf{LTE downlink}: Up to 256-QAM (Category 9+) with carrier aggregation
 
-\textbf{5G NR}: Up to 256-QAM (mmWave can use 1024-QAM in some
-scenarios)
-
-\subsection{WiFi (IEEE 802.11)}
+\textbf{5G NR}: Up to 256-QAM (mmWave can use 1024-QAM in some scenarios)
 
 \textbf{Adaptive MCS} (Modulation \& Coding Scheme):
 \begin{itemize}
 \item Poor channel: QPSK 1/4 (0.5 bits/symbol effective)
 \item Good channel: 256-QAM 3/4 (6 bits/symbol effective)
 \end{itemize}
-
-\subsection{Cable Modems (DOCSIS)}
-
-\subsection{Cellular: LTE and 5G NR}
-
-\textbf{LTE:} Up to 256-QAM (Category 9+) with carrier aggregation
-
-\textbf{Key advantage:} Wired channel has no fading, enabling high SNR and thus very high-order QAM.
-
-\subsection{Digital TV}
 
 \subsection{Cable Modems (DOCSIS)}
 
@@ -844,38 +775,6 @@ Point-to-point microwave links use adaptive QAM:
 \item 4096-QAM: 12 bits/symbol $\rightarrow$ 672~Mbps (uncoded)
 \item With FEC rate 3/4: 504~Mbps net throughput
 \end{itemize}
-
-\section{Comparison and Tradeoffs}
-
-\subsection{QAM vs PSK}
-
-\textbf{Typical link:} 28~GHz, 56~MHz channel
-\begin{itemize}
-\item 4096-QAM: 12 bits/symbol $\rightarrow$ 672~Mbps raw
-\item With FEC (rate 3/4): 504~Mbps net throughput
-\end{itemize}
-
-\section{Advantages and Disadvantages}
-
-\subsection*{Advantages}
-
-\begin{enumerate}
-\item \textbf{Highest spectral efficiency:} Optimal use of 2D signal space (rectangular grid more efficient than circular PSK constellation)
-\item \textbf{Scalable data rates:} Easily extend from 4-QAM (QPSK) to 16/64/256/1024/4096-QAM
-\item \textbf{Adaptive modulation:} Dynamic switching based on channel SNR maximizes throughput
-\item \textbf{Standard support:} Used in virtually all modern broadband systems (WiFi, LTE, 5G, cable, DSL)
-\item \textbf{Mature technology:} Well-understood theory, established hardware implementations
-\end{enumerate}
-
-\subsection*{Disadvantages}
-
-\begin{enumerate}
-\item \textbf{High SNR requirement:} Higher-order QAM needs excellent signal quality (256-QAM requires $\sim$23~dB $E_b/N_0$)
-\item \textbf{Varying envelope (PAPR):} Requires linear PA with backoff, reducing power efficiency
-\item \textbf{Sensitivity to impairments:} I/Q imbalance, phase noise, and nonlinearity severely degrade high-order QAM
-\item \textbf{Coherent detection required:} Must maintain precise carrier phase synchronization
-\item \textbf{Not constant envelope:} Cannot use nonlinear Class-C/D/E amplifiers (unlike QPSK/FSK)
-\end{enumerate}
 
 \section{Comparison: QAM vs PSK}
 
@@ -913,6 +812,11 @@ QPSK (4-QAM) uses only phase modulation with constant amplitude. QAM extends thi
     \fill[black] (\i,\q) circle (2pt);
   }
 }
+\node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
+\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Variable amplitude};
+\end{scope}
+\end{tikzpicture}
+\end{center}
 
 \textbf{General rule:} For $M > 8$, QAM significantly outperforms M-PSK.
 
