@@ -57,3 +57,4 @@ test_*.log
 _build/** */
 chimera-book.epub
 _build_data/chimera-book-epdf.idx
+.gitignore
