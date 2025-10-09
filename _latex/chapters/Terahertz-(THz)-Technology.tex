@@ -212,12 +212,12 @@ A complete THz imaging system:
 \node[block, right of=mixer] (proc) {Signal\\Processing};
 
 % Arrows
-\draw[->,thick] (qcl) -- node[above] {\scriptsize CW THz} (modulator);
-\draw[->,thick] (modulator) -- node[above] {\scriptsize modulated} (txant);
+\draw[->,thick] (qcl) -- node[above,font=\tiny] {CW THz} (modulator);
+\draw[->,thick] (modulator) -- node[above,font=\tiny] {modulated} (txant);
 \draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (txant) -- (space);
-\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (space) -- node[above] {\scriptsize reflected} (rxant);
+\draw[->,thick,red,decorate,decoration={snake,amplitude=1pt}] (space) -- node[above,font=\tiny] {reflected} (rxant);
 \draw[->,thick] (rxant) -- (mixer);
-\draw[->,thick] (mixer) -- node[above] {\scriptsize baseband} (proc);
+\draw[->,thick] (mixer) -- node[above,font=\tiny] {baseband} (proc);
 
 % Control signal
 \node[block, below=1.4cm of modulator] (drive) {Drive\\Electronics};
@@ -225,7 +225,7 @@ A complete THz imaging system:
 \draw[->,thick] (drive) -- (qcl);
 
 % Lock-in reference
-\draw[->,thick,dashed] (drive.east) -| (proc.south) node[pos=0.25,right,font=\scriptsize] {ref};
+\draw[->,thick,dashed] (drive.east) -| (proc.south) node[pos=0.25,right,font=\tiny] {ref};
 
 % Labels
 \node[above,font=\sffamily\small] at (modulator.north) [yshift=0.7cm] {Transmitter};
