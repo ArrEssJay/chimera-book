@@ -20,6 +20,7 @@ _minted*/
 
 # Test files
 test_*.tex
+test_*.png
 !test_exemplar_v2.tex
 test-*.png
 page-*.png
