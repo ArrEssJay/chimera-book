@@ -42,8 +42,14 @@ Thumbs.db
 # Backup files
 *.bak
 *.backup
-preamble.tex
-test_*.tex
-test_*.pdf
-test_*.aux
-test_*.log
+
+# Test artifacts
+*.idx
+*.png
+*.html
+_latex/test_*.tex
+_latex/test_*.pdf
+_latex/test_*.aux
+_latex/test_*.log
+_latex/test_*.idx
+_latex/test_preamble.tex
