@@ -95,7 +95,7 @@ where $m, n$ are positive integers defining the intermodulation order.
 \subsection{Nonlinear Mixing Diagram}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=0.95]
 % Input spectrum
 \begin{scope}[shift={(0,0)}]
 \draw[->] (-0.2,0) -- (4.5,0) node[right,font=\scriptsize] {$f$};
@@ -308,7 +308,7 @@ For detailed analysis, see Chapter~\ref{ch:imd-biology}.
 \subsection{Comparison: Acoustic vs Electromagnetic Nonlinearity}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.85]
 % Title
 \node[font=\small\bfseries] at (6,4.5) {Nonlinearity Strength Comparison};
 
@@ -468,14 +468,16 @@ For detailed analysis, see Chapter~\ref{ch:frey-effect}.
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=0.9cm, font=\sffamily\small, align=center},
   arrow/.style={->, >=stealth, very thick},
-  node distance=1.8cm,
-  font=\small
+  node distance=1.5cm,
+  font=\small,
+  scale=0.9,
+  transform shape
 ]
 
 % Input
-\node (input) {\textbf{Pulsed}\\\ textbf{Microwaves}\\1--10 GHz};
+\node (input) {\textbf{Pulsed}\\\textbf{Microwaves}\\1--10 GHz};
 
 % Process blocks
 \node[block, right=of input] (heating) {Rapid\\Tissue\\Heating};
@@ -484,7 +486,7 @@ For detailed analysis, see Chapter~\ref{ch:frey-effect}.
 \node[block, right=of acoustic] (cochlea) {Cochlear\\Stimulation};
 
 % Output
-\node[right=of cochlea] (output) {\textbf{Auditory}\\\ textbf{Perception}\\200 Hz--10 kHz};
+\node[right=of cochlea] (output) {\textbf{Auditory}\\\textbf{Perception}\\200 Hz--10 kHz};
 
 % Arrows with labels
 \draw[arrow] (input) -- (heating);
@@ -499,7 +501,7 @@ For detailed analysis, see Chapter~\ref{ch:frey-effect}.
 \node[below=0.5cm of acoustic, font=\scriptsize, align=center] {$f_{PRF}$\\(repetition rate)};
 
 % Title
-\node[above=1.2cm of expansion, font=\small\bfseries] {Frey Microwave Auditory Effect: Energy Transduction Pathway};
+\node[above=1.4cm of expansion, font=\small\bfseries, text width=10cm, align=center] {Frey Microwave Auditory Effect: Energy Transduction Pathway};
 
 % EM to Acoustic conversion box
 \draw[thick, dashed, NavyBlue] ([xshift=-0.3cm, yshift=0.5cm]heating.north west) rectangle ([xshift=0.3cm, yshift=-0.5cm]acoustic.south east);
