@@ -145,38 +145,20 @@ the GPS satellite signal.
 
 \subsubsection{Key Concepts Simplified}\label{key-concepts-simplified}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4000}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Concept
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Everyday Analogy
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Military Benefit
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Spread Spectrum} & Whisper spread across a huge room & Signal
-hidden below noise floor \\
-\textbf{Processing Gain} & Collecting 1000 whispers back into speech &
-Overcomes jammers and noise \\
-\textbf{Frequency Hopping} & Changing channels
-1000\$\textbackslash times\$ per second & Enemy can\textquotesingle t
-follow or jam \\
-\textbf{Phased Array} & Computer-controlled spotlight & Instant beam
-steering, multi-target \\
-\textbf{Encryption} & Secret language only you and friend know & Even
-intercepted messages are useless \\
-\textbf{Beamforming} & Talking through a directional megaphone & Only
-intended receiver hears you \\
-\end{longtable}
-}
+\begin{center}
+\begin{tabular}{@{}p{0.2\linewidth}p{0.35\linewidth}p{0.35\linewidth}@{}}
+\toprule
+\textbf{Concept} & \textbf{Everyday Analogy} & \textbf{Military Benefit} \\
+\midrule
+Spread Spectrum & Whisper spread across a huge room & Signal hidden below noise floor \\
+Processing Gain & Collecting 1000 whispers back into speech & Overcomes jammers and noise \\
+Frequency Hopping & Changing channels $1000\times$ per second & Enemy can't follow or jam \\
+Phased Array & Computer-controlled spotlight & Instant beam steering, multi-target \\
+Encryption & Secret language only you and friend know & Even intercepted messages are useless \\
+Beamforming & Talking through a directional megaphone & Only intended receiver hears you \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -1267,7 +1249,7 @@ The signal PSD ($-90$~dBm/Hz) is 24~dB below the thermal noise floor ($-114$~dBm
 \node[below,font=\scriptsize,green!70!black] at (5,1.5) {(undetectable)};
 
 % Annotations
-\draw[<->,thick] (3.5,1.6) -- (3.5,2) node[midway,right,font=\tiny] {24 dB\\below\\noise};
+\draw[<->,thick] (3.5,1.6) -- (3.5,2) node[midway,right,font=\tiny,align=left] {24 dB\\below\\noise};
 
 % Bandwidth indicators
 \draw[<->,thin] (1,0.3) -- (1.5,0.3) node[midway,below,font=\tiny] {$BW_{\text{info}}$};
@@ -1498,12 +1480,13 @@ Table~\ref{tab:military-techniques} provides a comprehensive comparison of techn
 \centering
 \caption{Military Communication Techniques Comparison}
 \label{tab:military-techniques}
-\begin{tabular}{llll}
+\small
+\begin{tabular}{@{}p{2.5cm}p{3cm}p{3.2cm}p{3.5cm}@{}}
 \toprule
 \textbf{Technique} & \textbf{Primary Gain} & \textbf{Advantage} & \textbf{Applications} \\
 \midrule
 DSSS & 20-40 dB proc. gain & AJ, LPI & GPS M-code, tactical radios \\
-FHSS & Frequency diversity & LPD, follower-jam resist. & MILSTAR, Link 16 \\
+FHSS & Frequency diversity & LPD, follower-jam resistance & MILSTAR, Link 16 \\
 AESA & Beamforming, agility & LPI, multi-target, EA & APG-77, AN/SPY-6 \\
 Nulling Antenna & 20-40 dB spatial filter & Jammer rejection & CRPA, adaptive arrays \\
 Burst TX & Temporal LPD & Minimize exposure & Submarine, UAV links \\
@@ -1568,10 +1551,10 @@ Adaptive Coding & Link optimization & Maximize throughput & MUOS, 5G tactical \\
 \textbf{Key Takeaways:}
 
 \begin{itemize}
-\item Military communications prioritize \textbf{anti-jam (AJ)}, \textbf{LPI/LPD}, and \textbf{security (TRANSEC)} over spectral efficiency
+\item Military communications prioritize \textbf{anti-jam (AJ)}, \textbf{LPI/LPD}, and \textbf{security (TRAN\-SEC)} over spectral efficiency
 \item Processing gain from spread spectrum enables signals 20-40 dB below noise floor while maintaining robust links
-\item GPS M-code combines BOC(10,5) modulation (50 dB processing gain), directional antennas (CRPA), and encryption to survive $>60$ dB jamming
-\item AESA radars achieve LPI through low peak power, frequency agility, narrow beamwidths, and electronic beam steering
+\item GPS M-code combines BOC(10,5) modulation (50~dB processing gain), directional antennas (CRPA), and encryption to survive $>60$~dB jamming
+\item AESA radars achieve LPI through low peak power, frequency agility, narrow beam\-widths, and electronic beam steering
 \item Link 16 uses FHSS (70,000 hops/sec) with TDMA and cryptographic hopping for jam-resistant tactical data exchange
 \item Jamming margin: $M_J = G_{\text{dB}} - (J/S)_{\text{dB}} - (E_b/N_0)_{\text{req}} - L_{\text{impl}}$
 \item Directional antennas provide 20-40 dB additional anti-jam capability through spatial filtering
