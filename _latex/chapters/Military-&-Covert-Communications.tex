@@ -1497,12 +1497,13 @@ Table~\ref{tab:military-techniques} provides a comprehensive comparison of techn
 \centering
 \caption{Military Communication Techniques Comparison}
 \label{tab:military-techniques}
-\begin{tabular}{llll}
+\small
+\begin{tabular}{@{}p{2.5cm}p{3cm}p{3.2cm}p{3.5cm}@{}}
 \toprule
 \textbf{Technique} & \textbf{Primary Gain} & \textbf{Advantage} & \textbf{Applications} \\
 \midrule
 DSSS & 20-40 dB proc. gain & AJ, LPI & GPS M-code, tactical radios \\
-FHSS & Frequency diversity & LPD, follower-jam resist. & MILSTAR, Link 16 \\
+FHSS & Frequency diversity & LPD, follower-jam resistance & MILSTAR, Link 16 \\
 AESA & Beamforming, agility & LPI, multi-target, EA & APG-77, AN/SPY-6 \\
 Nulling Antenna & 20-40 dB spatial filter & Jammer rejection & CRPA, adaptive arrays \\
 Burst TX & Temporal LPD & Minimize exposure & Submarine, UAV links \\
@@ -1566,10 +1567,10 @@ Adaptive Coding & Link optimization & Maximize throughput & MUOS, 5G tactical \\
 \textbf{Key Takeaways:}
 
 \begin{itemize}
-\item Military communications prioritize \textbf{anti-jam (AJ)}, \textbf{LPI/LPD}, and \textbf{security (TRANSEC)} over spectral efficiency
+\item Military communications prioritize \textbf{anti-jam (AJ)}, \textbf{LPI/LPD}, and \textbf{security (TRAN\-SEC)} over spectral efficiency
 \item Processing gain from spread spectrum enables signals 20-40 dB below noise floor while maintaining robust links
-\item GPS M-code combines BOC(10,5) modulation (50 dB processing gain), directional antennas (CRPA), and encryption to survive $>60$ dB jamming
-\item AESA radars achieve LPI through low peak power, frequency agility, narrow beamwidths, and electronic beam steering
+\item GPS M-code combines BOC(10,5) modulation (50~dB processing gain), directional antennas (CRPA), and encryption to survive $>60$~dB jamming
+\item AESA radars achieve LPI through low peak power, frequency agility, narrow beam\-widths, and electronic beam steering
 \item Link 16 uses FHSS (70,000 hops/sec) with TDMA and cryptographic hopping for jam-resistant tactical data exchange
 \item Jamming margin: $M_J = G_{\text{dB}} - (J/S)_{\text{dB}} - (E_b/N_0)_{\text{req}} - L_{\text{impl}}$
 \item Directional antennas provide 20-40 dB additional anti-jam capability through spatial filtering
