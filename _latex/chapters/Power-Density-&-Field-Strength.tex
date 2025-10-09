@@ -147,7 +147,6 @@ H = \frac{10}{377} \approx 0.0265 \text{~A/m}
 % Axes
 \draw[->] (0,0) -- (10,0) node[right] {\sffamily\small Direction of propagation};
 \draw[->] (0,-2) -- (0,2) node[above] {\sffamily\small $E$ (V/m)};
-\draw[->] (0,0) -- (0,-3) node[below] {};
 
 % Electric field wave (vertical)
 \draw[very thick, blue] plot[domain=0:9.5, samples=100] (\x, {1.5*sin(\x*60)});
@@ -159,10 +158,12 @@ H = \frac{10}{377} \approx 0.0265 \text{~A/m}
 
 % Phase relationship annotation
 \draw[<->, thick] (2.5, 1.6) -- (2.5, -1.1) node[midway, right, font=\scriptsize] {In phase};
-\node[below, font=\scriptsize, align=center] at (5, -2.2) {$E/H = 377~\Omega$ (far field)\\Perpendicular \& in phase};
 
 % Wavelength annotation
 \draw[<->, thick] (1, -1.8) -- (6.28, -1.8) node[midway, below, font=\scriptsize] {$\lambda$};
+
+% Bottom annotation (moved up to avoid overlap)
+\node[below, font=\scriptsize, align=center] at (5, -2.5) {$E/H = 377~\Omega$ (far field)\\Perpendicular \& in phase};
 \end{tikzpicture}
 \end{center}
 
@@ -227,6 +228,11 @@ r_{\text{far}} = \frac{2 \times (0.05)^2}{0.125} = \frac{0.005}{0.125} = 0.04 \t
 
 \begin{center}
 \begin{tikzpicture}[scale=1.2]
+% Grid for reference (drawn first to avoid overlapping text)
+\draw[very thin, gray!30] (-4, -4) grid[step=0.5] (4, 4);
+\draw[->] (-4.2, 0) -- (4.2, 0) node[right, font=\scriptsize] {$x$};
+\draw[->] (0, -4.2) -- (0, 4.2) node[above, font=\scriptsize] {$z$};
+
 % Antenna
 \draw[very thick] (0, -0.5) -- (0, 0.5) node[above] {\sffamily Antenna};
 \fill[black] (0,0) circle (2pt);
@@ -239,16 +245,11 @@ r_{\text{far}} = \frac{2 \times (0.05)^2}{0.125} = \frac{0.005}{0.125} = 0.04 \t
 % Far field region
 \draw[thick, red] (0,0) circle (3.5);
 \node[red, align=center, font=\small] at (2.5, 2.8) {Far Field\\$r > \frac{2D^2}{\lambda}$};
-\node[red, font=\scriptsize] at (2.5, -3.2) {$E/H = 377~\Omega$};
+\node[red, font=\scriptsize] at (2.5, -2.8) {$E/H = 377~\Omega$};
 
 % Distance annotations
 \draw[<->, thick] (0, -0.2) -- (1.5, -0.2) node[midway, below, font=\scriptsize] {$r_{\text{near}}$};
 \draw[<->, thick] (0, 0.2) -- (3.5, 0.2) node[midway, above, font=\scriptsize] {$r_{\text{far}}$};
-
-% Grid for reference
-\draw[very thin, gray!30] (-4, -4) grid[step=0.5] (4, 4);
-\draw[->] (-4.2, 0) -- (4.2, 0) node[right, font=\scriptsize] {$x$};
-\draw[->] (0, -4.2) -- (0, 4.2) node[above, font=\scriptsize] {$z$};
 \end{tikzpicture}
 \end{center}
 
@@ -337,6 +338,9 @@ S = \frac{100}{4\pi (20)^2} = \frac{100}{5027} \approx 0.0199 \text{~W/m}^2
 
 \begin{center}
 \begin{tikzpicture}[scale=1.0]
+% Grid reference (drawn first to avoid overlapping text)
+\draw[very thin, gray!20] (-3.5, -3.5) grid[step=0.5] (3.5, 3.5);
+
 % Source
 \fill[black] (0,0) circle (3pt);
 \node[below] at (0, -0.3) {\sffamily\small Source};
@@ -345,24 +349,21 @@ S = \frac{100}{4\pi (20)^2} = \frac{100}{5027} \approx 0.0199 \text{~W/m}^2
 % Spheres at different distances
 \draw[thick, blue] (0,0) circle (1.5);
 \node[blue, font=\small] at (1.5, 1.5) {$r_1$};
-\node[blue, font=\scriptsize, align=center] at (1.1, 1.1) {$S_1 = \frac{P_t}{4\pi r_1^2}$};
+\node[blue, font=\scriptsize, align=center, fill=white, inner sep=1pt] at (1.06, 1.06) {$S_1 = \frac{P_t}{4\pi r_1^2}$};
 
 \draw[thick, red] (0,0) circle (3.0);
 \node[red, font=\small] at (3.0, 3.0) {$r_2 = 2r_1$};
-\node[red, font=\scriptsize, align=center] at (2.2, 2.2) {$S_2 = \frac{S_1}{4}$};
+\node[red, font=\scriptsize, align=center, fill=white, inner sep=1pt] at (2.12, 2.12) {$S_2 = \frac{S_1}{4}$};
 
 % Radial lines
-\draw[->, thick] (0,0) -- (45:1.5) node[midway, above, sloped, font=\scriptsize] {};
+\draw[->, thick] (0,0) -- (45:1.5);
 \draw[->, thick] (0,0) -- (45:3.0);
 
 % Power density indicators
 \draw[<->, thick] (45:1.5) -- (45:3.0) node[midway, above, sloped, font=\scriptsize] {$2\times$ distance};
 
-% Grid reference
-\draw[very thin, gray!20] (-3.5, -3.5) grid[step=0.5] (3.5, 3.5);
-
-% Annotations
-\node[below, font=\small, align=center] at (0, -3.8) {Inverse Square Law: $S \propto \frac{1}{r^2}$};
+% Bottom annotation (with better spacing)
+\node[below, font=\small, align=center] at (0, -4.0) {Inverse Square Law: $S \propto \frac{1}{r^2}$};
 \end{tikzpicture}
 \end{center}
 

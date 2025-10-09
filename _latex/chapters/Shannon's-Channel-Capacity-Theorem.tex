@@ -122,22 +122,22 @@ Shannon analyzed communication as an information-theoretic system with five comp
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1.2cm, font=\sffamily\small, align=center},
-  node distance=2.5cm,
-  font=\small
+  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\scriptsize, align=center},
+  node distance=2cm,
+  font=\scriptsize
 ]
 \node[block] (source) {Information\\Source};
-\node[block, right of=source, node distance=3.5cm] (encoder) {Channel\\Encoder};
-\node[block, right of=encoder, node distance=3.5cm] (channel) {Noisy\\Channel};
-\node[block, right of=channel, node distance=3.5cm] (decoder) {Channel\\Decoder};
-\node[block, right of=decoder, node distance=3.5cm] (dest) {Destination};
+\node[block, right of=source, node distance=2.7cm] (encoder) {Channel\\Encoder};
+\node[block, right of=encoder, node distance=2.7cm] (channel) {Noisy\\Channel};
+\node[block, right of=channel, node distance=2.7cm] (decoder) {Channel\\Decoder};
+\node[block, right of=decoder, node distance=2.7cm] (dest) {Destination};
 
-\draw[->,thick] (source) -- node[above,font=\scriptsize] {$\{m_i\}$} (encoder);
-\draw[->,thick] (encoder) -- node[above,font=\scriptsize] {$\{x_i\}$} (channel);
-\draw[->,thick] (channel) -- node[above,font=\scriptsize] {$\{y_i\}$} (decoder);
-\draw[->,thick] (decoder) -- node[above,font=\scriptsize] {$\{\hat{m}_i\}$} (dest);
+\draw[->,thick] (source) -- node[above,font=\tiny] {$\{m_i\}$} (encoder);
+\draw[->,thick] (encoder) -- node[above,font=\tiny] {$\{x_i\}$} (channel);
+\draw[->,thick] (channel) -- node[above,font=\tiny] {$\{y_i\}$} (decoder);
+\draw[->,thick] (decoder) -- node[above,font=\tiny] {$\{\hat{m}_i\}$} (dest);
 
-\node[below of=channel, node distance=1.8cm, font=\scriptsize, text=red!70!black] (noise) {Noise $n(t)$};
+\node[below of=channel, node distance=1.5cm, font=\scriptsize, text=red!70!black] (noise) {Noise $n(t)$};
 \draw[->,thick,red!70!black] (noise) -- (channel);
 \end{tikzpicture}
 \end{center}
@@ -152,10 +152,10 @@ The relationship between data rate and reliability defines achievable performanc
 \begin{tikzpicture}[scale=1.2]
 % Axes
 \draw[->] (0,0) -- (6,0) node[right,font=\sffamily\small] {Data Rate $R$};
-\draw[->] (0,0) -- (0,5) node[above,font=\sffamily\small] {Reliability\\(Lower BER $\rightarrow$)};
+\draw[->] (0,0) -- (0,5) node[above,font=\sffamily\small,align=center] {Reliability\\(Lower BER $\rightarrow$)};
 
 % Shannon capacity line
-\draw[thick,blue] (4,0) -- (4,4.5) node[above,font=\scriptsize,text=black] {$R = C$\\Shannon\\Limit};
+\draw[thick,blue] (4,0) -- (4,4.5) node[above,font=\scriptsize,text=black,align=center] {$R = C$\\Shannon\\Limit};
 
 % Achievable region
 \fill[blue!20,opacity=0.5] (0,0) rectangle (4,5);
@@ -265,7 +265,7 @@ Spectral efficiency:
 \eta_{\max} = \frac{C}{B} = 6.66\,\text{bits/s/Hz}
 \end{equation}
 
-\textbf{Conclusion:} No matter how sophisticated the modulation or coding, this WiFi channel cannot reliably exceed 133~Mbps. Practical 802.11n systems achieve $\sim$100~Mbps (75\% of capacity) using 64-QAM with rate-5/6 LDPC codes.
+\textbf{Conclusion:} No matter how sophisticated the modulation or coding, this WiFi channel cannot reliably exceed 133~Mbps. Practical 802.11n systems achieve $\sim$100~Mbps (75\% of ca\-pac\-ity) using 64-QAM with rate-5/6 LDPC codes.
 
 \subsubsection{Example 2: Deep Space Communication}
 
@@ -326,7 +326,7 @@ With rate-1/2 LDPC code:
 R_{\text{coded}} = 20 \times 0.5 = 10\,\text{bps}, \quad \frac{R_{\text{coded}}}{C} = 11.1
 \end{equation}
 
-Still operating above capacity! Need rate-1/20 code or increase bandwidth/SNR.
+Still operating above capacity! A rate-1/20 code or higher bandwidth/SNR is needed.
 
 \begin{warningbox}
 This example illustrates why extremely low-SNR links require \textbf{massive error correction overhead}. A rate-1/20 code means sending 20 parity bits for every 1 information bit---but this is the price Shannon's theorem demands for reliable communication in extreme noise.
@@ -456,7 +456,7 @@ C \approx B \log_2(\mathrm{SNR}) \quad \text{(for SNR $\gg$ 1)}
 \label{eq:bandwidth-limited}
 \end{equation}
 
-\textbf{Capacity grows logarithmically with power}---doubling capacity requires squaring SNR (6~dB).
+\textbf{Capacity grows logarithmically with power}---dou\-bling ca\-pac\-ity requires squaring SNR (6~dB).
 
 \textbf{Design strategy:}
 \begin{itemize}
@@ -784,7 +784,7 @@ where $\gamma$ is the random fading coefficient and $\mathbb{E}[\cdot]$ denotes 
 
 \textbf{Mitigation strategies:}
 \begin{itemize}
-\item \textbf{Diversity:} Space (multiple antennas), time (interleaving), frequency (OFDM)
+\item \textbf{Diversity:} Spatial (antennas), temporal (interleaving), spectral (OFDM)
 \item \textbf{Channel coding + interleaving:} Spread errors across multiple fading realizations
 \item \textbf{Adaptive modulation:} Exploit good channel states, back off during deep fades
 \end{itemize}
