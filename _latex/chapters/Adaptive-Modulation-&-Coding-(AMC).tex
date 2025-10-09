@@ -495,99 +495,115 @@ For Rayleigh fading at high SNR: $C_{\text{ergodic}} \approx B \cdot \log_2(e \c
 
 \subsubsection{LTE Adaptive Modulation}\label{lte-adaptive-modulation}
 
-\textbf{Downlink (eNodeB \$\textbackslash rightarrow\$ UE)}:
+\textbf{Downlink (eNodeB $\rightarrow$ UE):}
 
-\begin{verbatim}
-CQI reporting:
-- Periodicity: 5-10 ms (semi-static)
-- Wideband or subband (per RB - Resource Block)
-- UE measures RSRP, RSRQ, SINR  computes CQI
+\textbf{CQI reporting:}
+\begin{itemize}
+\item Periodicity: 5--10 ms (semi-static)
+\item Wideband or subband (per RB - Resource Block)
+\item UE measures RSRP, RSRQ, SINR $\rightarrow$ computes CQI
+\end{itemize}
 
-MCS selection:
-- eNodeB scheduler receives CQI
-- Selects MCS per UE per RB
-- Goals: Maximize cell throughput, maintain fairness
+\textbf{MCS selection:}
+\begin{itemize}
+\item eNodeB scheduler receives CQI
+\item Selects MCS per UE per RB
+\item Goals: Maximize cell throughput, maintain fairness
+\end{itemize}
 
-Resource allocation:
-- Time-frequency (OFDMA)
-- 1 RB = 12 subcarriers × 1 slot (0.5 ms)
-- Assign high MCS to users with good CQI
-\end{verbatim}
+\textbf{Resource allocation:}
+\begin{itemize}
+\item Time-frequency (OFDMA)
+\item 1 RB = 12 subcarriers $\times$ 1 slot (0.5 ms)
+\item Assign high MCS to users with good CQI
+\end{itemize}
 
-\textbf{Uplink (UE \$\textbackslash rightarrow\$ eNodeB)}:
+\textbf{Uplink (UE $\rightarrow$ eNodeB):}
+\begin{itemize}
+\item UE transmits SRS (Sounding Reference Signal)
+\item eNodeB measures channel directly (TDD reciprocity helps)
+\item eNodeB commands MCS via PDCCH (Physical Downlink Control Channel)
+\end{itemize}
 
-\begin{verbatim}
-UE transmits SRS (Sounding Reference Signal)
-eNodeB measures channel directly (TDD reciprocity helps)
-eNodeB commands MCS via PDCCH (Physical Downlink Control Channel)
-
-Uplink challenges:
-- Limited UE power  coverage-limited
-- Lower MCS typical (vs. downlink)
-\end{verbatim}
+\textbf{Uplink challenges:}
+\begin{itemize}
+\item Limited UE power $\rightarrow$ coverage-limited
+\item Lower MCS typical (vs. downlink)
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsubsection{5G NR Ultra-Lean Design}\label{g-nr-ultra-lean-design}
 
-\textbf{Dynamic adaptation}:
+\textbf{Dynamic adaptation:}
 
-\begin{verbatim}
-Ultra-flexible frame structure:
-- Slot duration: 0.125-1 ms (depends on numerology)
-- Mini-slots: <1 ms (ultra-low latency)
-- HARQ feedback: 2-4 slots (faster than LTE)
+\textbf{Ultra-flexible frame structure:}
+\begin{itemize}
+\item Slot duration: 0.125--1 ms (depends on numerology)
+\item Mini-slots: $<$1 ms (ultra-low latency)
+\item HARQ feedback: 2--4 slots (faster than LTE)
+\end{itemize}
 
-Beam management:
-- Massive MIMO: Beamformed transmissions
-- CSI-RS: Beam-specific channel measurement
-- Adapt MCS per beam (spatial dimension)
+\textbf{Beam management:}
+\begin{itemize}
+\item Massive MIMO: Beamformed transmissions
+\item CSI-RS: Beam-specific channel measurement
+\item Adapt MCS per beam (spatial dimension)
+\end{itemize}
 
-Grant-free transmission (URLLC):
-- Pre-configured MCS (no dynamic CQI)
-- Used for ultra-reliable, low-latency (factory automation)
-\end{verbatim}
+\textbf{Grant-free transmission (URLLC):}
+\begin{itemize}
+\item Pre-configured MCS (no dynamic CQI)
+\item Used for ultra-reliable, low-latency (factory automation)
+\end{itemize}
 
-\textbf{Massive MIMO adaptation}:
+\textbf{Massive MIMO adaptation:}
 
-\begin{verbatim}
-Per-user MCS:
-- User 1 (cell center, high SINR): 256-QAM, rate-5/6
-- User 2 (cell edge, low SINR): QPSK, rate-1/3
-- Simultaneous (MU-MIMO) on same resource blocks
+\textbf{Per-user MCS:}
+\begin{itemize}
+\item User 1 (cell center, high SINR): 256-QAM, rate-5/6
+\item User 2 (cell edge, low SINR): QPSK, rate-1/3
+\item Simultaneous (MU-MIMO) on same resource blocks
+\end{itemize}
 
-Spectral efficiency:
-Sum rate = _{i} R_i (bits/s/Hz per user)
-         = 7 + 1 = 8 bits/s/Hz (vs. 4 for single-user)
-\end{verbatim}
+\textbf{Spectral efficiency:}
+\begin{equation*}
+\text{Sum rate} = \sum_{i} R_i \text{ (bits/s/Hz per user)} = 7 + 1 = 8 \text{ bits/s/Hz (vs. 4 for single-user)}
+\end{equation*}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsubsection{WiFi 6/7 (802.11ax/be)}\label{wifi-67-802.11axbe}
 
-\textbf{Rate adaptation}:
+\textbf{Rate adaptation:}
 
-\begin{verbatim}
-WiFi metrics:
-- RSSI (Received Signal Strength Indicator)
-- PER (Packet Error Rate)
-- Retry count
+\textbf{WiFi metrics:}
+\begin{itemize}
+\item RSSI (Received Signal Strength Indicator)
+\item PER (Packet Error Rate)
+\item Retry count
+\end{itemize}
 
-MCS selection:
-- Minstrel / SampleRate algorithms (open-source)
-- Proprietary vendor algorithms (Cisco, Qualcomm)
-- Test higher MCS occasionally (probing)
+\textbf{MCS selection:}
+\begin{itemize}
+\item Minstrel / SampleRate algorithms (open-source)
+\item Proprietary vendor algorithms (Cisco, Qualcomm)
+\item Test higher MCS occasionally (probing)
+\end{itemize}
 
-Spatial stream adaptation:
-- 1 stream: Long range, reliable
-- 4 streams: Short range, high throughput
-- Adapt based on distance, interference
+\textbf{Spatial stream adaptation:}
+\begin{itemize}
+\item 1 stream: Long range, reliable
+\item 4 streams: Short range, high throughput
+\item Adapt based on distance, interference
+\end{itemize}
 
-Example (WiFi 6, 80 MHz):
-- Close (1 m): 4 streams, 1024-QAM, rate-5/6  1.2 Gbps
-- Medium (10 m): 2 streams, 256-QAM, rate-3/4  600 Mbps
-- Far (50 m): 1 stream, QPSK, rate-1/2  30 Mbps
-\end{verbatim}
+\textbf{Example (WiFi 6, 80 MHz):}
+\begin{itemize}
+\item Close (1 m): 4 streams, 1024-QAM, rate-5/6 $\rightarrow$ 1.2 Gbps
+\item Medium (10 m): 2 streams, 256-QAM, rate-3/4 $\rightarrow$ 600 Mbps
+\item Far (50 m): 1 stream, QPSK, rate-1/2 $\rightarrow$ 30 Mbps
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -599,22 +615,24 @@ Example (WiFi 6, 80 MHz):
 \textbf{Motivation}: CQI can be inaccurate (channel estimation errors,
 feedback delay).
 
-\textbf{OLLA principle}:
+\textbf{OLLA principle:}
 
-\begin{verbatim}
 Adjust MCS based on ACK/NACK history, not just CQI.
 
-Algorithm:
-1. Start with MCS based on CQI
-2. If NACK: Decrease MCS (_down = 1 dB)
-3. If ACK: Increase MCS (_up = 0.01 dB)
+\textbf{Algorithm:}
+\begin{enumerate}
+\item Start with MCS based on CQI
+\item If NACK: Decrease MCS ($\Delta_{\text{down}} = 1$ dB)
+\item If ACK: Increase MCS ($\Delta_{\text{up}} = 0.01$ dB)
+\end{enumerate}
 
-Asymmetric adjustment:
-- Fast decrease (avoid errors)
-- Slow increase (test cautiously)
+\textbf{Asymmetric adjustment:}
+\begin{itemize}
+\item Fast decrease (avoid errors)
+\item Slow increase (test cautiously)
+\end{itemize}
 
-Result: Converges to optimal MCS despite CQI errors
-\end{verbatim}
+\textbf{Result:} Converges to optimal MCS despite CQI errors
 
 \textbf{Implementation}:
 
@@ -659,39 +677,34 @@ Result: Converges to optimal MCS despite CQI errors
 
 \textbf{Joint optimization} of PHY (MCS) and MAC (scheduling):
 
-\textbf{Proportional Fair Scheduler}:
+\textbf{Proportional Fair Scheduler:}
 
-\begin{verbatim}
-Maximize: _{i} log(R_i)  (sum log throughput)
+\textbf{Objective:} Maximize $\sum_{i} \log(R_i)$ (sum log throughput)
 
-User priority:
-Priority_i = R_instantaneous_i / R_average_i
-
+\textbf{User priority:}
+\begin{equation*}
+\text{Priority}_i = \frac{R_{\text{instantaneous},i}}{R_{\text{average},i}}
+\end{equation*}
 where:
-- R_instantaneous: Rate achievable now (AMC-selected MCS)
-- R_average: Long-term average throughput
+\begin{itemize}
+\item $R_{\text{instantaneous}}$: Rate achievable now (AMC-selected MCS)
+\item $R_{\text{average}}$: Long-term average throughput
+\end{itemize}
 
-Result:
-- User with good channel gets high MCS  high R_instantaneous
-- If already has high R_average, priority decreases
-- Balances throughput and fairness
-\end{verbatim}
+\textbf{Result:}
+\begin{itemize}
+\item User with good channel gets high MCS $\rightarrow$ high $R_{\text{instantaneous}}$
+\item If already has high $R_{\text{average}}$, priority decreases
+\item Balances throughput and fairness
+\end{itemize}
 
-\textbf{Buffer-aware AMC}:
-
-\begin{verbatim}
-If buffer almost empty:
- Use lower MCS (reliable, avoid stalls)
-
-If buffer full:
- Use higher MCS (aggressive, drain buffer)
-
-Delay-sensitive (VoIP):
- Conservative MCS (avoid retransmissions)
-
-Throughput-oriented (file download):
- Aggressive MCS (maximize rate, tolerate retries)
-\end{verbatim}
+\textbf{Buffer-aware AMC:}
+\begin{itemize}
+\item \textbf{If buffer almost empty:} Use lower MCS (reliable, avoid stalls)
+\item \textbf{If buffer full:} Use higher MCS (aggressive, drain buffer)
+\item \textbf{Delay-sensitive (VoIP):} Conservative MCS (avoid retransmissions)
+\item \textbf{Throughput-oriented (file download):} Aggressive MCS (maximize rate, tolerate retries)
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -699,37 +712,43 @@ Throughput-oriented (file download):
 
 \textbf{Anticipate channel changes} before they occur.
 
-\textbf{Method 1 - Doppler-based prediction}:
+\textbf{Method 1 - Doppler-based prediction:}
 
-\begin{verbatim}
-High mobility (vehicular):
-- Channel changes rapidly (coherence time ~10 ms)
-- CQI feedback outdated by RTT (8 ms)
+\textbf{High mobility (vehicular):}
+\begin{itemize}
+\item Channel changes rapidly (coherence time $\sim$10 ms)
+\item CQI feedback outdated by RTT (8 ms)
+\end{itemize}
 
-Prediction:
-1. Estimate Doppler shift (f_D = v/)
-2. Predict channel evolution: H(t + t) = f(H(t), f_D)
-3. Select MCS for predicted channel
+\textbf{Prediction steps:}
+\begin{enumerate}
+\item Estimate Doppler shift ($f_D = v/\lambda$)
+\item Predict channel evolution: $H(t + \Delta t) = f(H(t), f_D)$
+\item Select MCS for predicted channel
+\end{enumerate}
 
-Autoregressive model:
-H[n+1] = a·H[n] + a·H[n-1] + ... + noise
+\textbf{Autoregressive model:}
+\begin{equation*}
+H[n+1] = a_1 \cdot H[n] + a_2 \cdot H[n-1] + \ldots + \text{noise}
+\end{equation*}
 
 Wiener filter / Kalman filter for prediction
-\end{verbatim}
 
-\textbf{Method 2 - Machine learning}:
+\textbf{Method 2 - Machine learning:}
 
-\begin{verbatim}
-Train neural network:
-- Input: [H[n], H[n-1], ..., H[n-k], velocity, location]
-- Output: H[n+1] (predicted channel)
+\textbf{Train neural network:}
+\begin{itemize}
+\item \textbf{Input:} $[H[n], H[n-1], \ldots, H[n-k], \text{velocity}, \text{location}]$
+\item \textbf{Output:} $H[n+1]$ (predicted channel)
+\end{itemize}
 
-Online learning:
-- Update weights based on prediction error
-- Adapt to user-specific channel patterns
+\textbf{Online learning:}
+\begin{itemize}
+\item Update weights based on prediction error
+\item Adapt to user-specific channel patterns
+\end{itemize}
 
-Benefit: 2-3 dB gain in high-mobility scenarios
-\end{verbatim}
+\textbf{Benefit:} 2--3 dB gain in high-mobility scenarios
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
