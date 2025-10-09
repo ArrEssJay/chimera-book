@@ -224,10 +224,10 @@ h(t) = \sqrt{\frac{K}{K+1}} + \sqrt{\frac{1}{K+1}} \cdot h_{\text{Rayleigh}}(t)
 \subsection{Visual Comparison: Rayleigh vs Rician Distributions}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=1.1]
 % Axes
 \draw[->] (0,0) -- (9,0) node[right,font=\sffamily\small] {Envelope $r = |h|$};
-\draw[->] (0,0) -- (0,3.5) node[above,font=\sffamily\small] {PDF $p(r)$};
+\draw[->] (0,0) -- (0,3.8) node[above,font=\sffamily\small] {PDF $p(r)$};
 
 % Grid
 \draw[very thin,gray!20] (0,0) grid[step=0.5] (9,3.5);
@@ -235,21 +235,21 @@ h(t) = \sqrt{\frac{K}{K+1}} + \sqrt{\frac{1}{K+1}} \cdot h_{\text{Rayleigh}}(t)
 % Rayleigh PDF (K=0, pure NLOS)
 \draw[NavyBlue, very thick, smooth, domain=0:8, samples=100] 
   plot (\x, {2*\x*exp(-\x*\x)});
-\node[NavyBlue,font=\sffamily\small,anchor=west] at (1.5,2.2) {Rayleigh ($K=0$ dB)};
-\node[NavyBlue,font=\sffamily\footnotesize,anchor=west] at (1.5,1.9) {Pure NLOS};
+\node[NavyBlue,font=\sffamily\small,anchor=west] at (1.5,2.3) {Rayleigh ($K=0$ dB)};
+\node[NavyBlue,font=\sffamily\footnotesize,anchor=west] at (1.5,2.0) {Pure NLOS};
 
 % Rician PDF K=6 dB (K=4 linear)
 \draw[red!70!black, very thick, smooth, domain=0:8, samples=100] 
   plot (\x, {0.45*\x*exp(-(\x*\x + 4)/2)*
     (1 + 4*(\x/2) + 8*(\x/2)*(\x/2)/2 + 32*(\x/2)*(\x/2)*(\x/2)/6)});
-\node[red!70!black,font=\sffamily\small,anchor=west] at (4.5,2.8) {Rician ($K=6$ dB)};
-\node[red!70!black,font=\sffamily\footnotesize,anchor=west] at (4.5,2.5) {Moderate LOS};
+\node[red!70!black,font=\sffamily\small,anchor=west] at (4.3,3.0) {Rician ($K=6$ dB)};
+\node[red!70!black,font=\sffamily\footnotesize,anchor=west] at (4.3,2.7) {Moderate LOS};
 
 % Rician PDF K=15 dB (K=31.6 linear)
 \draw[ForestGreen, very thick, smooth, domain=2:8, samples=100] 
   plot (\x, {1.8*exp(-(\x-5.5)*(\x-5.5)/0.4)});
-\node[ForestGreen,font=\sffamily\small,anchor=west] at (6.2,3.0) {Rician ($K=15$ dB)};
-\node[ForestGreen,font=\sffamily\footnotesize,anchor=west] at (6.2,2.7) {Strong LOS};
+\node[ForestGreen,font=\sffamily\small,anchor=west] at (6.0,3.3) {Rician ($K=15$ dB)};
+\node[ForestGreen,font=\sffamily\footnotesize,anchor=west] at (6.0,3.0) {Strong LOS};
 
 % Mean markers
 \draw[NavyBlue,dashed] (1.25,0) -- (1.25,0.3);
@@ -262,7 +262,7 @@ h(t) = \sqrt{\frac{K}{K+1}} + \sqrt{\frac{1}{K+1}} \cdot h_{\text{Rayleigh}}(t)
 \node[ForestGreen,below,font=\scriptsize] at (5.5,-0.1) {$\bar{r}$};
 
 % Annotations
-\node[font=\sffamily\footnotesize,align=center] at (4.5,0.5) {
+\node[font=\sffamily\footnotesize,align=center] at (4.5,0.6) {
   \textbf{Increasing K-factor} \\
   Less fading, more stable signal
 };
@@ -283,8 +283,8 @@ As $K$ increases, the channel transitions from severe fading (Rayleigh) to nearl
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
-  node distance=2.5cm,
+  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small, align=center},
+  node distance=2cm,
   font=\small
 ]
 \node (input) {\sffamily Baseband\\Signal\\$s(t)$};
@@ -300,11 +300,11 @@ As $K$ increases, the channel transitions from severe fading (Rayleigh) to nearl
 \draw[->,thick] (awgn) -- (output);
 
 % Parameters
-\node[block, below=1.5cm of fading, minimum width=3cm] (params) {Parameters:\\$f_d$, $K$-factor\\(Doppler, LOS)};
+\node[block, below=1.5cm of fading, minimum width=2.5cm] (params) {Parameters:\\$f_d$, $K$-factor\\(Doppler, LOS)};
 \draw[->,thick] (params) -- (fading);
 
 % Noise source
-\node[block, below=1.5cm of awgn, minimum width=2cm] (noise) {Noise\\Generator\\$n(t)$};
+\node[block, below=1.5cm of awgn, minimum width=1.8cm] (noise) {Noise\\Generator\\$n(t)$};
 \draw[->,thick] (noise) -- (awgn);
 
 \end{tikzpicture}
@@ -359,7 +359,7 @@ As $K$ increases, the channel transitions from severe fading (Rayleigh) to nearl
 
 % Amplitude scale labels
 \foreach \y in {0,0.5,1.0,1.5,2.0,2.5,3.0}
-  \node[left,font=\scriptsize] at (-0.1,\y/2*3) {\y};
+  \node[left,font=\scriptsize] at (-0.1,{\y*3/2}) {\y};
 
 % Title
 \node[font=\sffamily\small,above] at (5,3.7) {\textbf{Rayleigh Fading: Time-Varying Envelope}};
@@ -496,7 +496,7 @@ h_Q(t) = \frac{1}{\sqrt{M}} \sum_{m=1}^{M} \sin(2\pi f_d t \cos\theta_m + \phi_m
 
 Where: - \(M\) = Number of scatterers (typically 8-20) -
 \(\theta_m = \frac{2\pi m}{M}\) (equally spaced angles) - \(\phi_m\) =
-Random phase, uniform {[}0, 2\$\textbackslash pi\${]}
+Random phase, uniform $[0, 2\pi]$
 
 \textbf{Complex channel gain}:
 
@@ -616,8 +616,11 @@ K = \frac{A^2}{2\sigma^2}
 
 \textbf{In dB}: \(K_{\text{dB}} = 10\log_{10}(K)\)
 
-\textbf{Special cases}: - \(K = 0\) (K = -\$\textbackslash infty\$ dB):
-Pure Rayleigh (no LOS) - \(K \to \infty\): Pure LOS (AWGN-like)
+\textbf{Special cases}: 
+\begin{itemize}
+\item $K = 0$ ($K = -\infty$ dB): Pure Rayleigh (no LOS)
+\item $K \to \infty$: Pure LOS (AWGN-like)
+\end{itemize}
 
 
 \subsubsection{Implementation (LOS +
@@ -805,12 +808,9 @@ K-factor
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\textbf{EPA} & Extended Pedestrian A & 0.41 \$\textbackslash mu\$s & Low
-(3 km/h) & - \\
-\textbf{EVA} & Extended Vehicular A & 2.51 \$\textbackslash mu\$s &
-Medium (30 km/h) & - \\
-\textbf{ETU} & Extended Typical Urban & 5.0 \$\textbackslash mu\$s &
-High (120 km/h) & - \\
+\textbf{EPA} & Extended Pedestrian A & 0.41 $\mu$s & Low (3 km/h) & - \\
+\textbf{EVA} & Extended Vehicular A & 2.51 $\mu$s & Medium (30 km/h) & - \\
+\textbf{ETU} & Extended Typical Urban & 5.0 $\mu$s & High (120 km/h) & - \\
 \textbf{CDL-A} & Clustered Delay Line A & NLOS (varies) & Configurable &
 Rayleigh \\
 \textbf{CDL-B} & Clustered Delay Line B & NLOS & Configurable &
@@ -1263,7 +1263,8 @@ NASA Deep Space Network uses \textbf{nearly AWGN channels}:
 \section{Summary}
 
 \begin{center}
-\begin{tabular}{@{}p{3cm}p{4cm}p{3cm}p{3cm}@{}}
+\small
+\begin{tabular}{@{}p{2.5cm}p{3.5cm}p{2.3cm}p{2.8cm}@{}}
 \toprule
 \textbf{Model} & \textbf{Use Case} & \textbf{Complexity} & \textbf{Realism} \\
 \midrule

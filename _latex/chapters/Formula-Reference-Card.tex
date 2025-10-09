@@ -901,13 +901,14 @@ $E_b/N_0$ (dB) & BER & Meaning \\
 \label{sec:common-systems}
 
 \begin{center}
+\small
 \begin{tabular}{@{}llll@{}}
 \toprule
 System & Frequency & Modulation & Coding \\
 \midrule
-\textbf{WiFi 802.11g} & 2.4 GHz & OFDM (BPSK-64QAM) & Convolutional \\
-\textbf{LTE} & 700 MHz--2.6 GHz & OFDM (QPSK-256QAM) & Turbo \\
-\textbf{5G NR} & 600 MHz--40 GHz & OFDM (QPSK-256QAM) & LDPC, Polar \\
+\textbf{WiFi 802.11g} & 2.4 GHz & OFDM (BPSK--64QAM) & Convolutional \\
+\textbf{LTE} & 700 MHz--2.6 GHz & OFDM (QPSK--256QAM) & Turbo \\
+\textbf{5G NR} & 600 MHz--40 GHz & OFDM (QPSK--256QAM) & LDPC, Polar \\
 \textbf{GPS} & 1.575 GHz & BPSK & None (DSSS) \\
 \textbf{DVB-S2} & 10--12 GHz & 8PSK, 16/32APSK & LDPC + BCH \\
 \bottomrule
@@ -923,9 +924,9 @@ The following diagram illustrates the typical flow of a link budget calculation:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=3cm, minimum height=1cm, font=\sffamily\small, align=center},
+  block/.style={rectangle, draw, minimum width=2.8cm, minimum height=0.9cm, font=\sffamily\small, align=center},
   arrow/.style={->, thick},
-  node distance=1.8cm
+  node distance=1.6cm
 ]
 
 % Transmitter side
@@ -942,7 +943,7 @@ The following diagram illustrates the typical flow of a link budget calculation:
 \node[block, below of=rxgain, fill=green!10] (rxpower) {Received\\Power $P_r$};
 
 % Noise and SNR
-\node[block, right of=rxpower, node distance=4.5cm, fill=yellow!10] (noise) {Thermal\\Noise $N$};
+\node[block, right of=rxpower, node distance=4cm, fill=yellow!10] (noise) {Thermal\\Noise $N$};
 \node[block, below of=rxpower, fill=green!20] (snr) {SNR\\$P_r - N$};
 
 % Arrows
@@ -956,9 +957,9 @@ The following diagram illustrates the typical flow of a link budget calculation:
 \draw[arrow] (noise) -- (snr);
 
 % Labels
-\node[right of=tx, node distance=4.5cm, font=\scriptsize, text width=2.5cm] {Add gains\\(in dB)};
-\node[right of=fspl, node distance=4.5cm, font=\scriptsize, text width=2.5cm] {Subtract losses\\(in dB)};
-\node[right of=rxgain, node distance=4.5cm, font=\scriptsize, text width=2.5cm] {Add gain\\(in dB)};
+\node[right of=tx, node distance=4cm, font=\scriptsize, text width=2.2cm, align=left] {Add gains\\(in dB)};
+\node[right of=fspl, node distance=4cm, font=\scriptsize, text width=2.2cm, align=left] {Subtract\\losses\\(in dB)};
+\node[right of=rxgain, node distance=4cm, font=\scriptsize, text width=2.2cm, align=left] {Add gain\\(in dB)};
 
 \end{tikzpicture}
 \end{center}
@@ -966,49 +967,49 @@ The following diagram illustrates the typical flow of a link budget calculation:
 \subsection{Modulation Constellation Comparison}
 
 \begin{center}
-\begin{tikzpicture}[scale=0.8]
+\begin{tikzpicture}[scale=0.7]
 
 % BPSK
 \begin{scope}[shift={(0,0)}]
-\node[above,font=\sffamily\bfseries] at (0,2.2) {BPSK (1 bit/symbol)};
-\draw[->] (-1.8,0) -- (1.8,0) node[right,font=\scriptsize] {$I$};
-\draw[->] (0,-1.5) -- (0,1.5) node[above,font=\scriptsize] {$Q$};
-\draw[very thin,gray!20] (-1.5,-1.2) grid[step=0.3] (1.5,1.2);
-\fill[black] (-1.2,0) circle (2.5pt);
-\fill[black] (1.2,0) circle (2.5pt);
-\node[below=3pt,font=\tiny] at (-1.2,0) {1};
-\node[below=3pt,font=\tiny] at (1.2,0) {0};
+\node[above,font=\sffamily\bfseries\small] at (0,2.0) {BPSK (1 bit/symbol)};
+\draw[->] (-1.6,0) -- (1.6,0) node[right,font=\scriptsize] {$I$};
+\draw[->] (0,-1.3) -- (0,1.3) node[above,font=\scriptsize] {$Q$};
+\draw[very thin,gray!20] (-1.3,-1.0) grid[step=0.3] (1.3,1.0);
+\fill[black] (-1.0,0) circle (2.5pt);
+\fill[black] (1.0,0) circle (2.5pt);
+\node[below=3pt,font=\tiny] at (-1.0,0) {1};
+\node[below=3pt,font=\tiny] at (1.0,0) {0};
 \end{scope}
 
 % QPSK
-\begin{scope}[shift={(5,0)}]
-\node[above,font=\sffamily\bfseries] at (0,2.2) {QPSK (2 bits/symbol)};
-\draw[->] (-1.8,0) -- (1.8,0) node[right,font=\scriptsize] {$I$};
-\draw[->] (0,-1.5) -- (0,1.5) node[above,font=\scriptsize] {$Q$};
-\draw[very thin,gray!20] (-1.5,-1.2) grid[step=0.3] (1.5,1.2);
-\fill[black] (0.85,0.85) circle (2.5pt);
-\fill[black] (-0.85,0.85) circle (2.5pt);
-\fill[black] (-0.85,-0.85) circle (2.5pt);
-\fill[black] (0.85,-0.85) circle (2.5pt);
-\node[above right=1pt,font=\tiny] at (0.85,0.85) {00};
-\node[above left=1pt,font=\tiny] at (-0.85,0.85) {01};
-\node[below left=1pt,font=\tiny] at (-0.85,-0.85) {11};
-\node[below right=1pt,font=\tiny] at (0.85,-0.85) {10};
+\begin{scope}[shift={(4.5,0)}]
+\node[above,font=\sffamily\bfseries\small] at (0,2.0) {QPSK (2 bits/symbol)};
+\draw[->] (-1.6,0) -- (1.6,0) node[right,font=\scriptsize] {$I$};
+\draw[->] (0,-1.3) -- (0,1.3) node[above,font=\scriptsize] {$Q$};
+\draw[very thin,gray!20] (-1.3,-1.0) grid[step=0.3] (1.3,1.0);
+\fill[black] (0.75,0.75) circle (2.5pt);
+\fill[black] (-0.75,0.75) circle (2.5pt);
+\fill[black] (-0.75,-0.75) circle (2.5pt);
+\fill[black] (0.75,-0.75) circle (2.5pt);
+\node[above right=1pt,font=\tiny] at (0.75,0.75) {00};
+\node[above left=1pt,font=\tiny] at (-0.75,0.75) {01};
+\node[below left=1pt,font=\tiny] at (-0.75,-0.75) {11};
+\node[below right=1pt,font=\tiny] at (0.75,-0.75) {10};
 \end{scope}
 
 % 16-QAM
-\begin{scope}[shift={(10,0)}]
-\node[above,font=\sffamily\bfseries] at (0,2.2) {16-QAM (4 bits/symbol)};
-\draw[->] (-1.8,0) -- (1.8,0) node[right,font=\scriptsize] {$I$};
-\draw[->] (0,-1.5) -- (0,1.5) node[above,font=\scriptsize] {$Q$};
-\draw[very thin,gray!20] (-1.5,-1.2) grid[step=0.3] (1.5,1.2);
+\begin{scope}[shift={(9,0)}]
+\node[above,font=\sffamily\bfseries\small] at (0,2.0) {16-QAM (4 bits/symbol)};
+\draw[->] (-1.6,0) -- (1.6,0) node[right,font=\scriptsize] {$I$};
+\draw[->] (0,-1.3) -- (0,1.3) node[above,font=\scriptsize] {$Q$};
+\draw[very thin,gray!20] (-1.3,-1.0) grid[step=0.3] (1.3,1.0);
 % Grid of 16 points
-\foreach \x in {-1.05,-0.35,0.35,1.05} {
-  \foreach \y in {-1.05,-0.35,0.35,1.05} {
+\foreach \x in {-0.95,-0.32,0.32,0.95} {
+  \foreach \y in {-0.95,-0.32,0.32,0.95} {
     \fill[black] (\x,\y) circle (1.5pt);
   }
 }
-\node[below=10pt,font=\tiny,align=center] at (0,-1.5) {16 constellation\\points};
+\node[below=8pt,font=\tiny,align=center] at (0,-1.3) {16 constellation\\points};
 \end{scope}
 
 \end{tikzpicture}

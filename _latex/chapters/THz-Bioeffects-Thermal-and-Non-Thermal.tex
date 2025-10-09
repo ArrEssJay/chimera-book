@@ -93,7 +93,7 @@ Penetration depth:
 \end{equation}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.5]
+\begin{tikzpicture}[scale=1.3]
 % Axes
 \draw[->] (0,0) -- (5,0) node[right] {\sffamily\small Frequency (THz)};
 \draw[->] (0,0) -- (0,4) node[above] {\sffamily\small Penetration Depth (µm)};
@@ -111,14 +111,14 @@ Penetration depth:
 \draw[thick,blue] plot[domain=0.5:5,samples=100] (\x,{2/(\x*\x)});
 
 % Key frequency markers
-\fill[red] (0.5,{2/(0.5*0.5)}) circle (2pt) node[above right,font=\scriptsize] {0.5 THz: 800 µm};
-\fill[red] (1,2) circle (2pt) node[right,font=\scriptsize] {1 THz: 200 µm};
-\fill[red] (2,0.5) circle (2pt) node[above right,font=\scriptsize] {2 THz: 50 µm};
-\fill[red] (3,{2/9}) circle (2pt);
-\fill[red] (4,{2/16}) circle (2pt);
+\fill[red] (0.5,{2/(0.5*0.5)}) circle (1.5pt) node[above right,font=\tiny] {0.5 THz};
+\fill[red] (1,2) circle (1.5pt) node[right,font=\tiny] {1 THz: 200 µm};
+\fill[red] (2,0.5) circle (1.5pt) node[above right,font=\tiny] {2 THz};
+\fill[red] (3,{2/9}) circle (1.5pt);
+\fill[red] (4,{2/16}) circle (1.5pt);
 
 % Annotation
-\node[align=center,font=\sffamily\small] at (3.5,3.2) {Penetration depth\\$\delta = 1/\alpha(f)$};
+\node[align=center,font=\sffamily\footnotesize] at (3.5,3.2) {Penetration depth\\$\delta = 1/\alpha(f)$};
 \draw[->,thick] (3.5,2.8) -- (2,1);
 \end{tikzpicture}
 \end{center}
@@ -135,36 +135,41 @@ Penetration depth:
 The spatial temperature distribution follows:
 
 \begin{center}
-\begin{tikzpicture}[scale=1.5]
+\begin{tikzpicture}[scale=1.3]
 % Surface and depth axis
-\draw[->] (0,0) -- (6,0) node[right] {\sffamily\small Depth $z$ (µm)};
+\draw[->] (0,0) -- (5.5,0) node[right] {\sffamily\small Depth $z$ (µm)};
 \draw[->] (0,0) -- (0,4) node[above] {\sffamily\small Temperature};
 
 % Grid
-\draw[very thin,gray!30] (0,0) grid[step=0.5] (6,4);
+\draw[very thin,gray!30] (0,0) grid[step=0.5] (5.5,4);
 
 % Tick marks
-\foreach \x in {0,50,100,150,200,250,300}
+\foreach \x in {0,50,100,150,200,250}
   \draw ({\x/50},0) -- ({\x/50},-0.1) node[below,font=\scriptsize] {\x};
 \foreach \y in {0,1,2,3}
   \draw (0,{1.2*\y}) -- (-0.1,{1.2*\y}) node[left,font=\scriptsize] {$T_0+\y$°C};
 
 % Exponential decay curves for different times
-\draw[thick,blue] plot[domain=0:6,samples=50] (\x,{3.6*exp(-\x/1)}) node[right,font=\scriptsize] {$t=0$};
-\draw[thick,red] plot[domain=0:6,samples=50] (\x,{2.4*exp(-\x/1.5)}) node[right,font=\scriptsize] {$t=50$ ms};
-\draw[thick,green!50!black] plot[domain=0:6,samples=50] (\x,{1.2*exp(-\x/2)}) node[right,font=\scriptsize] {$t=100$ ms};
+\draw[thick,blue] plot[domain=0:5,samples=50] (\x,{3.6*exp(-\x/1)});
+\draw[thick,red] plot[domain=0:5,samples=50] (\x,{2.4*exp(-\x/1.5)});
+\draw[thick,green!50!black] plot[domain=0:5,samples=50] (\x,{1.2*exp(-\x/2)});
+
+% Legend positioned more compactly
+\node[font=\tiny,blue] at (5.2,3.4) {$t=0$};
+\node[font=\tiny,red] at (5.2,2.4) {$t=50$ ms};
+\node[font=\tiny,green!50!black] at (5.2,1.4) {$t=100$ ms};
 
 % Surface heating zone
 \fill[yellow!30,opacity=0.3] (0,0) rectangle (1,3.6);
-\node[font=\scriptsize,align=center] at (0.5,4.2) {Surface\\heating};
+\node[font=\tiny,align=center] at (0.5,3.9) {Surface\\heating};
 
 % Penetration depth marker
 \draw[thick,dashed] (1,0) -- (1,3.6);
 \node[below,font=\scriptsize] at (1,-0.3) {$\delta = 50$ µm};
 
 % Annotation
-\node[align=center,font=\sffamily\small] at (4,3.5) {Heat diffuses\\into tissue};
-\draw[->,thick] (4,3.2) -- (2,1.5);
+\node[align=center,font=\sffamily\footnotesize] at (3.5,3.5) {Heat diffuses\\into tissue};
+\draw[->,thick] (3.5,3.2) -- (2,1.5);
 \end{tikzpicture}
 \end{center}
 
@@ -198,22 +203,22 @@ For $L = 100$ µm:
 Temperature rise determines biological response:
 
 \begin{center}
-\begin{tikzpicture}[scale=1.3]
+\begin{tikzpicture}[scale=1.0]
 % Temperature scale
 \draw[thick,->] (0,0) -- (0,8) node[above] {\sffamily\small $\Delta T$ (°C)};
 \draw[thick] (-0.1,0) -- (0.1,0) node[right] {\scriptsize 0};
 
 % Zones with different effects
-\fill[green!20] (0,0) rectangle (6,1);
-\fill[yellow!30] (0,1) rectangle (6,2);
-\fill[orange!30] (0,2) rectangle (6,5);
-\fill[red!30] (0,5) rectangle (6,8);
+\fill[green!20] (0,0) rectangle (5.5,1);
+\fill[yellow!30] (0,1) rectangle (5.5,2);
+\fill[orange!30] (0,2) rectangle (5.5,5);
+\fill[red!30] (0,5) rectangle (5.5,8);
 
 % Zone labels
-\node[right,align=left,font=\small] at (0.2,0.5) {\textbf{Safe:} No effects\\Thermal fluctuations};
-\node[right,align=left,font=\small] at (0.2,1.5) {\textbf{Mild:} Altered metabolism\\Enhanced blood flow};
-\node[right,align=left,font=\small] at (0.2,3.5) {\textbf{Moderate:} Protein denaturation\\Enzyme inactivation\\Cell membrane disruption};
-\node[right,align=left,font=\small] at (0.2,6.5) {\textbf{Severe:} Tissue ablation\\Burns\\Apoptosis};
+\node[right,align=left,font=\footnotesize] at (0.2,0.5) {\textbf{Safe:} No effects\\Thermal fluctuations};
+\node[right,align=left,font=\footnotesize] at (0.2,1.5) {\textbf{Mild:} Altered metabolism\\Enhanced blood flow};
+\node[right,align=left,font=\footnotesize] at (0.2,3.5) {\textbf{Moderate:} Protein denaturation\\Enzyme inactivation\\Cell membrane disruption};
+\node[right,align=left,font=\footnotesize] at (0.2,6.5) {\textbf{Severe:} Tissue ablation\\Burns\\Apoptosis};
 
 % Temperature markers
 \draw[thick] (-0.2,1) -- (0,1) node[left] {\scriptsize 1};
@@ -222,8 +227,8 @@ Temperature rise determines biological response:
 \draw[thick] (-0.2,8) -- (0,8) node[left] {\scriptsize 20+};
 
 % ICNIRP limit
-\draw[blue,very thick,dashed] (0,1) -- (6,1);
-\node[right,blue,font=\small\bfseries] at (6.2,1) {ICNIRP Limit};
+\draw[blue,very thick,dashed] (0,1) -- (5.5,1);
+\node[right,blue,font=\footnotesize\bfseries] at (5.6,1) {ICNIRP Limit};
 \end{tikzpicture}
 \end{center}
 
@@ -243,26 +248,28 @@ Temperature rise determines biological response:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=3cm, minimum height=1.2cm, font=\sffamily\small, align=center},
-  node distance=2.5cm,
-  font=\small
+  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\footnotesize, align=center},
+  node distance=2cm,
+  font=\footnotesize,
+  scale=0.95,
+  every node/.style={transform shape}
 ]
 % Top: THz Exposure
 \node[block,fill=yellow!20] (thz) {THz Radiation\\$I, f$};
 
 % Two pathways
-\node[block,fill=red!20,below left=1.5cm and 1.5cm of thz] (thermal) {Thermal\\Mechanism};
-\node[block,fill=blue!20,below right=1.5cm and 1.5cm of thz] (nonthermal) {Non-Thermal?\\Mechanism};
+\node[block,fill=red!20,below left=1.3cm and 1.2cm of thz] (thermal) {Thermal\\Mechanism};
+\node[block,fill=blue!20,below right=1.3cm and 1.2cm of thz] (nonthermal) {Non-Thermal?\\Mechanism};
 
 % Thermal pathway details
-\node[block,below=1.2cm of thermal,font=\scriptsize] (heat) {Absorption $\rightarrow$\\Heat Generation\\$Q = \alpha I$};
-\node[block,below=1.2cm of heat,font=\scriptsize] (temprise) {Temperature\\Rise\\$\Delta T$};
-\node[block,below=1.2cm of temprise,font=\scriptsize,fill=green!20] (damage) {Cell Damage\\if $\Delta T > 1°$C};
+\node[block,below=1cm of thermal,font=\tiny] (heat) {Absorption $\rightarrow$\\Heat Generation\\$Q = \alpha I$};
+\node[block,below=1cm of heat,font=\tiny] (temprise) {Temperature\\Rise $\Delta T$};
+\node[block,below=1cm of temprise,font=\tiny,fill=green!20] (damage) {Cell Damage\\if $\Delta T > 1°$C};
 
 % Non-thermal pathway details
-\node[block,below=1.2cm of nonthermal,font=\scriptsize] (resonance) {Resonant\\Excitation?\\Membrane?};
-\node[block,below=1.2cm of resonance,font=\scriptsize] (signal) {Signaling\\Cascade?};
-\node[block,below=1.2cm of signal,font=\scriptsize,fill=orange!20] (effect) {Biological\\Effect?};
+\node[block,below=1cm of nonthermal,font=\tiny] (resonance) {Resonant\\Excitation?};
+\node[block,below=1cm of resonance,font=\tiny] (signal) {Signaling\\Cascade?};
+\node[block,below=1cm of signal,font=\tiny,fill=orange!20] (effect) {Biological\\Effect?};
 
 % Arrows
 \draw[->,thick] (thz) -- (thermal);
@@ -275,13 +282,13 @@ Temperature rise determines biological response:
 \draw[->,thick,dashed] (signal) -- (effect);
 
 % Labels
-\node[font=\tiny\bfseries,red] at (-2.5,-4) {ESTABLISHED};
-\node[font=\tiny\bfseries,blue] at (2.5,-4) {CONTROVERSIAL};
+\node[font=\tiny\bfseries,red] at (-2.2,-3.8) {ESTABLISHED};
+\node[font=\tiny\bfseries,blue] at (2.2,-3.8) {CONTROVERSIAL};
 
 % Question marks
-\node[font=\Large,blue] at (3,-2.5) {?};
-\node[font=\Large,blue] at (3,-4.5) {?};
-\node[font=\Large,blue] at (3,-6.5) {?};
+\node[font=\large,blue] at (2.6,-2.2) {?};
+\node[font=\large,blue] at (2.6,-3.8) {?};
+\node[font=\large,blue] at (2.6,-5.4) {?};
 
 \end{tikzpicture}
 \end{center}
@@ -448,48 +455,49 @@ where:
 
 \textbf{Power density limits}:
 \begin{itemize}
-\item \textbf{Occupational exposure}: $S_{\text{occ}} = 10$ mW/cm$^2$ (averaged over $68/f^{1.05}$ minutes, $f$ in THz)
+\item \textbf{Occupational exposure}: $S_{\text{occ}} = 10$ mW/cm$^2$\\
+(averaged over $68/f^{1.05}$ minutes, where $f$ is in THz)
 \item \textbf{General public exposure}: $S_{\text{pub}} = 2$ mW/cm$^2$ (same averaging)
 \end{itemize}
 
 \textbf{Rationale}: Keep $\Delta T < 1°$C.
 
 \begin{center}
-\begin{tikzpicture}[scale=1.5]
+\begin{tikzpicture}[scale=1.05]
 % Axes
-\draw[->] (0,0) -- (6,0) node[right] {\sffamily\small Power Density (mW/cm$^2$)};
+\draw[->] (0,0) -- (5.5,0) node[right] {\sffamily\small Power Density (mW/cm$^2$)};
 \draw[->] (0,0) -- (0,4) node[above] {\sffamily\small Exposure Category};
 
 % Bars for different exposure categories
 % Safe zone (0-2)
-\fill[green!40] (0,0.5) rectangle (2,1.2);
-\node[right,font=\small] at (2.1,0.85) {ICNIRP Public Limit: 2 mW/cm$^2$};
+\fill[green!40] (0,0.5) rectangle (1.8,1.2);
+\node[right,font=\small] at (1.9,0.85) {ICNIRP Public Limit: 2 mW/cm$^2$};
 
 % Occupational (0-10)
-\fill[yellow!40] (0,1.7) rectangle (10/1.67,2.4);
-\node[right,font=\small] at (6.1,2.05) {ICNIRP Occupational: 10 mW/cm$^2$};
+\fill[yellow!40] (0,1.7) rectangle (10/2,2.4);
+\node[right,font=\small] at (5.1,2.05) {ICNIRP Occupational: 10 mW/cm$^2$};
 
 % Typical applications
-\fill[blue!30] (0,2.9) rectangle (0.5/1.67,3.6);
-\node[right,font=\small] at (0.5,3.25) {Security Scanner: 0.5 mW/cm$^2$};
+\fill[blue!30] (0,2.9) rectangle (0.5/2,3.6);
+\node[right,font=\small] at (0.4,3.25) {Security Scanner: 0.5 mW/cm$^2$};
 
-\fill[blue!30] (0,3.6) rectangle (1/1.67,4.3);
-\node[right,font=\small] at (0.8,3.95) {Medical Imaging: 1 mW/cm$^2$};
+\fill[blue!30] (0,3.6) rectangle (1/2,4.3);
+\node[right,font=\small] at (0.7,3.95) {Medical Imaging: 1 mW/cm$^2$};
 
 % Grid lines
-\draw[very thin,gray!30] (0,0) grid[xstep=1,ystep=0.5] (6,4.5);
+\draw[very thin,gray!30] (0,0) grid[xstep=0.9,ystep=0.5] (5.5,4.5);
 
 % X-axis ticks
 \foreach \x in {0,2,4,6,8,10}
-  \draw ({\x/1.67},0) -- ({\x/1.67},-0.1) node[below,font=\scriptsize] {\x};
+  \draw ({\x/2},0) -- ({\x/2},-0.1) node[below,font=\scriptsize] {\x};
 
 % Danger zone marker
-\draw[red,very thick,dashed] (10/1.67,0) -- (10/1.67,4.5);
-\node[red,font=\small\bfseries,align=center] at (5.2,4.2) {Exceeds\\Occupational\\Limit};
+\draw[red,very thick,dashed] (10/2,0) -- (10/2,4.5);
+\node[red,font=\small\bfseries,align=center] at (4.5,4.2) {Exceeds\\Occupational\\Limit};
 
 % Safe margin annotation
-\draw[<->,thick,green!50!black] (2/1.67,0.3) -- (10/1.67,0.3);
-\node[below,font=\scriptsize,green!50!black] at (3.6,0.3) {5× safety margin};
+\draw[<->,thick,green!50!black] (1.8/2,0.3) -- (10/2,0.3);
+\node[below,font=\scriptsize,green!50!black] at (3.0,0.3) {5× safety margin};
 
 \end{tikzpicture}
 \end{center}
