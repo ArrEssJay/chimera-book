@@ -178,19 +178,21 @@ OFDM subcarriers overlap in frequency but remain orthogonal:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small, align=center},
-  node distance=1.8cm,
+  scale=0.7,
+  transform shape,
+  block/.style={rectangle, draw, minimum width=1.8cm, minimum height=0.9cm, font=\sffamily\small, align=center},
+  node distance=1.6cm,
   font=\small
 ]
 \node (input) {\sffamily Binary\\Data};
-\node[block, right of=input, node distance=2.5cm] (s2p) {Serial-to-\\Parallel};
-\node[block, right of=s2p, node distance=2.5cm] (map) {QAM/PSK\\Mapper};
-\node[block, right of=map, node distance=2.5cm] (pilot) {Pilot\\Insertion};
-\node[block, right of=pilot, node distance=2.5cm] (ifft) {$N$-Point\\IFFT};
-\node[block, right of=ifft, node distance=2.5cm] (cp) {Add\\Cyclic Prefix};
-\node[block, right of=cp, node distance=2.5cm] (p2s) {Parallel-to-\\Serial};
-\node[block, right of=p2s, node distance=2.5cm] (dac) {DAC \&\\RF Up};
-\node[right of=dac, node distance=2.5cm] (ant) {\sffamily TX\\Antenna};
+\node[block, right of=input, node distance=2cm] (s2p) {Serial-to-\\Parallel};
+\node[block, right of=s2p, node distance=2cm] (map) {QAM/PSK\\Mapper};
+\node[block, right of=map, node distance=2cm] (pilot) {Pilot\\Insertion};
+\node[block, right of=pilot, node distance=2cm] (ifft) {$N$-Point\\IFFT};
+\node[block, right of=ifft, node distance=2cm] (cp) {Add\\Cyclic Prefix};
+\node[block, right of=cp, node distance=2cm] (p2s) {Parallel-to-\\Serial};
+\node[block, right of=p2s, node distance=2cm] (dac) {DAC \&\\RF Up};
+\node[right of=dac, node distance=2cm] (ant) {\sffamily TX\\Antenna};
 
 % Arrows
 \draw[->,thick] (input) -- (s2p);
@@ -219,20 +221,22 @@ OFDM subcarriers overlap in frequency but remain orthogonal:
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small, align=center},
-  node distance=1.8cm,
+  scale=0.7,
+  transform shape,
+  block/.style={rectangle, draw, minimum width=1.8cm, minimum height=0.9cm, font=\sffamily\small, align=center},
+  node distance=1.6cm,
   font=\small
 ]
 \node (ant) {\sffamily RX\\Antenna};
-\node[block, right of=ant, node distance=2.5cm] (adc) {RF Down\\\ \& ADC};
-\node[block, right of=adc, node distance=2.5cm] (sync) {Time/Freq\\Sync};
-\node[block, right of=sync, node distance=2.5cm] (s2p) {Serial-to-\\Parallel};
-\node[block, right of=s2p, node distance=2.5cm] (cpr) {Remove\\CP};
-\node[block, right of=cpr, node distance=2.5cm] (fft) {$N$-Point\\FFT};
-\node[block, right of=fft, node distance=2.5cm] (eq) {Channel\\Eq};
-\node[block, right of=eq, node distance=2.5cm] (demap) {QAM/PSK\\Demapper};
-\node[block, right of=demap, node distance=2.5cm] (p2s) {Parallel-to-\\Serial};
-\node[right of=p2s, node distance=2.5cm] (output) {\sffamily Binary\\Data};
+\node[block, right of=ant, node distance=2cm] (adc) {RF Down\\\ \& ADC};
+\node[block, right of=adc, node distance=2cm] (sync) {Time/Freq\\Sync};
+\node[block, right of=sync, node distance=2cm] (s2p) {Serial-to-\\Parallel};
+\node[block, right of=s2p, node distance=2cm] (cpr) {Remove\\CP};
+\node[block, right of=cpr, node distance=2cm] (fft) {$N$-Point\\FFT};
+\node[block, right of=fft, node distance=2cm] (eq) {Channel\\Eq};
+\node[block, right of=eq, node distance=2cm] (demap) {QAM/PSK\\Demapper};
+\node[block, right of=demap, node distance=2cm] (p2s) {Parallel-to-\\Serial};
+\node[right of=p2s, node distance=2cm] (output) {\sffamily Binary\\Data};
 
 % Arrows
 \draw[->,thick] (ant) -- (adc);
@@ -565,27 +569,27 @@ where:
 
 \textbf{1. Clipping \& Filtering}:
 
-\begin{verbatim}
-Clip peaks at threshold  filter out-of-band distortion  slight BER degradation
-\end{verbatim}
+\begin{itemize}
+\item Clip peaks at threshold $\rightarrow$ filter out-of-band distortion $\rightarrow$ slight BER degradation
+\end{itemize}
 
 \textbf{2. Tone Reservation}:
 
-\begin{verbatim}
-Reserve some subcarriers to generate "anti-peaks" that cancel large peaks.
-\end{verbatim}
+\begin{itemize}
+\item Reserve some subcarriers to generate ``anti-peaks'' that cancel large peaks
+\end{itemize}
 
 \textbf{3. Selective Mapping (SLM)}:
 
-\begin{verbatim}
-Generate multiple OFDM symbols with different phase rotations  choose one with lowest PAPR.
-\end{verbatim}
+\begin{itemize}
+\item Generate multiple OFDM symbols with different phase rotations $\rightarrow$ choose one with lowest PAPR
+\end{itemize}
 
 \textbf{4. Partial Transmit Sequence (PTS)}:
 
-\begin{verbatim}
-Divide subcarriers into blocks  optimize phase per block to minimize PAPR.
-\end{verbatim}
+\begin{itemize}
+\item Divide subcarriers into blocks $\rightarrow$ optimize phase per block to minimize PAPR
+\end{itemize}
 
 \textbf{Tradeoff}: PAPR reduction adds complexity, may reduce spectral
 efficiency or increase BER.
@@ -717,23 +721,27 @@ Analysis}{ Spectral Efficiency Analysis}}\label{spectral-efficiency-analysis}
 
 \subsubsection{Calculation}\label{calculation}
 
-\begin{verbatim}
-Spectral Efficiency (SE) = R / BW  bits/s/Hz
+Spectral Efficiency (SE) = $R / BW$ [bits/s/Hz]
 
 where:
-R = N_data · log(M) · (1 - CP_overhead) / T_symbol
+\begin{equation*}
+R = N_{\mathrm{data}} \cdot \log_2(M) \cdot (1 - \mathrm{CP\ overhead}) / T_{\mathrm{symbol}}
+\end{equation*}
 
-Example (LTE 20 MHz):
-- N_data = 1200 subcarriers (100 RBs × 12)
-- M = 64 (64-QAM  6 bits/symbol)
-- CP overhead = 7%
-- T_symbol = 66.67 s
+\textbf{Example (LTE 20 MHz):}
+\begin{itemize}
+\item $N_{\mathrm{data}} = 1200$ subcarriers (100 RBs $\times$ 12)
+\item $M = 64$ (64-QAM $\rightarrow$ 6 bits/symbol)
+\item CP overhead = 7\%
+\item $T_{\mathrm{symbol}} = 66.67\ \mu$s
+\end{itemize}
 
-SE = 1200 · 6 · 0.93 / (66.67×10 · 20×10)
-   = 6696 / 1.33 = 5.0 bits/s/Hz
+\begin{align*}
+\mathrm{SE} &= 1200 \cdot 6 \cdot 0.93 / (66.67 \times 10^{-6} \cdot 20 \times 10^6) \\
+&= 6696 / 1.33 = 5.0\ \text{bits/s/Hz}
+\end{align*}
 
-(Theoretical peak with MIMO: 30 bits/s/Hz for 4×4 spatial streams)
-\end{verbatim}
+(Theoretical peak with MIMO: 30 bits/s/Hz for $4 \times 4$ spatial streams)
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
