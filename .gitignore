@@ -54,3 +54,4 @@ _latex/test_*.idx
 _latex/test_*.log
 _latex/test_*.aux
 _latex/test_*.out
+_latex/*.png
