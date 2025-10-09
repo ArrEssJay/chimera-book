@@ -85,23 +85,23 @@ AMC operates by maintaining a lookup table mapping SNR to MCS index:
 ]
 % AMC ladder showing modulation schemes
 \node[level, fill=green!20] (mcs5) at (0,4) {256-QAM, Rate-5/6 $\rightarrow$ 7.4 bits/s/Hz};
-\node[right=0.3cm of mcs5, font=\scriptsize] {SNR $>$ 30 dB};
+\node[right=0.5cm of mcs5, font=\scriptsize] {SNR $>$ 30 dB};
 
 \node[level, fill=green!10] (mcs4) at (0,3) {64-QAM, Rate-3/4 $\rightarrow$ 4.5 bits/s/Hz};
-\node[right=0.3cm of mcs4, font=\scriptsize] {SNR = 20--30 dB};
+\node[right=0.5cm of mcs4, font=\scriptsize] {SNR = 20--30 dB};
 
 \node[level, fill=yellow!20] (mcs3) at (0,2) {16-QAM, Rate-1/2 $\rightarrow$ 2.0 bits/s/Hz};
-\node[right=0.3cm of mcs3, font=\scriptsize] {SNR = 12--20 dB};
+\node[right=0.5cm of mcs3, font=\scriptsize] {SNR = 12--20 dB};
 
 \node[level, fill=orange!20] (mcs2) at (0,1) {QPSK, Rate-1/2 $\rightarrow$ 1.0 bits/s/Hz};
-\node[right=0.3cm of mcs2, font=\scriptsize] {SNR = 5--12 dB};
+\node[right=0.5cm of mcs2, font=\scriptsize] {SNR = 5--12 dB};
 
 \node[level, fill=red!20] (mcs1) at (0,0) {BPSK, Rate-1/3 $\rightarrow$ 0.33 bits/s/Hz};
-\node[right=0.3cm of mcs1, font=\scriptsize] {SNR $<$ 5 dB};
+\node[right=0.5cm of mcs1, font=\scriptsize] {SNR $<$ 5 dB};
 
-% Arrows indicating adaptation
-\draw[->,thick,dashed] (mcs1.east) to[out=0,in=0] node[right,font=\scriptsize,align=left] {Channel\\improves} (mcs5.east);
-\draw[->,thick,dashed] (mcs5.west) to[out=180,in=180] node[left,font=\scriptsize,align=right] {Channel\\degrades} (mcs1.west);
+% Arrows indicating adaptation - positioned further out to avoid overlap
+\draw[->,thick,dashed] ([xshift=0.3cm]mcs1.east) to[out=15,in=-15] node[right,xshift=0.2cm,font=\scriptsize,align=left] {Channel\\improves} ([xshift=0.3cm]mcs5.east);
+\draw[->,thick,dashed] ([xshift=-0.3cm]mcs5.west) to[out=195,in=165] node[left,xshift=-0.2cm,font=\scriptsize,align=right] {Channel\\degrades} ([xshift=-0.3cm]mcs1.west);
 
 \node[above=0.3cm of mcs5, font=\sffamily\bfseries] {AMC Adaptation Ladder};
 \end{tikzpicture}
@@ -156,12 +156,12 @@ AMC requires a closed-loop feedback system:
 \node[block, right of=modulator, node distance=3cm] (channel) {Fading\\Channel};
 
 % Receiver side
-\node[block, below of=channel, node distance=2.5cm] (demod) {Demodulator\\+ Decoder};
+\node[block, below of=channel, node distance=3cm] (demod) {Demodulator\\+ Decoder};
 \node[block, left of=demod, node distance=3cm] (cqi) {CQI\\Estimator};
 \node[block, left of=cqi, node distance=3cm] (scheduler) {MCS\\Selector};
 
 % MCS table
-\node[block, below of=modulator, node distance=2.5cm, minimum width=2cm] (mcs) {MCS\\Table};
+\node[block, below of=modulator, node distance=3cm, minimum width=2cm] (mcs) {MCS\\Table};
 
 % Forward path
 \draw[->,thick] (encoder) -- node[above,font=\scriptsize] {bits} (modulator);
@@ -171,15 +171,15 @@ AMC requires a closed-loop feedback system:
 % Feedback path
 \draw[->,thick] (demod) -- (cqi);
 \draw[->,thick] (cqi) -- node[above,font=\scriptsize] {CQI} (scheduler);
-\draw[->,thick,dashed] (scheduler) |- node[left,font=\scriptsize,pos=0.3] {MCS cmd} (mcs);
+\draw[->,thick,dashed] (scheduler) |- node[left,font=\scriptsize,pos=0.25] {MCS cmd} (mcs);
 \draw[->,thick] (mcs) -- node[right,font=\scriptsize] {$M$, $r$} (modulator);
 
-% Channel estimation
-\node[below of=channel, node distance=1.2cm, font=\scriptsize, align=center] (pilot) {Pilot\\symbols};
+% Channel estimation - positioned with more space
+\node[below of=channel, node distance=1.6cm, font=\scriptsize, align=center] (pilot) {Pilot\\symbols};
 \draw[->,dashed] (channel) -- (pilot);
-\draw[->,dashed] (pilot) -| (cqi);
+\draw[->,dashed] (pilot) -| ([yshift=0.2cm]cqi.north);
 
-\node[above=0.2cm of channel, font=\sffamily\bfseries] {AMC Feedback Loop};
+\node[above=0.3cm of channel, font=\sffamily\bfseries] {AMC Feedback Loop};
 \end{tikzpicture}
 \end{center}
 
@@ -254,350 +254,360 @@ Simple averaging $\bar{\gamma} = \frac{1}{N}\sum \gamma_k$ is inaccurate for cod
 
 \textbf{CQI-to-MCS mapping} (LTE example):
 
-\begin{verbatim}
-CQI = f(SINR, interference, fading statistics)
+\textbf{CQI mapping function:}
+\begin{equation*}
+\text{CQI} = f(\text{SINR}, \text{interference}, \text{fading statistics})
+\end{equation*}
 
-Mapping:
-CQI  (Modulation, Code Rate)  Spectral Efficiency
+\textbf{Example LTE CQI values:}
+\begin{itemize}
+\item CQI 1: QPSK, Rate-1/8 $\rightarrow$ 0.15 bits/s/Hz (SINR $<$ 0 dB)
+\item CQI 5: QPSK, Rate-1/2 $\rightarrow$ 1.0 bits/s/Hz (SINR $\approx$ 5 dB)
+\item CQI 10: 64-QAM, Rate-3/4 $\rightarrow$ 4.5 bits/s/Hz (SINR $\approx$ 20 dB)
+\item CQI 15: 256-QAM, Rate-7/8 $\rightarrow$ 7.0 bits/s/Hz (SINR $\approx$ 30 dB)
+\end{itemize}
 
-Example (LTE):
-CQI 1:  QPSK, Rate-1/8   0.15 bits/s/Hz (SINR < 0 dB)
-CQI 5:  QPSK, Rate-1/2   1.0 bits/s/Hz (SINR  5 dB)
-CQI 10: 64-QAM, Rate-3/4  4.5 bits/s/Hz (SINR  20 dB)
-CQI 15: 256-QAM, Rate-7/8  7.0 bits/s/Hz (SINR  30 dB)
+\textbf{Target:} $<$10\% BLER (Block Error Rate) after first transmission
 
-Target: <10% BLER (Block Error Rate) after first transmission
-\end{verbatim}
+\textbf{CQI calculation:}
 
-\textbf{CQI calculation}:
-
-\begin{verbatim}
-Instantaneous SINR per subcarrier:
-SINR = |H|² · P / (N + I)
-
+\textbf{Instantaneous SINR per subcarrier:}
+\begin{equation*}
+\text{SINR}_k = \frac{|H_k|^2 \cdot P}{N + I}
+\end{equation*}
 where:
-- H = channel gain on subcarrier k
-- P = transmit power
-- N = noise power
-- I = interference power
+\begin{itemize}
+\item $H_k$ = channel gain on subcarrier $k$
+\item $P$ = transmit power
+\item $N$ = noise power
+\item $I$ = interference power
+\end{itemize}
 
-Effective SINR (over all subcarriers):
-SINR_eff = f(SINR, SINR, ..., SINR_N)
+\textbf{Effective SINR computation methods:}
+\begin{enumerate}
+\item \textbf{Mean SINR:} $\text{SINR}_{\text{eff}} = \text{mean}(\text{SINR}_k)$
+\item \textbf{EESM (Exponential Effective SINR Mapping):} 
+\begin{equation*}
+\text{SINR}_{\text{eff}} = -\beta \ln\left(\text{mean}\left(e^{-\text{SINR}_k/\beta}\right)\right)
+\end{equation*}
+\item \textbf{MIESM (Mutual Information ESM):} SINR$_{\text{eff}}$ based on mutual information
+\end{enumerate}
 
-Methods:
-1. Mean SINR: SINR_eff = mean(SINR)
-2. EESM (Exponential Effective SINR Mapping):
-   SINR_eff = -·ln(mean(exp(-SINR/)))
-3. MIESM (Mutual Information ESM):
-   SINR_eff based on mutual information
-
-CQI = Quantize(SINR_eff)
-\end{verbatim}
+Finally: $\text{CQI} = \text{Quantize}(\text{SINR}_{\text{eff}})$
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Modulation and Coding Schemes
-(MCS)}\label{modulation-and-coding-schemes-mcs}
+\subsubsection{Modulation and Coding Schemes (MCS)}\label{modulation-and-coding-schemes-mcs}
 
 \textbf{MCS Table (LTE example)}:
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1358}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1481}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1358}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2469}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-MCS Index
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Modulation
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Code Rate
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Spectral Eff. (bits/s/Hz)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Required SINR (dB)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
+\begin{center}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{MCS Index} & \textbf{Modulation} & \textbf{Code Rate} & \textbf{Spectral Eff.} & \textbf{Required SINR} \\
+ & & & \textbf{(bits/s/Hz)} & \textbf{(dB)} \\
+\midrule
 0 & QPSK & 0.076 & 0.15 & -6 \\
 5 & QPSK & 0.439 & 0.88 & 2 \\
 10 & 16-QAM & 0.478 & 1.91 & 10 \\
 15 & 64-QAM & 0.553 & 3.32 & 18 \\
 20 & 64-QAM & 0.750 & 4.50 & 24 \\
 28 & 256-QAM & 0.926 & 7.41 & 32 \\
-\end{longtable}
-}
+\bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Selection algorithm}:
+\textbf{MCS selection algorithm:}
 
-\begin{verbatim}
-Given CQI (estimated SINR):
-1. Find highest MCS where SINR  Required_SINR
-2. Verify: Predicted_BLER < 10%
-3. Transmit with selected MCS
+\textbf{Initial selection:}
+\begin{enumerate}
+\item Find highest MCS where SINR $\geq$ Required\_SINR
+\item Verify: Predicted\_BLER $<$ 10\%
+\item Transmit with selected MCS
+\end{enumerate}
 
-If BLER > 10% (ACK/NACK feedback):
- Fall back to lower MCS (more robust)
-
-If BLER < 1% (excellent channel):
- Attempt higher MCS (increase throughput)
-\end{verbatim}
+\textbf{Adaptation based on feedback:}
+\begin{itemize}
+\item If BLER $>$ 10\% (ACK/NACK feedback): Fall back to lower MCS (more robust)
+\item If BLER $<$ 1\% (excellent channel): Attempt higher MCS (increase throughput)
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ Hybrid ARQ
-(HARQ)}{ Hybrid ARQ (HARQ)}}\label{hybrid-arq-harq}
+\subsection{Hybrid ARQ (HARQ)}\label{hybrid-arq-harq}
 
 \textbf{Automatic Repeat Request} with \textbf{Forward Error
 Correction}-\/-\/-retransmissions carry additional redundancy.
 
 \subsubsection{HARQ Types}\label{harq-types}
 
-\textbf{Type I - Chase Combining}:
+\textbf{Type I - Chase Combining:}
+\begin{itemize}
+\item \textbf{First transmission:} Original codeword
+\item \textbf{Retransmissions:} Same codeword (identical copy)
+\item \textbf{Receiver:} Combines multiple copies via soft combining
+\item Effective SNR increases with each retransmission
+\end{itemize}
 
-\begin{verbatim}
-First transmission: Original codeword
-Retransmission(s): Same codeword (identical)
+\textbf{Example:}
+\begin{itemize}
+\item TX 1: SNR = 5 dB $\rightarrow$ NACK (failed)
+\item TX 2: SNR = 5 dB $\rightarrow$ Combined SNR = 8 dB $\rightarrow$ ACK ✓
+\end{itemize}
 
-Receiver: Combine multiple copies (soft combining)
- Effective SNR increases with each retransmission
+\textbf{Advantage:} Simple implementation\\
+\textbf{Disadvantage:} No incremental redundancy
 
-Example:
-- TX 1: SNR = 5 dB  NACK (failed)
-- TX 2: SNR = 5 dB  Combined SNR = 8 dB  ACK 
+\textbf{Type II/III - Incremental Redundancy (IR):}
+\begin{itemize}
+\item \textbf{First transmission:} High code rate (less redundancy)
+\item \textbf{Retransmission 1:} Additional parity bits (lower effective rate)
+\item \textbf{Retransmission 2:} Even more parity (lowest rate)
+\end{itemize}
 
-Advantage: Simple
-Disadvantage: No incremental redundancy
-\end{verbatim}
+\textbf{Example (Rate-compatible punctured code):}
+\begin{itemize}
+\item TX 1: Rate-3/4 (fast, fragile) $\rightarrow$ NACK
+\item TX 2: Rate-2/3 (add parity) $\rightarrow$ Combined rate-1/2 $\rightarrow$ NACK
+\item TX 3: Rate-1/2 (add more parity) $\rightarrow$ Combined rate-1/3 $\rightarrow$ ACK ✓
+\end{itemize}
 
-\textbf{Type II/III - Incremental Redundancy (IR)}:
-
-\begin{verbatim}
-First transmission: High code rate (less redundancy)
-Retransmission 1: Additional parity bits (lower effective rate)
-Retransmission 2: Even more parity (lowest rate)
-
-Example (Rate-compatible punctured code):
-- TX 1: Rate-3/4 (fast, fragile)  NACK
-- TX 2: Rate-2/3 (add parity)  Combined rate-1/2  NACK
-- TX 3: Rate-1/2 (add more parity)  Combined rate-1/3  ACK 
-
-Advantage: Adaptive coding without re-encoding
-Disadvantage: More complex receiver (soft buffer management)
-\end{verbatim}
+\textbf{Advantage:} Adaptive coding without re-encoding\\
+\textbf{Disadvantage:} More complex receiver (soft buffer management)
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsubsection{HARQ in LTE/5G}\label{harq-in-lte5g}
 
-\textbf{LTE HARQ process}:
+\textbf{LTE HARQ process:}
+\begin{itemize}
+\item 8 parallel HARQ processes (downlink), 8 (uplink)
+\item RTT (Round-Trip Time): 8 ms
+\item Max retransmissions: 4 (configurable)
+\end{itemize}
 
-\begin{verbatim}
-8 parallel HARQ processes (downlink), 8 (uplink)
-RTT (Round-Trip Time): 8 ms
-Max retransmissions: 4 (configurable)
+\textbf{Timeline:}
+\begin{itemize}
+\item $t = 0$ ms: TX initial transmission (Process 0)
+\item $t = 4$ ms: RX decodes, sends ACK/NACK
+\item $t = 8$ ms: If NACK, retransmit (Process 0); Meanwhile, Processes 1--7 active (pipelined)
+\end{itemize}
 
-Timeline:
-t = 0 ms:    TX initial transmission (Process 0)
-t = 4 ms:    RX decodes, sends ACK/NACK
-t = 8 ms:    If NACK, retransmit (Process 0)
-             Meanwhile, Process 1-7 active (pipelined)
+\textbf{Result:} 8 simultaneous processes $\rightarrow$ continuous transmission
 
-Result: 8 simultaneous processes  continuous transmission
-\end{verbatim}
-
-\textbf{5G NR HARQ}:
-
-\begin{verbatim}
-16+ parallel HARQ processes (flexible)
-RTT: 2-8 ms (depends on numerology)
-Adaptive retransmission:
-- Same MCS (Chase combining)
-- Different MCS (adapt to channel change)
-- Different RV (Redundancy Version) for IR
-\end{verbatim}
+\textbf{5G NR HARQ:}
+\begin{itemize}
+\item 16+ parallel HARQ processes (flexible)
+\item RTT: 2--8 ms (depends on numerology)
+\item \textbf{Adaptive retransmission:}
+  \begin{itemize}
+  \item Same MCS (Chase combining)
+  \item Different MCS (adapt to channel change)
+  \item Different RV (Redundancy Version) for IR
+  \end{itemize}
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ AMC Performance
-Analysis}{ AMC Performance Analysis}}\label{amc-performance-analysis}
+\subsection{AMC Performance Analysis}\label{amc-performance-analysis}
 
 \subsubsection{Shannon-Capacity
 Tracking}\label{shannon-capacity-tracking}
 
-\textbf{Ideal AMC} approaches Shannon capacity:
+\textbf{Ideal AMC approaches Shannon capacity:}
+\begin{equation*}
+C(\text{SNR}) = B \cdot \log_2(1 + \text{SNR})
+\end{equation*}
 
-\begin{verbatim}
-C(SNR) = B · log(1 + SNR)
+\textbf{Without AMC (fixed QPSK, rate-1/2):}
+\begin{itemize}
+\item $R_{\text{fixed}} = B \cdot 1$ bits/s/Hz (for all SNR)
+\item Efficiency: $R_{\text{fixed}} / C(\text{SNR})$ = low at high SNR
+\end{itemize}
 
-Without AMC (fixed QPSK, rate-1/2):
-R_fixed = B · 1 bits/s/Hz (for all SNR)
-Efficiency: R_fixed / C(SNR) = low at high SNR
+\textbf{With AMC:}
+\begin{equation*}
+R_{\text{AMC}}(\text{SNR}) \approx C(\text{SNR}) - \Delta
+\end{equation*}
+where $\Delta$ = implementation gap (typically 2--5 dB from Shannon)
 
-With AMC:
-R_AMC(SNR)  C(SNR) - 
-
-where  = implementation gap (typically 2-5 dB from Shannon)
-
-Throughput gain: 3-5× in typical fading scenarios
-\end{verbatim}
+\textbf{Throughput gain:} 3--5$\times$ in typical fading scenarios
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsubsection{Throughput in Fading
 Channels}\label{throughput-in-fading-channels}
 
-\textbf{Rayleigh fading channel} (urban/indoor):
+\textbf{Rayleigh fading channel (urban/indoor):}
 
-\begin{verbatim}
-Instantaneous SNR:  (exponentially distributed)
-Average SNR: 
+\textbf{Channel statistics:}
+\begin{itemize}
+\item Instantaneous SNR: $\gamma$ (exponentially distributed)
+\item Average SNR: $\bar{\gamma}$
+\end{itemize}
 
-Outage probability:
-P_out(R) = P(C() < R) = 1 - exp(-R / ( · B))
+\textbf{Outage probability:}
+\begin{equation*}
+P_{\text{out}}(R) = P(C(\gamma) < R) = 1 - e^{-R / (\bar{\gamma} \cdot B)}
+\end{equation*}
 
-Without AMC (fixed rate R):
-- Outage when  < _threshold  complete failure
-- Average throughput: R · (1 - P_out)
+\textbf{Without AMC (fixed rate $R$):}
+\begin{itemize}
+\item Outage when $\gamma < \gamma_{\text{threshold}}$ $\rightarrow$ complete failure
+\item Average throughput: $R \cdot (1 - P_{\text{out}})$
+\end{itemize}
 
-With AMC:
-- Adapt R = C() continuously
-- No outage (always some rate achievable)
-- Average throughput: E[C()] = ^ C() · p() d
+\textbf{With AMC:}
+\begin{itemize}
+\item Adapt $R = C(\gamma)$ continuously
+\item No outage (always some rate achievable)
+\item Average throughput: $E[C(\gamma)] = \int_0^\infty C(\gamma) \cdot p(\gamma) \, d\gamma$
+\end{itemize}
 
-Ergodic capacity:
-C_ergodic = B · E[log(1 + )]
+\textbf{Ergodic capacity:}
+\begin{equation*}
+C_{\text{ergodic}} = B \cdot E[\log_2(1 + \gamma)]
+\end{equation*}
+For Rayleigh fading at high SNR: $C_{\text{ergodic}} \approx B \cdot \log_2(e \cdot \bar{\gamma})$
 
-For Rayleigh: C_ergodic  B · log(e · ) (high SNR)
-\end{verbatim}
+\textbf{Numerical example:}
 
-\textbf{Numerical example}:
+\textbf{Channel:} Rayleigh fading, $\bar{\gamma} = 20$ dB, $B = 20$ MHz
 
-\begin{verbatim}
-Channel: Rayleigh fading,  = 20 dB, B = 20 MHz
+\textbf{Fixed 64-QAM (rate-3/4):}
+\begin{itemize}
+\item Required SNR: 18 dB
+\item Outage: $P(\gamma < 18 \text{ dB}) = 37\%$
+\item Average throughput: $4.5 \times 20$ MHz $\times 0.63 = 57$ Mbps
+\end{itemize}
 
-Fixed 64-QAM (rate-3/4):
-- Required SNR: 18 dB
-- Outage: P( < 18 dB) = 37%
-- Average throughput: 4.5 × 20 MHz × 0.63 = 57 Mbps
+\textbf{AMC (QPSK to 256-QAM):}
+\begin{itemize}
+\item Always adapts to channel
+\item Average throughput: $\approx 100$ Mbps
+\end{itemize}
 
-AMC (QPSK to 256-QAM):
-- Always adapts to channel
-- Average throughput:  100 Mbps
-
-Gain: 1.75× throughput improvement
-\end{verbatim}
+\textbf{Gain:} 1.75$\times$ throughput improvement
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ AMC in
-Standards}{ AMC in Standards}}\label{amc-in-standards}
+\subsection{AMC in Standards}\label{amc-in-standards}
 
 \subsubsection{LTE Adaptive Modulation}\label{lte-adaptive-modulation}
 
-\textbf{Downlink (eNodeB \$\textbackslash rightarrow\$ UE)}:
+\textbf{Downlink (eNodeB $\rightarrow$ UE):}
 
-\begin{verbatim}
-CQI reporting:
-- Periodicity: 5-10 ms (semi-static)
-- Wideband or subband (per RB - Resource Block)
-- UE measures RSRP, RSRQ, SINR  computes CQI
+\textbf{CQI reporting:}
+\begin{itemize}
+\item Periodicity: 5--10 ms (semi-static)
+\item Wideband or subband (per RB - Resource Block)
+\item UE measures RSRP, RSRQ, SINR $\rightarrow$ computes CQI
+\end{itemize}
 
-MCS selection:
-- eNodeB scheduler receives CQI
-- Selects MCS per UE per RB
-- Goals: Maximize cell throughput, maintain fairness
+\textbf{MCS selection:}
+\begin{itemize}
+\item eNodeB scheduler receives CQI
+\item Selects MCS per UE per RB
+\item Goals: Maximize cell throughput, maintain fairness
+\end{itemize}
 
-Resource allocation:
-- Time-frequency (OFDMA)
-- 1 RB = 12 subcarriers × 1 slot (0.5 ms)
-- Assign high MCS to users with good CQI
-\end{verbatim}
+\textbf{Resource allocation:}
+\begin{itemize}
+\item Time-frequency (OFDMA)
+\item 1 RB = 12 subcarriers $\times$ 1 slot (0.5 ms)
+\item Assign high MCS to users with good CQI
+\end{itemize}
 
-\textbf{Uplink (UE \$\textbackslash rightarrow\$ eNodeB)}:
+\textbf{Uplink (UE $\rightarrow$ eNodeB):}
+\begin{itemize}
+\item UE transmits SRS (Sounding Reference Signal)
+\item eNodeB measures channel directly (TDD reciprocity helps)
+\item eNodeB commands MCS via PDCCH (Physical Downlink Control Channel)
+\end{itemize}
 
-\begin{verbatim}
-UE transmits SRS (Sounding Reference Signal)
-eNodeB measures channel directly (TDD reciprocity helps)
-eNodeB commands MCS via PDCCH (Physical Downlink Control Channel)
-
-Uplink challenges:
-- Limited UE power  coverage-limited
-- Lower MCS typical (vs. downlink)
-\end{verbatim}
+\textbf{Uplink challenges:}
+\begin{itemize}
+\item Limited UE power $\rightarrow$ coverage-limited
+\item Lower MCS typical (vs. downlink)
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsubsection{5G NR Ultra-Lean Design}\label{g-nr-ultra-lean-design}
 
-\textbf{Dynamic adaptation}:
+\textbf{Dynamic adaptation:}
 
-\begin{verbatim}
-Ultra-flexible frame structure:
-- Slot duration: 0.125-1 ms (depends on numerology)
-- Mini-slots: <1 ms (ultra-low latency)
-- HARQ feedback: 2-4 slots (faster than LTE)
+\textbf{Ultra-flexible frame structure:}
+\begin{itemize}
+\item Slot duration: 0.125--1 ms (depends on numerology)
+\item Mini-slots: $<$1 ms (ultra-low latency)
+\item HARQ feedback: 2--4 slots (faster than LTE)
+\end{itemize}
 
-Beam management:
-- Massive MIMO: Beamformed transmissions
-- CSI-RS: Beam-specific channel measurement
-- Adapt MCS per beam (spatial dimension)
+\textbf{Beam management:}
+\begin{itemize}
+\item Massive MIMO: Beamformed transmissions
+\item CSI-RS: Beam-specific channel measurement
+\item Adapt MCS per beam (spatial dimension)
+\end{itemize}
 
-Grant-free transmission (URLLC):
-- Pre-configured MCS (no dynamic CQI)
-- Used for ultra-reliable, low-latency (factory automation)
-\end{verbatim}
+\textbf{Grant-free transmission (URLLC):}
+\begin{itemize}
+\item Pre-configured MCS (no dynamic CQI)
+\item Used for ultra-reliable, low-latency (factory automation)
+\end{itemize}
 
-\textbf{Massive MIMO adaptation}:
+\textbf{Massive MIMO adaptation:}
 
-\begin{verbatim}
-Per-user MCS:
-- User 1 (cell center, high SINR): 256-QAM, rate-5/6
-- User 2 (cell edge, low SINR): QPSK, rate-1/3
-- Simultaneous (MU-MIMO) on same resource blocks
+\textbf{Per-user MCS:}
+\begin{itemize}
+\item User 1 (cell center, high SINR): 256-QAM, rate-5/6
+\item User 2 (cell edge, low SINR): QPSK, rate-1/3
+\item Simultaneous (MU-MIMO) on same resource blocks
+\end{itemize}
 
-Spectral efficiency:
-Sum rate = _{i} R_i (bits/s/Hz per user)
-         = 7 + 1 = 8 bits/s/Hz (vs. 4 for single-user)
-\end{verbatim}
+\textbf{Spectral efficiency:}
+\begin{equation*}
+\text{Sum rate} = \sum_{i} R_i \text{ (bits/s/Hz per user)} = 7 + 1 = 8 \text{ bits/s/Hz (vs. 4 for single-user)}
+\end{equation*}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsubsection{WiFi 6/7 (802.11ax/be)}\label{wifi-67-802.11axbe}
 
-\textbf{Rate adaptation}:
+\textbf{Rate adaptation:}
 
-\begin{verbatim}
-WiFi metrics:
-- RSSI (Received Signal Strength Indicator)
-- PER (Packet Error Rate)
-- Retry count
+\textbf{WiFi metrics:}
+\begin{itemize}
+\item RSSI (Received Signal Strength Indicator)
+\item PER (Packet Error Rate)
+\item Retry count
+\end{itemize}
 
-MCS selection:
-- Minstrel / SampleRate algorithms (open-source)
-- Proprietary vendor algorithms (Cisco, Qualcomm)
-- Test higher MCS occasionally (probing)
+\textbf{MCS selection:}
+\begin{itemize}
+\item Minstrel / SampleRate algorithms (open-source)
+\item Proprietary vendor algorithms (Cisco, Qualcomm)
+\item Test higher MCS occasionally (probing)
+\end{itemize}
 
-Spatial stream adaptation:
-- 1 stream: Long range, reliable
-- 4 streams: Short range, high throughput
-- Adapt based on distance, interference
+\textbf{Spatial stream adaptation:}
+\begin{itemize}
+\item 1 stream: Long range, reliable
+\item 4 streams: Short range, high throughput
+\item Adapt based on distance, interference
+\end{itemize}
 
-Example (WiFi 6, 80 MHz):
-- Close (1 m): 4 streams, 1024-QAM, rate-5/6  1.2 Gbps
-- Medium (10 m): 2 streams, 256-QAM, rate-3/4  600 Mbps
-- Far (50 m): 1 stream, QPSK, rate-1/2  30 Mbps
-\end{verbatim}
+\textbf{Example (WiFi 6, 80 MHz):}
+\begin{itemize}
+\item Close (1 m): 4 streams, 1024-QAM, rate-5/6 $\rightarrow$ 1.2 Gbps
+\item Medium (10 m): 2 streams, 256-QAM, rate-3/4 $\rightarrow$ 600 Mbps
+\item Far (50 m): 1 stream, QPSK, rate-1/2 $\rightarrow$ 30 Mbps
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ Advanced AMC
-Techniques}{ Advanced AMC Techniques}}\label{advanced-amc-techniques}
+\subsection{Advanced AMC Techniques}\label{advanced-amc-techniques}
 
 \subsubsection{Outer-Loop Link Adaptation
 (OLLA)}\label{outer-loop-link-adaptation-olla}
@@ -605,22 +615,24 @@ Techniques}{ Advanced AMC Techniques}}\label{advanced-amc-techniques}
 \textbf{Motivation}: CQI can be inaccurate (channel estimation errors,
 feedback delay).
 
-\textbf{OLLA principle}:
+\textbf{OLLA principle:}
 
-\begin{verbatim}
 Adjust MCS based on ACK/NACK history, not just CQI.
 
-Algorithm:
-1. Start with MCS based on CQI
-2. If NACK: Decrease MCS (_down = 1 dB)
-3. If ACK: Increase MCS (_up = 0.01 dB)
+\textbf{Algorithm:}
+\begin{enumerate}
+\item Start with MCS based on CQI
+\item If NACK: Decrease MCS ($\Delta_{\text{down}} = 1$ dB)
+\item If ACK: Increase MCS ($\Delta_{\text{up}} = 0.01$ dB)
+\end{enumerate}
 
-Asymmetric adjustment:
-- Fast decrease (avoid errors)
-- Slow increase (test cautiously)
+\textbf{Asymmetric adjustment:}
+\begin{itemize}
+\item Fast decrease (avoid errors)
+\item Slow increase (test cautiously)
+\end{itemize}
 
-Result: Converges to optimal MCS despite CQI errors
-\end{verbatim}
+\textbf{Result:} Converges to optimal MCS despite CQI errors
 
 \textbf{Implementation}:
 
@@ -665,39 +677,34 @@ Result: Converges to optimal MCS despite CQI errors
 
 \textbf{Joint optimization} of PHY (MCS) and MAC (scheduling):
 
-\textbf{Proportional Fair Scheduler}:
+\textbf{Proportional Fair Scheduler:}
 
-\begin{verbatim}
-Maximize: _{i} log(R_i)  (sum log throughput)
+\textbf{Objective:} Maximize $\sum_{i} \log(R_i)$ (sum log throughput)
 
-User priority:
-Priority_i = R_instantaneous_i / R_average_i
-
+\textbf{User priority:}
+\begin{equation*}
+\text{Priority}_i = \frac{R_{\text{instantaneous},i}}{R_{\text{average},i}}
+\end{equation*}
 where:
-- R_instantaneous: Rate achievable now (AMC-selected MCS)
-- R_average: Long-term average throughput
+\begin{itemize}
+\item $R_{\text{instantaneous}}$: Rate achievable now (AMC-selected MCS)
+\item $R_{\text{average}}$: Long-term average throughput
+\end{itemize}
 
-Result:
-- User with good channel gets high MCS  high R_instantaneous
-- If already has high R_average, priority decreases
-- Balances throughput and fairness
-\end{verbatim}
+\textbf{Result:}
+\begin{itemize}
+\item User with good channel gets high MCS $\rightarrow$ high $R_{\text{instantaneous}}$
+\item If already has high $R_{\text{average}}$, priority decreases
+\item Balances throughput and fairness
+\end{itemize}
 
-\textbf{Buffer-aware AMC}:
-
-\begin{verbatim}
-If buffer almost empty:
- Use lower MCS (reliable, avoid stalls)
-
-If buffer full:
- Use higher MCS (aggressive, drain buffer)
-
-Delay-sensitive (VoIP):
- Conservative MCS (avoid retransmissions)
-
-Throughput-oriented (file download):
- Aggressive MCS (maximize rate, tolerate retries)
-\end{verbatim}
+\textbf{Buffer-aware AMC:}
+\begin{itemize}
+\item \textbf{If buffer almost empty:} Use lower MCS (reliable, avoid stalls)
+\item \textbf{If buffer full:} Use higher MCS (aggressive, drain buffer)
+\item \textbf{Delay-sensitive (VoIP):} Conservative MCS (avoid retransmissions)
+\item \textbf{Throughput-oriented (file download):} Aggressive MCS (maximize rate, tolerate retries)
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -705,42 +712,47 @@ Throughput-oriented (file download):
 
 \textbf{Anticipate channel changes} before they occur.
 
-\textbf{Method 1 - Doppler-based prediction}:
+\textbf{Method 1 - Doppler-based prediction:}
 
-\begin{verbatim}
-High mobility (vehicular):
-- Channel changes rapidly (coherence time ~10 ms)
-- CQI feedback outdated by RTT (8 ms)
+\textbf{High mobility (vehicular):}
+\begin{itemize}
+\item Channel changes rapidly (coherence time $\sim$10 ms)
+\item CQI feedback outdated by RTT (8 ms)
+\end{itemize}
 
-Prediction:
-1. Estimate Doppler shift (f_D = v/)
-2. Predict channel evolution: H(t + t) = f(H(t), f_D)
-3. Select MCS for predicted channel
+\textbf{Prediction steps:}
+\begin{enumerate}
+\item Estimate Doppler shift ($f_D = v/\lambda$)
+\item Predict channel evolution: $H(t + \Delta t) = f(H(t), f_D)$
+\item Select MCS for predicted channel
+\end{enumerate}
 
-Autoregressive model:
-H[n+1] = a·H[n] + a·H[n-1] + ... + noise
+\textbf{Autoregressive model:}
+\begin{equation*}
+H[n+1] = a_1 \cdot H[n] + a_2 \cdot H[n-1] + \ldots + \text{noise}
+\end{equation*}
 
 Wiener filter / Kalman filter for prediction
-\end{verbatim}
 
-\textbf{Method 2 - Machine learning}:
+\textbf{Method 2 - Machine learning:}
 
-\begin{verbatim}
-Train neural network:
-- Input: [H[n], H[n-1], ..., H[n-k], velocity, location]
-- Output: H[n+1] (predicted channel)
+\textbf{Train neural network:}
+\begin{itemize}
+\item \textbf{Input:} $[H[n], H[n-1], \ldots, H[n-k], \text{velocity}, \text{location}]$
+\item \textbf{Output:} $H[n+1]$ (predicted channel)
+\end{itemize}
 
-Online learning:
-- Update weights based on prediction error
-- Adapt to user-specific channel patterns
+\textbf{Online learning:}
+\begin{itemize}
+\item Update weights based on prediction error
+\item Adapt to user-specific channel patterns
+\end{itemize}
 
-Benefit: 2-3 dB gain in high-mobility scenarios
-\end{verbatim}
+\textbf{Benefit:} 2--3 dB gain in high-mobility scenarios
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ Python Implementation
-Example}{ Python Implementation Example}}\label{python-implementation-example}
+\subsection{Python Implementation Example}\label{python-implementation-example}
 
 \subsubsection{AMC Simulator}\label{amc-simulator}
 
@@ -875,8 +887,7 @@ Example}{ Python Implementation Example}}\label{python-implementation-example}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ When to Use
-AMC}{ When to Use AMC}}\label{when-to-use-amc}
+\subsection{When to Use AMC}\label{when-to-use-amc}
 
 \subsubsection{AMC Excels:}\label{amc-excels}
 
@@ -895,8 +906,7 @@ AMC}{ When to Use AMC}}\label{when-to-use-amc}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{\texorpdfstring{ Further
-Reading}{ Further Reading}}\label{further-reading}
+\subsection{Further Reading}\label{further-reading}
 
 \subsubsection{Textbooks}\label{textbooks}
 
