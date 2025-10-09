@@ -19,37 +19,35 @@ command -v pandoc >/dev/null 2>&1 || { echo "Error: pandoc not found"; exit 1; }
 # Directories
 LATEX_DIR="latex"
 BUILD_DIR="_build"
+BUILD_DATA_DIR="_build_data"
 DOC="chimera-book"
 
-# Create build directory
+# Create build directories
 mkdir -p "$BUILD_DIR"
+mkdir -p "$BUILD_DATA_DIR"
 
 # Clean old outputs to ensure fresh build
 echo "--- Cleaning old build artifacts ---"
-rm -f "$BUILD_DIR"/*.pdf
-rm -f "$BUILD_DIR"/*.epub
-rm -f ./chimera-book-print.pdf
-rm -f ./chimera-book-epdf.pdf
-rm -f ./chimera-book.epub
+rm -f ./*.pdf
+rm -f ./*.epub
+rm -rf "$BUILD_DATA_DIR"/*
+rm -f "$BUILD_DIR"/*
 
 # ==============================================================================
 # PRINT PDF BUILD (COLOR ONLY - Use Adobe Preflight for B/W)
 # ==============================================================================
 echo "--- Building Print PDF (Color) ---"
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
-mv "$LATEX_DIR/chimera-book-print.pdf" "$LATEX_DIR/chimera-book-print.aux" "$LATEX_DIR/chimera-book-print.log" "$LATEX_DIR/chimera-book-print.out" "$LATEX_DIR/chimera-book-print.toc" "$LATEX_DIR/chimera-book-print.bcf" "$BUILD_DIR/" 2>/dev/null || true
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
 
 # Run biber for bibliography
-if [ -f "$BUILD_DIR/chimera-book-print.bcf" ]; then
-    (cd "$LATEX_DIR" && biber "../$BUILD_DIR/chimera-book-print") 2>&1 | tail -10
+if [ -f "$BUILD_DATA_DIR/chimera-book-print.bcf" ]; then
+    (biber "$BUILD_DATA_DIR/chimera-book-print") 2>&1 | tail -10
 fi
-cp "$BUILD_DIR/chimera-book-print.bbl" "$LATEX_DIR/" 2>/dev/null || true
 
 # Two more passes for references
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
-mv "$LATEX_DIR/chimera-book-print.pdf" "$BUILD_DIR/" 2>/dev/null || true
-cp "$BUILD_DIR/chimera-book-print.pdf" "./chimera-book-print.pdf"
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
+cp "$BUILD_DATA_DIR/chimera-book-print.pdf" "./chimera-book-print.pdf"
 
 # ==============================================================================
 # E-PDF BUILD
@@ -63,19 +61,16 @@ EPDF_METADATA="\
 \def\pdfkeywords{signal processing, modulation, M-Theory, telecommunications, DSP}\
 \def\ISBN{$ISBN_EPDF}"
 
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode "$EPDF_METADATA\input{$DOC.tex}") | tail -20
-mv "$LATEX_DIR/chimera-book-epdf.pdf" "$BUILD_DIR/" 2>/dev/null || true
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") | tail -20
 
 # Run Biber for citations if needed
-if [ -f "$BUILD_DIR/chimera-book-epdf.bcf" ]; then
-    (cd "$LATEX_DIR" && biber "../$BUILD_DIR/chimera-book-epdf") 2>&1 | tail -10
-    cp "$BUILD_DIR/chimera-book-epdf.bbl" "$LATEX_DIR/" 2>/dev/null || true
+if [ -f "$BUILD_DATA_DIR/chimera-book-epdf.bcf" ]; then
+    (biber "$BUILD_DATA_DIR/chimera-book-epdf") 2>&1 | tail -10
     # Re-run xelatex to include citations
-    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode "$EPDF_METADATA\input{$DOC.tex}") | tail -20
-    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode "$EPDF_METADATA\input{$DOC.tex}") | tail -20
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") | tail -20
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") | tail -20
 fi
-mv "$LATEX_DIR/chimera-book-epdf.pdf" "$BUILD_DIR/" 2>/dev/null || true
-cp "$BUILD_DIR/chimera-book-epdf.pdf" "./chimera-book-epdf.pdf"
+cp "$BUILD_DATA_DIR/chimera-book-epdf.pdf" "./chimera-book-epdf.pdf"
 
 # ==============================================================================
 # EPUB BUILD
@@ -111,6 +106,7 @@ fi
 
 echo
 echo "Cleaning auxiliary files..."
-rm -f "$BUILD_DIR"/*.aux "$BUILD_DIR"/*.log "$BUILD_DIR"/*.out "$BUILD_DIR"/*.toc "$BUILD_DIR"/*.bcf "$BUILD_DIR"/*.run.xml "$BUILD_DIR"/*.blg "$BUILD_DIR"/*.bbl 2>/dev/null || true
+# The _build_data directory is cleaned at the start of the script.
+# No need to delete it upon successful completion, allows for inspection of logs.
 
 echo "Done!"
