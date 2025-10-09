@@ -55,7 +55,7 @@ defaults:
 
 # Exclude from processing
 exclude:
-  - _latex/
+  - latex/
   - _build/
   - node_modules/
   - vendor/

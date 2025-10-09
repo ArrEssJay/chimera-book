@@ -2,11 +2,9 @@
 % The Chimera Project - Root Manuscript File (Final - Corrected for pdfx)
 % ==============================================================================
 
-% The 'paper' option is removed from here. The preamble now has sole control
-% over the page geometry, which resolves the pdfx conflict.
 \documentclass[11pt,twoside,openany]{book}
 
-% Load preamble (fonts, packages, styling)
+% Load preamble directly
 \input{preamble}
 
 % Book metadata
@@ -56,7 +54,7 @@
 
 % PART I: FOUNDATIONS OF COMMUNICATION THEORY
 \part{Foundations of Communication Theory}
-\input{chapters/Maxwell's-Equations-&-Wave-Propagation}
+%\input{chapters/Maxwell's-Equations-&-Wave-Propagation}
 % \input{chapters/Electromagnetic-Spectrum}
 % \input{chapters/Wave-Polarization}
 % \input{chapters/Power-Density-&-Field-Strength}
@@ -71,7 +69,7 @@
 
 % PART II: CLASSICAL DIGITAL MODULATION
 \part{Classical Digital Modulation}
-% \input{chapters/Binary-Phase-Shift-Keying-(BPSK)-EXEMPLAR-V2}
+ \input{chapters/Binary-Phase-Shift-Keying-(BPSK)-EXEMPLAR-V2}
 % \input{chapters/On-Off-Keying-(OOK)}
 % \input{chapters/Amplitude-Shift-Keying-(ASK)}
 % \input{chapters/Frequency-Shift-Keying-(FSK)}
@@ -174,20 +172,15 @@ The following pages contain a complete, unaltered reproduction of the original r
 \printbibliography[heading=bibintoc,title={Bibliography}]
 
 % Glossary
-\input{chapters/Glossary}
+% \input{chapters/Glossary}
 
 % Index
-\printindex
+% \printindex
 
 % Epilogue - The final philosophical note.
 \input{backmatter/epilogue}
 
 % Colophon - Production notes about the book itself.
 \input{backmatter/colophon}
-
-% Back Cover Art (full page, no margins)
-\newpage
-\thispagestyle{empty}
-\includepdf[pages=-]{assets/artwork/back-cover.pdf}
 
 \end{document}

@@ -126,7 +126,7 @@ for CHAPTER in "${CHAPTERS[@]}"; do
 
 ## How to Assess
 
-1. Build the book: \`cd _latex && xelatex chimera-book.tex\`
+1. Build the book: \`cd latex && xelatex chimera-book.tex\`
 2. Open \`chimera-book.pdf\` and locate this chapter
 3. Review each page visually
 4. Identify specific line numbers in `latex/chapters/${CHAPTER}.tex` that need fixes

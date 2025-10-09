@@ -3,6 +3,9 @@
 
 set -e  # Exit on error
 
+# Source the ISBNs
+source isbns.sh
+
 echo "========================================"
 echo "Building Chimera Book - First Edition"
 echo "========================================"
@@ -11,71 +14,98 @@ echo
 # Check for required tools
 command -v xelatex >/dev/null 2>&1 || { echo "Error: xelatex not found"; exit 1; }
 command -v biber >/dev/null 2>&1 || { echo "Error: biber not found"; exit 1; }
+command -v pandoc >/dev/null 2>&1 || { echo "Error: pandoc not found"; exit 1; }
 
 # Directories
 LATEX_DIR="latex"
 BUILD_DIR="_build"
-
-# Main document
 DOC="chimera-book"
 
 # Create build directory
 mkdir -p "$BUILD_DIR"
 
-echo "Step 1: First XeLaTeX pass (generate aux files)..."
-(cd "$LATEX_DIR" && xelatex -shell-escape -interaction=nonstopmode "$DOC.tex") | tail -20
-mv "$LATEX_DIR"/*.pdf "$LATEX_DIR"/*.aux "$LATEX_DIR"/*.log "$LATEX_DIR"/*.out "$LATEX_DIR"/*.toc "$LATEX_DIR"/*.bcf "$LATEX_DIR"/*.run.xml "$LATEX_DIR"/*.blg "$LATEX_DIR"/*.bbl "$BUILD_DIR/" 2>/dev/null || true
+# Clean old outputs to ensure fresh build
+echo "--- Cleaning old build artifacts ---"
+rm -f "$BUILD_DIR"/*.pdf
+rm -f "$BUILD_DIR"/*.epub
+rm -f ./chimera-book-print.pdf
+rm -f ./chimera-book-epdf.pdf
+rm -f ./chimera-book.epub
 
-echo
-echo "Step 2: Generate bibliography..."
-if [ -f "$BUILD_DIR/$DOC.bcf" ]; then
-    (cd "$LATEX_DIR" && biber "../$BUILD_DIR/$DOC") 2>&1 | tail -10
-else
-    echo "No bibliography file found, skipping biber"
+# ==============================================================================
+# PRINT PDF BUILD (COLOR ONLY - Use Adobe Preflight for B/W)
+# ==============================================================================
+echo "--- Building Print PDF (Color) ---"
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
+mv "$LATEX_DIR/chimera-book-print.pdf" "$LATEX_DIR/chimera-book-print.aux" "$LATEX_DIR/chimera-book-print.log" "$LATEX_DIR/chimera-book-print.out" "$LATEX_DIR/chimera-book-print.toc" "$LATEX_DIR/chimera-book-print.bcf" "$BUILD_DIR/" 2>/dev/null || true
+
+# Run biber for bibliography
+if [ -f "$BUILD_DIR/chimera-book-print.bcf" ]; then
+    (cd "$LATEX_DIR" && biber "../$BUILD_DIR/chimera-book-print") 2>&1 | tail -10
 fi
+cp "$BUILD_DIR/chimera-book-print.bbl" "$LATEX_DIR/" 2>/dev/null || true
 
-echo
-echo "Step 3: Second XeLaTeX pass (resolve references)..."
-cp "$BUILD_DIR"/*.bbl "$LATEX_DIR/" 2>/dev/null || true
-(cd "$LATEX_DIR" && xelatex -shell-escape -interaction=nonstopmode "$DOC.tex") | tail -20
-mv "$LATEX_DIR"/*.pdf "$LATEX_DIR"/*.aux "$LATEX_DIR"/*.log "$LATEX_DIR"/*.out "$LATEX_DIR"/*.toc "$LATEX_DIR"/*.bcf "$LATEX_DIR"/*.run.xml "$LATEX_DIR"/*.blg "$LATEX_DIR"/*.bbl "$BUILD_DIR/" 2>/dev/null || true
+# Two more passes for references
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
+mv "$LATEX_DIR/chimera-book-print.pdf" "$BUILD_DIR/" 2>/dev/null || true
+cp "$BUILD_DIR/chimera-book-print.pdf" "./chimera-book-print.pdf"
 
-echo
-echo "Step 4: Third XeLaTeX pass (finalize TOC and index)..."
-(cd "$LATEX_DIR" && xelatex -shell-escape -interaction=nonstopmode "$DOC.tex") | tail -20
-mv "$LATEX_DIR"/*.pdf "$LATEX_DIR"/*.aux "$LATEX_DIR"/*.log "$LATEX_DIR"/*.out "$LATEX_DIR"/*.toc "$LATEX_DIR"/*.bcf "$LATEX_DIR"/*.run.xml "$LATEX_DIR"/*.blg "$LATEX_DIR"/*.bbl "$BUILD_DIR/" 2>/dev/null || true
+# ==============================================================================
+# E-PDF BUILD
+# ==============================================================================
+echo "--- Building E-PDF version ---"
+# Define metadata specifically for the e-PDF version
+EPDF_METADATA="\
+\def\pdftitle{Digital Signal Processing: Past, Present & Future}\
+\def\pdfsubject{The Chimera Project}\
+\def\pdfauthor{Rowan Jones, Editor}\
+\def\pdfkeywords{signal processing, modulation, M-Theory, telecommunications, DSP}\
+\def\ISBN{$ISBN_EPDF}"
 
-echo
-echo "Step 5: Final XeLaTeX pass for hyperlinks..."
-(cd "$LATEX_DIR" && xelatex -shell-escape -interaction=nonstopmode "$DOC.tex") | tail -20
-mv "$LATEX_DIR"/*.pdf "$LATEX_DIR"/*.aux "$LATEX_DIR"/*.log "$LATEX_DIR"/*.out "$LATEX_DIR"/*.toc "$LATEX_DIR"/*.bcf "$LATEX_DIR"/*.run.xml "$LATEX_DIR"/*.blg "$LATEX_DIR"/*.bbl "$BUILD_DIR/" 2>/dev/null || true
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode "$EPDF_METADATA\input{$DOC.tex}") | tail -20
+mv "$LATEX_DIR/chimera-book-epdf.pdf" "$BUILD_DIR/" 2>/dev/null || true
 
-# Copy PDF to book root
-if [ -f "$BUILD_DIR/$DOC.pdf" ]; then
-    cp "$BUILD_DIR/$DOC.pdf" "."
+# Run Biber for citations if needed
+if [ -f "$BUILD_DIR/chimera-book-epdf.bcf" ]; then
+    (cd "$LATEX_DIR" && biber "../$BUILD_DIR/chimera-book-epdf") 2>&1 | tail -10
+    cp "$BUILD_DIR/chimera-book-epdf.bbl" "$LATEX_DIR/" 2>/dev/null || true
+    # Re-run xelatex to include citations
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode "$EPDF_METADATA\input{$DOC.tex}") | tail -20
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode "$EPDF_METADATA\input{$DOC.tex}") | tail -20
 fi
+mv "$LATEX_DIR/chimera-book-epdf.pdf" "$BUILD_DIR/" 2>/dev/null || true
+cp "$BUILD_DIR/chimera-book-epdf.pdf" "./chimera-book-epdf.pdf"
 
-# Check for errors
-if [ -f "$DOC.pdf" ]; then
-    PDF_SIZE=$(du -h "$DOC.pdf" | cut -f1)
-    PAGE_COUNT=$(pdfinfo "$DOC.pdf" 2>/dev/null | grep "Pages:" | awk '{print $2}')
-    
+# ==============================================================================
+# EPUB BUILD
+# ==============================================================================
+echo "--- Building EPUB version ---"
+pandoc "$LATEX_DIR/$DOC.tex" -o "$BUILD_DIR/$DOC.epub" --from=latex --to=epub --metadata-file="metadata.xml" --resource-path="$LATEX_DIR" --css="epub.css" --toc --toc-depth=2
+cp "$BUILD_DIR/$DOC.epub" "./chimera-book.epub"
+
+# ==============================================================================
+# FINAL CHECK & CLEANUP
+# ==============================================================================
+if [ -f "chimera-book-print.pdf" ] && [ -f "chimera-book-epdf.pdf" ] && [ -f "chimera-book.epub" ]; then
     echo
     echo "========================================"
     echo "✅ BUILD SUCCESSFUL"
     echo "========================================"
-    echo "Output: $DOC.pdf"
-    echo "Size: $PDF_SIZE"
-    echo "Pages: ${PAGE_COUNT:-unknown}"
+    echo "Outputs:"
+    echo "  - chimera-book-print.pdf (Color - convert to B/W with Adobe Preflight)"
+    echo "  - chimera-book-epdf.pdf"
+    echo "  - chimera-book.epub"
     echo
-    echo "Opening PDF..."
-    open "$DOC.pdf" 2>/dev/null || xdg-open "$DOC.pdf" 2>/dev/null || echo "PDF ready: $DOC.pdf"
+    echo "Opening PDFs..."
+    open "chimera-book-print.pdf"
+    open "chimera-book-epdf.pdf"
 else
     echo
     echo "========================================"
     echo "❌ BUILD FAILED"
     echo "========================================"
-    echo "Check the LaTeX log for errors: $BUILD_DIR/$DOC.log"
+    echo "Check logs in $BUILD_DIR for errors."
     exit 1
 fi
 

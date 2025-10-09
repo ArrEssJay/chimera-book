@@ -91,7 +91,7 @@ for CHAPTER in "${CHAPTERS[@]}"; do
     ISSUE_BODY="## 🎨 Visual Quality Assessment
 
 **Chapter:** ${TITLE}  
-**File:** \`_latex/chapters/${CHAPTER}.tex\`
+**File:** \`latex/chapters/${CHAPTER}.tex\`
 
 ---
 
@@ -128,10 +128,10 @@ for CHAPTER in "${CHAPTERS[@]}"; do
 
 ## 🛠️ How to Fix
 
-1. **Build:** \`cd _latex && xelatex chimera-book.tex\`
+1. **Build:** \`cd latex && xelatex chimera-book.tex\`
 2. **Locate chapter** in \`chimera-book.pdf\`  
 3. **Identify issues** visually on each page
-4. **Fix LaTeX** in \`_latex/chapters/${CHAPTER}.tex\`:
+4. **Fix LaTeX** in \`latex/chapters/${CHAPTER}.tex\`:
    - Adjust \`\\vspace{}\`, \`\\hspace{}\` for spacing
    - Modify TikZ \`node\` positions and anchors
    - Resize graphics: \`[width=0.8\\textwidth]\`
