@@ -20,6 +20,7 @@ _minted*/
 
 # Test files
 test_*.tex
+test_*.png
 !test_exemplar_v2.tex
 test-*.png
 page-*.png
@@ -54,7 +55,7 @@ test_*.pdf
 test_*.aux
 test_*.log
 
-_build/** */
+_build/**/
 chimera-book.epub
 _build_data/chimera-book-epdf.idx
 .gitignore

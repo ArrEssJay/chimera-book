@@ -76,7 +76,10 @@ x(t) = A_1 \cos(\omega_1 t) + A_2 \cos(\omega_2 t)
 \textbf{Quadratic term ($a_2 x^2$):} Expanding using trigonometric identities:
 \begin{equation}
 \label{eq:quadratic-expansion}
-x^2(t) = \frac{A_1^2}{2} (1 + \cos 2\omega_1 t) + \frac{A_2^2}{2} (1 + \cos 2\omega_2 t) + A_1 A_2 [\cos(\omega_1 + \omega_2)t + \cos(\omega_1 - \omega_2)t]
+\begin{split}
+x^2(t) = & \frac{A_1^2}{2} (1 + \cos 2\omega_1 t) + \frac{A_2^2}{2} (1 + \cos 2\omega_2 t) \\
+& + A_1 A_2 [\cos(\omega_1 + \omega_2)t + \cos(\omega_1 - \omega_2)t]
+\end{split}
 \end{equation}
 
 This produces:
@@ -97,21 +100,29 @@ These are particularly important because they can fall \textbf{in-band} (near $f
 \begin{tikzpicture}[scale=1.0]
 % Axes
 \draw[->] (0,0) -- (10,0) node[right,font=\sffamily\small] {Frequency};
-\draw[->] (0,0) -- (0,3) node[above,font=\sffamily\small] {Amplitude};
+\draw[->] (0,0) -- (0,3.5) node[above,font=\sffamily\small] {Amplitude};
+
+% Grid (light, for readability)
+\draw[very thin,gray!20] (0,0) grid[step=1] (10,3);
 
 % Input tones
-\draw[thick,NavyBlue] (2,0) -- (2,2.5) node[above,font=\small] {$f_1$};
-\draw[thick,NavyBlue] (4,0) -- (4,2.2) node[above,font=\small] {$f_2$};
+\draw[thick,NavyBlue] (2,0) -- (2,2.5) node[below,font=\scriptsize,NavyBlue] {$f_1$};
+\draw[thick,NavyBlue] (4,0) -- (4,2.2) node[below,font=\scriptsize,NavyBlue] {$f_2$};
 
 % IMD products
-\draw[thick,BrickRed,dashed] (1,0) -- (1,1.2) node[above,font=\small] {$2f_1-f_2$};
-\draw[thick,BrickRed,dashed] (3,0) -- (3,1.5) node[above,font=\small] {$2f_2-f_1$};
-\draw[thick,BrickRed,dashed] (6,0) -- (6,1.0) node[above,font=\small] {$f_1+f_2$};
-\draw[thick,BrickRed,dashed] (8,0) -- (8,0.8) node[above,font=\small] {$2f_1+f_2$};
+\draw[thick,BrickRed,dashed] (1,0) -- (1,1.2) node[below,font=\scriptsize,BrickRed] {$2f_1-f_2$};
+\draw[thick,BrickRed,dashed] (3,0) -- (3,1.5) node[below,font=\scriptsize,BrickRed] {$2f_2-f_1$};
+\draw[thick,BrickRed,dashed] (6,0) -- (6,1.0) node[below,font=\scriptsize,BrickRed] {$f_1+f_2$};
+\draw[thick,BrickRed,dashed] (8,0) -- (8,0.8) node[below,font=\scriptsize,BrickRed] {$2f_1+f_2$};
 
-% Legend
-\node[font=\small] at (5,-0.8) {Input tones (solid blue)};
-\node[font=\small] at (5,-1.3) {IMD products (dashed red)};
+% Descriptive labels above key features
+\node[above,font=\scriptsize,NavyBlue] at (3,2.6) {Input tones};
+\node[above,font=\scriptsize,BrickRed] at (2,1.6) {3rd-order IMD};
+\node[above,font=\scriptsize,BrickRed] at (7,1.1) {Higher-order IMD};
+
+% Legend (with better spacing)
+\draw[thick,NavyBlue] (0.5,-0.6) -- (1.5,-0.6) node[right,font=\scriptsize,black] {Input tones (solid blue)};
+\draw[thick,BrickRed,dashed] (5.5,-0.6) -- (6.5,-0.6) node[right,font=\scriptsize,black] {IMD products (dashed red)};
 \end{tikzpicture}
 \end{center}
 
@@ -304,7 +315,7 @@ where:
 \item Resonant excitation $\rightarrow$ conformational change $\rightarrow$ altered function
 \end{itemize}
 
-\textbf{Problem:} Protein vibrational modes heavily damped in solution (linewidth $\sim$10--100~GHz) $\rightarrow$ no sharp resonance.
+\textbf{Problem:} Protein vibrational modes are heavily damped in solution (linewidth $\sim$10--100~GHz), so no sharp resonance exists.
 
 \textbf{Predicted efficiency:} $<10^{-6}$ (six orders of magnitude below direct single-photon excitation).
 
