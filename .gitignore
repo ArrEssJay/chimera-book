@@ -47,3 +47,14 @@ test_*.tex
 test_*.pdf
 test_*.aux
 test_*.log
+
+# LaTeX test files
+_latex/test_*.tex
+_latex/test_*.pdf
+_latex/test_*.log
+_latex/test_*.aux
+_latex/test_*.out
+_latex/test_*.idx
+_latex/test_*.toc
+_latex/test_preamble.tex
+_latex/page-*.png

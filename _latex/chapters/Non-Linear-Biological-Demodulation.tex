@@ -72,10 +72,11 @@ where:
 \end{itemize}
 
 The quadratic term produces:
-\begin{equation}
+\begin{align}
 \label{eq:quadratic-mixing}
-x^2(t) = \frac{A_1^2}{2}[1 + \cos(2\omega_1 t)] + \frac{A_2^2}{2}[1 + \cos(2\omega_2 t)] + A_1 A_2[\cos((\omega_1+\omega_2)t) + \cos((\omega_1-\omega_2)t)]
-\end{equation}
+x^2(t) &= \frac{A_1^2}{2}[1 + \cos(2\omega_1 t)] + \frac{A_2^2}{2}[1 + \cos(2\omega_2 t)] \nonumber\\
+&\quad + A_1 A_2[\cos((\omega_1+\omega_2)t) + \cos((\omega_1-\omega_2)t)]
+\end{align}
 
 This generates:
 \begin{itemize}
@@ -95,7 +96,7 @@ where $m, n$ are positive integers defining the intermodulation order.
 \subsection{Nonlinear Mixing Diagram}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
+\begin{tikzpicture}[scale=0.9]
 % Input spectrum
 \begin{scope}[shift={(0,0)}]
 \draw[->] (-0.2,0) -- (4.5,0) node[right,font=\scriptsize] {$f$};
@@ -308,7 +309,7 @@ For detailed analysis, see Chapter~\ref{ch:imd-biology}.
 \subsection{Comparison: Acoustic vs Electromagnetic Nonlinearity}
 
 \begin{center}
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.85]
 % Title
 \node[font=\small\bfseries] at (6,4.5) {Nonlinearity Strength Comparison};
 
@@ -468,42 +469,45 @@ For detailed analysis, see Chapter~\ref{ch:frey-effect}.
 
 \begin{center}
 \begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.5cm, minimum height=1cm, font=\sffamily\small, align=center},
-  arrow/.style={->, >=stealth, very thick},
-  node distance=1.8cm,
-  font=\small
+  scale=0.6,
+  block/.style={rectangle, draw, minimum width=1.5cm, minimum height=0.7cm, font=\sffamily\tiny, align=center},
+  arrow/.style={->, >=stealth, thick},
+  node distance=0.8cm,
+  font=\tiny
 ]
 
 % Input
-\node (input) {\textbf{Pulsed}\\\ textbf{Microwaves}\\1--10 GHz};
+\node[font=\tiny] (input) {\textbf{Pulsed}\\\textbf{Microwaves}\\1--10 GHz};
 
-% Process blocks
+% First row of process blocks
 \node[block, right=of input] (heating) {Rapid\\Tissue\\Heating};
 \node[block, right=of heating] (expansion) {Thermoelastic\\Expansion};
-\node[block, right=of expansion] (acoustic) {Pressure\\Wave};
+
+% Second row of process blocks
+\node[block, below=1.0cm of heating, xshift=1.2cm] (acoustic) {Pressure\\Wave};
 \node[block, right=of acoustic] (cochlea) {Cochlear\\Stimulation};
 
 % Output
-\node[right=of cochlea] (output) {\textbf{Auditory}\\\ textbf{Perception}\\200 Hz--10 kHz};
+\node[right=of cochlea, font=\tiny] (output) {\textbf{Auditory}\\\textbf{Perception}\\200 Hz--10 kHz};
 
 % Arrows with labels
 \draw[arrow] (input) -- (heating);
-\draw[arrow] (heating) -- node[above, font=\scriptsize] {$\Delta T \sim$ µK} (expansion);
-\draw[arrow] (expansion) -- node[above, font=\scriptsize] {$p \sim$ Pa} (acoustic);
+\draw[arrow] (heating) -- node[above, font=\tiny] {$\Delta T \sim$ µK} (expansion);
+\draw[arrow] (expansion) -- (expansion |- acoustic.north) -- node[left, font=\tiny] {$p \sim$ Pa} (acoustic);
 \draw[arrow] (acoustic) -- (cochlea);
 \draw[arrow] (cochlea) -- (output);
 
 % Time scale annotations
-\node[below=0.5cm of heating, font=\scriptsize, align=center] {$\tau_p \sim$ 1--50 µs\\(pulse duration)};
-\node[below=0.5cm of expansion, font=\scriptsize, align=center] {$\tau_{th} \sim$ 1 µs\\(thermal time)};
-\node[below=0.5cm of acoustic, font=\scriptsize, align=center] {$f_{PRF}$\\(repetition rate)};
+\node[above=0.2cm of heating, font=\tiny, align=center] {$\tau_p \sim$ 1--50 µs\\(pulse duration)};
+\node[above=0.2cm of expansion, font=\tiny, align=center] {$\tau_{th} \sim$ 1 µs\\(thermal time)};
+\node[below=0.2cm of acoustic, font=\tiny, align=center] {$f_{PRF}$\\(repetition rate)};
 
 % Title
-\node[above=1.2cm of expansion, font=\small\bfseries] {Frey Microwave Auditory Effect: Energy Transduction Pathway};
+\node[above=0.8cm of heating, font=\tiny\bfseries, xshift=1.2cm] {Frey Microwave Auditory Effect: Energy Transduction Pathway};
 
 % EM to Acoustic conversion box
-\draw[thick, dashed, NavyBlue] ([xshift=-0.3cm, yshift=0.5cm]heating.north west) rectangle ([xshift=0.3cm, yshift=-0.5cm]acoustic.south east);
-\node[above, NavyBlue, font=\scriptsize] at ([yshift=0.5cm]expansion.north) {EM $\rightarrow$ Acoustic Transduction};
+\draw[thick, dashed, NavyBlue] ([xshift=-0.2cm, yshift=0.3cm]heating.north west) rectangle ([xshift=0.2cm, yshift=-0.2cm]acoustic.south east);
+\node[left, NavyBlue, font=\tiny, align=right] at ([xshift=-0.3cm]heating.west |- acoustic) {EM $\rightarrow$\\Acoustic\\Transduction};
 \end{tikzpicture}
 \end{center}
 
@@ -580,35 +584,17 @@ This demonstrates why parametric arrays work: Two inaudible ultrasound beams (2 
 
 \section{Comparative Summary}
 
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2105}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2807}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1930}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1754}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1404}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Phenomenon
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Frequency Range
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Mechanism
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Strength
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Status
-\end{minipage} \\
-\midrule\noalign{}
+{\footnotesize
+\begin{longtable}{@{}p{0.20\linewidth}p{0.13\linewidth}p{0.38\linewidth}p{0.12\linewidth}p{0.12\linewidth}@{}}
+\toprule
+\textbf{Phenomenon} & \textbf{Frequency} & \textbf{Mechanism} & \textbf{Strength} & \textbf{Status} \\
+\midrule
 \endhead
-\bottomrule\noalign{}
+\bottomrule
 \endlastfoot
-\textbf{Acoustic heterodyning} & kHz-MHz (ultrasound) & Acoustic
-nonlinearity (\(\beta \sim 5\)) & Strong & Established \\
-\textbf{Frey effect} & 1-10 GHz (microwaves) & Thermoelastic
-transduction & Moderate & Established \\
-\textbf{EM IMD} & GHz-THz & Dielectric nonlinearity (\(\chi^{(3)}\)) &
-Weak & Speculative \\
+Acoustic heterodyning & kHz-MHz & Acoustic nonlinearity ($\beta \sim 5$) & Strong & Established \\
+Frey effect & 1-10 GHz & Thermoelastic transduction & Moderate & Established \\
+EM IMD & GHz-THz & Dielectric nonlinearity ($\chi^{(3)}$) & Weak & Speculative \\
 \end{longtable}
 }
 
