@@ -1,0 +1,20 @@
+\documentclass[11pt,letterpaper,openany]{book}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+% Define custom environments to prevent errors
+\newenvironment{nontechnical}{\par\textbf{Non-Technical Summary:}\par}{\par}
+\newenvironment{keyconcept}{\begin{tcolorbox}}{\end{tcolorbox}}
+\newenvironment{importantbox}{\begin{tcolorbox}}{\end{tcolorbox}}
+\newenvironment{calloutbox}[1][]{\begin{tcolorbox}}{\end{tcolorbox}}
+\newenvironment{warningbox}{\begin{tcolorbox}}{\end{tcolorbox}}
+
+\begin{document}
+\input{chapters/51-Biophysical-Coupling-Mechanism.tex}
+\end{document}

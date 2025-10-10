@@ -1,7 +1,7 @@
 #!/bin/bash -x
 # filepath: /Users/rowan/VSCode/chimera/book/build-book.sh
 # build-book.sh - Compile the complete Chimera book
-# Usage: ./build-book.sh [chapter_range] [--draft]
+# Usage: ./build-book.sh [chapter_range] [--watermark "Text"]
 # 
 # Chapter range examples:
 #   (no args)  - Build complete book (chapters 1 to end)
@@ -13,26 +13,38 @@
 #   -5:        - Build chapters (last - 5) to end
 #   42         - Build single chapter 42 (legacy mode)
 #
+# Watermark examples:
+#   --watermark "DRAFT"     - Add "DRAFT" watermark
+#   --watermark "V0.2"      - Add "V0.2" watermark
+#   --watermark "REVIEW"    - Add "REVIEW" watermark
+#
 # Note: Front and back matter are ALWAYS included regardless of range
-# Use --draft flag to add DRAFT watermark to all pages
 
 set -e  # Exit on error
 
 # Source the ISBNs
 source isbns.sh
 
-# Check for draft flag
-DRAFT_MODE=""
-if [[ "$*" == *"--draft"* ]]; then
-    DRAFT_MODE="\def\DRAFTMODE{1}"
-    echo "DRAFT MODE ENABLED - Watermark will be added"
-fi
+# Parse watermark argument
+WATERMARK_MODE=""
+WATERMARK_TEXT=""
+i=1
+while [ $i -le $# ]; do
+    arg="${!i}"
+    if [[ "$arg" == "--watermark" ]]; then
+        i=$((i + 1))
+        WATERMARK_TEXT="${!i}"
+        WATERMARK_MODE="\def\WATERMARKTEXT{$WATERMARK_TEXT}"
+        echo "WATERMARK ENABLED: '$WATERMARK_TEXT'"
+    fi
+    i=$((i + 1))
+done
 
 # Parse chapter range argument
 CHAPTER_RANGE=""
 CHAPTER_NUM=""  # Legacy single chapter mode
 for arg in "$@"; do
-    if [[ "$arg" != "--draft" ]] && [[ ! -z "$arg" ]]; then
+    if [[ "$arg" != "--watermark" ]] && [[ "$arg" != "$WATERMARK_TEXT" ]] && [[ ! -z "$arg" ]]; then
         if [[ "$arg" == *":"* ]]; then
             CHAPTER_RANGE="$arg"
         else
@@ -47,20 +59,20 @@ done
 if [ ! -z "$CHAPTER_NUM" ]; then
     echo "========================================"
     echo "Building Single Chapter: $CHAPTER_NUM"
-    [ ! -z "$DRAFT_MODE" ] && echo "(DRAFT MODE)"
+    [ ! -z "$WATERMARK_TEXT" ] && echo "(Watermark: $WATERMARK_TEXT)"
     echo "========================================"
     echo
 elif [ ! -z "$CHAPTER_RANGE" ]; then
     echo "========================================"
     echo "Building Chapter Range: $CHAPTER_RANGE"
     echo "(Front and back matter included)"
-    [ ! -z "$DRAFT_MODE" ] && echo "(DRAFT MODE)"
+    [ ! -z "$WATERMARK_TEXT" ] && echo "(Watermark: $WATERMARK_TEXT)"
     echo "========================================"
     echo
 else
     echo "========================================"
     echo "Building Chimera Book - First Edition"
-    [ ! -z "$DRAFT_MODE" ] && echo "(DRAFT MODE)"
+    [ ! -z "$WATERMARK_TEXT" ] && echo "(Watermark: $WATERMARK_TEXT)"
     echo "========================================"
     echo
 fi
@@ -289,7 +301,7 @@ else
 fi
 
 echo "Pass 1/3..."
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$DRAFT_MODE\def\ISBN{$ISBN_PRINT}\input{$PRINT_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$WATERMARK_MODE\def\ISBN{$ISBN_PRINT}\input{$PRINT_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 
 # Run biber for bibliography
 if [ -f "$BUILD_DATA_DIR/chimera-book-print.bcf" ]; then
@@ -299,10 +311,10 @@ fi
 
 # Two more passes for references
 echo "Pass 2/3..."
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$DRAFT_MODE\def\ISBN{$ISBN_PRINT}\input{$PRINT_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$WATERMARK_MODE\def\ISBN{$ISBN_PRINT}\input{$PRINT_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 
 echo "Pass 3/3..."
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$DRAFT_MODE\def\ISBN{$ISBN_PRINT}\input{$PRINT_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$WATERMARK_MODE\def\ISBN{$ISBN_PRINT}\input{$PRINT_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 
 cp "$BUILD_DATA_DIR/chimera-book-print.pdf" "./chimera-book-print.pdf"
 
@@ -328,7 +340,7 @@ EPDF_METADATA="\
 \def\ISBN{$ISBN_EPDF}"
 
 echo "E-PDF Pass 1/3..."
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$DRAFT_MODE$EPDF_METADATA\input{$EPDF_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$WATERMARK_MODE$EPDF_METADATA\input{$EPDF_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 
 # Run Biber for citations if needed
 if [ -f "$BUILD_DATA_DIR/chimera-book-epdf.bcf" ]; then
@@ -336,9 +348,9 @@ if [ -f "$BUILD_DATA_DIR/chimera-book-epdf.bcf" ]; then
     (biber "$BUILD_DATA_DIR/chimera-book-epdf") 2>&1 | tail -10
     # Re-run xelatex to include citations
     echo "E-PDF Pass 2/3..."
-    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$DRAFT_MODE$EPDF_METADATA\input{$EPDF_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$WATERMARK_MODE$EPDF_METADATA\input{$EPDF_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
     echo "E-PDF Pass 3/3..."
-    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$DRAFT_MODE$EPDF_METADATA\input{$EPDF_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$WATERMARK_MODE$EPDF_METADATA\input{$EPDF_INPUT}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 fi
 cp "$BUILD_DATA_DIR/chimera-book-epdf.pdf" "./chimera-book-epdf.pdf"
 

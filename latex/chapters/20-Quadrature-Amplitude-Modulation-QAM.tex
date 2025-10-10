@@ -1,1076 +1,121 @@
+% ==============================================================================
+% CHAPTER 20: Quadrature Amplitude Modulation (QAM)
+% ==============================================================================
+
 \chapter{Quadrature Amplitude Modulation (QAM)}
 \label{ch:qam}
 
 \begin{nontechnical}
+    \textbf{QAM is like using a grid of laser pointers to send data.} Instead of just varying the colour (phase) or brightness (amplitude), QAM varies \textbf{both simultaneously}. This creates a large grid of possible signal states, allowing a massive amount of information to be sent with each pulse.
 
-\textbf{QAM is like having a grid of mailboxes---the more boxes, the more messages you can send at once. Your WiFi/phone picks bigger grids when signal is strong!}
+    \parhead{The grid system}
+    \begin{itemize}
+        \item \textbf{16-QAM:} A 4x4 grid of 16 points, sending 4 bits at a time.
+        \item \textbf{64-QAM:} An 8x8 grid of 64 points, sending 6 bits at a time.
+        \item \textbf{256-QAM:} A 16x16 grid of 256 points, sending 8 bits at a time.
+        \item \textbf{1024-QAM:} A 32x32 grid, sending 10 bits at a time (used in WiFi 6).
+    \end{itemize}
 
-\textbf{The idea - Vary BOTH brightness and angle}:
-\begin{itemize}
-\item \textbf{PSK} (like QPSK): Only varies angle (4 or 8 positions)
-\item \textbf{QAM}: Varies \textbf{both} angle AND distance from center!
-\item Result: Many more possible positions = much faster data!
-\end{itemize}
+    \parhead{The speed vs. reliability trade-off} A larger grid means a much faster data rate. 256-QAM is four times faster than QPSK. However, the points on the grid are much closer together, making them harder to distinguish in a noisy environment.
 
-\textbf{Real QAM sizes}:
-\begin{itemize}
-\item \textbf{16-QAM}: $4 \times 4$ grid = 16 positions = 4 bits/symbol
-\item \textbf{64-QAM}: $8 \times 8$ grid = 64 positions = 6 bits/symbol
-\item \textbf{256-QAM}: $16 \times 16$ grid = 256 positions = 8 bits/symbol
-\item \textbf{1024-QAM} (WiFi 6): $32 \times 32$ grid = 1024 positions = 10 bits/symbol!
-\end{itemize}
-
-\textbf{Why you care - Speed differences}:
-\begin{itemize}
-\item \textbf{QPSK}: 2 bits/symbol (baseline)
-\item \textbf{16-QAM}: 4 bits/symbol = \textbf{$2\times$ faster}
-\item \textbf{64-QAM}: 6 bits/symbol = \textbf{$3\times$ faster}
-\item \textbf{256-QAM}: 8 bits/symbol = \textbf{$4\times$ faster}
-\item \textbf{1024-QAM}: 10 bits/symbol = \textbf{$5\times$ faster}!
-\end{itemize}
-
-\textbf{The trade-off}:
-\begin{itemize}
-\item \textbf{More positions} = faster BUT positions are closer together
-\item \textbf{Closer positions} = easier to confuse when signal is noisy
-\item Strong signal (close to router): Use 1024-QAM = blazing fast!
-\item Weak signal (far from router): Use QPSK = slower but reliable
-\end{itemize}
-
-\textbf{Where you see it}:
-\begin{itemize}
-\item \textbf{Your WiFi stats}: ``MCS 9, 256-QAM'' = using 256-position grid
-\item \textbf{4G/5G}: ``Modulation: 64-QAM'' = using 64-position grid
-\item \textbf{Cable modem}: DOCSIS 3.1 uses 4096-QAM (12 bits/symbol!)
-\item \textbf{Phone signal bars}: Full bars = can use high QAM, low bars = must use simple modulation
-\end{itemize}
-
-\textbf{Real experience}:
-\begin{itemize}
-\item Walk toward router: Speed increases as phone switches QPSK $\rightarrow$ 16-QAM $\rightarrow$ 64-QAM $\rightarrow$ 256-QAM
-\item Walk away: Speed decreases as phone steps back down
-\item This happens automatically hundreds of times per second!
-\end{itemize}
-
-\textbf{Fun fact}: Modern WiFi 6E can use 1024-QAM, but ONLY at close
-range with zero interference---it's like threading a needle with radio waves!
+    \parhead{Real-world use: Adaptive Modulation} Your smartphone and WiFi router perform this trade-off automatically hundreds of times per second.
+    \begin{itemize}
+        \item When the signal is strong (high SNR, close to the router), they use a large grid like 256-QAM for blazing-fast speeds.
+        \item As the signal gets weaker (low SNR, far from the router), they switch to a smaller, more robust grid like 16-QAM or QPSK to keep the connection reliable.
+    \end{itemize}
+    This is why your internet speed drops as you move further from your router.
 \end{nontechnical}
 
-\section{Overview}
 
-\textbf{Quadrature Amplitude Modulation (QAM)} is a digital modulation scheme that encodes data by modulating \textbf{both the amplitude and phase} of a carrier wave, achieving optimal use of the two-dimensional signal space.
+\subsection{Overview}
+
+\keyterm{Quadrature Amplitude Modulation (QAM)} is a highly spectrally efficient modulation scheme that encodes data by varying both the \keyterm{amplitude} and \keyterm{phase} of a carrier wave. It can be viewed as the combination of Amplitude-Shift Keying (ASK) and Phase-Shift Keying (PSK). By utilizing the full two-dimensional IQ plane, QAM can achieve a much higher data rate than ASK or PSK alone for a given bandwidth.
 
 \begin{keyconcept}
-QAM achieves \textbf{superior spectral efficiency} by utilizing both amplitude and phase dimensions of the signal space. While PSK uses only phase, QAM leverages the entire I/Q plane, making it the optimal choice for high-throughput systems where bandwidth is constrained but SNR is adequate.
+    QAM is the workhorse of modern, high-speed digital communications. Its ability to pack many bits into a single symbol makes it the standard for \textbf{bandwidth-limited} systems where high data throughput is required, such as WiFi, 4G/5G cellular, and cable modems. The trade-off for this high efficiency is a requirement for a high signal-to-noise ratio and linear amplification.
 \end{keyconcept}
 
-\section{Mathematical Description}
 
-\subsection{QAM Fundamentals}
+\subsection{Mathematical Representation}
 
-\subsubsection{Complex Baseband Representation}
-
-The QAM symbol in complex baseband representation is:
+An M-ary QAM signal is constructed from two independent baseband signals, $I(t)$ and $Q(t)$, which modulate orthogonal carriers. Each symbol corresponds to a point $(I_k, Q_k)$ on a grid in the IQ plane. The passband signal is:
 \begin{equation}
-s_m = I_m + jQ_m
-\label{eq:qam-symbol}
+    s(t) = I_k \cos(2\pi f_c t) - Q_k \sin(2\pi f_c t)
 \end{equation}
-where:
-\begin{itemize}
-\item $I_m$ = In-phase amplitude (real axis)
-\item $Q_m$ = Quadrature amplitude (imaginary axis)
-\item $m$ = Symbol index ($0$ to $M-1$)
-\end{itemize}
+For a square M-QAM constellation, there are $L = \sqrt{M}$ distinct amplitude levels for both the I and Q components, creating a grid of $M=L^2$ points. Each symbol encodes $k = \log_2(M)$ bits.
 
-The passband RF signal is expressed as:
+
+\subsection{Performance Characteristics}
+
+\paragraph{Bit Error Rate (BER)}
+The performance of QAM is determined by the Euclidean distance between adjacent constellation points. As the order of M-QAM increases, the points become more crowded for a given average power, making the system more susceptible to noise.
 \begin{equation}
-s_{\text{RF}}(t) = I_m \cos(2\pi f_c t) - Q_m \sin(2\pi f_c t)
-\label{eq:qam-passband}
-\end{equation}
-where:
-\begin{itemize}
-\item $f_c$ = carrier frequency (Hz)
-\item $t$ = time (seconds)
-\end{itemize}
-
-\subsubsection{M-ary QAM}
-
-For square M-QAM, the constellation contains:
-\begin{equation}
-M = L^2 \quad \text{points, where } L = \sqrt{M}
-\label{eq:qam-m}
+    \text{BER}_{\text{M-QAM}} \approx \frac{4}{\log_2 M} Q\left(\sqrt{\frac{3\log_2 M}{M-1} \frac{E_b}{N_0}}\right)
 \end{equation}
 
-The number of bits per symbol is:
-\begin{equation}
-k = \log_2(M)
-\label{eq:qam-bits}
-\end{equation}
+\paragraph{Power vs. Spectral Efficiency Trade-off}
+QAM provides a direct trade-off between power and bandwidth. Each time the number of bits per symbol is increased by one (e.g., moving from 16-QAM to 32-QAM), the spectral efficiency increases, but the required $E_b/N_0$ to maintain the same BER also increases by approximately 3-4 dB.
 
-\textbf{Common QAM orders:}
+\begin{table}[H]
+    \centering
+    \caption{Performance of Common QAM Schemes (for BER $10^{-6}$)}
+    \label{tab:qam-performance}
+    \begin{tabular}{@{}lccc@{}}
+        \toprule
+        \tableheaderfont Modulation & \tableheaderfont Bits/Symbol & \tableheaderfont Spectral Eff. ($\eta$) & \tableheaderfont Required $E_b/N_0$ \\
+        \midrule
+        QPSK (4-QAM) & 2 & 1.6 bps/Hz & 10.5 dB \\
+        16-QAM & 4 & 3.2 bps/Hz & 14.5 dB \\
+        64-QAM & 6 & 4.8 bps/Hz & 18.8 dB \\
+        256-QAM & 8 & 6.4 bps/Hz & 23.4 dB \\
+        1024-QAM & 10 & 8.0 bps/Hz & 28.5 dB \\
+        \bottomrule
+    \end{tabular}
+    \par\vspace{0.5em}
+    \small Note: Spectral efficiency calculated with a typical roll-off factor of $\alpha=0.25$.
+\end{table}
+
+
+\subsection{Implementation Challenges}
+
+\paragraph{Power Amplifier Linearity}
+Unlike constant-envelope schemes like PSK and FSK, QAM has a varying signal envelope. This results in a high \keyterm{Peak-to-Average Power Ratio (PAPR)}, especially for higher orders. A high PAPR requires the transmitter's power amplifier (PA) to be highly linear to avoid distorting the signal, which reduces the PA's power efficiency. This is a critical design trade-off in mobile devices.
+
+\paragraph{Receiver Complexity}
+QAM requires a fully coherent receiver with precise carrier and timing synchronization. It is also highly sensitive to hardware imperfections:
 \begin{itemize}
-\item 4-QAM (QPSK): $2 \times 2$ grid, 2 bits/symbol
-\item 16-QAM: $4 \times 4$ grid, 4 bits/symbol
-\item 64-QAM: $8 \times 8$ grid, 6 bits/symbol
-\item 256-QAM: $16 \times 16$ grid, 8 bits/symbol
-\item 1024-QAM: $32 \times 32$ grid, 10 bits/symbol
-\item 4096-QAM: $64 \times 64$ grid, 12 bits/symbol
+    \item \textbf{Phase Noise:} Causes rotation and blurring of the constellation points.
+    \item \textbf{IQ Imbalance:} Skews the constellation, reducing the distance between points.
+    \item \textbf{Amplitude/Phase Ripple:} Uneven frequency response in filters can distort the positions of the constellation points.
 \end{itemize}
+These impairments become increasingly problematic for higher-order schemes like 256-QAM and 1024-QAM, which require an EVM of less than 3.5\% and 1.8\%, respectively.
 
-\section{Constellation Diagrams}
 
-\subsection{16-QAM}
-
-\subsubsection{Constellation Diagram}
-
-The 16-QAM constellation forms a $4 \times 4$ square grid in the I/Q plane:
-
-\begin{center}
-\begin{tikzpicture}[scale=1.2]
-% Axes
-\draw[->] (-4.5,0) -- (4.5,0) node[right] {\sffamily\small $I$ (In-phase)};
-\draw[->] (0,-4.5) -- (0,4.5) node[above] {\sffamily\small $Q$ (Quadrature)};
-
-% Grid
-\draw[very thin,gray!30] (-4,-4) grid[step=0.5] (4,4);
-
-% Constellation points (d=1 normalized)
-\foreach \i in {-3,-1,1,3} {
-  \foreach \q in {-3,-1,1,3} {
-    \fill[black] (\i,\q) circle (3pt);
-  }
-}
-
-% Labels for corner points
-\node[below left=3pt] at (-3,-3) {\sffamily\scriptsize 0000};
-\node[above left=3pt] at (-3,3) {\sffamily\scriptsize 0010};
-\node[above right=3pt] at (3,3) {\sffamily\scriptsize 1010};
-\node[below right=3pt] at (3,-3) {\sffamily\scriptsize 1000};
-
-% Distance annotation
-\draw[<->,thick,blue] (-3,-4.8) -- (-1,-4.8) node[midway,below,font=\scriptsize] {$d_{\min} = 2d$};
-\draw[<->,thick,red] (0,0) -- (3,3) node[midway,above left,font=\scriptsize] {$d_{\max}$};
-
-% Title
-\node[above,font=\sffamily\bfseries] at (0,5) {16-QAM Constellation};
-\end{tikzpicture}
-\end{center}
-
-\textbf{Amplitude levels}: $I, Q \in \{-3d, -d, +d, +3d\}$
-
-where $d$ = unit spacing (normalized distance)
-
-For square QAM, the constellation forms a $\sqrt{M} \times \sqrt{M}$ grid in the I/Q plane.
-
-\section{Constellation Diagrams}
-
-QAM constellations are visualized as grids in the I/Q plane, with symbol positions determined by discrete amplitude levels on both axes.
-
-\begin{center}
-\begin{tikzpicture}[scale=1.0]
-% 16-QAM
-\begin{scope}[shift={(0,0)}]
-\node[above,font=\sffamily\bfseries] at (0,3) {16-QAM ($4 \times 4$ grid)};
-\draw[->] (-2.5,0) -- (2.5,0) node[right,font=\sffamily\small] {$I$};
-\draw[->] (0,-2.5) -- (0,2.5) node[above,font=\sffamily\small] {$Q$};
-\draw[very thin,gray!30] (-2,-2) grid[step=0.5] (2,2);
-
-% 16-QAM constellation points
-\foreach \i in {-1.5,-0.5,0.5,1.5} {
-  \foreach \q in {-1.5,-0.5,0.5,1.5} {
-    \fill[black] (\i,\q) circle (2pt);
-  }
-}
-
-\node[below,font=\small] at (0,-3) {$k = 4$ bits/symbol};
-\end{scope}
-\end{tikzpicture}
-\end{center}
-
-\textbf{Gray coding}: Adjacent symbols differ by exactly 1 bit, minimizing bit errors when symbol errors occur.
-
-\subsubsection{Signal Characteristics}
-
-The average symbol energy for 16-QAM is:
-\begin{equation}
-\bar{E}_s = \frac{1}{16}\sum_{m=0}^{15} (I_m^2 + Q_m^2) = \frac{1}{16} \times 16 \times 10d^2 = 10d^2
-\label{eq:16qam-energy}
-\end{equation}
-
-For unit average energy normalization, set $d^2 = 1/10$, giving $\bar{E}_s = 1$.
-
-The minimum Euclidean distance between adjacent constellation points is:
-\begin{equation}
-d_{\min} = 2d = 2\sqrt{\frac{1}{10}} = \frac{2}{\sqrt{10}} \approx 0.632
-\label{eq:16qam-distance}
-\end{equation}
-
-\subsection{64-QAM}
-
-\subsubsection{Constellation Diagram}
-
-The 64-QAM constellation forms an $8 \times 8$ square grid:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.8]
-% Axes
-\draw[->] (-5,0) -- (5,0) node[right] {\sffamily\small $I$};
-\draw[->] (0,-5) -- (0,5) node[above] {\sffamily\small $Q$};
-
-% Grid
-\draw[very thin,gray!30] (-4.5,-4.5) grid[step=0.5] (4.5,4.5);
-
-% Constellation points (8x8 grid, d=0.5 for spacing)
-\foreach \i in {-3.5,-2.5,-1.5,-0.5,0.5,1.5,2.5,3.5} {
-  \foreach \q in {-3.5,-2.5,-1.5,-0.5,0.5,1.5,2.5,3.5} {
-    \fill[black] (\i,\q) circle (2pt);
-  }
-}
-
-% Distance annotation
-\draw[<->,thick,blue] (-3.5,-5.2) -- (-2.5,-5.2) node[midway,below,font=\scriptsize] {$d_{\min} = 2d$};
-
-% Title
-\node[above,font=\sffamily\bfseries] at (0,5.5) {64-QAM Constellation (8$\times$8 grid)};
-\end{tikzpicture}
-\end{center}
-
-\textbf{Amplitude levels}: $I, Q \in \{-7d, -5d, -3d, -d, +d, +3d, +5d, +7d\}$
-
-\textbf{Bits per symbol}: $k = \log_2(64) = 6$
-
-The average symbol energy is:
-\begin{equation}
-\bar{E}_s = \frac{1}{64}\sum_{m=0}^{63} (I_m^2 + Q_m^2) = 42d^2
-\label{eq:64qam-energy}
-\end{equation}
-
-For normalized energy ($\bar{E}_s = 1$): $d = 1/\sqrt{42}$
-
-Minimum distance:
-\begin{equation}
-d_{\min} = 2d = \frac{2}{\sqrt{42}} \approx 0.309
-\label{eq:64qam-distance}
-\end{equation}
-
-\subsection{256-QAM}
-
-\subsubsection{Constellation Diagram}
-
-256-QAM uses a $16 \times 16$ square grid with 256 constellation points.
-
-\textbf{Bits per symbol}: $k = \log_2(256) = 8$
-
-The average symbol energy is:
-\begin{equation}
-\bar{E}_s = 170d^2
-\label{eq:256qam-energy}
-\end{equation}
-
-For normalized energy: $d = 1/\sqrt{170}$
-
-Minimum distance:
-\begin{equation}
-d_{\min} = 2d = \frac{2}{\sqrt{170}} \approx 0.153
-\label{eq:256qam-distance}
-\end{equation}
-
-\subsubsection{High-Order QAM}
-
-\textbf{1024-QAM}: $32 \times 32$ grid, 10 bits/symbol
-
-\textbf{4096-QAM}: $64 \times 64$ grid, 12 bits/symbol
-
-\textbf{Practical limit}: $\sim$4096-QAM (802.11ax WiFi 6, DOCSIS 3.1 cable modems)
-
-\begin{warningbox}
-High-order QAM (1024-QAM and above) requires \textbf{exceptional channel conditions}:
-\begin{itemize}
-\item SNR $>$ 30--40~dB (typically achievable only in controlled environments)
-\item Excellent transmitter/receiver linearity (EVM $<$ 1\%)
-\item Accurate I/Q balance and phase noise control
-\item Short transmission distances or high-quality cables
-\end{itemize}
-In practice, 1024/4096-QAM are limited to WiFi at very close range or wired systems (cable/DSL).
-\end{warningbox}
-
-\section{Performance Analysis}
-
-\subsection{Symbol Error Rate (SER)}
-
-For square M-QAM in an AWGN channel (approximate, high SNR):
-\begin{equation}
-P_s \approx 4\left(1 - \frac{1}{\sqrt{M}}\right) Q\left(\sqrt{\frac{3}{M-1} \cdot \frac{E_s}{N_0}}\right)
-\label{eq:qam-ser}
-\end{equation}
-where:
-\begin{itemize}
-\item $Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} dt$ = Gaussian Q-function
-\item $E_s$ = average symbol energy (joules)
-\item $N_0$ = noise power spectral density (W/Hz)
-\item $M$ = constellation size
-\end{itemize}
-
-\subsection{Bit Error Rate (BER)}
-
-With Gray coding (adjacent symbols differ by 1 bit), the approximate BER is:
-\begin{equation}
-\text{BER} \approx \frac{P_s}{\log_2(M)}
-\label{eq:qam-ber-gray}
-\end{equation}
-
-Expressed in terms of $E_b/N_0$:
-\begin{equation}
-\text{BER} \approx \frac{4}{\log_2(M)}\left(1 - \frac{1}{\sqrt{M}}\right) Q\left(\sqrt{\frac{3\log_2(M)}{M-1} \cdot \frac{E_b}{N_0}}\right)
-\label{eq:qam-ber-eb}
-\end{equation}
-where $E_b/N_0 = (E_s/N_0) / \log_2(M)$ is the energy per bit to noise ratio.
-
-\subsubsection{Required $E_b/N_0$ for BER = $10^{-6}$}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Modulation & Bits/symbol & Required Eb/N0 (dB) & SNR Penalty vs QPSK \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{QPSK} & 2 & 10.5 & 0 dB (baseline) \\
-\textbf{16-QAM} & 4 & 14.5 & +4 dB \\
-\textbf{64-QAM} & 6 & 18.5 & +8 dB \\
-\textbf{256-QAM} & 8 & 23 & +12.5 dB \\
-\textbf{1024-QAM} & 10 & 27.5 & +17 dB \\
-\textbf{4096-QAM} & 12 & 32 & +21.5 dB \\
-\end{longtable}
-}
-
-\section{Bandwidth Efficiency}
-
-With raised-cosine pulse shaping (roll-off factor $\alpha$), the occupied bandwidth is:
-\begin{equation}
-B = (1 + \alpha) R_s = (1 + \alpha) \frac{R_b}{\log_2(M)} \quad \text{(Hz)}
-\label{eq:qam-bandwidth}
-\end{equation}
-where:
-\begin{itemize}
-\item $R_b$ = bit rate (bps)
-\item $R_s$ = symbol rate (symbols/sec)
-\item $\alpha$ = roll-off factor (typically 0.2--0.5)
-\end{itemize}
-
-The spectral efficiency is:
-\begin{equation}
-\eta = \frac{R_b}{B} = \frac{\log_2(M)}{1 + \alpha} \quad \text{(bits/sec/Hz)}
-\label{eq:qam-spectral-efficiency}
-\end{equation}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Modulation & Bits/sym & Spectral Eff. & SNR Requirement \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{QPSK} & 2 & 1.48 & Good (10 dB) \\
-\textbf{16-QAM} & 4 & 2.96 & Moderate (15 dB) \\
-\textbf{64-QAM} & 6 & 4.44 & High (20 dB) \\
-\textbf{256-QAM} & 8 & 5.93 & Very high (25 dB) \\
-\textbf{1024-QAM} & 10 & 7.41 & Excellent (30 dB) \\
-\textbf{4096-QAM} & 12 & 8.89 & Exceptional (35 dB) \\
-\end{longtable}
-}
-
-\section{Worked Example: WiFi Link with 64-QAM}
-
-\begin{calloutbox}{Example: 802.11ac Link Budget Analysis}
-
-\textbf{Scenario:} Indoor WiFi link using 64-QAM at 5~GHz
-
-\subsection*{Given Parameters}
-\begin{tabular}{@{}ll@{}}
-Frequency & $f = 5.2$~GHz (802.11ac) \\
-Distance & $d = 10$~m (indoor) \\
-TX power & $P_t = 20$~dBm (100~mW) \\
-TX antenna gain & $G_t = 2$~dBi (omnidirectional) \\
-RX antenna gain & $G_r = 2$~dBi (laptop) \\
-Bandwidth & $B = 20$~MHz \\
-Modulation & 64-QAM (6 bits/symbol) \\
-Coding rate & $r = 3/4$ \\
-Noise figure & $NF = 6$~dB \\
-Target BER & $10^{-6}$ \\
-\end{tabular}
-
-\subsection*{Step 1: Free-Space Path Loss}
-\begin{equation*}
-\mathrm{FSPL} = 20\log_{10}(d) + 20\log_{10}(f) + 32.45 = 20\log_{10}(10) + 20\log_{10}(5200) + 32.45
-\end{equation*}
-\begin{equation*}
-\mathrm{FSPL} = 20 + 74.3 + 32.45 = 126.8~\text{dB}
-\end{equation*}
-
-\subsection*{Step 2: Indoor Propagation Loss}
-Indoor walls and obstacles add approximately 15~dB additional loss:
-\begin{equation*}
-L_{\text{indoor}} = 15~\text{dB}
-\end{equation*}
-
-\subsection*{Step 3: Received Signal Power}
-\begin{equation*}
-P_r = P_t + G_t + G_r - \mathrm{FSPL} - L_{\text{indoor}}
-\end{equation*}
-\begin{equation*}
-P_r = 20 + 2 + 2 - 126.8 - 15 = -117.8~\text{dBm}
-\end{equation*}
-
-\subsection*{Step 4: Noise Power}
-\begin{equation*}
-N = kTB \cdot NF = (-174 + 10\log_{10}(20 \times 10^6) + 6)~\text{dBm}
-\end{equation*}
-\begin{equation*}
-N = -174 + 73 + 6 = -95~\text{dBm}
-\end{equation*}
-
-\subsection*{Step 5: Signal-to-Noise Ratio}
-\begin{equation*}
-\mathrm{SNR} = P_r - N = -117.8 - (-95) = -22.8~\text{dB} \quad \text{(Oops! Negative!)}
-\end{equation*}
-
-Wait, this link won't work! Let's recalculate with a more realistic scenario at $d = 5$~m:
-\begin{equation*}
-\mathrm{FSPL}(5~\text{m}) = 20 + 68.3 + 32.45 = 120.8~\text{dB}
-\end{equation*}
-\begin{equation*}
-P_r = 20 + 2 + 2 - 120.8 - 10 = -106.8~\text{dBm}
-\end{equation*}
-\begin{equation*}
-\mathrm{SNR} = -106.8 - (-95) = -11.8~\text{dB} \quad \text{(Still negative!)}
-\end{equation*}
-
-\textbf{Actually}, the symbol rate for 20~MHz 802.11ac is $R_s \approx 312.5$~kSymbols/sec (accounting for OFDM overhead), so effective bandwidth is narrower. Using $B_{\text{eff}} = 16.25$~MHz:
-\begin{equation*}
-N = -174 + 72.1 + 6 = -95.9~\text{dBm}
-\end{equation*}
-\begin{equation*}
-\mathrm{SNR} = -106.8 - (-95.9) = -10.9~\text{dB} \quad \text{(Still too low!)}
-\end{equation*}
-
-\textbf{Correct approach - use symbol rate:}
-\begin{equation*}
-R_b = 6~\text{bits/symbol} \times \frac{3}{4}~\text{(coding)} \times 312.5~\text{kSymbols/sec} \approx 1.4~\text{Mbps per subcarrier}
-\end{equation*}
-
-For 52 data subcarriers (802.11ac), total rate $\approx 73$~Mbps.
-
-\subsection*{Step 6: Required $E_b/N_0$ for 64-QAM}
-From equation~\ref{eq:qam-ber-eb}, for BER $= 10^{-6}$ with 64-QAM: $E_b/N_0 \approx 18.5$~dB
-
-\subsection*{Conclusion}
-The link margin is tight. In practice, 802.11ac would use adaptive modulation:
-\begin{itemize}
-\item \textbf{Close range (< 5~m)}: 256-QAM possible
-\item \textbf{Medium range (5--15~m)}: 64-QAM typical
-\item \textbf{Long range (> 20~m)}: Falls back to 16-QAM or QPSK
-\end{itemize}
-
-\textbf{Key insight:} This calculation shows why WiFi speed drops dramatically with distance---the system must switch to lower-order QAM to maintain link reliability.
-\end{calloutbox}
-
-\section{Modulation and Demodulation}
-
-\subsection{QAM Modulator}
-
-The QAM modulator uses standard I/Q (quadrature) modulation architecture:
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  sum/.style={circle, draw, minimum size=0.8cm, font=\sffamily\small},
-  node distance=2.2cm,
-  font=\small
-]
-% Input
-\node (input) {\sffamily Serial\\Data};
-\node[block, right of=input, node distance=2.5cm] (serial) {Serial to\\Parallel};
-
-% I branch
-\node[block, above right of=serial, node distance=3cm] (imap) {I-Symbol\\Mapper};
-\node[block, right of=imap, node distance=3cm] (imult) {Mixer\\$\times$};
-\node[above of=imult, node distance=1.3cm, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
-
-% Q branch
-\node[block, below right of=serial, node distance=3cm] (qmap) {Q-Symbol\\Mapper};
-\node[block, right of=qmap, node distance=3cm] (qmult) {Mixer\\$\times$};
-\node[below of=qmult, node distance=1.3cm, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
-
-% Summer
-\node[sum, right of=imult, node distance=2.5cm, yshift=-1.5cm] (sum) {$+$};
-
-% Output
-\node[block, right of=sum, node distance=2.5cm] (filter) {Bandpass\\Filter};
-\node[right of=filter, node distance=2.5cm] (output) {\sffamily QAM\\Output};
-
-% Connections
-\draw[->,thick] (input) -- (serial);
-\draw[->,thick] (serial) |- (imap);
-\draw[->,thick] (serial) |- (qmap);
-\draw[->,thick] (imap) -- node[above,font=\scriptsize] {$I(t)$} (imult);
-\draw[->,thick] (qmap) -- node[above,font=\scriptsize] {$Q(t)$} (qmult);
-\draw[->,thick] (cos) -- (imult);
-\draw[->,thick] (sin) -- (qmult);
-\draw[->,thick] (imult) -- (sum);
-\draw[->,thick] (qmult) -- (sum);
-\draw[->,thick] (sum) -- (filter);
-\draw[->,thick] (filter) -- (output);
-\end{tikzpicture}
-\end{center}
-
-\textbf{Note:} The hardware is identical to QPSK; only the symbol mapping differs (QAM uses multiple amplitude levels).
-
-\subsection{QAM Coherent Demodulator}
-
-The receiver uses coherent I/Q demodulation to recover the transmitted symbols:
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.2cm,
-  font=\small
-]
-% Input
-\node (input) {\sffamily RX\\Signal};
-
-% I branch
-\node[block, above right of=input, node distance=3cm] (imult) {Mixer\\$\times$};
-\node[above of=imult, node distance=1.3cm, font=\scriptsize, align=center] (cos) {$2\cos(2\pi f_c t)$\\LO};
-\node[block, right of=imult, node distance=2.8cm] (ilpf) {Lowpass\\Filter};
-\node[block, right of=ilpf, node distance=2.8cm] (isample) {Sample\\$@T_s$};
-\node[right of=isample, node distance=2.5cm] (iout) {\sffamily $I$};
-
-% Q branch  
-\node[block, below right of=input, node distance=3cm] (qmult) {Mixer\\$\times$};
-\node[below of=qmult, node distance=1.3cm, font=\scriptsize, align=center] (sin) {$-2\sin(2\pi f_c t)$\\LO};
-\node[block, right of=qmult, node distance=2.8cm] (qlpf) {Lowpass\\Filter};
-\node[block, right of=qlpf, node distance=2.8cm] (qsample) {Sample\\$@T_s$};
-\node[right of=qsample, node distance=2.5cm] (qout) {\sffamily $Q$};
-
-% Decision block
-\node[block, right of=isample, node distance=5cm, yshift=-1.5cm] (decision) {Symbol\\Decision};
-\node[right of=decision, node distance=2.5cm] (bits) {\sffamily Data\\Bits};
-
-% Connections
-\draw[->,thick] (input) -- ++(1,0) coordinate(split);
-\draw[->,thick] (split) |- (imult);
-\draw[->,thick] (split) |- (qmult);
-\draw[->,thick] (cos) -- (imult);
-\draw[->,thick] (sin) -- (qmult);
-\draw[->,thick] (imult) -- (ilpf);
-\draw[->,thick] (ilpf) -- (isample);
-\draw[->,thick] (isample) -- (iout);
-\draw[->,thick] (qmult) -- (qlpf);
-\draw[->,thick] (qlpf) -- (qsample);
-\draw[->,thick] (qsample) -- (qout);
-\draw[->,thick] (iout) -| (decision);
-\draw[->,thick] (qout) -| (decision);
-\draw[->,thick] (decision) -- (bits);
-\end{tikzpicture}
-\end{center}
-
-\textbf{Detection process:}
-\begin{enumerate}
-\item Sample I and Q at symbol rate $T_s$
-\item Find nearest constellation point (minimum Euclidean distance)
-\item Map constellation point to bits using Gray code mapping
-\end{enumerate}
-
-\subsection{Soft-Decision Decoding}
-
-\textbf{Hard decision:} Select nearest constellation point, output bits directly.
-
-\textbf{Soft decision:} Pass I/Q values or Log-Likelihood Ratios (LLRs) to the FEC decoder.
-
-The LLR for bit $b_k$ is:
-\begin{equation}
-\text{LLR}(b_k) = \log\frac{P(b_k=0 | r)}{P(b_k=1 | r)}
-\label{eq:qam-llr-simple}
-\end{equation}
-
-\begin{keyconcept}
-Soft-decision decoding provides approximately \textbf{2~dB coding gain} over hard decisions when used with modern FEC codes (LDPC, Turbo). The decoder utilizes the reliability information from the demodulator, not just the bit decision.
-\end{keyconcept}
-
-\section{Power Efficiency}
-
-\subsection{Peak-to-Average Power Ratio (PAPR)}
-
-Unlike constant-envelope modulations (BPSK, QPSK, FSK), QAM has a varying envelope:
-\begin{equation}
-|s_m| = \sqrt{I_m^2 + Q_m^2}
-\label{eq:qam-envelope}
-\end{equation}
-
-The Peak-to-Average Power Ratio is defined as:
-\begin{equation}
-\text{PAPR} = \frac{P_{\max}}{P_{\text{avg}}} = \frac{|s_{\max}|^2}{\bar{E}_s}
-\label{eq:qam-papr}
-\end{equation}
-where:
-\begin{itemize}
-\item $|s_{\max}|$ = maximum constellation point magnitude
-\item $\bar{E}_s$ = average symbol energy
-\end{itemize}
-
-\subsubsection{PAPR Values}\label{papr-values}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Modulation & PAPR (linear) & PAPR (dB) & Notes \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{QPSK} & 1 & 0 dB & Constant envelope \\
-\textbf{16-QAM} & 2.55 & 4.1 dB & Corner points 2.55$\times$ average \\
-\textbf{64-QAM} & 3.68 & 5.7 dB & \\
-\textbf{256-QAM} & 4.80 & 6.8 dB & \\
-\textbf{1024-QAM} & 5.93 & 7.7 dB & \\
-\end{longtable}
-}
-
-\textbf{Impact}: High PAPR requires PA backoff (reduces efficiency)
-
-\textbf{Example}: 64-QAM with 5.7 dB PAPR requires PA backoff of 5.7 dB from saturation. Efficiency drops from 50\% to $\sim$13\% (4$\times$ penalty).
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\section{Practical Impairments}
-
-\subsection{I/Q Imbalance}
-
-Hardware imperfections in the I/Q modulator/demodulator cause:
-
-\textbf{Gain mismatch:} $G_I \neq G_Q$
-
-\textbf{Phase error:} Quadrature hybrid not exactly $90^\circ$ (e.g., $88^\circ$ or $92^\circ$)
-
-The received signal model with I/Q imbalance is:
-\begin{equation}
-r = (1 + \alpha_G) I + j(1 - \alpha_G) e^{j\epsilon} Q + n
-\label{eq:iq-imbalance}
-\end{equation}
-where:
-\begin{itemize}
-\item $\alpha_G$ = gain imbalance coefficient
-\item $\epsilon$ = phase error (rad)
-\item $n$ = AWGN
-\end{itemize}
-
-\textbf{Typical values:} $\pm 0.5$~dB gain, $\pm 2^\circ$ phase
-
-\textbf{Effect:} Constellation distortion, image frequency leakage, significant degradation for 256-QAM and higher.
-
-\textbf{Mitigation:} Digital I/Q calibration using pilot symbols or training sequences.
-
-\subsection{Nonlinear Power Amplifier Distortion}
-
-Non-constant envelope QAM signals suffer from PA nonlinearity:
-
-\textbf{AM-AM conversion:} Gain compression at high signal amplitudes
-
-\textbf{AM-PM conversion:} Phase shift varies with instantaneous amplitude
-
-\textbf{Effects:}
-\begin{itemize}
-\item Constellation warping (outer points compressed)
-\item Reduced minimum distance $\rightarrow$ increased BER
-\item Spectral regrowth (adjacent channel interference)
-\end{itemize}
-
-\textbf{Example:} For 64-QAM, if corner points compress by 1~dB:
-\begin{itemize}
-\item Effective $E_b/N_0$ penalty: $\sim$2~dB
-\item Spectral mask violations possible
-\end{itemize}
-
-\textbf{Mitigation techniques:}
-\begin{enumerate}
-\item \textbf{Power backoff:} Operate PA 6--10~dB below saturation (reduces efficiency)
-\item \textbf{Digital predistortion (DPD):} Pre-warp signal to compensate for PA nonlinearity
-\item \textbf{Crest factor reduction (CFR):} Clip and filter peaks to reduce PAPR
-\item \textbf{Linearization:} Feedforward or feedback techniques
-\end{enumerate}
-
-\subsection{Phase Noise}
-
-Oscillator jitter causes constellation rotation and spreading:
-\begin{equation}
-r(t) = s(t) e^{j\phi_n(t)} + n(t)
-\label{eq:phase-noise-model}
-\end{equation}
-where $\phi_n(t)$ is the random phase noise process.
-
-\textbf{Effects:}
-\begin{itemize}
-\item Common Phase Error (CPE): All symbols rotated by same random angle
-\item Inter-Carrier Interference (ICI) in OFDM systems
-\item Effective SNR degradation
-\end{itemize}
-
-\textbf{Sensitivity:} Higher-order QAM is extremely sensitive to phase noise.
-
-\textbf{Example (256-QAM):}
-\begin{itemize}
-\item Tolerable phase noise: $\sim 1^\circ$ RMS
-\item Requires high-quality oscillator (PLL with TCXO or OCXO reference)
-\item Phase noise spectral density: $< -100$~dBc/Hz at 1~kHz offset
-\end{itemize}
-
-\subsection{Timing Jitter}
-
-Symbol clock errors cause sampling offset, leading to:
-\begin{itemize}
-\item Intersymbol interference (ISI)
-\item Constellation blurring and rotation
-\item Reduced effective SNR
-\end{itemize}
-
-\textbf{Requirement:} Timing error $< 0.1$ symbol period
-
-\textbf{Example:} For 64-QAM at 10~Msymbols/sec:
-\begin{itemize}
-\item Symbol period: $T_s = 100$~ns
-\item Tolerable jitter: $< 10$~ns RMS
-\item Clock accuracy: $< 10^{-4}$ (100~ppm)
-\end{itemize}
-
-\section{Applications}
-
-\subsection{WiFi (802.11 Standards)}
-
-OFDM subcarriers in WiFi use QAM modulation:
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Standard & Max QAM & Max Rate & Notes \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{802.11a} & 64-QAM & 54 Mbps & 20 MHz \\
-\textbf{802.11n} & 64-QAM & 600 Mbps & 4$\times$4 MIMO, 40 MHz \\
-\textbf{802.11ac} & 256-QAM & 6.9 Gbps & 8$\times$8 MIMO, 160 MHz \\
-\textbf{802.11ax} & 1024-QAM & 9.6 Gbps & OFDMA, MU-MIMO \\
-\end{longtable}
-}
-
-\textbf{Adaptive modulation:} Systems dynamically switch between QPSK $\rightarrow$ 16/64/256/1024-QAM based on measured SNR.
-
-\subsection{Cellular: LTE and 5G NR}
-
-\textbf{LTE downlink}: Up to 256-QAM (Category 9+) with carrier aggregation
-
-\textbf{5G NR}: Up to 256-QAM (mmWave can use 1024-QAM in some scenarios)
-
-\textbf{Adaptive MCS} (Modulation \& Coding Scheme):
-\begin{itemize}
-\item Poor channel: QPSK 1/4 (0.5 bits/symbol effective)
-\item Good channel: 256-QAM 3/4 (6 bits/symbol effective)
-\end{itemize}
-
-\subsection{Cable Modems (DOCSIS)}
-
-\textbf{DOCSIS 3.0:} 256-QAM standard (8 bits/symbol)
-
-\textbf{DOCSIS 3.1:} 4096-QAM (12 bits/symbol) achieving 10~Gbps downstream
-\begin{itemize}
-\item Requires SNR $> 40$~dB (excellent cable plant)
-\item OFDM with up to 4096-QAM per subcarrier
-\item Wired channel enables very high-order QAM
-\end{itemize}
-
-\subsection{Microwave Backhaul}
-
-Point-to-point microwave links use adaptive QAM:
-
-\textbf{Weather-dependent modulation:}
-\begin{itemize}
-\item \textbf{Clear weather:} 2048-QAM, 4096-QAM ($\geq 30$~dB SNR)
-\item \textbf{Light rain:} 256-QAM
-\item \textbf{Heavy rain:} Adaptive fallback to 16-QAM or QPSK
-\end{itemize}
-
-\textbf{Frequency bands:} 6--42~GHz (E-band: 70--80~GHz)
-
-\textbf{Example:} 28~GHz link with 56~MHz channel:
-\begin{itemize}
-\item 4096-QAM: 12 bits/symbol $\rightarrow$ 672~Mbps (uncoded)
-\item With FEC rate 3/4: 504~Mbps net throughput
-\end{itemize}
-
-\section{Comparison: QAM vs PSK}
-
-\subsection{Evolution from PSK to QAM}
-
-QPSK (4-QAM) uses only phase modulation with constant amplitude. QAM extends this by adding amplitude variation:
-
-\begin{center}
-\begin{tikzpicture}[scale=1.2]
-% QPSK (4-QAM)
-\begin{scope}[shift={(0,0)}]
-\node[above,font=\sffamily\bfseries] at (0,2.5) {QPSK (4-QAM)};
-\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
-\draw[->] (0,-2) -- (0,2) node[above,font=\sffamily\small] {$Q$};
-\draw[very thin,gray!30] (-1.5,-1.5) grid[step=0.5] (1.5,1.5);
-% Constant amplitude circle
-\draw[dashed,gray] (0,0) circle (1.06);
-\fill[black] (1.06,1.06) circle (2.5pt);
-\fill[black] (-1.06,1.06) circle (2.5pt);
-\fill[black] (-1.06,-1.06) circle (2.5pt);
-\fill[black] (1.06,-1.06) circle (2.5pt);
-\node[below=12pt,font=\small] at (0,-2) {4 points, 2 bits/symbol};
-\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Constant amplitude};
-\end{scope}
-
-% 16-QAM
-\begin{scope}[shift={(6,0)}]
-\node[above,font=\sffamily\bfseries] at (0,2.5) {16-QAM};
-\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
-\draw[->] (0,-2) -- (0,2) node[above,font=\sffamily\small] {$Q$};
-\draw[very thin,gray!30] (-1.5,-1.5) grid[step=0.5] (1.5,1.5);
-% Multiple amplitude levels
-\foreach \i in {-1.5,-0.5,0.5,1.5} {
-  \foreach \q in {-1.5,-0.5,0.5,1.5} {
-    \fill[black] (\i,\q) circle (2pt);
-  }
-}
-\node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
-\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Variable amplitude};
-\end{scope}
-\end{tikzpicture}
-\end{center}
-
-\node[below=12pt,font=\small] at (0,-2) {16 points, 4 bits/symbol};
-\node[below=24pt,font=\scriptsize,align=center] at (0,-2) {Multiple amplitudes};
-\end{scope}
-\end{tikzpicture}
-\end{center}
-
-\textbf{General rule:} For $M > 8$, QAM significantly outperforms M-PSK.
-
-\textbf{Reason:} The 2D rectangular grid of QAM uses signal space more efficiently than the circular PSK constellation. QAM achieves larger minimum distance for the same average power.
-
-\begin{keyconcept}
-QAM's superiority over PSK arises from optimal packing in 2D space. While PSK points lie on a circle (wasting corners of the I/Q square), QAM fills the entire signal space uniformly, maximizing the minimum distance between symbols.
-\end{keyconcept}
-
-\subsection{Non-Square QAM}
-
-\textbf{Cross QAM:} Non-square constellations for non-power-of-2 constellation sizes.
-
-\textbf{32-QAM} (5 bits/symbol):
-\begin{itemize}
-\item Constellation: 4 inner + 12 middle + 16 outer points (hexagonal-like pattern)
-\item Used in some proprietary systems
-\end{itemize}
-
-\textbf{128-QAM} (7 bits/symbol):
-\begin{itemize}
-\item Fills gap between 64-QAM and 256-QAM
-\item Optimized constellation placement for best performance
-\end{itemize}
-
-\textbf{Trade-off:} Slightly worse performance than square QAM, but allows finer granularity in adaptive rate selection.
-
-\subsection{Constellation Shaping}
-
-\textbf{Probabilistic shaping} uses non-uniform symbol probability distribution.
-
-\textbf{Key idea:} Transmit inner constellation points (lower energy) more frequently than outer points $\rightarrow$ reduces average transmitted power for same information rate.
-
-\textbf{Benefit:} $\sim$0.5--1~dB SNR gain, approaches Shannon capacity limit.
-
-\textbf{Applications:} High-capacity optical communications (400G/800G coherent systems), submarine cables.
-
-\subsection{Adaptive QAM}
-
-Link adaptation dynamically selects QAM order and FEC rate based on measured channel SNR.
-
-\textbf{Typical SNR thresholds:}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-SNR (dB) & Modulation & Code Rate & Spectral Eff. \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-0-5 & QPSK & 1/2 & 1.0 \\
-5-10 & QPSK & 3/4 & 1.5 \\
-10-15 & 16-QAM & 1/2 & 2.0 \\
-15-20 & 16-QAM & 3/4 & 3.0 \\
-20-25 & 64-QAM & 2/3 & 4.0 \\
-25-30 & 64-QAM & 3/4 & 4.5 \\
-30-35 & 256-QAM & 3/4 & 6.0 \\
-\textgreater35 & 1024-QAM & 5/6 & 8.3 \\
-\end{longtable}
-}
-
-\textbf{Used in}: All modern wireless (WiFi, LTE, 5G)
-
-\section{Advantages and Disadvantages}
-
-\subsection*{Advantages}
-
-\begin{enumerate}
-\item \textbf{Superior spectral efficiency:} QAM achieves the highest bits/sec/Hz for a given constellation size compared to PSK or ASK alone.
-
-\item \textbf{Flexible data rates:} Support for multiple QAM orders (16, 64, 256, 1024-QAM) enables adaptive modulation to match channel conditions.
-
-\item \textbf{Optimal signal space utilization:} Rectangular grid constellation uses 2D I/Q space more efficiently than phase-only modulation (PSK).
-
-\item \textbf{Standard implementation:} Same I/Q hardware as QPSK; only symbol mapping differs. Compatible with standard RF architectures.
-
-\item \textbf{Well-suited for OFDM:} Each subcarrier can use independent QAM order, enabling fine-grained rate adaptation.
-\end{enumerate}
-
-\subsection*{Disadvantages}
-
-\begin{enumerate}
-\item \textbf{High SNR requirement:} Higher-order QAM (256-QAM and above) requires excellent channel conditions (SNR $>$ 25~dB).
-
-\item \textbf{Non-constant envelope:} Variable amplitude increases PAPR (Peak-to-Average Power Ratio), requiring linear amplifiers with reduced efficiency.
-
-\item \textbf{Sensitive to impairments:} Susceptible to:
-  \begin{itemize}
-  \item I/Q imbalance (gain/phase mismatch between branches)
-  \item Phase noise (degrades SNR, especially for high-order QAM)
-  \item Nonlinear distortion (amplifier compression)
-  \item Frequency/timing offsets
-  \end{itemize}
-
-\item \textbf{Coherent detection required:} Receiver must maintain accurate carrier phase and frequency synchronization.
-
-\item \textbf{Performance degradation in fading:} Rapid channel variations (mobility, multipath) force fallback to lower-order QAM, reducing throughput.
-
-\item \textbf{Higher complexity:} Symbol decision requires 2D nearest-neighbor search (vs 1D threshold for BPSK/OOK).
-\end{enumerate}
-
-\subsection{Implementation Tips}
-
-\subsection{Constellation Normalization}
-
-For fair performance comparisons, normalize constellations to unit average energy:
-\begin{equation}
-\bar{E}_s = \frac{1}{M}\sum_{m=0}^{M-1} |s_m|^2 = 1
-\label{eq:constellation-normalization}
-\end{equation}
-
-\textbf{Example (16-QAM):}
-\begin{itemize}
-\item Un-normalized: $I, Q \in \{-3, -1, +1, +3\}$
-\item Average power: $\bar{E}_s = 10$
-\item Normalized: $I, Q \in \{-3, -1, +1, +3\}/\sqrt{10}$
-\item Result: $\bar{E}_s = 1$
-\end{itemize}
-
-\subsection{Gray Coding Implementation}
-
-Map bits to I/Q symbols using Gray code to minimize bit errors:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ qam\_gray\_mapping(bits):}
-    \CommentTok{\# 16{-}QAM Gray mapping}
-\NormalTok{    gray\_map }\OperatorTok{=}\NormalTok{ [}\BaseNTok{0b00}\NormalTok{, }\BaseNTok{0b01}\NormalTok{, }\BaseNTok{0b11}\NormalTok{, }\BaseNTok{0b10}\NormalTok{]  }\CommentTok{\# Gray sequence}
-\NormalTok{    i\_bits }\OperatorTok{=}\NormalTok{ bits[}\DecValTok{0}\NormalTok{:}\DecValTok{2}\NormalTok{]}
-\NormalTok{    q\_bits }\OperatorTok{=}\NormalTok{ bits[}\DecValTok{2}\NormalTok{:}\DecValTok{4}\NormalTok{]}
+\begin{workedexample}{Adaptive Modulation in WiFi}
+    \parhead{Problem} A WiFi 6 (802.11ax) device is streaming video. Analyse its choice of modulation based on the received signal strength.
     
-\NormalTok{    i\_index }\OperatorTok{=}\NormalTok{ gray\_map.index(i\_bits)}
-\NormalTok{    q\_index }\OperatorTok{=}\NormalTok{ gray\_map.index(q\_bits)}
+    \parhead{System Parameters}
+    \begin{itemize}
+        \item Available Modulations: QPSK, 16-QAM, 64-QAM, 256-QAM, 1024-QAM.
+        \item Channel: Indoor with multipath fading.
+    \end{itemize}
     
-\NormalTok{    I }\OperatorTok{=} \DecValTok{2}\OperatorTok{*}\NormalTok{i\_index }\OperatorTok{{-}} \DecValTok{3}  \CommentTok{\# Map to \{{-}3, {-}1, +1, +3\}}
-\NormalTok{    Q }\OperatorTok{=} \DecValTok{2}\OperatorTok{*}\NormalTok{q\_index }\OperatorTok{{-}} \DecValTok{3}
-    
-    \ControlFlowTok{return}\NormalTok{ I }\OperatorTok{+} \OtherTok{1j}\OperatorTok{*}\NormalTok{Q}
-\end{Highlighting}
-\end{Shaded}
+    \parhead{Analysis (Adaptive Modulation)}
+    The device continuously measures the received SNR and selects the highest-order Modulation and Coding Scheme (MCS) that can be reliably decoded.
+    \begin{description}
+        \item[Scenario 1: Strong Signal] The user is in the same room as the router. The received SNR is excellent (>35 dB). The device selects the highest possible modulation, \textbf{1024-QAM}, achieving the maximum data rate (e.g., >1 Gbps).
+        \item[Scenario 2: Medium Signal] The user moves to an adjacent room. The signal passes through a wall, reducing the SNR to around 25 dB. This is insufficient for 1024-QAM, so the device's firmware automatically steps down to \textbf{256-QAM} or \textbf{64-QAM}, maintaining a stable connection at a reduced data rate (e.g., 300-600 Mbps).
+        \item[Scenario 3: Weak Signal] The user moves to the edge of the router's range. The SNR drops below 15 dB. The device falls back to the most robust modulation available, \textbf{QPSK}, to maintain the link, even if the data rate is only a few Mbps.
+    \end{description}
+    \parhead{Interpretation} This process of \keyterm{link adaptation} is the key to modern wireless performance. It allows the system to continuously track the Shannon Capacity of the channel, squeezing out the maximum possible data rate at any given moment while ensuring the connection remains reliable.
+\end{workedexample}
 
 
-\subsection{Soft-Decision LLR Calculation}
-
-For optimal FEC decoder performance, compute LLR for each bit:
-\begin{equation}
-\text{LLR}(b_k) = \log\frac{\sum_{s \in S_0} e^{-|r-s|^2/(2\sigma^2)}}{\sum_{s \in S_1} e^{-|r-s|^2/(2\sigma^2)}}
-\label{eq:llr-calculation}
-\end{equation}
-where:
-\begin{itemize}
-\item $S_0$ = constellation points with bit $b_k = 0$
-\item $S_1$ = constellation points with bit $b_k = 1$
-\item $r$ = received complex symbol
-\item $\sigma^2$ = noise variance estimate
-\end{itemize}
-
-\section{Summary}
-
-\begin{center}
-\begin{tabular}{@{}ll@{}}
-\toprule
-\textbf{Parameter} & \textbf{Value/Description} \\
-\midrule
-Principle & Modulate amplitude \emph{and} phase \\
-Constellation & Rectangular I/Q grid \\
-Common orders & 16-QAM (4b), 64-QAM (6b), 256-QAM (8b) \\
-Spectral eff. & $\eta = \log_2(M)/(1+\alpha)$ bps/Hz \\
-Gray coding & Adjacent symbols differ by 1 bit \\
-BER (64-QAM) & Requires $E_b/N_0 \approx 18.5$~dB @ $10^{-6}$ \\
-Detection & Coherent I/Q, nearest neighbor \\
-PAPR & Increases with order \\
-Advantage & Optimal 2D signal space use \\
-Disadvantage & High SNR, sensitive to impairments \\
-Applications & WiFi, LTE/5G, cable, microwave \\
-Adaptive & Switch order based on SNR \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Key insight:} QAM achieves the highest spectral efficiency among single-carrier modulation schemes by utilizing both I and Q dimensions. While PSK varies only phase (constant radius) and ASK varies only amplitude (fixed phase), QAM combines both for optimal signal space packing. The trade-off is increased sensitivity to noise and hardware impairments, requiring careful system design and adaptive rate control.
-
-\textbf{Performance comparison:}
-
-\begin{center}
-\small
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-\textbf{Order} & \textbf{Bits/sym} & \textbf{$d_{\min}$} & \textbf{$E_b/N_0$ @ $10^{-6}$} & \textbf{Use Case} \\
-\midrule
-QPSK & 2 & 1.41 & 10.5~dB & Satellite \\
-16-QAM & 4 & 0.63 & 14.5~dB & WiFi/LTE \\
-64-QAM & 6 & 0.31 & 18.5~dB & Good SNR \\
-256-QAM & 8 & 0.15 & 23~dB & WiFi 5/6 \\
-1024-QAM & 10 & 0.098 & 27.5~dB & Short range \\
-4096-QAM & 12 & 0.049 & 32~dB & Cable/DSL \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\section{Further Reading}
-
-\begin{itemize}
-\item \textbf{Chapter~\ref{ch:qpsk}:} QPSK Modulation---the simplest QAM (4-QAM), foundation for understanding QAM
-\item \textbf{Chapter~\ref{ch:constellation}:} Constellation Diagrams---visualization and interpretation of QAM signals
-\item \textbf{Chapter~\ref{ch:iq}:} IQ Representation---mathematical foundation of quadrature modulation
-\item \textbf{Chapter~\ref{ch:ber}:} Bit Error Rate Analysis---performance metrics and measurement
-\item \textbf{Chapter~\ref{ch:ofdm}:} OFDM \& Multicarrier---uses QAM on each subcarrier for WiFi/LTE
-\item \textbf{Chapter~\ref{ch:adaptive}:} Adaptive Modulation \& Coding---dynamic QAM order selection
-\item \textbf{Chapter~\ref{ch:synchronization}:} Carrier/Timing Synchronization---critical for coherent QAM detection
-\item \textbf{Chapter~\ref{ch:fec}:} Forward Error Correction---essential for reliable high-order QAM
-\item \textbf{Chapter~\ref{ch:channel-models}:} Channel Models---understand fading effects on QAM performance
-\item \textbf{Chapter~\ref{ch:ask}:} Amplitude Shift Keying---amplitude-only modulation component
-\item \textbf{Chapter~\ref{ch:psk}:} Phase Shift Keying---phase-only modulation component
-\item \textbf{Chapter~\ref{ch:shannon}:} Shannon's Channel Capacity---theoretical limits of spectral efficiency
-\end{itemize}
+\begin{importantbox}[title={Further Reading}]
+    QAM is the culmination of the single-carrier modulation techniques discussed in this part of the book.
+    \begin{description}
+        \item[OFDM] (\Cref{ch:ofdm}) is the essential next step. It explains how thousands of parallel QAM signals are used to create the high-speed, multipath-resistant links that power modern WiFi and 5G.
+        \item[Error Vector Magnitude (EVM)] (\Cref{ch:evm}) provides a deep dive into the critical metric used to quantify the quality of a QAM constellation and diagnose hardware impairments.
+        \item[Channel Equalization] (\Cref{ch:equalization}) describes the DSP techniques required to undo the distortion a channel inflicts on a QAM signal, allowing the receiver to recover the original data.
+    \end{description}
+\end{importantbox}
