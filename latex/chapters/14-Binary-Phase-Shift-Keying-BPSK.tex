@@ -1,594 +1,126 @@
+% ==============================================================================
+% CHAPTER 14: Binary Phase-Shift Keying (BPSK)
+% ==============================================================================
+
 \chapter{Binary Phase-Shift Keying (BPSK)}
 \label{ch:bpsk}
 
 \begin{nontechnical}
-\textbf{BPSK is like Morse code with a twist}---instead of turning a signal on and off, you flip the wave upside-down to send 1s and 0s.
+    \textbf{BPSK is like Morse code, but instead of turning a signal on and off, it flips the wave upside-down.} This simple flip, a 180$^\circ$ phase shift, is used to represent a "1" versus a "0".
 
-\textbf{Simple idea:}
-\begin{itemize}
-\item Bit 0 = wave pointing ``up'' $\uparrow$
-\item Bit 1 = wave pointing ``down'' $\downarrow$ (flipped $180°$)
-\end{itemize}
+    \parhead{The simple idea}
+    \begin{itemize}
+        \item To send a \textbf{bit 0}, transmit a normal carrier wave.
+        \item To send a \textbf{bit 1}, transmit the same wave, but inverted (phase-shifted by 180$^\circ$).
+    \end{itemize}
 
-\textbf{Real use:} GPS satellites use BPSK. Your phone detects whether the signal is normal or flipped.
+    \parhead{Why it's so robust} A receiver just has to decide if the wave it sees is "normal" or "flipped." This is a much easier decision to make in a noisy environment than trying to detect if a signal is merely on or off. This makes BPSK extremely power-efficient.
 
-\textbf{Why flip instead of on/off?} More reliable in noise, works with constant power, less interference. Trade-off: Simple but slow (1 bit per symbol).
+    \parhead{Real-world use} Its robustness makes BPSK the workhorse for \keyterm{power-limited} channels where every decibel of signal power counts. It is used extensively in deep-space missions (like the Voyager probes), satellite telemetry, and was the foundational modulation for the original GPS signal. The trade-off is its low speed: it can only send one bit at a time.
 \end{nontechnical}
 
-\section{Overview}
 
-\textbf{Binary Phase-Shift Keying (BPSK)} is the simplest form of phase modulation, where binary data is encoded by shifting the carrier phase between two states: $0°$ and $180°$.
+\subsection{Overview}
+
+\keyterm{Binary Phase-Shift Keying (BPSK)} is the simplest and most power-efficient form of digital phase modulation. It encodes one bit of information per symbol by shifting the phase of a carrier wave between two states, separated by 180$^\circ$.
 
 \begin{keyconcept}
-BPSK provides \textbf{3~dB better performance} than On-Off Keying (OOK) at the same signal-to-noise ratio, making it the optimal choice for power-limited channels such as satellite and deep-space communications.
+    BPSK offers the best performance (lowest Bit Error Rate for a given $E_b/N_0$) of any binary modulation scheme. Its constellation has the maximum possible Euclidean distance between its two points. This makes it the optimal choice for \textbf{power-limited} channels, where signal strength is the primary constraint.
 \end{keyconcept}
 
-BPSK forms the foundation for higher-order phase shift keying schemes including QPSK (4 phases), 8PSK (8 phases), and beyond.
 
-\section{Mathematical Description}
+\subsection{Mathematical Representation}
 
-\subsection{Time-Domain Signal}
-
-The BPSK waveform is expressed as:
+The BPSK signal can be represented as a carrier wave whose phase, $\phi_n$, is switched based on the input data bit:
 \begin{equation}
-s(t) = A \cos(2\pi f_c t + \phi_n)
+    s(t) = A \cos(2\pi f_c t + \phi_n), \quad \text{where } \phi_n = \begin{cases} 0^\circ & \text{for bit `0'} \\ 180^\circ & \text{for bit `1'} \end{cases}
 \end{equation}
-where:
+Using the identity $\cos(\theta + 180^\circ) = -\cos(\theta)$, this is more commonly expressed as antipodal signaling:
+\begin{equation}
+    s(t) = d_n \cdot A \cos(2\pi f_c t)
+\end{equation}
+where $d_n$ is a bipolar symbol from the set $\{-1, +1\}$. This shows that BPSK is equivalent to amplitude modulation with a bipolar baseband signal.
+
+\paragraph{IQ Representation}
+In the complex baseband, BPSK is a purely real signal, occupying only the I-axis of the constellation diagram.
 \begin{itemize}
-\item $A$ = carrier amplitude
-\item $f_c$ = carrier frequency (Hz)
-\item $\phi_n \in \{0°, 180°\}$ = phase for bit $n$
+    \item \textbf{I (In-phase):} $I_n = d_n \cdot A = \pm A$
+    \item \textbf{Q (Quadrature):} $Q_n = 0$
 \end{itemize}
+The two constellation points are located at $(+A, 0)$ and $(-A, 0)$.
 
-\textbf{Phase encoding:}
+
+\subsection{Modulation and Demodulation}
+
+\paragraph{Modulation}
+A BPSK modulator is straightforward. The incoming binary data stream is first converted into a bipolar Non-Return-to-Zero (NRZ) signal ($d_n \in \{-1, +1\}$). This baseband signal is then simply multiplied by the carrier wave, $\cos(2\pi f_c t)$.
+
+\paragraph{Coherent Demodulation}
+Demodulation is performed by a \keyterm{coherent detector}. The incoming RF signal is multiplied by a local oscillator that is perfectly synchronized in frequency and phase with the original carrier.
 \begin{equation}
-\phi_n = \begin{cases}
-0° & \text{if bit = 0} \\
-180° & \text{if bit = 1}
-\end{cases}
+    r(t) \cdot \cos(2\pi f_c t) = (d_n A \cos(2\pi f_c t)) \cdot \cos(2\pi f_c t) = \frac{A d_n}{2} (1 + \cos(4\pi f_c t))
 \end{equation}
-
-\textbf{Alternative representation} using the cosine identity $\cos(\theta + 180°) = -\cos(\theta)$:
-\begin{equation}
-s(t) = A \cdot d_n \cdot \cos(2\pi f_c t)
-\end{equation}
-where $d_n \in \{+1, -1\}$ is the bipolar data symbol:
-\begin{itemize}
-\item Bit 0 $\rightarrow$ $d_n = +1$ $\rightarrow$ $0°$ phase
-\item Bit 1 $\rightarrow$ $d_n = -1$ $\rightarrow$ $180°$ phase (inverted carrier)
-\end{itemize}
-
-\begin{calloutbox}{Physical Interpretation}
-BPSK is effectively \textbf{amplitude modulation with bipolar data}. The carrier polarity flips between positive and negative, which is equivalent to a $180°$ phase shift. This representation simplifies both mathematical analysis and hardware implementation.
-\end{calloutbox}
-
-\section{IQ Representation}
-
-The baseband complex representation of BPSK is:
-\begin{equation}
-s(t) = \mathrm{Re}\{A \cdot d_n \cdot e^{j2\pi f_c t}\}
-\end{equation}
-
-\textbf{IQ components:}
-\begin{itemize}
-\item \textbf{I (In-phase):} $I_n = A \cdot d_n$ (either $+A$ or $-A$)
-\item \textbf{Q (Quadrature):} $Q_n = 0$ (BPSK uses only the I axis)
-\end{itemize}
-
-\subsection{Constellation Diagram}
-
-The BPSK constellation consists of two points on the real axis separated by maximum distance $d = 2A$:
-
-\begin{center}
-\begin{tikzpicture}[scale=1.5]
-% Axes
-\draw[->] (-3,0) -- (3,0) node[right] {\sffamily\small $I$ (Real)};
-\draw[->] (0,-2) -- (0,2) node[above] {\sffamily\small $Q$ (Imaginary)};
-
-% Grid
-\draw[very thin,gray!30] (-2.5,-1.5) grid[step=0.5] (2.5,1.5);
-
-% Constellation points
-\fill[black] (-2,0) circle (3pt);
-\fill[black] (2,0) circle (3pt);
-
-% Labels
-\node[below=8pt,align=center] at (-2,0) {\sffamily\small Bit 1\\$(-A, 0)$\\$180°$};
-\node[below=8pt,align=center] at (2,0) {\sffamily\small Bit 0\\$(+A, 0)$\\$0°$};
-
-% Distance annotation
-\draw[<->,thick] (-2,0.8) -- (2,0.8) node[midway,above] {\sffamily\small $d = 2A$};
-\end{tikzpicture}
-\end{center}
-
-This maximum Euclidean separation between symbols provides optimal noise immunity for binary modulation schemes.
-
-\section{Modulation and Demodulation}
-
-\subsection{Transmitter (Modulator)}
-
-The BPSK modulator consists of three stages:
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=1cm, font=\sffamily\small, align=center},
-  node distance=2.2cm,
-  font=\small
-]
-\node[align=center] (input) {\sffamily Binary\\$\{0, 1\}$};
-\node[block, right of=input, node distance=2.8cm] (nrz) {NRZ\\Encoder};
-\node[block, right of=nrz, node distance=3.2cm] (mult) {Mixer\\$\times$};
-\node[block, right of=mult, node distance=3cm] (filter) {Bandpass\\Filter};
-\node[align=center, right of=filter, node distance=2.8cm] (output) {\sffamily BPSK\\Output};
-
-\node[below of=mult, node distance=1.5cm, font=\small] (carrier) {$\cos(2\pi f_c t)$};
-
-\draw[->,thick] (input) -- (nrz);
-\draw[->,thick] (nrz) -- node[above,font=\scriptsize] {$d_n$} (mult);
-\draw[->,thick] (carrier) -- (mult);
-\draw[->,thick] (mult) -- (filter);
-\draw[->,thick] (filter) -- (output);
-\end{tikzpicture}
-\end{center}
-
-\textbf{Process:}
-\begin{enumerate}
-\item \textbf{NRZ encoding:} Map bits to bipolar symbols
-  \begin{itemize}
-  \item Bit 0 $\rightarrow$ $d_n = +1$
-  \item Bit 1 $\rightarrow$ $d_n = -1$
-  \end{itemize}
-\item \textbf{Multiply by carrier:} $s(t) = A \cdot d_n \cdot \cos(2\pi f_c t)$
-\item \textbf{Pulse shaping:} Apply raised-cosine filter to:
-  \begin{itemize}
-  \item Limit occupied bandwidth
-  \item Prevent intersymbol interference (ISI)
-  \item Meet spectral mask requirements
-  \end{itemize}
-\end{enumerate}
-
-\subsection{Receiver (Coherent Detector)}
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small, align=center},
-  node distance=2cm,
-  font=\small
-]
-\node[align=center] (input) {\sffamily RX\\Signal};
-\node[block, right of=input, node distance=2.2cm] (mult) {Mixer\\$\times$};
-\node[block, right of=mult, node distance=2.4cm] (lpf) {Lowpass\\Filter};
-\node[block, right of=lpf, node distance=2.4cm] (sample) {Sample\\$@T_s$};
-\node[block, right of=sample, node distance=2.4cm] (thresh) {Threshold\\$>0?$};
-\node[align=center, right of=thresh, node distance=2.4cm] (output) {\sffamily Data\\$\{0,1\}$};
-
-\node[below of=mult, node distance=1.5cm, font=\scriptsize, align=center] (lo) {$2\cos(2\pi f_c t + \phi)$\\Local Oscillator};
-
-\draw[->,thick] (input) -- (mult);
-\draw[->,thick] (lo) -- (mult);
-\draw[->,thick] (mult) -- (lpf);
-\draw[->,thick] (lpf) -- (sample);
-\draw[->,thick] (sample) -- (thresh);
-\draw[->,thick] (thresh) -- (output);
-\end{tikzpicture}
-\end{center}
+A low-pass filter removes the double-frequency term ($2f_c$), leaving a DC voltage proportional to $d_n$. A simple slicer then makes a decision: if the voltage is positive, the bit is a `0'; if it's negative, the bit is a `1'.
 
 \begin{warningbox}
-\textbf{Phase synchronization is critical.} The local oscillator must be exactly in phase with the transmitter carrier. A phase offset $\phi_e$ reduces detected signal by $\cos(\phi_e)$. At $\phi_e = 90°$, complete signal loss occurs.
+    \textbf{Carrier recovery is critical.} The performance of coherent BPSK relies on the receiver's ability to generate a local oscillator that is an exact replica of the transmitter's carrier. Any phase error, $\phi_e$, will reduce the detected signal voltage by a factor of $\cos(\phi_e)$, degrading the SNR. This is typically achieved using a Phase-Locked Loop (PLL) such as a Costas Loop or a squaring loop.
 \end{warningbox}
 
-\textbf{Detection process:}
+\paragraph{Differential BPSK (DPSK)}
+To simplify receiver design, \keyterm{Differential BPSK (DPSK)} encodes information in the phase \emph{transitions} between symbols, not their absolute phase. A `1' is represented by a 180$^\circ$ phase change, and a `0' by no change. This allows for a much simpler non-coherent receiver but comes at the cost of an approximately 3 dB performance penalty compared to coherent BPSK.
 
-\begin{enumerate}
-\item \textbf{Multiply by local carrier} (frequency $f_c$, phase $\phi = 0$):
+
+\subsection{Performance and Spectral Efficiency}
+
+\paragraph{Bit Error Rate (BER)}
+The theoretical BER for coherent BPSK in an AWGN channel is the best possible for any binary scheme:
 \begin{equation}
-r(t) = s(t) \cdot 2\cos(2\pi f_c t) = 2A d_n \cos^2(2\pi f_c t)
+    \text{BER} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right)
 \end{equation}
+To achieve a BER of $10^{-5}$, BPSK requires an $E_b/N_0$ of approximately 9.6 dB.
 
-\item \textbf{Apply trigonometric identity} $\cos^2(x) = \frac{1}{2}[1 + \cos(2x)]$:
+\paragraph{Spectral Efficiency}
+As a binary modulation, BPSK encodes 1 bit per symbol. Its spectral efficiency, $\eta$, after accounting for practical pulse shaping (with a roll-off factor $\alpha$), is:
 \begin{equation}
-r(t) = A d_n [1 + \cos(4\pi f_c t)]
+    \eta = \frac{R_b}{B} = \frac{1}{1+\alpha} \quad \text{(bps/Hz)}
 \end{equation}
-
-\item \textbf{Lowpass filter} removes $2f_c$ component, leaving baseband:
-\begin{equation}
-y(t) = A d_n
-\end{equation}
-
-\item \textbf{Sample at bit period} $T_b$: $y_n = A d_n + n(t)$ where $n(t)$ is AWGN
-
-\item \textbf{Threshold decision:}
-\begin{equation}
-\hat{d}_n = \begin{cases}
-+1 & \text{if } y_n > 0 \quad \text{(decode as bit 0)} \\
--1 & \text{if } y_n < 0 \quad \text{(decode as bit 1)}
-\end{cases}
-\end{equation}
-\end{enumerate}
-
-\section{Carrier Recovery}
-
-The receiver must generate a local oscillator \textbf{exactly in phase} with the transmitter carrier. This is the primary challenge in coherent BPSK detection.
-
-\subsection{Problem: Phase Ambiguity}
-
-A phase offset $\phi_e$ between transmitter and receiver carriers causes:
-\begin{equation}
-y(t) = A d_n \cos(\phi_e) + n(t)
-\end{equation}
-
-\textbf{Effects:}
-\begin{itemize}
-\item $\phi_e = 0°$: Full signal strength (optimal)
-\item $\phi_e = 45°$: Signal reduced by 3~dB
-\item $\phi_e = 90°$: Complete signal loss
-\item $\phi_e = 180°$: Inverted data (all bits flipped)
-\end{itemize}
-
-\subsection{Carrier Recovery Techniques}
-
-\subsubsection{1. Pilot Tone}
-\begin{itemize}
-\item[\checkmark] Simple implementation
-\item[\checkmark] Accurate phase reference
-\item[\texttimes] Wastes power (typically 10--20\% of total)
-\item[\texttimes] Reduces data throughput
-\end{itemize}
-
-\subsubsection{2. Costas Loop}
-PLL-based carrier recovery using I/Q demodulation:
-\begin{itemize}
-\item[\checkmark] No pilot tone required
-\item[\checkmark] Optimal for BPSK and QPSK
-\item[\texttimes] Complex analog circuitry
-\item[\texttimes] Acquisition time required
-\end{itemize}
-
-\subsubsection{3. Squaring Loop}
-Exploits $d_n^2 = 1$ to remove data modulation:
-\begin{equation}
-[d_n \cos(2\pi f_c t)]^2 = \frac{1}{2}[1 + \cos(4\pi f_c t)]
-\end{equation}
-PLL locks to $2f_c$, then divides by 2 to recover $f_c$.
-\begin{itemize}
-\item[\checkmark] Completely removes data modulation
-\item[\checkmark] Robust in low SNR
-\item[\texttimes] $180°$ phase ambiguity (requires differential encoding)
-\end{itemize}
-
-\subsection{Differential BPSK (DBPSK)}
-
-\textbf{Principle:} Encode data in \textbf{phase transitions}, not absolute phase.
-
-\textbf{Encoding rule:}
-\begin{equation}
-\phi_n = \phi_{n-1} + \Delta\phi_n \quad\text{where}\quad \Delta\phi_n = \begin{cases}
-0° & \text{if bit = 0} \\
-180° & \text{if bit = 1}
-\end{cases}
-\end{equation}
-
-\textbf{Decoding:} Compare consecutive symbols:
-\begin{equation}
-\hat{b}_n = \begin{cases}
-0 & \text{if } \mathrm{sgn}(y_n) = \mathrm{sgn}(y_{n-1}) \\
-1 & \text{if } \mathrm{sgn}(y_n) \neq \mathrm{sgn}(y_{n-1})
-\end{cases}
-\end{equation}
-
-\textbf{Trade-off:}
-\begin{itemize}
-\item[\checkmark] No carrier recovery needed
-\item[\checkmark] Simpler receiver
-\item[\texttimes] Approximately 3~dB performance penalty
-\item[\texttimes] Error propagation (single error affects two bits)
-\end{itemize}
-
-\section{Bit Error Rate (BER) Performance}
-
-\subsection{Coherent BPSK in AWGN Channel}
-
-For ideal coherent detection with perfect synchronization:
-\begin{equation}
-\mathrm{BER} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right) = \frac{1}{2}\mathrm{erfc}\left(\sqrt{\frac{E_b}{N_0}}\right)
-\end{equation}
-where:
-\begin{itemize}
-\item $E_b = \frac{A^2 T_b}{2}$ = energy per bit (joules)
-\item $N_0$ = noise power spectral density (W/Hz)
-\item $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^\infty e^{-t^2/2}\,dt$ (Gaussian Q-function)
-\end{itemize}
-
-\textbf{Performance benchmarks:}
-
-\begin{center}
-\begin{tabular}{@{}lrl@{}}
-\toprule
-$E_b/N_0$ (dB) & \multicolumn{1}{c}{BER} & Practical Meaning \\
-\midrule
-0~dB & $7.9 \times 10^{-2}$ & 1 error in 13 bits \\
-5~dB & $9.7 \times 10^{-4}$ & 1 error in 1,000 bits \\
-10~dB & $3.9 \times 10^{-6}$ & 1 error in 250,000 bits \\
-15~dB & $6.9 \times 10^{-10}$ & 1 error in 1.4 billion bits \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\subsection{Comparison: BPSK vs OOK}
-
-At the same $E_b/N_0 = 10$~dB:
-
-\begin{center}
-\begin{tabular}{@{}lrr@{}}
-\toprule
-Modulation Scheme & BER & Performance Ratio \\
-\midrule
-OOK (non-coherent) & $4.0 \times 10^{-3}$ & Baseline \\
-\textbf{BPSK (coherent)} & $\mathbf{3.9 \times 10^{-6}}$ & \textbf{1000$\times$ better} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{keyconcept}
-\textbf{Why is BPSK 3~dB better than OOK?}
-
-\begin{enumerate}
-\item \textbf{Full signal space utilization:} BPSK uses $\pm A$ (both polarities), while OOK uses $\{0, A\}$ (one polarity). This doubles the Euclidean distance between symbols.
-
-\item \textbf{Coherent detection:} Correlating with a known carrier phase is the optimal detection strategy (maximum likelihood).
-
-\item \textbf{Constant envelope:} Energy is transmitted continuously, not just during ``on'' bits.
-\end{enumerate}
-\end{keyconcept}
-
-\subsection{Differential BPSK Performance}
-
-DBPSK trades synchronization complexity for performance:
-\begin{equation}
-\mathrm{BER}_{\mathrm{DBPSK}} \approx \frac{1}{2}e^{-E_b/N_0}
-\end{equation}
-
-At $E_b/N_0 = 10$~dB: BER $\approx 5 \times 10^{-6}$ (approximately 1.3~dB penalty versus coherent BPSK).
-
-\section{Bandwidth Efficiency}
-
-The occupied bandwidth (99\% power) for rectangular pulses is:
-\begin{equation}
-B \approx \frac{1}{T_b} = R_b
-\end{equation}
-where $R_b$ is the bit rate (bps) and $T_b$ is the bit period (seconds).
-
-With \textbf{raised-cosine pulse shaping} (roll-off factor $\alpha$):
-\begin{equation}
-B = R_b(1 + \alpha)
-\end{equation}
-
-\textbf{Typical value:} $\alpha = 0.35$ gives $B = 1.35 R_b$
-
-\textbf{Spectral efficiency:}
-\begin{equation}
-\eta = \frac{R_b}{B} = \frac{1}{1+\alpha} \approx 0.74\ \text{bps/Hz}
-\end{equation}
-
-\begin{calloutbox}{Example: 1~Mbps BPSK System}
-\begin{itemize}
-\item Data rate: $R_b = 1$~Mbps
-\item Roll-off: $\alpha = 0.35$
-\item Required bandwidth: $B = 1 \times (1 + 0.35) = 1.35$~MHz
-\item Spectral efficiency: $\eta = 1/1.35 = 0.74$~bps/Hz
-\end{itemize}
-\end{calloutbox}
-
-\section{Practical Implementations}
-
-\subsection{IEEE 802.15.4 (Zigbee)}
-
-Low-rate wireless personal area networks (868/915~MHz bands):
-\begin{itemize}
-\item \textbf{Modulation:} BPSK with Direct-Sequence Spread Spectrum (DSSS)
-\item \textbf{Chip rate:} 300~kcps (868~MHz), 600~kcps (915~MHz)
-\item \textbf{Data rate:} 20~kbps (868~MHz), 40~kbps (915~MHz)
-\item \textbf{Spreading gain:} 15:1 to 20:1 (improves interference rejection)
-\end{itemize}
-
-\subsection{Satellite Telemetry}
-
-Deep-space missions (Voyager, Mars rovers) use BPSK for maximum power efficiency:
-\begin{itemize}
-\item \textbf{Modulation:} BPSK or QPSK
-\item \textbf{Coding:} Concatenated (Convolutional + Reed-Solomon)
-\item \textbf{Data rate:} 10~bps to 10~kbps (extreme path loss)
-\item \textbf{Rationale:} Every dB matters at interplanetary distances
-\end{itemize}
-
-\begin{calloutbox}[colback=black!5!white,colframe=black]{Example: Voyager 1 at 24 Billion km}
-\begin{tabular}{@{}ll@{}}
-TX power & 23~W \\
-TX antenna gain & 48~dBi (3.7~m dish) \\
-RX antenna & 70~m Deep Space Network dish (74~dBi) \\
-Free-space path loss & 310~dB \\
-Received power & $-196$~dBm \\
-Link budget & Barely positive with FEC \\
-Achieved BER & $\sim 10^{-5}$ \\
-\end{tabular}
-\end{calloutbox}
-
-\subsection{RFID Backscatter}
-
-Passive RFID tags use backscatter modulation (effectively BPSK):
-\begin{itemize}
-\item \textbf{Mechanism:} Tag switches antenna impedance (reflection vs absorption)
-\item \textbf{Binary encoding:} Reflection = bit 0, absorption = bit 1
-\item \textbf{Data rate:} 40--640~kbps (EPC Gen2 standard)
-\item \textbf{Power source:} Harvested from reader's carrier
-\end{itemize}
-
-\section{Advantages and Disadvantages}
-
-\subsection*{Advantages}
-
-\begin{enumerate}
-\item \textbf{Optimal binary modulation:} Best BER performance for 1 bit/symbol (3~dB better than OOK)
-\item \textbf{Constant envelope:} Compatible with nonlinear amplifiers (no AM-PM distortion)
-\item \textbf{Simple constellation:} Two points simplify visualization and analysis
-\item \textbf{Foundation for higher PSK:} Concepts extend naturally to QPSK, 8PSK, etc.
-\end{enumerate}
-
-\subsection*{Disadvantages}
-
-\begin{enumerate}
-\item \textbf{Carrier synchronization required:} Costas loop or squaring loop adds complexity
-\item \textbf{DBPSK penalty:} Avoiding synchronization costs 3~dB in performance
-\item \textbf{Low spectral efficiency:} 1 bit/symbol = maximum 1~bps/Hz
-\item \textbf{Outperformed at high SNR:} QPSK, 16-QAM more efficient when SNR permits
-\end{enumerate}
-
-\section{Transition to Higher-Order Modulation}
-
-BPSK uses only the I-axis (real axis) with two constellation points.
-
-\textbf{Natural extension:} Utilize \textbf{both I and Q axes} to create QPSK:
-
-\begin{center}
-\begin{tikzpicture}[scale=1.2]
-% BPSK
-\begin{scope}[shift={(0,0)}]
-\node[above,font=\sffamily\bfseries] at (0,2.5) {BPSK};
-\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
-\draw[->] (0,-1.5) -- (0,1.5) node[above,font=\sffamily\small] {$Q$};
-\draw[very thin,gray!30] (-1.5,-1) grid[step=0.5] (1.5,1);
-\fill[black] (-1.5,0) circle (2.5pt);
-\fill[black] (1.5,0) circle (2.5pt);
-\node[below=12pt,font=\small] at (0,-1.5) {2 points, 1 bit/symbol};
-\end{scope}
-
-% QPSK
-\begin{scope}[shift={(6,0)}]
-\node[above,font=\sffamily\bfseries] at (0,2.5) {QPSK};
-\draw[->] (-2,0) -- (2,0) node[right,font=\sffamily\small] {$I$};
-\draw[->] (0,-1.5) -- (0,1.5) node[above,font=\sffamily\small] {$Q$};
-\draw[very thin,gray!30] (-1.5,-1) grid[step=0.5] (1.5,1);
-\fill[black] (1.06,1.06) circle (2.5pt);
-\fill[black] (-1.06,1.06) circle (2.5pt);
-\fill[black] (-1.06,-1.06) circle (2.5pt);
-\fill[black] (1.06,-1.06) circle (2.5pt);
-\node[below=12pt,font=\small] at (0,-1.5) {4 points, 2 bits/symbol};
-\end{scope}
-\end{tikzpicture}
-\end{center}
-
-\textbf{QPSK} = Two independent BPSK channels (I and Q) operating in parallel, doubling spectral efficiency to $\sim$2~bps/Hz.
-
-\section{Worked Example: Satellite Link Budget}
-
-\textbf{Scenario:} Geostationary satellite downlink to 1~m ground station
-
-\subsection*{Given Parameters}
-
-\begin{tabular}{@{}ll@{}}
-TX power & $P_t = 10$~W = 40~dBm \\
-TX antenna gain & $G_t = 30$~dBi \\
-Distance & $d = 36{,}000$~km (GEO orbit) \\
-Frequency & $f = 12$~GHz (Ku-band) \\
-RX antenna gain & $G_r = 40$~dBi (1~m dish) \\
-System noise temp & $T_s = 150$~K \\
-Bandwidth & $B = 1$~MHz \\
-Required BER & $10^{-6}$ \\
-\end{tabular}
-
-\subsection*{Step 1: Free-Space Path Loss}
-
-\begin{equation}
-\mathrm{FSPL\,[dB]} = 20\log_{10}(d_{\text{km}}) + 20\log_{10}(f_{\text{MHz}}) + 32.45
-\end{equation}
-\begin{equation}
-\mathrm{FSPL} = 20\log_{10}(36{,}000) + 20\log_{10}(12{,}000) + 32.45 = 205.5~\text{dB}
-\end{equation}
-
-\subsection*{Step 2: Received Signal Power}
-
-\begin{equation}
-P_r = P_t + G_t + G_r - \mathrm{FSPL}
-\end{equation}
-\begin{equation}
-P_r = 40 + 30 + 40 - 205.5 = -95.5~\text{dBm}
-\end{equation}
-
-\subsection*{Step 3: Noise Power}
-
-\begin{equation}
-N = kT_sB = (1.38 \times 10^{-23})(150)(10^6) = 2.07 \times 10^{-15}~\text{W}
-\end{equation}
-\begin{equation}
-N = 10\log_{10}(2.07 \times 10^{-15} / 10^{-3}) = -117~\text{dBm}
-\end{equation}
-
-\subsection*{Step 4: Signal-to-Noise Ratio}
-
-\begin{equation}
-\mathrm{SNR} = P_r - N = -95.5 - (-117) = 21.5~\text{dB}
-\end{equation}
-
-\subsection*{Step 5: Energy-per-Bit to Noise Ratio}
-
-Assuming data rate $R_b = 500$~kbps:
-\begin{equation}
-\frac{E_b}{N_0} = \mathrm{SNR} + 10\log_{10}\left(\frac{B}{R_b}\right)
-\end{equation}
-\begin{equation}
-\frac{E_b}{N_0} = 21.5 + 10\log_{10}\left(\frac{1{,}000{,}000}{500{,}000}\right) = 21.5 + 3.0 = 24.5~\text{dB}
-\end{equation}
-
-\subsection*{Step 6: Link Margin Calculation}
-
-\begin{itemize}
-\item \textbf{Required $E_b/N_0$ for BER $= 10^{-6}$:} 10.5~dB
-\item \textbf{Available $E_b/N_0$:} 24.5~dB
-\item \textbf{Link margin:} $24.5 - 10.5 = 14.0$~dB
-\end{itemize}
-
-\begin{calloutbox}[colback=black!8!white,colframe=black]{Link Budget Summary}
-\textbf{Result: Link closes with 14~dB margin}
-
-This comfortable margin accommodates:
-\begin{itemize}
-\item Rain fade ($\sim$5--8~dB at Ku-band)
-\item Implementation losses ($\sim$2--3~dB)
-\item Pointing errors ($\sim$1--2~dB)
-\item Aging and component degradation
-\end{itemize}
-
-\textbf{Conclusion:} Link is viable for reliable 500~kbps BPSK transmission.
-\end{calloutbox}
-
-\section{Summary}
-
-\begin{center}
-\begin{tabular}{@{}ll@{}}
-\toprule
-\textbf{Parameter} & \textbf{Value} \\
-\midrule
-Bits per symbol & 1 \\
-Constellation points & 2 ($0°$, $180°$) \\
-Spectral efficiency & $\sim$0.7--1.0~bps/Hz \\
-BER @ 10~dB $E_b/N_0$ & $3.9 \times 10^{-6}$ \\
-Carrier recovery & Required (Costas/squaring loop) \\
-Implementation & Moderate complexity \\
-Best application & Power-limited channels \\
-Typical uses & Satellite, deep-space, RFID \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\section{Further Reading}
-
-\begin{itemize}
-\item \textbf{Chapter 5:} On-Off Keying (OOK)---simpler but inferior performance
-\item \textbf{Chapter 6:} Frequency-Shift Keying (FSK)---alternative binary scheme
-\item \textbf{Chapter 7:} Quadrature Phase-Shift Keying (QPSK)---2 bits/symbol extension
-\item \textbf{Chapter 12:} Constellation Diagrams---visualization techniques
-\item \textbf{Chapter 13:} IQ Representation---complex baseband mathematics
-\item \textbf{Chapter 18:} Bit Error Rate Analysis---performance measurement
-\item \textbf{Chapter 22:} Forward Error Correction---coding for BER improvement
-\item \textbf{Chapter 25:} Carrier Recovery Techniques---synchronization methods
-\end{itemize}
+For a typical $\alpha=0.35$, the spectral efficiency is approximately 0.74 bps/Hz. This is relatively low, making BPSK unsuitable for bandwidth-limited applications.
+
+
+\begin{workedexample}{BPSK Link Budget for a Deep Space Probe}
+    \parhead{Problem} A deep space probe transmits data back to Earth. Determine if the link will close for a target BER of $10^{-6}$.
+    \parhead{System Parameters}
+    \begin{itemize}
+        \item Transmit Power ($P_t$): \qty{20}{W} (\qty{43}{dBm})
+        \item Transmit Antenna Gain ($G_t$): \qty{48}{dBi} (high-gain dish)
+        \item Distance ($r$): 1 Astronomical Unit (AU) $\approx 1.5 \times 10^8$ km
+        \item Frequency ($f$): \qty{8.4}{GHz} (X-band)
+        \item Receive Antenna: \qty{70}{m} DSN dish ($G_r \approx \qty{74}{dBi}$)
+        \item System Noise Temperature ($T_s$): \qty{25}{K} (cryogenically cooled LNA)
+        \item Data Rate ($R_b$): \qty{100}{kbps}
+    \end{itemize}
+    \parhead{Solution}
+    \begin{derivationsteps}
+        \step Calculate the Free-Space Path Loss (FSPL).
+        \[ \text{FSPL}_{\text{dB}} \approx 20\log_{10}(d_{\text{km}}) + 20\log_{10}(f_{\text{MHz}}) + 32.45 = 20\log_{10}(1.5 \times 10^8) + 20\log_{10}(8400) + 32.45 \approx \qty{281.3}{dB} \]
+        \step Calculate the received signal power ($P_r$).
+        \[ P_r = P_t + G_t + G_r - \text{FSPL} = 43 + 48 + 74 - 281.3 = \qty{-116.3}{dBm} \]
+        \step Calculate the noise power spectral density ($N_0$).
+        \[ N_0 \text{ (dBm/Hz)} = 10\log_{10}(k T_s / 10^{-3}) = 10\log_{10}(1.38 \times 10^{-23} \times 25 / 10^{-3}) = \qty{-184.6}{dBm/Hz} \]
+        \step Calculate the available $E_b/N_0$.
+        \[ E_b/N_0 = P_r - 10\log_{10}(R_b) - N_0 = -116.3 - 10\log_{10}(100 \times 10^3) - (-184.6) = -116.3 - 50 + 184.6 = \qty{18.3}{dB} \]
+        \step Determine the link margin. For a BER of $10^{-6}$, BPSK requires $E_b/N_0 \approx 10.5$ dB.
+        \[ \text{Margin} = (\text{Available}) - (\text{Required}) = 18.3 - 10.5 = \qty{7.8}{dB} \]
+    \end{derivationsteps}
+    \parhead{Interpretation} The link closes with a healthy margin of 7.8 dB. This demonstrates how BPSK, combined with massive antennas and cryogenically cooled receivers, enables communication across interplanetary distances, despite the colossal path loss.
+\end{workedexample}
+
+
+\begin{importantbox}[title={Further Reading}]
+    BPSK is the foundational building block for more complex phase modulation schemes.
+    \begin{description}
+        \item[Quadrature Phase-Shift Keying (QPSK)] (\Cref{ch:qpsk}) can be understood as two independent BPSK systems operating in parallel on the I and Q axes, doubling the spectral efficiency.
+        \item[Carrier Recovery] (\Cref{ch:sync}) provides a deep dive into the practical implementation of the Costas and squaring loops required for coherent BPSK demodulation.
+        \item[Bit Error Rate] (\Cref{ch:ber}) explores the BPSK performance curve in detail and compares it to other modulation formats.
+    \end{description}
+\end{importantbox}
