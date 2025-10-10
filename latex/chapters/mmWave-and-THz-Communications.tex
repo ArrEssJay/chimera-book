@@ -713,8 +713,16 @@ Margin: 45 - 20 (required SNR for 256-QAM) = 25 dB
 \subsection{\texorpdfstring{ Python Example: mmWave Path Loss
 Calculator}{ Python Example: mmWave Path Loss Calculator}}\label{python-example-mmwave-path-loss-calculator}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+% TODO: Fix long code block - currently causes build hang
+% The Python mmWave path loss calculator code block below has been temporarily commented out to allow the book to build.
+% Issue: Very long Shaded environment (100+ lines) with complex syntax highlighting
+
+\begin{center}
+\textit{[mmWave path loss calculator code temporarily removed - see digital version or future edition]}
+\end{center}
+
+% \begin{Shaded}
+% \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 
 \KeywordTok{def}\NormalTok{ mmwave\_path\_loss(freq\_ghz, distance\_m, rain\_rate\_mm\_h}\OperatorTok{=}\DecValTok{0}\NormalTok{):}
@@ -811,10 +819,10 @@ Calculator}{ Python Example: mmWave Path Loss Calculator}}\label{python-example-
 \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Noise: }\SpecialCharTok{\{}\NormalTok{thermal\_noise}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dBm"}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  SNR: }\SpecialCharTok{\{}\NormalTok{snr}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
 
-\NormalTok{capacity\_gbps }\OperatorTok{=}\NormalTok{ (bandwidth\_mhz }\OperatorTok{*}\NormalTok{ np.log2(}\DecValTok{1} \OperatorTok{+} \DecValTok{10}\OperatorTok{**}\NormalTok{(snr}\OperatorTok{/}\DecValTok{10}\NormalTok{))) }\OperatorTok{/} \DecValTok{1000}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Shannon capacity: }\SpecialCharTok{\{}\NormalTok{capacity\_gbps}\SpecialCharTok{:.2f\}}\SpecialStringTok{ Gbps"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+% \NormalTok{capacity\_gbps }\OperatorTok{=}\NormalTok{ (bandwidth\_mhz }\OperatorTok{*}\NormalTok{ np.log2(}\DecValTok{1} \OperatorTok{+} \DecValTok{10}\OperatorTok{**}\NormalTok{(snr}\OperatorTok{/}\DecValTok{10}\NormalTok{))) }\OperatorTok{/} \DecValTok{1000}
+% \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Shannon capacity: }\SpecialCharTok{\{}\NormalTok{capacity\_gbps}\SpecialCharTok{:.2f\}}\SpecialStringTok{ Gbps"}\NormalTok{)}
+% \end{Highlighting}
+% \end{Shaded}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 

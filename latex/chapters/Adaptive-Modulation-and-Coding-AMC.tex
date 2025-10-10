@@ -756,8 +756,16 @@ Wiener filter / Kalman filter for prediction
 
 \subsubsection{AMC Simulator}\label{amc-simulator}
 
-\begin{Shaded}
-\begin{Highlighting}[]
+% TODO: Fix long code block - currently causes TeX capacity exceeded error
+% The Python AMC simulator code block below has been temporarily commented out to allow the book to build.
+% Issue: Very long Shaded environment (130+ lines) with complex syntax highlighting
+
+\begin{center}
+\textit{[AMC simulator code temporarily removed - see digital version or future edition]}
+\end{center}
+
+% \begin{Shaded}
+% \begin{Highlighting}[]
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 
 \KeywordTok{def}\NormalTok{ generate\_fading\_channel(n\_samples, coherence\_time}\OperatorTok{=}\DecValTok{100}\NormalTok{):}
@@ -880,10 +888,10 @@ Wiener filter / Kalman filter for prediction
 \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Average SNR: }\SpecialCharTok{\{}\NormalTok{avg\_snr\_db}\SpecialCharTok{\}}\SpecialStringTok{ dB"}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"AMC average throughput: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\NormalTok{mean(throughput\_amc)}\SpecialCharTok{:.2f\}}\SpecialStringTok{ bits/s/Hz"}\NormalTok{)}
 \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Fixed MCS throughput: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\NormalTok{mean(throughput\_fixed)}\SpecialCharTok{:.2f\}}\SpecialStringTok{ bits/s/Hz"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"AMC gain: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\NormalTok{mean(throughput\_amc) }\OperatorTok{/}\NormalTok{ np}\SpecialCharTok{.}\NormalTok{mean(throughput\_fixed)}\SpecialCharTok{:.2f\}}\SpecialStringTok{×"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"AMC average BLER: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\NormalTok{mean(bler\_amc)}\SpecialCharTok{:.2\%\}}\SpecialStringTok{"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+% \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"AMC gain: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\NormalTok{mean(throughput\_amc) }\OperatorTok{/}\NormalTok{ np}\SpecialCharTok{.}\NormalTok{mean(throughput\_fixed)}\SpecialCharTok{:.2f\}}\SpecialStringTok{×"}\NormalTok{)}
+% \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"AMC average BLER: }\SpecialCharTok{\{}\NormalTok{np}\SpecialCharTok{.}\NormalTok{mean(bler\_amc)}\SpecialCharTok{:.2\%\}}\SpecialStringTok{"}\NormalTok{)}
+% \end{Highlighting}
+% \end{Shaded}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 

@@ -37,16 +37,20 @@ rm -f "$BUILD_DIR"/*
 # PRINT PDF BUILD (COLOR ONLY - Use Adobe Preflight for B/W)
 # ==============================================================================
 echo "--- Building Print PDF (Color) ---"
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
+echo "Pass 1/3..."
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 
 # Run biber for bibliography
 if [ -f "$BUILD_DATA_DIR/chimera-book-print.bcf" ]; then
+    echo "Running biber..."
     (biber "$BUILD_DATA_DIR/chimera-book-print") 2>&1 | tail -10
 fi
 
 # Two more passes for references
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") | tail -20
+echo "Pass 2/3..."
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+echo "Pass 3/3..."
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-print" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "\def\ISBN{$ISBN_PRINT}\input{$DOC.tex}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 cp "$BUILD_DATA_DIR/chimera-book-print.pdf" "./chimera-book-print.pdf"
 
 # ==============================================================================
@@ -61,14 +65,18 @@ EPDF_METADATA="\
 \def\pdfkeywords{signal processing, modulation, M-Theory, telecommunications, DSP}\
 \def\ISBN{$ISBN_EPDF}"
 
-(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") | tail -20
+echo "E-PDF Pass 1/3..."
+(cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 
 # Run Biber for citations if needed
 if [ -f "$BUILD_DATA_DIR/chimera-book-epdf.bcf" ]; then
+    echo "Running biber for E-PDF..."
     (biber "$BUILD_DATA_DIR/chimera-book-epdf") 2>&1 | tail -10
     # Re-run xelatex to include citations
-    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") | tail -20
-    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") | tail -20
+    echo "E-PDF Pass 2/3..."
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
+    echo "E-PDF Pass 3/3..."
+    (cd "$LATEX_DIR" && xelatex -jobname="chimera-book-epdf" -shell-escape -interaction=nonstopmode -output-directory="../$BUILD_DATA_DIR" "$EPDF_METADATA\input{$DOC.tex}") 2>&1 | grep --line-buffered -E "LOADING CHAPTER|CHAPTER.*COMPLETE|Output written|pages"
 fi
 cp "$BUILD_DATA_DIR/chimera-book-epdf.pdf" "./chimera-book-epdf.pdf"
 
