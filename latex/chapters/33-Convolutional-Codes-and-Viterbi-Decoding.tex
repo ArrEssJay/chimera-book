@@ -1,1149 +1,128 @@
+% ==============================================================================
+% CHAPTER 33: Convolutional Codes & Viterbi Decoding
+% ==============================================================================
+
 \chapter{Convolutional Codes \& Viterbi Decoding}
 \label{ch:convolutional-codes}
 
 \begin{nontechnical}
-\textbf{Convolutional codes + Viterbi decoding is like having a GPS that considers your entire journey to figure out where you really are---even if some GPS samples are noisy!}
+    \textbf{Convolutional codes are like adding a "memory" to your data}, creating a continuous, flowing pattern. The Viterbi algorithm is like a detective that can follow this pattern to find and fix errors, even in very noisy signals.
 
+    \parhead{The problem: Isolated bits are vulnerable}
+    If you send a stream of independent 1s and 0s, and noise flips one bit, it's hard to know an error even occurred.
 
-\textbf{The Problem:} 
-\begin{itemize}
-\item Noise corrupts transmitted bits: some 0s become 1s, some 1s become 0s
-\item How do you figure out what was actually sent?
-\end{itemize}
+    \parhead{The convolutional solution: Create a pattern}
+    Instead of encoding each bit by itself, a convolutional encoder looks at the current bit \emph{and} a few previous bits. The output bits are a function of this entire "window" of data. This creates a structural link, or memory, between consecutive bits. A single bit error in the input will now affect several output bits, creating a distinct pattern that the receiver can spot.
 
-\textbf{The Convolutional Code Solution---Add memory:}
-\begin{enumerate}
-\item Instead of encoding each bit independently, the encoder ``remembers'' previous bits
-\item Each output bit depends on current + past few input bits
-\item This creates patterns---if one bit gets corrupted, the pattern breaks and decoder notices!
-\end{enumerate}
+    \parhead{The Viterbi algorithm: Finding the most likely path}
+    The Viterbi decoder is the real genius of the system. It works like a GPS navigator trying to reconstruct your route from a series of noisy location pings.
+    \begin{itemize}
+        \item It knows all the "valid roads" (the possible patterns the encoder can make).
+        \item It looks at the entire sequence of noisy "pings" it has received.
+        \item It then finds the one single valid path through the map of all possibilities that most closely matches the noisy sequence it observed.
+    \end{itemize}
+    By finding the "most likely path," it simultaneously decodes the data and corrects errors.
 
-\textbf{The GPS Analogy:}
-\begin{itemize}
-\item \textbf{Bad GPS:} Each position reading is independent. Get noisy reading? Can't tell if it's wrong!
-\item \textbf{Smart GPS:} Considers your speed, direction, previous positions. Get noisy reading that says you teleported 5 miles? ``That's impossible, ignore it!''
-\end{itemize}
-
-\textbf{Viterbi Decoding---Find the most likely path:}
-\begin{itemize}
-\item Looks at entire received sequence
-\item Considers all possible paths the data could have taken
-\item Picks the path that best matches what was received (even with errors!)
-\end{itemize}
-
-\textbf{Real-world example---Space probes:}
-\begin{itemize}
-\item \textbf{Voyager spacecraft:} 15+ billion miles away, incredibly noisy signal
-\item Uses convolutional code with Viterbi decoding
-\item Can correct errors even when 30--40\% of bits are corrupted!
-\item This is why we still get photos from interstellar space!
-\end{itemize}
-
-\textbf{Everyday uses:}
-\begin{itemize}
-\item \textbf{WiFi:} 802.11a/g use convolutional codes
-\item \textbf{Satellite TV:} DVB-S uses convolutional + Viterbi
-\item \textbf{GSM (2G):} Your old cell phone used this
-\item \textbf{GPS signals:} Navigation satellites use convolutional codes
-\end{itemize}
-
-\textbf{Why it works:}
-\begin{itemize}
-\item Pattern-based: Errors break patterns, decoder spots them
-\item Context-aware: Uses past data to correct current data
-\item Optimal: Viterbi finds the single best answer (mathematically proven!)
-\end{itemize}
-
-\textbf{Trade-off:} More memory = better error correction BUT more complex decoder. Most systems use 3--7 bits of memory (called ``constraint length'').
-
-\textbf{Fun fact:} Andrew Viterbi invented this algorithm in 1967 for deep space communications---then co-founded Qualcomm, making billions from the algorithm used in every cell phone!
+    \parhead{Real-world magic} This technique is so powerful that it allows us to communicate with the \textbf{Voyager space probes}, which are now in interstellar space. Their signals are billions of times weaker than the background noise, but because they use a convolutional code, the Viterbi algorithm on Earth can still pull the data out of the static. It was also the workhorse code for 2G mobile phones, early WiFi, and satellite TV.
 \end{nontechnical}
 
-\section{Overview}
 
-\textbf{Convolutional codes} are a class of error-correcting codes that encode data \textbf{continuously} rather than in fixed blocks. Unlike block codes that treat each codeword independently, convolutional codes maintain \textbf{memory} of previous input bits, enabling powerful error correction through pattern-based decoding.
+\subsection{Overview}
+
+\keyterm{Convolutional codes} are a class of forward error-correcting codes that differ from block codes in one fundamental way: they have \keyterm{memory}. The encoder processes a continuous stream of information bits, and each block of $n$ output bits depends not only on the current $k$ input bits but also on the previous $m$ input bits. This memory introduces a structure of dependencies into the coded stream.
+
+This structure is best represented by a \keyterm{trellis diagram}, which maps all possible state transitions of the encoder over time. The optimal decoding of a convolutional code is then equivalent to finding the most likely path through this trellis, a problem that is solved efficiently and elegantly by the \keyterm{Viterbi algorithm}.
 
 \begin{keyconcept}
-The fundamental distinction between block codes and convolutional codes lies in \textbf{memory}:
-\begin{itemize}
-\item \textbf{Block codes:} Encode $k$ bits $\rightarrow$ $n$ bits independently (memoryless)
-\item \textbf{Convolutional codes:} Each output depends on current + \textbf{previous} input bits (memory)
-\end{itemize}
-
-This memory creates \textbf{structural dependencies} that enable the Viterbi algorithm to perform optimal maximum-likelihood (ML) decoding efficiently.
+    The combination of a convolutional encoder and a \textbf{Viterbi decoder} provides a powerful and practical method for achieving significant coding gain. For decades, this was the dominant FEC technique for power-limited channels, used in everything from deep-space probes to mobile phones, before the advent of capacity-approaching Turbo and LDPC codes.
 \end{keyconcept}
 
-\textbf{Applications:} Convolutional codes are ubiquitous in modern communications:
-\begin{itemize}
-\item \textbf{Satellite:} DVB-S, GPS navigation signals
-\item \textbf{Wireless:} WiFi (802.11a/g), LTE control channels
-\item \textbf{Deep space:} Voyager spacecraft, Mars rovers
-\item \textbf{Mobile:} GSM (2G), early 3G systems
-\end{itemize}
 
-\textbf{Key advantages:}
-\begin{itemize}
-\item Excellent performance with soft-decision decoding
-\item Low latency (suitable for streaming applications)
-\item Optimal ML decoding via Viterbi algorithm
-\item Easily punctured to achieve variable code rates
-\end{itemize}
+\subsection{Encoder Structure and Parameters}
 
-\section{Fundamental Parameters}
+A convolutional encoder is defined by three key parameters: $(n, k, K)$.
+\begin{description}
+    \item[Code Rate ($R=k/n$)] The ratio of input bits ($k$) to output bits ($n$) per time step. Most practical codes use $k=1$ and have rates like 1/2 or 1/3.
+    \item[Constraint Length ($K$)] The number of input bits that influence each output. The encoder is implemented with a shift register of length $m=K-1$, which represents its memory.
+    \item[Generator Polynomials] A set of $n$ polynomials that define the XOR connections from the shift register taps to the output summer.
+\end{description}
+The number of states in the encoder's state machine is $2^{K-1}$. The complexity of the Viterbi decoder grows exponentially with $K$, which limits practical constraint lengths to around 7-9.
 
-\subsection{Constraint Length ($K$)}
+\paragraph{The NASA Standard Code}
+One of the most famous and widely used codes is the NASA/JPL standard, with $K=7$ and rate $R=1/2$. Its generator polynomials are $g_1 = 171_8$ and $g_2 = 133_8$. This code has a free distance of $d_{\text{free}}=10$, providing a powerful error correction capability that became the benchmark for satellite and deep-space communications for over two decades.
 
-The \textbf{constraint length} $K$ defines the number of input bits that influence each output bit:
-\begin{equation}
-K = \text{number of input bits affecting output}
-\label{eq:constraint-length}
-\end{equation}
 
-The encoder maintains \textbf{memory} through a shift register with:
-\begin{equation}
-m = K - 1 \quad \text{(shift register stages)}
-\label{eq:memory-order}
-\end{equation}
-where:
-\begin{itemize}
-\item $K$ = constraint length (total influencing bits)
-\item $m$ = memory order (number of previous bits stored)
-\end{itemize}
+\subsection{The Viterbi Algorithm}
 
-\textbf{Example:} For $K = 3$, the current bit plus 2 previous bits (3 total) determine each output.
+The \keyterm{Viterbi algorithm} is a dynamic programming algorithm that performs \keyterm{maximum-likelihood sequence estimation}. It finds the single path through the code trellis that has the minimum "distance" (e.g., Hamming or Euclidean distance) to the received sequence.
 
-The number of encoder states is:
-\begin{equation}
-N_{\text{states}} = 2^{K-1} = 2^m
-\label{eq:num-states}
-\end{equation}
-
-\subsection{Code Rate ($r$)}
-
-The \textbf{code rate} quantifies redundancy:
-\begin{equation}
-r = \frac{k}{n}
-\label{eq:code-rate}
-\end{equation}
-where:
-\begin{itemize}
-\item $k$ = number of input bits per time step
-\item $n$ = number of output bits per time step
-\item $r$ = code rate (fraction of information bits)
-\end{itemize}
-
-\textbf{Common code rates:}
-\begin{itemize}
-\item $r = 1/2$: 1 input bit $\rightarrow$ 2 output bits (strong coding, deep space)
-\item $r = 1/3$: 1 input bit $\rightarrow$ 3 output bits (very strong coding, low SNR)
-\item $r = 2/3$: 2 input bits $\rightarrow$ 3 output bits (punctured from $r = 1/2$)
-\item $r = 3/4$: 3 input bits $\rightarrow$ 4 output bits (high throughput)
-\end{itemize}
-
-Lower code rates provide more redundancy and stronger error correction at the cost of reduced data throughput.
-
-\section{Encoder Structure}
-
-A convolutional encoder consists of:
+\parhead{The Core Operation: Add-Compare-Select}
+The algorithm works by moving through the trellis one time step at a time. At each state, it performs three operations:
 \begin{enumerate}
-\item \textbf{Shift register:} Stores $K-1$ previous input bits
-\item \textbf{Modulo-2 adders (XOR gates):} Combine register contents
-\item \textbf{Generator polynomials:} Define connections from register to XORs
+    \item \textbf{Add:} For each of the two paths entering the current state, add the \keyterm{branch metric} (the error of that transition) to the cumulative \keyterm{path metric} of the preceding state.
+    \item \textbf{Compare:} Compare the two resulting path metrics.
+    \item \textbf{Select:} Choose the path with the smaller metric as the "survivor" for that state, and discard the other path.
 \end{enumerate}
-
-\subsection{Generic Encoder Architecture}
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=1cm, minimum height=0.8cm, font=\sffamily\small},
-  node distance=1.5cm,
-  font=\small
-]
-
-% Shift register stages
-\node[block] (d0) {$D_0$};
-\node[block, right of=d0] (d1) {$D_1$};
-\node[block, right of=d1] (d2) {$D_2$};
-
-% Input
-\node[left of=d0, node distance=2cm] (input) {\sffamily Input};
-\draw[->,thick] (input) -- node[above,font=\scriptsize] {$u_k$} (d0);
-
-% Connections between stages
-\draw[->,thick] (d0) -- (d1);
-\draw[->,thick] (d1) -- (d2);
-
-% XOR gates for output 1
-\node[below of=d1, node distance=2cm, font=\small] (xor1) {$\bigoplus$};
-\node[circle, draw, inner sep=0pt, minimum size=6pt, fill=black] at ($(d0.south)+(0,-0.3)$) (tap1a) {};
-\node[circle, draw, inner sep=0pt, minimum size=6pt, fill=black] at ($(d1.south)+(0,-0.3)$) (tap1b) {};
-\node[circle, draw, inner sep=0pt, minimum size=6pt, fill=black] at ($(d2.south)+(0,-0.3)$) (tap1c) {};
-\draw[-] (d0.south) -- (tap1a);
-\draw[-] (d1.south) -- (tap1b);
-\draw[-] (d2.south) -- (tap1c);
-\draw[-] (tap1a) |- (xor1);
-\draw[-] (tap1b) -- (xor1);
-\draw[-] (tap1c) |- (xor1);
-
-% Output 1
-\node[below of=xor1, node distance=0.8cm] (out1) {\sffamily $v_1$};
-\draw[->,thick] (xor1) -- (out1);
-
-% XOR gates for output 2
-\node[below of=d0, node distance=3.5cm, font=\small] (xor2) {$\bigoplus$};
-\node[circle, draw, inner sep=0pt, minimum size=6pt, fill=black] at ($(d0.south)+(0,-2.2)$) (tap2a) {};
-\node[circle, draw, inner sep=0pt, minimum size=6pt, fill=black] at ($(d2.south)+(0,-2.2)$) (tap2c) {};
-\draw[-] (tap1a) -- (tap2a);
-\draw[-] (tap1c) -- (tap2c);
-\draw[-] (tap2a) |- (xor2);
-\draw[-] (tap2c) |- (xor2);
-
-% Output 2
-\node[below of=xor2, node distance=0.8cm] (out2) {\sffamily $v_2$};
-\draw[->,thick] (xor2) -- (out2);
-
-% Labels
-\node[above=3pt of d0, font=\scriptsize] {Current};
-\node[above=3pt of d1, font=\scriptsize] {Previous};
-\node[above=3pt of d2, font=\scriptsize] {Previous};
-
-% Title
-\node[above=15pt of d1, font=\sffamily\bfseries] {Rate $r=1/2$, Constraint Length $K=3$};
-
-\end{tikzpicture}
-\end{center}
-
-\textbf{Generator polynomials} define the connections:
-\begin{itemize}
-\item $g_1 = 111_2$ (binary): All three stages connected to XOR$_1$ $\rightarrow$ Output $v_1$
-\item $g_2 = 101_2$ (binary): Stages $D_0$ and $D_2$ connected to XOR$_2$ $\rightarrow$ Output $v_2$
-\end{itemize}
-
-The generator polynomial determines which shift register taps feed each modulo-2 adder.
-
-\section{Industry Standard: NASA Code}
-
-\subsection{NASA Standard ($r=1/2$, $K=7$)}
-
-The \textbf{NASA standard convolutional code} is one of the most widely deployed error-correcting codes, used in deep-space missions including Voyager, Cassini, and Mars rovers. This code achieves excellent performance with manageable complexity.
-
-\textbf{Parameters:}
-\begin{itemize}
-\item \textbf{Code rate:} $r = 1/2$ (1 input bit $\rightarrow$ 2 output bits)
-\item \textbf{Constraint length:} $K = 7$ (7-bit influence span)
-\item \textbf{Memory:} $m = 6$ (6 shift register stages)
-\item \textbf{Number of states:} $2^6 = 64$ states
-\end{itemize}
-
-\textbf{Generator polynomials} (octal notation):
-\begin{align}
-g_1 &= 171_8 = 1111001_2 \label{eq:nasa-g1} \\
-g_2 &= 133_8 = 1011011_2 \label{eq:nasa-g2}
-\end{align}
-where:
-\begin{itemize}
-\item $g_1$ = generator for output $Y_1$ (stages 0,1,2,3,6 connected)
-\item $g_2$ = generator for output $Y_2$ (stages 0,2,3,5,6 connected)
-\end{itemize}
-
-\begin{calloutbox}{Octal to Binary Conversion}
-The octal notation is standard in convolutional code specifications:
-\begin{itemize}
-\item $171_8 = 001\ 111\ 001_2 = 1111001_2$ (trim leading zeros)
-\item $133_8 = 001\ 011\ 011_2 = 1011011_2$
-\end{itemize}
-
-Each octal digit (0--7) represents exactly 3 binary bits, making it convenient for generator polynomial specification.
-\end{calloutbox}
-
-\subsection{Encoding Example (Simplified $K=3$ Code)}
-
-To illustrate the encoding process, consider a simpler $K=3$ code with generators $g_1 = 111_2$ and $g_2 = 101_2$.
-
-\textbf{Input data:} $101_2$ (3 bits)
-
-\textbf{Initial state:} All zeros $[00]$ (2-stage shift register for $K=3$)
-
-\begin{center}
-\begin{tabular}{@{}cccccc@{}}
-\toprule
-\textbf{Time} & \textbf{Input} & \textbf{State} & \textbf{$Y_1$} & \textbf{$Y_2$} & \textbf{Output} \\
-\midrule
-0 & 1 & 10 & 1 & 1 & 11 \\
-1 & 0 & 01 & 1 & 0 & 10 \\
-2 & 1 & 10 & 0 & 1 & 01 \\
-3 (flush) & 0 & 01 & 1 & 0 & 10 \\
-4 (flush) & 0 & 00 & 1 & 1 & 11 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Encoded output:} $11\ 10\ 01\ 10\ 11$ (10 bits for 3 input bits + 2 flush bits)
-
-\textbf{Code rate achieved:} $r = 3/(3+2) \times 2 = 3/10 = 0.3$ (effectively, including flush overhead)
+By systematically discarding the less likely paths at every step, the Viterbi algorithm avoids an exponential explosion in complexity, maintaining only one survivor path for each of the $2^{K-1}$ states. Once the end of the sequence is reached, the decoder performs a \keyterm{traceback} from the final state with the best metric to recover the single most likely transmitted sequence.
 
 \begin{warningbox}
-\textbf{Termination (flushing) is critical.} The encoder must be returned to the all-zeros state by appending $K-1$ zero bits. This ensures the Viterbi decoder can reliably identify the final state, preventing decoding errors at the end of the sequence.
-
-For $K=7$ codes, 6 flush bits are required. For short messages, this overhead can be significant.
+    \textbf{Soft-Decision Decoding:} The true power of the Viterbi algorithm is realised with \textbf{soft-decision} inputs. By using the raw analogue or multi-bit digital samples from the demodulator (instead of hard 0/1 decisions), the algorithm can weigh its decisions based on reliability. A sample that is close to the decision boundary contributes less to the path metric than a sample that is clearly a '0' or '1'. This provides a "free" coding gain of 2-3 dB over hard-decision decoding.
 \end{warningbox}
 
-\subsection{State Diagram}\label{state-diagram}
 
-\textbf{States}: All possible shift register contents
+\subsection{Performance and Coding Gain}
 
-\textbf{For K=3}: \(2^{K-1} = 2^2 = 4\) states - State 00, State 01,
-State 10, State 11
+The performance of a convolutional code is determined by its \keyterm{free distance}, $d_{\text{free}}$, which is the minimum Hamming distance between any two distinct paths through the trellis. A larger free distance implies better error correction capability. The asymptotic coding gain is given by $G_c = 10\log_{10}(R \cdot d_{\text{free}})$.
 
-\textbf{Transitions}: Input bit determines next state
+\begin{table}[H]
+    \centering
+    \caption{Performance of Common Convolutional Codes (Rate 1/2)}
+    \label{tab:conv-code-performance}
+    \begin{tabular}{@{}cccc@{}}
+        \toprule
+        \tableheaderfont Constraint Length ($K$) & \tableheaderfont Free Distance ($d_{\text{free}}$) & \tableheaderfont Asymptotic Gain (Hard) & \tableheaderfont Approx. Gain (Soft) \\
+        \midrule
+        3 & 5 & 4.0 dB & 6.0 dB \\
+        5 & 7 & 5.4 dB & 7.4 dB \\
+        \textbf{7 (NASA Std.)} & \textbf{10} & \textbf{7.0 dB} & \textbf{9.0 dB} \\
+        9 & 12 & 7.8 dB & 9.8 dB \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
-\textbf{Example (r=1/2, K=3, g1=111, g2=101)}:
 
-\begin{verbatim}
-State diagram:
-
-   00 --0/00--> 00
-    |  --1/11--> 10
+\begin{workedexample}{Deep Space Link with Convolutional Coding}
+    \parhead{Problem} The Voyager 1 spacecraft transmits data from interstellar space. Given the extremely weak signal, analyse how convolutional coding makes communication possible.
+    \parhead{System Parameters}
+    \begin{itemize}
+        \item Received $E_b/N_0$: Approx. \qty{2.5}{dB}.
+        \item Modulation: BPSK.
+        \item Target BER: $< 10^{-5}$.
+        \item Code: NASA standard convolutional code ($K=7, R=1/2$) with soft-decision Viterbi decoding.
+    \end{itemize}
+    \parhead{Analysis}
+    \begin{derivationsteps}
+        \step \textbf{Check Uncoded Performance.} The required $E_b/N_0$ for uncoded BPSK to achieve a BER of $10^{-5}$ is 9.6 dB. With an available $E_b/N_0$ of only 2.5 dB, the uncoded link would fail completely (the BER would be worse than $10^{-1}$).
+        
+        \step \textbf{Apply Coding Gain.} The $K=7, R=1/2$ code with soft-decision decoding provides approximately 9.0 dB of coding gain at this BER.
+        
+        \step \textbf{Calculate Required Coded $E_b/N_0$.}
+        \[ (\text{Required } E_b/N_0)_{\text{coded}} = (\text{Required } E_b/N_0)_{\text{uncoded}} - \text{Coding Gain} \]
+        \[ (\text{Required } E_b/N_0)_{\text{coded}} = 9.6 \text{ dB} - 9.0 \text{ dB} = \textbf{\qty{0.6}{dB}} \]
+        
+        \step \textbf{Calculate Link Margin.}
+        \[ \text{Link Margin} = (\text{Available } E_b/N_0) - (\text{Required } E_b/N_0)_{\text{coded}} = 2.5 - 0.6 = \textbf{\qty{1.9}{dB}} \]
+    \end{derivationsteps}
     
-   01 --0/11--> 00
-    |  --1/00--> 10
-    
-   10 --0/10--> 01
-    |  --1/01--> 11
-    
-   11 --0/01--> 01
-    |  --1/10--> 11
-\end{verbatim}
-
-\textbf{Notation}: Input/Output (e.g., ``1/11'' = input 1 produces
-output 11)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\section{Trellis Diagram}
-
-The \textbf{trellis diagram} is the state diagram \textbf{unrolled in time}, showing all possible encoder state transitions over multiple time steps. It is the fundamental structure for Viterbi decoding.
-
-\subsection{Trellis Structure ($K=3$ Example)}
-
-% TODO: Fix TikZ trellis diagram - currently causes TeX capacity exceeded error
-% The diagram below has been temporarily commented out to allow the book to build.
-% Issue: Complex nested \foreach loops with TikZ node naming causing infinite recursion
-
-\begin{center}
-\textit{[Trellis diagram temporarily removed - see digital version or future edition]}
-\end{center}
-
-% \begin{center}
-% \begin{tikzpicture}[
-%   scale=1.2,
-%   every node/.style={font=\small},
-%   state/.style={circle, draw, minimum size=6pt, inner sep=1pt, fill=white},
-%   solid/.style={thick, ->,>=stealth},
-%   dashed/.style={thick, ->,>=stealth, dashed}
-% ]
-% 
-% % Time labels
-% \foreach \t in {0,1,2,3,4} {
-%   \node[font=\scriptsize] at (\t*2.5, 3.5) {$t=\t$};
-% }
-% 
-% % State labels
-% \node[font=\scriptsize, left] at (-0.3, 3) {00};
-% \node[font=\scriptsize, left] at (-0.3, 2) {01};
-% \node[font=\scriptsize, left] at (-0.3, 1) {10};
-% \node[font=\scriptsize, left] at (-0.3, 0) {11};
-% 
-% % Draw states at each time
-% \foreach \t in {0,1,2,3,4} {
-%   \foreach \s in {0,1,2,3} {
-%     \node[state] (s\s-t\t) at (\t*2.5, 3-\s) {};
-%   }
-% }
-% 
-% % Draw transitions (input 0 = solid, input 1 = dashed)
-% % From state 00
-% \foreach \t in {0,1,2,3} {
-%   \pgfmathtruncatemacro{\tnext}{\t+1}
-%   \draw[solid] (s0-t\t) -- (s0-t\tnext) node[midway,above,font=\tiny] {0/00};
-%   \draw[dashed] (s0-t\t) -- (s2-t\tnext) node[midway,below,font=\tiny] {1/11};
-% }
-% 
-% % From state 01
-% \foreach \t in {0,1,2,3} {
-%   \pgfmathtruncatemacro{\tnext}{\t+1}
-%   \draw[solid] (s1-t\t) -- (s0-t\tnext) node[midway,above,font=\tiny] {0/11};
-%   \draw[dashed] (s1-t\t) -- (s2-t\tnext) node[midway,below,font=\tiny] {1/00};
-% }
-% 
-% % From state 10
-% \foreach \t in {0,1,2,3} {
-%   \pgfmathtruncatemacro{\tnext}{\t+1}
-%   \draw[solid] (s2-t\t) -- (s1-t\tnext) node[midway,above,font=\tiny] {0/10};
-%   \draw[dashed] (s2-t\t) -- (s3-t\tnext) node[midway,below,font=\tiny] {1/01};
-% }
-% 
-% % From state 11
-% \foreach \t in {0,1,2,3} {
-%   \pgfmathtruncatemacro{\tnext}{\t+1}
-%   \draw[solid] (s3-t\t) -- (s1-t\tnext) node[midway,above,font=\tiny] {0/01};
-%   \draw[dashed] (s3-t\t) -- (s3-t\tnext) node[midway,below,font=\tiny] {1/10};
-% }
-% 
-% % Legend
-% \node[font=\scriptsize, align=left] at (5, -0.8) {
-%   \tikz{\draw[solid] (0,0) -- (0.4,0);} Input = 0\\
-%   \tikz{\draw[dashed] (0,0) -- (0.4,0);} Input = 1\\
-%   Labels: input/output
-% };
-% 
-% \end{tikzpicture}
-% \end{center}
-
-\textbf{Key observations:}
-\begin{itemize}
-\item Each \textbf{state node} represents the shift register contents at time $t$
-\item Each \textbf{branch} represents a state transition caused by an input bit
-\item \textbf{Branch labels} show input/output (e.g., ``1/11'' = input 1 produces output 11)
-\item A \textbf{path through the trellis} represents a complete encoded sequence
-\item The encoder must start at state 00 (after reset/flush)
-\end{itemize}
-
-\textbf{Decoding problem:} Given received sequence $r_1, r_2, \ldots, r_N$, find the \textbf{most likely path} through the trellis. The Viterbi algorithm solves this optimally.
-
-\section{Viterbi Algorithm}
-
-The \textbf{Viterbi algorithm}, invented by Andrew J. Viterbi in 1967, performs \textbf{optimal maximum-likelihood (ML) decoding} for convolutional codes. It efficiently searches the exponentially large space of possible paths through the trellis.
-
-\begin{keyconcept}
-The Viterbi algorithm exploits the \textbf{Markov property} of convolutional codes: the optimal path to any state at time $t+1$ must include the optimal path to some state at time $t$.
-
-This enables \textbf{dynamic programming}: instead of examining all $2^L$ possible sequences, we only track $2^{K-1}$ survivor paths at each time step.
-\end{keyconcept}
-
-\subsection{Algorithm Complexity}
-
-\textbf{Computational complexity:}
-\begin{equation}
-\mathcal{O}(2^{K-1} \cdot L \cdot n)
-\label{eq:viterbi-complexity}
-\end{equation}
-where:
-\begin{itemize}
-\item $K$ = constraint length
-\item $L$ = sequence length (number of time steps)
-\item $n$ = number of outputs per time step (code rate denominator)
-\end{itemize}
-
-\textbf{Practical limits:} The algorithm is efficient for $K \leq 9$. Beyond $K=10$, the exponential state space becomes prohibitive ($2^9 = 512$ states vs. $2^{10} = 1024$ states).
-
-\subsection{Core Principle}
-
-At each time step $t$, for each possible state $s$:
-\begin{enumerate}
-\item Compute \textbf{branch metrics} for all incoming transitions
-\item Select the \textbf{survivor path} with minimum cumulative metric
-\item Store the survivor path and its metric
-\end{enumerate}
-
-After processing all received symbols, \textbf{traceback} from the best final state to recover the decoded sequence.
-
-\subsection{Complete Algorithm Steps}
-
-\textbf{Step 1: Initialization}
-\begin{itemize}
-\item Set $\text{PM}_0(00) = 0$ (start at all-zeros state)
-\item Set $\text{PM}_0(s) = \infty$ for all other states $s \neq 00$
-\item Initialize survivor path storage
-\end{itemize}
-
-\textbf{Step 2: Forward Pass (for $t = 1$ to $L$)}
-
-For each time step $t$:
-\begin{enumerate}
-\item \textbf{For each state $s$:}
-   \begin{enumerate}
-   \item Identify all valid predecessor states $s'$
-   \item Compute branch metrics $\text{BM}_t(s' \to s)$
-   \item Compute candidate path metrics: $\text{PM}_{t-1}(s') + \text{BM}_t(s' \to s)$
-   \item Select minimum: $\text{PM}_t(s) = \min_{s'} [\text{PM}_{t-1}(s') + \text{BM}_t(s' \to s)]$
-   \item Store survivor path: record which $s'$ achieved the minimum
-   \end{enumerate}
-\end{enumerate}
-
-\textbf{Step 3: Termination}
-\begin{itemize}
-\item If encoder was flushed: select state 00 at time $L$
-\item If not flushed: select state with minimum $\text{PM}_L(s)$
-\end{itemize}
-
-\textbf{Step 4: Traceback}
-\begin{enumerate}
-\item Start at selected final state $s_L$
-\item Follow survivor paths backward: $s_L \to s_{L-1} \to \cdots \to s_1 \to s_0$
-\item Extract input bits that caused each state transition
-\item Reverse the sequence to obtain decoded bits
-\end{enumerate}
-
-\textbf{Step 5: Output}
-
-Return decoded bit sequence (excluding flush bits if applicable).
-
-\subsection{Branch Metrics}
-
-The \textbf{branch metric} quantifies the ``distance'' between the received symbol and the expected output for a particular state transition.
-
-\subsubsection{Hard-Decision Decoding (Hamming Distance)}
-
-For binary demodulator output ($r_i \in \{0, 1\}$):
-\begin{equation}
-\text{BM}_{\text{hard}}(s' \to s) = \sum_{i=1}^{n} (r_i \oplus c_i)
-\label{eq:branch-metric-hard}
-\end{equation}
-where:
-\begin{itemize}
-\item $r_i$ = received bit (0 or 1)
-\item $c_i$ = expected output bit for transition $s' \to s$
-\item $\oplus$ = modulo-2 addition (XOR)
-\item $n$ = number of output bits per symbol
-\end{itemize}
-
-This counts the number of bit errors (\textbf{Hamming distance}).
-
-\subsubsection{Soft-Decision Decoding (Euclidean Distance)}
-
-For analog demodulator output ($r_i \in \mathbb{R}$):
-\begin{equation}
-\text{BM}_{\text{soft}}(s' \to s) = \sum_{i=1}^{n} (r_i - \hat{c}_i)^2
-\label{eq:branch-metric-soft}
-\end{equation}
-where:
-\begin{itemize}
-\item $r_i \in \mathbb{R}$ = soft received value (e.g., $+3.2$ or $-1.7$)
-\item $\hat{c}_i \in \{+1, -1\}$ = expected output mapped to antipodal signals
-\end{itemize}
-
-For BPSK modulation: $\hat{c}_i = 2c_i - 1$ maps $\{0,1\}$ to $\{-1,+1\}$.
-
-\begin{keyconcept}
-\textbf{Soft-decision decoding provides approximately 2--3 dB coding gain} over hard-decision at the same BER. This is ``free'' performance improvement requiring only analog values from the demodulator instead of binary decisions.
-
-The key insight: preserving \textbf{reliability information} (how confident the demodulator is) enables better decoding decisions.
-\end{keyconcept}
-
-\subsection{Path Metric and Survivor Selection}
-
-The \textbf{path metric} is the cumulative distance from the starting state to state $s$ at time $t$:
-\begin{equation}
-\text{PM}_t(s) = \min_{s'} \left[ \text{PM}_{t-1}(s') + \text{BM}_t(s' \to s) \right]
-\label{eq:path-metric}
-\end{equation}
-where:
-\begin{itemize}
-\item $\text{PM}_t(s)$ = cumulative path metric to state $s$ at time $t$
-\item $\text{PM}_{t-1}(s')$ = path metric to previous state $s'$ at time $t-1$
-\item $\text{BM}_t(s' \to s)$ = branch metric for transition $s' \to s$ at time $t$
-\item $\min_{s'}$ = minimize over all valid predecessor states $s'$
-\end{itemize}
-
-The \textbf{survivor path} to state $s$ is the path achieving the minimum in Equation \ref{eq:path-metric}.
-
-\textbf{Add-Compare-Select (ACS) operation:}
-\begin{enumerate}
-\item \textbf{Add:} Compute $\text{PM}_{t-1}(s') + \text{BM}_t(s' \to s)$ for each predecessor
-\item \textbf{Compare:} Find the minimum among all candidates
-\item \textbf{Select:} Choose the survivor path and update $\text{PM}_t(s)$
-\end{enumerate}
-
-This ACS operation is the computational core of the Viterbi algorithm, performed $2^{K-1}$ times per time step (once for each state).
-
-\subsection{Worked Example: Hard-Decision Viterbi Decoding}
-
-\textbf{Given:}
-\begin{itemize}
-\item Code: $K=3$, $r=1/2$, generators $g_1=111$, $g_2=101$
-\item Received sequence: $11\ 10\ 01\ 11\ 00$
-\item Assumptions: Start state 00, end state 00 (flushed)
-\end{itemize}
-
-\textbf{Step-by-step decoding:}
-
-\textbf{Time 0: Initialization}
-\begin{itemize}
-\item $\text{PM}_0(00) = 0$
-\item $\text{PM}_0(s) = \infty$ for all $s \neq 00$
-\end{itemize}
-
-\textbf{Time 1: Received $11$}
-\begin{itemize}
-\item From state 00, input 0 produces 00: Hamming distance from 11 = 2
-\item From state 00, input 1 produces 11: Hamming distance from 11 = 0
-\item Update: $\text{PM}_1(00) = 0 + 2 = 2$, $\text{PM}_1(10) = 0 + 0 = 0$
-\item Survivor: State 10 is most likely
-\end{itemize}
-
-\textbf{Continue for all time steps...}
-
-The Viterbi algorithm continues this process:
-\begin{enumerate}
-\item At each time, compute branch metrics for all possible transitions
-\item Select survivor path to each state (minimum cumulative metric)
-\item Store survivor paths
-\end{enumerate}
-
-\textbf{Final: Traceback}
-
-After processing all received symbols, traceback from the state with minimum $\text{PM}_L$ to recover the most likely transmitted sequence.
-
-\section{Free Distance and Error Correction Capability}
-
-\subsection{Definition of Free Distance}
-
-The \textbf{free distance} $d_{\text{free}}$ is the minimum Hamming distance between \textbf{any two distinct encoded sequences} that diverge from and later remerge to the same state in the trellis.
-
-\begin{equation}
-d_{\text{free}} = \min_{i \neq j} d_H(c^{(i)}, c^{(j)})
-\label{eq:free-distance}
-\end{equation}
-where:
-\begin{itemize}
-\item $c^{(i)}$ and $c^{(j)}$ are any two distinct codeword sequences
-\item $d_H(\cdot, \cdot)$ is the Hamming distance
-\end{itemize}
-
-\subsection{Error Correction Capability}
-
-The free distance determines the \textbf{guaranteed error correction capability}:
-\begin{equation}
-t_{\text{correct}} = \left\lfloor \frac{d_{\text{free}} - 1}{2} \right\rfloor
-\label{eq:error-correction-capability}
-\end{equation}
-
-The code can \textbf{always correct} up to $t_{\text{correct}}$ errors. It can \textbf{detect} up to $d_{\text{free}} - 1$ errors.
-
-\subsection{Common Convolutional Codes}
-
-\begin{center}
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-\textbf{Code} & \textbf{$K$} & \textbf{Rate} & \textbf{$d_{\text{free}}$} & \textbf{$t$} & \textbf{States} \\
-\midrule
-(5, 7) & 3 & 1/2 & 5 & 2 & 4 \\
-(171, 133) & 7 & 1/2 & 10 & 4 & 64 \\
-(561, 753) & 9 & 1/2 & 12 & 5 & 256 \\
-(1167, 1375, 1545) & 9 & 1/3 & 18 & 8 & 256 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Observations:}
-\begin{itemize}
-\item \textbf{Larger $K$}: Higher $d_{\text{free}}$ $\rightarrow$ better error correction
-\item \textbf{Lower rate}: Higher $d_{\text{free}}$ at same $K$ (more redundancy)
-\item \textbf{Trade-off}: Larger $K$ $\rightarrow$ more states $\rightarrow$ higher decoder complexity
-\end{itemize}
-
-\begin{calloutbox}{Why NASA Chose $K=7$}
-The NASA standard $(171, 133)$ with $K=7$ represents an optimal balance:
-\begin{itemize}
-\item \textbf{Performance:} $d_{\text{free}} = 10$ provides excellent error correction
-\item \textbf{Complexity:} 64 states is manageable even in 1970s hardware
-\item \textbf{Memory:} Only 6 bits of shift register required
-\item \textbf{Proven:} Decades of successful deployment in deep-space missions
-\end{itemize}
-
-Moving to $K=9$ would double the number of states (256) for only a 20\% improvement in $d_{\text{free}}$ (10 $\to$ 12).
-\end{calloutbox}
-
-\section{Performance Analysis}
-
-\subsection{Bit Error Rate (BER)}
-
-For BPSK modulation over AWGN channel with hard-decision Viterbi decoding:
-\begin{equation}
-P_b \approx \sum_{d=d_{\text{free}}}^{\infty} \beta_d \cdot Q\left(\sqrt{2 d r \frac{E_b}{N_0}}\right)
-\label{eq:ber-convolutional}
-\end{equation}
-where:
-\begin{itemize}
-\item $P_b$ = bit error probability
-\item $\beta_d$ = number of information bit errors for paths at Hamming distance $d$
-\item $r$ = code rate
-\item $E_b/N_0$ = energy per information bit to noise spectral density ratio
-\item $Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^\infty e^{-t^2/2} dt$ = Gaussian Q-function
-\end{itemize}
-
-\textbf{High SNR approximation:} At large $E_b/N_0$, the BER is dominated by the $d_{\text{free}}$ term:
-\begin{equation}
-P_b \approx \beta_{d_{\text{free}}} \cdot Q\left(\sqrt{2 d_{\text{free}} r \frac{E_b}{N_0}}\right)
-\label{eq:ber-high-snr}
-\end{equation}
-
-\subsection{Coding Gain}
-
-The \textbf{asymptotic coding gain} (compared to uncoded BPSK) is:
-\begin{equation}
-G_c = 10 \log_{10}(r \cdot d_{\text{free}}) \quad \text{(dB)}
-\label{eq:coding-gain}
-\end{equation}
-
-\textbf{Worked Example: NASA Code $(171, 133)$}
-
-Given:
-\begin{itemize}
-\item $K = 7$, $r = 1/2$, $d_{\text{free}} = 10$
-\end{itemize}
-
-Coding gain:
-\begin{equation}
-G_c = 10 \log_{10}(0.5 \times 10) = 10 \log_{10}(5) = 6.99 \approx 7.0 \text{ dB}
-\end{equation}
-
-\textbf{With soft-decision decoding:} Add approximately 2--2.5 dB additional gain:
-\begin{equation}
-G_{c,\text{soft}} \approx 7.0 + 2.0 = 9.0 \text{ dB}
-\end{equation}
-
-This means at BER $= 10^{-5}$, the coded system requires 9 dB \textbf{less} $E_b/N_0$ than uncoded BPSK.
-
-\subsection{BER Performance Comparison}
-
-\begin{center}
-\begin{tabular}{@{}lrrr@{}}
-\toprule
-\textbf{$E_b/N_0$ (dB)} & \textbf{Uncoded BPSK} & \textbf{Conv (hard)} & \textbf{Conv (soft)} \\
-\midrule
-2 & $2.4 \times 10^{-2}$ & $7 \times 10^{-3}$ & $2 \times 10^{-3}$ \\
-4 & $1.2 \times 10^{-3}$ & $3 \times 10^{-4}$ & $5 \times 10^{-5}$ \\
-6 & $2.4 \times 10^{-5}$ & $2 \times 10^{-6}$ & $1 \times 10^{-7}$ \\
-8 & $1.9 \times 10^{-7}$ & $5 \times 10^{-9}$ & $5 \times 10^{-10}$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{keyconcept}
-\textbf{Soft-decision Viterbi decoding provides approximately 2--2.5 dB gain} over hard-decision at the same BER. This is achieved by utilizing the \textbf{reliability information} from the demodulator (analog samples) rather than making hard binary decisions.
-
-For systems where every dB matters (satellite, deep-space), this ``free'' gain is critical.
-\end{keyconcept}
-
-\section{Puncturing: Variable Rate Codes}
-
-\textbf{Puncturing} is a technique to increase code rate by systematically \textbf{deleting} (not transmitting) selected output bits from a low-rate parent code.
-
-\subsection{How Puncturing Works}
-
-\textbf{Example:} Transform $r=1/2$ code into $r=2/3$ code.
-
-\textbf{Original code:} 1 input bit $\rightarrow$ 2 output bits $(Y_1, Y_2)$
-
-\textbf{Puncturing pattern (period 2):}
-
-\begin{center}
-\begin{tabular}{@{}ccccc@{}}
-\toprule
-\textbf{Period} & \textbf{Input} & \textbf{$Y_1$} & \textbf{$Y_2$} & \textbf{Transmitted} \\
-\midrule
-1 & bit 1 & \checkmark & \checkmark & $Y_1, Y_2$ \\
-2 & bit 2 & \checkmark & \texttimes & $Y_1$ only \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Result:} 2 input bits $\rightarrow$ 3 output bits (rate $r = 2/3$)
-
-\textbf{Puncturing matrix:}
-\begin{equation}
-P = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}
-\label{eq:puncturing-matrix}
-\end{equation}
-where:
-\begin{itemize}
-\item 1 = transmit this bit
-\item 0 = delete (puncture) this bit
-\item Rows correspond to outputs $(Y_1, Y_2)$
-\item Columns correspond to time periods
-\end{itemize}
-
-\subsection{Common Punctured Rates}
-
-From $r=1/2$ parent code:
-
-\begin{center}
-\begin{tabular}{@{}lccc@{}}
-\toprule
-\textbf{Target Rate} & \textbf{Period} & \textbf{Puncturing Matrix} & \textbf{Used In} \\
-\midrule
-2/3 & 2 & $\begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ & WiFi, LTE \\[0.3em]
-3/4 & 3 & $\begin{bmatrix} 1 & 1 & 0 \\ 1 & 0 & 1 \end{bmatrix}$ & WiFi, DVB \\[0.3em]
-5/6 & 5 & (5-column pattern) & DVB-S2 \\
-7/8 & 7 & (7-column pattern) & DVB-S \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Trade-off:} Higher code rates increase throughput but reduce error correction capability (lower effective $d_{\text{free}}$).
-
-\section{Advanced Techniques}
-
-\subsection{Tail-Biting}
-
-\textbf{Problem with standard encoding:} Termination requires appending $K-1$ zero bits to flush the encoder to state 00. For a message of length $L$ bits, this creates overhead:
-\begin{equation}
-\text{Overhead} = \frac{K-1}{L} \times 100\%
-\end{equation}
-
-For short packets ($L < 100$), this overhead becomes significant.
-
-\textbf{Tail-biting solution:} Initialize the encoder in a \textbf{non-zero state} chosen such that the ending state equals the starting state after encoding $L$ bits.
-
-\textbf{Encoding:}
-\begin{enumerate}
-\item Pre-compute the required initial state (circular property)
-\item Encode $L$ data bits starting from this state
-\item Final state automatically equals initial state (no flush needed)
-\end{enumerate}
-
-\textbf{Decoding:} Try all $2^{K-1}$ possible starting states, run Viterbi for each, select the path with minimum metric.
-
-\textbf{Benefits:}
-\begin{itemize}
-\item Zero termination overhead
-\item Useful for short packets (control channels)
-\end{itemize}
-
-\textbf{Cost:} Decoder complexity increases by factor of $2^{K-1}$
-
-\textbf{Applications:} LTE control channels, WiFi management frames
-
-\subsection{Recursive Systematic Convolutional (RSC) Codes}
-
-Standard convolutional codes are \textbf{non-systematic} (input bits not directly present in output). RSC codes modify this structure.
-
-\textbf{Properties:}
-\begin{itemize}
-\item \textbf{Systematic:} One output equals the input bit directly
-\item \textbf{Recursive:} Encoder includes feedback path
-\end{itemize}
-
-\textbf{Structure:}
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=1.2cm, minimum height=0.8cm},
-  node distance=2cm,
-  font=\small
-]
-
-\node (input) {Input};
-\node[circle, draw, right of=input, node distance=2cm] (sum1) {$\bigoplus$};
-\node[block, right of=sum1, node distance=2cm] (sr) {Shift Reg};
-\node[below of=sr, node distance=1.5cm] (xor) {XOR};
-\node[right of=sr, node distance=2.5cm] (sys) {Systematic};
-\node[right of=xor, node distance=2.5cm] (par) {Parity};
-
-\draw[->,thick] (input) -- (sum1);
-\draw[->,thick] (sum1) -- (sr);
-\draw[->,thick] (sr) -- (sys);
-\draw[->,thick] (sr) -- (xor);
-\draw[->,thick] (xor) -- (par);
-\draw[->,thick] (sr.south) -- ++(0,-0.5) -| (sum1.south);
-
-\node[below=2cm of input, align=center, font=\scriptsize] {Feedback creates\\recursive structure};
-
-\end{tikzpicture}
-\end{center}
-
-\textbf{Advantage for Turbo codes:} RSC codes have \textbf{infinite impulse response} (IIR) due to feedback. This spreads the effect of each input bit over the entire codeword, improving performance when used in parallel concatenation (Turbo codes).
-
-\textbf{Applications:} LTE Turbo codes, 3GPP standards
-
-\section{Practical Applications}
-
-Convolutional codes with Viterbi decoding have been deployed in countless communication systems since the 1970s. Here we examine several prominent applications.
-
-\subsection{Deep Space Communications: Voyager Spacecraft}
-
-\textbf{System Parameters:}
-\begin{itemize}
-\item \textbf{Code:} $(171, 133)$, $K=7$, $r=1/2$
-\item \textbf{Modulation:} BPSK
-\item \textbf{Operating $E_b/N_0$:} $\sim 1$ dB (extremely weak signal at 15+ billion miles)
-\item \textbf{BER after Viterbi:} $\sim 5 \times 10^{-3}$
-\end{itemize}
-
-\textbf{Concatenated Coding:}
-\begin{itemize}
-\item \textbf{Inner code:} Convolutional $(171, 133)$
-\item \textbf{Outer code:} Reed-Solomon RS(255,223)
-\item \textbf{Final BER:} $< 10^{-10}$ (virtually error-free)
-\end{itemize}
-
-This concatenated scheme enables reliable communication across interstellar distances where signal power is incredibly weak.
-
-\subsection{WiFi: IEEE 802.11a/g}
-
-\textbf{Convolutional Code:}
-\begin{itemize}
-\item \textbf{Base code:} $K=7$, $r=1/2$
-\item \textbf{Punctured rates:} 1/2, 2/3, 3/4 (adaptive based on channel)
-\item \textbf{Combined with:} OFDM (Orthogonal Frequency Division Multiplexing)
-\end{itemize}
-
-\textbf{Example: 54 Mbps Mode}
-\begin{itemize}
-\item 64-QAM modulation (6 bits/symbol)
-\item Rate 3/4 convolutional code
-\item Effective: $6 \times 3/4 = 4.5$ coded bits/symbol/subcarrier
-\item 52 data subcarriers $\times$ 250 ksymbols/s = 54 Mbps
-\end{itemize}
-
-\subsection{GPS Navigation Signals}
-
-\textbf{L1 C/A Code:}
-\begin{itemize}
-\item \textbf{Convolutional code:} $K=7$, $r=1/2$ (NASA-type)
-\item \textbf{Navigation message:} 50 bps (low rate for robustness)
-\item \textbf{After encoding:} 100 symbols/s
-\item \textbf{Modulation:} BPSK
-\item \textbf{Spreading:} CDMA at 1.023 Mcps (20.46× processing gain)
-\end{itemize}
-
-The combination of convolutional coding and spread spectrum enables GPS to work with signals \textbf{below the noise floor} ($\sim -130$ dBm received power).
-
-\subsection{Satellite Television: DVB-S}
-
-\textbf{Concatenated Coding Architecture:}
-\begin{itemize}
-\item \textbf{Inner code:} Convolutional $K=7$, $r=1/2$
-\item \textbf{Puncturing:} Adaptive rates 2/3, 3/4, 5/6, 7/8 based on link quality
-\item \textbf{Outer code:} Reed-Solomon RS(204,188)
-\item \textbf{Interleaving:} Convolutional interleaver (handles burst errors)
-\end{itemize}
-
-\textbf{Error Handling Strategy:}
-\begin{itemize}
-\item \textbf{Inner convolutional code:} Corrects random errors from AWGN
-\item \textbf{Outer RS code:} Corrects burst errors from rain fade
-\item Result: Robust satellite link even during heavy rain
-\end{itemize}
-
-\subsection{GSM Mobile Telephony (2G)}
-
-\textbf{Channel Coding:}
-\begin{itemize}
-\item \textbf{Speech codec:} 260 bits per 20 ms frame
-\item \textbf{Convolutional code:} $K=5$, $r=1/2$ (simple for mobile handset)
-\item \textbf{Interleaving:} 8-frame diagonal interleaver
-\item \textbf{Modulation:} GMSK (Gaussian Minimum Shift Keying)
-\end{itemize}
-
-The relatively simple $K=5$ code keeps decoder complexity low for battery-powered handsets while still providing adequate error correction for voice quality.
-
-\section{Implementation Considerations}
-
-\subsection{Computational Complexity}
-
-\textbf{Per time step operations:}
-\begin{itemize}
-\item \textbf{Branch metric computation:} $2^K$ calculations (one per possible previous state and input combination)
-\item \textbf{Add-Compare-Select (ACS):} $2^{K-1}$ operations (one per current state)
-\item \textbf{Path storage:} Store survivor path history for each state
-\end{itemize}
-
-\textbf{Memory requirements:}
-\begin{itemize}
-\item Path metrics: $2^{K-1}$ values
-\item Survivor paths: $2^{K-1} \times \text{traceback\_depth}$ bits
-\item Total memory: Approximately $2^{K-1} \times 5K$ bits
-\end{itemize}
-
-\textbf{Example: NASA $K=7$ decoder}
-\begin{itemize}
-\item States: 64
-\item Traceback: $5 \times 7 = 35$ steps
-\item Memory: $64 \times 35 = 2240$ bits $\approx$ 280 bytes
-\end{itemize}
-
-\subsection{Traceback Depth}
-
-The \textbf{traceback depth} determines how far back the decoder looks when making decisions.
-
-\textbf{Typical range:} $5K$ to $7K$ times the constraint length
-
-\textbf{Examples:}
-\begin{itemize}
-\item $K=3$: Traceback 15--21 steps
-\item $K=7$: Traceback 35--50 steps
-\item $K=9$: Traceback 45--63 steps
-\end{itemize}
-
-\textbf{Trade-offs:}
-\begin{itemize}
-\item \textbf{Longer traceback:} Better decoding decisions, higher accuracy
-\item \textbf{Shorter traceback:} Lower latency, less memory
-\end{itemize}
-
-Rule of thumb: Beyond $5K$ steps, performance improvement is marginal ($< 0.1$ dB).
-
-\subsection{Fixed-Point vs. Floating-Point}
-
-\textbf{Fixed-point implementation:}
-\begin{itemize}
-\item \textbf{Metric representation:} 6--8 bits sufficient
-\item \textbf{Benefits:} Faster computation, lower power consumption
-\item \textbf{Performance loss:} Negligible ($< 0.1$ dB)
-\item \textbf{Ideal for:} Embedded systems, ASICs, FPGAs
-\end{itemize}
-
-\textbf{Quantization effects:}
-\begin{itemize}
-\item Branch metrics: 4--6 bits (soft inputs)
-\item Path metrics: 8--12 bits (accumulated sum)
-\item Metric normalization prevents overflow
-\end{itemize}
-
-\textbf{Floating-point implementation:}
-\begin{itemize}
-\item \textbf{Benefits:} Simpler algorithm, no overflow concerns
-\item \textbf{Drawbacks:} Higher power, slower (unless GPU/SIMD)
-\item \textbf{Ideal for:} Software-defined radio, simulation
-\end{itemize}
-
-\section{Advantages and Disadvantages}
-
-\subsection*{Advantages}
-
-\begin{enumerate}
-\item \textbf{Optimal ML decoding:} Viterbi algorithm achieves maximum-likelihood decoding efficiently
-\item \textbf{Soft-decision natural:} Easily exploits analog demodulator outputs for 2--2.5 dB gain
-\item \textbf{Low latency:} Suitable for streaming applications (no need to buffer entire block)
-\item \textbf{Excellent AWGN performance:} Well-suited for random error correction
-\item \textbf{Flexible rates:} Easy puncturing to achieve variable code rates
-\item \textbf{Proven reliability:} Decades of successful deployment in critical systems
-\item \textbf{Hardware efficient:} Simple shift register + XOR implementation
-\end{enumerate}
-
-\subsection*{Disadvantages}
-
-\begin{enumerate}
-\item \textbf{Exponential state growth:} $2^{K-1}$ states limits practical constraint length to $K \leq 9$
-\item \textbf{Termination overhead:} Requires $K-1$ flush bits (significant for short packets)
-\item \textbf{Burst error vulnerability:} Single long burst can overwhelm decoder
-\item \textbf{Suboptimal at high rates:} Performance degrades when heavily punctured ($r > 3/4$)
-\item \textbf{Surpassed by modern codes:} Turbo codes and LDPC codes achieve better performance
-\item \textbf{Fixed structure:} Less flexible than modern graph-based codes
-\end{enumerate}
-
-\section{Comparison: Block Codes vs. Convolutional Codes}
-
-\begin{center}
-\begin{tabular}{@{}p{3cm}p{4.5cm}p{4.5cm}@{}}
-\toprule
-\textbf{Property} & \textbf{Block Codes} & \textbf{Convolutional Codes} \\
-\midrule
-\textbf{Encoding} & Fixed-length blocks $(n,k)$ & Continuous stream \\
-\textbf{Memory} & None (memoryless) & Yes (shift register) \\
-\textbf{Structure} & Matrix multiplication & State machine \\
-\textbf{Decoding} & Algebraic (syndrome) & Viterbi (trellis search) \\
-\textbf{Complexity} & $O(n^2)$ to $O(n^3)$ & $O(2^K \cdot L)$ \\
-\textbf{Latency} & Block delay & Traceback depth ($\sim 5K$) \\
-\textbf{Soft-decision} & Possible but complex & Natural in Viterbi \\
-\textbf{Best use} & Burst errors (RS) & Random errors (AWGN) \\
-\textbf{Rate flexibility} & Fixed $(n,k)$ & Easy puncturing \\
-\textbf{Examples} & Hamming, BCH, RS & NASA $(171,133)$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{keyconcept}
-\textbf{Concatenated coding} combines the strengths of both:
-\begin{itemize}
-\item \textbf{Inner code:} Convolutional (corrects random AWGN errors)
-\item \textbf{Outer code:} Reed-Solomon (corrects burst errors)
-\item \textbf{Result:} Robust against both error types (used in Voyager, DVB-S, etc.)
-\end{itemize}
-
-This concatenation approach dominated space and satellite communications for decades before Turbo and LDPC codes emerged.
-\end{keyconcept}
-
-\subsection{Design Guidelines}\label{design-guidelines}
-
-\textbf{Choose K}: - \textbf{K=3-5}: Low complexity, embedded systems -
-\textbf{K=7}: Standard (NASA, WiFi), good performance - \textbf{K=9}:
-Better performance, higher complexity
-
-\textbf{Choose rate}: - \textbf{1/2}: Strong coding (deep space) -
-\textbf{1/3}: Very strong (low SNR) - \textbf{2/3, 3/4}: High throughput
-(punctured)
-
-\textbf{Soft-decision}: Always use if demodulator provides LLRs (+2 dB
-free gain!)
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\section{Summary}
-
-\begin{center}
-\begin{tabular}{@{}ll@{}}
-\toprule
-\textbf{Parameter} & \textbf{Value/Description} \\
-\midrule
-\textbf{Encoding type} & Continuous (not block-based) \\
-\textbf{Memory} & $K-1$ shift register stages \\
-\textbf{Number of states} & $2^{K-1}$ \\
-\textbf{Common rates} & 1/2, 1/3, 2/3, 3/4 (punctured) \\
-\textbf{Decoding} & Viterbi algorithm (optimal ML) \\
-\textbf{Complexity} & $O(2^{K-1} \cdot L)$ \\
-\textbf{Free distance} & Determines error correction capability \\
-\textbf{Coding gain} & $10\log_{10}(r \cdot d_{\text{free}})$ dB \\
-\textbf{Soft-decision gain} & $\sim$2--2.5 dB over hard-decision \\
-\textbf{NASA standard} & $(171, 133)$, $K=7$, $d_{\text{free}}=10$ \\
-\textbf{Typical applications} & Satellite, deep-space, WiFi, GPS \\
-\textbf{Best for} & Random errors (AWGN channels) \\
-\textbf{Limitation} & Exponential state growth, termination overhead \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Key Insights:}
-\begin{itemize}
-\item \textbf{Memory is fundamental:} Output depends on current + past $K-1$ inputs
-\item \textbf{Viterbi is optimal:} Achieves ML decoding efficiently via dynamic programming
-\item \textbf{Free distance determines performance:} Higher $d_{\text{free}}$ $\rightarrow$ better correction
-\item \textbf{Soft-decision is crucial:} Utilizing analog values provides significant gain
-\item \textbf{Puncturing enables flexibility:} Easy to adapt code rate to channel conditions
-\item \textbf{Trade-off exists:} Larger $K$ gives better performance but higher complexity
-\end{itemize}
-
-\section{Further Reading}
-
-\textbf{Prerequisites:}
-\begin{itemize}
-\item \textbf{Chapter 5:} Binary Phase-Shift Keying (BPSK)---modulation for coded systems
-\item \textbf{Chapter 8:} Bit Error Rate (BER)---performance metrics
-\item \textbf{Chapter 9:} Signal-to-Noise Ratio (SNR)---link budget fundamentals
-\item \textbf{Chapter 11:} Additive White Gaussian Noise (AWGN)---channel model
-\end{itemize}
-
-\textbf{Related error correction:}
-\begin{itemize}
-\item \textbf{Chapter 21:} Forward Error Correction (FEC)---general overview
-\item \textbf{Chapter 22:} Block Codes (Hamming, BCH, Reed-Solomon)---alternative approach
-\item \textbf{Chapter 24:} Turbo Codes---parallel concatenated convolutional codes
-\item \textbf{Chapter 25:} LDPC Codes---modern capacity-approaching codes
-\item \textbf{Chapter 23:} Hamming Distance \& Error Detection---fundamental concepts
-\end{itemize}
-
-\textbf{System integration:}
-\begin{itemize}
-\item \textbf{Chapter 15:} Complete Link Budget Analysis---incorporating coding gain
-\item \textbf{Chapter 17:} Shannon's Channel Capacity---fundamental limits
-\item \textbf{Chapter 19:} Spectral Efficiency---throughput with coding
-\end{itemize}
-
-\textbf{Advanced topics:}
-\begin{itemize}
-\item \textbf{Chapter 28:} OFDM \& Multicarrier Modulation---used with convolutional codes in WiFi
-\item \textbf{Chapter 30:} Adaptive Modulation \& Coding---dynamic rate selection
-\item \textbf{Chapter 31:} Synchronization---carrier and timing recovery for coded systems
-\end{itemize}
+    \parhead{Interpretation} The convolutional code is the enabling technology. It reduces the required signal strength by a factor of nearly eight, moving the performance requirement from an impossible 9.6 dB to an achievable 0.6 dB. The available 2.5 dB is therefore sufficient to close the link with a small but functional margin. (Note: Voyager actually uses an even more powerful concatenated code).
+\end{workedexample}
+
+
+\begin{importantbox}[title={Further Reading}]
+    Convolutional codes and the Viterbi algorithm are foundational concepts in digital communications.
+    \begin{description}
+        \item[Block Codes] (\Cref{ch:block-codes}) such as Reed-Solomon are often used as an "outer code" in concatenation with an "inner" convolutional code to correct the burst errors that a Viterbi decoder can sometimes produce.
+        \item[Turbo Codes] (\Cref{ch:turbo}) can be understood as a clever parallel concatenation of two simple convolutional codes, which, when decoded iteratively, achieves near-Shannon-limit performance.
+        \item[Link Budget Analysis] (\Cref{ch:linkbudget}) is where the concept of coding gain is practically applied to determine if a link will close.
+    \end{description}
+\end{importantbox}
