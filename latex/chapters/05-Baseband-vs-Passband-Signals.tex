@@ -1,790 +1,144 @@
-\chapter{Baseband vs Passband Signals}
+% ==============================================================================
+% CHAPTER 5: Baseband vs. Passband Signals
+% ==============================================================================
+
+\chapter{Baseband vs. Passband Signals}
 \label{ch:baseband-passband}
 
 \begin{nontechnical}
-\textbf{Baseband vs passband is like the difference between sheet music (the notes you play) and the actual sound coming out of a trumpet (shifted to a specific pitch range).}
+    \textbf{Baseband vs. passband is like the difference between sheet music and the sound from a trumpet.}
 
-\textbf{Musical analogy:}
-\begin{itemize}
-\item \textbf{Baseband}: The melody as written on paper---frequency near 0 Hz, the ``pure'' information
-\item \textbf{Passband}: Same melody played on a flute (high pitch) vs tuba (low pitch)---shifted to different frequency ranges
-\end{itemize}
+    \parhead{Musical analogy}
+    \begin{itemize}
+        \item \textbf{Baseband Signal:} The melody as written on paper. It represents the "pure" information, with frequencies centered around 0 Hz.
+        \item \textbf{Passband Signal:} The same melody played on a specific instrument. A flute plays it at a high pitch (a high frequency band), while a tuba plays it at a low pitch (a low frequency band). The melody is the same, but it has been shifted to a different frequency range.
+    \end{itemize}
 
-\textbf{Your phone call journey:}
-\begin{enumerate}
-\item \textbf{Your voice}: Baseband (20 Hz -- 3.4 kHz)
-\item \textbf{Cell phone transmitter}: Shifts to passband (1.9 GHz)
-\item \textbf{Over the air}: Passband signal travels to tower
-\item \textbf{Tower receiver}: Shifts back to baseband
-\item \textbf{Recipient's phone}: Shifts to passband again (transmit)
-\item \textbf{Recipient's speaker}: Back to baseband (audio)
-\end{enumerate}
+    \parhead{The journey of your voice in a phone call}
+    \begin{enumerate}[label=\arabic*.]
+        \item Your voice is a \textbf{baseband} audio signal (approx. 300 Hz -- 3.4 kHz).
+        \item Your phone's transmitter shifts it to a \textbf{passband} signal (e.g., 1.9 GHz).
+        \item The passband signal travels through the air to the cell tower.
+        \item The tower's receiver shifts the signal back down to \textbf{baseband} for processing.
+        \item The process is reversed to send the signal to the other person's phone.
+    \end{enumerate}
 
-\textbf{Why antennas need passband:} Efficient antenna size $\approx \lambda/2$ (half wavelength). Audio at 20~Hz requires a 7,500~km antenna (impossible!). WiFi at 2.4~GHz needs only a 6~cm antenna.
-
-\textbf{Fun fact:} Software Defined Radio (SDR) works by keeping signals in baseband as long as possible---only converting to passband at the last moment.
+    \parhead{Why we need passband signals} An efficient antenna is roughly half a wavelength long. A baseband audio signal at 300 Hz has a wavelength of 1,000 km, requiring an impossible 500 km antenna. A passband WiFi signal at 2.4 GHz has a wavelength of 12.5 cm, requiring a practical 6 cm antenna.
 \end{nontechnical}
 
-\section{Overview}
 
-Understanding the distinction between baseband and passband signals is fundamental to radio communication system design. \textbf{Baseband signals} represent information at low frequencies (near DC), while \textbf{passband signals} are frequency-translated versions centered around a carrier frequency $f_c$.
+\subsection{Overview}
+
+The distinction between \keyterm{baseband} and \keyterm{passband} signals is fundamental to all radio communication systems. Baseband signals contain the original information, with a frequency spectrum centered around DC (0 Hz). Passband signals are created by shifting this baseband information up to a high-frequency \keyterm{carrier frequency} ($f_c$) suitable for wireless transmission.
 
 \begin{keyconcept}
-The transformation between baseband and passband domains enables \textbf{efficient wireless transmission} while preserving \textbf{computational simplicity} in digital signal processing. This duality is the cornerstone of modern software-defined radio architectures.
+    The transformation between baseband and passband domains enables \textbf{efficient wireless transmission} while preserving \textbf{computational simplicity}. This duality is the cornerstone of modern Software-Defined Radio (SDR), where complex signal processing is performed on the low-frequency baseband signal in software, while the high-frequency passband signal interfaces with the physical RF channel.
 \end{keyconcept}
 
-\textbf{Key operations:}
-\begin{itemize}
-\item \textbf{Upconversion}: Frequency translation from baseband to passband (modulation)
-\item \textbf{Downconversion}: Frequency translation from passband to baseband (demodulation)
-\end{itemize}
 
-Modern communication systems leverage this separation: baseband processing handles complex modulation and coding algorithms in software, while passband conversion interfaces with the physical RF channel.
+\subsection{Signal Definitions}
 
-\section{Mathematical Definitions}
-
-\subsection{Baseband Signal}
-
-A \textbf{baseband signal} is defined as having frequency content centered around DC (0~Hz):
+\paragraph{Baseband Signal}
+A baseband signal is one whose frequency content is concentrated around 0 Hz. In digital communications, it is almost always represented as a \keyterm{complex baseband} signal (also known as the complex envelope):
 \begin{equation}
-s_{\text{BB}}(t) = s_I(t) + js_Q(t)
+    s_{\text{BB}}(t) = s_I(t) + js_Q(t)
 \end{equation}
-where:
-\begin{itemize}
-\item $s_I(t)$ = in-phase (real) component
-\item $s_Q(t)$ = quadrature (imaginary) component
-\item Complex representation enables efficient DSP
-\end{itemize}
+where $s_I(t)$ is the \keyterm{in-phase} component and $s_Q(t)$ is the \keyterm{quadrature} component. This complex representation is the natural language of digital signal processing.
 
-The \textbf{spectrum} of a baseband signal extends from approximately 0~Hz to $B$~Hz (bandwidth):
+\paragraph{Passband Signal}
+A passband signal is a real-world, physical signal whose frequency content is centered around a high-frequency carrier, $f_c$. It is generated from the complex baseband signal via \keyterm{upconversion} or \keyterm{modulation}:
 \begin{equation}
-S_{\text{BB}}(f) \neq 0 \quad \text{for } |f| \leq B/2
+    s_{\text{RF}}(t) = \Re\{s_{\text{BB}}(t) \cdot e^{j2\pi f_c t}\} = s_I(t)\cos(2\pi f_c t) - s_Q(t)\sin(2\pi f_c t)
 \end{equation}
+This process preserves the bandwidth ($B$) of the baseband signal but shifts its spectrum from being centered at 0 Hz to being centered at $f_c$.
 
-\textbf{Examples:}
-\begin{itemize}
-\item \textbf{Digital:} NRZ pulses ($\pm 1$), Manchester encoding, pulse-shaped symbols (raised cosine, RRC)
-\item \textbf{Analog:} Voice (300--3400~Hz), audio (20~Hz -- 20~kHz), video (DC -- 6~MHz)
-\end{itemize}
 
-\subsection{Complex Baseband Representation}
+\subsection{The Role of Frequency Translation}
 
-For bandpass systems, the signal is represented as a \textbf{complex envelope} or \textbf{equivalent lowpass signal}. This representation simplifies analysis and implementation.
+Shifting a signal from baseband to passband is a necessary step for three primary reasons:
+\begin{description}
+    \item[Antenna Efficiency] As discussed, practical antenna dimensions are on the order of the signal's wavelength. Baseband signals have impractically long wavelengths, whereas passband signals in the MHz or GHz range have wavelengths on the scale of centimetres to metres, allowing for small, efficient antennas.
+    \item[Spectrum Allocation] Regulatory bodies (like the ITU and FCC) allocate specific passbands to different services (e.g., FM radio, cellular, WiFi). Upconversion allows a signal to be placed in its legally assigned band, enabling multiple services to coexist without interference.
+    \item[Frequency Division Multiplexing (FDM)] Multiple independent baseband signals can be upconverted to different, adjacent carrier frequencies and transmitted simultaneously over the same physical medium.
+\end{description}
 
-The relationship between the real passband signal and complex baseband is:
-\begin{equation}
-s_{\text{RF}}(t) = \text{Re}\{s_{\text{BB}}(t) \cdot e^{j2\pi f_c t}\}
-\end{equation}
-where:
-\begin{itemize}
-\item $s_{\text{RF}}(t)$ = real passband signal
-\item $s_{\text{BB}}(t) = s_I(t) + js_Q(t)$ = complex baseband signal
-\item $f_c$ = carrier frequency (Hz)
-\end{itemize}
 
-Expanding using Euler's formula:
-\begin{equation}
-s_{\text{RF}}(t) = s_I(t)\cos(2\pi f_c t) - s_Q(t)\sin(2\pi f_c t)
-\end{equation}
+\subsection{The Transceiver Architecture}
 
-\textbf{Advantages of complex baseband:}
-\begin{itemize}
-\item Simplifies DSP (single complex signal vs two real signals)
-\item Natural representation for IQ modulation
-\item Halves sampling rate requirement (no negative frequencies)
-\item Enables efficient software-defined radio implementations
-\end{itemize}
-
-\subsection{Baseband Bandwidth}
-
-The \textbf{occupied bandwidth} of a baseband signal depends on the symbol rate $R_s$ and pulse shaping filter characteristics.
-
-For \textbf{ideal rectangular pulses} (no pulse shaping):
-\begin{equation}
-B_{\text{BB}} = R_s \quad \text{(Hz)}
-\end{equation}
-
-For \textbf{raised cosine pulse shaping} with roll-off factor $\alpha$:
-\begin{equation}
-B_{\text{BB}} = R_s(1 + \alpha) \quad \text{(Hz)}
-\end{equation}
-where:
-\begin{itemize}
-\item $R_s$ = symbol rate (symbols/second)
-\item $\alpha \in [0, 1]$ = roll-off factor ($\alpha = 0$ is ideal, $\alpha = 1$ is 100\% excess bandwidth)
-\item Practical values: $\alpha = 0.22$ (LTE), $\alpha = 0.35$ (satellite), $\alpha = 0.5$ (legacy systems)
-\end{itemize}
-
-\textbf{Example:} QPSK modulation at 1~Msps with $\alpha = 0.35$:
-\begin{equation}
-B_{\text{BB}} = 1.0 \times (1 + 0.35) = 1.35~\text{MHz}
-\end{equation}
-
-\subsection{Passband Signal}
-
-A \textbf{passband signal} has frequency content centered around a carrier frequency $f_c$:
-\begin{equation}
-s_{\text{RF}}(t) = A(t)\cos[2\pi f_c t + \phi(t)]
-\end{equation}
-where:
-\begin{itemize}
-\item $A(t)$ = time-varying amplitude (envelope)
-\item $f_c$ = carrier frequency (Hz)
-\item $\phi(t)$ = time-varying phase
-\end{itemize}
-
-The \textbf{spectrum} extends from $f_c - B/2$ to $f_c + B/2$:
-\begin{equation}
-S_{\text{RF}}(f) \neq 0 \quad \text{for } f_c - B/2 \leq f \leq f_c + B/2
-\end{equation}
-
-\subsection{Why Passband Transmission?}
-
-\textbf{1. Antenna Efficiency}
-
-Efficient antenna length is approximately $\lambda/4$ (quarter-wavelength):
-\begin{equation}
-L_{\text{ant}} \approx \frac{\lambda}{4} = \frac{c}{4f}
-\end{equation}
-where:
-\begin{itemize}
-\item $c = 3 \times 10^8$~m/s (speed of light)
-\item $f$ = operating frequency (Hz)
-\end{itemize}
-
-\begin{calloutbox}{Antenna Size Comparison}
-\begin{itemize}
-\item \textbf{100~Hz baseband:} $\lambda = 3000$~km $\rightarrow$ antenna = 750~km (impossible!)
-\item \textbf{2.4~GHz WiFi:} $\lambda = 12.5$~cm $\rightarrow$ antenna = 3.1~cm (practical)
-\end{itemize}
-\end{calloutbox}
-
-\textbf{2. Spectrum Allocation}
-
-Regulatory bodies (FCC, ITU) assign non-overlapping frequency bands to different services, enabling coexistence without interference.
-
-\textbf{3. Propagation Characteristics}
-
-Different frequency bands exhibit distinct propagation properties:
-\begin{itemize}
-\item \textbf{HF (3--30~MHz):} Ionospheric reflection, long-range
-\item \textbf{VHF (30--300~MHz):} Line-of-sight, FM radio
-\item \textbf{UHF (300~MHz -- 3~GHz):} Building penetration, cellular
-\item \textbf{SHF (3--30~GHz):} Satellite links, high capacity
-\end{itemize}
-
-\textbf{4. Frequency Division Multiplexing (FDM)}
-
-Multiple baseband signals can be upconverted to different carriers, enabling simultaneous transmission over a single physical channel.
-
-\section{Frequency Translation: Baseband to Passband}
-
-\subsection{Spectrum Visualization}
-
-The transformation from baseband to passband is a frequency shift operation. Consider a baseband signal with bandwidth $B$ centered at DC:
+A modern wireless transceiver is a physical embodiment of the baseband/passband concept.
 
 \begin{center}
-\begin{tikzpicture}[scale=1.2]
-% Baseband spectrum
-\draw[->] (-0.5,0) -- (4.5,0) node[right,font=\small] {$f$ (Hz)};
-\draw[->] (0,-0.3) -- (0,2.5) node[above,font=\small] {$|S_{\text{BB}}(f)|$};
+    \begin{tikzpicture}[
+        block/.style={rectangle, draw, minimum width=2.2cm, minimum height=0.9cm, font=\sffamily\scriptsize, fill=diagramlight, draw=diagramprimary, thick},
+        node distance=1.8cm, font=\scriptsize
+    ]
+        % Transmit Path
+        \node[align=center] (tx_data) {\sffamily Baseband\\Data};
+        \node[block, right of=tx_data, node distance=2.5cm] (tx_dsp) {DSP\\Modulator};
+        \node[block, right of=tx_dsp, node distance=2.5cm] (tx_dac) {DAC};
+        \node[block, right of=tx_dac, node distance=2.5cm] (tx_iq) {IQ\\Upconverter};
+        \node[block, right of=tx_iq, node distance=2.5cm] (tx_pa) {PA};
+        \node[right of=tx_pa, node distance=2.2cm] (tx_ant) {\faBroadcastTower};
 
-% Baseband signal (triangular spectrum)
-\draw[thick,blue] (0,0) -- (0.5,2) -- (2,2) -- (2.5,0);
-\draw[dashed] (0.5,0) -- (0.5,2);
-\draw[dashed] (2,0) -- (2,2);
+        % Receive Path
+        \node[below=3.2cm of tx_data, align=center] (rx_data) {\sffamily Baseband\\Data};
+        \node[block, right of=rx_data, node distance=2.5cm] (rx_dsp) {DSP\\Demodulator};
+        \node[block, right of=rx_dsp, node distance=2.5cm] (rx_adc) {ADC};
+        \node[block, right of=rx_adc, node distance=2.5cm] (rx_iq) {IQ\\Downconverter};
+        \node[block, right of=rx_iq, node distance=2.5cm] (rx_lna) {LNA};
+        \node[right of=rx_lna, node distance=2.2cm] (rx_ant) {\faBroadcastTower};
 
-% Labels
-\node[below,font=\scriptsize] at (0,-0.1) {0};
-\node[below,font=\scriptsize] at (0.5,-0.1) {$-B/2$};
-\node[below,font=\scriptsize] at (2,-0.1) {$B/2$};
-\node[above,font=\small,blue] at (1.25,2.3) {Baseband};
+        % Local Oscillator
+        \node[block, below=1.6cm of tx_iq] (lo) {LO};
 
-% Arrow indicating upconversion
-\node[font=\large] at (5.2,1) {$\xrightarrow{\text{Upconvert to } f_c}$};
+        % Connections
+        \draw[->,thick] (tx_data) -- (tx_dsp);
+        \draw[->,thick] (tx_dsp) -- node[above,font=\tiny] {I/Q} (tx_dac);
+        \draw[->,thick] (tx_dac) -- (tx_iq);
+        \draw[->,thick] (tx_iq) -- (tx_pa);
+        \draw[->,thick] (tx_pa) -- (tx_ant);
 
-% Passband spectrum
-\begin{scope}[xshift=9.5cm]
-\draw[->] (-0.5,0) -- (8.5,0) node[right,font=\small] {$f$ (Hz)};
-\draw[->] (0,-0.3) -- (0,2.5) node[above,font=\small] {$|S_{\text{RF}}(f)|$};
+        \draw[->,thick] (rx_ant) -- (rx_lna);
+        \draw[->,thick] (rx_lna) -- (rx_iq);
+        \draw[->,thick] (rx_iq) -- (rx_adc);
+        \draw[->,thick] (rx_adc) -- node[above,font=\tiny] {I/Q} (rx_dsp);
+        \draw[->,thick] (rx_dsp) -- (rx_data);
 
-% Passband signal (shifted spectrum)
-\draw[thick,red] (3.5,0) -- (4,2) -- (5.5,2) -- (6,0);
-\draw[dashed] (4,0) -- (4,2);
-\draw[dashed] (5.5,0) -- (5.5,2);
+        \draw[->,thick] (lo) -- (tx_iq);
+        \draw[->,thick] (lo) -- (rx_iq);
 
-% Labels
-\node[below,font=\scriptsize] at (0,-0.1) {0};
-\node[below,font=\scriptsize] at (4,-0.1) {$f_c - B/2$};
-\node[below,font=\scriptsize] at (4.75,-0.1) {$f_c$};
-\node[below,font=\scriptsize] at (5.5,-0.1) {$f_c + B/2$};
-\node[above,font=\small,red] at (4.75,2.3) {Passband};
-
-\draw[<->,thick] (4,-0.9) -- (5.5,-0.9) node[midway,below,font=\scriptsize] {Bandwidth $B$};
-\end{scope}
-\end{tikzpicture}
+        % Domain Boundary
+        \draw[dashed,diagramgray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(0,1.8) -- ++(0,-5.2);
+        \node[above,font=\sffamily\bfseries\small] at ($(tx_data)!0.5!(tx_dac)$) {Baseband Domain (Digital)};
+        \node[above,font=\sffamily\bfseries\small] at ($(tx_iq)!0.5!(tx_ant)$) {Passband Domain (Analog RF)};
+    \end{tikzpicture}
 \end{center}
 
-\textbf{Key insight:} Upconversion preserves bandwidth while shifting the signal to a higher frequency suitable for wireless transmission.
 
-\section{Upconversion (Modulation)}
-
-\subsection{IQ Modulator Architecture}
-
-The \textbf{quadrature modulator} (IQ modulator) performs the frequency translation from complex baseband to real passband.
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.2cm,
-  font=\small
-]
-% Input signals
-\node (input_i) {\sffamily $s_I(t)$};
-\node[below=1.8cm of input_i] (input_q) {\sffamily $s_Q(t)$};
-
-% Mixers
-\node[block, right of=input_i, node distance=2.8cm] (mix_i) {$\times$};
-\node[block, right of=input_q, node distance=2.8cm] (mix_q) {$\times$};
-
-% Local oscillator
-\node[below=3.2cm of mix_i, font=\scriptsize] (lo) {Local\\Oscillator\\$f_c$};
-\node[above=0.4cm of mix_i, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
-\node[above=0.4cm of mix_q, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
-
-% Summer
-\node[block, right of=mix_i, node distance=3.8cm, yshift=-0.9cm] (sum) {$\Sigma$};
-
-% Bandpass filter
-\node[block, right of=sum, node distance=3.2cm] (bpf) {Bandpass\\Filter};
-
-% Output
-\node[right of=bpf, node distance=3.2cm] (output) {\sffamily $s_{\text{RF}}(t)$};
-
-% Connections
-\draw[->,thick] (input_i) -- (mix_i);
-\draw[->,thick] (input_q) -- (mix_q);
-\draw[->,thick] (lo) -- ($(lo)+(0,1.4)$) -| (mix_i);
-\draw[->,thick] (lo) -- ($(lo)+(0,0.6)$) -| (mix_q);
-\draw[->,thick] (mix_i) -| (sum);
-\draw[->,thick] (mix_q) -| (sum);
-\draw[->,thick] (sum) -- (bpf);
-\draw[->,thick] (bpf) -- (output);
-\end{tikzpicture}
-\end{center}
-
-\subsection{Mathematical Description}
-
-The I-channel is multiplied by $\cos(2\pi f_c t)$:
-\begin{equation}
-s_{\text{I,up}}(t) = s_I(t) \cos(2\pi f_c t)
-\end{equation}
-
-The Q-channel is multiplied by $-\sin(2\pi f_c t)$:
-\begin{equation}
-s_{\text{Q,up}}(t) = -s_Q(t) \sin(2\pi f_c t)
-\end{equation}
-
-The two components are summed to produce the real RF output:
-\begin{equation}
-s_{\text{RF}}(t) = s_I(t)\cos(2\pi f_c t) - s_Q(t)\sin(2\pi f_c t)
-\end{equation}
-where:
-\begin{itemize}
-\item $s_I(t), s_Q(t)$ = baseband in-phase and quadrature components
-\item $f_c$ = carrier frequency (Hz)
-\item $s_{\text{RF}}(t)$ = real-valued passband signal
-\end{itemize}
-
-This can be expressed compactly using complex notation:
-\begin{equation}
-s_{\text{RF}}(t) = \text{Re}\{[s_I(t) + js_Q(t)] \cdot e^{j2\pi f_c t}\}
-\end{equation}
-
-\subsection{Frequency Domain Analysis}
-
-In the frequency domain, upconversion shifts the baseband spectrum to the carrier frequency:
-\begin{equation}
-S_{\text{RF}}(f) = \frac{1}{2}[S_{\text{BB}}(f - f_c) + S_{\text{BB}}^*(-f - f_c)]
-\end{equation}
-where:
-\begin{itemize}
-\item $S_{\text{BB}}(f)$ = complex baseband spectrum
-\item $S_{\text{BB}}^*(f)$ = complex conjugate
-\item The conjugate term ensures $s_{\text{RF}}(t)$ is real-valued
-\end{itemize}
-
-\begin{warningbox}
-\textbf{Image Rejection:} Real mixers (single-ended) produce both upper sideband (USB) at $f_c + f_{\text{BB}}$ and lower sideband (LSB) at $f_c - f_{\text{BB}}$. The IQ modulator provides natural image rejection by controlling the relative phase between I and Q channels.
-\end{warningbox}
-
-\section{Downconversion (Demodulation)}
-
-\subsection{IQ Demodulator Architecture}
-
-The \textbf{quadrature demodulator} (IQ demodulator) performs the reverse operation: frequency translation from real passband back to complex baseband.
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2cm, minimum height=1cm, font=\sffamily\small},
-  node distance=2.2cm,
-  font=\small
-]
-% Input
-\node (input) {\sffamily $s_{\text{RF}}(t)$};
-
-% Splitter
-\node[right of=input, node distance=2.2cm] (split) {};
-
-% Mixers
-\node[block, above right=0.6cm and 2.2cm of split] (mix_i) {$\times$};
-\node[block, below right=0.6cm and 2.2cm of split] (mix_q) {$\times$};
-
-% Local oscillator
-\node[below=3.4cm of split, font=\scriptsize] (lo) {Local\\Oscillator\\$f_c$};
-\node[above=0.4cm of mix_i, font=\scriptsize] (cos) {$\cos(2\pi f_c t)$};
-\node[above=0.4cm of mix_q, font=\scriptsize] (sin) {$-\sin(2\pi f_c t)$};
-
-% Lowpass filters
-\node[block, right of=mix_i, node distance=3.2cm] (lpf_i) {Lowpass\\Filter};
-\node[block, right of=mix_q, node distance=3.2cm] (lpf_q) {Lowpass\\Filter};
-
-% Outputs
-\node[right of=lpf_i, node distance=3cm] (output_i) {\sffamily $s_I(t)$};
-\node[right of=lpf_q, node distance=3cm] (output_q) {\sffamily $s_Q(t)$};
-
-% Connections
-\draw[->,thick] (input) -- (split);
-\draw[->,thick] (split) |- (mix_i);
-\draw[->,thick] (split) |- (mix_q);
-\draw[->,thick] (lo) -- ($(lo)+(0,2)$) -| (mix_i);
-\draw[->,thick] (lo) -- ($(lo)+(0,1.1)$) -| (mix_q);
-\draw[->,thick] (mix_i) -- (lpf_i);
-\draw[->,thick] (mix_q) -- (lpf_q);
-\draw[->,thick] (lpf_i) -- (output_i);
-\draw[->,thick] (lpf_q) -- (output_q);
-\end{tikzpicture}
-\end{center}
-
-\subsection{Mathematical Description}
-
-The received RF signal is split and mixed with both cosine and sine local oscillator signals.
-
-\textbf{I-channel downconversion:}
-\begin{equation}
-s_I(t) = \text{LPF}\{s_{\text{RF}}(t) \cdot \cos(2\pi f_c t)\}
-\end{equation}
-
-\textbf{Q-channel downconversion:}
-\begin{equation}
-s_Q(t) = \text{LPF}\{s_{\text{RF}}(t) \cdot [-\sin(2\pi f_c t)]\}
-\end{equation}
-where:
-\begin{itemize}
-\item $s_{\text{RF}}(t)$ = received passband signal
-\item LPF = lowpass filter (removes $2f_c$ mixing products)
-\item $s_I(t), s_Q(t)$ = recovered baseband components
-\end{itemize}
-
-\subsection{Derivation of Downconversion}
-
-Consider the received RF signal:
-\begin{equation}
-s_{\text{RF}}(t) = s_I^{\text{TX}}(t)\cos(2\pi f_c t) - s_Q^{\text{TX}}(t)\sin(2\pi f_c t)
-\end{equation}
-
-\textbf{I-channel after mixing:}
-\begin{equation}
-s_I^{\text{mix}}(t) = s_{\text{RF}}(t) \cdot \cos(2\pi f_c t)
-\end{equation}
-
-Expanding:
-\begin{equation}
-s_I^{\text{mix}}(t) = s_I^{\text{TX}}\cos^2(2\pi f_c t) - s_Q^{\text{TX}}\sin(2\pi f_c t)\cos(2\pi f_c t)
-\end{equation}
-
-Using trigonometric identities:
-\begin{itemize}
-\item $\cos^2\theta = \frac{1 + \cos(2\theta)}{2}$
-\item $\sin\theta\cos\theta = \frac{\sin(2\theta)}{2}$
-\end{itemize}
-
-This yields:
-\begin{equation}
-s_I^{\text{mix}}(t) = s_I^{\text{TX}}\frac{1 + \cos(4\pi f_c t)}{2} - s_Q^{\text{TX}}\frac{\sin(4\pi f_c t)}{2}
-\end{equation}
-
-After lowpass filtering (removes $2f_c$ components):
-\begin{equation}
-s_I(t) = \frac{1}{2}s_I^{\text{TX}}(t)
-\end{equation}
-
-Similarly for the Q-channel:
-\begin{equation}
-s_Q(t) = \frac{1}{2}s_Q^{\text{TX}}(t)
-\end{equation}
-
-The recovered complex baseband signal is:
-\begin{equation}
-s_{\text{BB}}(t) = s_I(t) + js_Q(t) = \frac{1}{2}[s_I^{\text{TX}}(t) + js_Q^{\text{TX}}(t)]
-\end{equation}
-
-The factor of $1/2$ is easily compensated by digital gain adjustment.
-
-\section{Worked Example: WiFi 802.11n Upconversion}
-
-\subsection{System Specifications}
-
-\textbf{Given:}
-\begin{itemize}
-\item Modulation: 64-QAM OFDM
-\item Channel bandwidth: 20~MHz
-\item Symbol rate: 20~Msps
-\item Carrier frequency: 2.412~GHz (Channel 1)
-\item Baseband oversampling: 2$\times$
-\end{itemize}
-
-\subsection{Baseband Signal Characteristics}
-
-The complex baseband OFDM signal occupies:
-\begin{equation}
-f_{\text{BB}} \in [-10~\text{MHz}, +10~\text{MHz}]
-\end{equation}
-
-Sampling rate (with 2$\times$ oversampling):
-\begin{equation}
-f_s = 2 \times 20~\text{Msps} = 40~\text{Msps}
-\end{equation}
-
-\subsection{Upconversion Process}
-
-The IQ modulator shifts the baseband spectrum to the carrier:
-\begin{equation}
-s_{\text{RF}}(t) = s_I(t)\cos(2\pi \cdot 2.412~\text{GHz} \cdot t) - s_Q(t)\sin(2\pi \cdot 2.412~\text{GHz} \cdot t)
-\end{equation}
-
-Resulting RF spectrum:
-\begin{equation}
-f_{\text{RF}} \in [2.402~\text{GHz}, 2.422~\text{GHz}]
-\end{equation}
-
-\subsection{Transmit Chain}
-
-\textbf{Signal processing flow:}
-\begin{enumerate}
-\item \textbf{Generate OFDM symbols:} 64-QAM constellation mapping, IFFT
-\item \textbf{Digital-to-analog conversion:} DAC at 40~Msps
-\item \textbf{IQ upconversion:} Mixer with 2.412~GHz LO
-\item \textbf{Power amplification:} PA drives antenna
-\end{enumerate}
-
-\subsection{Key Design Parameters}
-
-Antenna quarter-wavelength at 2.412~GHz:
-\begin{equation}
-L_{\text{ant}} = \frac{c}{4f_c} = \frac{3 \times 10^8}{4 \times 2.412 \times 10^9} = 3.1~\text{cm}
-\end{equation}
-
-Required RF bandwidth matches baseband:
-\begin{equation}
-B_{\text{RF}} = B_{\text{BB}} = 20~\text{MHz}
-\end{equation}
-
-\textbf{Conclusion:} The upconversion preserves signal bandwidth while enabling practical antenna dimensions and regulatory compliance with ISM band allocations.
-
-\section{Complete Transceiver System}
-
-A modern wireless transceiver integrates both baseband processing and passband RF conversion:
-
-\begin{center}
-\begin{tikzpicture}[
-  block/.style={rectangle, draw, minimum width=2.2cm, minimum height=0.9cm, font=\sffamily\scriptsize},
-  node distance=1.8cm,
-  font=\scriptsize
-]
-% Transmit path (top)
-\node[align=center] (tx_data) {\sffamily Baseband\\Data};
-\node[block, right of=tx_data, node distance=2.5cm] (tx_dsp) {DSP\\Modulator};
-\node[block, right of=tx_dsp, node distance=2.5cm] (tx_dac) {DAC};
-\node[block, right of=tx_dac, node distance=2.5cm] (tx_iq) {IQ\\Upconvert};
-\node[block, right of=tx_iq, node distance=2.5cm] (tx_pa) {PA};
-\node[right of=tx_pa, node distance=2.2cm] (tx_ant) {\sffamily Antenna};
-
-% Receive path (bottom)
-\node[below=3.2cm of tx_data, align=center] (rx_data) {\sffamily Baseband\\Data};
-\node[block, right of=rx_data, node distance=2.5cm] (rx_dsp) {DSP\\Demod};
-\node[block, right of=rx_dsp, node distance=2.5cm] (rx_adc) {ADC};
-\node[block, right of=rx_adc, node distance=2.5cm] (rx_iq) {IQ\\Downconvert};
-\node[block, right of=rx_iq, node distance=2.5cm] (rx_lna) {LNA};
-\node[right of=rx_lna, node distance=2.2cm] (rx_ant) {\sffamily Antenna};
-
-% Local oscillator (shared)
-\node[block, below=1.6cm of tx_iq] (lo) {LO\\$f_c$};
-
-% Transmit path connections
-\draw[->,thick] (tx_data) -- (tx_dsp);
-\draw[->,thick] (tx_dsp) -- node[above,font=\tiny] {I/Q} (tx_dac);
-\draw[->,thick] (tx_dac) -- node[above,font=\tiny] {analog} (tx_iq);
-\draw[->,thick] (tx_iq) -- node[above,font=\tiny] {RF} (tx_pa);
-\draw[->,thick] (tx_pa) -- (tx_ant);
-
-% Receive path connections
-\draw[->,thick] (rx_ant) -- (rx_lna);
-\draw[->,thick] (rx_lna) -- node[above,font=\tiny] {RF} (rx_iq);
-\draw[->,thick] (rx_iq) -- node[above,font=\tiny] {analog} (rx_adc);
-\draw[->,thick] (rx_adc) -- node[above,font=\tiny] {I/Q} (rx_dsp);
-\draw[->,thick] (rx_dsp) -- (rx_data);
-
-% LO connections
-\draw[->,thick] (lo) -- (tx_iq);
-\draw[->,thick] (lo) -- (rx_iq);
-
-% Baseband/Passband labels
-\draw[dashed,gray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(-0.4,1.6) -- ++(-0.4,-5.2) node[midway,left,align=center,font=\tiny] {Baseband\\Domain};
-\draw[dashed,gray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(0.4,1.6) -- ++(0.4,-5.2) node[midway,right,align=center,font=\tiny] {Passband\\Domain};
-\end{tikzpicture}
-\end{center}
-
-\textbf{Key observations:}
-\begin{itemize}
-\item \textbf{Baseband domain:} All processing in I/Q (complex) format
-\item \textbf{Passband domain:} Real RF signals at carrier frequency $f_c$
-\item \textbf{Frequency translation:} IQ modulators/demodulators bridge the domains
-\item \textbf{Shared LO:} Ensures TX and RX use same frequency reference
-\end{itemize}
-
-\section{Receiver Architectures}
-
-\subsection{Superheterodyne Receiver}
-
-The \textbf{superheterodyne} (superhet) architecture uses an intermediate frequency (IF) stage between RF and baseband.
-
-\textbf{Architecture:} RF $\rightarrow$ IF $\rightarrow$ Baseband
-
-\textbf{Advantages:}
-\begin{itemize}
-\item \textbf{Image rejection:} High-Q IF filters provide excellent selectivity
-\item \textbf{Fixed IF:} Optimized filters independent of RF tuning
-\item \textbf{Gain distribution:} Prevents oscillation through staged amplification
-\end{itemize}
-
-\textbf{Example---FM radio receiver:}
-\begin{itemize}
-\item RF input: 88--108~MHz (tunable)
-\item Local oscillator: $f_{\text{LO}} = f_{\text{RF}} + 10.7$~MHz
-\item IF: 10.7~MHz (fixed)
-\item IF filter: 150~kHz ceramic/crystal filter
-\end{itemize}
-
-\subsection{Zero-IF (Direct Conversion) Receiver}
-
-\textbf{Zero-IF} receivers directly downconvert RF to baseband, eliminating the IF stage.
-
-\textbf{Architecture:} RF $\rightarrow$ Baseband (one step)
-
-\textbf{Advantages:}
-\begin{itemize}
-\item Fewer components (no IF filters, single LO)
-\item Compact, low power (ideal for mobile)
-\item Software-defined bandwidth and filtering
-\end{itemize}
-
-\textbf{Challenges:}
-\begin{itemize}
-\item \textbf{DC offset:} LO leakage creates DC component
-\item \textbf{Flicker noise:} 1/f noise near DC degrades SNR
-\item \textbf{I/Q imbalance:} Gain/phase mismatch between channels
-\end{itemize}
-
-\begin{calloutbox}{Modern Trend}
-Modern SDR transceivers (e.g., AD9361, LMS7002M) use zero-IF with digital compensation for DC offset and I/Q imbalance. This enables single-chip integration and software reconfigurability.
-\end{calloutbox}
-
-\section{Sampling Considerations}
-
-\subsection{Bandpass Sampling Theorem}
-
-For a real passband signal $s_{\text{RF}}(t)$ centered at $f_c$ with bandwidth $B$:
-\begin{equation}
-f_s \geq 2B
-\end{equation}
-where:
-\begin{itemize}
-\item $f_s$ = sampling rate (Hz)
-\item $B$ = signal bandwidth (Hz)
-\item Note: $f_s < 2f_c$ is permitted (undersampling)
-\end{itemize}
-
-\textbf{Advantage:} Can sample at much lower rate than $2f_c$ (Nyquist for baseband).
-
-\textbf{Example---WiFi at 2.4~GHz:}
-\begin{itemize}
-\item Carrier: $f_c = 2.4$~GHz
-\item Bandwidth: $B = 20$~MHz
-\item Minimum sampling rate: $f_s = 40$~MHz (60$\times$ less than $2f_c = 4.8$~GHz)
-\end{itemize}
-
-\subsection{Complex Baseband Sampling}
-
-For complex baseband $s_{\text{BB}}(t) = s_I(t) + js_Q(t)$:
-\begin{equation}
-f_s \geq B
-\end{equation}
-
-This is \textbf{half the rate} required for real passband sampling because negative frequencies are represented in the complex signal and need not be avoided.
-
-\textbf{Practical consideration:} Typical oversampling of 2$\times$ or more accommodates pulse shaping filter roll-off:
-\begin{equation}
-f_s = (2 \text{ to } 4) \times B
-\end{equation}
-
-\section{Practical Impairments}
-
-\subsection{Carrier Frequency Offset (CFO)}
-
-Transmitter and receiver oscillators are never perfectly matched:
-\begin{equation}
-\Delta f = f_{\text{TX}} - f_{\text{RX}}
-\end{equation}
-
-This causes a rotating phase error in the received baseband:
-\begin{equation}
-s_{\text{RX}}(t) = s(t) \cdot e^{j2\pi \Delta f t}
-\end{equation}
-where:
-\begin{itemize}
-\item $\Delta f$ = frequency offset (Hz)
-\item Constellation rotates at $2\pi \Delta f$ rad/s
-\end{itemize}
-
-\textbf{Typical oscillator accuracy:} $\pm 10$~ppm
-\begin{itemize}
-\item At 2.4~GHz: $\Delta f \approx \pm 24$~kHz
-\item At 28~GHz (5G mmWave): $\Delta f \approx \pm 280$~kHz
-\end{itemize}
-
-\subsection{Phase Noise}
-
-Local oscillator jitter introduces random phase variations:
-\begin{equation}
-s_{\text{RF}}(t) = A(t)\cos[2\pi f_c t + \phi_n(t)]
-\end{equation}
-where $\phi_n(t)$ is a random phase noise process.
-
-\textbf{Effects:}
-\begin{itemize}
-\item Constellation point spreading
-\item Inter-carrier interference (ICI) in OFDM systems
-\item BER floor at high SNR
-\end{itemize}
-
-\textbf{Specification:} Phase noise power spectral density $\mathcal{L}(f_m)$ at offset $f_m$ from carrier (units: dBc/Hz).
-
-\subsection{I/Q Imbalance}
-
-Non-ideal hardware causes gain and phase mismatches between I and Q channels:
-\begin{equation}
-s_{\text{imb}}(t) = G_I s_I(t) + G_Q e^{j(\pi/2 + \epsilon)} s_Q(t)
-\end{equation}
-where:
-\begin{itemize}
-\item $G_I, G_Q$ = channel gains (typically $\pm 0.5$~dB mismatch)
-\item $\epsilon$ = phase error (typically $\pm 2°$ from ideal 90°)
-\end{itemize}
-
-\textbf{Consequence:} Image sideband leakage and constellation distortion.
-
-\textbf{Mitigation:} Digital calibration using known pilot symbols or factory calibration tables.
-
-\subsection{DC Offset}
-
-In zero-IF receivers, local oscillator leakage mixes with itself, creating a DC component:
-\begin{equation}
-s_{\text{DC}} = k \cdot P_{\text{LO}}
-\end{equation}
-
-\textbf{Mitigation strategies:}
-\begin{itemize}
-\item AC coupling (high-pass filter)
-\item Blank center subcarrier (OFDM)
-\item Adaptive DC offset cancellation
-\end{itemize}
-
-\section{Applications}
-
-\subsection{Cellular Networks}
-
-Modern cellular systems (LTE, 5G NR) process signals in complex baseband for:
-\begin{itemize}
-\item Channel estimation and equalization
-\item MIMO spatial processing
-\item Turbo/LDPC decoding
-\end{itemize}
-
-RF upconversion/downconversion occurs at the antenna interface, with carrier frequencies ranging from 600~MHz (LTE Band 71) to 39~GHz (5G FR2).
-
-\subsection{Software-Defined Radio (SDR)}
-
-SDR platforms (USRP, BladeRF, HackRF) maximize baseband processing time:
-\begin{itemize}
-\item Flexible modulation schemes (BPSK, QPSK, QAM, OFDM) in software
-\item Reconfigurable bandwidth and center frequency
-\item Digital filtering and pulse shaping
-\end{itemize}
-
-Only the final RF stage is fixed hardware; all signal processing occurs in complex baseband on CPU/FPGA.
-
-\subsection{Satellite Communications}
-
-Satellites receive uplink at one passband (e.g., 14~GHz), downconvert to IF, process/amplify, then upconvert to downlink passband (e.g., 12~GHz). The IF stage enables:
-\begin{itemize}
-\item Channel filtering and routing
-\item Transponder switching
-\item Power efficient amplification
-\end{itemize}
-
-\subsection{WiFi and WLAN}
-
-IEEE 802.11 devices use zero-IF transceivers for compact integration:
-\begin{itemize}
-\item OFDM generation/detection in complex baseband
-\item 20/40/80/160~MHz channel bandwidths
-\item Carrier frequencies: 2.4~GHz, 5~GHz, 6~GHz (WiFi 6E)
-\end{itemize}
-
-\section{Summary}
-
-\begin{center}
-\begin{tabular}{@{}lp{5cm}p{6cm}@{}}
-\toprule
-\textbf{Aspect} & \textbf{Baseband} & \textbf{Passband} \\
-\midrule
-Frequency range & $\sim 0$ to $B$ Hz & $f_c - B/2$ to $f_c + B/2$ \\
-Signal type & Complex or real & Real only \\
-Sampling rate & $\geq B$ (complex) & $\geq 2B$ (bandpass) \\
-Processing & Digital (DSP) & Analog RF or SDR \\
-Transmission & Wired (Ethernet) & Wireless (antenna) \\
-Representation & $s(t) = s_I + js_Q$ & $s_{\text{RF}} = s_I\cos\omega_c t - s_Q\sin\omega_c t$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Key points:}
-\begin{itemize}
-\item Baseband signals represent information at low frequency (near DC)
-\item Passband signals are frequency-translated for wireless transmission
-\item IQ modulation enables efficient complex-to-real conversion
-\item Modern systems maximize baseband processing for flexibility
-\item Hardware impairments (CFO, phase noise, I/Q imbalance) require compensation
-\end{itemize}
-
-\section{Further Reading}
-
-\begin{itemize}
-\item \textbf{IQ Representation:} Complex baseband signal structure and properties
-\item \textbf{QPSK Modulation:} Practical example of baseband-to-passband transformation
-\item \textbf{OFDM:} Multi-carrier modulation using complex baseband per subcarrier
-\item \textbf{Synchronization:} Carrier frequency and phase recovery techniques
-\item \textbf{Free-Space Path Loss:} Link budget analysis for passband transmission
-\item \textbf{Software-Defined Radio:} Modern baseband processing architectures
-\end{itemize}
+\subsection{Receiver Architectures}
+
+\paragraph{Superheterodyne Receiver}
+The classic \keyterm{superheterodyne} ("superhet") architecture uses a two-step downconversion process: from the high radio frequency (RF) to a fixed \keyterm{intermediate frequency} (IF), and then from IF to baseband. The key advantage is the high-quality, fixed-frequency IF filter, which provides excellent selectivity and image rejection. This architecture dominated radio design for most of the 20th century.
+
+\paragraph{Direct-Conversion (Zero-IF) Receiver}
+Modern transceivers, especially in mobile devices and SDRs, use a \keyterm{direct-conversion} or \keyterm{Zero-IF} architecture. This approach downconverts the RF signal directly to baseband (DC) in a single step. While this drastically reduces component count, cost, and power consumption, it introduces significant design challenges, including DC offsets, flicker noise, and I/Q imbalance, which must be corrected with sophisticated digital signal processing.
+
+\subsection{Practical Impairments}
+
+The ideal mathematical model of frequency translation is disrupted by real-world hardware limitations.
+\begin{description}
+    \item[Carrier Frequency Offset (CFO)] Mismatches between the transmitter and receiver's local oscillators cause a continuous rotation of the received constellation, which must be tracked and corrected.
+    \item[Phase Noise] Random fluctuations (jitter) in the local oscillator's phase introduce noise that spreads energy between constellation points and limits the achievable signal-to-noise ratio.
+    \item[I/Q Imbalance] Mismatches in the gain or phase of the I and Q signal paths cause "leakage" from the desired signal into its spectral image, degrading performance.
+    \item[DC Offset] In direct-conversion receivers, self-mixing of the local oscillator can create a large, unwanted DC spike at the center of the baseband spectrum.
+\end{description}
+Modern DSP algorithms in the baseband domain are almost entirely dedicated to estimating and correcting for these analog passband impairments.
+
+\begin{importantbox}[title={Further Reading}]
+    The baseband/passband duality is the central operating principle of modern communications.
+    \begin{description}
+        \item[IQ Representation] (\Cref{ch:iq}) provides a deep dive into the mathematics and advantages of using complex baseband signals.
+        \item[Modulation Techniques] (e.g., \Cref{ch:qpsk}, \Cref{ch:qam}) are all defined by how information is encoded onto the baseband $s_I(t)$ and $s_Q(t)$ components.
+        \item[Synchronization] (\Cref{ch:sync}) covers the essential DSP techniques used to correct for Carrier Frequency Offset and other impairments introduced during frequency translation.
+    \end{description}
+\end{importantbox}
