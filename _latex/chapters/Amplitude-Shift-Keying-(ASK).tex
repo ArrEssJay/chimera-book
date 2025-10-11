@@ -417,7 +417,7 @@ The spectral efficiency becomes:
 For $\alpha = 0.35$:
 
 \begin{center}
-\begin{tabular}{@{}llll@{}}
+\begin{tabularx}{\textwidth}{@{}llXX@{}}
 \toprule
 Modulation & Bits/symbol & $\eta$ (bps/Hz) & Bandwidth Efficiency \\
 \midrule
@@ -426,7 +426,7 @@ Modulation & Bits/symbol & $\eta$ (bps/Hz) & Bandwidth Efficiency \\
 8-ASK & 3 & 2.22 & $3\times$ better \\
 16-ASK & 4 & 2.96 & $4\times$ better \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \textbf{Trade-off:} Higher spectral efficiency requires higher SNR to maintain acceptable BER.
@@ -457,7 +457,7 @@ High PAPR stresses power amplifiers, requiring significant backoff to avoid nonl
 At the same bit rate and $E_b/N_0 = 10$~dB:
 
 \begin{center}
-\begin{tabular}{@{}lllll@{}}
+\begin{tabularx}{\textwidth}{@{}llXlX@{}}
 \toprule
 Modulation & Bits/symbol & Constellation & BER & Notes \\
 \midrule
@@ -468,7 +468,7 @@ QPSK & 2 & 4 points (2D) & $3.9 \times 10^{-6}$ & $2\times$ efficiency \\
 16-QAM & 4 & 16 points (2D) & $\sim 10^{-4}$ & Better than 16-ASK \\
 16-ASK & 4 & 16 points (1D) & $\sim 10^{-2}$ & Worst BER \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \begin{keyconcept}
