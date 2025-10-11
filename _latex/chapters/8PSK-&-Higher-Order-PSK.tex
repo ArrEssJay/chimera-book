@@ -130,7 +130,7 @@ This maximum Euclidean distance constellation on the unit circle maintains const
 Adjacent constellation points differ by only one bit (Gray coding) to minimize bit errors when symbol errors occur:
 
 \begin{center}
-\begin{tabular}{@{}ccccc@{}}
+\begin{tabularx}{\textwidth}{@{}ccXcc@{}}
 \toprule
 Symbol & Gray Code & Phase & $I_m/A$ & $Q_m/A$ \\
 \midrule
@@ -143,7 +143,7 @@ Symbol & Gray Code & Phase & $I_m/A$ & $Q_m/A$ \\
 6 & 101 & $270°$ & 0.000 & $-1.000$ \\
 7 & 100 & $315°$ & 0.707 & $-0.707$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 Note that adjacent symbols (e.g., 000 $\rightarrow$ 001 $\rightarrow$ 011) differ by exactly one bit, minimizing the number of bit errors when noise causes a decision error to an adjacent symbol.
@@ -385,7 +385,7 @@ QPSK & 10.5 & 0~dB \\
 \subsection{BER Performance Comparison}
 
 \begin{center}
-\begin{tabular}{@{}ccccc@{}}
+\begin{tabularx}{\textwidth}{@{}Xcccc@{}}
 \toprule
 $E_b/N_0$ (dB) & BPSK & QPSK & 8PSK & 16-PSK \\
 \midrule
@@ -395,7 +395,7 @@ $E_b/N_0$ (dB) & BPSK & QPSK & 8PSK & 16-PSK \\
 12 & $7.8 \times 10^{-8}$ & $7.8 \times 10^{-8}$ & $4.0 \times 10^{-5}$ & $8.0 \times 10^{-3}$ \\
 14 & $7.7 \times 10^{-10}$ & $7.7 \times 10^{-10}$ & $1.0 \times 10^{-6}$ & $7.0 \times 10^{-4}$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \textbf{Key observation:} At a given SNR, higher-order PSK schemes suffer significantly higher BER due to reduced minimum distance between constellation points. To maintain the same BER as lower-order schemes, higher SNR is required.
