@@ -1,0 +1,7 @@
+# Test files
+test_*.tex
+test_*.pdf
+test_*.aux
+test_*.log
+test_*.idx
+test_*.out
