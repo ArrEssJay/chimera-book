@@ -235,6 +235,40 @@
   {\sffamily\bfseries\normalsize}
   {\thesubsubsection}{1em}{}
 
+% ==============================================================================
+% TABLE OF CONTENTS CONFIGURATION
+% ==============================================================================
+
+\setcounter{tocdepth}{2}  % Show chapters, sections, subsections
+\setcounter{secnumdepth}{3}  % Number up to subsubsections
+
+% TOC formatting
+\usepackage{tocloft}
+
+% Part entries in TOC
+% Using \sffamily for sans-serif (Myriad Pro/Latin Modern Sans)
+\renewcommand{\cftpartfont}{\sffamily\bfseries\Large}
+\renewcommand{\cftpartpagefont}{\sffamily\bfseries\Large}
+\setlength{\cftbeforepartskip}{2em}
+
+% Chapter entries in TOC
+\renewcommand{\cftchapfont}{\sffamily\bfseries}
+\renewcommand{\cftchappagefont}{\sffamily\bfseries}
+\setlength{\cftbeforechapskip}{0.8em}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+
+% Section entries in TOC
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsecpagefont}{\sffamily}
+\setlength{\cftbeforesecskip}{0.4em}
+\setlength{\cftsecindent}{1.5em}
+
+% Subsection entries in TOC
+\renewcommand{\cftsubsecfont}{\normalfont}
+\renewcommand{\cftsubsecpagefont}{\normalfont}
+\setlength{\cftbeforesubsecskip}{0.2em}
+\setlength{\cftsubsecindent}{3em}
+
 % --- Mermaid Diagrams ---
 % This requires a build script to convert .mmd files to .pdf
 % Usage: \includemermaid{diagram_filename_without_extension}
