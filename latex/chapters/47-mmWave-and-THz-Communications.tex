@@ -1,937 +1,134 @@
-\section{mmWave \& THz Communications}\label{mmwave-thz-communications}
+% ==============================================================================
+% CHAPTER 47: mmWave & THz Communications
+% ==============================================================================
 
-\textbf{Millimeter-wave (mmWave, 24-300 GHz)} and \textbf{Terahertz
-(THz, 0.3-10 THz)} communications exploit ultra-high-frequency spectrum
-for multi-gigabit wireless links. 5G NR FR2 (24-52 GHz) delivers 20+
-Gbps, while future 6G targets sub-THz (100-300 GHz) for 100+ Gbps. These
-bands offer massive bandwidth but face severe propagation challenges
-requiring advanced beamforming and novel system architectures.
+\chapter{mmWave \& THz Communications}
+\label{ch:mmwave-thz}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{nontechnical}
+    \textbf{Millimetre-wave (mmWave) and Terahertz (THz) communications are the next frontier in wireless, offering fibre-optic speeds without the cables.} They use ultra-high frequencies to open up massive new "highways" for data.
 
-\subsection{\texorpdfstring{ For Non-Technical
-Readers}{ For Non-Technical Readers}}\label{for-non-technical-readers}
+    \parhead{The water pipe analogy}
+    Imagine the available radio spectrum as a set of water pipes:
+    \begin{itemize}
+        \item \textbf{4G / traditional 5G (below 6 GHz):} A standard household pipe. Good flow, but limited capacity.
+        \item \textbf{5G mmWave (24-100 GHz):} A city fire hydrant. Incredible flow rate, but over a shorter distance.
+        \item \textbf{Future 6G (100-300 GHz):} A massive industrial water main. Capable of Tbps speeds, but only for very short, direct connections.
+    \end{itemize}
 
-Think of wireless communication like water flowing through pipes of
-different sizes:
+    \parhead{The trade-off: Speed vs. range}
+    The reason these ultra-high frequencies are not used for everything is their poor propagation.
+    \begin{itemize}
+        \item \textbf{They are Line-of-Sight:} Like a laser pointer, they cannot pass through walls, trees, or even your hand.
+        \item \textbf{They have a short range:} Atmospheric absorption and rain weaken the signal significantly over distance.
+    \end{itemize}
 
-\textbf{The Water Pipe Analogy}:
+    \parhead{The enabling technology: Beamforming}
+    To overcome the massive path loss, mmWave systems use large phased-array antennas to focus all their energy into a single, narrow, pencil-like beam, pointed directly at the user. This \keyterm{beamforming} is what makes the link possible, but it requires constant, precise tracking as a user moves.
 
-\begin{verbatim}
-Regular WiFi (2.4 GHz):     [====] Small pipe
-                            Flow: 100 Mbps (like a garden hose)
+    \parhead{Where you will see it}
+    You will not see mmWave replacing traditional cellular everywhere. Instead, it will be used for "surgical" capacity injections in specific, high-demand locations: airports, stadiums, dense urban centres, and as a "fixed wireless" alternative to home fibre broadband.
+\end{nontechnical}
 
-5G mmWave (28 GHz):         [================] Medium pipe
-                            Flow: 5 Gbps (like a fire hydrant)
 
-Future 6G (300 GHz):        [================================] Large pipe
-                            Flow: 100+ Gbps (like a water main)
-\end{verbatim}
+\subsection{Overview}
 
-\textbf{Why the excitement?} - Download a 4K movie in 3 seconds instead
-of 3 minutes - 100 people streaming 4K video in a stadium without
-buffering - Wireless connections as fast as fiber optic cables
+\keyterm{Millimetre-wave (mmWave)} and \keyterm{Terahertz (THz)} communications refer to wireless systems operating in the frequency bands from approximately 24 GHz to 10 THz. The primary motivation for moving to these bands is the immense amount of available bandwidth. While the entire cellular spectrum below 6 GHz is only a few gigahertz wide, the mmWave bands offer tens of gigahertz of contiguous spectrum, and the THz bands offer terahertz of spectrum.
 
-\textbf{The catch?} Just like a powerful fire hose that only shoots
-water in one direction for a short distance: - \textbf{Range}: Works
-great up close (50-200 meters) but not across town -
-\textbf{Line-of-sight}: Needs clear path---walls, trees, even rain
-blocks it - \textbf{Direction}: Works like a flashlight beam, not a
-light bulb (requires aiming)
+This vast bandwidth is the key to achieving the multi-gigabit and, eventually, terabit-per-second data rates envisioned for 5G-Advanced and 6G. However, these frequencies present extreme propagation challenges, including severe path loss, atmospheric absorption, and blockage by common objects.
 
-\textbf{Real-world examples you might recognize}: - \textbf{``5G Ultra
-Wideband''} (Verizon/AT\&T): This is mmWave---super fast in cities,
-slower in suburbs - \textbf{Stadium WiFi}: mmWave lets thousands of fans
-upload videos simultaneously - \textbf{Fixed Wireless Internet}: Instead
-of cable/fiber to your house, an antenna on your roof beams mmWave from
-a nearby tower - \textbf{Self-driving cars}: 77 GHz radar ``sees'' other
-vehicles even in fog
+\begin{keyconcept}
+    The viability of mmWave and THz communication hinges entirely on the use of high-gain antennas and sophisticated \textbf{beamforming}. Large-scale phased arrays with hundreds or thousands of elements are used to generate narrow, steerable beams that can focus energy, overcome path loss, and track mobile users.
+\end{keyconcept}
 
-\textbf{The tradeoff}:
 
-\begin{verbatim}
-Lower frequencies (like FM radio):
- Go far (miles)
- Go through walls
- Slower speeds (like dial-up)
+\subsection{Propagation Challenges}
 
-Higher frequencies (mmWave/THz):
- Ultra-fast speeds (like fiber)
- Short range (city block)
- Need clear view (blocked by obstacles)
+\paragraph{Path Loss}
+Free-Space Path Loss is proportional to the square of the frequency ($L \propto f^2$). A 28 GHz mmWave signal suffers over 20 dB more path loss than a 2.4 GHz WiFi signal over the same distance. This must be compensated for by antenna gain.
 
-It's not better or worse---it's choosing the right tool for the job!
-\end{verbatim}
+\paragraph{Atmospheric Absorption}
+Molecular oxygen and water vapour have strong absorption lines in the mmWave and THz bands, most notably at 60 GHz (oxygen) and 183 GHz (water vapour). These absorption peaks create "windows" of usable spectrum but severely limit long-distance propagation.
 
-\textbf{What this means for you}: - \textbf{Today}: Your phone switches
-between regular 5G (wide coverage) and mmWave (speed bursts in cities) -
-\textbf{Tomorrow}: Ultra-fast wireless in your home/office, slow when
-you walk outside - \textbf{Future (6G)}: Wireless faster than
-today\textquotesingle s hardwired internet, but only indoors or short
-outdoor distances
+\paragraph{Blockage}
+At these high frequencies, wavelengths are in the millimetre or sub-millimetre range. This means that objects like walls, foliage, and even the human body are electrically large and act as complete blockers, not just attenuators. This makes a clear line-of-sight (LOS) path essential.
 
-\textbf{The technical stuff below explains \emph{how} this magic
-works---but you don\textquotesingle t need to understand it to
-benefit from it!}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\subsection{Beamforming: The Enabling Technology}
 
-\subsection{\texorpdfstring{ Why mmWave \&
-THz?}{ Why mmWave \& THz?}}\label{why-mmwave-thz}
+\keyterm{Beamforming} is the technique of using a phased-array antenna to steer a narrow beam of radio energy in a specific direction. For mmWave and THz, this is not an optional feature; it is mandatory. The high gain of the beam (which scales with the number of antenna elements) is required to close the link budget.
 
-\subsubsection{The Spectrum Crunch}\label{the-spectrum-crunch}
+\paragraph{Hybrid Beamforming}
+Because implementing a full digital transceiver for each of the hundreds of antenna elements would be prohibitively expensive and power-hungry, modern systems use \keyterm{hybrid beamforming}. A small number of digital streams are first processed, and then a network of analogue phase shifters steers the beams for the large antenna array. This provides a practical balance between performance and complexity.
 
-\textbf{Sub-6 GHz problem}:
-
-\begin{verbatim}
-Available spectrum: ~1 GHz (fragmented across bands)
-Demand: Exponential growth (video, AR/VR, IoT)
-Result: Spectrum scarcity  congestion
-
-Shannon capacity:
-C = B · log(1 + SNR)
-
-To increase C:
-- Increase B (bandwidth)  Move to higher frequencies 
-- Increase SNR  Limited by power, interference
-\end{verbatim}
-
-\textbf{mmWave/THz solution}:
-
-\begin{verbatim}
-mmWave (24-52 GHz): 28 GHz bandwidth available (5G FR2)
-Sub-THz (100-300 GHz): 200 GHz bandwidth potential (6G)
-THz (1-10 THz): Multi-THz bandwidths (research)
-
-Example (100 GHz carrier, 10 GHz BW, SNR = 20 dB):
-C = 10 GHz · log(1 + 100) = 66 Gbps
-
-Compare to sub-6 GHz (100 MHz BW):
-C = 100 MHz · log(1 + 100) = 660 Mbps
-
-100× more bandwidth  100× higher capacity!
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Propagation
-Characteristics}{ Propagation Characteristics}}\label{propagation-characteristics}
-
-\subsubsection{Path Loss: The Main
-Challenge}\label{path-loss-the-main-challenge}
-
-\textbf{Free-space path loss} (FSPL):
-
-\begin{verbatim}
-FSPL(dB) = 32.4 + 20·log(f_MHz) + 20·log(d_km)
-
-Example comparisons (d = 100 m):
-
-2.4 GHz (WiFi):
-FSPL = 32.4 + 20·log(2400) + 20·log(0.1) = 80 dB
-
-28 GHz (5G mmWave):
-FSPL = 32.4 + 20·log(28000) + 20·log(0.1) = 101 dB
-
-300 GHz (sub-THz):
-FSPL = 32.4 + 20·log(300000) + 20·log(0.1) = 122 dB
-
-Relative loss:
-28 GHz: +21 dB worse than 2.4 GHz
-300 GHz: +42 dB worse than 2.4 GHz
-
-Implication: Higher frequency  much shorter range (or need much higher antenna gain)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Atmospheric Absorption}\label{atmospheric-absorption}
-
-\textbf{Oxygen (O\textsubscript{2}) and water vapor
-(H\textsubscript{2}O)} absorb mmWave/THz strongly.
-
-\textbf{Absorption peaks}:
-
-\begin{verbatim}
-Frequency (GHz) | Attenuation (dB/km at sea level) | Cause
-----------------|-----------------------------------|-------
-60              | 15 dB/km                         | O resonance
-120             | 2 dB/km                          | O 2nd harmonic
-183             | 2 dB/km                          | HO resonance
-325             | 1 dB/km                          | HO
-380-750         | 0.1-1 dB/km                      | Windows (low absorption)
->1 THz          | 10-100 dB/km                     | Multiple molecular resonances
-
-Transmission windows:
-- 71-76 GHz, 81-86 GHz (5G FR2 upper band)
-- 94 GHz (radar, imaging)
-- 130-175 GHz (low absorption)
-- 220-325 GHz (6G candidate)
-\end{verbatim}
-
-\textbf{Distance implications}:
-
-\begin{verbatim}
-Example (100 m link):
-
-28 GHz: 0.1 dB/km × 0.1 km = 0.01 dB (negligible)
-60 GHz: 15 dB/km × 0.1 km = 1.5 dB (moderate)
-300 GHz: 1 dB/km × 0.1 km = 0.1 dB (low, in window)
-1 THz: 50 dB/km × 0.1 km = 5 dB (significant)
-
-Indoor/short-range: Absorption manageable
-Outdoor/long-range: Limits reach to <1 km
-\end{verbatim}
-
-\textbf{Weather effects}:
-
-\begin{verbatim}
-Rain attenuation (ITU-R model):
- = k · R^  dB/km
-
-where R = rain rate (mm/h)
-
-At 28 GHz (heavy rain, 50 mm/h):
-  5 dB/km  100 m link: 0.5 dB
-
-At 300 GHz (same rain):
-  15 dB/km  100 m link: 1.5 dB
-
-THz: Extremely sensitive to humidity, fog, rain
- Indoor/short-range only in adverse weather
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Blockage \& Diffraction}\label{blockage-diffraction}
-
-\textbf{Non-Line-of-Sight (NLOS) problem}:
-
-\begin{verbatim}
-mmWave/THz wavelengths:
- = c/f
-
-28 GHz:  = 10.7 mm (1 cm)
-300 GHz:  = 1 mm
-
-Diffraction scales with :
-- Lower frequencies: Diffract around obstacles (wavelength ~ building size)
-- mmWave: Minimal diffraction (wavelength << human body)
-- THz: No practical diffraction (wavelength ~ grain of sand)
-
-Blockage:
-- Human body: 20-40 dB attenuation (28 GHz)
-- Hand: 10-20 dB
-- Wall: 30-80 dB (depends on material)
-- Foliage: 10-30 dB
-
-Result: Highly directional, LOS-dependent propagation
-\end{verbatim}
-
-\textbf{Multipath in mmWave/THz}:
-
-\begin{verbatim}
-Sparse multipath environment:
-- Few reflections reach receiver (high absorption, blockage)
-- Reflections off smooth surfaces (specular, not diffuse)
-- Delay spread: Shorter than sub-6 GHz (fewer paths)
-
-Advantage: Simpler channel model (ray-tracing accurate)
-Disadvantage: No diversity from multipath  beamforming essential
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Beamforming: The Enabling
-Technology}{ Beamforming: The Enabling Technology}}\label{beamforming-the-enabling-technology}
-
-\textbf{Why beamforming is mandatory}:
-
-\begin{verbatim}
-Path loss compensation:
-- 28 GHz: 21 dB more loss than 2.4 GHz
-- Need: 21 dB+ antenna gain to match range
-
-Beamforming gain:
-G(dB) = 10·log(N)  (for N-element array)
-
-Example (64-element array):
-G = 10·log(64) = 18 dB
-
-With 256 elements:
-G = 10·log(256) = 24 dB
-
-Overcomes path loss + provides spatial selectivity
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Analog Beamforming}\label{analog-beamforming}
-
-\textbf{Architecture}:
-
-\begin{verbatim}
-Single RF chain  Phase shifters on each antenna element
-
-TX: Data  DAC  Mixer  Power Divider  [Phase Shifters]  Antenna Array
-                                           
-                                    All elements see same data
-                                    Phase shifts steer beam
-
-Advantages:
-- Low power (1 RF chain)
-- Simple, cost-effective
-- High gain (all power focused)
-
-Disadvantages:
-- Single beam at a time
-- Cannot do MIMO spatial multiplexing
-- Fixed beam (hard to adapt dynamically)
-\end{verbatim}
-
-\textbf{Phase shift calculation}:
-
-\begin{verbatim}
-Desired beam direction: 
-Element spacing: d (typically /2)
-
-Phase shift for element n:
- = (2/) · n·d · sin()
-
-Example (28 GHz,  = 30°, d = /2):
- = 10.7 mm
- =  · n · sin(30°) = /2 · n
-
-Element 0: 0°
-Element 1: 90°
-Element 2: 180°
-Element 3: 270°
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Hybrid Beamforming}\label{hybrid-beamforming}
-
-\textbf{Compromise}: Analog beamforming per subarray + digital baseband
-processing.
-
-\begin{verbatim}
-Architecture:
-Data streams  [Digital Precoder]  DACs (N_{r} chains)  Mixers 
-               [Analog Phase Shifters per subarray]  Antenna Array (N elements)
-
-Where N_{r} << N
-
-Example:
-- Total antennas: 256
-- RF chains: 16
-- Digital precoding: 16 streams (MIMO)
-- Analog beamforming: 256/16 = 16 elements per subarray
-
-Benefits:
-- Multi-beam capability (N_{r} simultaneous beams)
-- MIMO spatial multiplexing (up to N_{r} streams)
-- Moderate power/cost (N_{r} RF chains)
-\end{verbatim}
-
-\textbf{Precoding}:
-
-\begin{verbatim}
-Transmit signal: x = F_analog · F_digital · s
-
-where:
-- s: Data streams (N × 1, N  N_{r})
-- F_digital: Digital precoder (N_{r} × N)
-- F_analog: Analog beamformer (N × N_{r}, phase-only)
-
-Optimization:
-Maximize: ||H · F_analog · F_digital||²
-Subject to: F_analog has constant-modulus entries (phase-only)
-
-Algorithms: Orthogonal Matching Pursuit (OMP), alternating minimization
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Beam Management}\label{beam-management}
-
-\textbf{Challenge}: Narrow beams must be steered to track users.
-
-\textbf{Beam sweeping (initial access)}:
-
-\begin{verbatim}
-1. BS transmits sync signals on multiple beam directions
-2. UE measures RSRP (Reference Signal Received Power) per beam
-3. UE reports best beam index to BS
-4. BS selects beam for data transmission
-
-Example (5G NR):
-- BS: 64 beam directions (8×8 azimuth/elevation grid)
-- Sweep time: 5 ms (one beam per SSB - SS/PBCH Block)
-- UE selects best beam (e.g., beam 23)
-- Data transmission on beam 23
-
-Beamwidth: ~10° (64-element array at 28 GHz)
-\end{verbatim}
-
-\textbf{Beam tracking}:
-
-\begin{verbatim}
-Problem: User moves  beam misalignment  link failure
-
-Solutions:
-1. Periodic re-sweeping (every 20-100 ms)
-2. Predictive tracking:
-   - Estimate velocity from Doppler
-   - Adjust beam direction proactively
-3. Multi-beam transmission:
-   - Transmit on 2-3 adjacent beams
-   - Handover smoothly as user moves
-
-5G NR: Beam Failure Recovery (BFR)
-- UE monitors beam quality (RSRP)
-- If below threshold: Trigger beam switch
-- Latency: <10 ms for recovery
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ 5G NR FR2
-(mmWave)}{ 5G NR FR2 (mmWave)}}\label{g-nr-fr2-mmwave}
-
-\textbf{Frequency Range 2}: 24.25-52.6 GHz
-
-\subsubsection{Frequency Bands}\label{frequency-bands}
-
-\begin{verbatim}
-n257: 26.5-29.5 GHz (3 GHz BW)
-n258: 24.25-27.5 GHz
-n260: 37-40 GHz
-n261: 27.5-28.35 GHz
-
-Typical deployment:
-- n257 (28 GHz): US carriers (Verizon, AT&T)
-- n258 (26 GHz): Europe, Asia
-- n260 (39 GHz): US (fixed wireless access)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{5G NR mmWave
-Specifications}\label{g-nr-mmwave-specifications}
-
-\begin{verbatim}
-Bandwidth: 50-400 MHz per carrier
-- Typical: 100 MHz (lower latency, easier beam management)
-- Maximum: 400 MHz (peak throughput)
-
-Numerology:
-- SCS (Subcarrier Spacing): 120 kHz (fast Doppler tolerance)
-- Symbol duration: 8.33 s (short, good for mobility)
-- Slot: 0.125 ms (8× faster than sub-6 GHz)
-
-Modulation: Up to 256-QAM (spectral efficiency: 7.4 bits/s/Hz)
-
-MIMO: Up to 4 layers (spatial multiplexing with hybrid beamforming)
-
-Peak data rate:
-R = BW × Spectral_Eff × MIMO_layers × Aggregation
-  = 400 MHz × 7.4 × 4 × 1 = 11.8 Gbps (single carrier)
-  
-With carrier aggregation (8 carriers):
-R = 11.8 × 8 = 94 Gbps (theoretical)
-
-Practical: 2-5 Gbps (typical deployment, moderate SINR)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Applications}\label{applications}
-
-\textbf{Enhanced Mobile Broadband (eMBB)}:
-
-\begin{verbatim}
-Use case: Stadiums, airports, malls (high user density)
-- 1000+ users per cell
-- Aggregate: 20-50 Gbps per gNB
-- Per-user: 20-50 Mbps (shared capacity)
-
-Deployment: Small cells (50-200 m range)
-- Dense urban: 1 cell per block
-- Outdoor-to-indoor: Penetration challenges (require indoor cells)
-\end{verbatim}
-
-\textbf{Fixed Wireless Access (FWA)}:
-
-\begin{verbatim}
-Use case: Home/business internet (alternative to fiber/cable)
-- CPE (Customer Premises Equipment) on roof/window
-- LOS to nearby gNB (200-500 m)
-- Throughput: 1-3 Gbps (comparable to gigabit fiber)
-- Latency: 10-20 ms
-
-Advantage: Rapid deployment (no trenching)
-Disadvantage: Weather-sensitive, requires LOS or near-LOS
-\end{verbatim}
-
-\textbf{Industrial IoT / URLLC}:
-
-\begin{verbatim}
-Use case: Factory automation, robotics
-- Latency: 1-5 ms (mini-slot transmission)
-- Reliability: 99.999% (5 nines)
-- Capacity: 10-100 Mbps per device
-
-Private 5G networks:
-- Dedicated spectrum (CBRS, local licensing)
-- On-premises gNB (security, low latency)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Beyond 5G: Sub-THz
-(6G)}{ Beyond 5G: Sub-THz (6G)}}\label{beyond-5g-sub-thz-6g}
-
-\textbf{6G target frequencies}: 100-300 GHz (D-band, G-band)
-
-\subsubsection{Why Sub-THz for 6G?}\label{why-sub-thz-for-6g}
-
-\begin{verbatim}
-Bandwidth availability:
-- 92-114.25 GHz (WRC-19): 22 GHz continuous
-- 130-174.8 GHz: 44 GHz
-- 200-260 GHz: 60 GHz (being considered)
-
-Total: 100+ GHz spectrum (vs. 5 GHz for all cellular below 6 GHz!)
-
-Peak data rate (conservative estimate):
-BW = 10 GHz, SE = 5 bits/s/Hz, MIMO = 8
-R = 10 × 5 × 8 = 400 Gbps
-
-Target: 100 Gbps-1 Tbps (100× faster than 5G)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{Sub-THz Challenges}\label{sub-thz-challenges}
-
-\textbf{1. Path Loss}:
-
-\begin{verbatim}
-300 GHz FSPL (100 m): 122 dB
-Compensation:
-- Ultra-massive MIMO: 1024+ elements  30 dB gain
-- Dense deployment: 10-50 m cell radius (pico/femto cells)
-- Relay/RIS: Intelligent reflecting surfaces
-\end{verbatim}
-
-\textbf{2. Hardware Limitations}:
-
-\begin{verbatim}
-PA (Power Amplifier):
-- 28 GHz: 20-30 dBm per element (mature GaN technology)
-- 300 GHz: 5-10 dBm per element (InP, SiGe limited)
-
-Phase shifters:
-- 28 GHz: 4-6 bit resolution, low loss
-- 300 GHz: 2-3 bit (lossy, expensive)
-
-ADC/DAC:
-- Nyquist rate: 2× bandwidth
-- 10 GHz BW  20 Gsps ADC/DAC
-- Power: 10-100 W per RF chain (prohibitive for mobile)
-
-Solution: Ultra-low-power circuits (sub-threshold, approximate computing)
-\end{verbatim}
-
-\textbf{3. Beam Alignment}:
-
-\begin{verbatim}
-Beamwidth (1024-element array at 300 GHz):
-   / (N·d)  1 mm / (32 × 0.5 mm) = 0.06 rad  3.5°
-
-Challenge: <4° beam  precise alignment required
-- Rotation/motion: 10°/s movement  beam misalignment in 0.35 s
-- Solution: 100+ Hz beam tracking
-
-Beam switching latency:
-- Analog: <1 s (phase shifter settling)
-- Digital: 10-100 s (baseband processing)
-- Requirement: <1 ms for mobility
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsubsection{6G Candidate
-Technologies}\label{g-candidate-technologies}
-
-\textbf{Reconfigurable Intelligent Surface (RIS)}:
-
-\begin{verbatim}
-Concept: Passive reflector with electronically tunable elements
-
-Application:
-- Coverage extension: Reflect signal around obstacles
-- Virtual LOS: Create alternative paths in NLOS
-- Energy efficiency: Passive (no power amplifier)
-
-Example:
-- RIS: 1024 elements (1m × 1m panel)
-- Placement: Building wall
-- Reflect 300 GHz signal from BS to blocked UE
-- Gain: 20-30 dB (overcome blockage loss)
-
-Status: Research prototypes, not yet standardized
-\end{verbatim}
-
-\textbf{Wireless Fiber (WF)}:
-
-\begin{verbatim}
-Concept: Short-range (1-10 m), fiber-like data rates
-
-Use case: Wireless backhaul, kiosk downloads, data center links
-- Frequency: 300 GHz
-- Bandwidth: 20-50 GHz (entire band)
-- Data rate: 100-200 Gbps
-- Range: <10 m (LOS required)
-
-Advantage: 100× faster than WiFi, no fiber installation
-Disadvantage: Ultra-short range, perfect alignment needed
-\end{verbatim}
-
-\textbf{OAM (Orbital Angular Momentum) Multiplexing}:
-
-\begin{verbatim}
-Concept: Use twisted EM waves (vortex beams) as additional dimension
-
-Orthogonal OAM modes: l = 0, ±1, ±2, ...
-- Each mode carries independent data stream
-- Separation by phase profile (not frequency)
-
-Capacity:
-C = N_OAM × N_MIMO × B × SE
-
-Example (N_OAM = 4, N_MIMO = 8, B = 10 GHz, SE = 5):
-C = 4 × 8 × 10 × 5 = 1.6 Tbps
-
-Status: Lab demonstrations, far from practical (alignment critical)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Automotive Radar
-(mmWave)}{ Automotive Radar (mmWave)}}\label{automotive-radar-mmwave}
-
-\textbf{77-81 GHz radar} for autonomous vehicles.
-
-\subsubsection{System Parameters}\label{system-parameters}
-
-\begin{verbatim}
-Frequency: 76-81 GHz (5 GHz bandwidth allocated)
-Modulation: FMCW (Frequency-Modulated Continuous Wave)
-Range resolution: r = c / (2·BW) = 3 cm (for 5 GHz BW)
-Velocity resolution: Doppler shift
-Angular resolution: Beamforming (MIMO radar)
-
-Performance:
-- Detection range: 200+ m (long-range radar)
-- Velocity: ±70 m/s (Doppler)
-- Angle: ±60° (wide FoV for short-range, ±10° for long-range)
-- Update rate: 10-20 Hz
-
-Applications:
-- Adaptive Cruise Control (ACC)
-- Collision avoidance
-- Blind-spot detection
-- Parking assistance
-\end{verbatim}
-
-\textbf{MIMO radar}:
-
-\begin{verbatim}
-Virtual array: N_TX × N_RX elements
-- Physical: 3 TX, 4 RX = 12 elements
-- Virtual: 3 × 4 = 12 unique TX-RX pairs (phase centers)
-- Angular resolution: Equivalent to 12-element receive array
-
-Imaging:
-- Range-Doppler map (2D)
-- Range-Angle map (2D)
-- 3D point cloud (range-azimuth-elevation)
-
-Example (Bosch 5th gen):
-- TX: 3 antennas
-- RX: 4 antennas
-- Virtual: 12 elements
-- Angular resolution: 1° (azimuth)
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Link Budget Example (28
-GHz)}{ Link Budget Example (28 GHz)}}\label{link-budget-example-28-ghz}
-
-\begin{verbatim}
-System: 5G FR2 mmWave (28 GHz, 100 MHz BW)
-
-Transmitter (gNB):
-- TX power per element: 23 dBm (200 mW)
-- Number of elements: 64
-- Total TX power: 23 + 10·log(64) = 41 dBm
-- Analog beamforming gain: 18 dB (64 elements, single beam)
-- EIRP: 41 + 18 = 59 dBm
-
-Path:
-- Distance: 100 m
-- FSPL: 32.4 + 20·log(28000) + 20·log(0.1) = 101 dB
-- Atmospheric absorption: 0.01 dB (negligible)
-- Blockage margin: 10 dB (foliage, wall)
-- Total loss: 111 dB
-
-Receiver (UE):
-- RX antenna gain: 10 dB (16-element array)
-- Noise figure: 7 dB
-- Thermal noise: -174 + 10·log(100 MHz) + 7 = -87 dBm
-
-Received signal:
-RX power = 59 - 111 + 10 = -42 dBm
-
-SNR:
-SNR = -42 - (-87) = 45 dB
-
-Throughput (Shannon):
-C = 100 MHz × log(1 + 10^(45/10)) = 100 MHz × 15 = 1.5 Gbps
-
-Practical (256-QAM, rate-5/6, 75% efficiency):
-R = 100 MHz × 7.4 × 0.75 = 555 Mbps
-
-Margin: 45 - 20 (required SNR for 256-QAM) = 25 dB 
-\end{verbatim}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Python Example: mmWave Path Loss
-Calculator}{ Python Example: mmWave Path Loss Calculator}}\label{python-example-mmwave-path-loss-calculator}
-
-% TODO: Fix long code block - currently causes build hang
-% The Python mmWave path loss calculator code block below has been temporarily commented out to allow the book to build.
-% Issue: Very long Shaded environment (100+ lines) with complex syntax highlighting
-
-\begin{center}
-\textit{[mmWave path loss calculator code temporarily removed - see digital version or future edition]}
-\end{center}
-
-% \begin{Shaded}
-% \begin{Highlighting}[]
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
-
-\KeywordTok{def}\NormalTok{ mmwave\_path\_loss(freq\_ghz, distance\_m, rain\_rate\_mm\_h}\OperatorTok{=}\DecValTok{0}\NormalTok{):}
-    \CommentTok{"""}
-\CommentTok{    Calculate mmWave path loss including atmospheric effects.}
-\CommentTok{    }
-\CommentTok{    Args:}
-\CommentTok{        freq\_ghz: Frequency (GHz)}
-\CommentTok{        distance\_m: Distance (meters)}
-\CommentTok{        rain\_rate\_mm\_h: Rain rate (mm/h, optional)}
-\CommentTok{    }
-\CommentTok{    Returns:}
-\CommentTok{        Total path loss (dB)}
-\CommentTok{    """}
-    \CommentTok{\# Free{-}space path loss}
-\NormalTok{    fspl }\OperatorTok{=} \FloatTok{32.4} \OperatorTok{+} \DecValTok{20}\OperatorTok{*}\NormalTok{np.log10(freq\_ghz}\OperatorTok{*}\DecValTok{1000}\NormalTok{) }\OperatorTok{+} \DecValTok{20}\OperatorTok{*}\NormalTok{np.log10(distance\_m}\OperatorTok{/}\DecValTok{1000}\NormalTok{)}
-    
-    \CommentTok{\# Atmospheric absorption (simplified model)}
-    \ControlFlowTok{if}\NormalTok{ freq\_ghz }\OperatorTok{\textless{}} \DecValTok{30}\NormalTok{:}
-\NormalTok{        attenuation\_db\_km }\OperatorTok{=} \FloatTok{0.1}
-    \ControlFlowTok{elif}\NormalTok{ freq\_ghz }\OperatorTok{\textless{}} \DecValTok{100}\NormalTok{:}
-\NormalTok{        attenuation\_db\_km }\OperatorTok{=} \FloatTok{0.5} \OperatorTok{+} \FloatTok{0.05} \OperatorTok{*}\NormalTok{ (freq\_ghz }\OperatorTok{{-}} \DecValTok{30}\NormalTok{)}
-    \ControlFlowTok{else}\NormalTok{:}
-\NormalTok{        attenuation\_db\_km }\OperatorTok{=} \DecValTok{4} \OperatorTok{+} \FloatTok{0.02} \OperatorTok{*}\NormalTok{ (freq\_ghz }\OperatorTok{{-}} \DecValTok{100}\NormalTok{)}
-    
-\NormalTok{    atmospheric\_loss }\OperatorTok{=}\NormalTok{ attenuation\_db\_km }\OperatorTok{*}\NormalTok{ (distance\_m }\OperatorTok{/} \DecValTok{1000}\NormalTok{)}
-    
-    \CommentTok{\# Rain attenuation (ITU{-}R model)}
-    \ControlFlowTok{if}\NormalTok{ rain\_rate\_mm\_h }\OperatorTok{\textgreater{}} \DecValTok{0}\NormalTok{:}
-\NormalTok{        k }\OperatorTok{=} \FloatTok{0.0001} \OperatorTok{*}\NormalTok{ freq\_ghz}\OperatorTok{**}\DecValTok{2}
-\NormalTok{        alpha }\OperatorTok{=} \FloatTok{1.0}
-\NormalTok{        rain\_loss }\OperatorTok{=}\NormalTok{ k }\OperatorTok{*}\NormalTok{ rain\_rate\_mm\_h}\OperatorTok{**}\NormalTok{alpha }\OperatorTok{*}\NormalTok{ (distance\_m }\OperatorTok{/} \DecValTok{1000}\NormalTok{)}
-    \ControlFlowTok{else}\NormalTok{:}
-\NormalTok{        rain\_loss }\OperatorTok{=} \DecValTok{0}
-    
-\NormalTok{    total\_loss }\OperatorTok{=}\NormalTok{ fspl }\OperatorTok{+}\NormalTok{ atmospheric\_loss }\OperatorTok{+}\NormalTok{ rain\_loss}
-    
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Frequency: }\SpecialCharTok{\{}\NormalTok{freq\_ghz}\SpecialCharTok{\}}\SpecialStringTok{ GHz, Distance: }\SpecialCharTok{\{}\NormalTok{distance\_m}\SpecialCharTok{\}}\SpecialStringTok{ m"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  FSPL: }\SpecialCharTok{\{}\NormalTok{fspl}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Atmospheric: }\SpecialCharTok{\{}\NormalTok{atmospheric\_loss}\SpecialCharTok{:.2f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Rain: }\SpecialCharTok{\{}\NormalTok{rain\_loss}\SpecialCharTok{:.2f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Total: }\SpecialCharTok{\{}\NormalTok{total\_loss}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-    
-    \ControlFlowTok{return}\NormalTok{ total\_loss}
-
-\KeywordTok{def}\NormalTok{ beamforming\_gain(n\_elements, beamwidth\_deg}\OperatorTok{=}\VariableTok{None}\NormalTok{):}
-    \CommentTok{"""}
-\CommentTok{    Calculate antenna array gain.}
-\CommentTok{    }
-\CommentTok{    Args:}
-\CommentTok{        n\_elements: Number of antenna elements}
-\CommentTok{        beamwidth\_deg: Optional 3dB beamwidth (degrees)}
-\CommentTok{    }
-\CommentTok{    Returns:}
-\CommentTok{        Gain (dB)}
-\CommentTok{    """}
-\NormalTok{    gain\_db }\OperatorTok{=} \DecValTok{10} \OperatorTok{*}\NormalTok{ np.log10(n\_elements)}
-    
-    \ControlFlowTok{if}\NormalTok{ beamwidth\_deg:}
-        \CommentTok{\# Approximate directivity from beamwidth}
-\NormalTok{        directivity }\OperatorTok{=} \DecValTok{41253} \OperatorTok{/}\NormalTok{ (beamwidth\_deg}\OperatorTok{**}\DecValTok{2}\NormalTok{)}
-\NormalTok{        gain\_from\_bw }\OperatorTok{=} \DecValTok{10} \OperatorTok{*}\NormalTok{ np.log10(directivity)}
-        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Array gain (element count): }\SpecialCharTok{\{}\NormalTok{gain\_db}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-        \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"Gain from beamwidth: }\SpecialCharTok{\{}\NormalTok{gain\_from\_bw}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-\NormalTok{        gain\_db }\OperatorTok{=} \BuiltInTok{max}\NormalTok{(gain\_db, gain\_from\_bw)}
-    
-    \ControlFlowTok{return}\NormalTok{ gain\_db}
-
-\CommentTok{\# Example: 5G mmWave link budget}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"=== 5G mmWave Link Budget ===}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
-
-\NormalTok{freq }\OperatorTok{=} \DecValTok{28}  \CommentTok{\# GHz}
-\NormalTok{distance }\OperatorTok{=} \DecValTok{100}  \CommentTok{\# meters}
-\NormalTok{tx\_power\_dbm }\OperatorTok{=} \DecValTok{23}  \CommentTok{\# dBm per element}
-\NormalTok{n\_tx\_elements }\OperatorTok{=} \DecValTok{64}
-\NormalTok{n\_rx\_elements }\OperatorTok{=} \DecValTok{16}
-
-\NormalTok{path\_loss }\OperatorTok{=}\NormalTok{ mmwave\_path\_loss(freq, distance, rain\_rate\_mm\_h}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
-\NormalTok{tx\_gain }\OperatorTok{=}\NormalTok{ beamforming\_gain(n\_tx\_elements)}
-\NormalTok{rx\_gain }\OperatorTok{=}\NormalTok{ beamforming\_gain(n\_rx\_elements)}
-
-\NormalTok{eirp }\OperatorTok{=}\NormalTok{ tx\_power\_dbm }\OperatorTok{+}\NormalTok{ tx\_gain}
-\NormalTok{rx\_power }\OperatorTok{=}\NormalTok{ eirp }\OperatorTok{{-}}\NormalTok{ path\_loss }\OperatorTok{+}\NormalTok{ rx\_gain}
-
-\NormalTok{noise\_figure }\OperatorTok{=} \DecValTok{7}  \CommentTok{\# dB}
-\NormalTok{bandwidth\_mhz }\OperatorTok{=} \DecValTok{100}
-\NormalTok{thermal\_noise }\OperatorTok{=} \OperatorTok{{-}}\DecValTok{174} \OperatorTok{+} \DecValTok{10}\OperatorTok{*}\NormalTok{np.log10(bandwidth\_mhz }\OperatorTok{*} \FloatTok{1e6}\NormalTok{) }\OperatorTok{+}\NormalTok{ noise\_figure}
-
-\NormalTok{snr }\OperatorTok{=}\NormalTok{ rx\_power }\OperatorTok{{-}}\NormalTok{ thermal\_noise}
-
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"}\CharTok{\textbackslash{}n}\SpecialStringTok{Link Budget:"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  EIRP: }\SpecialCharTok{\{}\NormalTok{eirp}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dBm"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  RX power: }\SpecialCharTok{\{}\NormalTok{rx\_power}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dBm"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Noise: }\SpecialCharTok{\{}\NormalTok{thermal\_noise}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dBm"}\NormalTok{)}
-\BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  SNR: }\SpecialCharTok{\{}\NormalTok{snr}\SpecialCharTok{:.1f\}}\SpecialStringTok{ dB"}\NormalTok{)}
-
-% \NormalTok{capacity\_gbps }\OperatorTok{=}\NormalTok{ (bandwidth\_mhz }\OperatorTok{*}\NormalTok{ np.log2(}\DecValTok{1} \OperatorTok{+} \DecValTok{10}\OperatorTok{**}\NormalTok{(snr}\OperatorTok{/}\DecValTok{10}\NormalTok{))) }\OperatorTok{/} \DecValTok{1000}
-% \BuiltInTok{print}\NormalTok{(}\SpecialStringTok{f"  Shannon capacity: }\SpecialCharTok{\{}\NormalTok{capacity\_gbps}\SpecialCharTok{:.2f\}}\SpecialStringTok{ Gbps"}\NormalTok{)}
-% \end{Highlighting}
-% \end{Shaded}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Summary
-Comparison}{ Summary Comparison}}\label{summary-comparison}
-
-{\def\LTcaptype{} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Aspect & Sub-6 GHz & mmWave (24-52 GHz) & Sub-THz (100-300 GHz) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\textbf{Bandwidth} & 100 MHz & 400 MHz-2 GHz & 10-50 GHz \\
-\textbf{Peak Rate} & 1 Gbps & 10 Gbps & 100+ Gbps \\
-\textbf{Range} & 1-5 km & 100-500 m & 10-100 m \\
-\textbf{Propagation} & NLOS-friendly & LOS-preferred & LOS-only \\
-\textbf{Mobility} & Excellent & Good & Limited \\
-\textbf{Beamforming} & Optional & Mandatory & Ultra-massive \\
-\textbf{Applications} & Wide-area & Dense urban, FWA & Indoor, backhaul \\
-\end{longtable}
-}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\subsection{\texorpdfstring{ Further
-Reading}{ Further Reading}}\label{further-reading}
-
-\subsubsection{Textbooks}\label{textbooks}
-
+\paragraph{Beam Management}
+With beamwidths of only a few degrees, the base station and the user device must constantly perform \keyterm{beam management} to maintain alignment. This involves:
 \begin{itemize}
-\tightlist
-\item
-  \textbf{Rappaport et al.}, \emph{Millimeter Wave Wireless
-  Communications} - Comprehensive mmWave treatment
-\item
-  \textbf{Akyildiz et al.}, \emph{Terahertz Band Communication} - THz
-  fundamentals
-\item
-  \textbf{Rangan et al.}, \emph{Millimeter-Wave Cellular Wireless
-  Networks} - 5G mmWave
+    \item \textbf{Beam Sweeping:} The base station periodically transmits synchronisation signals in different directions to allow users to identify the best beam.
+    \item \textbf{Beam Tracking:} Once a link is established, the system must continuously refine the beam's direction to track user movement.
+    \item \textbf{Beam Recovery:} A rapid procedure to find a new beam if the current one is suddenly blocked.
 \end{itemize}
 
-\subsubsection{Key Papers}\label{key-papers}
 
+\subsection{5G New Radio (NR) in FR2 (mmWave)}
+
+The 5G standard defines Frequency Range 2 (FR2) for mmWave operation, primarily in the 24, 28, and 39 GHz bands.
 \begin{itemize}
-\tightlist
-\item
-  \textbf{Rappaport et al.} (2013): ``Millimeter Wave Mobile
-  Communications for 5G'' - Seminal 5G mmWave paper
-\item
-  \textbf{Alsharif et al.} (2020): ``Sixth Generation (6G) Wireless
-  Networks'' - 6G vision including THz
-\item
-  \textbf{ITU-R P.676}: Atmospheric attenuation models
-  (O\textsubscript{2},
-  H\textsubscript{2}O)
+    \item \textbf{Bandwidth:} Provides very wide channel bandwidths, from 50 MHz up to 400 MHz per component carrier.
+    \item \textbf{Numerology:} Uses a flexible OFDM structure with a wide subcarrier spacing (e.g., 120 kHz) to create very short symbols, which makes the system more robust to the high Doppler shifts encountered at these frequencies.
+    \item \textbf{Applications:} Primarily targeted at \keyterm{enhanced Mobile Broadband (eMBB)} in dense urban hotspots (stadiums, airports) and \keyterm{Fixed Wireless Access (FWA)} as a "last-mile" fibre alternative.
 \end{itemize}
 
-\subsubsection{Standards}\label{standards}
 
-\begin{itemize}
-\tightlist
-\item
-  \textbf{3GPP TS 38.104}: 5G NR Base Station radio
-  transmission/reception (FR2 specs)
-\item
-  \textbf{IEEE 802.11ad/ay}: WiGig 60 GHz mmWave WiFi
-\item
-  \textbf{IEEE 802.15.3d}: 100 Gbps WPAN (THz band)
-\end{itemize}
+\begin{workedexample}{5G mmWave Link Budget}
+    \parhead{Problem} Assess the feasibility of a 100-meter 5G mmWave link at 28 GHz.
+    \parhead{System Parameters}
+    \begin{itemize}
+        \item Base Station (gNB): 256-element phased array, total transmit power of \qty{40}{dBm}.
+        \item User Device (UE): 16-element phased array.
+        \item Channel Bandwidth: \qty{100}{MHz}.
+        \item Receiver Noise Figure: 8 dB.
+    \end{itemize}
+    \parhead{Analysis}
+    \begin{derivationsteps}
+        \step \textbf{Calculate Link Gains.} The array gain is approx. $10\log_{10}(N)$.
+        \[ G_t \approx 10\log_{10}(256) = 24 \text{ dBi}; \quad G_r \approx 10\log_{10}(16) = 12 \text{ dBi} \]
+        The total transmit power (EIRP) is $40 \text{ dBm} + 24 \text{ dBi} = \qty{64}{dBm}$.
 
-\subsubsection{Related Topics}\label{related-topics}
+        \step \textbf{Calculate Path Loss.}
+        \[ \text{FSPL} = 20\log_{10}(100 \text{ m}) + 20\log_{10}(28 \text{ GHz}) + 20.4 \approx 40 + 29.0 + 20.4 = \qty{89.4}{dB} \]
 
-\begin{itemize}
-\tightlist
-\item
-  {[}{[}MIMO-\&-Spatial-Multiplexing{]}{]} - Beamforming foundations
-\item
-  {[}{[}OFDM-\&-Multicarrier-Modulation{]}{]} - mmWave uses OFDM
-\item
-  {[}{[}Adaptive-Modulation-\&-Coding-(AMC){]}{]} - Critical for
-  variable mmWave channels
-\item
-  {[}{[}Atmospheric-Effects-(Ionospheric,-Tropospheric){]}{]} -
-  Propagation background
-\item
-  {[}{[}Terahertz-(THz)-Technology{]}{]} - THz-specific content (quantum
-  cascade lasers, imaging)
-\item
-  {[}{[}Real-World-System-Examples{]}{]} - 5G NR deployments
-\end{itemize}
+        \step \textbf{Calculate Received Power.}
+        \[ P_r = \text{EIRP} - L_{\text{FSPL}} + G_r = 64 - 89.4 + 12 = \qty{-13.4}{dBm} \]
+        This is an extremely strong received signal. However, this is for a perfect LOS path. A more realistic scenario includes blockage. Assume a 30 dB loss from passing through a modern, energy-efficient window.
+        \[ P_r (\text{NLOS}) = -13.4 - 30 = \qty{-43.4}{dBm} \]
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+        \step \textbf{Calculate SNR.} The noise floor is $N = -174 + 10\log_{10}(100 \times 10^6) + 8 = \qty{-86}{dBm}$.
+        \[ \text{SNR} = P_r - N = -43.4 - (-86) = \textbf{\qty{42.6}{dB}} \]
+    \end{derivationsteps}
+    \parhead{Interpretation} Even with a significant 30 dB blockage loss, the combination of high transmit power and massive beamforming gains at both ends results in an excellent SNR of over 40 dB. This is more than sufficient to support the highest-order 256-QAM modulation, enabling multi-gigabit data rates. This demonstrates that while mmWave propagation is challenging, it is entirely feasible with advanced antenna technology.
+\end{workedexample}
 
-\textbf{Summary}: mmWave (24-300 GHz) and THz (0.3-10 THz) offer massive
-bandwidth ($100\times$ more than sub-6 GHz) enabling
-multi-gigabit to terabit wireless. 5G NR FR2 (24-52 GHz) delivers 2-10
-Gbps with 100-500 m range using massive MIMO beamforming (64-256
-elements). Path loss increases 20-40 dB vs.~sub-6 GHz, requiring
-directional antennas and dense small-cell deployment. Atmospheric
-absorption (O\textsubscript{2} at 60 GHz,
-H\textsubscript{2}O at 183 GHz) and rain attenuation
-limit range. Blockage (human body 20-40 dB, walls 30-80 dB) makes LOS
-critical. Beamforming is mandatory (analog or hybrid) for coverage.
-Applications: urban hotspots, fixed wireless access, industrial IoT. 6G
-targets sub-THz (100-300 GHz) for 100 Gbps-1 Tbps with ultra-massive
-MIMO (1024+ elements), intelligent surfaces (RIS), and 10-50 m cell
-radius. Automotive radar (77-81 GHz) uses FMCW for 3 cm range
-resolution. mmWave/THz = ultra-high bandwidth, ultra-short range,
-ultra-directional---requires paradigm shift in network architecture.
+\begin{table}[H]
+    \centering
+    \caption{Comparison of Wireless Technology Generations}
+    \label{tab:generation-comparison}
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+        \tableheaderfont Technology & \tableheaderfont Frequency Band & \tableheaderfont Key Technologies & \tableheaderfont Peak Data Rate \\
+        \midrule
+        4G (LTE-A) & < 6 GHz & MIMO-OFDM, Carrier Agg. & 1 Gbps \\
+        5G (NR) & < 6 GHz + mmWave & Massive MIMO, Beamforming & 10-20 Gbps \\
+        6G (Future) & Sub-THz & Ultra-Massive MIMO, RIS & >100 Gbps \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{importantbox}[title={Further Reading}]
+    mmWave and THz are the future of high-capacity wireless, building directly on many concepts in this book.
+    \begin{description}
+        \item[MIMO Systems] (\Cref{ch:mimo}) provides the foundational theory for the beamforming and spatial multiplexing techniques that are mandatory for mmWave.
+        \item[OFDM] (\Cref{ch:ofdm}) is the modulation scheme used, but with a flexible "numerology" to adapt to the unique challenges of the mmWave channel.
+        \item[Antenna Theory] (\Cref{ch:antenna}) discusses the principles of the phased-array antennas that are the key enabling hardware.
+    \end{description}
+\end{importantbox}
