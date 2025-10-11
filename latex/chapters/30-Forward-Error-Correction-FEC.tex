@@ -81,7 +81,7 @@ The coding gain is the reduction in the required $E_b/N_0$ (in dB) to achieve a 
 The demodulator first makes a firm decision on each received bit (a '0' or a '1'). The FEC decoder then receives this stream of hard bits and attempts to correct errors based on the parity checks. This approach discards valuable information about the reliability of each decision.
 
 \paragraph{Soft-Decision Decoding}
-The demodulator does not make a hard decision. Instead, it passes the raw analog or multi-bit digital value of each received symbol to the FEC decoder. This allows the decoder to know which bits are highly reliable and which are marginal (close to the decision boundary).
+The demodulator does not make a hard decision. Instead, it passes the raw analogue or multi-bit digital value of each received symbol to the FEC decoder. This allows the decoder to know which bits are highly reliable and which are marginal (close to the decision boundary).
 \begin{warningbox}
     \textbf{Soft-decision decoding provides a significant performance gain of approximately 2-3 dB} over hard-decision decoding. All modern high-performance codes (Turbo, LDPC, Polar) are designed specifically to use soft-decision inputs, typically in the form of Log-Likelihood Ratios (LLRs).
 \end{warningbox}

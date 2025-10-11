@@ -67,13 +67,13 @@ Shifting a signal from baseband to passband is a necessary step for three primar
 
 A modern wireless transceiver is a physical embodiment of the baseband/passband concept.
 
-\begin{center}
+\begin{centre}
     \begin{tikzpicture}[
         block/.style={rectangle, draw, minimum width=2.2cm, minimum height=0.9cm, font=\sffamily\scriptsize, fill=diagramlight, draw=diagramprimary, thick},
         node distance=1.8cm, font=\scriptsize
     ]
         % Transmit Path
-        \node[align=center] (tx_data) {\sffamily Baseband\\Data};
+        \node[align=centre] (tx_data) {\sffamily Baseband\\Data};
         \node[block, right of=tx_data, node distance=2.5cm] (tx_dsp) {DSP\\Modulator};
         \node[block, right of=tx_dsp, node distance=2.5cm] (tx_dac) {DAC};
         \node[block, right of=tx_dac, node distance=2.5cm] (tx_iq) {IQ\\Upconverter};
@@ -81,7 +81,7 @@ A modern wireless transceiver is a physical embodiment of the baseband/passband 
         \node[right of=tx_pa, node distance=2.2cm] (tx_ant) {\faBroadcastTower};
 
         % Receive Path
-        \node[below=3.2cm of tx_data, align=center] (rx_data) {\sffamily Baseband\\Data};
+        \node[below=3.2cm of tx_data, align=centre] (rx_data) {\sffamily Baseband\\Data};
         \node[block, right of=rx_data, node distance=2.5cm] (rx_dsp) {DSP\\Demodulator};
         \node[block, right of=rx_dsp, node distance=2.5cm] (rx_adc) {ADC};
         \node[block, right of=rx_adc, node distance=2.5cm] (rx_iq) {IQ\\Downconverter};
@@ -110,9 +110,9 @@ A modern wireless transceiver is a physical embodiment of the baseband/passband 
         % Domain Boundary
         \draw[dashed,diagramgray,thick] ($(tx_dac.east)!0.5!(tx_iq.west)$) ++(0,1.8) -- ++(0,-5.2);
         \node[above,font=\sffamily\bfseries\small] at ($(tx_data)!0.5!(tx_dac)$) {Baseband Domain (Digital)};
-        \node[above,font=\sffamily\bfseries\small] at ($(tx_iq)!0.5!(tx_ant)$) {Passband Domain (Analog RF)};
+        \node[above,font=\sffamily\bfseries\small] at ($(tx_iq)!0.5!(tx_ant)$) {Passband Domain (Analogue RF)};
     \end{tikzpicture}
-\end{center}
+\end{centre}
 
 
 \subsection{Receiver Architectures}
@@ -130,9 +130,9 @@ The ideal mathematical model of frequency translation is disrupted by real-world
     \item[Carrier Frequency Offset (CFO)] Mismatches between the transmitter and receiver's local oscillators cause a continuous rotation of the received constellation, which must be tracked and corrected.
     \item[Phase Noise] Random fluctuations (jitter) in the local oscillator's phase introduce noise that spreads energy between constellation points and limits the achievable signal-to-noise ratio.
     \item[I/Q Imbalance] Mismatches in the gain or phase of the I and Q signal paths cause "leakage" from the desired signal into its spectral image, degrading performance.
-    \item[DC Offset] In direct-conversion receivers, self-mixing of the local oscillator can create a large, unwanted DC spike at the center of the baseband spectrum.
+    \item[DC Offset] In direct-conversion receivers, self-mixing of the local oscillator can create a large, unwanted DC spike at the centre of the baseband spectrum.
 \end{description}
-Modern DSP algorithms in the baseband domain are almost entirely dedicated to estimating and correcting for these analog passband impairments.
+Modern DSP algorithms in the baseband domain are almost entirely dedicated to estimating and correcting for these analogue passband impairments.
 
 \begin{importantbox}[title={Further Reading}]
     The baseband/passband duality is the central operating principle of modern communications.

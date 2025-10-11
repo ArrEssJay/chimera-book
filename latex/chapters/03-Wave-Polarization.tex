@@ -2,24 +2,24 @@
 % CHAPTER 3: Wave Polarization
 % ==============================================================================
 
-\chapter{Wave Polarization}
-\label{ch:polarization}
+\chapter{Wave Polarisation}
+\label{ch:polarisation}
 
 \begin{nontechnical}
-    \textbf{Wave polarization is like the orientation of a jump rope}---you can shake it up and down (vertical), side-to-side (horizontal), or in circles (circular). For a radio receiver to work, its antenna must be oriented to "catch" the wave in the same way it was sent.
+    \textbf{Wave polarisation is like the orientation of a jump rope}---you can shake it up and down (vertical), side-to-side (horizontal), or in circles (circular). For a radio receiver to work, its antenna must be oriented to "catch" the wave in the same way it was sent.
 
     \parhead{Three main types}
     \begin{itemize}
-        \item \textbf{Linear Polarization} (most common): The wave oscillates in one fixed direction---vertical, horizontal, or at a slant.
-        \item \textbf{Circular Polarization}: The wave rotates in a corkscrew pattern as it travels---either clockwise (right-hand) or counter-clockwise (left-hand).
-        \item \textbf{Elliptical Polarization}: An intermediate state where the wave traces an ellipse.
+        \item \textbf{Linear Polarisation} (most common): The wave oscillates in one fixed direction---vertical, horizontal, or at a slant.
+        \item \textbf{Circular Polarisation}: The wave rotates in a corkscrew pattern as it travels---either clockwise (right-hand) or counter-clockwise (left-hand).
+        \item \textbf{Elliptical Polarisation}: An intermediate state where the wave traces an ellipse.
     \end{itemize}
 
     \parhead{Real-world examples}
     \begin{itemize}
-        \item \textbf{FM Radio:} Uses vertical polarization, which is why car antennas are typically vertical.
+        \item \textbf{FM Radio:} Uses vertical polarisation, which is why car antennas are typically vertical.
         \item \textbf{WiFi:} Often vertical. Tilting your laptop's screen can sometimes change the signal strength because it misaligns the internal antennas.
-        \item \textbf{GPS:} Uses circular polarization. This is crucial because it works regardless of your phone's orientation and is robust against atmospheric effects that can twist the signal.
+        \item \textbf{GPS:} Uses circular polarisation. This is crucial because it works regardless of your phone's orientation and is robust against atmospheric effects that can twist the signal.
     \end{itemize}
 
     \parhead{Why it matters} A 90° mismatch between the transmitter and receiver antennas can cause over 99\% of the signal to be lost---enough to drop a call or lose GPS lock.
@@ -28,10 +28,10 @@
 
 \subsection{Overview}
 
-\keyterm{Polarization} describes the geometric orientation of the electric field vector's oscillation as an electromagnetic wave propagates through space. While the wave travels forward, its electric field oscillates in a plane perpendicular to that direction. The specific pattern traced by the tip of the electric field vector in this plane defines the wave's polarization.
+\keyterm{Polarisation} describes the geometric orientation of the electric field vector's oscillation as an electromagnetic wave propagates through space. While the wave travels forward, its electric field oscillates in a plane perpendicular to that direction. The specific pattern traced by the tip of the electric field vector in this plane defines the wave's polarisation.
 
 \begin{keyconcept}
-    Understanding polarization is critical for practical system design. The alignment between the transmitting and receiving antennas must match the wave's polarization to ensure maximum signal transfer. Mismatch results in a predictable and often severe signal loss known as \keyterm{polarization loss}.
+    Understanding polarisation is critical for practical system design. The alignment between the transmitting and receiving antennas must match the wave's polarisation to ensure maximum signal transfer. Mismatch results in a predictable and often severe signal loss known as \keyterm{polarisation loss}.
 \end{keyconcept}
 
 
@@ -42,15 +42,15 @@ The general electric field for a plane wave propagating in the $+z$ direction is
     \vec{E}(z,t) = E_x \cos(\omega t - kz + \phi_x)\hat{x} + E_y \cos(\omega t - kz + \phi_y)\hat{y}
     \label{eq:general-efield}
 \end{equation}
-The polarization type is determined entirely by the relationship between the amplitudes ($E_x$, $E_y$) and the relative phase difference ($\Delta\phi = \phi_y - \phi_x$). At a fixed point in space (e.g., $z=0$), the tip of the $\vec{E}$ vector traces a shape in the $xy$-plane over time. This shape is known as a Lissajous figure, and it defines the polarization.
+The polarisation type is determined entirely by the relationship between the amplitudes ($E_x$, $E_y$) and the relative phase difference ($\Delta\phi = \phi_y - \phi_x$). At a fixed point in space (e.g., $z=0$), the tip of the $\vec{E}$ vector traces a shape in the $xy$-plane over time. This shape is known as a Lissajous figure, and it defines the polarisation.
 
 
-\subsection{Linear Polarization}
+\subsection{Linear Polarisation}
 
 \parhead{Condition} The phase difference between the two components is either $0^\circ$ (in-phase) or $180^\circ$ (anti-phase), so $\Delta\phi = 0$ or $\pi$.
 \parhead{Result} The electric field oscillates along a single, fixed line in the transverse plane. The angle of this line, $\theta$, is determined by the relative amplitudes of the components.
 
-\begin{center}
+\begin{centre}
     \begin{tikzpicture}[scale=1.15, font=\sffamily]
         % Vertical
         \begin{scope}[shift={(0,0)}]
@@ -77,17 +77,17 @@ The polarization type is determined entirely by the relationship between the amp
             \node[below=2pt] at (0,-1.5) {$\theta = 45^\circ$};
         \end{scope}
     \end{tikzpicture}
-\end{center}
+\end{centre}
 
-\parhead{Applications} Linear polarization is simple to generate (e.g., with a dipole or monopole antenna) and is widely used in terrestrial broadcasting like AM/FM radio, television, and many WiFi systems.
+\parhead{Applications} Linear polarisation is simple to generate (e.g., with a dipole or monopole antenna) and is widely used in terrestrial broadcasting like AM/FM radio, television, and many WiFi systems.
 
 
-\subsection{Circular Polarization}
+\subsection{Circular Polarisation}
 
 \parhead{Condition} The amplitudes are equal ($E_x = E_y$) and the phase difference is exactly $\pm90^\circ$ (quadrature phase), so $\Delta\phi = \pm\pi/2$.
 \parhead{Result} The tip of the electric field vector traces a perfect circle, rotating once per cycle. The direction of rotation defines its "handedness."
 
-\begin{center}
+\begin{centre}
     \begin{tikzpicture}[scale=1.2, font=\sffamily]
         % RHCP
         \begin{scope}[shift={(0,0)}]
@@ -96,7 +96,7 @@ The polarization type is determined entirely by the relationship between the amp
             \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {y};
             \draw[very thick, diagramprimary] (0,0) circle (1.3cm);
             \draw[->, very thick, diagramsecondary] (1.3,0) arc (0:-270:1.3cm);
-            \node[below=4pt, align=center] at (0,-1.8) {$\Delta\phi = -90^\circ$\\Clockwise};
+            \node[below=4pt, align=centre] at (0,-1.8) {$\Delta\phi = -90^\circ$\\Clockwise};
         \end{scope}
         % LHCP
         \begin{scope}[shift={(5.5,0)}]
@@ -105,37 +105,37 @@ The polarization type is determined entirely by the relationship between the amp
             \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {y};
             \draw[very thick, diagramprimary] (0,0) circle (1.3cm);
             \draw[->, very thick, diagramsecondary] (1.3,0) arc (0:270:1.3cm);
-            \node[below=4pt, align=center] at (0,-1.8) {$\Delta\phi = +90^\circ$\\Counter-clockwise};
+            \node[below=4pt, align=centre] at (0,-1.8) {$\Delta\phi = +90^\circ$\\Counter-clockwise};
         \end{scope}
     \end{tikzpicture}
-\end{center}
+\end{centre}
 
 \parhead{Handedness} By convention (IEEE standard), handedness is determined by pointing the thumb of your right or left hand in the direction of wave propagation; if your fingers curl in the direction of the E-field's rotation, that is the handedness.
 \begin{itemize}
-    \item \keyterm{Right-Hand Circular Polarization (RHCP):} E-field rotates clockwise when viewed from the receiver.
-    \item \keyterm{Left-Hand Circular Polarization (LHCP):} E-field rotates counter-clockwise.
+    \item \keyterm{Right-Hand Circular Polarisation (RHCP):} E-field rotates clockwise when viewed from the receiver.
+    \item \keyterm{Left-Hand Circular Polarisation (LHCP):} E-field rotates counter-clockwise.
 \end{itemize}
-\parhead{Applications} Circular polarization is critical for satellite communications, including GPS. Its key advantage is that it is immune to the polarization rotation caused by the ionosphere (\keyterm{Faraday rotation}) and provides robustness against signal cancellation from multipath reflections.
+\parhead{Applications} Circular polarisation is critical for satellite communications, including GPS. Its key advantage is that it is immune to the polarisation rotation caused by the ionosphere (\keyterm{Faraday rotation}) and provides robustness against signal cancellation from multipath reflections.
 
 
-\subsection{Elliptical Polarization}
+\subsection{Elliptical Polarisation}
 
 \parhead{Condition} The general case. This occurs whenever the amplitudes are unequal ($E_x \neq E_y$) or the phase difference is not a multiple of $90^\circ$.
-\parhead{Result} The E-field tip traces an ellipse. This is the most common form of polarization in the real world, as perfect linear or circular polarization is an ideal.
-\parhead{Quantification} The shape of the ellipse is described by the \keyterm{Axial Ratio (AR)}, the ratio of the major axis to the minor axis. An AR of 1 (or 0 dB) is perfect circular polarization, while an AR of infinity is perfect linear polarization. A "good" circularly polarized antenna typically has an AR below 3 dB.
+\parhead{Result} The E-field tip traces an ellipse. This is the most common form of polarisation in the real world, as perfect linear or circular polarisation is an ideal.
+\parhead{Quantification} The shape of the ellipse is described by the \keyterm{Axial Ratio (AR)}, the ratio of the major axis to the minor axis. An AR of 1 (or 0 dB) is perfect circular polarisation, while an AR of infinity is perfect linear polarisation. A "good" circularly polarized antenna typically has an AR below 3 dB.
 
 
-\subsection{Polarization Loss Factor (PLF)}
+\subsection{Polarisation Loss Factor (PLF)}
 
-When the polarization of the receiving antenna does not perfectly match the polarization of the incoming wave, a portion of the signal power is lost. This is quantified by the Polarization Loss Factor (PLF).
+When the polarisation of the receiving antenna does not perfectly match the polarisation of the incoming wave, a portion of the signal power is lost. This is quantified by the Polarisation Loss Factor (PLF).
 
 \begin{table}[H]
     \centering
-    \caption{Common Polarization Mismatch Scenarios}
+    \caption{Common Polarisation Mismatch Scenarios}
     \label{tab:plf-summary}
     \begin{tabular}{@{}lll@{}}
         \toprule
-        \tableheaderfont Transmit Polarization & \tableheaderfont Receive Polarization & \tableheaderfont Power Loss \\
+        \tableheaderfont Transmit Polarisation & \tableheaderfont Receive Polarisation & \tableheaderfont Power Loss \\
         \midrule
         Vertical & Vertical & 0 dB (Perfect Match) \\
         Vertical & Slant at 45$^\circ$ & 3 dB (Half Power) \\
@@ -156,17 +156,17 @@ When the polarization of the receiving antenna does not perfectly match the pola
 
 \subsection{Propagation Effects}
 
-The polarization of a wave is not always preserved as it travels from transmitter to receiver.
+The polarisation of a wave is not always preserved as it travels from transmitter to receiver.
 \begin{description}
-    \item[Faraday Rotation] As a wave passes through the ionosphere, Earth's magnetic field causes its polarization to rotate. The effect is proportional to $1/f^2$, making it severe at HF frequencies but negligible for satellite communications in the GHz range. Circular polarization is immune to this effect.
+    \item[Faraday Rotation] As a wave passes through the ionosphere, Earth's magnetic field causes its polarisation to rotate. The effect is proportional to $1/f^2$, making it severe at HF frequencies but negligible for satellite communications in the GHz range. Circular polarisation is immune to this effect.
     \item[Rain Depolarization] The non-spherical shape of raindrops can cause circularly or slant-polarized waves to become elliptical, degrading the isolation between orthogonal channels. This is a significant concern for Ku-band and Ka-band satellite systems.
-    \item[Reflection] When a wave reflects off a surface, its polarization can change. A key example is a circularly polarized wave reversing its handedness upon reflection (e.g., RHCP becomes LHCP). This is exploited by circularly polarized antennas to reject multipath signals.
+    \item[Reflection] When a wave reflects off a surface, its polarisation can change. A key example is a circularly polarized wave reversing its handedness upon reflection (e.g., RHCP becomes LHCP). This is exploited by circularly polarized antennas to reject multipath signals.
 \end{description}
 
 
 \subsection{Stokes Parameters and the Poincaré Sphere}
 
-For a complete and unambiguous description of any polarization state (including partially polarized waves), a mathematical framework called the \keyterm{Stokes parameters} is used. These four parameters ($S_0, S_1, S_2, S_3$) capture the total intensity, the preference for horizontal vs. vertical, the preference for $\pm45^\circ$, and the preference for right-hand vs. left-hand circular, respectively.
+For a complete and unambiguous description of any polarisation state (including partially polarized waves), a mathematical framework called the \keyterm{Stokes parameters} is used. These four parameters ($S_0, S_1, S_2, S_3$) capture the total intensity, the preference for horizontal vs. vertical, the preference for $\pm45^\circ$, and the preference for right-hand vs. left-hand circular, respectively.
 
 These parameters can be visualized on the surface of the \keyterm{Poincaré sphere}, an elegant geometric tool where every possible fully polarized state corresponds to a unique point on the sphere's surface.
 \begin{itemize}
@@ -176,10 +176,10 @@ These parameters can be visualized on the surface of the \keyterm{Poincaré sphe
 \end{itemize}
 
 \begin{importantbox}[title={Further Reading}]
-    Polarization is not an isolated topic; it is deeply interconnected with the physical components and environment of a communication system.
+    Polarisation is not an isolated topic; it is deeply interconnected with the physical components and environment of a communication system.
     \begin{description}
         \item[Antenna Theory] (\Cref{ch:antenna}) details the practical design of antennas that generate and receive specific polarizations, from simple dipoles to complex helical and patch antennas.
         \item[Atmospheric Propagation] (\Cref{ch:propagation}) provides a deep dive into the physics of Faraday rotation and rain depolarization.
-        \item[Multipath Fading] (\Cref{ch:multipath}) explains how polarization is used to mitigate the destructive effects of signal reflections in wireless channels.
+        \item[Multipath Fading] (\Cref{ch:multipath}) explains how polarisation is used to mitigate the destructive effects of signal reflections in wireless channels.
     \end{description}
 \end{importantbox}

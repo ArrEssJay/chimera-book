@@ -73,7 +73,7 @@ Conversely, the amplitude and phase can be recovered from the IQ components:
 An IQ modulator translates the complex baseband signal to a real passband signal.
 \begin{description}
     \item[1. Symbol Mapping] Digital bits are mapped to discrete complex values ($I+jQ$) that represent points on a constellation diagram.
-    \item[2. Pulse Shaping & DAC] The discrete symbols are converted into smooth analog waveforms, $I(t)$ and $Q(t)$, by digital-to-analog converters (DACs).
+    \item[2. Pulse Shaping & DAC] The discrete symbols are converted into smooth analogue waveforms, $I(t)$ and $Q(t)$, by digital-to-analogue converters (DACs).
     \item[3. Upconversion] The $I(t)$ waveform is mixed with a cosine carrier, and the $Q(t)$ waveform is mixed with a sine carrier.
     \item[4. Combination] The two resulting signals are summed to produce the final RF passband signal.
 \end{description}
@@ -83,7 +83,7 @@ An IQ demodulator performs the reverse operation, recovering the complex baseban
 \begin{description}
     \item[1. Downconversion] The incoming RF signal is split and mixed with both cosine and sine waves from a local oscillator.
     \item[2. Low-Pass Filtering] This removes the high-frequency mixing products, leaving only the desired baseband $I(t)$ and $Q(t)$ signals.
-    \item[3. ADC & DSP] The analog $I(t)$ and $Q(t)$ are sampled by analog-to-digital converters (ADCs), and the resulting digital IQ stream is then passed to the DSP for demodulation, error correction, and decoding.
+    \item[3. ADC & DSP] The analogue $I(t)$ and $Q(t)$ are sampled by analogue-to-digital converters (ADCs), and the resulting digital IQ stream is then passed to the DSP for demodulation, error correction, and decoding.
 \end{description}
 
 \begin{warningbox}
@@ -94,7 +94,7 @@ An IQ demodulator performs the reverse operation, recovering the complex baseban
 
 A \keyterm{constellation diagram} is the fundamental tool for visualizing a digital modulation scheme. It is a scatter plot of all possible transmitted symbols on the 2D IQ plane.
 
-\begin{center}
+\begin{centre}
     \begin{tikzpicture}[scale=1.5]
         % Axes
         \draw[->] (-2.5,0) -- (2.5,0) node[right] {\sffamily\small $I$ (Real)};
@@ -111,7 +111,7 @@ A \keyterm{constellation diagram} is the fundamental tool for visualizing a digi
         
         \node[above,font=\sffamily\bfseries] at (0,2.5) {QPSK Constellation Diagram};
     \end{tikzpicture}
-\end{center}
+\end{centre}
 
 In the presence of noise, received samples do not fall perfectly on the constellation points but form a "cloud" around each one. A symbol error occurs if the noise is large enough to push a sample into the decision region of a different symbol.
 
