@@ -1,0 +1,83 @@
+% ==============================================================================
+% CHAPTER 49: Beamforming
+% ==============================================================================
+
+\chapter{Beamforming and Phased-Array Antennas}
+\label{ch:beamforming}
+
+\begin{nontechnical}
+    Imagine a chorus of singers all standing in a line, all singing the exact same note. If they all sing at the exact same moment, the combined sound wave will travel straight out, perpendicular to their line.
+
+    Now, imagine a simple instruction is given: each singer, from left to right, should start singing with a tiny, progressive delay. The singer on the far left starts first, the next starts a microsecond later, the next a microsecond after that, and so on. The result is that the combined sound wave is no longer projected straight out. Instead, it is "steered" in a specific direction. By precisely controlling the timing of each individual singer, the chorus can aim their collective voice anywhere in the audience without ever taking a step.
+
+    This is the principle of a \keyterm{phased-array antenna}. It is an array of small, simple antennas, and by introducing a precise phase shift to the signal fed to each one, the array can create a highly directional "beam" of radio energy and steer it electronically in microseconds, with no moving parts. This is the core technology that enables modern radar, 5G cellular, and high-frequency satellite communications.
+\end{nontechnical}
+
+\subsection{Overview}
+
+\keyterm{Beamforming} is a signal processing technique used to control the directionality of the transmission or reception of radio waves. It is achieved by using a \keyterm{phased array}—an array of multiple antenna elements whose collective radiation pattern is manipulated by controlling the relative phase of the signals feeding each element. This allows for the creation of narrow, high-gain beams that can be steered electronically, as well as the creation of deep nulls to suppress interference.
+
+\begin{keyconcept}
+    A phased array synthesises a directional radiation pattern from a collection of non-directional elements through the principle of wave interference. By introducing progressive phase shifts across the array, the direction of maximum constructive interference (the \textbf{main beam}) can be steered, while directions of destructive interference can be configured to create \textbf{nulls}. This electronic steerability is the key advantage over fixed, mechanical antennas.
+\end{keyconcept}
+
+\subsection{Principle of a Uniform Linear Array (ULA)}
+
+The simplest and most intuitive phased array is the Uniform Linear Array (ULA), where \(N\) identical antenna elements are spaced a uniform distance \(d\) apart. For a signal arriving at an angle \(\theta\) relative to the array's broadside, there is a path length difference between adjacent elements of \(d \sin(\theta)\). This translates to a progressive phase shift across the array.
+
+To steer the main beam to a specific angle \(\theta_0\), the transmitter must apply an opposite, progressive phase shift, \(\Delta\phi\), to each element's signal to ensure the individual waves all add up coherently in that desired direction.
+\begin{equation}
+    \Delta\phi = -\frac{2\pi}{\lambda} d \sin(\theta_0)
+\end{equation}
+The total radiation pattern of the array, known as the \keyterm{Array Factor (AF)}, is the sum of the contributions from each element and determines the beam's shape, gain, and direction.
+
+\subsection{Types of Beamforming}
+
+\paragraph{Analogue Beamforming}
+This is the simplest form, where the phase shifting is done in the analogue RF domain using hardware phase shifters behind each antenna element. A single RF signal chain feeds the entire array. While cost-effective, it can only generate a single beam at a time.
+
+\paragraph{Digital Beamforming}
+In this advanced architecture, each antenna element has its own dedicated transceiver and ADC/DAC. The phase shifting and signal combination are performed entirely in the digital domain (DSP). This provides immense flexibility, allowing the system to generate multiple independent beams simultaneously, dynamically change beam shapes, and perform complex spatial filtering. It is, however, far more complex and power-hungry.
+
+\paragraph{Hybrid Beamforming}
+This is the compromise architecture that makes systems like 5G mmWave practical. It combines a smaller number of digital transceivers with larger analogue sub-arrays. This approach provides a balance, allowing for the generation of multiple beams with manageable hardware complexity and power consumption.
+
+\subsection{Key Applications}
+
+\begin{description}
+    \item[Radar Systems] Modern \keyterm{Active Electronically Scanned Array (AESA)} radars use two-dimensional phased arrays to steer their beams instantly, allowing them to track thousands of targets simultaneously with no moving parts.
+    \item[5G and Massive MIMO] 5G base stations use massive phased arrays (e.g., 64 or 128 elements) to create narrow "pencil beams" for each user, dramatically increasing spectral efficiency and reducing inter-user interference.
+    \item[Satellite Communications] Phased arrays are essential for modern Low Earth Orbit (LEO) constellations like \textbf{Starlink}. On the ground, the user terminals use a phased array to track the rapidly moving satellites across the sky. On the satellite itself, a sophisticated array generates multiple steerable spot beams to serve different users on the ground simultaneously.
+    \item[Interference Nulling] By precisely controlling the phase and amplitude at each element, a phased array can be configured to place a deep null in its radiation pattern in the direction of a known jammer or interference source, providing exceptional immunity.
+\end{description}
+
+\begin{workedexample}{2-Element Array Beam Steering}
+    \parhead{Problem}
+    Consider a simple array of two omnidirectional antennas spaced half a wavelength apart (\(d = \lambda/2\)). Calculate the phase shift required to steer the main beam to an angle of 30° from broadside.
+
+    \parhead{Analysis}
+    We need to apply a progressive phase shift, \(\Delta\phi\), to the signal of the second antenna relative to the first, such that the waves from both antennas add constructively at the target angle of \(\theta_0 = 30^\circ\).
+    
+    \parhead{Calculation}
+    Using the beam steering formula:
+    \[ \Delta\phi = -\frac{2\pi}{\lambda} d \sin(\theta_0) \]
+    Substituting the given values \(d = \lambda/2\) and \(\theta_0 = 30^\circ\):
+    \[ \Delta\phi = -\frac{2\pi}{\lambda} \left(\frac{\lambda}{2}\right) \sin(30^\circ) = -\pi \times (0.5) = -\frac{\pi}{2}~\text{radians} \]
+    Converting to degrees:
+    \[ \Delta\phi = -90^\circ \]
+    
+    \parhead{Interpretation}
+    To steer the beam to 30°, the signal fed to the second antenna must be delayed by a phase of 90 degrees relative to the first antenna. This simple calculation is the fundamental building block of all phased-array systems. A large array simply applies this same principle across hundreds or thousands of elements to create a highly focused and steerable beam.
+\end{workedexample}
+
+\begin{importantbox}
+\section*{Further Reading}
+\parhead{Related Concepts and Systems}
+Beamforming is a practical application of fundamental antenna theory and the enabling technology for many advanced systems.
+\begin{description}
+    \item[\Cref{ch:antenna} (Antenna Theory Basics)] Provides the foundational concepts of gain, directivity, and radiation patterns upon which beamforming is built.
+    \item[\Cref{ch:mimo} (MIMO \& Spatial Multiplexing)] Explains how beamforming is used as a tool within multiple-antenna systems to improve reliability (diversity) and capacity (spatial multiplexing).
+    \item[\Cref{ch:mmwave-thz} (mmWave \& THz Communications)] and \Cref{ch:5g} (5G Systems) Are case studies of modern systems where beamforming is not just an enhancement, but an absolute necessity to overcome the extreme path loss at high frequencies.
+    \item[\Cref{ch:military-covert} (Military Communications)] Details the application of beamforming for interference nulling and creating low-probability-of-intercept (LPI) signals.
+\end{description}
+\end{importantbox}

@@ -1,0 +1,86 @@
+% ==============================================================================
+% CHAPTER 46: Radiolocation and Positioning Systems
+% ==============================================================================
+
+\chapter{Radiolocation and Positioning Systems}
+\label{ch:radiolocation}
+
+\begin{nontechnical}
+    Imagine you are the captain of a ship navigating through a dense fog. You hear the blast of a foghorn from a known lighthouse. The sound tells you that the lighthouse is nearby, but not where. Now, imagine there are two lighthouses, and they are synchronised to blast their horns at the exact same instant. You hear the horn from Lighthouse A, and then, a moment later, you hear the horn from Lighthouse B.
+
+    That tiny time difference is a profound piece of information. You know that you must be located somewhere on a specific curve on your nautical chart—a hyperbola—where the difference in distance to the two lighthouses perfectly matches that time delay. If a third lighthouse sounds its horn, you can draw a second curve. Where the two curves intersect is your precise location.
+
+    This is the principle of Time Difference of Arrival (TDOA). It is a "meta" technique that does not care about the *content* of the signal (the sound of the horn), but only its physical properties (its time of arrival). This and other related techniques, such as measuring a signal's absolute travel time or its angle of arrival, are the foundation of all modern radiolocation and navigation systems, from the GPS in your phone to advanced military tracking systems.
+\end{nontechnical}
+
+\subsection{Overview}
+
+\keyterm{Radiolocation} is the process of determining the position of an object using the properties of radio waves. Unlike communication systems, which are designed to extract information encoded in the modulation of a signal, radiolocation systems extract information from the physical propagation of the signal itself. These techniques are often independent of the data being transmitted and can function even with simple, unmodulated carriers.
+
+\begin{keyconcept}
+    Radiolocation systems exploit the fundamental physics of wave propagation. By measuring a signal's time of arrival, time difference of arrival, or angle of arrival, a receiver can determine its position relative to a set of known transmitters (or vice-versa). These techniques form the basis of global navigation, asset tracking, and direction-finding systems.
+\end{keyconcept}
+
+\subsection{Time of Arrival (ToA) and Trilateration}
+
+\paragraph{Principle}
+The most direct method of ranging is to measure the \keyterm{Time of Arrival (ToA)} of a signal. By precisely timing how long a signal takes to travel from a transmitter at a known location to a receiver, the distance can be calculated:
+\begin{equation}
+    \text{Distance} = c \times \Delta t
+\end{equation}
+where \(c\) is the speed of light and \(\Delta t\) is the signal's transit time. This measurement places the receiver on the surface of a sphere of a known radius, centred on the transmitter.
+
+\paragraph{Trilateration}
+By making simultaneous ToA measurements from three or more transmitters, the receiver's position can be determined as the unique intersection point of the corresponding spheres. This is known as \keyterm{trilateration}.
+
+\paragraph{Application: GPS}
+The Global Positioning System (GPS) is the canonical example of a ToA-based system. Each satellite transmits a signal containing its precise orbital position and the exact time of transmission. The receiver measures the arrival time of these signals to calculate its distance to each satellite. A minimum of four satellite signals are required: three to solve for the receiver's 3D spatial coordinates (latitude, longitude, altitude), and a fourth to solve for the receiver's own clock error, which is the largest source of uncertainty.
+
+\subsection{Time Difference of Arrival (TDOA) and Multilateration}
+
+\paragraph{Principle}
+The \keyterm{Time Difference of Arrival (TDOA)} method removes the need for the receiver to have a synchronised clock. Instead, it measures the *difference* in the arrival time of signals from two different, synchronised transmitters. A constant time difference confines the receiver to a \keyterm{hyperboloid} in three-dimensional space, with the two transmitters as its foci.
+
+\paragraph{Multilateration}
+By measuring the TDOA from multiple pairs of transmitters, the receiver's position is found at the intersection of the resulting hyperboloids. This is known as \keyterm{multilateration}. While less intuitive than trilateration, it has the significant advantage of allowing for a much simpler, lower-cost receiver, as the difficult problem of time synchronisation is offloaded entirely to the transmitter network.
+
+\paragraph{Applications}
+TDOA is the basis for classic navigation systems like LORAN-C and is widely used in passive surveillance and emitter location systems.
+
+\subsection{Angle of Arrival (AoA) and Triangulation}
+
+\paragraph{Principle}
+The \keyterm{Angle of Arrival (AoA)} method determines the direction of a transmitter by measuring the properties of its incoming wavefront at a receiver. This is typically achieved using a \keyterm{phased-array antenna}. By measuring the microscopic phase difference of the signal as it arrives at different elements of the antenna array, the angle of the wavefront can be calculated with high precision.
+
+\paragraph{Triangulation}
+An AoA measurement provides a line of bearing to the transmitter. By taking bearings from two or more receivers at known locations, the transmitter's position can be determined at the intersection of these lines, a process known as \keyterm{triangulation}.
+
+\paragraph{Applications}
+AoA is the classic technique used in radio direction finding (RDF) for military intelligence and civilian use (e.g., tracking emergency beacons). It has seen a major resurgence with the introduction of direction-finding features in the \textbf{Bluetooth 5.1} standard, which uses AoA and Angle of Departure (AoD) to enable high-precision, centimetre-level indoor positioning and asset tracking.
+
+\begin{workedexample}{The Criticality of Timing in GPS}
+    \parhead{Problem}
+    Calculate the positioning error that would result from a mere 10-nanosecond error in the receiver's clock in a GPS system.
+
+    \parhead{Analysis}
+    The receiver calculates its distance (pseudorange) to a satellite based on the measured signal transit time. An error in the receiver's local time estimate directly translates to an error in this transit time measurement.
+    \[ \text{Positioning Error} = c \times \text{Timing Error} \]
+
+    \parhead{Calculation}
+    Given a timing error of \(\Delta t = 10~\text{ns} = 10 \times 10^{-9}\)~s and the speed of light \(c \approx 3 \times 10^8\)~m/s:
+    \[ \text{Error} = (3 \times 10^8~\text{m/s}) \times (10 \times 10^{-9}~\text{s}) = \mathbf{3~\text{metres}} \]
+    
+    \parhead{Interpretation}
+    A clock error of just ten billionths of a second results in a three-metre positioning error. This simple calculation demonstrates the extraordinary timing precision required for satellite navigation. Because it is impractical to equip every low-cost receiver with an atomic clock, the GPS system is designed to use a fourth satellite measurement to solve for this clock bias as an additional unknown variable, thereby elegantly correcting for the receiver's own timing imperfections.
+\end{workedexample}
+
+\begin{importantbox}
+\section*{Further Reading}
+\parhead{Related Concepts and Systems}
+\begin{description}
+    \item[\Cref{ch:gps} (GPS)] Provides a complete case study of a Time of Arrival (ToA) radiolocation system, including signal structure, error sources, and the mathematics of position calculation.
+    \item[\Cref{ch:synchronisation} (Synchronisation)] Details the critical signal processing techniques (e.g., Phase-Locked Loops) required to achieve the pico-second-level timing accuracy needed for these systems.
+    \item[\Cref{ch:antenna} (Antenna Theory)] Discusses the principles of phased-array antennas that are the enabling hardware for Angle of Arrival (AoA) measurements.
+    \item[\Cref{ch:iot} (IoT Wireless Standards)] Explores the application of Bluetooth 5.1's AoA features for centimetre-level indoor positioning and asset tracking.
+\end{description}
+\end{importantbox}```

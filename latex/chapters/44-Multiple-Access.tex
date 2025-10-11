@@ -1,0 +1,122 @@
+% ==============================================================================
+% CHAPTER 44: Multiple Access Schemes
+% ==============================================================================
+
+\chapter{Multiple Access Schemes: FDMA, TDMA, CDMA, and OFDMA}
+\label{ch:multiple-access}
+
+\begin{nontechnical}
+    Imagine a group of people who need to share a single, large whiteboard to write messages. The rules they agree upon for sharing this space are a "multiple access scheme." The radio spectrum is just like that whiteboard—a finite resource that must be shared. There are four main strategies for doing so:
+
+    \begin{description}
+        \item[Frequency Division (FDMA)] The whiteboard is divided into permanent horizontal stripes, and each person is assigned their own stripe. They can write in their stripe whenever they want, but cannot cross into anyone else's. This is analogous to how AM/FM radio stations each get their own dedicated frequency.
+        
+        \item[Time Division (TDMA)] Everyone gets to use the entire whiteboard, but they must take turns. Person A writes for one minute, then Person B for one minute, and so on. This is the principle behind 2G mobile networks like GSM, where your phone is assigned specific time slots to transmit and receive.
+        
+        \item[Code Division (CDMA)] This is the most counter-intuitive method. Everyone writes on the entire whiteboard at the same time, but each person uses a unique "invisible ink" and a corresponding pair of special glasses. To you, wearing your specific glasses, only your intended message appears clearly; everyone else's writing looks like faint, unintelligible noise. This is the magic of using unique spreading codes, which was the basis for 3G networks.
+        
+        \item[Orthogonal Frequency Division (OFDMA)] This is the modern, hybrid approach. The whiteboard is divided into thousands of very fine horizontal lines (subcarriers). A central coordinator assigns small groups of these lines to different people for very short periods. It is an extremely flexible and efficient method of dynamically allocating the whiteboard space, and it is the core technology of 4G, 5G, and Wi-Fi 6.
+    \end{description}
+\end{nontechnical}
+
+\subsection{Overview}
+
+In any wireless system, multiple users must share a finite amount of radio spectrum. A \keyterm{multiple access scheme} is the fundamental strategy that defines how this shared resource is partitioned among users, allowing them to communicate with a central base station without interfering with one another.
+
+The choice of multiple access scheme is a primary architectural decision that dictates a system's capacity, flexibility, and complexity. The four foundational methods are Frequency-Division Multiple Access (FDMA), Time-Division Multiple Access (TDMA), Code-Division Multiple Access (CDMA), and Orthogonal Frequency-Division Multiple Access (OFDMA).
+
+\begin{keyconcept}
+    The evolution of multiple access schemes reflects the relentless drive for greater spectral efficiency. Early analogue systems used simple FDMA. 2G systems like GSM introduced the flexibility of TDMA. 3G systems leveraged the capacity gains of CDMA. Modern 4G and 5G systems rely on the superior flexibility and efficiency of OFDMA to meet the demands of mobile broadband.
+\end{keyconcept}
+
+\subsection{Frequency-Division Multiple Access (FDMA)}
+
+\paragraph{Principle}
+In FDMA, the total available spectrum is divided into a set of narrower frequency channels. Each user is allocated a unique channel for the duration of their connection. To prevent adjacent channel interference, small \keyterm{guard bands} are left unused between the channels.
+
+\paragraph{Characteristics}
+FDMA is conceptually simple and was the basis for the first generation of cellular systems (e.g., AMPS). However, it is spectrally inefficient. A frequency channel is allocated to a user for the entire duration of their call, and that bandwidth is wasted during the silent periods inherent in speech.
+
+\subsection{Time-Division Multiple Access (TDMA)}
+
+\paragraph{Principle}
+In TDMA, users share the same wide frequency channel but take turns transmitting in a round-robin fashion. Time is divided into repeating \keyterm{frames}, and each frame is subdivided into a fixed number of \keyterm{time slots}. Each user is assigned one or more time slots within each frame. \keyterm{Guard times} are used between slots to prevent transmissions from overlapping due to propagation delays.
+
+\paragraph{Characteristics}
+TDMA is more flexible than FDMA, as a single user can be allocated multiple time slots to achieve a higher data rate. It is the basis for the GSM (2G) cellular standard, where a 200~kHz frequency channel is shared by eight users in eight distinct time slots. Its primary technical challenge is the need for precise time synchronisation across the network.
+
+\subsection{Code-Division Multiple Access (CDMA)}
+
+\paragraph{Principle}
+In CDMA, all users transmit on the same frequency at the same time. Separation is achieved by assigning each user a unique, pseudo-random \keyterm{spreading code}. The transmitter spreads the user's data over a wide bandwidth using this code. The receiver, knowing the same code, can "despread" the desired signal, collapsing its energy back to a narrow band while spreading out the signals from all other users, which are then perceived as low-level noise.
+
+\paragraph{Characteristics}
+CDMA offers a "soft" capacity advantage over TDMA and FDMA. Adding more users simply raises the noise floor for everyone, gradually degrading performance rather than hitting a hard limit. Its major technical challenges are the \keyterm{near-far problem}, which requires stringent power control to prevent users close to the base station from drowning out those far away, and the complexity of the receiver (the Rake receiver) needed to handle multipath. CDMA is the basis for IS-95 (cdmaOne) and UMTS (3G) cellular standards.
+
+\subsection{Orthogonal Frequency-Division Multiple Access (OFDMA)}
+
+\paragraph{Principle}
+OFDMA is the multi-user extension of OFDM. The underlying principle is to divide a wideband channel not into a few wide frequency channels, but into thousands of narrow, orthogonal \keyterm{subcarriers}. The base station scheduler can then allocate a specific subset of these subcarriers to a given user for a specific duration.
+
+\paragraph{Characteristics}
+OFDMA provides extremely fine-grained and flexible resource allocation in both the time and frequency domains. It can allocate a small number of subcarriers to a low-rate IoT device and a large number to a high-rate video streamer, all within the same channel and time frame. This high efficiency, combined with its inherent robustness to multipath, has made OFDMA the multiple access scheme of choice for all modern high-speed data systems, including 4G LTE, 5G NR, and Wi-Fi 6.
+
+\begin{table}[ht]
+    \centering
+    \caption{Comparison of Multiple Access Schemes}
+    \label{tab:ma-comparison}
+    \begin{tabular}{@{}lllll@{}}
+        \toprule
+        \textbf{Scheme} & \textbf{Division Method} & \textbf{Key Advantage} & \textbf{Key Disadvantage} & \textbf{Classic Application} \\
+        \midrule
+        FDMA & Frequency & Simplicity & Inefficient (idle channels) & AM/FM Radio \\
+        TDMA & Time & Flexible rates & Requires synchronisation & GSM (2G) \\
+        CDMA & Code & Soft capacity & Near-far problem & UMTS (3G) \\
+        OFDMA & Time \& Frequency & High efficiency \& flexibility & High PAPR & 5G NR, Wi-Fi 6 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{workedexample}{Cellular Capacity Comparison: 2G vs. 3G}
+    \parhead{Problem}
+    Compare the theoretical number of simultaneous voice users that can be supported in a 1.25~MHz spectrum allocation using a 2G TDMA/FDMA system (like GSM) versus a 3G CDMA system (like IS-95).
+
+    \parhead{Assumptions}
+    \begin{itemize}
+        \item \textbf{GSM (TDMA/FDMA):} Each frequency channel is 200~kHz wide and supports 8 TDMA users.
+        \item \textbf{CDMA (IS-95):} Uses the full 1.25~MHz bandwidth. Voice data is 9.6~kbps. Required \(E_b/N_0\) is 7~dB (\(\approx 5.0\)). A voice activity factor of 0.4 is assumed (users are silent 60\% of the time).
+    \end{itemize}
+
+    \parhead{Analysis}
+    \begin{derivationsteps}
+        \step \textbf{Calculate GSM Capacity.}
+        First, find the number of frequency channels that can fit in the allocation:
+        \[ \text{Number of Channels} = \frac{1.25~\text{MHz}}{200~\text{kHz}} = 6.25 \to \mathbf{6~\text{channels}} \]
+        Total users is the number of channels multiplied by the users per channel:
+        \[ \text{Total Users} = 6~\text{channels} \times 8~\text{users/channel} = \mathbf{48~\text{users}} \]
+        This is a *hard capacity* limit. The 49th user is blocked.
+
+        \step \textbf{Calculate CDMA Capacity.}
+        First, calculate the processing gain, \(G_p\):
+        \[ G_p = \frac{\text{Bandwidth}}{\text{Data Rate}} = \frac{1.25 \times 10^6}{9.6 \times 10^3} \approx 130.2 \]
+        The theoretical number of users, \(M\), is given by the CDMA capacity equation:
+        \[ M = 1 + \frac{G_p}{(E_b/N_0)_{\text{req}}} \approx 1 + \frac{130.2}{5.0} \approx 27~\text{users} \]
+        Now, account for the voice activity factor. Since users are only transmitting 40\% of the time, the system can support more users:
+        \[ M_{\text{voice}} = \frac{M}{\text{Voice Activity Factor}} = \frac{27}{0.4} = 67.5 \to \mathbf{67~\text{users}} \]
+        This is a *soft capacity*. The 68th user is not blocked, but simply increases the interference for all other users.
+    \end{derivationsteps}
+
+    \parhead{Interpretation}
+    In this idealised comparison, the CDMA system supports approximately 67 users, a 40\% increase over the 48 users supported by the TDMA/FDMA system in the same spectrum. This "soft capacity" advantage, derived from its statistical multiplexing of users, was a key driver for the transition from 2G to 3G cellular technologies.
+\end{workedexample}
+
+\begin{importantbox}
+\section*{Further Reading}
+\parhead{Related Concepts and Systems}
+The choice of multiple access scheme is intrinsically linked to the underlying physical layer technology.
+\begin{description}
+    \item[\Cref{ch:spread-spectrum} (Spread Spectrum)] Provides the detailed theory of spreading codes and processing gain that is the foundation of CDMA.
+    \item[\Cref{ch:ofdm} (OFDM)] Explains the multicarrier modulation technique that is extended to create OFDMA, the dominant scheme in modern systems.
+    \item[\Cref{ch:5g} (5G Systems) and \Cref{ch:wifi} (Wi-Fi Systems)] Are case studies in the practical implementation and sophisticated resource scheduling of OFDMA in the world's most advanced wireless standards.
+\end{description}
+\end{importantbox}
