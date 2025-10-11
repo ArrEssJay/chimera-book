@@ -94,7 +94,7 @@ An IQ demodulator performs the reverse operation, recovering the complex baseban
 
 A \keyterm{constellation diagram} is the fundamental tool for visualizing a digital modulation scheme. It is a scatter plot of all possible transmitted symbols on the 2D IQ plane.
 
-\begin{centre}
+\begin{center}
     \begin{tikzpicture}[scale=1.5]
         % Axes
         \draw[->] (-2.5,0) -- (2.5,0) node[right] {\sffamily\small $I$ (Real)};
@@ -111,7 +111,7 @@ A \keyterm{constellation diagram} is the fundamental tool for visualizing a digi
         
         \node[above,font=\sffamily\bfseries] at (0,2.5) {QPSK Constellation Diagram};
     \end{tikzpicture}
-\end{centre}
+\end{center}
 
 In the presence of noise, received samples do not fall perfectly on the constellation points but form a "cloud" around each one. A symbol error occurs if the noise is large enough to push a sample into the decision region of a different symbol.
 
