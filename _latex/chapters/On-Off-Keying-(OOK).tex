@@ -531,7 +531,7 @@ General ASK uses non-zero levels: $A_k \in \{A_1, A_2, \ldots, A_M\}$ where $A_1
 \subsection{Comparison Table}
 
 \begin{center}
-\begin{tabular}{@{}lcccc@{}}
+\begin{tabularx}{\textwidth}{@{}lcXXl@{}}
 \toprule
 \textbf{Modulation} & \textbf{Bits/Symbol} & \textbf{Bandwidth} & \textbf{$E_b/N_0$ @ BER $10^{-6}$} & \textbf{Complexity} \\
 \midrule
@@ -540,7 +540,7 @@ BPSK & 1 & $R_b$ & 10.5~dB & Low \\
 QPSK & 2 & $R_b$ & 10.5~dB & Moderate \\
 16-QAM & 4 & $R_b$ & 18.5~dB & High \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \textbf{Key insight:} OOK trades performance for simplicity. BPSK achieves 3~dB better power efficiency and 2$\times$ better spectral efficiency with only modest increase in complexity.
