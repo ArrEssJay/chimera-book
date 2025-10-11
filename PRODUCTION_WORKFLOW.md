@@ -215,18 +215,26 @@ Use this for EVERY chapter:
 
 ---
 
-## Automated Validation
+## Automated Validation & Build
+
+The build process is managed by a powerful script that handles compilation, chapter selection, and error reporting.
 
 ```bash
-# Test single chapter
+# Build the complete book
 cd /Users/rowan/VSCode/chimera/book
-./test_chapter.sh chapters/Binary-Phase-Shift-Keying-(BPSK)-EXEMPLAR-V2.tex
+./build-book.sh
 
-# Validate all chapters
-./validate_all_chapters.sh
+# Build a specific range of chapters (e.g., 5 to 15)
+./build-book.sh 5:15
 
-# Full book build
-./build.sh
+# Build with a draft watermark
+./build-book.sh --watermark "DRAFT"
+
+# Run in debug mode for verbose error logs
+./build-book.sh --debug
+
+# Check for common citation errors before building
+./check-citations.sh
 ```
 
 ---

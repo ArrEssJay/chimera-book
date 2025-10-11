@@ -36,11 +36,12 @@ This template is built with professional production in mind and includes a host 
 Before you begin, ensure you have the following software installed:
 
 1.  **A Full TeX Live Installation (2025 or later):** A minimal installation will likely fail. This project relies on `xelatex`, `biber`, and a number of standard packages.
-2.  **Python and Pygments:** The `minted` package requires Pygments for syntax highlighting.
+2.  **Perl:** Required for the build script's timeout functionality, which prevents hangs during compilation. Perl is pre-installed on most macOS and Linux systems.
+3.  **Python and Pygments:** The `minted` package requires Pygments for syntax highlighting.
     ```bash
     pip install Pygments
     ```
-3.  **Required Fonts:**
+4.  **Required Fonts:**
     *   **Minion Pro & Myriad Pro:** These are commercial Adobe fonts and must be installed on your system.
     *   **Minion Math:** This can be installed using the `getnonfreefonts` script provided by TeX Live. See the [TeX Live documentation](https://www.tug.org/fonts/getnonfreefonts/) for instructions. (Typically `sudo getnonfreefonts-sys -a`).
     *   **Latin Modern:** The standard `lmodern` package should be installed via `tlmgr`.
@@ -49,15 +50,50 @@ Before you begin, ensure you have the following software installed:
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/your-username/your-repository-name.git
-    cd your-repository-name
+    git clone https://github.com/ArrEssJay/chimera-book.git
+    cd chimera-book/book
     ```
 2.  **Ensure Prerequisites are Met:** Verify that all required fonts and software are installed on your system. The build will fail if fonts are missing.
-3.  **Run the Build Script:** The script handles all the complexities of the LaTeX build process.
+3.  **Run the Build Script:** The script handles all the complexities of the LaTeX build process and offers several options for customizing the build.
+
+    **Basic Build (Full Book):**
     ```bash
     ./build-book.sh
     ```
-4.  **Find the Output:** The final, press-ready PDF will be located in the `_build` directory.
+
+    **Advanced Build Options:**
+
+    The build script accepts several flags to speed up development and add features:
+
+    *   **Chapter Ranges:** Compile only a specific part of the book. This is extremely useful for quickly iterating on a single chapter.
+        ```bash
+        # Build chapters 5 through 15
+        ./build-book.sh 5:15
+
+        # Build from chapter 40 to the end
+        ./build-book.sh 40:
+
+        # Build from the start up to chapter 10
+        ./build-book.sh :10
+        ```
+
+    *   **Watermarks:** Add a custom watermark to every page, ideal for draft or review copies.
+        ```bash
+        ./build-book.sh --watermark "DRAFT COPY"
+        ```
+
+    *   **Debug Mode:** If a build fails, run it in debug mode to get verbose output from the LaTeX compiler.
+        ```bash
+        ./build-book.sh --debug
+        ```
+
+    *   **Combining Options:** All options can be used together.
+        ```bash
+        # Build chapter 25 with a watermark
+        ./build-book.sh 25:25 --watermark "REVIEW"
+        ```
+
+4.  **Find the Output:** The final PDFs (`chimera-book-print.pdf` and `chimera-book-epdf.pdf`) will be created in the current directory (`book/`).
 
 ### Customizing the Output (Color vs. Grayscale)
 
