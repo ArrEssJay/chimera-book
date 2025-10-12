@@ -26,6 +26,8 @@
 \end{nontechnical}
 
 
+\section{Overview and Properties}
+
 \subsection{Overview}
 
 \keyterm{Polarisation} describes the geometric orientation of the electric field vector's oscillation as an electromagnetic wave propagates through space. While the wave travels forward, its electric field oscillates in a plane perpendicular to that direction. The specific pattern traced by the tip of the electric field vector in this plane defines the wave's polarisation.
@@ -96,7 +98,7 @@ The polarisation type is determined entirely by the relationship between the amp
             \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {y};
             \draw[very thick, diagramprimary] (0,0) circle (1.3cm);
             \draw[->, very thick, diagramsecondary] (1.3,0) arc (0:-270:1.3cm);
-            \node[below=4pt, align=centre] at (0,-1.8) {$\Delta\phi = -90^\circ$\\Clockwise};
+            \node[below=4pt, align=center] at (0,-1.8) {$\Delta\phi = -90^\circ$\\Clockwise};
         \end{scope}
         % LHCP
         \begin{scope}[shift={(5.5,0)}]
@@ -105,7 +107,7 @@ The polarisation type is determined entirely by the relationship between the amp
             \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {y};
             \draw[very thick, diagramprimary] (0,0) circle (1.3cm);
             \draw[->, very thick, diagramsecondary] (1.3,0) arc (0:270:1.3cm);
-            \node[below=4pt, align=centre] at (0,-1.8) {$\Delta\phi = +90^\circ$\\Counter-clockwise};
+            \node[below=4pt, align=center] at (0,-1.8) {$\Delta\phi = +90^\circ$\\Counter-clockwise};
         \end{scope}
     \end{tikzpicture}
 \end{center}
@@ -179,7 +181,7 @@ These parameters can be visualized on the surface of the \keyterm{Poincaré sphe
     Polarisation is not an isolated topic; it is deeply interconnected with the physical components and environment of a communication system.
     \begin{description}
         \item[Antenna Theory] (\Cref{ch:antenna}) details the practical design of antennas that generate and receive specific polarizations, from simple dipoles to complex helical and patch antennas.
-        \item[Atmospheric Propagation] (\Cref{ch:propagation}) provides a deep dive into the physics of Faraday rotation and rain depolarization.
+        \item[Atmospheric Propagation] (\Cref{ch:propagation-modes}) provides a deep dive into the physics of Faraday rotation and rain depolarization.
         \item[Multipath Fading] (\Cref{ch:multipath}) explains how polarisation is used to mitigate the destructive effects of signal reflections in wireless channels.
     \end{description}
 \end{importantbox}
