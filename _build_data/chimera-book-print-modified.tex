@@ -43,6 +43,8 @@
 \input{frontmatter/prologue}
 
 % Table of Contents
+% Set TOC depth to include Parts (level -1), Chapters (level 0), and Sections (level 1)
+\setcounter{tocdepth}{1}
 \tableofcontents
 \newpage
 
@@ -52,12 +54,17 @@
 % ============================================================================
 \mainmatter
 
-% PART I: FOUNDATIONS OF COMMUNICATION THEORY
-\part{Foundations of Communication Theory}
-% SKIPPED: \loggedinput{chapters/01-Maxwells-Equations-and-Wave-Propagation}
-% SKIPPED: \loggedinput{chapters/02-Electromagnetic-Spectrum}
-% SKIPPED: \loggedinput{chapters/03-Wave-Polarization}
+% PART I: FOUNDATIONS OF ELECTROMAGNETISM & WAVES
+\part{Foundations of Electromagnetism \& Waves}
+\input{frontmatter/part-i-intro}
+\loggedinput{chapters/01-Maxwells-Equations-and-Wave-Propagation}
+\loggedinput{chapters/02-Electromagnetic-Spectrum}
+\loggedinput{chapters/03-Wave-Polarization}
 % SKIPPED: \loggedinput{chapters/04-Power-Density-and-Field-Strength}
+
+% PART II: DIGITAL BASEBAND SIGNALS
+\part{Digital Baseband Signals}
+\input{frontmatter/part-ii-intro}
 % SKIPPED: \loggedinput{chapters/05-Baseband-vs-Passband-Signals}
 % SKIPPED: \loggedinput{chapters/06-IQ-Representation}
 % SKIPPED: \loggedinput{chapters/07-Constellation-Diagrams}
@@ -68,8 +75,9 @@
 % SKIPPED: \loggedinput{chapters/12-Noise-Sources-and-Noise-Figure}
 % SKIPPED: \loggedinput{chapters/13-Shannons-Channel-Capacity-Theorem}
 
-% PART II: CLASSICAL DIGITAL MODULATION
-\part{Classical Digital Modulation}
+% PART III: MODULATION & DEMODULATION
+\part{Modulation \& Demodulation}
+\input{frontmatter/part-iii-intro}
 % SKIPPED: \loggedinput{chapters/14-Binary-Phase-Shift-Keying-BPSK}
 % SKIPPED: \loggedinput{chapters/15-On-Off-Keying-OOK}
 % SKIPPED: \loggedinput{chapters/16-Amplitude-Shift-Keying-ASK}
@@ -78,8 +86,9 @@
 % SKIPPED: \loggedinput{chapters/19-8PSK-and-Higher-Order-PSK}
 % SKIPPED: \loggedinput{chapters/20-Quadrature-Amplitude-Modulation-QAM}
 
-% PART III: CHANNEL EFFECTS AND PROPAGATION
-\part{Channel Effects and Propagation}
+% PART IV: THE WIRELESS CHANNEL & PROPAGATION
+\part{The Wireless Channel \& Propagation}
+\input{frontmatter/part-iv-intro}
 % SKIPPED: \loggedinput{chapters/21-Free-Space-Path-Loss-FSPL}
 % SKIPPED: \loggedinput{chapters/22-Channel-Models-Rayleigh-and-Rician}
 % SKIPPED: \loggedinput{chapters/23-Multipath-Propagation-and-Fading-Rayleigh-Rician}
@@ -88,20 +97,22 @@
 % SKIPPED: \loggedinput{chapters/26-Weather-Effects-Rain-Fade-Fog-Attenuation}
 % SKIPPED: \loggedinput{chapters/27-Link-Loss-vs-Noise}
 % SKIPPED: \loggedinput{chapters/28-Complete-Link-Budget-Analysis}
-% SKIPPED: \loggedinput{chapters/29-Channel-Equalization}
 
-% PART IV: ERROR CORRECTION AND CHANNEL CODING
-\part{Error Correction and Channel Coding}
+% PART V: ADVANCED CODING & EQUALISATION
+\part{Advanced Coding \& Equalisation}
+\input{frontmatter/part-v-intro}
+% SKIPPED: \loggedinput{chapters/29-Channel-Equalization}
 % SKIPPED: \loggedinput{chapters/30-Forward-Error-Correction-FEC}
 % SKIPPED: \loggedinput{chapters/31-Hamming-Distance-and-Error-Detection}
-\loggedinput{chapters/32-Block-Codes-Hamming-BCH-Reed-Solomon}
-\loggedinput{chapters/33-Convolutional-Codes-and-Viterbi-Decoding}
-\loggedinput{chapters/34-Turbo-Codes}
-\loggedinput{chapters/35-LDPC-Codes}
+% SKIPPED: \loggedinput{chapters/32-Block-Codes-Hamming-BCH-Reed-Solomon}
+% SKIPPED: \loggedinput{chapters/33-Convolutional-Codes-and-Viterbi-Decoding}
+% SKIPPED: \loggedinput{chapters/34-Turbo-Codes}
+% SKIPPED: \loggedinput{chapters/35-LDPC-Codes}
 % SKIPPED: \loggedinput{chapters/36-Polar-Codes}
 
-% PART V: MODERN COMMUNICATION SYSTEMS
-\part{Modern Communication Systems}
+% PART VI: MODERN COMMUNICATION SYSTEMS & ARCHITECTURES
+\part{Modern Communication Systems \& Architectures}
+\input{frontmatter/part-vi-intro}
 % SKIPPED: \loggedinput{chapters/37-OFDM-and-Multicarrier-Modulation}
 % SKIPPED: \loggedinput{chapters/38-Spread-Spectrum-DSSS-FHSS}
 % SKIPPED: \loggedinput{chapters/39-MIMO-and-Spatial-Multiplexing}
@@ -109,42 +120,41 @@
 % SKIPPED: \loggedinput{chapters/41-Synchronization-Carrier-Timing-Frame}
 % SKIPPED: \loggedinput{chapters/42-Spectral-Efficiency-and-Bit-Rate}
 % SKIPPED: \loggedinput{chapters/43-Signal-Chain-End-to-End-Processing}
-% SKIPPED: \loggedinput{chapters/44-Real-World-System-Examples}
+% SKIPPED: \loggedinput{chapters/44-Multiple-Access}
+% SKIPPED: \loggedinput{chapters/45-Link-Layer}
+% SKIPPED: \loggedinput{chapters/46-Radiolocation}
+% SKIPPED: \loggedinput{chapters/47-Real-World-System-Examples}
+% SKIPPED: \loggedinput{chapters/48-Antenna-Theory-Basics}
+% SKIPPED: \loggedinput{chapters/49-Beamforming}
+% SKIPPED: \loggedinput{chapters/50-RF-Frontend}
 
-% PART VI: RF ENGINEERING AND ANTENNA SYSTEMS
-\part{RF Engineering and Antenna Systems}
-% SKIPPED: \loggedinput{chapters/45-Antenna-Theory-Basics}
+% PART VII: ADVANCED TOPICS IN WAVE-MATTER INTERACTION
+\part{Advanced Topics in Wave-Matter Interaction}
+\input{frontmatter/part-vii-intro}
+% SKIPPED: \loggedinput{chapters/51-mmWave-and-THz-Communications}
+% SKIPPED: \loggedinput{chapters/52-Military-and-Covert-Communications}
+% SKIPPED: \loggedinput{chapters/53-Acoustic-Heterodyning}
+% SKIPPED: \loggedinput{chapters/54-Frey-Microwave-Auditory-Effect}
+% SKIPPED: \loggedinput{chapters/55-Intermodulation-Distortion-in-Biology}
 
-% PART VII: EMERGING TECHNOLOGIES
-\part{Emerging Technologies}
-% SKIPPED: \loggedinput{chapters/46-Terahertz-THz-Technology}
-% SKIPPED: \loggedinput{chapters/47-mmWave-and-THz-Communications}
+% PART VIII: THE QUANTUM BIOLOGY & CONSCIOUSNESS INTERFACE
+\part{The Quantum Biology \& Consciousness Interface}
+\input{frontmatter/part-viii-intro}
+% SKIPPED: \loggedinput{chapters/56-Microtubule-Structure-and-Function}
+% SKIPPED: \loggedinput{chapters/57-THz-Propagation-in-Biological-Tissue}
+% SKIPPED: \loggedinput{chapters/58-THz-Bioeffects-Thermal-and-Non-Thermal}
+% SKIPPED: \loggedinput{chapters/59-THz-Resonances-in-Microtubules}
+% SKIPPED: \loggedinput{chapters/60-Quantum-Coherence-in-Biological-Systems}
+% SKIPPED: \loggedinput{chapters/61-Orchestrated-Objective-Reduction-Orch-OR}
+% SKIPPED: \loggedinput{chapters/62-Hyper-Rotational-Physics-HRP-Framework}
+% SKIPPED: \loggedinput{chapters/63-AID-Protocol-Case-Study}
 
-% PART VIII: SPECIALIZED TOPICS
-\part{Specialized Topics}
-% SKIPPED: \loggedinput{chapters/48-Military-and-Covert-Communications}
-% SKIPPED: \loggedinput{chapters/49-Acoustic-Heterodyning}
-% SKIPPED: \loggedinput{chapters/50-AID-Protocol-Case-Study}
-
-% PART IX: BIOPHYSICAL COMMUNICATIONS
-\part{Biophysical Communications}
-% SKIPPED: \loggedinput{chapters/51-Biophysical-Coupling-Mechanism}
-% SKIPPED: \loggedinput{chapters/52-Frey-Microwave-Auditory-Effect}
-% SKIPPED: \loggedinput{chapters/53-Non-Linear-Biological-Demodulation}
-% SKIPPED: \loggedinput{chapters/54-Intermodulation-Distortion-in-Biology}
-% SKIPPED: \loggedinput{chapters/55-Microtubule-Structure-and-Function}
-% SKIPPED: \loggedinput{chapters/56-THz-Propagation-in-Biological-Tissue}
-% SKIPPED: \loggedinput{chapters/57-THz-Bioeffects-Thermal-and-Non-Thermal}
-% SKIPPED: \loggedinput{chapters/58-THz-Resonances-in-Microtubules}
-% SKIPPED: \loggedinput{chapters/59-Quantum-Coherence-in-Biological-Systems}
-% SKIPPED: \loggedinput{chapters/60-Orchestrated-Objective-Reduction-Orch-OR}
-% SKIPPED: \loggedinput{chapters/61-Hyper-Rotational-Physics-HRP-Framework}
-
-% PART X: REFERENCE MATERIALS
-\part{Reference Materials}
-% SKIPPED: \loggedinput{chapters/62-Formula-Reference-Card}
-% SKIPPED: \loggedinput{chapters/63-Glossary}
-% SKIPPED: \loggedinput{chapters/64-Bibliography}
+% PART IX: APPENDICES & REFERENCES
+\part{Appendices \& References}
+\input{frontmatter/part-ix-intro}
+% SKIPPED: \loggedinput{chapters/64-Formula-Reference-Card}
+% SKIPPED: \loggedinput{chapters/65-Glossary}
+% SKIPPED: \loggedinput{chapters/66-Bibliography}
 % Note: Bibliography.tex contains \printbibliography, so we don't include it here
 % to avoid duplication which can cause TeX capacity errors
 % SKIPPED: % \loggedinput{chapters/Bibliography}
