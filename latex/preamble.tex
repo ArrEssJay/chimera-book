@@ -165,6 +165,214 @@
 % ==============================================================================
 
 % --- Tables ---
+% PREAMBLE - The Chimera Project
+% LaTeX configuration, packages, and styling for the book
+% ==============================================================================
+
+% ==============================================================================
+% FONTS & TYPOGRAPHY
+% ==============================================================================
+\usepackage{fontspec}
+\usepackage{unicode-math}
+
+% Set main fonts with fallbacks
+\setmainfont{Minion Pro}[
+    Extension = .otf,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+    BoldItalicFont = *-BoldItalic
+]
+
+\setsansfont{Myriad Pro}[
+    Extension = .otf,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+    BoldItalicFont = *-BoldItalic
+]
+
+\setmonofont{Latin Modern Mono}[Scale=0.9]
+
+% Set math font
+\setmathfont{Latin Modern Math}
+
+% ==============================================================================
+% PAGE LAYOUT
+% ==============================================================================
+\usepackage[
+    paperwidth=7in,
+    paperheight=10in,
+    textwidth=5in,
+    textheight=7.5in,
+    top=1.25in,
+    bottom=1.25in,
+    inner=1in,
+    outer=1in,
+    headsep=0.25in,
+    footskip=0.35in
+]{geometry}
+
+% ==============================================================================
+% PDF/X COMPLIANCE & COLOR MANAGEMENT
+% ==============================================================================
+\usepackage[a-1b,pdf17]{pdfx}
+\usepackage{xcolor}
+
+% Print version toggle
+\newif\ifprintversion
+\printversionfalse  % Default: color version
+
+% Define color profiles
+\ifprintversion
+    % Grayscale for print
+    \definecolor{boxblue}{RGB}{100,100,100}
+    \definecolor{boxgreen}{RGB}{120,120,120}
+    \definecolor{boxyellow}{RGB}{140,140,140}
+    \definecolor{boxred}{RGB}{80,80,80}
+\else
+    % Full color for digital
+    \definecolor{boxblue}{RGB}{0,102,204}
+    \definecolor{boxgreen}{RGB}{0,153,76}
+    \definecolor{boxyellow}{RGB}{255,153,0}
+    \definecolor{boxred}{RGB}{204,0,0}
+\fi
+
+% ==============================================================================
+% GRAPHICS & FIGURES
+% ==============================================================================
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,patterns,decorations.pathreplacing,decorations.markings}
+\usepackage{pdfpages}
+
+% Set graphics path
+\graphicspath{{assets/}{assets/diagrams/}{assets/artwork/}}
+
+% ==============================================================================
+% HYPERLINKS & CROSS-REFERENCES
+% ==============================================================================
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=green,
+    pdftitle={The Chimera Project: Digital Signal Processing},
+    pdfauthor={Edited by Rowan Jones},
+    pdfsubject={Digital Signal Processing, Communications Engineering},
+    pdfkeywords={DSP, Modulation, Wireless Communications, Quantum Biology},
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    bookmarksopenlevel=2
+}
+
+% ==============================================================================
+% BIBLIOGRAPHY
+% ==============================================================================
+\usepackage[
+    backend=biber,
+    style=ieee,
+    sorting=none,
+    maxbibnames=99,
+    isbn=false,
+    doi=true,
+    url=true
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+% ==============================================================================
+% MATHEMATICS
+% ==============================================================================
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% Custom math commands
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\unit}[1]{\,\text{#1}}
+
+% ==============================================================================
+% CUSTOM ENVIRONMENTS - Callout Boxes
+% ==============================================================================
+\usepackage[most]{tcolorbox}
+
+% Non-technical summary box (blue)
+\newtcolorbox{nontechnical}{
+  colback=boxblue!5!white,
+  colframe=boxblue,
+  title=Non-Technical Summary,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% Key concept box (green)
+\newtcolorbox{keyconcept}{
+  colback=boxgreen!5!white,
+  colframe=boxgreen,
+  title=Key Concept,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% Warning/caution box (yellow)
+\newtcolorbox{warning}{
+  colback=boxyellow!5!white,
+  colframe=boxyellow,
+  title=Warning,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% Critical note box (red)
+\newtcolorbox{critical}{
+  colback=boxred!5!white,
+  colframe=boxred,
+  title=Critical Note,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% ==============================================================================
+% TABLES
+% ==============================================================================
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -174,7 +382,9 @@
 % Define \real for pandoc-generated table column widths
 \providecommand{\real}[1]{#1}
 
-% --- Lists ---
+% ==============================================================================
+% LISTS
+% ==============================================================================
 \usepackage{enumitem}
 \setlist{noitemsep, topsep=5pt}
 
@@ -219,7 +429,6 @@
 \usepackage{tocloft}
 
 % Part entries in TOC
-% Using \sffamily for sans-serif
 \renewcommand{\cftpartfont}{\sffamily\bfseries\Large}
 \renewcommand{\cftpartpagefont}{\sffamily\bfseries\Large}
 \setlength{\cftbeforepartskip}{2em}
@@ -237,7 +446,6 @@
 \setlength{\cftsecindent}{1.5em}
 
 % Subsection entries in TOC
-% Using normal font (serif) for subsections to provide visual hierarchy
 \renewcommand{\cftsubsecfont}{\normalfont}
 \renewcommand{\cftsubsecpagefont}{\normalfont}
 \setlength{\cftbeforesubsecskip}{0.2em}
@@ -273,6 +481,443 @@
 \renewcommand{\bottomfraction}{0.85}
 \renewcommand{\textfraction}{0.1}
 \renewcommand{\floatpagefraction}{0.75}
+\newcommand{\keyterm}[1]{\textbf{\textsf{#1}}\index{#1}}
+
+% Paragraph heading (bold sans-serif)
+\newcommand{\parhead}[1]{\medskip\noindent\textbf{\textsf{#1:}}\space}
+
+% Logged input command for debugging chapter loading
+\newcommand{\loggedinput}[1]{%
+  \typeout{LOADING CHAPTER: #1}%
+  \input{#1}%
+  \typeout{CHAPTER COMPLETE: #1}%
+}
+
+% ==============================================================================
+% INDEX
+% ==============================================================================
+\usepackage{makeidx}
+\makeindex
+
+% ==============================================================================
+% HEADERS AND FOOTERS
+% ==============================================================================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textit{\leftmark}}
+\fancyhead[RO]{\small\textit{\rightmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Plain style for chapter opening pages
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ==============================================================================
+% MISCELLANEOUS
+% ==============================================================================
+
+% Better spacing
+\usepackage{setspace}
+\setstretch{1.1}
+
+% Prevent orphans and widows
+\widowpenalty=10000
+\clubpenalty=10000
+
+% Better hyphenation
+\usepackage[english]{babel}
+\hyphenpenation{DSP sig-nal pro-cess-ing mod-u-la-tion}
+
+% Creative Commons icons
+\usepackage{ccicons}
+% The Chimera Project - Preamble
+% ==============================================================================
+% This file contains all package imports and custom environment definitions
+% for the Chimera book.
+
+% ==============================================================================
+% PACKAGE IMPORTS
+% ==============================================================================
+
+% Font and encoding
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+
+% Mathematics
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+% Graphics and figures
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,positioning,calc,patterns,decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+
+% Colors
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+
+% Page layout and formatting
+\usepackage[
+    paperwidth=7in,
+    paperheight=10in,
+    top=0.75in,
+    bottom=0.75in,
+    inner=0.75in,
+    outer=0.5in,
+    headsep=0.2in,
+    footskip=0.3in
+]{geometry}
+
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{setspace}
+
+% Lists and enumerations
+\usepackage{enumitem}
+
+% Hyperlinks and cross-references
+\usepackage{url}
+\usepackage[unicode=true,pdfencoding=auto]{hyperref}
+\usepackage{cleveref}
+\usepackage{bookmark}
+
+% Bibliography
+\usepackage[
+    backend=biber,
+    style=numeric,
+    sorting=none,
+    maxbibnames=99
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+% Code listings
+\usepackage{listings}
+\usepackage{minted}
+
+% Custom boxes and environments
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable,hooks}
+\usepackage{fontawesome5}
+
+% PDF inclusion
+\usepackage{pdfpages}
+
+% Units and quantities
+\usepackage{siunitx}
+
+% Miscellaneous
+\usepackage{xspace}
+\usepackage{textcomp}
+\usepackage{gensymb}
+
+% ==============================================================================
+% PRINT VERSION TOGGLE
+% ==============================================================================
+\newif\ifprintversion
+\printversionfalse  % Set to \printversiontrue for grayscale print version
+
+% ==============================================================================
+% COLOR DEFINITIONS
+% ==============================================================================
+\ifprintversion
+    % Grayscale colors for print version
+    \definecolor{primaryblue}{RGB}{80,80,80}
+    \definecolor{primaryred}{RGB}{60,60,60}
+    \definecolor{primaryteal}{RGB}{100,100,100}
+    \definecolor{lightblue}{RGB}{240,240,240}
+    \definecolor{lightred}{RGB}{235,235,235}
+    \definecolor{lightteal}{RGB}{245,245,245}
+    % Diagram colors (grayscale)
+    \definecolor{diagramlight}{RGB}{220,220,220}
+    \definecolor{diagramdark}{RGB}{100,100,100}
+    \definecolor{diagramgray}{RGB}{180,180,180}
+    \definecolor{diagramprimary}{RGB}{80,80,80}
+\else
+    % Full color for digital version
+    \definecolor{primaryblue}{RGB}{0,82,155}      % Rich blue
+    \definecolor{primaryred}{RGB}{179,27,27}      % Dark red
+    \definecolor{primaryteal}{RGB}{0,128,128}     % Teal
+    \definecolor{lightblue}{RGB}{230,242,255}     % Light blue background
+    \definecolor{lightred}{RGB}{255,235,235}      % Light red background
+    \definecolor{lightteal}{RGB}{230,255,255}     % Light teal background
+    % Diagram colors (full color)
+    \definecolor{diagramlight}{RGB}{230,240,250}  % Light blue for diagrams
+    \definecolor{diagramdark}{RGB}{0,82,155}      % Dark blue for diagrams
+    \definecolor{diagramgray}{RGB}{150,150,150}   % Gray for diagrams
+    \definecolor{diagramprimary}{RGB}{0,82,155}   % Primary color for diagrams
+\fi
+
+% ==============================================================================
+% HYPERREF CONFIGURATION
+% ==============================================================================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    citecolor=primaryteal,
+    urlcolor=primaryblue,
+    bookmarksnumbered=true,
+    pdfborder={0 0 0}
+}
+
+% ==============================================================================
+% CUSTOM COMMANDS
+% ==============================================================================
+
+% Key terms
+\newcommand{\keyterm}[1]{\textbf{#1}\index{#1}}
+
+% Paragraph headings
+\newcommand{\parhead}[1]{\par\noindent\textbf{#1}\par\noindent}
+
+% Step counter for worked examples
+\newcounter{step}
+\newcommand{\step}{\stepcounter{step}\textbf{Step \thestep:} }
+
+% Font commands (placeholders for custom fonts that may not be available)
+\providecommand{\trajantitle}{}
+\providecommand{\lorettadisplay}{}
+\providecommand{\lorettamedium}{}
+\providecommand{\tableheaderfont}{\bfseries}
+
+% Logged input (for debugging chapter loading)
+\newcommand{\loggedinput}[1]{%
+    \typeout{LOADING CHAPTER: #1}%
+    \input{#1}%
+    \typeout{CHAPTER COMPLETE: #1}%
+}
+
+% ==============================================================================
+% CUSTOM ENVIRONMENTS
+% ==============================================================================
+
+% Non-technical summary box (blue, guidance style)
+\newtcolorbox{nontechnical}{
+    enhanced,
+    breakable,
+    colback=lightblue,
+    colframe=primaryblue,
+    boxrule=1pt,
+    arc=0mm,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    before skip=10pt plus 2pt,
+    after skip=10pt plus 2pt,
+    attach boxed title to top left={yshift=-2mm,xshift=5mm},
+    boxed title style={
+        colback=primaryblue,
+        colframe=primaryblue,
+        arc=0mm,
+        boxrule=0pt
+    },
+    title={\textcolor{white}{\faIcon{book-reader} \textbf{Non-Technical Summary}}},
+    fonttitle=\sffamily\bfseries
+}
+
+% Key concept box (blue, guidance style)
+\newtcolorbox{keyconcept}{
+    enhanced,
+    breakable,
+    colback=lightblue,
+    colframe=primaryblue,
+    boxrule=1pt,
+    arc=0mm,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    before skip=10pt plus 2pt,
+    after skip=10pt plus 2pt,
+    attach boxed title to top left={yshift=-2mm,xshift=5mm},
+    boxed title style={
+        colback=primaryblue,
+        colframe=primaryblue,
+        arc=0mm,
+        boxrule=0pt
+    },
+    title={\textcolor{white}{\faIcon{key} \textbf{Key Concept}}},
+    fonttitle=\sffamily\bfseries
+}
+
+% Important box (blue, guidance style)
+\newtcolorbox{importantbox}{
+    enhanced,
+    breakable,
+    colback=lightblue,
+    colframe=primaryblue,
+    boxrule=1pt,
+    arc=0mm,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    before skip=10pt plus 2pt,
+    after skip=10pt plus 2pt,
+    attach boxed title to top left={yshift=-2mm,xshift=5mm},
+    boxed title style={
+        colback=primaryblue,
+        colframe=primaryblue,
+        arc=0mm,
+        boxrule=0pt
+    },
+    title={\textcolor{white}{\faIcon{exclamation-circle} \textbf{Important}}},
+    fonttitle=\sffamily\bfseries
+}
+
+% Warning box (red, alert style)
+\newtcolorbox{warningbox}{
+    enhanced,
+    breakable,
+    colback=lightred,
+    colframe=primaryred,
+    boxrule=1pt,
+    arc=0mm,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    before skip=10pt plus 2pt,
+    after skip=10pt plus 2pt,
+    attach boxed title to top left={yshift=-2mm,xshift=5mm},
+    boxed title style={
+        colback=primaryred,
+        colframe=primaryred,
+        arc=0mm,
+        boxrule=0pt
+    },
+    title={\textcolor{white}{\faIcon{exclamation-triangle} \textbf{Warning}}},
+    fonttitle=\sffamily\bfseries
+}
+
+% Callout box with custom title (blue, guidance style)
+\newtcolorbox{calloutbox}[1][]{
+    enhanced,
+    breakable,
+    colback=lightblue,
+    colframe=primaryblue,
+    boxrule=1pt,
+    arc=0mm,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    before skip=10pt plus 2pt,
+    after skip=10pt plus 2pt,
+    attach boxed title to top left={yshift=-2mm,xshift=5mm},
+    boxed title style={
+        colback=primaryblue,
+        colframe=primaryblue,
+        arc=0mm,
+        boxrule=0pt
+    },
+    title={\textcolor{white}{\faIcon{info-circle} \textbf{#1}}},
+    fonttitle=\sffamily\bfseries
+}
+
+% Worked example box (teal, application style)
+\newtcolorbox{workedexample}{
+    enhanced,
+    breakable,
+    colback=lightteal,
+    colframe=primaryteal,
+    boxrule=1pt,
+    arc=0mm,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    before skip=10pt plus 2pt,
+    after skip=10pt plus 2pt,
+    attach boxed title to top left={yshift=-2mm,xshift=5mm},
+    boxed title style={
+        colback=primaryteal,
+        colframe=primaryteal,
+        arc=0mm,
+        boxrule=0pt
+    },
+    title={\textcolor{white}{\faIcon{calculator} \textbf{Worked Example}}},
+    fonttitle=\sffamily\bfseries
+}
+
+% ==============================================================================
+% CHAPTER AND SECTION FORMATTING
+% ==============================================================================
+
+% Chapter formatting
+\titleformat{\chapter}[display]
+    {\normalfont\huge\bfseries\color{primaryblue}}
+    {\chaptertitlename\ \thechapter}
+    {20pt}
+    {\Huge}
+
+% Section formatting
+\titleformat{\section}
+    {\normalfont\Large\bfseries\color{primaryblue}}
+    {\thesection}
+    {1em}
+    {}
+
+% Subsection formatting
+\titleformat{\subsection}
+    {\normalfont\large\bfseries\color{primaryblue}}
+    {\thesubsection}
+    {1em}
+    {}
+
+% ==============================================================================
+% HEADER AND FOOTER FORMATTING
+% ==============================================================================
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\textit{\nouppercase{\leftmark}}}
+\fancyhead[LO]{\textit{\nouppercase{\rightmark}}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Plain style for chapter pages
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+% ==============================================================================
+% CLEVEREF CONFIGURATION
+% ==============================================================================
+
+\crefname{chapter}{Chapter}{Chapters}
+\Crefname{chapter}{Chapter}{Chapters}
+\crefname{section}{Section}{Sections}
+\Crefname{section}{Section}{Sections}
+\crefname{subsection}{Subsection}{Subsections}
+\Crefname{subsection}{Subsection}{Subsections}
+\crefname{equation}{Equation}{Equations}
+\Crefname{equation}{Equation}{Equations}
+\crefname{figure}{Figure}{Figures}
+\Crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
 
 % ==============================================================================
 % END OF PREAMBLE
