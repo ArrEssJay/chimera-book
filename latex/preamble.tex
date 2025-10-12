@@ -1,0 +1,279 @@
+% ==============================================================================
+% PREAMBLE: The Chimera Project - LaTeX Package Configuration and Styling
+% ==============================================================================
+
+% ==============================================================================
+% FONTS AND TYPESETTING
+% ==============================================================================
+\usepackage{fontspec}
+
+% Set main fonts (with fallbacks)
+\setmainfont{Latin Modern Roman}[
+  Ligatures=TeX,
+  Numbers=OldStyle
+]
+
+\setsansfont{Latin Modern Sans}[
+  Ligatures=TeX,
+  Scale=MatchLowercase
+]
+
+\setmonofont{Latin Modern Mono}[
+  Scale=MatchLowercase
+]
+
+% Define custom font commands for title page
+\newfontfamily\trajantitle{Latin Modern Roman}[
+  Ligatures=TeX,
+  Scale=1.2
+]
+
+% ==============================================================================
+% CORE PACKAGES
+% ==============================================================================
+
+% --- Page Layout ---
+\usepackage[
+  paperwidth=7in,
+  paperheight=10in,
+  top=0.75in,
+  bottom=0.75in,
+  inner=0.75in,
+  outer=0.5in,
+  includehead,
+  includefoot
+]{geometry}
+
+% --- Mathematics ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+% --- Graphics and Color ---
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
+
+% Define custom colors
+\definecolor{NavyBlue}{RGB}{0,47,108}
+\definecolor{BoxBg}{RGB}{245,245,250}
+
+% --- PDF Handling ---
+\usepackage{pdfpages}
+
+% --- Hyperlinks ---
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=NavyBlue,
+  filecolor=NavyBlue,
+  urlcolor=NavyBlue,
+  citecolor=NavyBlue,
+  bookmarks=true,
+  bookmarksopen=true,
+  pdfstartview=FitH
+}
+
+% --- Bibliography ---
+\usepackage[
+  backend=biber,
+  style=numeric,
+  sorting=none,
+  maxbibnames=99
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+% --- Index ---
+\usepackage{makeidx}
+\makeindex
+
+% ==============================================================================
+% CUSTOM ENVIRONMENTS
+% ==============================================================================
+
+% --- Colored Boxes (tcolorbox) ---
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Base box style
+\tcbset{
+  base/.style={
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=NavyBlue,
+    boxrule=1pt,
+    sharp corners,
+    left=8pt,
+    right=8pt,
+    top=6pt,
+    bottom=6pt,
+    toptitle=3pt,
+    bottomtitle=3pt
+  }
+}
+
+% Non-technical callout (light blue background)
+\newtcolorbox{nontechnical}{
+  base,
+  colback=BoxBg,
+  colframe=NavyBlue,
+  title={\textbf{Non-Technical Summary}},
+  fonttitle=\sffamily\bfseries
+}
+
+% Key concept box
+\newtcolorbox{keyconcept}{
+  base,
+  colback=yellow!5,
+  colframe=orange!70!black,
+  title={\textbf{Key Concept}},
+  fonttitle=\sffamily\bfseries
+}
+
+% Important box
+\newtcolorbox{importantbox}{
+  base,
+  colback=red!5,
+  colframe=red!70!black,
+  title={\textbf{Important}},
+  fonttitle=\sffamily\bfseries
+}
+
+% Warning box
+\newtcolorbox{warningbox}{
+  base,
+  colback=orange!5,
+  colframe=orange!80!black,
+  title={\textbf{Warning}},
+  fonttitle=\sffamily\bfseries
+}
+
+% Generic callout box with optional title
+\newtcolorbox{calloutbox}[1][]{
+  base,
+  colback=BoxBg,
+  colframe=NavyBlue,
+  title={#1},
+  fonttitle=\sffamily\bfseries
+}
+
+% ==============================================================================
+% TABLES AND LISTS
+% ==============================================================================
+
+% --- Tables ---
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{calc}
+
+% Define \real for pandoc-generated table column widths
+\providecommand{\real}[1]{#1}
+
+% --- Lists ---
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=5pt}
+
+% Pandoc compatibility - define \tightlist for compact lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% ==============================================================================
+% CHAPTER AND SECTION STYLING
+% ==============================================================================
+\usepackage{titlesec}
+
+% Chapter formatting
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\Large}
+  {\chaptertitlename\ \thechapter}{12pt}{\fontsize{24}{28}\selectfont}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+% Section formatting
+\titleformat{\section}
+  {\sffamily\bfseries\large}
+  {\thesection}{1em}{}
+
+% Subsection formatting
+\titleformat{\subsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsection}{1em}{}
+
+% Subsubsection formatting
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsubsection}{1em}{}
+
+% ==============================================================================
+% TABLE OF CONTENTS CONFIGURATION
+% ==============================================================================
+
+\setcounter{tocdepth}{2}  % Show chapters, sections, subsections
+\setcounter{secnumdepth}{3}  % Number up to subsubsections
+
+% TOC formatting
+\usepackage{tocloft}
+
+% Part entries in TOC
+% Using \sffamily for sans-serif
+\renewcommand{\cftpartfont}{\sffamily\bfseries\Large}
+\renewcommand{\cftpartpagefont}{\sffamily\bfseries\Large}
+\setlength{\cftbeforepartskip}{2em}
+
+% Chapter entries in TOC
+\renewcommand{\cftchapfont}{\sffamily\bfseries}
+\renewcommand{\cftchappagefont}{\sffamily\bfseries}
+\setlength{\cftbeforechapskip}{0.8em}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+
+% Section entries in TOC
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsecpagefont}{\sffamily}
+\setlength{\cftbeforesecskip}{0.4em}
+\setlength{\cftsecindent}{1.5em}
+
+% Subsection entries in TOC
+% Using normal font (serif) for subsections to provide visual hierarchy
+\renewcommand{\cftsubsecfont}{\normalfont}
+\renewcommand{\cftsubsecpagefont}{\normalfont}
+\setlength{\cftbeforesubsecskip}{0.2em}
+\setlength{\cftsubsecindent}{3em}
+
+% ==============================================================================
+% CUSTOM COMMANDS
+% ==============================================================================
+
+% Key term highlighting
+\newcommand{\keyterm}[1]{\textbf{\textcolor{NavyBlue}{#1}}}
+
+% Paragraph heading
+\newcommand{\parhead}[1]{\paragraph{#1}}
+
+% Logged input (for debugging chapter loading)
+\newcommand{\loggedinput}[1]{%
+  \typeout{LOADING CHAPTER: #1}%
+  \input{#1}%
+  \typeout{CHAPTER #1 COMPLETE}%
+}
+
+% ==============================================================================
+% MISCELLANEOUS SETTINGS
+% ==============================================================================
+
+% Prevent overfull hbox warnings for slight overruns
+\tolerance=1000
+\hbadness=1000
+
+% Allow more flexible float placement
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+
+% ==============================================================================
+% END OF PREAMBLE
+% ==============================================================================
