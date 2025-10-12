@@ -1,0 +1,351 @@
+% ==============================================================================
+% PREAMBLE - The Chimera Project
+% LaTeX configuration, packages, and styling for the book
+% ==============================================================================
+
+% ==============================================================================
+% FONTS & TYPOGRAPHY
+% ==============================================================================
+\usepackage{fontspec}
+\usepackage{unicode-math}
+
+% Set main fonts with fallbacks
+\setmainfont{Minion Pro}[
+    Extension = .otf,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+    BoldItalicFont = *-BoldItalic
+]
+
+\setsansfont{Myriad Pro}[
+    Extension = .otf,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+    BoldItalicFont = *-BoldItalic
+]
+
+\setmonofont{Latin Modern Mono}[Scale=0.9]
+
+% Set math font
+\setmathfont{Latin Modern Math}
+
+% ==============================================================================
+% PAGE LAYOUT
+% ==============================================================================
+\usepackage[
+    paperwidth=7in,
+    paperheight=10in,
+    textwidth=5in,
+    textheight=7.5in,
+    top=1.25in,
+    bottom=1.25in,
+    inner=1in,
+    outer=1in,
+    headsep=0.25in,
+    footskip=0.35in
+]{geometry}
+
+% ==============================================================================
+% PDF/X COMPLIANCE & COLOR MANAGEMENT
+% ==============================================================================
+\usepackage[a-1b,pdf17]{pdfx}
+\usepackage{xcolor}
+
+% Print version toggle
+\newif\ifprintversion
+\printversionfalse  % Default: color version
+
+% Define color profiles
+\ifprintversion
+    % Grayscale for print
+    \definecolor{boxblue}{RGB}{100,100,100}
+    \definecolor{boxgreen}{RGB}{120,120,120}
+    \definecolor{boxyellow}{RGB}{140,140,140}
+    \definecolor{boxred}{RGB}{80,80,80}
+\else
+    % Full color for digital
+    \definecolor{boxblue}{RGB}{0,102,204}
+    \definecolor{boxgreen}{RGB}{0,153,76}
+    \definecolor{boxyellow}{RGB}{255,153,0}
+    \definecolor{boxred}{RGB}{204,0,0}
+\fi
+
+% ==============================================================================
+% GRAPHICS & FIGURES
+% ==============================================================================
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,patterns,decorations.pathreplacing,decorations.markings}
+\usepackage{pdfpages}
+
+% Set graphics path
+\graphicspath{{assets/}{assets/diagrams/}{assets/artwork/}}
+
+% ==============================================================================
+% HYPERLINKS & CROSS-REFERENCES
+% ==============================================================================
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=green,
+    pdftitle={The Chimera Project: Digital Signal Processing},
+    pdfauthor={Edited by Rowan Jones},
+    pdfsubject={Digital Signal Processing, Communications Engineering},
+    pdfkeywords={DSP, Modulation, Wireless Communications, Quantum Biology},
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    bookmarksopenlevel=2
+}
+
+% ==============================================================================
+% BIBLIOGRAPHY
+% ==============================================================================
+\usepackage[
+    backend=biber,
+    style=ieee,
+    sorting=none,
+    maxbibnames=99,
+    isbn=false,
+    doi=true,
+    url=true
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+% ==============================================================================
+% MATHEMATICS
+% ==============================================================================
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% Custom math commands
+\newcommand{\vect}[1]{\mathbf{#1}}
+\newcommand{\unit}[1]{\,\text{#1}}
+
+% ==============================================================================
+% CUSTOM ENVIRONMENTS - Callout Boxes
+% ==============================================================================
+\usepackage[most]{tcolorbox}
+
+% Non-technical summary box (blue)
+\newtcolorbox{nontechnical}{
+  colback=boxblue!5!white,
+  colframe=boxblue,
+  title=Non-Technical Summary,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% Key concept box (green)
+\newtcolorbox{keyconcept}{
+  colback=boxgreen!5!white,
+  colframe=boxgreen,
+  title=Key Concept,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% Warning/caution box (yellow)
+\newtcolorbox{warning}{
+  colback=boxyellow!5!white,
+  colframe=boxyellow,
+  title=Warning,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% Critical note box (red)
+\newtcolorbox{critical}{
+  colback=boxred!5!white,
+  colframe=boxred,
+  title=Critical Note,
+  fonttitle=\sffamily\bfseries,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  before skip=10pt,
+  after skip=10pt
+}
+
+% ==============================================================================
+% TABLES
+% ==============================================================================
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{calc}
+
+% Define \real for pandoc-generated table column widths
+\providecommand{\real}[1]{#1}
+
+% ==============================================================================
+% LISTS
+% ==============================================================================
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=5pt}
+
+% Pandoc compatibility - define \tightlist for compact lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% ==============================================================================
+% CHAPTER AND SECTION STYLING
+% ==============================================================================
+\usepackage{titlesec}
+
+% Chapter formatting
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\Large}
+  {\chaptertitlename\ \thechapter}{12pt}{\fontsize{24}{28}\selectfont}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+% Section formatting
+\titleformat{\section}
+  {\sffamily\bfseries\large}
+  {\thesection}{1em}{}
+
+% Subsection formatting
+\titleformat{\subsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsection}{1em}{}
+
+% Subsubsection formatting
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsubsection}{1em}{}
+
+% ==============================================================================
+% TABLE OF CONTENTS CONFIGURATION
+% ==============================================================================
+
+\setcounter{tocdepth}{2}  % Show chapters, sections, subsections
+\setcounter{secnumdepth}{3}  % Number up to subsubsections
+
+% TOC formatting
+\usepackage{tocloft}
+
+% Part entries in TOC
+\renewcommand{\cftpartfont}{\sffamily\bfseries\Large}
+\renewcommand{\cftpartpagefont}{\sffamily\bfseries\Large}
+\setlength{\cftbeforepartskip}{2em}
+
+% Chapter entries in TOC
+\renewcommand{\cftchapfont}{\sffamily\bfseries}
+\renewcommand{\cftchappagefont}{\sffamily\bfseries}
+\setlength{\cftbeforechapskip}{0.8em}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+
+% Section entries in TOC
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsecpagefont}{\sffamily}
+\setlength{\cftbeforesecskip}{0.4em}
+\setlength{\cftsecindent}{1.5em}
+
+% Subsection entries in TOC
+\renewcommand{\cftsubsecfont}{\normalfont}
+\renewcommand{\cftsubsecpagefont}{\normalfont}
+\setlength{\cftbeforesubsecskip}{0.2em}
+\setlength{\cftsubsecindent}{3em}
+
+% ==============================================================================
+% CUSTOM COMMANDS
+% ==============================================================================
+
+% Key term highlighting
+\newcommand{\keyterm}[1]{\textbf{\textsf{#1}}\index{#1}}
+
+% Paragraph heading (bold sans-serif)
+\newcommand{\parhead}[1]{\medskip\noindent\textbf{\textsf{#1:}}\space}
+
+% Logged input command for debugging chapter loading
+\newcommand{\loggedinput}[1]{%
+  \typeout{LOADING CHAPTER: #1}%
+  \input{#1}%
+  \typeout{CHAPTER COMPLETE: #1}%
+}
+
+% ==============================================================================
+% INDEX
+% ==============================================================================
+\usepackage{makeidx}
+\makeindex
+
+% ==============================================================================
+% HEADERS AND FOOTERS
+% ==============================================================================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textit{\leftmark}}
+\fancyhead[RO]{\small\textit{\rightmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Plain style for chapter opening pages
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ==============================================================================
+% MISCELLANEOUS
+% ==============================================================================
+
+% Better spacing
+\usepackage{setspace}
+\setstretch{1.1}
+
+% Prevent orphans and widows
+\widowpenalty=10000
+\clubpenalty=10000
+
+% Better hyphenation
+\usepackage[english]{babel}
+\hyphenpenation{DSP sig-nal pro-cess-ing mod-u-la-tion}
+
+% Creative Commons icons
+\usepackage{ccicons}
+
+% ==============================================================================
+% END OF PREAMBLE
+% ==============================================================================
