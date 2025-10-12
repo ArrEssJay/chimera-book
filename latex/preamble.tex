@@ -1,0 +1,269 @@
+% ==============================================================================
+% The Chimera Project - LaTeX Preamble
+% ==============================================================================
+% This file contains all package imports, configurations, and custom commands
+% used throughout the book.
+
+% ==============================================================================
+% FONTS & ENCODING
+% ==============================================================================
+\usepackage{fontspec}
+\setmainfont{Minion Pro}
+\setsansfont{Myriad Pro}
+\setmonofont{Courier}
+
+% ==============================================================================
+% MATHEMATICS
+% ==============================================================================
+\usepackage{amsmath,amssymb,amsthm}
+
+% ==============================================================================
+% GRAPHICS & COLORS
+% ==============================================================================
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,patterns,decorations.pathreplacing}
+
+% ==============================================================================
+% PAGE LAYOUT & GEOMETRY
+% ==============================================================================
+\usepackage[
+    paperwidth=7in,
+    paperheight=10in,
+    margin=0.75in,
+    inner=0.875in,
+    outer=0.875in,
+    top=0.75in,
+    bottom=0.75in
+]{geometry}
+
+% ==============================================================================
+% FLOATS & POSITIONING
+% ==============================================================================
+\usepackage{float}
+\usepackage{pdfpages}
+
+% ==============================================================================
+% TABLES
+% ==============================================================================
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{calc}
+
+% Define \real for pandoc-generated table column widths
+\providecommand{\real}[1]{#1}
+
+% ==============================================================================
+% LISTS
+% ==============================================================================
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=5pt}
+
+% Pandoc compatibility - define \tightlist for compact lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% ==============================================================================
+% COLORED BOXES & ENVIRONMENTS
+% ==============================================================================
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Key Concept Box (Light Blue)
+\newtcolorbox{keyconcept}[1][]{
+  colback=blue!5!white,
+  colframe=blue!75!black,
+  fonttitle=\bfseries\sffamily,
+  title=Key Concept,
+  breakable,
+  enhanced,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% Important Box (Orange)
+\newtcolorbox{importantbox}[1][]{
+  colback=orange!5!white,
+  colframe=orange!75!black,
+  fonttitle=\bfseries\sffamily,
+  title=Important,
+  breakable,
+  enhanced,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% Warning Box (Red)
+\newtcolorbox{warningbox}[1][]{
+  colback=red!5!white,
+  colframe=red!75!black,
+  fonttitle=\bfseries\sffamily,
+  title=Warning,
+  breakable,
+  enhanced,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% Callout Box (Generic)
+\newtcolorbox{calloutbox}[1][]{
+  colback=gray!5!white,
+  colframe=gray!75!black,
+  fonttitle=\bfseries\sffamily,
+  breakable,
+  enhanced,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  #1
+}
+
+% Non-Technical Summary Box (Light Green)
+\newtcolorbox{nontechnical}{
+  colback=green!5!white,
+  colframe=green!75!black,
+  fonttitle=\bfseries\sffamily,
+  title=Non-Technical Summary,
+  breakable,
+  enhanced,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt
+}
+
+% Worked Example Box (Light Yellow)
+\newtcolorbox{workedexample}[1]{
+  colback=yellow!5!white,
+  colframe=yellow!75!black,
+  fonttitle=\bfseries\sffamily,
+  title=Worked Example: #1,
+  breakable,
+  enhanced,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt
+}
+
+% ==============================================================================
+% CHAPTER & SECTION STYLING
+% ==============================================================================
+\usepackage{titlesec}
+
+% Chapter formatting
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\Large}
+  {\chaptertitlename\ \thechapter}{12pt}{\fontsize{24}{28}\selectfont}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+% Section formatting
+\titleformat{\section}
+  {\sffamily\bfseries\large}
+  {\thesection}{1em}{}
+
+% Subsection formatting
+\titleformat{\subsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsection}{1em}{}
+
+% Subsubsection formatting
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize}
+  {\thesubsubsection}{1em}{}
+
+% ==============================================================================
+% TABLE OF CONTENTS CONFIGURATION
+% ==============================================================================
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+\usepackage{tocloft}
+\renewcommand{\cftchapfont}{\sffamily\bfseries}
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsubsecfont}{\sffamily}
+\renewcommand{\cftchappagefont}{\sffamily\bfseries}
+\renewcommand{\cftsecpagefont}{\sffamily}
+\renewcommand{\cftsubsecpagefont}{\sffamily}
+
+% ==============================================================================
+% HYPERLINKS & CROSS-REFERENCES
+% ==============================================================================
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+
+% ==============================================================================
+% BIBLIOGRAPHY
+% ==============================================================================
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+\addbibresource{bibliography.bib}
+
+% ==============================================================================
+% CUSTOM COMMANDS
+% ==============================================================================
+
+% Table header font
+\newcommand{\tableheaderfont}{\bfseries}
+
+% Paragraph header
+\newcommand{\parhead}[1]{\par\noindent\textbf{#1}\quad}
+
+% Logged input (for debugging chapter loading)
+\newcommand{\loggedinput}[1]{%
+  \typeout{LOADING CHAPTER: #1}%
+  \input{#1}%
+  \typeout{CHAPTER COMPLETE: #1}%
+}
+
+% ==============================================================================
+% ADDITIONAL SETTINGS
+% ==============================================================================
+
+% Prevent orphaned and widowed lines
+\widowpenalty=10000
+\clubpenalty=10000
+
+% Better hyphenation
+\hyphenpenalty=1000
+\exhyphenpenalty=1000
+
+% Line spacing
+\usepackage{setspace}
+\setstretch{1.05}
