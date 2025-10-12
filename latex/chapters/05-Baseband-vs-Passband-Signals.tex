@@ -73,7 +73,7 @@ A modern wireless transceiver is a physical embodiment of the baseband/passband 
         node distance=1.8cm, font=\scriptsize
     ]
         % Transmit Path
-        \node[align=centre] (tx_data) {\sffamily Baseband\\Data};
+        \node[align=center] (tx_data) {\sffamily Baseband\\Data};
         \node[block, right of=tx_data, node distance=2.5cm] (tx_dsp) {DSP\\Modulator};
         \node[block, right of=tx_dsp, node distance=2.5cm] (tx_dac) {DAC};
         \node[block, right of=tx_dac, node distance=2.5cm] (tx_iq) {IQ\\Upconverter};
@@ -81,7 +81,7 @@ A modern wireless transceiver is a physical embodiment of the baseband/passband 
         \node[right of=tx_pa, node distance=2.2cm] (tx_ant) {\faBroadcastTower};
 
         % Receive Path
-        \node[below=3.2cm of tx_data, align=centre] (rx_data) {\sffamily Baseband\\Data};
+        \node[below=3.2cm of tx_data, align=center] (rx_data) {\sffamily Baseband\\Data};
         \node[block, right of=rx_data, node distance=2.5cm] (rx_dsp) {DSP\\Demodulator};
         \node[block, right of=rx_dsp, node distance=2.5cm] (rx_adc) {ADC};
         \node[block, right of=rx_adc, node distance=2.5cm] (rx_iq) {IQ\\Downconverter};
