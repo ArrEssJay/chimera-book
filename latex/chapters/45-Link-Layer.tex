@@ -17,6 +17,8 @@
     Finally, the clerk handles \keyterm{Error Control}. They might write a checksum on the envelope. The recipient can recalculate the checksum to see if the envelope was smudged or damaged in transit. If it was, they can request a new copy. This error *detection* and retransmission is the fundamental role of the Link Layer, providing a reliable link over an unreliable physical medium.
 \end{nontechnical}
 
+\section{Overview and Properties}
+
 \subsection{Overview: The Role of Layer 2}
 
 In the standard OSI model of networking, the \keyterm{Link Layer} is Layer 2, situated directly above the Physical Layer (Layer 1). While the Physical Layer is concerned with the transmission of raw bits as a physical signal, the Link Layer is responsible for creating a reliable, point-to-point link between two devices on the same physical medium. It takes the chaotic, error-prone service provided by the physical layer and transforms it into a structured and reliable channel for the higher network layers.
