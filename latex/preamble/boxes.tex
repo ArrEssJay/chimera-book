@@ -16,11 +16,35 @@
   fonttitle=\dinfont\bfseries,
 }
 
+% Style for breakable boxes with continuation indicators
+\tcbset{
+    breakable with indicators/.style={
+        breakable,
+        enhanced,
+        break at=\textheight/2,
+        overlay first={
+            \draw[black!40, densely dotted, line width=0.6pt]
+            ([xshift=5pt]frame.south west) -- ([xshift=-5pt]frame.south east);
+        },
+        overlay middle={
+            \draw[black!40, densely dotted, line width=0.6pt]
+            ([xshift=5pt]frame.north west) -- ([xshift=-5pt]frame.north east);
+            \draw[black!40, densely dotted, line width=0.6pt]
+            ([xshift=5pt]frame.south west) -- ([xshift=-5pt]frame.south east);
+        },
+        overlay last={
+            \draw[black!40, densely dotted, line width=0.6pt]
+            ([xshift=5pt]frame.north west) -- ([xshift=-5pt]frame.north east);
+        }
+    }
+}
+
 % Key Concept Box (Pantone 2985 C - Academic Blue)
 \newtcolorbox{keyconcept}[1][]{
   colback=pantone2985!10!white,
   colframe=pantone2985!85!black,
   title=Key Concept,
+  style=breakable with indicators,
   #1
 }
 
@@ -29,6 +53,7 @@
   colback=pantone1375!10!white,
   colframe=pantone1375!85!black,
   title=Further Reading,
+  style=breakable with indicators,
   #1
 }
 
@@ -37,6 +62,7 @@
   colback=pantone186!10!white,
   colframe=pantone186!85!black,
   title=Warning,
+  style=breakable with indicators,
   #1
 }
 
@@ -44,6 +70,7 @@
 \newtcolorbox{calloutbox}[1][]{
   colback=pantonecg3!10!white,
   colframe=pantonecg3!85!black,
+  style=breakable with indicators,
   #1
 }
 
@@ -52,6 +79,7 @@
   colback=pantone375!10!white,
   colframe=pantone375!85!black,
   title=Non-Technical Summary,
+  style=breakable with indicators,
   #1
 }
 
@@ -59,5 +87,6 @@
 \newtcolorbox{workedexample}[1]{
   colback=pantone116!10!white,
   colframe=pantone116!85!black,
-  title=Worked Example: #1
+  title=Worked Example: #1,
+  style=breakable with indicators
 }
