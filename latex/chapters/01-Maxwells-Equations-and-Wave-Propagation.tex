@@ -9,8 +9,7 @@
 \label{sec:maxwell}
 
 \begin{nontechnical}
-    \textbf{Maxwell's Equations explain how every wireless device works}---from your phone to GPS satellites to radio telescopes.
-
+    \parhead{Maxwell's Equations explain how every wireless device works}---from your phone to GPS satellites to radio telescopes.
     \parhead{Simple idea} Electric and magnetic fields can create each other. When they do this in just the right way, they form a wave that travels through space at the speed of light.
 
     \parhead{The four rules}
@@ -45,10 +44,10 @@ States that \keyterm{electric charges create electric fields}:
     \label{eq:gauss-electric}
 \end{equation}
 where:
-\begin{description}[font=\normalfont, style=unboxed]
-    \item[$\mathbf{E}$] is the electric field vector (V/m).
-    \item[$\rho$] is the charge density (C/m³).
-    \item[$\epsilon_0$] is the permittivity of free space ($8.854 \times 10^{-12}$ F/m).
+\begin{description}[\dinfont, style=unboxed, labelwidth=1.5cm]
+    \item[$\mathbf{E}$] is the electric field vector (\unit{V/m}).
+    \item[$\rho$] is the charge density (\unit{C/m^3}).
+    \item[$\epsilon_0$] is the permittivity of free space (\SI{8.854e-12}{F/m}).
 \end{description}
 \parhead{Physical meaning} Electric field lines originate from positive charges and terminate on negative charges. The divergence of $\mathbf{E}$ at any point is proportional to the charge density there.
 
@@ -58,8 +57,8 @@ States that \keyterm{no magnetic monopoles exist}:
     \nabla \cdot \mathbf{B} = 0
     \label{eq:gauss-magnetic}
 \end{equation}
-where $\mathbf{B}$ is the magnetic field vector (Tesla or Wb/m²).
-\parhead{Physical meaning} Magnetic field lines always form closed loops---there are no isolated north or south poles. Breaking a magnet in half creates two smaller magnets, each with both poles.
+where $\mathbf{B}$ is the magnetic field vector (Tesla or \unit{Wb/m^2}).
+\parhead{Physical meaning} Magnetic field lines always form closed loops---there are no isolated north or south poles.
 
 \paragraph{3. Faraday's Law of Induction}
 States that \keyterm{changing magnetic fields create electric fields}:
@@ -67,8 +66,7 @@ States that \keyterm{changing magnetic fields create electric fields}:
     \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}
     \label{eq:faraday}
 \end{equation}
-where $\nabla \times$ is the curl operator, and $\partial \mathbf{B}/\partial t$ is the time rate of change of the magnetic field.
-\parhead{Physical meaning} A time-varying magnetic field induces a circulating electric field. This is the fundamental principle behind electrical generators, transformers, and induction heating.
+\parhead{Physical meaning} A time-varying magnetic field induces a circulating electric field. This is the principle behind electrical generators and transformers.
 
 \paragraph{4. Ampère-Maxwell Law}
 States that \keyterm{electric currents and changing electric fields create magnetic fields}:
@@ -76,69 +74,45 @@ States that \keyterm{electric currents and changing electric fields create magne
     \nabla \times \mathbf{B} = \mu_0 \mathbf{J} + \mu_0 \epsilon_0 \frac{\partial \mathbf{E}}{\partial t}
     \label{eq:ampere-maxwell}
 \end{equation}
-where $\mu_0$ is the permeability of free space ($4\pi \times 10^{-7}$ H/m), $\mathbf{J}$ is the current density (A/m²), and the final term is the \keyterm{displacement current}.
+where $\mu_0$ is the permeability of free space (\SI{4\pi e-7}{H/m}), $\mathbf{J}$ is the current density (\unit{A/m^2}), and the final term is the \keyterm{displacement current}.
 
 \begin{keyconcept}
-    \textbf{Maxwell's Critical Insight:} The displacement current term, $\mu_0 \epsilon_0 \partial \mathbf{E}/\partial t$, was missing from Ampère's original law. Maxwell added it for mathematical consistency—and this single term is what allows the equations to predict the existence of electromagnetic waves.
+    \textbf{Maxwell's Critical Insight:} The displacement current term, $\mu_0 \epsilon_0 \partial \mathbf{E}/\partial t$, was missing from Ampère's original law. Maxwell added it for mathematical consistency—this single term is what allows the equations to predict the existence of electromagnetic waves.
 \end{keyconcept}
 
 \subsection{Derivation of the Wave Equation}
 
-In free space (a vacuum), where there are no charges ($\rho = 0$) and no currents ($\mathbf{J} = \mathbf{0}$), Maxwell's equations simplify, allowing for the direct derivation of the wave equation.
-
-\begin{derivationsteps}
-    \step Take the curl of Faraday's Law (\cref{eq:faraday}):
-    \begin{equation}
-        \nabla \times (\nabla \times \mathbf{E}) = -\nabla \times \left(\frac{\partial \mathbf{B}}{\partial t}\right) = -\frac{\partial}{\partial t}(\nabla \times \mathbf{B})
-        \label{eq:curl-faraday}
-    \end{equation}
-
-    \step Substitute the Ampère-Maxwell Law (\cref{eq:ampere-maxwell}) with $\mathbf{J} = \mathbf{0}$:
-    \begin{equation}
-        \nabla \times (\nabla \times \mathbf{E}) = -\mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2}
-        \label{eq:curl-sub}
-    \end{equation}
-
-    \step Apply the vector identity $\nabla \times (\nabla \times \mathbf{A}) = \nabla(\nabla \cdot \mathbf{A}) - \nabla^2 \mathbf{A}$. Since we are in a vacuum, Gauss's Law (\cref{eq:gauss-electric}) gives $\nabla \cdot \mathbf{E} = 0$, simplifying the identity and yielding the wave equation for the electric field:
-    \begin{tcolorbox}[colback=white, colframe=black!75, boxrule=0.5pt, sharp corners]
-    \begin{equation}
-        \nabla^2 \mathbf{E} = \mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2}
-        \label{eq:wave-E}
-    \end{equation}
-    \end{tcolorbox}
-    \step An identical derivation starting from the curl of the Ampère-Maxwell Law yields the wave equation for the magnetic field:
-     \begin{tcolorbox}[colback=white, colframe=black!75, boxrule=0.5pt, sharp corners]
-    \begin{equation}
-        \nabla^2 \mathbf{B} = \mu_0 \epsilon_0 \frac{\partial^2 \mathbf{B}}{\partial t^2}
-        \label{eq:wave-B}
-    \end{equation}
-    \end{tcolorbox}
-\end{derivationsteps}
-
-% ... The rest of the chapter continues, applying these new commands and structures.
+\begin{workedexample}{Deriving the Wave Equation in a Vacuum}
+In free space (no charges, no currents), Maxwell's equations simplify.
+\begin{enumerate}
+    \item Take the curl of Faraday's Law (\cref{eq:faraday}):
+          \[ \nabla \times (\nabla \times \mathbf{E}) = -\frac{\partial}{\partial t}(\nabla \times \mathbf{B}) \]
+    \item Substitute the simplified Ampère-Maxwell Law ($\mathbf{J}=0$):
+          \[ \nabla \times (\nabla \times \mathbf{E}) = -\mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2} \]
+    \item Apply the vector identity $\nabla \times (\nabla \times \mathbf{A}) = \nabla(\nabla \cdot \mathbf{A}) - \nabla^2 \mathbf{A}$. In a vacuum, Gauss's Law ($\rho=0$) gives $\nabla \cdot \mathbf{E} = 0$. This simplifies the identity, yielding the \keyterm{wave equation}:
+          \begin{equation}
+              \nabla^2 \mathbf{E} = \mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2}
+              \label{eq:wave-E}
+          \end{equation}
+\end{enumerate}
+\end{workedexample}
 
 \subsection{Wave Speed and the Speed of Light}
-The general form of a wave equation is $\nabla^2 f = (1/v^2) \partial^2 f/\partial t^2$, where $v$ is the wave propagation speed. By comparing this to \cref{eq:wave-E}, we can see that $1/v^2 = \mu_0 \epsilon_0$. The speed of the wave is therefore:
+The general form of a wave equation is $\nabla^2 f = (1/v^2) \partial^2 f/\partial t^2$, where $v$ is the wave propagation speed. Comparing this to \cref{eq:wave-E}, we see that $1/v^2 = \mu_0 \epsilon_0$. The speed of the wave is therefore:
 \begin{equation}
-v = \frac{1}{\sqrt{\mu_0 \epsilon_0}} = \frac{1}{\sqrt{(4\pi \times 10^{-7})(8.854 \times 10^{-12})}} \approx 2.998 \times 10^8 \text{ m/s} = c
+v = \frac{1}{\sqrt{\mu_0 \epsilon_0}} \approx \SI{2.998e8}{m/s} = c
 \label{eq:speed-of-light}
 \end{equation}
 
 \begin{keyconcept}
-    \textbf{Maxwell's Triumph:} The predicted speed of electromagnetic waves, calculated from the fundamental constants of electricity ($\epsilon_0$) and magnetism ($\mu_0$), was precisely equal to the measured speed of light ($c$). This was the definitive proof that \textbf{light is an electromagnetic wave}---one of the greatest unifications in the history of physics.
+    \textbf{Maxwell's Triumph:} The predicted speed of electromagnetic waves, calculated from the fundamental constants of electricity ($\epsilon_0$) and magnetism ($\mu_0$), was precisely equal to the measured speed of light ($c$). This was the definitive proof that \textbf{light is an electromagnetic wave}.
 \end{keyconcept}
 
-% ... The rest of the chapter, especially the tables, would be reformatted using the `booktabs` package for a more professional look.
-% ... The bibliography would be moved to a separate .bib file.
-
-\section{Further Reading}
-
-% Re-styled this section for better visual appeal
-\begin{importantbox}[title={Further Reading}]
-    The concepts introduced in this chapter form the bedrock of communication theory. For a deeper understanding of their practical applications, the following chapters are essential:
+\begin{importantbox}
+    For a deeper understanding of the practical applications of these foundational concepts, the following chapters are essential:
     \begin{itemize}
-        \item \textbf{The Electromagnetic Spectrum:} A detailed breakdown of frequency bands and their specific uses (\Cref{ch:spectrum}).
-        \item \textbf{Antenna Theory Basics:} The principles of radiating and receiving the waves described by Maxwell's equations (\Cref{ch:antennas}).
-        \item \textbf{Wave Polarisation:} Understanding the orientation of the electric field, a critical parameter in system design (\Cref{ch:polarisation}).
+        \item \textbf{\Cref{ch:spectrum}:} The Electromagnetic Spectrum
+        \item \textbf{\Cref{ch:antenna}:} Antenna Theory Basics
+        \item \textbf{\Cref{ch:polarisation}:} Wave Polarisation
     \end{itemize}
 \end{importantbox}

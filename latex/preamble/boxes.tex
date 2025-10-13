@@ -1,0 +1,63 @@
+% ==============================================================================
+% COLORED BOXES & ENVIRONMENTS
+% ==============================================================================
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Base style for all colored boxes
+\tcbset{
+  enhanced,
+  breakable,
+  boxrule=1pt,
+  sharp corners,
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  toptitle=3pt, bottomtitle=3pt,
+  fontupper=\dinfont, fontlower=\dinfont,
+  fonttitle=\dinfont\bfseries,
+}
+
+% Key Concept Box (Pantone 2985 C - Academic Blue)
+\newtcolorbox{keyconcept}[1][]{
+  colback=pantone2985!10!white,
+  colframe=pantone2985!85!black,
+  title=Key Concept,
+  #1
+}
+
+% Important Box (Pantone 1375 C - Safety Orange)
+\newtcolorbox{importantbox}[1][]{
+  colback=pantone1375!10!white,
+  colframe=pantone1375!85!black,
+  title=Further Reading,
+  #1
+}
+
+% Warning Box (Pantone 186 C - Alert Red)
+\newtcolorbox{warningbox}[1][]{
+  colback=pantone186!10!white,
+  colframe=pantone186!85!black,
+  title=Warning,
+  #1
+}
+
+% Callout Box (Pantone Cool Gray 3 C - Neutral)
+\newtcolorbox{calloutbox}[1][]{
+  colback=pantonecg3!10!white,
+  colframe=pantonecg3!85!black,
+  #1
+}
+
+% Non-Technical Summary Box (Pantone 375 C - Fresh Green)
+\newtcolorbox{nontechnical}[1][]{
+  colback=pantone375!10!white,
+  colframe=pantone375!85!black,
+  title=Non-Technical Summary,
+  #1
+}
+
+% Worked Example Box (Pantone 116 C - Academic Yellow)
+\newtcolorbox{workedexample}[1]{
+  colback=pantone116!10!white,
+  colframe=pantone116!85!black,
+  title=Worked Example: #1
+}

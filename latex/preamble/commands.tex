@@ -1,0 +1,19 @@
+% ==============================================================================
+% CUSTOM COMMANDS
+% ==============================================================================
+
+% Table header font
+\newcommand{\tableheaderfont}{\dinfont\bfseries}
+
+% Paragraph header
+\newcommand{\parhead}[1]{\par\noindent\textbf{\dinfont #1}\quad}
+
+% Key term highlighting
+\newcommand{\keyterm}[1]{\textbf{\textit{#1}}}
+
+% Logged input (for debugging chapter loading)
+\newcommand{\loggedinput}[1]{%
+  \typeout{LOADING CHAPTER: #1}%
+  \input{#1}%
+  \typeout{CHAPTER COMPLETE: #1}%
+}

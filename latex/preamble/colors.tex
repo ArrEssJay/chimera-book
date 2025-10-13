@@ -1,0 +1,34 @@
+% ==============================================================================
+% GRAPHICS & COLORS
+% ==============================================================================
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,patterns,decorations.pathreplacing}
+
+% Define all project colors using their Pantone names and CMYK values.
+% For professional printing, the press will map these named colors to the
+% corresponding Pantone spot color plates.
+\definecolor{pantone2728}{cmyk}{1.0,0.52,0.0,0.0}     % Diagram Primary Blue
+\definecolor{pantone1665}{cmyk}{0.0,0.60,0.88,0.0}    % Orange
+\definecolor{pantone2592}{cmyk}{0.43,0.73,0.0,0.0}    % Purple
+\definecolor{pantone347}{cmyk}{0.67,0.0,0.54,0.0}     % Green
+\definecolor{pantonecg10}{cmyk}{0.0,0.0,0.0,0.65}     % Dark Grey
+\definecolor{pantone2985}{cmyk}{0.64,0.16,0.0,0.0}    % Key Concept Blue
+\definecolor{pantone1375}{cmyk}{0.0,0.38,0.89,0.0}    % Important Orange
+\definecolor{pantone186}{cmyk}{0.0,0.92,0.77,0.22}    % Warning Red
+\definecolor{pantone375}{cmyk}{0.45,0.0,0.75,0.0}     % Non-Technical Green
+\definecolor{pantone116}{cmyk}{0.0,0.20,1.0,0.0}      % Worked Example Yellow
+\definecolor{pantonecg3}{cmyk}{0.0,0.0,0.0,0.22}      % Light Grey
+
+% Alias colors for TikZ diagrams (mapping to appropriate Pantone colors)
+\colorlet{signalcolor}{pantone2728}      % Blue for signals
+\colorlet{processcolor}{pantone1665}     % Orange for processing blocks
+\colorlet{noisecolor}{pantone2592}       % Purple for noise
+\colorlet{outputcolor}{pantone347}       % Green for output
+\colorlet{blockcolor}{pantonecg10}       % Dark grey for block borders
+
+% Diagram-specific colors used in TikZ blocks
+\colorlet{diagramprimary}{pantone2728}   % Primary diagram color (blue)
+\colorlet{diagramlight}{pantonecg3}      % Light grey for diagram backgrounds

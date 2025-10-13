@@ -1,0 +1,25 @@
+% ==============================================================================
+% HYPERLINKS & CROSS-REFERENCES
+% ==============================================================================
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise]{cleveref}
+
+% ==============================================================================
+% BIBLIOGRAPHY
+% ==============================================================================
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+\addbibresource{assets/bibliography.bib}
+
+% ==============================================================================
+% PDF METADATA
+% ==============================================================================
+\hypersetup{
+    pdftitle={The Chimera Project},
+    pdfauthor={Rowan Jones},
+    pdfsubject={Digital Signal Processing},
+    colorlinks=false,
+    urlbordercolor={1 1 1}
+}
+
+% Configure URL display with monospace font (hyperref provides \url command)
+\renewcommand{\UrlFont}{\ttfamily}
