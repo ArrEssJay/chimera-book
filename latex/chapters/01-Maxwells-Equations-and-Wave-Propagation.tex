@@ -1,118 +1,134 @@
 % ==============================================================================
-% CHAPTER 1: Maxwell's Equations & Wave Propagation
+% CHAPTER 1: Maxwell's Equations & Wave Propagation - Professional Revision
 % ==============================================================================
 
-\chapter{Foundations of Communication Theory} % Assuming this is Part I, Chapter 1
-\label{ch:foundations}
-
-\section{Maxwell's Equations \& Wave Propagation}
-\label{sec:maxwell}
+\chapter{Maxwell's Equations \& Wave Propagation}
+\label{ch:maxwell}
 
 \begin{nontechnical}
-    \parhead{Maxwell's Equations explain how every wireless device works}---from your phone to GPS satellites to radio telescopes.
-    \parhead{Simple idea} Electric and magnetic fields can create each other. When they do this in just the right way, they form a wave that travels through space at the speed of light.
+    Maxwell's Equations are the fundamental laws that explain how every wireless device works—from a car radio to a deep-space probe. They describe how electric and magnetic fields can create each other, forming a wave that travels through space at the speed of light.
 
-    \parhead{The four rules}
-    \begin{enumerate}[label=\arabic*.]
+    \parhead{The Four Fundamental Rules}
+    \begin{enumerate}
         \item Electric charges create electric fields.
-        \item Magnetic field lines always form closed loops (no magnetic monopoles).
-        \item Changing magnetic fields create electric fields (how generators work).
-        \item Electric currents and changing electric fields create magnetic fields (how antennas work).
+        \item Magnetic field lines always form closed loops (there are no magnetic monopoles).
+        \item A changing magnetic field creates an electric field (the principle behind electric generators).
+        \item An electric current or a changing electric field creates a magnetic field (the principle behind antennas).
     \end{enumerate}
 
-    \parhead{Maxwell's breakthrough} He realised these four rules predict waves travelling at exactly the speed of light---proving that light itself is an electromagnetic wave.
-
-    \parhead{Real impact} Every wireless technology (WiFi, Bluetooth, 5G, GPS, radar, satellite TV) relies on electromagnetic waves described by these equations.
+    \parhead{The Breakthrough}
+    Maxwell's genius was in adding the final term to the fourth equation. This single addition predicted the existence of waves travelling at exactly the measured speed of light, proving that light itself is an electromagnetic wave. Every wireless technology is a practical application of this profound discovery.
 \end{nontechnical}
 
-\subsection{Overview}
+\section{Overview}
 
-\keyterm{Maxwell's Equations} are the fundamental laws of electromagnetism, unifying electricity, magnetism, and optics into a single coherent framework. Formulated by James Clerk Maxwell in 1865, these four elegant equations describe how electric and magnetic fields interact and propagate through space.
+\keyterm{Maxwell's Equations} are a set of four partial differential equations that form the foundation of classical electromagnetism, classical optics, and electric circuits. Formulated by James Clerk Maxwell in the 1860s, they unify the previously separate phenomena of electricity, magnetism, and light into a single, coherent framework.
 
 \begin{keyconcept}
-    Maxwell's Equations predict that electromagnetic disturbances propagate as \textbf{waves} at the speed of light, proving that light itself is an electromagnetic phenomenon. This unification of optics with electromagnetic theory represents one of the greatest achievements in physics.
+    The most profound prediction of Maxwell's Equations is the existence of self-propagating \textbf{electromagnetic waves}. The theory demonstrated that these waves travel at a constant speed, $c$, which, when calculated from the fundamental physical constants of electricity ($\epsilon_0$) and magnetism ($\mu_0$), was found to be precisely the measured speed of light. This was the definitive proof that light is an electromagnetic phenomenon.
 \end{keyconcept}
 
-\subsection{The Four Maxwell's Equations}
+\section{The Four Equations in Differential Form}
 
-\subsubsection{Differential Form (Local Description)}
-
-\paragraph{1. Gauss's Law (Electric)}
-States that \keyterm{electric charges create electric fields}:
+\subsection{Gauss's Law for Electricity}
+This law states that an electric field diverges from electric charges.
 \begin{equation}
     \nabla \cdot \mathbf{E} = \frac{\rho}{\epsilon_0}
-    \label{eq:gauss-electric}
+    \label{eq:gauss_electric}
 \end{equation}
 where:
-\begin{description}[\dinfont, style=unboxed, labelwidth=1.5cm]
+\begin{description}
     \item[$\mathbf{E}$] is the electric field vector (\unit{V/m}).
-    \item[$\rho$] is the charge density (\unit{C/m^3}).
-    \item[$\epsilon_0$] is the permittivity of free space (\SI{8.854e-12}{F/m}).
+    \item[$\rho$] is the electric charge density (\unit{C/m^3}).
+    \item[$\epsilon_0$] is the permittivity of free space.
 \end{description}
-\parhead{Physical meaning} Electric field lines originate from positive charges and terminate on negative charges. The divergence of $\mathbf{E}$ at any point is proportional to the charge density there.
 
-\paragraph{2. Gauss's Law for Magnetism}
-States that \keyterm{no magnetic monopoles exist}:
+\subsection{Gauss's Law for Magnetism}
+This law states that there are no magnetic monopoles; magnetic field lines always form closed loops.
 \begin{equation}
     \nabla \cdot \mathbf{B} = 0
-    \label{eq:gauss-magnetic}
+    \label{eq:gauss_magnetic}
 \end{equation}
-where $\mathbf{B}$ is the magnetic field vector (Tesla or \unit{Wb/m^2}).
-\parhead{Physical meaning} Magnetic field lines always form closed loops---there are no isolated north or south poles.
+where $\mathbf{B}$ is the magnetic field vector (Tesla).
 
-\paragraph{3. Faraday's Law of Induction}
-States that \keyterm{changing magnetic fields create electric fields}:
+\subsection{Faraday's Law of Induction}
+This law describes how a time-varying magnetic field creates (induces) a circulating electric field.
 \begin{equation}
     \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}
     \label{eq:faraday}
 \end{equation}
-\parhead{Physical meaning} A time-varying magnetic field induces a circulating electric field. This is the principle behind electrical generators and transformers.
 
-\paragraph{4. Ampère-Maxwell Law}
-States that \keyterm{electric currents and changing electric fields create magnetic fields}:
+\subsection{Ampère-Maxwell Law}
+This law states that magnetic fields can be generated by two sources: by an electric current ($\mathbf{J}$) and by a time-varying electric field (the "displacement current").
 \begin{equation}
     \nabla \times \mathbf{B} = \mu_0 \mathbf{J} + \mu_0 \epsilon_0 \frac{\partial \mathbf{E}}{\partial t}
-    \label{eq:ampere-maxwell}
+    \label{eq:ampere_maxwell}
 \end{equation}
-where $\mu_0$ is the permeability of free space (\SI{4\pi e-7}{H/m}), $\mathbf{J}$ is the current density (\unit{A/m^2}), and the final term is the \keyterm{displacement current}.
+where $\mu_0$ is the permeability of free space and $\mathbf{J}$ is the current density (\unit{A/m^2}).
 
-\begin{keyconcept}
-    \textbf{Maxwell's Critical Insight:} The displacement current term, $\mu_0 \epsilon_0 \partial \mathbf{E}/\partial t$, was missing from Ampère's original law. Maxwell added it for mathematical consistency—this single term is what allows the equations to predict the existence of electromagnetic waves.
-\end{keyconcept}
+\begin{warningbox}
+    Maxwell's addition of the \keyterm{displacement current} term ($\mu_0 \epsilon_0 \frac{\partial \mathbf{E}}{\partial t}$) was the critical step. Without it, the equations do not predict the existence of propagating waves. It establishes the perfect symmetry between electric and magnetic fields: a changing B-field creates an E-field, and a changing E-field creates a B-field.
+\end{warningbox}
 
-\subsection{Derivation of the Wave Equation}
+\section{The Electromagnetic Wave}
 
-\begin{workedexample}{Deriving the Wave Equation in a Vacuum}
-In free space (no charges, no currents), Maxwell's equations simplify.
-\begin{enumerate}
-    \item Take the curl of Faraday's Law (\cref{eq:faraday}):
+In free space, where there are no charges ($\rho=0$) and no currents ($\mathbf{J}=0$), Maxwell's equations can be combined to derive the electromagnetic wave equation.
+
+\begin{workedexample}{Derivation of the Wave Equation}
+    \parhead{Objective}
+    Derive the wave equation for the electric field $\mathbf{E}$ in a vacuum.
+    
+    \parhead{Derivation}
+    \begin{derivationsteps}
+        \step Start by taking the curl of Faraday's Law (\cref{eq:faraday}):
           \[ \nabla \times (\nabla \times \mathbf{E}) = -\frac{\partial}{\partial t}(\nabla \times \mathbf{B}) \]
-    \item Substitute the simplified Ampère-Maxwell Law ($\mathbf{J}=0$):
+        \step Substitute the Ampère-Maxwell Law (\cref{eq:ampere_maxwell}) with $\mathbf{J}=0$:
           \[ \nabla \times (\nabla \times \mathbf{E}) = -\mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2} \]
-    \item Apply the vector identity $\nabla \times (\nabla \times \mathbf{A}) = \nabla(\nabla \cdot \mathbf{A}) - \nabla^2 \mathbf{A}$. In a vacuum, Gauss's Law ($\rho=0$) gives $\nabla \cdot \mathbf{E} = 0$. This simplifies the identity, yielding the \keyterm{wave equation}:
+        \step Apply the vector identity $\nabla \times (\nabla \times \mathbf{A}) = \nabla(\nabla \cdot \mathbf{A}) - \nabla^2 \mathbf{A}$. Since $\rho=0$, Gauss's Law gives $\nabla \cdot \mathbf{E} = 0$. This simplifies the identity to yield the final \keyterm{wave equation}:
           \begin{equation}
               \nabla^2 \mathbf{E} = \mu_0 \epsilon_0 \frac{\partial^2 \mathbf{E}}{\partial t^2}
-              \label{eq:wave-E}
+              \label{eq:wave_equation}
           \end{equation}
-\end{enumerate}
+    \end{derivationsteps}
+    \parhead{Conclusion}
+    This is the standard form of a wave equation, where the propagation speed $v$ is given by $v^2 = 1/(\mu_0 \epsilon_0)$. The same derivation can be performed for the magnetic field $\mathbf{B}$.
 \end{workedexample}
 
-\subsection{Wave Speed and the Speed of Light}
-The general form of a wave equation is $\nabla^2 f = (1/v^2) \partial^2 f/\partial t^2$, where $v$ is the wave propagation speed. Comparing this to \cref{eq:wave-E}, we see that $1/v^2 = \mu_0 \epsilon_0$. The speed of the wave is therefore:
-\begin{equation}
-v = \frac{1}{\sqrt{\mu_0 \epsilon_0}} \approx \SI{2.998e8}{m/s} = c
-\label{eq:speed-of-light}
-\end{equation}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=1.2, x=1.5cm, y=1.2cm, z=0.7cm, font=\sffamily\small]
+        % Axes
+        \draw[->, thick] (0,0,0) -- (4,0,0) node[below left] {z (Propagation)};
+        \draw[->, thick] (0,0,0) -- (0,1.5,0) node[below right] {y (E-field)};
+        \draw[->, thick] (0,0,0) -- (0,0,1.5) node[above] {x (B-field)};
 
-\begin{keyconcept}
-    \textbf{Maxwell's Triumph:} The predicted speed of electromagnetic waves, calculated from the fundamental constants of electricity ($\epsilon_0$) and magnetism ($\mu_0$), was precisely equal to the measured speed of light ($c$). This was the definitive proof that \textbf{light is an electromagnetic wave}.
-\end{keyconcept}
+        % E-field (sine wave in y-z plane)
+        \draw[color=diagramprimary, thick, variable=\t, domain=0:3.8, samples=100] 
+            plot (\t, {sin(\t*180/pi*2)}, 0) node[right, black] {$\mathbf{E}$};
+        
+        % B-field (sine wave in x-z plane)
+        \draw[color=diagramsecondary, thick, variable=\t, domain=0:3.8, samples=100] 
+            plot (\t, 0, {sin(\t*180/pi*2)}) node[above, black] {$\mathbf{B}$};
+
+        % Wavelength annotation
+        \draw[<->, dashed] (0,-1.2,0) -- (3.14159,-1.2,0) node[midway, below] {Wavelength, $\lambda$};
+        
+        % Field vectors at a point
+        \begin{scope}[shift={(pi/4,0,0)}]
+            \draw[->, ultra thick, diagramprimary] (0,0,0) -- (0,{sin(pi/2)},0);
+            \draw[->, ultra thick, diagramsecondary] (0,0,0) -- (0,0,{sin(pi/2)});
+        \end{scope>
+    \end{tikzpicture}
+    \caption{A linearly polarised transverse electromagnetic (TEM) wave, showing the orthogonal electric ($\mathbf{E}$) and magnetic ($\mathbf{B}$) fields propagating in the z-direction.}
+    \label{fig:tem_wave}
+\end{figure}
 
 \begin{importantbox}
-    For a deeper understanding of the practical applications of these foundational concepts, the following chapters are essential:
-    \begin{itemize}
-        \item \textbf{\Cref{ch:spectrum}:} The Electromagnetic Spectrum
-        \item \textbf{\Cref{ch:antenna}:} Antenna Theory Basics
-        \item \textbf{\Cref{ch:polarisation}:} Wave Polarisation
-    \end{itemize}
+    \section*{Further Reading}
+    Maxwell's Equations are the physical bedrock upon which all subsequent topics are built. A firm grasp of these principles is essential for understanding:
+    \begin{description}
+        \item[The Electromagnetic Spectrum (\Cref{ch:spectrum})] which categorises the solutions to the wave equation by frequency.
+        \item[Wave Polarisation (\Cref{ch:polarisation})] which describes the geometric orientation of the electric field vector $\mathbf{E}$.
+        \item[Antenna Theory (\Cref{ch:antenna})] which explains the practical mechanisms for generating and receiving these waves.
+    \end{description}
 \end{importantbox}

@@ -6,7 +6,7 @@
 \label{ch:spectrum}
 
 \begin{nontechnical}
-    \textbf{The electromagnetic spectrum is like a piano keyboard}---but instead of sound notes, it's frequencies of light and radio waves.
+    \parhead{The electromagnetic spectrum is like a piano keyboard}---but instead of sound notes, it's frequencies of light and radio waves.
 
     \parhead{The big picture}
     \begin{itemize}
@@ -39,140 +39,59 @@ This inverse relationship means that as frequency increases, wavelength decrease
 \begin{equation}
     E = h f = \frac{hc}{\lambda}
 \end{equation}
-where $h$ is Planck's constant. This energy determines whether radiation is \keyterm{ionizing} (able to break chemical bonds, like X-rays) or \keyterm{non-ionizing} (unable to, like radio waves). The threshold between them occurs in the ultraviolet region at a photon energy of approximately 10~eV.
+where $h$ is Planck's constant. This energy determines whether radiation is \keyterm{ionising} (able to break chemical bonds, like X-rays) or \keyterm{non-ionising} (unable to, like radio waves). The threshold between them occurs in the ultraviolet region at a photon energy of approximately \SI{10}{eV}.
 
 \subsection{Radio Frequencies (RF): \qty{3}{kHz} to \qty{300}{GHz}}
+This portion of the spectrum is the workhorse of all modern wireless communications. The descriptions below are organised by standard frequency band designations.
 
-This portion of the spectrum is the workhorse of all modern wireless communications.
-
-\begin{spectrumband}{ELF}{Extremely Low Frequency: 3--30 Hz}
-    \item[Wavelength:] 100,000--10,000 km.
-    \item[Applications:] Submarine communication (due to its ability to penetrate seawater), geophysical surveys.
-    \item[Propagation:] Travels within the Earth-ionosphere waveguide with extremely low attenuation.
-\end{spectrumband}
-
-\begin{spectrumband}{VLF}{Very Low Frequency: 3--30 kHz}
-    \item[Wavelength:] 100--10 km.
-    \item[Applications:] Long-range navigation (e.g., LORAN), time signals, lightning detection.
-    \item[Propagation:] Primarily by ground wave and reflection from the ionosphere.
-\end{spectrumband}
-
-\begin{spectrumband}{LF}{Low Frequency: 30--300 kHz}
-     \item[Wavelength:] 10--1 km.
-    \item[Applications:] AM radio (longwave), non-directional beacons (NDB) for aviation, some RFID systems.
-    \item[Propagation:] Reliable ground wave propagation, stable day and night.
-\end{spectrumband}
-
-\begin{spectrumband}{MF}{Medium Frequency: 300 kHz -- 3 MHz}
-    \item[Wavelength:] 1 km -- 100 m.
-    \item[Applications:] AM radio (the standard broadcast band), maritime communication.
-    \item[Propagation:] Ground wave during the day; ionospheric reflection (\keyterm{skywave}) at night allows for long-distance reception.
-\end{spectrumband}
-
-\begin{spectrumband}{HF}{High Frequency: 3--30 MHz}
-    \item[Wavelength:] 100--10 m.
-    \item[Applications:] Shortwave radio, amateur radio ("ham"), over-the-horizon radar, long-distance aviation communication.
-    \item[Propagation:] Relies on refraction from the ionosphere, enabling global, intercontinental communication.
-\end{spectrumband}
-
-\begin{spectrumband}{VHF}{Very High Frequency: 30--300 MHz}
-    \item[Wavelength:] 10--1 m.
-    \item[Applications:] FM radio (88--108 MHz), television broadcast, air traffic control, marine communications.
-    \item[Propagation:] Almost exclusively line-of-sight (LOS), though occasional atmospheric effects like tropospheric ducting can extend range.
-\end{spectrumband}
-
-\begin{spectrumband}{UHF}{Ultra High Frequency: 300 MHz -- 3 GHz}
-    \item[Wavelength:] 1 m -- 10 cm.
-    \item[Applications:] The most crowded part of the spectrum. Includes television, mobile phones (GSM, LTE, 5G), GPS, WiFi (2.4 GHz), Bluetooth, and microwave ovens.
-    \item[Propagation:] Line-of-sight, with moderate ability to penetrate buildings. Rain attenuation is minimal.
-\end{spectrumband}
-
-\begin{spectrumband}{SHF}{Super High Frequency: 3--30 GHz}
-    \item[Wavelength:] 10--1 cm.
-    \item[Applications:] Satellite communications (C-band, Ku-band), radar systems, 5G mid-band, WiFi (5 and 6 GHz), point-to-point microwave links.
-    \item[Propagation:] Strictly line-of-sight. Signals are significantly attenuated by rain (\keyterm{rain fade}) and atmospheric gases.
-\end{spectrumband}
-
-\begin{spectrumband}{EHF}{Extremely High Frequency: 30--300 GHz}
-    \item[Wavelength:] 1 cm -- 1 mm. Also known as the \keyterm{millimetre wave (mmWave)} band.
-    \item[Applications:] mmWave 5G, automotive radar (77 GHz), high-capacity wireless backhaul, radio astronomy.
-    \item[Propagation:] Suffers from severe attenuation due to rain, foliage, and atmospheric absorption, especially from oxygen at 60 GHz.
-\end{spectrumband}
-
-\begin{calloutbox}{The 60 GHz Oxygen Absorption Anomaly}
-    Around 60 GHz, oxygen molecules (O$_2$) in the atmosphere have a resonant absorption peak, causing extreme signal attenuation of approximately \qty{15}{dB/km}. While this severely limits range, it is intentionally exploited for security. Signals are contained within a room or short link, preventing eavesdropping. This is the basis for technologies like WiGig (IEEE 802.11ad).
-\end{calloutbox}
-
-\subsection{Optical Frequencies: \qty{300}{GHz} to \qty{30}{PHz}}
-
-This region, spanning from the Terahertz gap to Ultraviolet, is governed by the principles of optics.
-
-\begin{spectrumband}{THz}{Terahertz: 0.3--10 THz}
-    \item[Wavelength:] 1 mm -- 30 $\mu$m.
-    \item[Status:] Often called the "THz gap," as it was historically difficult to generate and detect these frequencies.
-    \item[Applications:] Security imaging (can see through clothing but is non-ionizing), spectroscopy, biomedical sensing, and is a major research area for future 6G wireless systems.
-\end{spectrumband}
-
-\begin{spectrumband}{IR}{Infrared: 10--430 THz}
-    \item[Wavelength:] 30 $\mu$m -- 700 nm.
-    \item[Divisions:] Split into Far-IR (thermal radiation from objects at room temperature), Mid-IR, and Near-IR.
-    \item[Applications:] Thermal imaging, fiber optic communications (which use the 1550 nm window in NIR), remote controls, and medical imaging.
-\end{spectrumband}
-
-\begin{spectrumband}{Visible}{Visible Light: 430--750 THz}
-    \item[Wavelength:] 700 nm (red) to 400 nm (violet).
-    \item[Properties:] This is the narrow band of frequencies to which the human eye is sensitive. It is non-ionizing.
-    \item[Applications:] Human vision, optical communications (Li-Fi, free-space optics), photography, and photovoltaics.
-\end{spectrumband}
+\begin{description}[font=\normalfont, style=unboxed, labelwidth=1cm]
+    \item[ELF (3--30 Hz)] \textbf{Extremely Low Frequency.} Used for submarine communication due to its ability to penetrate seawater. Wavelengths are measured in thousands of kilometres.
+    \item[VLF (3--30 kHz)] \textbf{Very Low Frequency.} Used for long-range navigation and time signals.
+    \item[LF (30--300 kHz)] \textbf{Low Frequency.} Used for AM longwave radio and aviation beacons (NDBs).
+    \item[MF (300 kHz -- 3 MHz)] \textbf{Medium Frequency.} Home to the standard AM broadcast band and maritime communication.
+    \item[HF (3--30 MHz)] \textbf{High Frequency.} The shortwave band, enabling global communication via ionospheric reflection (skywave).
+    \item[VHF (30--300 MHz)] \textbf{Very High Frequency.} Includes FM radio, broadcast television, and air traffic control. Propagation is almost exclusively line-of-sight.
+    \item[UHF (300 MHz -- 3 GHz)] \textbf{Ultra High Frequency.} The most crowded part of the spectrum, containing mobile phones, GPS, WiFi, and Bluetooth.
+    \item[SHF (3--30 GHz)] \textbf{Super High Frequency.} Used for satellite communications (Ku-band), 5G mid-band, and 5~GHz WiFi.
+    \item[EHF (30--300 GHz)] \textbf{Extremely High Frequency.} Known as the \keyterm{millimetre wave (mmWave)} band, it is used for high-capacity 5G and automotive radar.
+\end{description}
 
 \subsection{High-Energy Frequencies: >\qty{750}{THz}}
+These frequencies carry enough energy per photon to be ionising, posing a risk to biological tissue.
 
-These frequencies carry enough energy per photon to be ionizing, posing a risk to biological tissue.
+\begin{description}[font=\normalfont, style=unboxed, labelwidth=1cm]
+    \item[UV (750 THz -- 30 PHz)] \textbf{Ultraviolet.} Marks the transition to ionising radiation. Used for sterilisation and semiconductor manufacturing.
+    \item[X-ray (30 PHz -- 30 EHz)] \textbf{X-Rays.} Highly ionising radiation used for medical imaging and security screening.
+    \item[Gamma ($\gamma$)] \textbf{>30 EHz.} The most energetic and penetrating form of radiation, used in radiotherapy and astronomy.
+\end{description}
 
-\begin{spectrumband}{UV}{Ultraviolet: 750 THz -- 30 PHz}
-    \item[Wavelength:] 400 nm -- 10 nm.
-    \item[Properties:] This band marks the transition to ionizing radiation. Earth's ozone layer blocks the most harmful components.
-    \item[Applications:] Sterilization (UVC light is germicidal), fluorescence microscopy, and photolithography for semiconductor manufacturing.
-\end{spectrumband}
-
-\begin{spectrumband}{X-ray}{X-Rays: 30 PHz -- 30 EHz}
-    \item[Wavelength:] 10 nm -- 0.01 nm.
-    \item[Properties:] Highly ionizing radiation capable of penetrating soft tissue but blocked by denser materials like bone and metal.
-    \item[Applications:] Medical imaging (radiography, CT scans), security screening, and X-ray crystallography to determine molecular structures.
-\end{spectrumband}
-
-\begin{spectrumband}{Gamma}{$\gamma$-Rays: >30 EHz}
-    \item[Wavelength:] < 0.01 nm.
-    \item[Properties:] The most energetic and penetrating form of electromagnetic radiation.
-    \item[Sources:] Emitted during radioactive decay, nuclear reactions, and by extreme astrophysical objects like pulsars and black holes.
-    \item[Applications:] Cancer therapy (radiotherapy), sterilization of medical equipment, and gamma-ray astronomy.
-\end{spectrumband}
-
-% A final summary table using booktabs for a professional look
 \subsection{Spectrum Summary Table}
+
+% Re-formatted with tabularx to ensure the table fits within the text width.
+% The 'X' column type allows text to wrap automatically.
 \begin{table}[H]
     \centering
     \caption{The Electromagnetic Spectrum at a Glance}
     \label{tab:spectrum-summary}
-    \begin{tabular}{@{}lllll@{}}
+    \begin{tabularx}{\textwidth}{@{}l l l X l@{}}
         \toprule
-        \tableheaderfont Band & \tableheaderfont Frequency & \tableheaderfont Wavelength & \tableheaderfont Key Applications & \tableheaderfont Ionizing? \\
+        \tableheaderfont Band & \tableheaderfont Frequency & \tableheaderfont Wavelength & \tableheaderfont Key Applications & \tableheaderfont Ionising? \\
         \midrule
-        Radio (RF) & 3 kHz -- 300 GHz & > 1 mm & Communications, Radar & No \\
-        Infrared (IR) & 0.3 -- 430 THz & 1 mm -- 700 nm & Thermal, Fiber Optics & No \\
-        Visible & 430 -- 750 THz & 700 -- 400 nm & Human Vision, Optics & No \\
-        Ultraviolet (UV) & 750 THz -- 30 PHz & 400 -- 10 nm & Sterilization, Lithography & Transition \\
-        X-ray & 30 PHz -- 30 EHz & 10 -- 0.01 nm & Medical Imaging & Yes \\
-        Gamma Ray & > 30 EHz & < 0.01 nm & Radiotherapy, Astronomy & Yes \\
+        Radio (RF) & \qty{3}{kHz} -- \qty{300}{GHz} & > \qty{1}{mm} & Communications, Radar & No \\
+        Infrared (IR) & \qty{0.3} -- \qty{430}{THz} & \qty{1}{mm} -- \qty{700}{nm} & Thermal, Fiber Optics & No \\
+        Visible & \qty{430} -- \qty{750}{THz} & \qty{700} -- \qty{400}{nm} & Human Vision, Optics & No \\
+        Ultraviolet (UV) & \qty{750}{THz} -- \qty{30}{PHz} & \qty{400} -- \qty{10}{nm} & Sterilisation, Lithography & Transition \\
+        X-ray & \qty{30}{PHz} -- \qty{30}{EHz} & \qty{10} -- \qty{0.01}{nm} & Medical Imaging & Yes \\
+        Gamma Ray & > \qty{30}{EHz} & < \qty{0.01}{nm} & Radiotherapy, Astronomy & Yes \\
         \bottomrule
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
-\begin{importantbox}[title={Further Reading}]
+\begin{importantbox}
     A deep understanding of the electromagnetic spectrum is critical for system design. The following chapters build directly on these concepts:
     \begin{description}
-        \item[Propagation Characteristics] (\Cref{ch:propagation}) provides a detailed analysis of how signals in different bands interact with the atmosphere, including absorption, reflection, and ducting.
-        \item[Antenna Theory] (\Cref{ch:antenna}) explores the practical design of antennas that are resonant and efficient at specific frequencies, from massive VLF towers to tiny mmWave arrays.
-        \item[Link Budget Analysis] (\Cref{ch:linkbudget}) provides the full framework for calculating system performance, combining frequency-dependent path loss with antenna gain, power, and receiver sensitivity.
+        \item[Propagation Characteristics (\Cref{ch:atmospheric})] provides a detailed analysis of how signals in different bands interact with the atmosphere, including absorption, reflection, and ducting.
+        \item[Antenna Theory (\Cref{ch:antenna})] explores the practical design of antennas that are resonant and efficient at specific frequencies, from massive VLF towers to tiny mmWave arrays.
+        \item[Link Budget Analysis (\Cref{ch:linkbudget})] provides the full framework for calculating system performance, combining frequency-dependent path loss with antenna gain, power, and receiver sensitivity.
     \end{description}
 \end{importantbox}

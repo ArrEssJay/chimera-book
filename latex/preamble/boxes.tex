@@ -19,9 +19,6 @@
 % Style for breakable boxes with continuation indicators
 \tcbset{
     breakable with indicators/.style={
-        breakable,
-        enhanced,
-        break at=\textheight/2,
         overlay first={
             \draw[black!40, densely dotted, line width=0.6pt]
             ([xshift=5pt]frame.south west) -- ([xshift=-5pt]frame.south east);

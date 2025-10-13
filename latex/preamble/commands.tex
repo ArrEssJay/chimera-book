@@ -11,6 +11,16 @@
 % Key term highlighting
 \newcommand{\keyterm}[1]{\textbf{\textit{#1}}}
 
+% Step command for derivation environments
+\newcommand{\step}{\item}
+
+% Derivation steps environment
+\newenvironment{derivationsteps}{%
+  \begin{itemize}[leftmargin=*,label={}]
+}{%
+  \end{itemize}%
+}
+
 % Logged input (for debugging chapter loading)
 \newcommand{\loggedinput}[1]{%
   \typeout{LOADING CHAPTER: #1}%
